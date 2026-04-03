@@ -1,76 +1,91 @@
-import { useGetTimeline, getGetTimelineQueryKey, ReportWithDetails } from "@workspace/api-client-react";
+import { useGetTimeline, getGetTimelineQueryKey, ReportWithDetails, useGetCurrentUser } from "@workspace/api-client-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { CATEGORY_LABELS, CATEGORY_COLORS } from "@/lib/constants";
-import { MapPin, Users, HeartHandshake, GraduationCap, Home, MoreHorizontal } from "lucide-react";
+import { CATEGORY_LABELS } from "@/lib/constants";
+import { MapPin, Users, HeartHandshake, GraduationCap, Home, MoreHorizontal, BookOpen, PlusCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-const CategoryIcon = ({ category, className }: { category: string, className?: string }) => {
-  switch (category) {
-    case "church_planting": return <Home className={className} />;
-    case "leadership_training": return <Users className={className} />;
-    case "humanitarian_work": return <HeartHandshake className={className} />;
-    case "education": return <GraduationCap className={className} />;
-    default: return <MoreHorizontal className={className} />;
-  }
+const CATEGORY_META: Record<string, { icon: React.ReactNode; color: string; bg: string }> = {
+  church_planting: {
+    icon: <Home className="h-4 w-4" />,
+    color: "text-amber-600",
+    bg: "bg-amber-50",
+  },
+  leadership_training: {
+    icon: <Users className="h-4 w-4" />,
+    color: "text-blue-600",
+    bg: "bg-blue-50",
+  },
+  humanitarian_work: {
+    icon: <HeartHandshake className="h-4 w-4" />,
+    color: "text-rose-600",
+    bg: "bg-rose-50",
+  },
+  education: {
+    icon: <GraduationCap className="h-4 w-4" />,
+    color: "text-emerald-600",
+    bg: "bg-emerald-50",
+  },
+  other: {
+    icon: <MoreHorizontal className="h-4 w-4" />,
+    color: "text-slate-500",
+    bg: "bg-slate-50",
+  },
 };
 
-function ReportCard({ report, index }: { report: ReportWithDetails, index: number }) {
-  const { missionary, photos, category, title, description, reportDate, location } = report;
-  const firstPhoto = photos?.[0];
-  const excerpt = description.length > 150 ? description.substring(0, 150) + "..." : description;
-  
+function ReportRow({ report, index }: { report: ReportWithDetails; index: number }) {
+  const { missionary, category, title, description, reportDate, location } = report;
+  const meta = CATEGORY_META[category] ?? CATEGORY_META.other;
+  const excerpt = description.length > 120 ? description.substring(0, 120) + "…" : description;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
+      transition={{ duration: 0.25, delay: index * 0.05 }}
     >
-      <Link href={`/reports/${report.id}`} data-testid={`link-report-${report.id}`} className="block group">
-        <Card className="overflow-hidden border-2 border-border/60 shadow-sm transition-all hover:shadow-lg hover:border-primary/30 bg-card hover:-translate-y-0.5">
-          <CardHeader className="flex flex-row items-center gap-4 p-4 sm:p-6 pb-3">
-            <Avatar className="h-10 w-10 sm:h-11 sm:w-11 ring-2 ring-border/40">
-              <AvatarImage src={missionary.avatarUrl || undefined} alt={missionary.name} />
-              <AvatarFallback className="font-serif bg-primary/10 text-primary font-bold">{missionary.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="font-bold text-sm text-foreground truncate tracking-tight">{missionary.name}</p>
-              <div className="flex items-center text-[11px] text-muted-foreground mt-0.5 gap-2 uppercase tracking-wider font-medium">
-                <span>{format(new Date(reportDate), "MMM d, yyyy")}</span>
-                {location && (
-                  <>
-                    <span>·</span>
-                    <span className="flex items-center gap-1 truncate"><MapPin className="h-2.5 w-2.5" /> {location}</span>
-                  </>
-                )}
-              </div>
-            </div>
-            <Badge variant={CATEGORY_COLORS[category]} className="hidden sm:flex gap-1.5 whitespace-nowrap uppercase text-[10px] tracking-widest font-bold px-3 py-1">
-              <CategoryIcon category={category} className="h-3 w-3" />
-              {CATEGORY_LABELS[category]}
-            </Badge>
-          </CardHeader>
-          
-          <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
-            <h2 className="text-xl sm:text-2xl font-serif font-bold leading-snug group-hover:text-primary transition-colors tracking-tight">{title}</h2>
-            <p className="text-muted-foreground leading-relaxed text-sm">{excerpt}</p>
-            
-            {firstPhoto && (
-              <div className="relative mt-4 aspect-video sm:aspect-[21/9] overflow-hidden rounded-md bg-muted">
-                <img 
-                  src={firstPhoto.url} 
-                  alt={firstPhoto.caption || title} 
-                  className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
+      <Link
+        href={`/reports/${report.id}`}
+        data-testid={`link-report-${report.id}`}
+        className="flex items-start gap-4 py-4 px-4 sm:px-5 hover:bg-muted/40 transition-colors group rounded-sm"
+      >
+        {/* Icon */}
+        <div className={cn("mt-0.5 flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center", meta.bg, meta.color)}>
+          {meta.icon}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold text-foreground text-[15px] leading-snug group-hover:text-primary transition-colors truncate">
+            {title}
+          </p>
+          <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{excerpt}</p>
+          <p className="text-xs text-muted-foreground/70 mt-1.5">
+            {format(new Date(reportDate), "MMM d, yyyy")}
+            {" · by "}
+            <span className="font-medium text-muted-foreground">{missionary.name}</span>
+            {location && (
+              <span className="ml-2 inline-flex items-center gap-1">
+                <MapPin className="h-3 w-3" />
+                {location}
+              </span>
             )}
-          </CardContent>
-        </Card>
+          </p>
+        </div>
+
+        {/* Category tag */}
+        <span
+          className={cn(
+            "flex-shrink-0 mt-0.5 text-[11px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full",
+            meta.bg,
+            meta.color
+          )}
+        >
+          {CATEGORY_LABELS[category]}
+        </span>
       </Link>
     </motion.div>
   );
@@ -81,26 +96,28 @@ export default function Timeline() {
     { limit: 20 },
     { query: { queryKey: getGetTimelineQueryKey({ limit: 20 }) } }
   );
+  const { data: currentUser } = useGetCurrentUser();
 
   if (isLoading) {
     return (
-      <div className="max-w-2xl mx-auto space-y-6">
-        {[1, 2, 3].map((i) => (
-          <Card key={i} className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center gap-4">
-              <Skeleton className="h-12 w-12 rounded-full" />
-              <div className="space-y-2 flex-1">
-                <Skeleton className="h-4 w-1/3" />
-                <Skeleton className="h-3 w-1/4" />
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <Skeleton className="h-6 w-40" />
+          <Skeleton className="h-9 w-28 rounded-md" />
+        </div>
+        <div className="bg-card border border-border rounded-lg overflow-hidden divide-y divide-border">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="flex items-start gap-4 px-5 py-4">
+              <Skeleton className="h-9 w-9 rounded-full flex-shrink-0" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-3 w-1/3" />
               </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Skeleton className="h-6 w-3/4" />
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-48 w-full rounded-md" />
-            </CardContent>
-          </Card>
-        ))}
+              <Skeleton className="h-6 w-20 rounded-full flex-shrink-0" />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -108,35 +125,43 @@ export default function Timeline() {
   if (isError || !data) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-serif text-destructive">Could not load timeline</h2>
-        <p className="text-muted-foreground mt-2">Please try again later.</p>
+        <p className="text-destructive font-medium">Could not load reports.</p>
+        <p className="text-muted-foreground text-sm mt-1">Please try again later.</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-10 text-center space-y-3">
-        <p className="text-[11px] uppercase tracking-[0.2em] font-bold text-primary mb-2">Church Missionary Updates</p>
-        <h1 className="text-4xl sm:text-5xl font-serif font-extrabold text-foreground">Field Journal</h1>
-        <p className="text-muted-foreground text-base sm:text-lg font-medium">Stories of impact from around the world.</p>
+    <div className="max-w-3xl mx-auto">
+      {/* Section header — PWE-style with left accent bar */}
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-lg font-bold text-foreground flex items-center gap-3">
+          <span className="inline-block w-1 h-6 bg-primary rounded-full" />
+          Field Reports
+        </h2>
+        {currentUser?.role === "missionary" && (
+          <Link href="/submit">
+            <Button size="sm" className="gap-1.5 rounded-md" data-testid="link-nav-submit-inline">
+              <PlusCircle className="h-4 w-4" />
+              Add Entry
+            </Button>
+          </Link>
+        )}
       </div>
 
       {data.reports.length === 0 ? (
         <div className="text-center py-16 bg-card rounded-lg border border-border border-dashed">
-          <BookOpen className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-          <h3 className="text-xl font-serif text-foreground">No reports yet</h3>
-          <p className="text-muted-foreground mt-2">The field journal is waiting for its first entry.</p>
+          <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/40 mb-3" />
+          <p className="font-medium text-foreground">No reports yet</p>
+          <p className="text-muted-foreground text-sm mt-1">The field journal is waiting for its first entry.</p>
         </div>
       ) : (
-        <div className="space-y-6 sm:space-y-8">
+        <div className="bg-card border border-border rounded-lg overflow-hidden divide-y divide-border">
           {data.reports.map((report, index) => (
-            <ReportCard key={report.id} report={report} index={index} />
+            <ReportRow key={report.id} report={report} index={index} />
           ))}
         </div>
       )}
     </div>
   );
 }
-
-import { BookOpen } from "lucide-react";
