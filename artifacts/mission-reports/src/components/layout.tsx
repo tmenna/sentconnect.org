@@ -28,7 +28,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="bg-primary text-primary-foreground p-1.5 rounded-md group-hover:scale-105 transition-transform">
               <BookOpen className="h-5 w-5" />
             </div>
-            <span className="font-serif font-extrabold text-lg tracking-tight">Mission Reports</span>
+            <span className="font-sans font-bold text-lg tracking-tight">SentTrack</span>
           </Link>
           
           <nav className="flex items-center gap-1 sm:gap-2">
@@ -92,7 +92,7 @@ export function Layout({ children }: { children: ReactNode }) {
       
       <footer className="border-t-2 py-8 mt-12 bg-card">
         <div className="container max-w-5xl mx-auto px-4 text-center space-y-1">
-          <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-muted-foreground/60">Field Journal</p>
+          <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-muted-foreground/60">SentTrack</p>
           <p className="text-xs text-muted-foreground font-medium">"Declare his glory among the nations, his marvelous works among all the peoples!"</p>
         </div>
       </footer>

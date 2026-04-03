@@ -79,19 +79,19 @@
   --sidebar: 210 20% 97%;
   --sidebar-foreground: 201 42% 18%;
   --sidebar-border: 210 18% 80%;
-  --sidebar-primary: 47 96% 53%;
-  --sidebar-primary-foreground: 201 42% 14%;
+  --sidebar-primary: 215 80% 55%;
+  --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 210 20% 93%;
   --sidebar-accent-foreground: 201 42% 18%;
-  --sidebar-ring: 47 96% 53%;
+  --sidebar-ring: 215 80% 55%;
 
   --popover: 0 0% 100%;
   --popover-foreground: 201 42% 16%;
   --popover-border: 210 18% 82%;
 
-  /* Tearfund yellow — the primary button/action color */
-  --primary: 47 96% 53%;
-  --primary-foreground: 201 42% 14%;
+  /* SentTrack blue — primary action color */
+  --primary: 215 80% 55%;
+  --primary-foreground: 0 0% 100%;
 
   /* Deep navy teal — secondary */
   --secondary: 201 42% 18%;
@@ -107,7 +107,7 @@
   --destructive-foreground: 0 0% 100%;
 
   --input: 210 20% 76%;
-  --ring: 47 96% 53%;
+  --ring: 215 80% 55%;
 
   --app-font-sans: 'Roboto', sans-serif;
   --app-font-serif: 'Roboto', sans-serif;
@@ -131,18 +131,18 @@
   --sidebar: 201 42% 8%;
   --sidebar-foreground: 210 20% 95%;
   --sidebar-border: 201 30% 18%;
-  --sidebar-primary: 47 96% 53%;
-  --sidebar-primary-foreground: 201 42% 14%;
+  --sidebar-primary: 215 80% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 201 30% 18%;
   --sidebar-accent-foreground: 210 20% 95%;
-  --sidebar-ring: 47 96% 53%;
+  --sidebar-ring: 215 80% 60%;
 
   --popover: 201 42% 12%;
   --popover-foreground: 210 20% 95%;
   --popover-border: 201 30% 20%;
 
-  --primary: 47 96% 53%;
-  --primary-foreground: 201 42% 14%;
+  --primary: 215 80% 60%;
+  --primary-foreground: 0 0% 100%;
 
   --secondary: 201 30% 22%;
   --secondary-foreground: 210 20% 95%;
@@ -157,7 +157,7 @@
   --destructive-foreground: 0 0% 100%;
 
   --input: 201 30% 22%;
-  --ring: 47 96% 53%;
+  --ring: 215 80% 60%;
 }
 
 @layer base {

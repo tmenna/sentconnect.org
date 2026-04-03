@@ -1,8 +1,8 @@
-# Mission Reports — Church Missionary Reporting App
+# SentTrack — Church Missionary Reporting App
 
 ## Overview
 
-A full-stack web app for churches to manage missionary reporting. Features a story-driven timeline feed, report submission, admin dashboard, and missionary profiles.
+A full-stack web app for churches to manage missionary reporting. Features a clean list-style timeline feed, report submission, admin dashboard, and missionary profiles.
 
 ## Users & Access
 
