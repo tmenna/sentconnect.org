@@ -1,0 +1,54 @@
+Build a clean and simple web app for churches to manage missionary reporting.
+
+The app should have two types of users:
+
+    Missionaries
+    Church Admins 
+
+Missionaries should be able to log in and submit reports that include:
+
+    Title
+    Description (story-style update)
+    Category (such as church planting, leadership training, humanitarian work, or education)
+    Date
+    Optional photos 
+
+Church Admins should be able to log in and:
+
+    View all submitted reports
+    Filter reports by missionary and category
+    Track recent activity 
+
+Add a timeline feature where all reports appear in chronological order as a feed.
+
+Each report in the timeline should display as a clean, visually appealing card that includes:
+
+    Title
+    Short summary
+    Missionary name
+    Date
+    Category
+    Photo preview (if available) 
+
+The timeline should feel like a simple social media feed that is easy to scroll and quickly shows updates and impact.
+
+Make the timeline the main homepage/dashboard so users immediately see recent activity.
+
+Reports should feel like meaningful story updates, not just forms.
+
+Add the ability to click on a report from the timeline to view a full detailed page with the complete story, all photos, and additional information.
+
+Include a simple missionary profile page that shows their basic info and a history of their submitted reports.
+
+Allow missionaries to upload multiple photos per report and display them nicely in the timeline and detail view.
+
+Add a simple “recent activity” or “latest updates” section highlighting the most recent reports.
+
+Make the app feel personal and story-driven, highlighting impact, testimonies, and real-world updates rather than just data.
+
+Add a simple way to highlight key impact metrics in reports, such as number of people reached, leaders trained, or communities served.
+
+Ensure the design works well on both desktop and mobile devices, especially for users in low-bandwidth environments.
+
+The overall design should be modern, clean, and very easy to use for non-technical users.
+

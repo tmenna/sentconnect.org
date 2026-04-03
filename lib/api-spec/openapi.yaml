@@ -3,13 +3,22 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Missionary Reporting API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: users
+    description: User management
+  - name: reports
+    description: Missionary reports
+  - name: photos
+    description: Report photos
+  - name: timeline
+    description: Timeline and activity feeds
+
 paths:
   /healthz:
     get:
@@ -24,6 +33,399 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /users:
+    get:
+      operationId: listUsers
+      tags: [users]
+      summary: List users
+      parameters:
+        - name: role
+          in: query
+          schema:
+            type: string
+            enum: [missionary, admin]
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      operationId: createUser
+      tags: [users]
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserBody"
+      responses:
+        "201":
+          description: Created user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad request
+
+  /users/{id}:
+    get:
+      operationId: getUser
+      tags: [users]
+      summary: Get a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateUser
+      tags: [users]
+      summary: Update a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserBody"
+      responses:
+        "200":
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /users/login:
+    post:
+      operationId: loginUser
+      tags: [users]
+      summary: Login with username and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Invalid credentials
+
+  /users/me:
+    get:
+      operationId: getCurrentUser
+      tags: [users]
+      summary: Get current logged-in user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Not authenticated
+    delete:
+      operationId: logoutUser
+      tags: [users]
+      summary: Logout current user
+      responses:
+        "204":
+          description: Logged out
+
+  /users/{id}/reports:
+    get:
+      operationId: getUserReports
+      tags: [users]
+      summary: Get reports for a specific missionary
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Reports by user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReportWithDetails"
+        "404":
+          description: User not found
+
+  /reports:
+    get:
+      operationId: listReports
+      tags: [reports]
+      summary: List all reports with optional filters
+      parameters:
+        - name: missionaryId
+          in: query
+          schema:
+            type: ["integer", "null"]
+        - name: category
+          in: query
+          schema:
+            type: ["string", "null"]
+            enum: [church_planting, leadership_training, humanitarian_work, education, other, "null"]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReportWithDetails"
+    post:
+      operationId: createReport
+      tags: [reports]
+      summary: Submit a new report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReportBody"
+      responses:
+        "201":
+          description: Created report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportWithDetails"
+        "400":
+          description: Bad request
+
+  /reports/{id}:
+    get:
+      operationId: getReport
+      tags: [reports]
+      summary: Get a single report with all details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportWithDetails"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateReport
+      tags: [reports]
+      summary: Update a report
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReportBody"
+      responses:
+        "200":
+          description: Updated report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportWithDetails"
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteReport
+      tags: [reports]
+      summary: Delete a report
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /reports/{id}/photos:
+    post:
+      operationId: addReportPhoto
+      tags: [photos]
+      summary: Add a photo to a report
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddPhotoBody"
+      responses:
+        "201":
+          description: Photo added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Photo"
+        "404":
+          description: Report not found
+
+  /photos/{id}:
+    delete:
+      operationId: deletePhoto
+      tags: [photos]
+      summary: Delete a photo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /timeline:
+    get:
+      operationId: getTimeline
+      tags: [timeline]
+      summary: Get chronological timeline of all reports
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Timeline feed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimelineResponse"
+
+  /recent-activity:
+    get:
+      operationId: getRecentActivity
+      tags: [timeline]
+      summary: Get the most recent activity highlights
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 5
+      responses:
+        "200":
+          description: Recent activity
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReportWithDetails"
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [timeline]
+      summary: Get overall impact statistics
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatsResponse"
+
+  /upload-url:
+    post:
+      operationId: getUploadUrl
+      tags: [photos]
+      summary: Get a signed URL for uploading a photo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadUrlBody"
+      responses:
+        "200":
+          description: Upload URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadUrlResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +436,335 @@ components:
       required:
         - status
 
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [missionary, admin]
+        bio:
+          type: ["string", "null"]
+        location:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        organization:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - email
+        - role
+        - createdAt
+
+    CreateUserBody:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+          enum: [missionary, admin]
+        bio:
+          type: ["string", "null"]
+        location:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        organization:
+          type: ["string", "null"]
+      required:
+        - name
+        - email
+        - password
+        - role
+
+    UpdateUserBody:
+      type: object
+      properties:
+        name:
+          type: ["string", "null"]
+        bio:
+          type: ["string", "null"]
+        location:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        organization:
+          type: ["string", "null"]
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+      required:
+        - user
+
+    Photo:
+      type: object
+      properties:
+        id:
+          type: integer
+        reportId:
+          type: integer
+        url:
+          type: string
+        caption:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - reportId
+        - url
+        - createdAt
+
+    Report:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [church_planting, leadership_training, humanitarian_work, education, other]
+        reportDate:
+          type: string
+          format: date-time
+        missionaryId:
+          type: integer
+        peopleReached:
+          type: ["integer", "null"]
+        leadersTrainer:
+          type: ["integer", "null"]
+        communitiesServed:
+          type: ["integer", "null"]
+        location:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - description
+        - category
+        - reportDate
+        - missionaryId
+        - createdAt
+        - updatedAt
+
+    ReportWithDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [church_planting, leadership_training, humanitarian_work, education, other]
+        reportDate:
+          type: string
+          format: date-time
+        missionaryId:
+          type: integer
+        peopleReached:
+          type: ["integer", "null"]
+        leadersTrainer:
+          type: ["integer", "null"]
+        communitiesServed:
+          type: ["integer", "null"]
+        location:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        missionary:
+          $ref: "#/components/schemas/User"
+        photos:
+          type: array
+          items:
+            $ref: "#/components/schemas/Photo"
+      required:
+        - id
+        - title
+        - description
+        - category
+        - reportDate
+        - missionaryId
+        - createdAt
+        - updatedAt
+        - missionary
+        - photos
+
+    CreateReportBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [church_planting, leadership_training, humanitarian_work, education, other]
+        reportDate:
+          type: string
+          format: date-time
+        missionaryId:
+          type: integer
+        peopleReached:
+          type: ["integer", "null"]
+        leadersTrainer:
+          type: ["integer", "null"]
+        communitiesServed:
+          type: ["integer", "null"]
+        location:
+          type: ["string", "null"]
+      required:
+        - title
+        - description
+        - category
+        - reportDate
+        - missionaryId
+
+    UpdateReportBody:
+      type: object
+      properties:
+        title:
+          type: ["string", "null"]
+        description:
+          type: ["string", "null"]
+        category:
+          type: ["string", "null"]
+        reportDate:
+          type: ["string", "null"]
+        peopleReached:
+          type: ["integer", "null"]
+        leadersTrainer:
+          type: ["integer", "null"]
+        communitiesServed:
+          type: ["integer", "null"]
+        location:
+          type: ["string", "null"]
+
+    AddPhotoBody:
+      type: object
+      properties:
+        url:
+          type: string
+        caption:
+          type: ["string", "null"]
+      required:
+        - url
+
+    TimelineResponse:
+      type: object
+      properties:
+        reports:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReportWithDetails"
+        total:
+          type: integer
+        hasMore:
+          type: boolean
+      required:
+        - reports
+        - total
+        - hasMore
+
+    StatsResponse:
+      type: object
+      properties:
+        totalReports:
+          type: integer
+        totalMissionaries:
+          type: integer
+        totalPeopleReached:
+          type: integer
+        totalLeadersTrained:
+          type: integer
+        totalCommunitiesServed:
+          type: integer
+        reportsByCategory:
+          type: array
+          items:
+            $ref: "#/components/schemas/CategoryCount"
+      required:
+        - totalReports
+        - totalMissionaries
+        - totalPeopleReached
+        - totalLeadersTrained
+        - totalCommunitiesServed
+        - reportsByCategory
+
+    CategoryCount:
+      type: object
+      properties:
+        category:
+          type: string
+        count:
+          type: integer
+      required:
+        - category
+        - count
+
+    UploadUrlBody:
+      type: object
+      properties:
+        filename:
+          type: string
+        contentType:
+          type: string
+      required:
+        - filename
+        - contentType
+
+    UploadUrlResponse:
+      type: object
+      properties:
+        uploadUrl:
+          type: string
+        publicUrl:
+          type: string
+      required:
+        - uploadUrl
+        - publicUrl
