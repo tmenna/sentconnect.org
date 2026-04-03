@@ -63,8 +63,7 @@ export default function Login() {
           <div className="bg-primary w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5 text-primary-foreground shadow-md">
             <Send className="h-6 w-6" />
           </div>
-          <p className="text-[10px] uppercase tracking-[0.22em] font-bold text-primary mb-2">Missionary Tracking</p>
-          <h1 className="text-3xl font-sans font-bold text-foreground tracking-tight">SentTrack</h1>
+          <h1 className="text-3xl font-sans font-bold text-foreground tracking-tight mt-1">SentTrack</h1>
           <p className="text-muted-foreground mt-2 text-sm">Sign in to your account.</p>
         </div>
         
