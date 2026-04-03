@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useLoginUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { Redirect, useLocation } from "wouter";
-import { ArrowLeftRight, LogIn } from "lucide-react";
+import { Send, LogIn } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
@@ -61,7 +61,7 @@ export default function Login() {
       <div className="w-full max-w-md bg-card border border-border/50 rounded-2xl shadow-xl overflow-hidden">
         <div className="bg-primary/5 p-8 text-center border-b-2 border-border/40">
           <div className="bg-primary w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5 text-primary-foreground shadow-md">
-            <ArrowLeftRight className="h-7 w-7" />
+            <Send className="h-6 w-6" />
           </div>
           <p className="text-[10px] uppercase tracking-[0.22em] font-bold text-primary mb-2">Missionary Tracking</p>
           <h1 className="text-3xl font-sans font-bold text-foreground tracking-tight">SentTrack</h1>
