@@ -120,7 +120,7 @@ export default function Profile() {
                   name="location"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex items-center gap-2"><MapPin className="h-4 w-4 text-muted-foreground" /> Location</FormLabel>
+                      <FormLabel className="flex items-center gap-2"><MapPin className="h-4 w-4 text-muted-foreground" /> Field Location</FormLabel>
                       <FormControl>
                         <Input placeholder="City, Country" {...field} data-testid="input-profile-location" />
                       </FormControl>
@@ -134,7 +134,7 @@ export default function Profile() {
                   name="organization"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex items-center gap-2"><Building className="h-4 w-4 text-muted-foreground" /> Organization</FormLabel>
+                      <FormLabel className="flex items-center gap-2"><Building className="h-4 w-4 text-muted-foreground" /> Sent From (Home Church)</FormLabel>
                       <FormControl>
                         <Input placeholder="Mission Agency" {...field} data-testid="input-profile-org" />
                       </FormControl>

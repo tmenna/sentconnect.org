@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useLoginUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Redirect, useLocation } from "wouter";
-import { Shuffle, LogIn } from "lucide-react";
+import { Redirect } from "wouter";
+import { Shuffle } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
@@ -21,7 +21,6 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function Login() {
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
 
   const login = useLoginUser({
@@ -29,11 +28,10 @@ export default function Login() {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
         toast({ title: "Welcome back!" });
-        setLocation("/");
       },
       onError: () => {
-        toast({ 
-          title: "Login Failed", 
+        toast({
+          title: "Login failed",
           description: "Invalid email or password.",
           variant: "destructive"
         });
@@ -43,13 +41,14 @@ export default function Login() {
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    }
+    defaultValues: { email: "", password: "" }
   });
 
-  if (isLoading) return <div className="h-screen w-full flex items-center justify-center"><div className="animate-pulse text-muted-foreground">Loading...</div></div>;
+  if (isLoading) return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="animate-pulse text-muted-foreground text-sm">Loading…</div>
+    </div>
+  );
   if (isAuthenticated) return <Redirect href="/" />;
 
   function onSubmit(data: LoginFormValues) {
@@ -57,53 +56,54 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md bg-card border border-border/50 rounded-2xl shadow-xl overflow-hidden">
-        <div className="bg-primary/5 p-8 text-center border-b-2 border-border/40">
-          <div className="bg-primary w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5 text-primary-foreground shadow-md">
-            <Shuffle className="h-6 w-6" />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4 py-12">
+      <div className="w-full max-w-sm">
+
+        <div className="text-center mb-8">
+          <div className="bg-primary w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-primary-foreground shadow-lg">
+            <Shuffle className="h-7 w-7" />
           </div>
-          <h1 className="text-3xl font-sans font-bold text-foreground tracking-tight mt-1">SentTrack</h1>
-          <p className="text-muted-foreground mt-2 text-sm">Sign in to your account.</p>
+          <h1 className="text-[32px] font-bold text-foreground tracking-tight">SentTrack</h1>
+          <p className="text-muted-foreground mt-1.5 text-sm">Sign in to your account</p>
         </div>
-        
-        <div className="p-8">
+
+        <div className="bg-white rounded-2xl border border-border shadow-sm p-7">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email Address</FormLabel>
+                    <FormLabel className="text-sm font-medium">Email</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="you@mission.org" 
-                        className="bg-background/50" 
-                        autoComplete="email" 
-                        {...field} 
-                        data-testid="input-login-email" 
+                      <Input
+                        placeholder="you@mission.org"
+                        autoComplete="email"
+                        className="h-11"
+                        {...field}
+                        data-testid="input-login-email"
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className="text-sm font-medium">Password</FormLabel>
                     <FormControl>
-                      <Input 
-                        type="password" 
-                        placeholder="••••••••" 
-                        className="bg-background/50" 
-                        autoComplete="current-password" 
-                        {...field} 
-                        data-testid="input-login-password" 
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        autoComplete="current-password"
+                        className="h-11"
+                        {...field}
+                        data-testid="input-login-password"
                       />
                     </FormControl>
                     <FormMessage />
@@ -111,25 +111,22 @@ export default function Login() {
                 )}
               />
 
-              <Button 
-                type="submit" 
-                className="w-full mt-4 h-12 text-base font-medium gap-2" 
+              <Button
+                type="submit"
+                className="w-full h-11 text-[15px] font-semibold mt-1"
                 disabled={login.isPending}
                 data-testid="btn-login-submit"
               >
-                <LogIn className="h-5 w-5" />
-                {login.isPending ? "Signing In..." : "Sign In"}
+                {login.isPending ? "Signing in…" : "Sign In"}
               </Button>
             </form>
           </Form>
+        </div>
 
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            <p>Demo accounts:</p>
-            <div className="mt-2 space-y-1">
-              <p><strong className="text-foreground">Admin:</strong> admin@calvary.org / password123</p>
-              <p><strong className="text-foreground">Missionary:</strong> james@mission.org / password123</p>
-            </div>
-          </div>
+        <div className="mt-6 text-center text-xs text-muted-foreground space-y-1.5">
+          <p className="font-semibold text-muted-foreground/60 uppercase tracking-wide text-[10px]">Demo accounts</p>
+          <p><span className="font-semibold text-foreground">Admin</span> · admin@calvary.org / password123</p>
+          <p><span className="font-semibold text-foreground">Missionary</span> · james@mission.org / password123</p>
         </div>
       </div>
     </div>

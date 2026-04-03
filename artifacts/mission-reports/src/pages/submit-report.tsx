@@ -38,12 +38,16 @@ export default function SubmitReport() {
   const createReport = useCreateReport();
   const addPhoto = useAddReportPhoto();
 
+  const urlCategory = new URLSearchParams(window.location.search).get("category") ?? "other";
+  const validCategories = ["church_planting", "leadership_training", "humanitarian_work", "education", "other"];
+  const preselectedCategory = validCategories.includes(urlCategory) ? urlCategory : "other";
+
   const form = useForm<ReportFormValues>({
     resolver: zodResolver(reportSchema),
     defaultValues: {
       title: "",
       description: "",
-      category: "other",
+      category: preselectedCategory as ReportFormValues["category"],
       reportDate: format(new Date(), "yyyy-MM-dd"),
       location: user?.location || "",
       photos: [{ url: "", caption: "" }]

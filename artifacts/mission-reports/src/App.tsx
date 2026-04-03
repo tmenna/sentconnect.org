@@ -1,8 +1,9 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/components/auth-provider";
+import { useAuth } from "@/components/auth-provider";
 import { Layout } from "@/components/layout";
 import NotFound from "@/pages/not-found";
 
@@ -13,14 +14,24 @@ import MissionaryProfile from "./pages/missionary-profile";
 import SubmitReport from "./pages/submit-report";
 import Login from "./pages/login";
 import AdminDashboard from "./pages/admin";
+import MissionaryDashboard from "./pages/missionary-dashboard";
 
 const queryClient = new QueryClient();
+
+function HomeRoute() {
+  const { user, isAuthenticated, isLoading } = useAuth();
+  if (isLoading) return null;
+  if (!isAuthenticated) return <Redirect href="/login" />;
+  if (user?.role === "admin") return <Redirect href="/admin" />;
+  return <MissionaryDashboard />;
+}
 
 function Router() {
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={Timeline} />
+        <Route path="/" component={HomeRoute} />
+        <Route path="/feed" component={Timeline} />
         <Route path="/reports/:id" component={ReportDetail} />
         <Route path="/missionaries/:id" component={MissionaryProfile} />
         <Route path="/submit" component={SubmitReport} />
