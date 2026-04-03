@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useUpdateUser, useGetCurrentUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
 import { Redirect } from "wouter";
@@ -20,7 +19,6 @@ const profileSchema = z.object({
   organization: z.string().optional(),
   avatarUrl: z.string().url("Must be a valid URL").optional().or(z.literal('')),
 });
-
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export default function Profile() {
@@ -31,15 +29,11 @@ export default function Profile() {
   const updateUser = useUpdateUser({
     mutation: {
       onSuccess: () => {
-        toast({ title: "Profile updated successfully" });
+        toast({ title: "Profile saved" });
         queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
       },
-      onError: (error) => {
-        toast({ 
-          title: "Error updating profile", 
-          description: error.message || "Please try again later",
-          variant: "destructive"
-        });
+      onError: () => {
+        toast({ title: "Could not save profile", variant: "destructive" });
       }
     }
   });
@@ -55,7 +49,7 @@ export default function Profile() {
     }
   });
 
-  if (isLoading) return <div className="text-center py-12">Loading...</div>;
+  if (isLoading) return null;
   if (!isAuthenticated || !user) return <Redirect href="/login" />;
 
   function onSubmit(data: ProfileFormValues) {
@@ -72,113 +66,119 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-serif font-bold">Your Profile</h1>
-        <p className="text-muted-foreground mt-2">Manage your personal information and public presence.</p>
+    <div className="max-w-lg mx-auto py-6">
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-foreground tracking-tight">Profile Settings</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          {user.role === "missionary"
+            ? "Your profile is visible to church admins and on your reports."
+            : "Your admin account details."}
+        </p>
       </div>
 
-      <Card className="border-border/60 shadow-sm">
-        <CardHeader className="bg-muted/30 border-b border-border/50">
-          <CardTitle>Personal Details</CardTitle>
-          <CardDescription>This information is visible to {user.role === 'missionary' ? 'church admins and on your public reports' : 'other church admins'}.</CardDescription>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2"><User className="h-4 w-4 text-muted-foreground" /> Full Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John Doe" {...field} data-testid="input-profile-name" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+      <div className="bg-white rounded-xl border border-border shadow-sm p-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
 
-              <FormField
-                control={form.control}
-                name="avatarUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2"><ImageIcon className="h-4 w-4 text-muted-foreground" /> Avatar URL</FormLabel>
-                    <FormControl>
-                      <Input placeholder="https://example.com/avatar.jpg" {...field} data-testid="input-profile-avatar" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2"><MapPin className="h-4 w-4 text-muted-foreground" /> Field Location</FormLabel>
-                      <FormControl>
-                        <Input placeholder="City, Country" {...field} data-testid="input-profile-location" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="organization"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2"><Building className="h-4 w-4 text-muted-foreground" /> Sent From (Home Church)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Mission Agency" {...field} data-testid="input-profile-org" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {user.role === 'missionary' && (
-                <FormField
-                  control={form.control}
-                  name="bio"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Biography</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Tell us about your calling and mission..." 
-                          className="h-32 resize-none" 
-                          {...field} 
-                          data-testid="input-profile-bio"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium flex items-center gap-1.5">
+                    <User className="h-3.5 w-3.5 text-muted-foreground" /> Full Name
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="John Doe" className="h-10 text-sm" {...field} data-testid="input-profile-name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
+            />
 
-              <div className="pt-4 flex justify-end">
-                <Button 
-                  type="submit" 
-                  disabled={updateUser.isPending}
-                  data-testid="btn-profile-submit"
-                  className="min-w-32"
-                >
-                  {updateUser.isPending ? "Saving..." : "Save Changes"}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+            <FormField
+              control={form.control}
+              name="avatarUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium flex items-center gap-1.5">
+                    <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" /> Avatar URL
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://example.com/avatar.jpg" className="h-10 text-sm" {...field} data-testid="input-profile-avatar" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium flex items-center gap-1.5">
+                      <MapPin className="h-3.5 w-3.5 text-muted-foreground" /> Field Location
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="City, Country" className="h-10 text-sm" {...field} data-testid="input-profile-location" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="organization"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium flex items-center gap-1.5">
+                      <Building className="h-3.5 w-3.5 text-muted-foreground" /> Sent From
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Home Church" className="h-10 text-sm" {...field} data-testid="input-profile-org" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {user.role === 'missionary' && (
+              <FormField
+                control={form.control}
+                name="bio"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Biography</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Tell us about your calling and mission..."
+                        className="resize-none text-sm h-28"
+                        {...field}
+                        data-testid="input-profile-bio"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            <div className="pt-1 flex justify-end">
+              <Button
+                type="submit"
+                disabled={updateUser.isPending}
+                className="h-9 px-5 text-sm font-medium"
+                data-testid="btn-profile-submit"
+              >
+                {updateUser.isPending ? "Saving…" : "Save Changes"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }

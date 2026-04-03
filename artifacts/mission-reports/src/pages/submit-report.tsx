@@ -104,196 +104,194 @@ export default function SubmitReport() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-6">
-      <div className="mb-8 text-center sm:text-left">
-        <h1 className="text-3xl font-serif font-bold text-foreground flex items-center justify-center sm:justify-start gap-3">
-          <FileText className="h-8 w-8 text-primary" />
-          Write Field Report
-        </h1>
-        <p className="text-muted-foreground mt-2 text-lg">Share what God is doing in your area.</p>
+    <div className="max-w-2xl mx-auto py-6">
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-foreground tracking-tight">File a Report</h1>
+        <p className="text-sm text-muted-foreground mt-1">Share what God is doing in your area of ministry.</p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          
-          <Card className="border-border/60 shadow-sm overflow-hidden">
-            <div className="h-2 w-full bg-primary" />
-            <CardHeader className="bg-muted/20 pb-4 border-b border-border/40">
-              <CardTitle className="text-xl">The Story</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-6 space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+
+          <div className="bg-white rounded-xl border border-border shadow-sm p-6 space-y-5">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Report Title</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g. New Church Planted in Achi Village"
+                      className="h-10 text-sm"
+                      {...field}
+                      data-testid="input-report-title"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="title"
+                name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base">Report Title</FormLabel>
+                    <FormLabel className="text-sm font-medium">Category</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="h-10 text-sm" data-testid="select-report-category">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
+                          <SelectItem key={key} value={key}>{label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="reportDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Date</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Joyful Baptisms in the River" className="text-lg py-6 font-serif" {...field} data-testid="input-report-title" />
+                      <Input type="date" className="h-10 text-sm" {...field} data-testid="input-report-date" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Focus Area</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger data-testid="select-report-category">
-                            <SelectValue placeholder="Select category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
-                            <SelectItem key={key} value={key}>{label}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Location</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Village, Region" className="h-10 text-sm" {...field} data-testid="input-report-location" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-                <FormField
-                  control={form.control}
-                  name="reportDate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Date</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} data-testid="input-report-date" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Report Body</FormLabel>
+                  <FormDescription className="text-xs text-muted-foreground">
+                    Share the story — what happened, how lives were impacted, what God is doing.
+                  </FormDescription>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Write your report here..."
+                      className="min-h-[220px] text-sm leading-relaxed"
+                      {...field}
+                      data-testid="input-report-desc"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Location</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Village, Region" {...field} data-testid="input-report-location" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+          <div className="bg-white rounded-xl border border-border shadow-sm p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                  <ImageIcon className="h-4 w-4 text-muted-foreground" /> Photos
+                </h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Attach image URLs to enrich your report.</p>
               </div>
+            </div>
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base">Field Notes</FormLabel>
-                    <FormDescription>Share the narrative. What happened? How were lives changed?</FormDescription>
-                    <FormControl>
-                      <Textarea 
-                        placeholder="Write your story here..." 
-                        className="min-h-[250px] text-base leading-relaxed p-4" 
-                        {...field} 
-                        data-testid="input-report-desc"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
-
-
-          <Card className="border-border/60 shadow-sm overflow-hidden">
-            <CardHeader className="bg-muted/20 pb-4 border-b border-border/40">
-              <CardTitle className="text-xl flex items-center gap-2">
-                <ImageIcon className="h-5 w-5 text-primary" />
-                Photos
-              </CardTitle>
-              <CardDescription>Attach image URLs to bring your story to life.</CardDescription>
-            </CardHeader>
-            <CardContent className="pt-6 space-y-4">
-              {fields.map((field, index) => (
-                <div key={field.id} className="flex flex-col sm:flex-row gap-4 items-start bg-muted/30 p-4 rounded-lg border border-border/50">
-                  <div className="flex-1 space-y-4 w-full">
-                    <FormField
-                      control={form.control}
-                      name={`photos.${index}.url`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-xs">Image URL</FormLabel>
-                          <FormControl>
-                            <Input placeholder="https://..." {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`photos.${index}.caption`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-xs">Caption (optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Describe this photo" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  {index > 0 && (
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="icon" 
-                      className="text-destructive hover:bg-destructive/10 sm:mt-8 self-end sm:self-auto"
-                      onClick={() => remove(index)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
+            {fields.map((field, index) => (
+              <div key={field.id} className="flex flex-col sm:flex-row gap-3 items-start bg-muted/40 p-4 rounded-lg border border-border">
+                <div className="flex-1 space-y-3 w-full">
+                  <FormField
+                    control={form.control}
+                    name={`photos.${index}.url`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-xs text-muted-foreground">Image URL</FormLabel>
+                        <FormControl>
+                          <Input placeholder="https://…" className="h-9 text-sm" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`photos.${index}.caption`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-xs text-muted-foreground">Caption (optional)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Describe this photo" className="h-9 text-sm" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-              ))}
-              
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="w-full border-dashed"
-                onClick={() => append({ url: "", caption: "" })}
-              >
-                <Plus className="h-4 w-4 mr-2" /> Add Another Photo
-              </Button>
-            </CardContent>
-          </Card>
+                {index > 0 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-destructive/60 hover:text-destructive hover:bg-destructive/8 sm:mt-6 self-end sm:self-auto flex-shrink-0"
+                    onClick={() => remove(index)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+              </div>
+            ))}
 
-          <div className="flex items-center justify-end gap-4 pt-4 border-t border-border">
-            <Button 
-              type="button" 
-              variant="ghost" 
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="w-full h-9 text-xs border-dashed text-muted-foreground hover:text-foreground"
+              onClick={() => append({ url: "", caption: "" })}
+            >
+              <Plus className="h-3.5 w-3.5 mr-1.5" /> Add Photo
+            </Button>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="text-sm"
               onClick={() => window.history.back()}
             >
               Cancel
             </Button>
-            <Button 
-              type="submit" 
-              size="lg" 
-              className="gap-2 px-8" 
+            <Button
+              type="submit"
+              className="h-9 px-5 text-sm font-semibold gap-1.5"
               disabled={createReport.isPending}
               data-testid="btn-submit-report"
             >
-              <Send className="h-4 w-4" />
-              {createReport.isPending ? "Publishing..." : "Publish Report"}
+              <Send className="h-3.5 w-3.5" />
+              {createReport.isPending ? "Publishing…" : "Publish Report"}
             </Button>
           </div>
         </form>

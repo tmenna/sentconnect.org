@@ -20,7 +20,8 @@ A full-stack web app for churches to manage missionary reporting. Features a cle
 - **Package manager**: pnpm
 - **TypeScript version**: 5.9
 - **Frontend**: React + Vite + Tailwind CSS + shadcn/ui + Framer Motion
-- **Fonts**: Roboto (300/400/500/700/900) — used for both `font-sans` and `font-serif` aliases, matching Balbooa's actual font
+- **Fonts**: Inter (300/400/500/600/700) — used for both `font-sans` and `font-serif` aliases
+- **Design system**: Linear/Vercel-inspired SaaS aesthetic — white cards on `hsl(220 20% 97%)` bg, 1px `border-border` borders, `shadow-sm` depth, `rounded-xl` cards, `rounded-full` filter pills, category colors (amber/blue/rose/emerald/slate)
 - **API framework**: Express 5
 - **Database**: PostgreSQL + Drizzle ORM
 - **Validation**: Zod (`zod/v4`), `drizzle-zod`
