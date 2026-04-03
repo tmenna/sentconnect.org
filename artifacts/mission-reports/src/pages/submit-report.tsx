@@ -13,7 +13,7 @@ import { Redirect, useLocation } from "wouter";
 import { CATEGORY_LABELS } from "@/lib/constants";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Plus, Trash2, Image as ImageIcon, Send, FileText, Target } from "lucide-react";
+import { Plus, Trash2, Image as ImageIcon, Send, FileText } from "lucide-react";
 import { format } from "date-fns";
 
 const reportSchema = z.object({
@@ -22,9 +22,6 @@ const reportSchema = z.object({
   category: z.enum(["church_planting", "leadership_training", "humanitarian_work", "education", "other"]),
   reportDate: z.string(),
   location: z.string().optional(),
-  peopleReached: z.coerce.number().int().min(0).optional().or(z.literal('')),
-  leadersTrainer: z.coerce.number().int().min(0).optional().or(z.literal('')),
-  communitiesServed: z.coerce.number().int().min(0).optional().or(z.literal('')),
   photos: z.array(z.object({
     url: z.string().url("Must be a valid URL"),
     caption: z.string().optional()
@@ -49,9 +46,6 @@ export default function SubmitReport() {
       category: "other",
       reportDate: format(new Date(), "yyyy-MM-dd"),
       location: user?.location || "",
-      peopleReached: "",
-      leadersTrainer: "",
-      communitiesServed: "",
       photos: [{ url: "", caption: "" }]
     }
   });
@@ -75,9 +69,6 @@ export default function SubmitReport() {
           reportDate: new Date(data.reportDate).toISOString(),
           missionaryId: user!.id,
           location: data.location || null,
-          peopleReached: data.peopleReached === "" ? null : Number(data.peopleReached),
-          leadersTrainer: data.leadersTrainer === "" ? null : Number(data.leadersTrainer),
-          communitiesServed: data.communitiesServed === "" ? null : Number(data.communitiesServed),
         }
       });
 
@@ -216,56 +207,6 @@ export default function SubmitReport() {
             </CardContent>
           </Card>
 
-          <Card className="border-border/60 shadow-sm overflow-hidden">
-            <CardHeader className="bg-muted/20 pb-4 border-b border-border/40">
-              <CardTitle className="text-xl flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" />
-                Impact Metrics
-              </CardTitle>
-              <CardDescription>Optional quantitative data to track overall ministry progress.</CardDescription>
-            </CardHeader>
-            <CardContent className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <FormField
-                control={form.control}
-                name="peopleReached"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>People Reached</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="0" min="0" {...field} data-testid="input-metric-people" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="leadersTrainer"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Leaders Trained</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="0" min="0" {...field} data-testid="input-metric-leaders" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="communitiesServed"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Communities Served</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="0" min="0" {...field} data-testid="input-metric-communities" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
 
           <Card className="border-border/60 shadow-sm overflow-hidden">
             <CardHeader className="bg-muted/20 pb-4 border-b border-border/40">

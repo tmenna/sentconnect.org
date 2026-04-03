@@ -1,13 +1,12 @@
 import { useAuth } from "@/components/auth-provider";
 import { Redirect, Link } from "wouter";
 import { 
-  useGetStats, getGetStatsQueryKey, 
   useListReports, getListReportsQueryKey,
   useListUsers, getListUsersQueryKey,
   useGetRecentActivity, getGetRecentActivityQueryKey 
 } from "@workspace/api-client-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Users, Target, Heart, FileText, Activity, MapPin } from "lucide-react";
+import { Users, FileText, Activity, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -20,10 +19,6 @@ export default function AdminDashboard() {
   
   const [filterMissionary, setFilterMissionary] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
-
-  const { data: stats } = useGetStats({
-    query: { queryKey: getGetStatsQueryKey() }
-  });
 
   const { data: activity } = useGetRecentActivity({ limit: 5 }, {
     query: { queryKey: getGetRecentActivityQueryKey({ limit: 5 }) }
@@ -62,47 +57,6 @@ export default function AdminDashboard() {
           <p className="text-muted-foreground mt-1">Global ministry impact and recent activities.</p>
         </div>
       </div>
-
-      {stats && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="bg-card">
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className="p-3 bg-primary/10 text-primary rounded-full"><Users className="h-6 w-6" /></div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Missionaries</p>
-                <h3 className="text-2xl font-bold font-serif">{stats.totalMissionaries}</h3>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-card">
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className="p-3 bg-blue-500/10 text-blue-600 rounded-full"><FileText className="h-6 w-6" /></div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Reports</p>
-                <h3 className="text-2xl font-bold font-serif">{stats.totalReports}</h3>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-card">
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className="p-3 bg-green-500/10 text-green-600 rounded-full"><Users className="h-6 w-6" /></div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">People Reached</p>
-                <h3 className="text-2xl font-bold font-serif">{stats.totalPeopleReached.toLocaleString()}</h3>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-card">
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className="p-3 bg-purple-500/10 text-purple-600 rounded-full"><Target className="h-6 w-6" /></div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Leaders Trained</p>
-                <h3 className="text-2xl font-bold font-serif">{stats.totalLeadersTrained.toLocaleString()}</h3>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
