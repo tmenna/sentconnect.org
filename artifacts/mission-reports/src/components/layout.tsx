@@ -22,13 +22,13 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground selection:bg-primary/20">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
+      <header className="sticky top-0 z-50 w-full border-b-2 bg-white shadow-sm">
         <div className="container max-w-5xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-2 group transition-opacity hover:opacity-80" data-testid="link-home">
+          <Link href="/" className="flex items-center gap-2.5 group transition-opacity hover:opacity-80" data-testid="link-home">
             <div className="bg-primary text-primary-foreground p-1.5 rounded-md group-hover:scale-105 transition-transform">
               <BookOpen className="h-5 w-5" />
             </div>
-            <span className="font-serif font-semibold text-lg tracking-tight">Mission Reports</span>
+            <span className="font-serif font-bold text-lg tracking-tight">Mission Reports</span>
           </Link>
           
           <nav className="flex items-center gap-1 sm:gap-2">
