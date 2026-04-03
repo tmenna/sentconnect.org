@@ -20,7 +20,7 @@ A full-stack web app for churches to manage missionary reporting. Features a sto
 - **Package manager**: pnpm
 - **TypeScript version**: 5.9
 - **Frontend**: React + Vite + Tailwind CSS + shadcn/ui + Framer Motion
-- **Fonts**: Manrope (800/extrabold for headings via `font-serif` alias) + Plus Jakarta Sans (body, 400–800)
+- **Fonts**: Roboto (300/400/500/700/900) — used for both `font-sans` and `font-serif` aliases, matching Balbooa's actual font
 - **API framework**: Express 5
 - **Database**: PostgreSQL + Drizzle ORM
 - **Validation**: Zod (`zod/v4`), `drizzle-zod`

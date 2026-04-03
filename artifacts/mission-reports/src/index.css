@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -109,8 +109,8 @@
   --input: 210 20% 76%;
   --ring: 47 96% 53%;
 
-  --app-font-sans: 'Plus Jakarta Sans', sans-serif;
-  --app-font-serif: 'Manrope', sans-serif;
+  --app-font-sans: 'Roboto', sans-serif;
+  --app-font-serif: 'Roboto', sans-serif;
   --radius: 0.5rem;
 
   --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
@@ -166,12 +166,18 @@
   }
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    font-weight: 500;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.6;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif text-foreground;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
+    @apply font-sans text-foreground;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
   }
+  h1 { font-size: 2.25rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.25rem; }
+  p { font-weight: 400; }
 }
