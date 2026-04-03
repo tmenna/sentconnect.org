@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
 import { Button } from "./ui/button";
-import { BookOpen, LogOut, PlusCircle, User as UserIcon, LayoutDashboard } from "lucide-react";
+import { ArrowLeftRight, LogOut, PlusCircle, User as UserIcon, LayoutDashboard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -26,7 +26,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="container max-w-5xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2.5 group transition-opacity hover:opacity-80" data-testid="link-home">
             <div className="bg-primary text-primary-foreground p-1.5 rounded-md group-hover:scale-105 transition-transform">
-              <BookOpen className="h-5 w-5" />
+              <ArrowLeftRight className="h-5 w-5" />
             </div>
             <span className="font-sans font-bold text-lg tracking-tight">SentTrack</span>
           </Link>
