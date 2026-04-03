@@ -31,33 +31,33 @@ function ReportCard({ report, index }: { report: ReportWithDetails, index: numbe
       transition={{ duration: 0.4, delay: index * 0.1 }}
     >
       <Link href={`/reports/${report.id}`} data-testid={`link-report-${report.id}`} className="block group">
-        <Card className="overflow-hidden border-border/50 shadow-sm transition-all hover:shadow-md hover:border-primary/20 bg-card/50 hover:bg-card">
-          <CardHeader className="flex flex-row items-center gap-4 p-4 sm:p-6 pb-4">
-            <Avatar className="h-10 w-10 sm:h-12 sm:w-12 border border-border/50">
+        <Card className="overflow-hidden border-2 border-border/60 shadow-sm transition-all hover:shadow-lg hover:border-primary/30 bg-card hover:-translate-y-0.5">
+          <CardHeader className="flex flex-row items-center gap-4 p-4 sm:p-6 pb-3">
+            <Avatar className="h-10 w-10 sm:h-11 sm:w-11 ring-2 ring-border/40">
               <AvatarImage src={missionary.avatarUrl || undefined} alt={missionary.name} />
-              <AvatarFallback className="font-serif bg-primary/10 text-primary">{missionary.name.charAt(0)}</AvatarFallback>
+              <AvatarFallback className="font-serif bg-primary/10 text-primary font-bold">{missionary.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-foreground truncate">{missionary.name}</h3>
-              <div className="flex items-center text-xs text-muted-foreground mt-0.5 gap-2">
-                <span>{format(new Date(reportDate), "MMMM d, yyyy")}</span>
+              <p className="font-bold text-sm text-foreground truncate tracking-tight">{missionary.name}</p>
+              <div className="flex items-center text-[11px] text-muted-foreground mt-0.5 gap-2 uppercase tracking-wider font-medium">
+                <span>{format(new Date(reportDate), "MMM d, yyyy")}</span>
                 {location && (
                   <>
-                    <span>•</span>
-                    <span className="flex items-center gap-1 truncate"><MapPin className="h-3 w-3" /> {location}</span>
+                    <span>·</span>
+                    <span className="flex items-center gap-1 truncate"><MapPin className="h-2.5 w-2.5" /> {location}</span>
                   </>
                 )}
               </div>
             </div>
-            <Badge variant={CATEGORY_COLORS[category]} className="hidden sm:flex gap-1.5 whitespace-nowrap">
-              <CategoryIcon category={category} className="h-3.5 w-3.5" />
+            <Badge variant={CATEGORY_COLORS[category]} className="hidden sm:flex gap-1.5 whitespace-nowrap uppercase text-[10px] tracking-widest font-bold px-3 py-1">
+              <CategoryIcon category={category} className="h-3 w-3" />
               {CATEGORY_LABELS[category]}
             </Badge>
           </CardHeader>
           
-          <CardContent className="p-4 sm:p-6 pt-0 space-y-4">
-            <h2 className="text-xl font-serif font-medium leading-tight group-hover:text-primary transition-colors">{title}</h2>
-            <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">{excerpt}</p>
+          <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold leading-snug group-hover:text-primary transition-colors tracking-tight">{title}</h2>
+            <p className="text-muted-foreground leading-relaxed text-sm">{excerpt}</p>
             
             {firstPhoto && (
               <div className="relative mt-4 aspect-video sm:aspect-[21/9] overflow-hidden rounded-md bg-muted">
@@ -116,9 +116,10 @@ export default function Timeline() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="mb-8 text-center space-y-3">
-        <h1 className="text-3xl sm:text-4xl font-serif font-bold text-foreground">Field Journal</h1>
-        <p className="text-muted-foreground text-lg">Stories of impact from around the world.</p>
+      <div className="mb-10 text-center space-y-3">
+        <p className="text-[11px] uppercase tracking-[0.2em] font-bold text-primary mb-2">Church Missionary Updates</p>
+        <h1 className="text-4xl sm:text-5xl font-serif font-extrabold text-foreground">Field Journal</h1>
+        <p className="text-muted-foreground text-base sm:text-lg font-medium">Stories of impact from around the world.</p>
       </div>
 
       {data.reports.length === 0 ? (

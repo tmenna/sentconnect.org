@@ -58,30 +58,30 @@ export default function ReportDetail() {
 
       <header className="space-y-6 sm:space-y-8 mb-10 sm:mb-14">
         <div className="flex flex-wrap items-center gap-3">
-          <Badge variant={CATEGORY_COLORS[category]} className="text-sm px-3 py-1 font-medium">
+          <Badge variant={CATEGORY_COLORS[category]} className="uppercase text-[10px] tracking-widest font-bold px-3 py-1">
             {CATEGORY_LABELS[category]}
           </Badge>
-          <div className="flex items-center text-sm text-muted-foreground gap-3">
-            <span className="flex items-center gap-1.5"><CalendarDays className="h-4 w-4" /> {format(new Date(reportDate), "MMMM d, yyyy")}</span>
+          <div className="flex items-center text-[11px] text-muted-foreground gap-3 uppercase tracking-wider font-medium">
+            <span className="flex items-center gap-1.5"><CalendarDays className="h-3.5 w-3.5" /> {format(new Date(reportDate), "MMM d, yyyy")}</span>
             {location && (
               <>
-                <span className="opacity-50">•</span>
-                <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" /> {location}</span>
+                <span className="opacity-50">·</span>
+                <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {location}</span>
               </>
             )}
           </div>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-serif font-bold leading-tight tracking-tight text-foreground">{title}</h1>
+        <h1 className="text-3xl sm:text-[2.75rem] font-serif font-extrabold leading-tight text-foreground">{title}</h1>
 
         <Link href={`/missionaries/${missionary.id}`} className="flex items-center gap-4 group w-fit hover:bg-muted/50 p-2 -ml-2 rounded-lg transition-colors">
-          <Avatar className="h-12 w-12 sm:h-14 sm:w-14 border border-border">
+          <Avatar className="h-12 w-12 sm:h-14 sm:w-14 ring-2 ring-border/50">
             <AvatarImage src={missionary.avatarUrl || undefined} alt={missionary.name} />
-            <AvatarFallback className="font-serif bg-primary/10 text-primary">{missionary.name.charAt(0)}</AvatarFallback>
+            <AvatarFallback className="font-serif bg-primary/10 text-primary font-bold">{missionary.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div>
-            <div className="font-semibold text-foreground group-hover:text-primary transition-colors">{missionary.name}</div>
-            <div className="text-sm text-muted-foreground">{missionary.organization || 'Missionary'}</div>
+            <div className="font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">{missionary.name}</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium mt-0.5">{missionary.organization || 'Missionary'}</div>
           </div>
         </Link>
       </header>

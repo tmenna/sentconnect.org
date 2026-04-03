@@ -59,12 +59,13 @@ export default function Login() {
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md bg-card border border-border/50 rounded-2xl shadow-xl overflow-hidden">
-        <div className="bg-primary/5 p-8 text-center border-b border-border/50">
-          <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
-            <BookOpen className="h-8 w-8" />
+        <div className="bg-primary/5 p-8 text-center border-b-2 border-border/40">
+          <div className="bg-primary w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5 text-primary-foreground shadow-md">
+            <BookOpen className="h-7 w-7" />
           </div>
-          <h1 className="text-3xl font-serif font-bold text-foreground">Mission Reports</h1>
-          <p className="text-muted-foreground mt-2">Sign in to your field journal.</p>
+          <p className="text-[10px] uppercase tracking-[0.22em] font-bold text-primary mb-2">Field Journal</p>
+          <h1 className="text-3xl font-serif font-extrabold text-foreground tracking-tight">Mission Reports</h1>
+          <p className="text-muted-foreground mt-2 text-sm font-medium">Sign in to your account.</p>
         </div>
         
         <div className="p-8">

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -110,7 +110,7 @@
   --ring: 47 96% 53%;
 
   --app-font-sans: 'Plus Jakarta Sans', sans-serif;
-  --app-font-serif: 'Lora', serif;
+  --app-font-serif: 'Manrope', sans-serif;
   --radius: 0.5rem;
 
   --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
@@ -169,10 +169,9 @@
     font-weight: 500;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-tight text-foreground;
-    font-weight: 700;
+    @apply font-serif text-foreground;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
   }
-  h1 { font-weight: 700; }
-  h2 { font-weight: 700; }
-  h3 { font-weight: 700; }
 }
