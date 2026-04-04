@@ -18,9 +18,9 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const FEATURES = [
-  { icon: BookOpen, text: "Real-time field reports from the mission field" },
-  { icon: MapPin, text: "Know where every missionary is currently serving" },
-  { icon: Building, text: "Track missionaries by sending church and category" },
+  { icon: BookOpen, text: "Real-time reports from the field" },
+  { icon: MapPin, text: "Know where every team member is currently serving" },
+  { icon: Building, text: "Track activities by organization and program type" },
 ];
 
 export default function Login() {
@@ -59,7 +59,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex">
       {/* Left: Brand Panel */}
-      <div className="hidden lg:flex lg:w-[44%] flex-col bg-[#0B1F3A] text-white p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-[44%] flex-col bg-[#1a4899] text-white p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.04]" style={{
           backgroundImage: `radial-gradient(circle, white 1px, transparent 1px)`,
           backgroundSize: "28px 28px"
@@ -74,10 +74,10 @@ export default function Login() {
 
         <div className="flex-1 flex flex-col justify-center relative z-10 max-w-xs">
           <h2 className="text-[2rem] font-bold leading-snug mb-3 tracking-tight text-white">
-            Track where God sends your missionaries.
+            Track where your field teams are serving.
           </h2>
-          <p className="text-white/50 text-sm leading-relaxed mb-10">
-            A platform for churches to receive real-time field reports from missionaries serving worldwide.
+          <p className="text-white/60 text-sm leading-relaxed mb-10">
+            A platform for organizations to receive real-time updates from teams working around the world.
           </p>
 
           <div className="space-y-4">
