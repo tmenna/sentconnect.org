@@ -169,20 +169,6 @@ export default function Login() {
             </Form>
           </div>
 
-          <div className="mt-4 bg-white rounded-xl border border-border p-4">
-            <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2.5">Demo Access</p>
-            <div className="space-y-2 text-[13px]">
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Admin</span>
-                <span className="font-mono text-[11px] text-foreground bg-muted px-2 py-0.5 rounded">admin@calvary.org</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Missionary</span>
-                <span className="font-mono text-[11px] text-foreground bg-muted px-2 py-0.5 rounded">james@mission.org</span>
-              </div>
-              <p className="text-[11px] text-muted-foreground/60 pt-1">Password: <span className="font-mono">password123</span></p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
