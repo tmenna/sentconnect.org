@@ -213,9 +213,9 @@ export default function SubmitReport() {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                  <ImageIcon className="h-4 w-4 text-muted-foreground" /> Photos
+                  <ImageIcon className="h-4 w-4 text-muted-foreground" /> Photos & Videos
                 </h3>
-                <p className="text-xs text-muted-foreground mt-0.5">Attach image URLs to enrich your report.</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Paste image or video URLs (jpg, png, mp4, webm) to enrich your report.</p>
               </div>
             </div>
 
