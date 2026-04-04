@@ -25,11 +25,10 @@ const CAT_META: Record<string, {
   other: { icon: <MoreHorizontal className="h-3 w-3" />, color: "text-slate-600", tagBg: "bg-slate-50", tagColor: "text-slate-600" },
 };
 
-const PREVIEW_LIMIT = 160;
+const PREVIEW_LIMIT = 140;
 
 function ArticleCard({ report, index }: { report: ReportWithDetails; index: number }) {
   const [, navigate] = useLocation();
-  const meta = CAT_META[report.category] ?? CAT_META.other;
   const firstPhoto = (report as any).photos?.[0];
   const isVideo = firstPhoto && /\.(mp4|webm|ogg|mov)$/i.test(firstPhoto.url);
   const preview = report.description.length > PREVIEW_LIMIT
@@ -38,90 +37,54 @@ function ArticleCard({ report, index }: { report: ReportWithDetails; index: numb
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25, delay: index * 0.07 }}
-      className="bg-white rounded-2xl overflow-hidden shadow-sm border border-border hover:shadow-md transition-shadow duration-200 cursor-pointer group"
+      transition={{ duration: 0.22, delay: index * 0.05 }}
+      className="cursor-pointer group"
       onClick={() => navigate(`/reports/${report.id}`)}
     >
-      {/* Hero media */}
-      {firstPhoto?.url && !isVideo && (
-        <div className="w-full h-[220px] overflow-hidden bg-muted">
+      {/* Image */}
+      <div className="w-full aspect-[4/3] overflow-hidden bg-muted mb-3 rounded-sm">
+        {firstPhoto?.url && !isVideo ? (
           <img
             src={firstPhoto.url}
             alt={firstPhoto.caption || report.title}
-            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
             loading="lazy"
           />
-        </div>
-      )}
-      {firstPhoto?.url && isVideo && (
-        <div className="w-full h-[220px] overflow-hidden bg-black">
+        ) : firstPhoto?.url && isVideo ? (
           <video src={firstPhoto.url} className="w-full h-full object-cover" muted />
-        </div>
-      )}
-      {!firstPhoto && (
-        <div className="w-full h-[120px] bg-gradient-to-br from-primary/8 via-primary/4 to-transparent flex items-center justify-center">
-          <Globe className="h-10 w-10 text-primary/20" />
-        </div>
-      )}
-
-      <div className="px-6 py-5">
-        {/* Category tag */}
-        <div className="flex items-center justify-between mb-3">
-          <span className={cn(
-            "inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full",
-            meta.tagBg, meta.tagColor
-          )}>
-            {meta.icon}
-            {CATEGORY_LABELS[report.category]}
-          </span>
-          <span className="text-[11px] text-muted-foreground flex items-center gap-1">
-            <CalendarDays className="h-3 w-3" />
-            {format(new Date(report.reportDate), "MMM d, yyyy")}
-          </span>
-        </div>
-
-        {/* Title */}
-        <h2 className="text-[18px] font-bold text-foreground leading-snug mb-2 group-hover:text-primary transition-colors">
-          {report.title}
-        </h2>
-
-        {/* Preview text */}
-        <p className="text-[13.5px] text-muted-foreground leading-relaxed mb-4 line-clamp-3">
-          {preview}
-        </p>
-
-        {/* Footer: author + read more */}
-        <div className="flex items-center justify-between pt-3 border-t border-border/60">
-          <Link
-            href={`/missionaries/${report.missionary.id}`}
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="flex items-center gap-2.5 group/author">
-              <Avatar className="h-7 w-7 border border-border flex-shrink-0">
-                <AvatarImage src={report.missionary.avatarUrl || undefined} />
-                <AvatarFallback className="text-[10px] font-bold bg-primary/10 text-primary">
-                  {report.missionary.name.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="text-[12px] font-semibold text-foreground group-hover/author:text-primary transition-colors leading-tight">
-                  {report.missionary.name}
-                </p>
-                {report.location && (
-                  <p className="text-[10.5px] text-muted-foreground flex items-center gap-0.5 leading-tight">
-                    <MapPin className="h-2.5 w-2.5" />{report.location}
-                  </p>
-                )}
-              </div>
-            </div>
-          </Link>
-          <span className="text-[12px] font-semibold text-primary inline-flex items-center gap-0.5 group-hover:gap-1.5 transition-all">
-            Read more <ChevronRight className="h-3.5 w-3.5" />
-          </span>
-        </div>
+        ) : (
+          <div className="w-full h-full bg-muted flex items-center justify-center">
+            <Globe className="h-10 w-10 text-muted-foreground/20" />
+          </div>
+        )}
       </div>
+
+      {/* Date */}
+      <p className="text-[11.5px] text-muted-foreground mb-1.5">
+        {format(new Date(report.reportDate), "M/d/yy")}
+        {report.location && (
+          <span className="ml-2 inline-flex items-center gap-0.5">
+            <MapPin className="h-2.5 w-2.5" />{report.location}
+          </span>
+        )}
+      </p>
+
+      {/* Title */}
+      <h2 className="text-[19px] font-bold text-foreground leading-tight mb-2 group-hover:text-primary transition-colors" style={{ fontWeight: 700, letterSpacing: "-0.01em" }}>
+        {report.title}
+      </h2>
+
+      {/* Excerpt */}
+      <p className="text-[13px] text-foreground/70 leading-relaxed mb-2.5 line-clamp-3">
+        {preview}
+      </p>
+
+      {/* Read More */}
+      <span className="text-[13px] font-semibold text-primary underline underline-offset-2 hover:text-primary/80 transition-colors">
+        Read More
+      </span>
     </motion.article>
   );
 }
@@ -264,8 +227,8 @@ export default function Timeline() {
       {/* Sidebar */}
       <Sidebar reports={allReports} />
 
-      {/* Main feed */}
-      <div className="flex-1 min-w-0 space-y-5">
+      {/* Main feed — 2-col newspaper grid */}
+      <div className="flex-1 min-w-0">
         {allReports.length === 0 ? (
           <div className="bg-white rounded-2xl border border-dashed border-border py-24 text-center shadow-sm">
             <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
@@ -273,13 +236,15 @@ export default function Timeline() {
             <p className="text-muted-foreground text-xs mt-1">Check back soon for field updates.</p>
           </div>
         ) : (
-          allReports.map((report, index) => (
-            <ArticleCard key={report.id} report={report} index={index} />
-          ))
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10">
+            {allReports.map((report, index) => (
+              <ArticleCard key={report.id} report={report} index={index} />
+            ))}
+          </div>
         )}
 
         {allReports.length > 0 && (
-          <p className="text-center text-[11px] text-muted-foreground py-3">
+          <p className="text-center text-[11px] text-muted-foreground pt-8">
             {allReports.length} report{allReports.length !== 1 ? "s" : ""} total
           </p>
         )}
