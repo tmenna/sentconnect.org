@@ -200,51 +200,52 @@ function PostCard({ report, index }: { report: ReportWithDetails; index: number 
   );
 }
 
-function TimelineSidebar({ reports }: { reports: ReportWithDetails[] }) {
-  const grouped: Record<string, ReportWithDetails[]> = {};
-  reports.forEach(r => {
-    const key = format(new Date(r.reportDate), "MMMM yyyy");
-    if (!grouped[key]) grouped[key] = [];
-    grouped[key].push(r);
-  });
+function MissionarySidebar({ reports }: { reports: ReportWithDetails[] }) {
+  const seen = new Set<number>();
+  const missionaries = reports
+    .map(r => r.missionary)
+    .filter(m => { if (seen.has(m.id)) return false; seen.add(m.id); return true; });
+
+  const reportCounts: Record<number, number> = {};
+  reports.forEach(r => { reportCounts[r.missionaryId] = (reportCounts[r.missionaryId] || 0) + 1; });
 
   return (
     <aside className="hidden lg:block">
       <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden sticky top-[72px] max-h-[calc(100vh-96px)] overflow-y-auto">
         <div className="px-4 py-3.5 border-b border-border">
           <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Report Archive
+            Field Team
           </h3>
         </div>
-        <div className="p-4 space-y-5">
-          {Object.entries(grouped).map(([month, reps]) => (
-            <div key={month}>
-              <p className="text-[10.5px] font-semibold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                <CalendarDays className="h-3 w-3" /> {month}
-              </p>
-              <div className="space-y-1">
-                {reps.map(r => {
-                  const meta = CAT_META[r.category] ?? CAT_META.other;
-                  return (
-                    <Link key={r.id} href={`/reports/${r.id}`}>
-                      <div className="group flex items-start gap-2 py-1.5 px-2 rounded-lg hover:bg-muted/60 transition-colors cursor-pointer">
-                        <div className={cn("mt-0.5 w-4 h-4 rounded flex items-center justify-center flex-shrink-0", meta.iconBg)}>
-                          <span className={meta.color}>{meta.icon}</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[12px] font-medium text-foreground group-hover:text-primary transition-colors leading-snug line-clamp-2">
-                            {r.title}
-                          </p>
-                          <p className="text-[10.5px] text-muted-foreground mt-0.5">
-                            {r.missionary.name} · {format(new Date(r.reportDate), "MMM d")}
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
+        <div className="p-4 grid grid-cols-2 gap-3">
+          {missionaries.map(m => (
+            <Link key={m.id} href={`/missionaries/${m.id}`}>
+              <div className="group flex flex-col items-center gap-2 cursor-pointer">
+                <div className="w-full aspect-square rounded-xl overflow-hidden border-2 border-transparent group-hover:border-primary transition-all duration-150 shadow-sm bg-muted">
+                  {m.avatarUrl ? (
+                    <img
+                      src={m.avatarUrl}
+                      alt={m.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-primary/10">
+                      <span className="text-2xl font-bold text-primary">
+                        {m.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="text-center">
+                  <p className="text-[12px] font-semibold text-foreground group-hover:text-primary transition-colors leading-tight truncate w-full">
+                    {m.name.split(" ")[0]}
+                  </p>
+                  <p className="text-[10.5px] text-muted-foreground mt-0.5">
+                    {reportCounts[m.id] ?? 0} report{reportCounts[m.id] !== 1 ? "s" : ""}
+                  </p>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -348,9 +349,9 @@ export default function Timeline() {
         )}
       </div>
 
-      {/* Timeline sidebar */}
-      <div className="w-64 flex-shrink-0">
-        <TimelineSidebar reports={allReports} />
+      {/* Missionary sidebar */}
+      <div className="w-56 flex-shrink-0">
+        <MissionarySidebar reports={allReports} />
       </div>
     </div>
   );
