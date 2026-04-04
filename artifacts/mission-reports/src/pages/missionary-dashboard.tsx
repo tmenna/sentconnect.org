@@ -1,78 +1,314 @@
+import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
-import { useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
-import { Link, Redirect } from "wouter";
 import {
-  Home, Users, HeartHandshake, GraduationCap, MoreHorizontal,
-  MapPin, Building, ChevronRight, FileText, Plus
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+  useGetUserReports, getGetUserReportsQueryKey,
+  useCreateReport, useAddReportPhoto
+} from "@workspace/api-client-react";
+import { Link, Redirect, useLocation } from "wouter";
+import { MapPin, Building, Plus, Image, Video, X, ChevronRight, BookOpen, Send, CalendarDays } from "lucide-react";
 import { format } from "date-fns";
-import { CATEGORY_LABELS } from "@/lib/constants";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
+import { useQueryClient } from "@tanstack/react-query";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const CATEGORIES = [
-  {
-    key: "church_planting",
-    label: "Church Planting",
-    icon: Home,
-    color: "text-amber-700",
-    bg: "bg-amber-50",
-    border: "border-amber-200/80",
-    iconBg: "bg-amber-100",
-    dot: "bg-amber-400",
-    desc: "New congregations & outreach",
-  },
-  {
-    key: "leadership_training",
-    label: "Leadership Training",
-    icon: Users,
-    color: "text-blue-700",
-    bg: "bg-blue-50",
-    border: "border-blue-200/80",
-    iconBg: "bg-blue-100",
-    dot: "bg-blue-400",
-    desc: "Equipping local leaders",
-  },
-  {
-    key: "humanitarian_work",
-    label: "Humanitarian Work",
-    icon: HeartHandshake,
-    color: "text-rose-700",
-    bg: "bg-rose-50",
-    border: "border-rose-200/80",
-    iconBg: "bg-rose-100",
-    dot: "bg-rose-400",
-    desc: "Serving practical needs",
-  },
-  {
-    key: "education",
-    label: "Education",
-    icon: GraduationCap,
-    color: "text-emerald-700",
-    bg: "bg-emerald-50",
-    border: "border-emerald-200/80",
-    iconBg: "bg-emerald-100",
-    dot: "bg-emerald-400",
-    desc: "Teaching & training programs",
-  },
-  {
-    key: "other",
-    label: "Other",
-    icon: MoreHorizontal,
-    color: "text-slate-600",
-    bg: "bg-slate-50",
-    border: "border-slate-200/80",
-    iconBg: "bg-slate-100",
-    dot: "bg-slate-400",
-    desc: "General ministry updates",
-  },
-];
+const TEXT_LIMIT = 280;
+
+function MyPostCard({ report, index }: { report: any; index: number }) {
+  const [expanded, setExpanded] = useState(false);
+  const [, navigate] = useLocation();
+  const firstPhoto = report.photos?.[0];
+  const isLong = report.description?.length > TEXT_LIMIT;
+  const displayText =
+    expanded || !isLong
+      ? report.description
+      : report.description?.slice(0, TEXT_LIMIT) + "…";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22, delay: index * 0.06 }}
+      className="bg-white rounded-xl border border-border shadow-sm overflow-hidden"
+    >
+      <div className="px-5 pt-4 pb-3">
+        <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground mb-3">
+          <CalendarDays className="h-3 w-3" />
+          {format(new Date(report.reportDate), "MMM d, yyyy")}
+          {report.location && (
+            <>
+              <span>·</span>
+              <MapPin className="h-3 w-3" />
+              {report.location}
+            </>
+          )}
+        </div>
+
+        <h3
+          className="font-semibold text-foreground text-[15px] leading-snug mb-2 cursor-pointer hover:text-primary transition-colors"
+          onClick={() => navigate(`/reports/${report.id}`)}
+        >
+          {report.title}
+        </h3>
+
+        {report.description && (
+          <div className="text-sm text-foreground/85 leading-relaxed">
+            <p>{displayText}</p>
+            {isLong && (
+              <button
+                className="text-primary text-[12.5px] font-medium mt-1 hover:underline"
+                onClick={() => setExpanded(e => !e)}
+              >
+                {expanded ? "Show less" : "See more"}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {firstPhoto?.url && (
+        <div
+          className="cursor-pointer border-t border-border"
+          onClick={() => navigate(`/reports/${report.id}`)}
+        >
+          {/\.(mp4|webm|ogg|mov)$/i.test(firstPhoto.url) ? (
+            <video
+              src={firstPhoto.url}
+              controls
+              className="w-full max-h-[340px] bg-black"
+              onClick={e => e.stopPropagation()}
+            />
+          ) : (
+            <img
+              src={firstPhoto.url}
+              alt={firstPhoto.caption || report.title}
+              className="w-full object-cover max-h-[340px]"
+              loading="lazy"
+            />
+          )}
+          {firstPhoto.caption && (
+            <p className="px-5 py-2 text-[11px] text-muted-foreground italic border-t border-border bg-muted/30">
+              {firstPhoto.caption}
+            </p>
+          )}
+        </div>
+      )}
+
+      <div className="px-5 py-3 border-t border-border">
+        <Link href={`/reports/${report.id}`}>
+          <span className="text-[12.5px] font-medium text-primary hover:underline inline-flex items-center gap-1">
+            Read full report <ChevronRight className="h-3.5 w-3.5" />
+          </span>
+        </Link>
+      </div>
+    </motion.div>
+  );
+}
+
+function PostComposer({ user, onPosted }: { user: any; onPosted: () => void }) {
+  const [expanded, setExpanded] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [media, setMedia] = useState<{ url: string; caption: string }[]>([]);
+  const [showMediaInput, setShowMediaInput] = useState(false);
+  const [pendingUrl, setPendingUrl] = useState("");
+  const [pendingCaption, setPendingCaption] = useState("");
+  const [error, setError] = useState("");
+
+  const createReport = useCreateReport();
+  const addPhoto = useAddReportPhoto();
+
+  const canSubmit = title.trim().length > 0 && description.trim().length > 0;
+  const isPending = createReport.isPending;
+
+  function addMedia() {
+    if (!pendingUrl.trim()) return;
+    setMedia(m => [...m, { url: pendingUrl.trim(), caption: pendingCaption.trim() }]);
+    setPendingUrl("");
+    setPendingCaption("");
+    setShowMediaInput(false);
+  }
+
+  async function handlePost() {
+    if (!canSubmit) return;
+    setError("");
+    try {
+      const report = await createReport.mutateAsync({
+        body: {
+          title: title.trim(),
+          description: description.trim(),
+          category: "other",
+          reportDate: new Date().toISOString().split("T")[0],
+          location: user.location ?? null,
+        }
+      });
+      for (const m of media) {
+        await addPhoto.mutateAsync({ params: { id: report.id }, body: { url: m.url, caption: m.caption || null } });
+      }
+      setTitle("");
+      setDescription("");
+      setMedia([]);
+      setShowMediaInput(false);
+      setExpanded(false);
+      onPosted();
+    } catch {
+      setError("Something went wrong. Please try again.");
+    }
+  }
+
+  return (
+    <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
+      {!expanded ? (
+        <button
+          className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-muted/30 transition-colors"
+          onClick={() => setExpanded(true)}
+        >
+          <Avatar className="h-9 w-9 border border-border flex-shrink-0">
+            <AvatarImage src={user.avatarUrl || undefined} />
+            <AvatarFallback className="text-sm font-semibold bg-primary/10 text-primary">
+              {user.name.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
+          <span className="text-sm text-muted-foreground flex-1">
+            Share a field update, {user.name.split(" ")[0]}…
+          </span>
+          <Send className="h-4 w-4 text-muted-foreground/40" />
+        </button>
+      ) : (
+        <div className="p-5 space-y-3">
+          <div className="flex items-center gap-3 mb-1">
+            <Avatar className="h-9 w-9 border border-border flex-shrink-0">
+              <AvatarImage src={user.avatarUrl || undefined} />
+              <AvatarFallback className="text-sm font-semibold bg-primary/10 text-primary">
+                {user.name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-semibold text-foreground">{user.name}</p>
+              {user.location && (
+                <p className="text-[11px] text-muted-foreground flex items-center gap-0.5">
+                  <MapPin className="h-2.5 w-2.5" />{user.location}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <input
+            type="text"
+            placeholder="Report title…"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            className="w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground/60 border-b border-border bg-transparent pb-2 outline-none focus:border-primary transition-colors"
+          />
+
+          <textarea
+            placeholder="What's happening in your field? Share an update, story, or prayer request…"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            rows={4}
+            className="w-full text-sm text-foreground placeholder:text-muted-foreground/60 resize-none bg-transparent outline-none leading-relaxed"
+          />
+
+          {media.length > 0 && (
+            <div className="space-y-1.5">
+              {media.map((m, i) => (
+                <div key={i} className="flex items-center gap-2 text-xs bg-muted/50 rounded-lg px-3 py-2">
+                  <Image className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                  <span className="flex-1 truncate text-muted-foreground">{m.url}</span>
+                  {m.caption && <span className="text-muted-foreground/60 truncate max-w-[120px]">"{m.caption}"</span>}
+                  <button onClick={() => setMedia(prev => prev.filter((_, j) => j !== i))}>
+                    <X className="h-3 w-3 text-muted-foreground hover:text-destructive" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <AnimatePresence>
+            {showMediaInput && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="border border-border rounded-xl p-3 space-y-2 bg-muted/20"
+              >
+                <input
+                  type="text"
+                  placeholder="Paste photo or video URL…"
+                  value={pendingUrl}
+                  onChange={e => setPendingUrl(e.target.value)}
+                  className="w-full text-xs bg-white border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors"
+                />
+                <input
+                  type="text"
+                  placeholder="Caption (optional)"
+                  value={pendingCaption}
+                  onChange={e => setPendingCaption(e.target.value)}
+                  className="w-full text-xs bg-white border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors"
+                />
+                <div className="flex gap-2 justify-end">
+                  <button
+                    onClick={() => setShowMediaInput(false)}
+                    className="text-xs text-muted-foreground px-3 py-1.5 rounded-lg hover:bg-muted transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={addMedia}
+                    disabled={!pendingUrl.trim()}
+                    className="text-xs font-medium bg-primary text-white px-3 py-1.5 rounded-lg disabled:opacity-40 hover:opacity-90 transition-opacity"
+                  >
+                    Attach
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {error && <p className="text-xs text-destructive">{error}</p>}
+
+          <div className="flex items-center justify-between pt-1 border-t border-border">
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => { setShowMediaInput(true); setPendingUrl(""); setPendingCaption(""); }}
+                className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-foreground px-2.5 py-1.5 rounded-lg hover:bg-muted/60 transition-colors"
+              >
+                <Image className="h-3.5 w-3.5" /> Photo
+              </button>
+              <button
+                onClick={() => { setShowMediaInput(true); setPendingUrl(""); setPendingCaption(""); }}
+                className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-foreground px-2.5 py-1.5 rounded-lg hover:bg-muted/60 transition-colors"
+              >
+                <Video className="h-3.5 w-3.5" /> Video
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => { setExpanded(false); setTitle(""); setDescription(""); setMedia([]); setShowMediaInput(false); }}
+                className="text-xs text-muted-foreground px-3 py-1.5 rounded-lg hover:bg-muted transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handlePost}
+                disabled={!canSubmit || isPending}
+                className="text-xs font-semibold bg-primary text-white px-4 py-1.5 rounded-lg disabled:opacity-40 hover:opacity-90 transition-opacity flex items-center gap-1.5"
+              >
+                <Send className="h-3 w-3" />
+                {isPending ? "Posting…" : "Post"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
+  const queryClient = useQueryClient();
 
-  const { data: reports } = useGetUserReports(user?.id ?? 0, {
+  const { data: reports, refetch } = useGetUserReports(user?.id ?? 0, {
     query: { enabled: !!user?.id, queryKey: getGetUserReportsQueryKey(user?.id ?? 0) }
   });
 
@@ -83,11 +319,13 @@ export default function MissionaryDashboard() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
-  const countByCategory: Record<string, number> = {};
-  reports?.forEach(r => { countByCategory[r.category] = (countByCategory[r.category] || 0) + 1; });
+  function handlePosted() {
+    queryClient.invalidateQueries({ queryKey: getGetUserReportsQueryKey(user!.id) });
+    refetch();
+  }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-4">
 
       {/* Identity bar */}
       <motion.div
@@ -96,9 +334,12 @@ export default function MissionaryDashboard() {
         transition={{ duration: 0.25 }}
         className="bg-white rounded-xl border border-border p-5 flex items-start gap-4 shadow-sm"
       >
-        <div className="w-11 h-11 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold text-lg flex-shrink-0 border border-primary/20">
-          {user.name.charAt(0).toUpperCase()}
-        </div>
+        <Avatar className="h-11 w-11 border border-border flex-shrink-0">
+          <AvatarImage src={user.avatarUrl || undefined} />
+          <AvatarFallback className="text-lg font-semibold bg-primary/10 text-primary">
+            {user.name.charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
         <div className="flex-1 min-w-0">
           <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{greeting}</p>
           <h1 className="text-lg font-semibold text-foreground mt-0.5 tracking-tight">{user.name}</h1>
@@ -135,108 +376,21 @@ export default function MissionaryDashboard() {
         </div>
       </motion.div>
 
-      {/* Category grid */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-foreground">File a Report</h2>
-          <span className="text-xs text-muted-foreground">Choose a ministry area</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          {CATEGORIES.map((cat, i) => {
-            const Icon = cat.icon;
-            const count = countByCategory[cat.key] || 0;
-            return (
-              <motion.div
-                key={cat.key}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: i * 0.05 }}
-              >
-                <Link href={`/submit?category=${cat.key}`}>
-                  <div className={cn(
-                    "flex items-center gap-3.5 p-4 rounded-xl border bg-white cursor-pointer group",
-                    "hover:shadow-md hover:-translate-y-px transition-all duration-150",
-                    cat.border
-                  )}>
-                    <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0", cat.iconBg)}>
-                      <Icon className={cn("h-5 w-5", cat.color)} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-foreground text-[13.5px] leading-tight">{cat.label}</p>
-                      <p className="text-[11.5px] text-muted-foreground mt-0.5">{cat.desc}</p>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      {count > 0 && (
-                        <span className={cn("text-[11px] font-semibold px-2 py-0.5 rounded-full", cat.bg, cat.color)}>
-                          {count}
-                        </span>
-                      )}
-                      <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-muted-foreground transition-colors" />
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
+      {/* Post composer */}
+      <PostComposer user={user} onPosted={handlePosted} />
 
-      {/* Recent reports */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-foreground">Your Reports</h2>
-          <Link href="/feed">
-            <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-muted-foreground gap-1">
-              Church feed <ChevronRight className="h-3 w-3" />
-            </Button>
-          </Link>
+      {/* Personal timeline */}
+      {!reports || reports.length === 0 ? (
+        <div className="bg-white rounded-xl border border-dashed border-border py-16 text-center shadow-sm">
+          <BookOpen className="h-9 w-9 mx-auto text-muted-foreground/25 mb-3" />
+          <p className="font-semibold text-foreground text-sm">No updates yet</p>
+          <p className="text-muted-foreground text-xs mt-1">Use the box above to share your first field update.</p>
         </div>
-
-        {!reports || reports.length === 0 ? (
-          <div className="bg-white rounded-xl border border-dashed border-border py-14 text-center">
-            <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center mx-auto mb-3">
-              <FileText className="h-5 w-5 text-muted-foreground/50" />
-            </div>
-            <p className="font-semibold text-foreground text-sm">No reports yet</p>
-            <p className="text-xs text-muted-foreground mt-1">Pick a ministry area above to file your first report.</p>
-          </div>
-        ) : (
-          <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-            {reports.slice(0, 6).map((report, index) => {
-              const meta = CATEGORIES.find(c => c.key === report.category) ?? CATEGORIES[4];
-              const Icon = meta.icon;
-              return (
-                <motion.div
-                  key={report.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: index * 0.04 }}
-                  className={index > 0 ? "border-t border-border" : ""}
-                >
-                  <Link
-                    href={`/reports/${report.id}`}
-                    className="flex items-center gap-3.5 px-5 py-3.5 hover:bg-[#F7F8FA] transition-colors group"
-                    data-testid={`link-my-report-${report.id}`}
-                  >
-                    <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0", meta.iconBg)}>
-                      <Icon className={cn("h-3.5 w-3.5", meta.color)} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-foreground text-sm truncate group-hover:text-primary transition-colors">
-                        {report.title}
-                      </p>
-                      <p className="text-[11px] text-muted-foreground mt-0.5">
-                        {format(new Date(report.reportDate), "MMM d, yyyy")} · {CATEGORY_LABELS[report.category]}
-                      </p>
-                    </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground/30 group-hover:text-muted-foreground transition-colors flex-shrink-0" />
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
-      </div>
+      ) : (
+        reports.map((report, index) => (
+          <MyPostCard key={report.id} report={report} index={index} />
+        ))
+      )}
     </div>
   );
 }
