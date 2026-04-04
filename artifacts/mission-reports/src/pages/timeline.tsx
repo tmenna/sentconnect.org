@@ -261,6 +261,9 @@ export default function Timeline() {
   return (
     <div className="flex gap-6 items-start">
 
+      {/* Sidebar */}
+      <Sidebar reports={allReports} />
+
       {/* Main feed */}
       <div className="flex-1 min-w-0 space-y-5">
         {allReports.length === 0 ? (
@@ -281,9 +284,6 @@ export default function Timeline() {
           </p>
         )}
       </div>
-
-      {/* Sidebar */}
-      <Sidebar reports={allReports} />
     </div>
   );
 }
