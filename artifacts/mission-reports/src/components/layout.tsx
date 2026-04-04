@@ -7,7 +7,7 @@ import { Shuffle, LogOut, LayoutDashboard, Rss } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
-const BRAND_TEAL = "#09757A";
+const BRAND_DARK = "#1a202c";
 
 export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -41,7 +41,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground">
-      <header className="sticky top-0 z-50 w-full" style={{ backgroundColor: BRAND_TEAL }}>
+      <header className="sticky top-0 z-50 w-full" style={{ backgroundColor: BRAND_DARK }}>
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
             <div className="bg-white/15 border border-white/20 p-1.5 rounded-lg">
@@ -79,7 +79,7 @@ export function Layout({ children }: { children: ReactNode }) {
                   <Link href="/login" data-testid="link-nav-login">
                     <Button
                       size="sm"
-                      className="h-8 px-4 text-sm font-semibold rounded-lg bg-white text-[#09757A] hover:bg-white/90"
+                      className="h-8 px-5 text-sm font-bold rounded-md bg-[#E8730C] text-white hover:bg-[#d4660a] transition-colors"
                     >
                       Sign In
                     </Button>
@@ -95,7 +95,7 @@ export function Layout({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      <footer className="border-t border-border py-5 mt-12" style={{ backgroundColor: BRAND_TEAL }}>
+      <footer className="border-t border-border py-5 mt-12" style={{ backgroundColor: BRAND_DARK }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-white/10 p-1 rounded-md border border-white/15">
