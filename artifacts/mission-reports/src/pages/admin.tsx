@@ -107,7 +107,7 @@ export default function AdminDashboard() {
           {activity && activity.length > 0 && (
             <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-border">
-                <h2 className="text-sm font-semibold text-foreground">Recent Activity</h2>
+                <h2 className="text-sm font-semibold text-foreground">Recent Reports</h2>
               </div>
               <div>
                 {activity.map((rep, i) => (
