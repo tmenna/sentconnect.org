@@ -79,18 +79,18 @@
   --sidebar: 0 0% 97%;
   --sidebar-foreground: 0 0% 10%;
   --sidebar-border: 0 0% 88%;
-  --sidebar-primary: 115 48% 42%;
+  --sidebar-primary: 183 86% 26%;
   --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 0 0% 93%;
   --sidebar-accent-foreground: 0 0% 10%;
-  --sidebar-ring: 115 48% 42%;
+  --sidebar-ring: 183 86% 26%;
 
   --popover: 0 0% 100%;
   --popover-foreground: 0 0% 9%;
   --popover-border: 0 0% 90%;
 
-  /* #59C14F → hsl(115 48% 53%) — using slightly deeper shade for readability */
-  --primary: 115 48% 42%;
+  /* #09757A → hsl(183 86% 26%) */
+  --primary: 183 86% 26%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 0 0% 93%;
@@ -99,14 +99,14 @@
   --muted: 0 0% 92%;
   --muted-foreground: 0 0% 44%;
 
-  --accent: 115 40% 93%;
-  --accent-foreground: 115 48% 26%;
+  --accent: 183 60% 93%;
+  --accent-foreground: 183 86% 18%;
 
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
 
   --input: 0 0% 86%;
-  --ring: 115 48% 42%;
+  --ring: 183 86% 26%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-serif: 'Inter', sans-serif;
