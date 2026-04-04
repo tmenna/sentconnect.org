@@ -59,7 +59,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex">
       {/* Left: Brand Panel */}
-      <div className="hidden lg:flex lg:w-[44%] flex-col bg-[#1a202c] text-white p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-[44%] flex-col bg-[#132272] text-white p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.04]" style={{
           backgroundImage: `radial-gradient(circle, white 1px, transparent 1px)`,
           backgroundSize: "28px 28px"
