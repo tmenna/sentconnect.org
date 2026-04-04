@@ -44,7 +44,7 @@ export default function AdminDashboard() {
             <div className="px-5 py-4 border-b border-border">
               <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
                 <Users className="h-4 w-4 text-muted-foreground" />
-                Field Team
+                Global Partners
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">Select a missionary to view their reports</p>
             </div>

@@ -205,7 +205,7 @@ function MissionarySidebar({ reports }: { reports: ReportWithDetails[] }) {
       <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden sticky top-[72px] max-h-[calc(100vh-96px)] overflow-y-auto">
         <div className="px-4 py-3.5 border-b border-border">
           <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Field Team
+            Global Partners
           </h3>
         </div>
         <div className="p-4 grid grid-cols-2 gap-3">
