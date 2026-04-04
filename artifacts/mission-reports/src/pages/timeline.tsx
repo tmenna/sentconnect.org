@@ -56,15 +56,6 @@ const CAT_META: Record<string, {
   },
 };
 
-const FILTER_OPTIONS = [
-  { key: "all", label: "All" },
-  { key: "church_planting", label: "Church Planting" },
-  { key: "leadership_training", label: "Leadership" },
-  { key: "humanitarian_work", label: "Humanitarian" },
-  { key: "education", label: "Education" },
-  { key: "other", label: "Other" },
-];
-
 const TEXT_LIMIT = 300;
 
 function PostCard({ report, index }: { report: ReportWithDetails; index: number }) {
@@ -254,25 +245,17 @@ function MissionarySidebar({ reports }: { reports: ReportWithDetails[] }) {
 }
 
 export default function Timeline() {
-  const [activeFilter, setActiveFilter] = useState("all");
-
   const { data, isLoading, isError } = useGetTimeline(
     { limit: 40 },
     { query: { queryKey: getGetTimelineQueryKey({ limit: 40 }) } }
   );
 
   const allReports = data?.reports ?? [];
-  const filtered = activeFilter === "all"
-    ? allReports
-    : allReports.filter(r => r.category === activeFilter);
 
   if (isLoading) {
     return (
       <div className="flex gap-6">
         <div className="flex-1 space-y-4">
-          <div className="flex gap-2 flex-wrap">
-            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-8 w-24 rounded-full" />)}
-          </div>
           {[1, 2, 3].map(i => (
             <div key={i} className="bg-white rounded-xl border border-border shadow-sm p-5 space-y-3">
               <div className="flex items-center gap-3">
@@ -310,41 +293,22 @@ export default function Timeline() {
       {/* Main feed */}
       <div className="flex-1 min-w-0 space-y-4">
 
-        {/* Category filters */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          {FILTER_OPTIONS.map(opt => (
-            <button
-              key={opt.key}
-              onClick={() => setActiveFilter(opt.key)}
-              className={cn(
-                "px-3 py-1.5 rounded-full text-[12.5px] font-medium transition-colors",
-                activeFilter === opt.key
-                  ? "bg-[#1a4899] text-white shadow-sm"
-                  : "bg-white border border-border text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-
         {/* Posts */}
-        {filtered.length === 0 ? (
+        {allReports.length === 0 ? (
           <div className="bg-white rounded-xl border border-dashed border-border py-20 text-center shadow-sm">
             <BookOpen className="h-9 w-9 mx-auto text-muted-foreground/25 mb-3" />
             <p className="font-semibold text-foreground text-sm">No reports yet</p>
-            <p className="text-muted-foreground text-xs mt-1">No reports in this category.</p>
+            <p className="text-muted-foreground text-xs mt-1">Check back soon for field updates.</p>
           </div>
         ) : (
-          filtered.map((report, index) => (
+          allReports.map((report, index) => (
             <PostCard key={report.id} report={report} index={index} />
           ))
         )}
 
-        {filtered.length > 0 && (
+        {allReports.length > 0 && (
           <p className="text-center text-[11px] text-muted-foreground py-2">
-            {filtered.length} report{filtered.length !== 1 ? "s" : ""}
-            {activeFilter !== "all" ? ` in ${CATEGORY_LABELS[activeFilter]}` : " total"}
+            {allReports.length} report{allReports.length !== 1 ? "s" : ""} total
           </p>
         )}
       </div>
