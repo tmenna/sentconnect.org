@@ -7,6 +7,8 @@ import { Shuffle, LogOut, LayoutDashboard, Rss } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
+const BRAND_BLUE = "#1a4899";
+
 export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [currentPath] = useLocation();
@@ -28,8 +30,8 @@ export function Layout({ children }: { children: ReactNode }) {
       <span className={cn(
         "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
         currentPath === href
-          ? "bg-muted text-foreground"
-          : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+          ? "bg-white/15 text-white"
+          : "text-white/65 hover:text-white hover:bg-white/10"
       )}>
         {icon}
         {label}
@@ -39,13 +41,13 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground">
-      <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-border">
+      <header className="sticky top-0 z-50 w-full" style={{ backgroundColor: BRAND_BLUE }}>
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <div className="bg-primary text-white p-1.5 rounded-lg">
-              <Shuffle className="h-4 w-4" />
+            <div className="bg-white/15 border border-white/20 p-1.5 rounded-lg">
+              <Shuffle className="h-4 w-4 text-white" />
             </div>
-            <span className="font-semibold text-[15px] tracking-tight text-foreground">SentTrack</span>
+            <span className="font-semibold text-[15px] tracking-tight text-white">SentTrack</span>
           </Link>
 
           <nav className="flex items-center gap-0.5">
@@ -54,11 +56,10 @@ export function Layout({ children }: { children: ReactNode }) {
                 {isAuthenticated && user ? (
                   <>
                     {navLink("/feed", "Feed", <Rss className="h-3.5 w-3.5" />)}
-
                     {user.role === "admin" && navLink("/admin", "Admin", <LayoutDashboard className="h-3.5 w-3.5" />)}
 
                     <Link href="/profile" data-testid="link-nav-profile">
-                      <div className="ml-1.5 w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold text-[13px] cursor-pointer hover:bg-primary/20 transition-colors border border-primary/20">
+                      <div className="ml-1.5 w-8 h-8 rounded-full bg-white/15 border border-white/25 text-white flex items-center justify-center font-semibold text-[13px] cursor-pointer hover:bg-white/25 transition-colors">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                     </Link>
@@ -66,7 +67,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 ml-0.5 text-muted-foreground hover:text-foreground"
+                      className="h-8 w-8 ml-0.5 text-white/60 hover:text-white hover:bg-white/10"
                       onClick={() => logout.mutate({ data: undefined })}
                       title="Sign out"
                       data-testid="btn-logout"
@@ -76,7 +77,12 @@ export function Layout({ children }: { children: ReactNode }) {
                   </>
                 ) : (
                   <Link href="/login" data-testid="link-nav-login">
-                    <Button size="sm" className="h-8 px-4 text-sm font-medium rounded-lg">Sign In</Button>
+                    <Button
+                      size="sm"
+                      className="h-8 px-4 text-sm font-semibold rounded-lg bg-white text-[#1a4899] hover:bg-white/90"
+                    >
+                      Sign In
+                    </Button>
                   </Link>
                 )}
               </>
@@ -89,15 +95,15 @@ export function Layout({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      <footer className="border-t border-border bg-white py-5 mt-12">
+      <footer className="border-t border-border py-5 mt-12" style={{ backgroundColor: BRAND_BLUE }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="bg-primary/8 p-1 rounded-md">
-              <Shuffle className="h-3 w-3 text-primary" />
+            <div className="bg-white/10 p-1 rounded-md border border-white/15">
+              <Shuffle className="h-3 w-3 text-white/70" />
             </div>
-            <span className="text-xs font-semibold text-muted-foreground">SentTrack</span>
+            <span className="text-xs font-semibold text-white/60">SentTrack</span>
           </div>
-          <p className="text-xs text-muted-foreground/60 italic">"Declare his glory among the nations." — Ps 96:3</p>
+          <p className="text-xs text-white/35 italic">"Declare his glory among the nations." — Ps 96:3</p>
         </div>
       </footer>
     </div>
