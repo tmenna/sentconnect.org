@@ -18,7 +18,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const FEATURES = [
-  { icon: BookOpen, text: "Real-time reports from the field" },
+  { icon: BookOpen, text: "Timely updates from the field" },
   { icon: MapPin, text: "Know where every team member is currently serving" },
   { icon: Building, text: "Track activities by organization and program type" },
 ];
