@@ -69,7 +69,7 @@ export default function Login() {
           <div className="bg-white/10 p-2 rounded-xl border border-white/10">
             <Shuffle className="h-5 w-5 text-white" />
           </div>
-          <span className="text-lg font-semibold tracking-tight">SentTrack</span>
+          <span className="text-lg font-semibold tracking-tight">SentConnect</span>
         </div>
 
         <div className="flex-1 flex flex-col justify-center relative z-10 max-w-xs">
@@ -106,7 +106,7 @@ export default function Login() {
           <div className="bg-primary p-2 rounded-xl text-white">
             <Shuffle className="h-5 w-5" />
           </div>
-          <span className="text-lg font-semibold">SentTrack</span>
+          <span className="text-lg font-semibold">SentConnect</span>
         </div>
 
         <div className="w-full max-w-[380px]">

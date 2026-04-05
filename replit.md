@@ -1,4 +1,4 @@
-# SentTrack — Private Social Feed for Field Teams
+# SentConnect — Private Social Feed for Field Teams
 
 ## Overview
 

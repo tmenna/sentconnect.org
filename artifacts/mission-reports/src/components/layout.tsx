@@ -47,7 +47,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="bg-white/15 border border-white/20 p-1.5 rounded-lg">
               <Shuffle className="h-4 w-4 text-white" />
             </div>
-            <span className="font-semibold text-[15px] tracking-tight text-white">SentTrack</span>
+            <span className="font-semibold text-[15px] tracking-tight text-white">SentConnect</span>
           </Link>
 
           <nav className="flex items-center gap-0.5">
@@ -101,7 +101,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="bg-white/10 p-1 rounded-md border border-white/15">
               <Shuffle className="h-3 w-3 text-white/70" />
             </div>
-            <span className="text-xs font-semibold text-white/60">SentTrack</span>
+            <span className="text-xs font-semibold text-white/60">SentConnect</span>
           </div>
           <p className="text-xs text-white/35 italic">"Declare his glory among the nations." — Ps 96:3</p>
         </div>
