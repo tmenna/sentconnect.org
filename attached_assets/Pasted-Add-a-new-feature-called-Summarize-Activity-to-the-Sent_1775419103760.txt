@@ -1,0 +1,102 @@
+Add a new feature called “Summarize Activity” to the SentConnect app that allows admins to generate a concise summary of posts over a selected time period.
+
+Core Goal:
+Help admins quickly understand what has been happening across posts without reading each one.
+
+Feature Requirements:
+
+1. Access & Placement
+
+* This feature is available only to Admin users
+* Add a button on the Admin Dashboard:
+
+  * Label: “Summarize Activity”
+* Optionally also allow access from the feed page
+
+2. Input Controls (Simple UI)
+
+* When clicked, open a modal or panel with:
+
+  * Date range selector:
+
+    * Last 7 days
+    * Last 30 days (default)
+    * Custom date range (optional)
+* Optional filters (if easy to add):
+
+  * By user
+  * By location
+
+3. Data Handling
+
+* Fetch all posts within the selected range from the database
+* Each post includes:
+
+  * Text content
+  * Location (if available)
+  * Created date
+  * Optional stats (e.g., people reached)
+
+4. AI Summarization
+
+* Send the collected posts to an AI summarization function (use OpenAI API or similar)
+* Construct a prompt that:
+
+  * Summarizes key activities
+  * Identifies common themes
+  * Highlights impact (if numbers exist)
+* Keep the summary concise and structured
+
+Example prompt to AI:
+“Summarize the following field updates into a clear, concise report. Include:
+
+* Key activities
+* Main themes
+* Any measurable impact (numbers if mentioned)
+* Notable highlights
+  Keep it under 150 words and use bullet points.”
+
+5. Output Display
+
+* Show the result in a clean card or modal:
+
+  * Title: “Summary (Last 30 Days)” or based on selected range
+  * Bullet-point summary
+* Add options:
+
+  * Copy to clipboard
+  * Regenerate summary
+
+6. UX Guidelines
+
+* Keep it fast and simple (one-click + result)
+* Show loading state while generating summary
+* Handle empty state:
+
+  * “No posts available for this period”
+
+7. Tech Implementation
+
+* Backend:
+
+  * Add endpoint: POST /api/summarize
+  * Accepts: date range + optional filters
+  * Fetch posts → send to AI → return summary
+* Frontend:
+
+  * Modal component
+  * API call to summarization endpoint
+* Ensure secure handling of API keys (environment variables)
+
+8. Future Enhancements (optional, not required now)
+
+* Add metrics (total posts, total people reached)
+* Export summary (PDF or text)
+* Save summaries for later viewing
+* Add charts or visual insights
+
+Design Principles:
+
+* Keep the feature lightweight and non-intrusive
+* Focus on clarity and usefulness over complexity
+* Make it feel like a helpful assistant, not a reporting tool
