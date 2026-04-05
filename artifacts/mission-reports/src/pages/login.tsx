@@ -18,9 +18,9 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const FEATURES = [
-  { icon: BookOpen, text: "Timely updates from the field" },
-  { icon: MapPin, text: "Know where every team member is currently serving" },
-  { icon: Building, text: "Track activities by organization and program type" },
+  { icon: BookOpen, text: "Share updates from the field" },
+  { icon: MapPin, text: "See where work is happening" },
+  { icon: Building, text: "Stay informed across teams and activities" },
 ];
 
 export default function Login() {
@@ -74,10 +74,10 @@ export default function Login() {
 
         <div className="flex-1 flex flex-col justify-center relative z-10 max-w-xs">
           <h2 className="text-[2rem] font-bold leading-snug mb-3 tracking-tight text-white">
-            Track where your field teams are serving.
+            Stay connected with your field teams.
           </h2>
           <p className="text-white/60 text-sm leading-relaxed mb-10">
-            A platform for organizations to receive real-time updates from teams working around the world.
+            A simple platform for organizations to receive updates from teams working across different locations.
           </p>
 
           <div className="space-y-4">
