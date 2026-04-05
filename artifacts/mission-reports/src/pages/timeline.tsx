@@ -110,10 +110,14 @@ function PostSkeleton() {
 }
 
 export default function Feed() {
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const [posts, setPosts] = useState<PostData[] | null>(null);
   if (!authLoading && !isAuthenticated) {
     if (typeof window !== "undefined") window.location.replace("/login");
+    return null;
+  }
+  if (!authLoading && isAuthenticated && user?.role !== "admin") {
+    if (typeof window !== "undefined") window.location.replace("/");
     return null;
   }
   const { data, isLoading, isError } = useGetTimeline(

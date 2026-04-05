@@ -1,10 +1,11 @@
 import { useGetUser, getGetUserQueryKey, useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
-import { useParams, Link } from "wouter";
+import { useParams, Link, Redirect } from "wouter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Building, Calendar, ArrowLeft, Home, Users, HeartHandshake, GraduationCap, MoreHorizontal, ChevronRight } from "lucide-react";
 import { format } from "date-fns";
 import { CATEGORY_LABELS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/components/auth-provider";
 
 const CAT_META: Record<string, { icon: React.ReactNode; color: string; iconBg: string }> = {
   church_planting: { icon: <Home className="h-3.5 w-3.5" />, color: "text-amber-700", iconBg: "bg-amber-100" },
@@ -17,16 +18,23 @@ const CAT_META: Record<string, { icon: React.ReactNode; color: string; iconBg: s
 export default function MissionaryProfile() {
   const params = useParams<{ id: string }>();
   const userId = Number(params.id);
+  const { user: currentUser, isAuthenticated, isLoading: authLoading } = useAuth();
 
   const { data: user, isLoading: loadingUser } = useGetUser(userId, {
-    query: { enabled: !!userId, queryKey: getGetUserQueryKey(userId) }
+    query: { enabled: !!userId && !!currentUser, queryKey: getGetUserQueryKey(userId) }
   });
 
   const { data: reports, isLoading: loadingReports } = useGetUserReports(userId, {
-    query: { enabled: !!userId, queryKey: getGetUserReportsQueryKey(userId) }
+    query: { enabled: !!userId && !!currentUser, queryKey: getGetUserReportsQueryKey(userId) }
   });
 
-  if (loadingUser) {
+  if (!authLoading && !isAuthenticated) return <Redirect href="/login" />;
+  // Non-admins can only view their own profile
+  if (!authLoading && currentUser && currentUser.role !== "admin" && userId !== currentUser.id) {
+    return <Redirect href="/" />;
+  }
+
+  if (authLoading || loadingUser) {
     return (
       <div className="max-w-2xl mx-auto py-10 text-center text-sm text-muted-foreground animate-pulse">
         Loading profile…

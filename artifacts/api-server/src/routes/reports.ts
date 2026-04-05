@@ -25,19 +25,28 @@ async function getPostsWithDetails(posts: typeof reportsTable.$inferSelect[], cu
   return await Promise.all(posts.map(p => getPostWithDetails(p.id, currentUserId)));
 }
 
-// GET /timeline — requires login
+// Helper: get current user with role
+async function getCurrentUser(userId: number) {
+  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
+  return user ?? null;
+}
+
+// GET /timeline — admin only: shows all posts
 router.get("/timeline", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
+  const currentUser = await getCurrentUser(currentUserId);
+  if (!currentUser || currentUser.role !== "admin") {
+    res.status(403).json({ error: "Admin access required" }); return;
+  }
+
   const limit = Math.min(Number(req.query.limit) || 20, 50);
   const offset = Number(req.query.offset) || 0;
 
-  const whereClause = undefined; // all posts visible to logged-in users
-  const [countResult] = await db.select({ count: sql<number>`count(*)::int` }).from(reportsTable).where(whereClause);
+  const [countResult] = await db.select({ count: sql<number>`count(*)::int` }).from(reportsTable);
   const total = countResult?.count ?? 0;
   const posts = await db.select().from(reportsTable)
-    .where(whereClause)
     .orderBy(desc(reportsTable.createdAt))
     .limit(limit)
     .offset(offset);
@@ -45,17 +54,24 @@ router.get("/timeline", async (req, res): Promise<void> => {
   res.json({ reports: result, total, hasMore: offset + limit < total });
 });
 
-// GET /reports — list posts (requires login)
+// GET /reports — admins see all; non-admins see only their own
 router.get("/reports", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
+  const currentUser = await getCurrentUser(currentUserId);
+  const isAdmin = currentUser?.role === "admin";
   const missionaryId = req.query.missionaryId ? Number(req.query.missionaryId) : undefined;
   const limit = Math.min(Number(req.query.limit) || 20, 50);
   const offset = Number(req.query.offset) || 0;
 
   const conditions = [];
-  if (missionaryId) conditions.push(eq(reportsTable.missionaryId, missionaryId));
+  if (isAdmin) {
+    if (missionaryId) conditions.push(eq(reportsTable.missionaryId, missionaryId));
+  } else {
+    // Non-admins can ONLY see their own posts, ignore missionaryId param
+    conditions.push(eq(reportsTable.missionaryId, currentUserId));
+  }
 
   const posts = await db.select().from(reportsTable)
     .where(conditions.length > 0 ? and(...conditions) : undefined)
@@ -66,15 +82,23 @@ router.get("/reports", async (req, res): Promise<void> => {
   res.json(result);
 });
 
-// GET /users/:id/reports — profile timeline (requires login)
+// GET /users/:id/reports — admins can fetch anyone's; non-admins only their own
 router.get("/users/:id/reports", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
   const userId = Number(req.params.id);
   if (isNaN(userId)) { res.status(400).json({ error: "Invalid user id" }); return; }
-  const conditions = [eq(reportsTable.missionaryId, userId)];
+
+  const currentUser = await getCurrentUser(currentUserId);
+  const isAdmin = currentUser?.role === "admin";
+
+  // Non-admins can only fetch their own posts
+  if (!isAdmin && userId !== currentUserId) {
+    res.status(403).json({ error: "You can only view your own posts" }); return;
+  }
+
   const posts = await db.select().from(reportsTable)
-    .where(and(...conditions))
+    .where(eq(reportsTable.missionaryId, userId))
     .orderBy(desc(reportsTable.createdAt));
   const result = await getPostsWithDetails(posts, currentUserId);
   res.json(result);
@@ -101,7 +125,7 @@ router.post("/reports", async (req, res): Promise<void> => {
   res.status(201).json(details);
 });
 
-// GET /reports/:id (requires login)
+// GET /reports/:id — admins can view any; non-admins only their own
 router.get("/reports/:id", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
@@ -109,6 +133,13 @@ router.get("/reports/:id", async (req, res): Promise<void> => {
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
   const details = await getPostWithDetails(postId, currentUserId);
   if (!details) { res.status(404).json({ error: "Post not found" }); return; }
+
+  const currentUser = await getCurrentUser(currentUserId);
+  const isAdmin = currentUser?.role === "admin";
+  if (!isAdmin && details.missionaryId !== currentUserId) {
+    res.status(403).json({ error: "You can only view your own posts" }); return;
+  }
+
   res.json(details);
 });
 
@@ -237,10 +268,14 @@ router.get("/stats", async (req, res): Promise<void> => {
   });
 });
 
-// GET /recent-activity (requires login)
+// GET /recent-activity — admin only
 router.get("/recent-activity", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
+  const currentUser = await getCurrentUser(currentUserId);
+  if (!currentUser || currentUser.role !== "admin") {
+    res.status(403).json({ error: "Admin access required" }); return;
+  }
   const limit = Math.min(Number(req.query.limit) || 5, 20);
   const posts = await db.select().from(reportsTable)
     .orderBy(desc(reportsTable.createdAt))

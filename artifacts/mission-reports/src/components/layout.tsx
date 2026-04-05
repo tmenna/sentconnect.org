@@ -18,7 +18,7 @@ export function Layout({ children }: { children: ReactNode }) {
     mutation: {
       onSuccess: () => {
         toast({ title: "Signed out" });
-        window.location.href = "/feed";
+        window.location.href = "/login";
       }
     }
   });
@@ -55,7 +55,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <>
                 {isAuthenticated && user ? (
                   <>
-                    {navLink("/feed", "Feed", <Rss className="h-3.5 w-3.5" />)}
+                    {user.role === "admin" && navLink("/feed", "Feed", <Rss className="h-3.5 w-3.5" />)}
                     {user.role === "admin" && navLink("/admin", "Admin", <LayoutDashboard className="h-3.5 w-3.5" />)}
 
                     <Link href="/profile" data-testid="link-nav-profile">

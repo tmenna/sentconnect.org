@@ -26,12 +26,20 @@ function HomeRoute() {
   return <MissionaryDashboard />;
 }
 
+function AdminFeedRoute() {
+  const { user, isAuthenticated, isLoading } = useAuth();
+  if (isLoading) return null;
+  if (!isAuthenticated) return <Redirect href="/login" />;
+  if (user?.role !== "admin") return <Redirect href="/" />;
+  return <Timeline />;
+}
+
 function Router() {
   return (
     <Layout>
       <Switch>
         <Route path="/" component={HomeRoute} />
-        <Route path="/feed" component={Timeline} />
+        <Route path="/feed" component={AdminFeedRoute} />
         <Route path="/reports/:id" component={ReportDetail} />
         <Route path="/missionaries/:id" component={MissionaryProfile} />
         <Route path="/submit" component={SubmitReport} />
