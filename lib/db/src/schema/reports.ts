@@ -5,15 +5,16 @@ import { usersTable } from "./users";
 
 export const reportsTable = pgTable("reports", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  category: text("category").notNull(),
-  reportDate: timestamp("report_date", { withTimezone: true }).notNull(),
+  title: text("title"),
+  description: text("description"),
+  category: text("category"),
+  reportDate: timestamp("report_date", { withTimezone: true }),
   missionaryId: integer("missionary_id").notNull().references(() => usersTable.id),
   peopleReached: integer("people_reached"),
   leadersTrainer: integer("leaders_trainer"),
   communitiesServed: integer("communities_served"),
   location: text("location"),
+  visibility: text("visibility").notNull().default("public"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });

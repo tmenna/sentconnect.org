@@ -21,7 +21,7 @@ const queryClient = new QueryClient();
 function HomeRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
   if (isLoading) return null;
-  if (!isAuthenticated) return <Redirect href="/login" />;
+  if (!isAuthenticated) return <Redirect href="/feed" />;
   if (user?.role === "admin") return <Redirect href="/admin" />;
   return <MissionaryDashboard />;
 }

@@ -18,7 +18,7 @@ export function Layout({ children }: { children: ReactNode }) {
     mutation: {
       onSuccess: () => {
         toast({ title: "Signed out" });
-        window.location.href = "/login";
+        window.location.href = "/feed";
       }
     }
   });
@@ -76,14 +76,17 @@ export function Layout({ children }: { children: ReactNode }) {
                     </Button>
                   </>
                 ) : (
-                  <Link href="/login" data-testid="link-nav-login">
-                    <Button
-                      size="sm"
-                      className="h-8 px-5 text-sm font-bold rounded-md bg-white text-[#132272] border border-white/60 hover:bg-white/90 transition-colors"
-                    >
-                      Sign In
-                    </Button>
-                  </Link>
+                  <>
+                    {navLink("/feed", "Feed", <Rss className="h-3.5 w-3.5" />)}
+                    <Link href="/login" data-testid="link-nav-login">
+                      <Button
+                        size="sm"
+                        className="h-8 px-5 text-sm font-bold rounded-md bg-white text-[#132272] border border-white/60 hover:bg-white/90 transition-colors ml-1"
+                      >
+                        Sign In
+                      </Button>
+                    </Link>
+                  </>
                 )}
               </>
             )}

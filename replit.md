@@ -1,17 +1,19 @@
-# SentTrack — Church Missionary Reporting App
+# SentTrack — Private Social Feed for Field Teams
 
 ## Overview
 
-A full-stack web app for churches to manage missionary reporting. Features a clean list-style timeline feed, report submission, admin dashboard, and missionary profiles.
+A Twitter/Instagram-style private social feed for missionary field teams. Users post short updates with drag-and-drop photos/videos, like and comment on posts, and set posts as public or private. Admins can view all users and stats. Public feed is accessible without login.
 
 ## Users & Access
 
-- **Missionaries** — submit reports, view their profile and history
-- **Church Admins** — view all reports, filter, and see stats
+- **Users (missionaries)** — post updates, like/comment, manage own posts
+- **Admins** — view all reports/stats, see all users
 
 **Demo accounts:**
 - Admin: `admin@calvary.org` / `password123`
-- Missionary: `james@mission.org` / `password123`
+- User: `james@mission.org` / `password123`
+- User: `maria@mission.org` / `password123`
+- User: `david@mission.org` / `password123`
 
 ## Stack
 

@@ -3,136 +3,110 @@ import { Redirect, Link } from "wouter";
 import {
   useGetStats, getGetStatsQueryKey,
   useListUsers, getListUsersQueryKey,
-  useGetRecentActivity, getGetRecentActivityQueryKey,
-  useListReports, getListReportsQueryKey
 } from "@workspace/api-client-react";
-import { Users, MapPin } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { Users, FileText, Shield } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatDistanceToNow } from "date-fns";
+
+function StatCard({ label, value, icon }: { label: string; value: number | string; icon: React.ReactNode }) {
+  return (
+    <div className="bg-white rounded-xl border border-border/60 shadow-sm p-5">
+      <div className="flex items-center gap-3">
+        <div className="p-2.5 rounded-lg bg-primary/10 text-primary">{icon}</div>
+        <div>
+          <p className="text-[26px] font-bold text-foreground leading-none">{value}</p>
+          <p className="text-[12px] text-muted-foreground mt-1">{label}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
-
-  const { data: stats } = useGetStats({ query: { queryKey: getGetStatsQueryKey() } });
-  const { data: activity } = useGetRecentActivity({ limit: 5 }, { query: { queryKey: getGetRecentActivityQueryKey({ limit: 5 }) } });
-  const { data: missionaries } = useListUsers({ role: "missionary" }, { query: { queryKey: getListUsersQueryKey({ role: "missionary" }) } });
-  const { data: reports } = useListReports({ limit: 100 }, { query: { queryKey: getListReportsQueryKey({ limit: 100 }) } });
+  const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey() } });
+  const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}) } });
 
   if (isLoading) return null;
   if (!isAuthenticated || !user) return <Redirect href="/login" />;
   if (user.role !== "admin") return <Redirect href="/" />;
 
-  return (
-    <div className="max-w-5xl mx-auto space-y-6">
+  const nonAdmins = users?.filter((u: any) => u.role !== "admin") ?? [];
 
-      {/* Page header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-bold text-foreground tracking-tight">Admin Overview</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {stats ? `${stats.totalMissionaries} missionaries · ${stats.totalReports} reports` : "Loading…"}
-          </p>
-        </div>
+  return (
+    <div className="max-w-4xl mx-auto space-y-6">
+
+      <div>
+        <h1 className="text-[22px] font-bold text-foreground tracking-tight">Admin</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Overview of all users and activity</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {statsLoading ? (
+          [1, 2, 3].map(i => <Skeleton key={i} className="h-24 rounded-xl" />)
+        ) : (
+          <>
+            <StatCard label="Total posts" value={stats?.totalPosts ?? 0} icon={<FileText className="h-4.5 w-4.5" />} />
+            <StatCard label="Active users" value={nonAdmins.length} icon={<Users className="h-4.5 w-4.5" />} />
+            <StatCard label="Admin" value={user.name.split(" ")[0]} icon={<Shield className="h-4.5 w-4.5" />} />
+          </>
+        )}
+      </div>
 
-        {/* Main: Missionary thumbnail grid */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-            <div className="px-5 py-4 border-b border-border">
-              <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                <Users className="h-4 w-4 text-muted-foreground" />
-                Global Partners
-              </h2>
-              <p className="text-xs text-muted-foreground mt-0.5">Select a missionary to view their reports</p>
-            </div>
-            <div className="p-5 grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {missionaries?.map((m, i) => {
-                const reportCount = reports?.filter(r => r.missionaryId === m.id).length ?? 0;
-                return (
-                  <motion.div
-                    key={m.id}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.06 }}
-                  >
-                    <Link href={`/missionaries/${m.id}`}>
-                      <div className="group flex flex-col items-center gap-2.5 cursor-pointer">
-                        <div className="w-full aspect-square rounded-xl overflow-hidden border-2 border-transparent group-hover:border-primary transition-all duration-150 shadow-sm bg-muted relative">
-                          {m.avatarUrl ? (
-                            <img
-                              src={m.avatarUrl}
-                              alt={m.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-primary/10">
-                              <span className="text-3xl font-bold text-primary">{m.name.charAt(0)}</span>
-                            </div>
-                          )}
-                          <div className="absolute top-2 right-2 bg-black/50 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full">
-                            {reportCount}
-                          </div>
-                        </div>
-                        <div className="text-center w-full">
-                          <p className="text-[13px] font-semibold text-foreground group-hover:text-primary transition-colors leading-tight truncate">
-                            {m.name}
-                          </p>
-                          {m.location && (
-                            <p className="text-[11px] text-muted-foreground mt-0.5 flex items-center justify-center gap-0.5 truncate">
-                              <MapPin className="h-2.5 w-2.5 flex-shrink-0" />{m.location}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                  </motion.div>
-                );
-              })}
-              {(!missionaries || missionaries.length === 0) && (
-                <div className="col-span-3 py-12 text-center text-sm text-muted-foreground">
-                  No missionaries yet.
+      {/* User list */}
+      <div className="bg-white rounded-xl border border-border/60 shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-border/40 flex items-center gap-2">
+          <Users className="h-4 w-4 text-primary" />
+          <h2 className="font-semibold text-[14px] text-foreground">Users</h2>
+          <span className="ml-auto text-[12px] text-muted-foreground">{nonAdmins.length} members</span>
+        </div>
+
+        {usersLoading ? (
+          <div className="divide-y divide-border/40">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="flex items-center gap-3 px-5 py-3">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <div className="space-y-1.5">
+                  <Skeleton className="h-3.5 w-32" />
+                  <Skeleton className="h-2.5 w-24" />
                 </div>
-              )}
-            </div>
+              </div>
+            ))}
           </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-4">
-
-          {/* Recent activity */}
-          {activity && activity.length > 0 && (
-            <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-              <div className="px-5 py-4 border-b border-border">
-                <h2 className="text-sm font-semibold text-foreground">Recent Reports</h2>
-              </div>
-              <div>
-                {activity.map((rep, i) => (
-                  <Link
-                    key={`activity-${rep.id}`}
-                    href={`/reports/${rep.id}`}
-                    className={cn(
-                      "block px-5 py-3.5 hover:bg-[#F7F8FA] transition-colors group",
-                      i > 0 ? "border-t border-border" : ""
+        ) : nonAdmins.length === 0 ? (
+          <div className="py-12 text-center">
+            <p className="text-sm text-muted-foreground">No users yet.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-border/40">
+            {nonAdmins.map((u: any) => (
+              <Link key={u.id} href={`/missionaries/${u.id}`}>
+                <div className="flex items-center gap-3 px-5 py-3 hover:bg-muted/30 transition-colors cursor-pointer group">
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={u.avatarUrl ?? undefined} />
+                    <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm">
+                      {u.name.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-[14px] text-foreground group-hover:text-primary transition-colors">{u.name}</p>
+                    <p className="text-[12px] text-muted-foreground">{u.email}</p>
+                  </div>
+                  <div className="text-right">
+                    {u.location && (
+                      <p className="text-[12px] text-muted-foreground">{u.location}</p>
                     )}
-                  >
-                    <p className="text-[12.5px] text-foreground leading-snug">
-                      <span className="font-medium">{rep.missionary.name}</span>
-                      <span className="text-muted-foreground"> filed </span>
-                      <span className="font-medium group-hover:text-primary transition-colors">{rep.title}</span>
+                    <p className="text-[11px] text-muted-foreground/60">
+                      Joined {formatDistanceToNow(new Date(u.createdAt), { addSuffix: true })}
                     </p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
-                      {format(new Date(rep.createdAt), "MMM d, yyyy")}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
