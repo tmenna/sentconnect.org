@@ -25,13 +25,15 @@ async function getPostsWithDetails(posts: typeof reportsTable.$inferSelect[], cu
   return await Promise.all(posts.map(p => getPostWithDetails(p.id, currentUserId)));
 }
 
-// GET /timeline — public feed (public posts only for guests, all for logged-in)
+// GET /timeline — requires login
 router.get("/timeline", async (req, res): Promise<void> => {
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
   const limit = Math.min(Number(req.query.limit) || 20, 50);
   const offset = Number(req.query.offset) || 0;
-  const currentUserId = req.session?.userId as number | undefined;
 
-  const whereClause = currentUserId ? undefined : eq(reportsTable.visibility, "public");
+  const whereClause = undefined; // all posts visible to logged-in users
   const [countResult] = await db.select({ count: sql<number>`count(*)::int` }).from(reportsTable).where(whereClause);
   const total = countResult?.count ?? 0;
   const posts = await db.select().from(reportsTable)
@@ -43,16 +45,17 @@ router.get("/timeline", async (req, res): Promise<void> => {
   res.json({ reports: result, total, hasMore: offset + limit < total });
 });
 
-// GET /reports — list posts (used by profile pages etc)
+// GET /reports — list posts (requires login)
 router.get("/reports", async (req, res): Promise<void> => {
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
   const missionaryId = req.query.missionaryId ? Number(req.query.missionaryId) : undefined;
   const limit = Math.min(Number(req.query.limit) || 20, 50);
   const offset = Number(req.query.offset) || 0;
-  const currentUserId = req.session?.userId as number | undefined;
 
   const conditions = [];
   if (missionaryId) conditions.push(eq(reportsTable.missionaryId, missionaryId));
-  if (!currentUserId) conditions.push(eq(reportsTable.visibility, "public"));
 
   const posts = await db.select().from(reportsTable)
     .where(conditions.length > 0 ? and(...conditions) : undefined)
@@ -63,13 +66,13 @@ router.get("/reports", async (req, res): Promise<void> => {
   res.json(result);
 });
 
-// GET /users/:id/reports — profile timeline
+// GET /users/:id/reports — profile timeline (requires login)
 router.get("/users/:id/reports", async (req, res): Promise<void> => {
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
   const userId = Number(req.params.id);
   if (isNaN(userId)) { res.status(400).json({ error: "Invalid user id" }); return; }
-  const currentUserId = req.session?.userId as number | undefined;
   const conditions = [eq(reportsTable.missionaryId, userId)];
-  if (!currentUserId) conditions.push(eq(reportsTable.visibility, "public"));
   const posts = await db.select().from(reportsTable)
     .where(and(...conditions))
     .orderBy(desc(reportsTable.createdAt));
@@ -98,14 +101,14 @@ router.post("/reports", async (req, res): Promise<void> => {
   res.status(201).json(details);
 });
 
-// GET /reports/:id
+// GET /reports/:id (requires login)
 router.get("/reports/:id", async (req, res): Promise<void> => {
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
   const postId = Number(req.params.id);
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
-  const currentUserId = req.session?.userId as number | undefined;
   const details = await getPostWithDetails(postId, currentUserId);
   if (!details) { res.status(404).json({ error: "Post not found" }); return; }
-  if (details.visibility === "private" && !currentUserId) { res.status(403).json({ error: "Forbidden" }); return; }
   res.json(details);
 });
 
@@ -234,14 +237,15 @@ router.get("/stats", async (req, res): Promise<void> => {
   });
 });
 
-// GET /recent-activity
+// GET /recent-activity (requires login)
 router.get("/recent-activity", async (req, res): Promise<void> => {
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
   const limit = Math.min(Number(req.query.limit) || 5, 20);
   const posts = await db.select().from(reportsTable)
-    .where(eq(reportsTable.visibility, "public"))
     .orderBy(desc(reportsTable.createdAt))
     .limit(limit);
-  const result = await getPostsWithDetails(posts);
+  const result = await getPostsWithDetails(posts, currentUserId);
   res.json(result);
 });
 

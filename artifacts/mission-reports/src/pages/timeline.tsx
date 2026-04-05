@@ -24,7 +24,7 @@ function Sidebar({ posts }: { posts: PostData[] }) {
           <div className="px-4 py-3 border-b border-border/40 flex items-center gap-2">
             <Users className="h-3.5 w-3.5 text-primary" />
             <h3 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-              Who's Here
+              Global Partners
             </h3>
           </div>
           <div className="p-3 space-y-1">
@@ -110,8 +110,12 @@ function PostSkeleton() {
 }
 
 export default function Feed() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [posts, setPosts] = useState<PostData[] | null>(null);
+  if (!authLoading && !isAuthenticated) {
+    if (typeof window !== "undefined") window.location.replace("/login");
+    return null;
+  }
   const { data, isLoading, isError } = useGetTimeline(
     { limit: 40 },
     {
