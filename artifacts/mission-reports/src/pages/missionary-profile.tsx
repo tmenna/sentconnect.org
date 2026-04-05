@@ -1,19 +1,11 @@
 import { useGetUser, getGetUserQueryKey, useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
 import { useParams, Link, Redirect } from "wouter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Building, Calendar, ArrowLeft, Home, Users, HeartHandshake, GraduationCap, MoreHorizontal, ChevronRight } from "lucide-react";
+import { MapPin, Building, Calendar, ArrowLeft, FileText } from "lucide-react";
 import { format } from "date-fns";
-import { CATEGORY_LABELS } from "@/lib/constants";
-import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/auth-provider";
-
-const CAT_META: Record<string, { icon: React.ReactNode; color: string; iconBg: string }> = {
-  church_planting: { icon: <Home className="h-3.5 w-3.5" />, color: "text-amber-700", iconBg: "bg-amber-100" },
-  leadership_training: { icon: <Users className="h-3.5 w-3.5" />, color: "text-blue-700", iconBg: "bg-blue-100" },
-  humanitarian_work: { icon: <HeartHandshake className="h-3.5 w-3.5" />, color: "text-rose-700", iconBg: "bg-rose-100" },
-  education: { icon: <GraduationCap className="h-3.5 w-3.5" />, color: "text-emerald-700", iconBg: "bg-emerald-100" },
-  other: { icon: <MoreHorizontal className="h-3.5 w-3.5" />, color: "text-slate-600", iconBg: "bg-slate-100" },
-};
+import { PostCard, type PostData } from "@/components/post-card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MissionaryProfile() {
   const params = useParams<{ id: string }>();
@@ -29,127 +21,122 @@ export default function MissionaryProfile() {
   });
 
   if (!authLoading && !isAuthenticated) return <Redirect href="/login" />;
-  // Non-admins can only view their own profile
   if (!authLoading && currentUser && currentUser.role !== "admin" && userId !== currentUser.id) {
     return <Redirect href="/" />;
   }
 
   if (authLoading || loadingUser) {
     return (
-      <div className="max-w-2xl mx-auto py-10 text-center text-sm text-muted-foreground animate-pulse">
-        Loading profile…
+      <div className="space-y-5">
+        <div className="rounded-2xl h-24 animate-pulse" style={{ background: "linear-gradient(135deg, #132272 0%, #1e3a8a 100%)" }} />
+        <div className="bg-white rounded-xl border border-border/60 shadow-sm p-4 space-y-3">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <div className="space-y-1.5 flex-1">
+              <Skeleton className="h-3.5 w-28" />
+              <Skeleton className="h-2.5 w-20" />
+            </div>
+          </div>
+          <Skeleton className="h-48 w-full rounded-lg" />
+        </div>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="max-w-2xl mx-auto py-10 text-center">
+      <div className="py-10 text-center">
         <p className="text-foreground font-semibold">User not found</p>
         <Link href="/feed" className="text-sm text-primary mt-2 inline-block hover:underline">Back to feed</Link>
       </div>
     );
   }
 
+  const posts = (reports ?? []) as PostData[];
+
   return (
-    <div className="max-w-2xl mx-auto py-6">
+    <div className="space-y-5">
+      {/* Back link */}
       <Link
         href="/feed"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8 group"
-        data-testid="link-back"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
       >
         <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-        Feed
+        Back to feed
       </Link>
 
-      {/* Profile card */}
-      <div className="bg-white rounded-xl border border-border shadow-sm p-6 mb-5">
-        <div className="flex flex-col sm:flex-row items-start gap-5">
-          <Avatar className="h-20 w-20 border-2 border-border shadow-sm flex-shrink-0">
-            <AvatarImage src={user.avatarUrl || undefined} alt={user.name} />
-            <AvatarFallback className="text-2xl font-bold bg-primary/10 text-primary">
-              {user.name.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
+      {/* Profile banner — matches admin/dashboard navy style */}
+      <div
+        className="rounded-2xl px-6 py-5 flex items-center gap-4"
+        style={{ background: "linear-gradient(135deg, #132272 0%, #1e3a8a 100%)" }}
+      >
+        <Avatar className="h-16 w-16 ring-2 ring-white/30 flex-shrink-0">
+          <AvatarImage src={user.avatarUrl || undefined} alt={user.name} />
+          <AvatarFallback className="text-2xl font-bold bg-white/20 text-white">
+            {user.name.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
 
-          <div className="flex-1 min-w-0">
-            <h1 className="text-xl font-bold text-foreground tracking-tight">{user.name}</h1>
-
-            <div className="flex flex-wrap items-center gap-3 mt-2">
-              {user.location && (
-                <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <MapPin className="h-3.5 w-3.5 text-primary" />
-                  {user.location}
-                </span>
-              )}
-              {user.organization && (
-                <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <Building className="h-3.5 w-3.5 text-primary" />
-                  {user.organization}
-                </span>
-              )}
-              <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                <Calendar className="h-3.5 w-3.5 text-muted-foreground/50" />
-                Since {format(new Date(user.createdAt), "MMM yyyy")}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-[20px] font-extrabold text-white tracking-tight leading-snug">{user.name}</h1>
+          <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1">
+            {user.location && (
+              <span className="inline-flex items-center gap-1.5 text-[12px] text-white/70">
+                <MapPin className="h-3 w-3" />{user.location}
               </span>
-            </div>
-
-            {user.bio && (
-              <p className="text-sm text-muted-foreground leading-relaxed mt-3 max-w-lg">
-                {user.bio}
-              </p>
             )}
+            {user.organization && (
+              <span className="inline-flex items-center gap-1.5 text-[12px] text-white/70">
+                <Building className="h-3 w-3" />{user.organization}
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1.5 text-[12px] text-white/60">
+              <Calendar className="h-3 w-3" />Since {format(new Date(user.createdAt), "MMM yyyy")}
+            </span>
           </div>
+          {user.bio && (
+            <p className="text-[12px] text-white/60 mt-1.5 leading-relaxed line-clamp-2">{user.bio}</p>
+          )}
+        </div>
+
+        <div className="hidden sm:block text-right flex-shrink-0">
+          <p className="text-[28px] font-extrabold text-white leading-none">{posts.length}</p>
+          <p className="text-[11px] text-white/60 mt-0.5 flex items-center gap-1 justify-end">
+            <FileText className="h-3 w-3" />posts
+          </p>
         </div>
       </div>
 
-      {/* Reports */}
-      <div>
-        <h2 className="text-sm font-semibold text-foreground mb-3">
-          Field Reports
-          {reports && <span className="text-muted-foreground font-normal ml-1.5">({reports.length})</span>}
-        </h2>
-
-        {loadingReports ? (
-          <div className="bg-white rounded-xl border border-border py-10 text-center text-sm text-muted-foreground animate-pulse">
-            Loading reports…
-          </div>
-        ) : reports && reports.length > 0 ? (
-          <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-            {reports.map((report, i) => {
-              const meta = CAT_META[report.category] ?? CAT_META.other;
-              const Icon = () => <span className={meta.color}>{meta.icon}</span>;
-              return (
-                <Link
-                  key={report.id}
-                  href={`/reports/${report.id}`}
-                  className={cn(
-                    "flex items-center gap-3.5 px-5 py-3.5 hover:bg-[#F7F8FA] transition-colors group",
-                    i > 0 ? "border-t border-border" : ""
-                  )}
-                >
-                  <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0", meta.iconBg)}>
-                    <Icon />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate group-hover:text-primary transition-colors">
-                      {report.title}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
-                      {format(new Date(report.reportDate), "MMM d, yyyy")} · {CATEGORY_LABELS[report.category]}
-                    </p>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground/30 group-hover:text-muted-foreground transition-colors flex-shrink-0" />
-                </Link>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="bg-white rounded-xl border border-dashed border-border py-12 text-center">
-            <p className="text-sm text-muted-foreground">No reports published yet.</p>
-          </div>
-        )}
-      </div>
+      {/* Posts feed */}
+      {loadingReports ? (
+        <div className="space-y-4">
+          {[1, 2].map(i => (
+            <div key={i} className="bg-white rounded-xl border border-border/60 shadow-sm p-4 space-y-3">
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <div className="space-y-1.5 flex-1">
+                  <Skeleton className="h-3.5 w-28" />
+                  <Skeleton className="h-2.5 w-20" />
+                </div>
+              </div>
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-48 w-full rounded-lg" />
+            </div>
+          ))}
+        </div>
+      ) : posts.length === 0 ? (
+        <div className="bg-white rounded-xl border border-dashed border-border py-20 text-center shadow-sm">
+          <FileText className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+          <p className="font-semibold text-foreground text-sm">No posts yet</p>
+          <p className="text-muted-foreground text-xs mt-1">This team member hasn't shared any updates.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {posts.map(post => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
