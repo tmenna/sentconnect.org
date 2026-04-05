@@ -90,7 +90,7 @@ export default function Login() {
               </div>
             ))}
           </div>
-          <p className="text-white/30 text-sm mt-6">sentconnect.org</p>
+          <p className="text-white/30 text-sm mt-6 text-center">sentconnect.org</p>
         </div>
 
         <div className="relative z-10 border-l-2 border-white/15 pl-4">
@@ -168,11 +168,22 @@ export default function Login() {
                 </Button>
               </form>
             </Form>
+            <p className="text-center mt-4">
+              <span className="text-sm text-muted-foreground hover:text-foreground cursor-default transition-colors">
+                Forgot password?
+              </span>
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 mt-5">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-xs text-muted-foreground">or</span>
+            <div className="flex-1 h-px bg-border" />
           </div>
 
           <p className="text-center text-sm text-muted-foreground mt-4">
             Don't have an account?{" "}
-            <span className="text-primary font-medium cursor-default">Sign Up</span>
+            <span className="text-primary font-semibold cursor-default">Sign Up</span>
           </p>
 
         </div>
