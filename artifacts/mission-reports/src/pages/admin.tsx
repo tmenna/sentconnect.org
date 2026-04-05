@@ -14,7 +14,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { formatDistanceToNow } from "date-fns";
-import { SummarizeModal } from "@/components/summarize-modal";
 
 function StatCard({
   label, value, icon, accent,
@@ -105,7 +104,6 @@ export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<"team" | "feed">("team");
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
-  const [showSummarize, setShowSummarize] = useState(false);
 
   const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey() } });
   const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}) } });
@@ -150,15 +148,8 @@ export default function AdminDashboard() {
             Here's what your team has been up to.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setShowSummarize(true)}
-            className="hidden sm:flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[13px] font-semibold px-4 py-2 rounded-xl transition-all"
-          >
-            <Sparkles className="h-4 w-4" />
-            Summarize Activity
-          </button>
-          <Avatar className="h-10 w-10 ring-2 ring-white/30 hidden sm:block">
+        <div className="hidden sm:flex items-center gap-2">
+          <Avatar className="h-10 w-10 ring-2 ring-white/30">
             <AvatarImage src={user.avatarUrl ?? undefined} />
             <AvatarFallback className="bg-white/20 text-white font-bold">
               {user.name.charAt(0).toUpperCase()}
@@ -166,9 +157,6 @@ export default function AdminDashboard() {
           </Avatar>
         </div>
       </div>
-
-      {/* Summarize Modal */}
-      {showSummarize && <SummarizeModal onClose={() => setShowSummarize(false)} />}
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
