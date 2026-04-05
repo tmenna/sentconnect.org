@@ -14,12 +14,12 @@ export default function ReportDetail() {
 
   if (isLoading) {
     return (
-      <div className="max-w-2xl mx-auto py-6 space-y-4">
+      <div className="space-y-4">
         <Skeleton className="h-4 w-20" />
         <div className="bg-white rounded-xl border border-border/60 shadow-sm p-4 space-y-3">
           <div className="flex items-center gap-3">
             <Skeleton className="h-10 w-10 rounded-full" />
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 flex-1">
               <Skeleton className="h-3.5 w-28" />
               <Skeleton className="h-2.5 w-20" />
             </div>
@@ -34,7 +34,7 @@ export default function ReportDetail() {
 
   if (isError || !report) {
     return (
-      <div className="text-center py-20 max-w-2xl mx-auto">
+      <div className="text-center py-20">
         <p className="text-lg font-semibold text-foreground">Post not found</p>
         <Link href="/feed" className="mt-3 inline-block text-sm text-primary hover:underline">
           Back to Feed
@@ -57,7 +57,7 @@ export default function ReportDetail() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-6 space-y-4">
+    <div className="space-y-4">
       <Link
         href="/feed"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
