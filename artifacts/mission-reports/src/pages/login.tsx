@@ -71,19 +71,26 @@ export default function Login() {
           }}
         />
 
-        <div className="flex items-center gap-2.5 relative z-10">
+        {/* Logo */}
+        <div className="flex items-center gap-2.5 relative z-10 mb-6">
           <div className="bg-white/10 p-2 rounded-xl border border-white/10">
             <Shuffle className="h-5 w-5 text-white" />
           </div>
           <span className="text-lg font-extrabold tracking-tight text-white">SentConnect</span>
         </div>
 
-        <div className="flex-1 flex flex-col justify-center relative z-10 max-w-xs">
+        {/* Domain — matches signup */}
+        <p className="relative z-10 text-white/40 text-[11px] font-medium tracking-widest uppercase mb-8">
+          www.sentconnect.org
+        </p>
+
+        {/* Headline + description */}
+        <div className="relative z-10 max-w-xs">
           <h2 className="text-[2rem] font-extrabold leading-snug mb-3 tracking-tight text-white">
             Stay connected with your{" "}
             <span style={{ color: "#00C4A7" }}>field teams.</span>
           </h2>
-          <p className="text-white/60 text-sm leading-relaxed mb-10">
+          <p className="text-white/60 text-sm leading-relaxed mb-8">
             A simple platform for organizations to receive updates from teams working across different locations.
           </p>
 
@@ -97,15 +104,31 @@ export default function Login() {
               </div>
             ))}
           </div>
-          <p className="text-white/30 text-sm mt-6 text-center">sentconnect.org</p>
         </div>
 
-        <div className="relative z-10 border-l-2 border-white/15 pl-4">
-          <p className="text-white/40 text-sm italic leading-relaxed">
-            "Declare his glory among the nations, his marvelous works among all the peoples!"
-          </p>
-          <p className="text-white/25 text-xs mt-1.5 font-medium">— Psalm 96:3</p>
+        {/* World map image — matches signup */}
+        <div className="relative z-10 mt-8 rounded-2xl overflow-hidden shadow-2xl">
+          <img
+            src={`${import.meta.env.BASE_URL}world-map.jpg`}
+            alt="Global partner map"
+            className="w-full h-44 object-cover object-center"
+            loading="lazy"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(to bottom, rgba(13,27,94,0.15) 0%, rgba(13,27,94,0.60) 100%)",
+            }}
+          />
+          <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
+            <p className="text-white/85 text-[12px] font-medium leading-snug">
+              Connecting Global Partners across the world.
+            </p>
+          </div>
         </div>
+
+        {/* Footer — matches signup */}
+        <p className="relative z-10 mt-6 text-white/30 text-xs">© SentConnect</p>
       </div>
 
       {/* Right: Login Form */}
