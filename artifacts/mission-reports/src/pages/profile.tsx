@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,14 +11,15 @@ import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
 import { Redirect } from "wouter";
-import { User, MapPin, Building, Image as ImageIcon } from "lucide-react";
+import { User, MapPin, Building, Camera, Loader2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useUpload } from "@workspace/object-storage-web";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   bio: z.string().optional(),
   location: z.string().optional(),
   organization: z.string().optional(),
-  avatarUrl: z.string().url("Must be a valid URL").optional().or(z.literal('')),
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
@@ -25,6 +27,8 @@ export default function Profile() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const updateUser = useUpdateUser({
     mutation: {
@@ -38,6 +42,20 @@ export default function Profile() {
     }
   });
 
+  const { uploadFile, isUploading } = useUpload({
+    onSuccess: async (response) => {
+      const avatarUrl = `/api/storage${response.objectPath}`;
+      setPreviewUrl(avatarUrl);
+      updateUser.mutate({
+        id: user!.id,
+        data: { avatarUrl },
+      });
+    },
+    onError: () => {
+      toast({ title: "Photo upload failed", description: "Please try again.", variant: "destructive" });
+    },
+  });
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     values: {
@@ -45,12 +63,30 @@ export default function Profile() {
       bio: user?.bio || "",
       location: user?.location || "",
       organization: user?.organization || "",
-      avatarUrl: user?.avatarUrl || "",
     }
   });
 
   if (isLoading) return null;
   if (!isAuthenticated || !user) return <Redirect href="/login" />;
+
+  const displayAvatar = previewUrl ?? user.avatarUrl ?? undefined;
+  const initials = user.name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "U";
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Please select an image file", variant: "destructive" });
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      toast({ title: "Image must be smaller than 10 MB", variant: "destructive" });
+      return;
+    }
+    const localPreview = URL.createObjectURL(file);
+    setPreviewUrl(localPreview);
+    await uploadFile(file);
+  }
 
   function onSubmit(data: ProfileFormValues) {
     updateUser.mutate({
@@ -60,7 +96,6 @@ export default function Profile() {
         bio: data.bio || null,
         location: data.location || null,
         organization: data.organization || null,
-        avatarUrl: data.avatarUrl || null,
       }
     });
   }
@@ -76,6 +111,55 @@ export default function Profile() {
         </p>
       </div>
 
+      {/* Photo upload card */}
+      <div className="bg-white rounded-xl border border-border shadow-sm p-6 mb-4">
+        <p className="text-sm font-semibold text-foreground mb-4">Profile Photo</p>
+        <div className="flex items-center gap-5">
+          <div className="relative flex-shrink-0">
+            <Avatar className="h-20 w-20 ring-2 ring-border">
+              <AvatarImage src={displayAvatar} alt={user.name} className="object-cover" />
+              <AvatarFallback className="text-xl font-bold bg-primary/10 text-primary">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            {isUploading && (
+              <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center">
+                <Loader2 className="h-5 w-5 text-white animate-spin" />
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <p className="text-sm text-muted-foreground mb-3 leading-snug">
+              Upload a photo of yourself or your family. Shown on your posts and profile.
+            </p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+              data-testid="input-avatar-file"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={isUploading}
+              onClick={() => fileInputRef.current?.click()}
+              className="h-8 px-3 text-sm gap-1.5"
+              data-testid="btn-avatar-upload"
+            >
+              {isUploading ? (
+                <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Uploading…</>
+              ) : (
+                <><Camera className="h-3.5 w-3.5" /> Upload Photo</>
+              )}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Profile fields */}
       <div className="bg-white rounded-xl border border-border shadow-sm p-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -90,22 +174,6 @@ export default function Profile() {
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="John Doe" className="h-10 text-sm" {...field} data-testid="input-profile-name" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="avatarUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium flex items-center gap-1.5">
-                    <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" /> Avatar URL
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://example.com/avatar.jpg" className="h-10 text-sm" {...field} data-testid="input-profile-avatar" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

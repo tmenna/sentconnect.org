@@ -60,6 +60,8 @@ Path-based routing simulates subdomain multi-tenancy during development. The fir
 **SWAP POINT for real subdomain routing:** In `org-resolver.ts`, replace `req.headers['x-org-subdomain']` with `req.hostname.split('.')[0]`. No other changes needed.
 
 ## User Identity & Profiles
+- **Profile photo upload**: Users click "Upload Photo" on their profile page — a hidden `<input type="file">` triggers the presigned URL flow (metadata → `/api/storage/uploads/request-url` → PUT directly to GCS → avatar URL auto-saved via `PATCH /api/users/:id`). Avatar shown as circular image in feed, post cards, and admin table. Falls back to initials if no photo.
+- **Object storage**: `@workspace/object-storage-web` `useUpload` hook used in profile.tsx. Stored URL format: `/api/storage/objects/<uuid>`. Package installed in mission-reports, tsconfig references updated.
 - **Summary (bio)**: `bio` text column on `users` table. Editable by the user on their Profile page (max 250 chars, counter shown). Admins can also edit any member's summary inline from the Team table (hover row → pencil icon → inline textarea → Save).
 - **Post card identity**: Each post shows avatar → author name (bold link) → 1-line truncated summary (if set, muted text, tooltip on hover) → timestamp + location. If no summary, the line is simply absent.
 - **Public profile** (`/missionaries/:id`): Shows avatar, name, summary, location, joined date, and all posts. Accessible by admins and the user themselves.
