@@ -40,9 +40,6 @@ export default function Feed() {
     {
       query: {
         queryKey: getGetTimelineQueryKey({ limit: 40 }),
-        onSuccess: (data: any) => {
-          if (posts === null) setPosts(data?.reports ?? []);
-        },
       },
     }
   );

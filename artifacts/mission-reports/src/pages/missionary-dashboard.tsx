@@ -13,14 +13,11 @@ export default function MissionaryDashboard() {
   const [posts, setPosts] = useState<PostData[] | null>(null);
 
   const { data, isLoading: postsLoading } = useGetUserReports(
-    { id: user?.id ?? 0 },
+    user?.id ?? 0,
     {
       query: {
         enabled: !!user?.id,
-        queryKey: getGetUserReportsQueryKey({ id: user?.id ?? 0 }),
-        onSuccess: (data: any) => {
-          if (posts === null) setPosts(data ?? []);
-        },
+        queryKey: getGetUserReportsQueryKey(user?.id ?? 0),
       },
     }
   );
@@ -75,7 +72,7 @@ export default function MissionaryDashboard() {
 
       {/* Composer */}
       <PostComposer
-        onPost={(newPost) => setPosts(prev => prev ? [newPost, ...prev] : [newPost])}
+        onPost={(newPost) => setPosts(prev => [newPost, ...(prev ?? (data as PostData[] ?? []))])}
       />
 
       {/* Timeline */}
