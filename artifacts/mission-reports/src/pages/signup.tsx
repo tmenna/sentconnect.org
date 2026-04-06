@@ -70,12 +70,17 @@ export default function Signup() {
 
         {/* Top content */}
         <div className="relative z-10">
-          <div className="flex items-center gap-2.5 mb-14">
+          <div className="flex items-center gap-2.5 mb-6">
             <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
               <Shuffle className="h-5 w-5 text-white" />
             </div>
             <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
           </div>
+
+          {/* Subtle domain branding */}
+          <p className="text-white/40 text-[11px] font-medium tracking-widest uppercase mb-8">
+            www.sentconnect.org
+          </p>
 
           <h2 className="text-[2.1rem] font-extrabold leading-[1.2] mb-5 tracking-tight text-white">
             Connect with your Global Partners<br />
@@ -88,31 +93,31 @@ export default function Signup() {
           </p>
         </div>
 
-        {/* Human image block */}
-        <div className="relative z-10 mt-10 rounded-2xl overflow-hidden shadow-2xl">
+        {/* World map image */}
+        <div className="relative z-10 mt-8 rounded-2xl overflow-hidden shadow-2xl">
           <img
-            src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80&fit=crop"
-            alt="Team collaboration"
+            src={`${import.meta.env.BASE_URL}world-map.jpg`}
+            alt="Global partner map"
             className="w-full h-52 object-cover object-center"
             loading="lazy"
           />
-          {/* Overlay so image blends into dark panel */}
+          {/* Overlay to blend with panel */}
           <div
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(to bottom, rgba(13,27,94,0.25) 0%, rgba(13,27,94,0.55) 100%)",
+              background: "linear-gradient(to bottom, rgba(13,27,94,0.15) 0%, rgba(13,27,94,0.60) 100%)",
             }}
           />
           {/* Caption */}
           <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
-            <p className="text-white/90 text-[12px] font-medium leading-snug">
-              Teams using SentConnect stay connected across 40+ countries.
+            <p className="text-white/85 text-[12px] font-medium leading-snug">
+              Connecting Global Partners across 40+ countries.
             </p>
           </div>
         </div>
 
         {/* Bottom */}
-        <p className="relative z-10 mt-8 text-white/30 text-xs">sentconnect.org</p>
+        <p className="relative z-10 mt-6 text-white/30 text-xs">© SentConnect</p>
       </div>
 
       {/* Right panel */}
