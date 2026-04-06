@@ -11,7 +11,7 @@ import {
   Users, FileText, Heart, MessageCircle,
   Globe, Sparkles, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
-  ShieldCheck,
+  ShieldCheck, Pencil,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -290,6 +290,8 @@ function TeamRow({ u, onUpdated, onDeleted }: { u: any; onUpdated: () => void; o
   const [busy, setBusy] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [resetLink, setResetLink] = useState<string | null>(null);
+  const [editingBio, setEditingBio] = useState(false);
+  const [bioText, setBioText] = useState(u.bio ?? "");
 
   async function toggleStatus() {
     setBusy(true);
@@ -331,6 +333,22 @@ function TeamRow({ u, onUpdated, onDeleted }: { u: any; onUpdated: () => void; o
     }
   }
 
+  async function saveBio() {
+    setBusy(true);
+    try {
+      await apiFetch(`/users/${u.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ bio: bioText.trim() || null }),
+      });
+      setEditingBio(false);
+      onUpdated();
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <>
       {showDeleteModal && (
@@ -347,16 +365,61 @@ function TeamRow({ u, onUpdated, onDeleted }: { u: any; onUpdated: () => void; o
       <tr className="border-b border-border/40 hover:bg-muted/30 transition-colors">
         {/* User */}
         <td className="px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-8 w-8 flex-shrink-0">
+          <div className="flex items-start gap-3">
+            <Avatar className="h-9 w-9 flex-shrink-0 mt-0.5">
               <AvatarImage src={u.avatarUrl ?? undefined} />
               <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
                 {u.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-[13px] font-semibold text-foreground leading-none">{u.name}</p>
               <p className="text-[11px] text-muted-foreground mt-0.5">{u.email}</p>
+              {editingBio ? (
+                <div className="mt-1.5 space-y-1.5">
+                  <textarea
+                    value={bioText}
+                    onChange={e => setBioText(e.target.value.slice(0, 250))}
+                    rows={2}
+                    maxLength={250}
+                    autoFocus
+                    placeholder="Short summary (max 250 chars)"
+                    className="w-full text-[12px] border border-border/60 rounded-lg px-2 py-1.5 resize-none outline-none focus:ring-2 focus:ring-primary/20 bg-white"
+                    disabled={busy}
+                  />
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={saveBio}
+                      disabled={busy}
+                      className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-primary text-white rounded-lg hover:opacity-90 disabled:opacity-60 transition"
+                    >
+                      <Check className="h-3 w-3" /> Save
+                    </button>
+                    <button
+                      onClick={() => { setEditingBio(false); setBioText(u.bio ?? ""); }}
+                      className="px-2.5 py-1 text-[11px] font-semibold text-muted-foreground border border-border/60 rounded-lg hover:bg-muted transition"
+                    >
+                      Cancel
+                    </button>
+                    <span className="text-[10px] text-muted-foreground ml-auto">{bioText.length}/250</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-1 flex items-start gap-1.5 group/bio">
+                  {u.bio ? (
+                    <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed flex-1">{u.bio}</p>
+                  ) : (
+                    <p className="text-[11px] text-muted-foreground/50 italic flex-1">No summary</p>
+                  )}
+                  <button
+                    onClick={() => setEditingBio(true)}
+                    title="Edit summary"
+                    className="opacity-0 group-hover/bio:opacity-100 transition-opacity p-0.5 hover:text-primary text-muted-foreground flex-shrink-0"
+                  >
+                    <Pencil className="h-3 w-3" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </td>

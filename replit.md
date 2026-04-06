@@ -59,6 +59,12 @@ Path-based routing simulates subdomain multi-tenancy during development. The fir
 
 **SWAP POINT for real subdomain routing:** In `org-resolver.ts`, replace `req.headers['x-org-subdomain']` with `req.hostname.split('.')[0]`. No other changes needed.
 
+## User Identity & Profiles
+- **Summary (bio)**: `bio` text column on `users` table. Editable by the user on their Profile page (max 250 chars, counter shown). Admins can also edit any member's summary inline from the Team table (hover row → pencil icon → inline textarea → Save).
+- **Post card identity**: Each post shows avatar → author name (bold link) → 1-line truncated summary (if set, muted text, tooltip on hover) → timestamp + location. If no summary, the line is simply absent.
+- **Public profile** (`/missionaries/:id`): Shows avatar, name, summary, location, joined date, and all posts. Accessible by admins and the user themselves.
+- **Profile settings** (`/profile`): Name, avatar URL, location, sent-from church, and Summary field — available to all roles.
+
 ## Post Features
 - **Composer**: single text input + optional media (drag & drop), location (with auto-detect), impact (people reached number), and ⭐ highlight toggle. No visibility selector — all posts are public by default.
 - **Editing**: post authors click the 3-dot menu → Edit to open an inline editor; fields: text, location, people reached, highlight toggle. Saved via `PATCH /api/reports/:id`.

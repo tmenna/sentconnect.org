@@ -26,6 +26,7 @@ export type PostData = {
     name: string;
     avatarUrl?: string | null;
     role?: string;
+    bio?: string | null;
   };
   photos: { id: number; url: string; caption?: string | null }[];
 };
@@ -377,11 +378,20 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
           </Avatar>
         </Link>
         <div className="flex-1 min-w-0">
-          <Link href={`/missionaries/${post.author.id}`}>
-            <span className="font-semibold text-[14px] text-foreground hover:text-primary transition-colors cursor-pointer leading-tight">
-              {post.author.name}
-            </span>
+          <Link
+            href={`/missionaries/${post.author.id}`}
+            className="font-semibold text-[14px] text-foreground hover:text-primary transition-colors leading-tight block"
+          >
+            {post.author.name}
           </Link>
+          {post.author.bio && (
+            <p
+              className="text-[12px] text-muted-foreground leading-snug truncate"
+              title={post.author.bio}
+            >
+              {post.author.bio}
+            </p>
+          )}
           <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground mt-0.5">
             <span>{timeAgo}</span>
             {post.location && (

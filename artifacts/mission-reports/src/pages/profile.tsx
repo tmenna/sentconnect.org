@@ -145,26 +145,30 @@ export default function Profile() {
               />
             </div>
 
-            {(user.role === 'missionary' || user.role === 'field_user') && (
-              <FormField
-                control={form.control}
-                name="bio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">Biography</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Tell us about your calling and mission..."
-                        className="resize-none text-sm h-28"
-                        {...field}
-                        data-testid="input-profile-bio"
-                      />
-                    </FormControl>
+            <FormField
+              control={form.control}
+              name="bio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Summary</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="A short summary about yourself and your mission (max 250 characters)"
+                      className="resize-none text-sm h-20"
+                      maxLength={250}
+                      {...field}
+                      data-testid="input-profile-bio"
+                    />
+                  </FormControl>
+                  <div className="flex items-center justify-between">
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+                    <span className={`text-[11px] ml-auto ${(field.value?.length ?? 0) > 230 ? "text-amber-500" : "text-muted-foreground"}`}>
+                      {field.value?.length ?? 0}/250
+                    </span>
+                  </div>
+                </FormItem>
+              )}
+            />
 
             <div className="pt-1 flex justify-end">
               <Button
