@@ -109,14 +109,16 @@ router.post("/reports", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
-  const { description, location, visibility } = req.body ?? {};
+  const { description, location, visibility, peopleReached } = req.body ?? {};
   const vis = visibility === "private" ? "private" : "public";
+  const reached = peopleReached !== undefined && peopleReached !== null && peopleReached !== "" ? Number(peopleReached) : null;
 
   const [post] = await db.insert(reportsTable).values({
     missionaryId: currentUserId,
     description: typeof description === "string" ? description : null,
     location: typeof location === "string" ? location : null,
     visibility: vis,
+    peopleReached: reached && !isNaN(reached) ? reached : null,
     title: null,
     category: "post",
     reportDate: new Date(),

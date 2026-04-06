@@ -104,15 +104,18 @@ export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<"team" | "feed">("team");
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
+  const [filterUserId, setFilterUserId] = useState<string>("");
+  const [filterDateFrom, setFilterDateFrom] = useState<string>("");
+  const [filterDateTo, setFilterDateTo] = useState<string>("");
 
   const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey() } });
   const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}) } });
   const { data: timelineData, isLoading: feedLoading } = useGetTimeline(
-    { limit: 30 },
+    { limit: 50 },
     {
       query: {
         enabled: activeTab === "feed",
-        queryKey: getGetTimelineQueryKey({ limit: 30 }),
+        queryKey: getGetTimelineQueryKey({ limit: 50 }),
         onSuccess: (data: any) => {
           if (feedPosts === null) setFeedPosts(data?.reports ?? []);
         },
@@ -125,7 +128,24 @@ export default function AdminDashboard() {
   if (user.role !== "admin") return <Redirect href="/" />;
 
   const nonAdmins = users?.filter((u: any) => u.role !== "admin") ?? [];
-  const allFeedPosts: PostData[] = feedPosts ?? (timelineData?.reports ?? []) as PostData[];
+  const rawFeedPosts: PostData[] = feedPosts ?? (timelineData?.reports ?? []) as PostData[];
+
+  const allFeedPosts = rawFeedPosts.filter(post => {
+    if (filterUserId && String(post.author.id) !== filterUserId) return false;
+    if (filterDateFrom) {
+      const from = new Date(filterDateFrom);
+      from.setHours(0, 0, 0, 0);
+      if (new Date(post.createdAt) < from) return false;
+    }
+    if (filterDateTo) {
+      const to = new Date(filterDateTo);
+      to.setHours(23, 59, 59, 999);
+      if (new Date(post.createdAt) > to) return false;
+    }
+    return true;
+  });
+
+  const hasFilters = filterUserId || filterDateFrom || filterDateTo;
 
   const firstName = user.name.split(" ")[0];
 
@@ -259,11 +279,58 @@ export default function AdminDashboard() {
       {/* Tab: Activity Feed */}
       {activeTab === "feed" && (
         <div className="space-y-4">
-          <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 flex items-center gap-2.5">
-            <Heart className="h-4 w-4 text-blue-500 flex-shrink-0" />
-            <p className="text-[13px] text-blue-700 font-medium">
-              Like and comment on posts to encourage your team in the field.
-            </p>
+          {/* Filters */}
+          <div className="bg-white border border-border/60 rounded-xl px-4 py-3 shadow-sm">
+            <div className="flex flex-wrap items-end gap-3">
+              {/* Filter by user */}
+              <div className="flex-1 min-w-[160px]">
+                <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Team member</label>
+                <select
+                  value={filterUserId}
+                  onChange={e => setFilterUserId(e.target.value)}
+                  className="w-full text-[13px] border border-border/60 rounded-lg px-3 py-1.5 bg-background outline-none focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="">All members</option>
+                  {nonAdmins.map((u: any) => (
+                    <option key={u.id} value={String(u.id)}>{u.name}</option>
+                  ))}
+                </select>
+              </div>
+              {/* From date */}
+              <div className="flex-1 min-w-[140px]">
+                <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">From</label>
+                <input
+                  type="date"
+                  value={filterDateFrom}
+                  onChange={e => setFilterDateFrom(e.target.value)}
+                  className="w-full text-[13px] border border-border/60 rounded-lg px-3 py-1.5 bg-background outline-none focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+              {/* To date */}
+              <div className="flex-1 min-w-[140px]">
+                <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">To</label>
+                <input
+                  type="date"
+                  value={filterDateTo}
+                  onChange={e => setFilterDateTo(e.target.value)}
+                  className="w-full text-[13px] border border-border/60 rounded-lg px-3 py-1.5 bg-background outline-none focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+              {/* Clear filters */}
+              {hasFilters && (
+                <button
+                  onClick={() => { setFilterUserId(""); setFilterDateFrom(""); setFilterDateTo(""); }}
+                  className="text-[12px] font-semibold text-muted-foreground hover:text-foreground underline underline-offset-2 whitespace-nowrap pb-1.5"
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+            {hasFilters && (
+              <p className="text-[12px] text-muted-foreground mt-2">
+                Showing {allFeedPosts.length} of {rawFeedPosts.length} posts
+              </p>
+            )}
           </div>
 
           {feedLoading ? (
@@ -285,8 +352,8 @@ export default function AdminDashboard() {
           ) : allFeedPosts.length === 0 ? (
             <div className="bg-white rounded-2xl border border-dashed border-border py-16 text-center shadow-sm">
               <MessageCircle className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
-              <p className="font-semibold text-sm text-foreground">No posts yet</p>
-              <p className="text-muted-foreground text-xs mt-1">Team updates will appear here once posted.</p>
+              <p className="font-semibold text-sm text-foreground">{hasFilters ? "No posts match your filters" : "No posts yet"}</p>
+              <p className="text-muted-foreground text-xs mt-1">{hasFilters ? "Try adjusting your filters above." : "Team updates will appear here once posted."}</p>
             </div>
           ) : (
             allFeedPosts.map(post => (

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
-import { Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Globe, Lock, Send } from "lucide-react";
+import { Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Globe, Lock, Send, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
@@ -16,6 +16,7 @@ export type PostData = {
   likeCount: number;
   commentCount: number;
   likedByMe: boolean;
+  peopleReached?: number | null;
   author: {
     id: number;
     name: string;
@@ -231,6 +232,16 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
       {post.description && (
         <div className="px-4 pb-3">
           <p className="text-[14.5px] text-foreground leading-relaxed whitespace-pre-wrap">{post.description}</p>
+        </div>
+      )}
+
+      {/* People Reached */}
+      {post.peopleReached != null && post.peopleReached > 0 && (
+        <div className="px-4 pb-3">
+          <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-full">
+            <Users className="h-3.5 w-3.5" />
+            {post.peopleReached.toLocaleString()} people reached
+          </span>
         </div>
       )}
 

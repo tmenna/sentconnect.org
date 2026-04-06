@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Image, MapPin, X, Globe, Lock, Loader2 } from "lucide-react";
+import { Image, MapPin, X, Globe, Lock, Loader2, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
@@ -32,9 +32,11 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
   const { user } = useAuth();
   const [text, setText] = useState("");
   const [location, setLocation] = useState("");
+  const [peopleReached, setPeopleReached] = useState("");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [files, setFiles] = useState<LocalFile[]>([]);
   const [showLocation, setShowLocation] = useState(false);
+  const [showPeopleReached, setShowPeopleReached] = useState(false);
   const [posting, setPosting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -84,6 +86,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
           description: text.trim() || null,
           location: location.trim() || null,
           visibility,
+          peopleReached: peopleReached.trim() ? Number(peopleReached) : null,
         }),
       });
       if (!postRes.ok) throw new Error("Failed to create post");
@@ -105,7 +108,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
 
       setText("");
       setLocation("");
+      setPeopleReached("");
       setShowLocation(false);
+      setShowPeopleReached(false);
       setVisibility("public");
       files.forEach(f => URL.revokeObjectURL(f.previewUrl));
       setFiles([]);
@@ -193,6 +198,25 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             </div>
           )}
 
+          {/* People Reached */}
+          {showPeopleReached && (
+            <div className="mt-2 flex items-center gap-2 bg-emerald-50 rounded-full px-3 py-1.5 border border-emerald-100">
+              <Users className="h-3.5 w-3.5 text-emerald-600 flex-shrink-0" />
+              <input
+                type="number"
+                min="0"
+                value={peopleReached}
+                onChange={e => setPeopleReached(e.target.value)}
+                placeholder="How many people reached?"
+                className="flex-1 text-[13px] bg-transparent outline-none text-emerald-800 placeholder:text-emerald-400"
+                disabled={posting}
+              />
+              <button onClick={() => { setShowPeopleReached(false); setPeopleReached(""); }}>
+                <X className="h-3.5 w-3.5 text-emerald-400 hover:text-emerald-700 transition-colors" />
+              </button>
+            </div>
+          )}
+
           {/* Drag drop zone when no files */}
           {files.length === 0 && (
             <div
@@ -232,6 +256,19 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               title="Add location"
             >
               <MapPin className="h-4.5 w-4.5" />
+            </button>
+
+            {/* People Reached button */}
+            <button
+              onClick={() => setShowPeopleReached(s => !s)}
+              disabled={posting}
+              className={cn(
+                "p-2 rounded-full transition-colors",
+                showPeopleReached ? "text-emerald-600 bg-emerald-50" : "text-primary hover:bg-primary/10"
+              )}
+              title="People reached"
+            >
+              <Users className="h-4.5 w-4.5" />
             </button>
 
             {/* Visibility toggle */}
