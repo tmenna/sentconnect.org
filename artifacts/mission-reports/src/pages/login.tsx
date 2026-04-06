@@ -59,22 +59,29 @@ export default function Login() {
   return (
     <div className="min-h-screen flex">
       {/* Left: Brand Panel */}
-      <div className="hidden lg:flex lg:w-[44%] flex-col bg-[#132272] text-white p-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.04]" style={{
-          backgroundImage: `radial-gradient(circle, white 1px, transparent 1px)`,
-          backgroundSize: "28px 28px"
-        }} />
+      <div
+        className="hidden lg:flex lg:w-[44%] flex-col text-white p-12 relative overflow-hidden"
+        style={{ background: "linear-gradient(155deg, #0d1b5e 0%, #132272 45%, #1a3a9a 100%)" }}
+      >
+        {/* Radial glow — matches signup page */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.06) 0%, transparent 60%)",
+          }}
+        />
 
         <div className="flex items-center gap-2.5 relative z-10">
           <div className="bg-white/10 p-2 rounded-xl border border-white/10">
             <Shuffle className="h-5 w-5 text-white" />
           </div>
-          <span className="text-lg font-semibold tracking-tight">SentConnect</span>
+          <span className="text-lg font-extrabold tracking-tight text-white">SentConnect</span>
         </div>
 
         <div className="flex-1 flex flex-col justify-center relative z-10 max-w-xs">
-          <h2 className="text-[2rem] font-bold leading-snug mb-3 tracking-tight text-white">
-            Stay connected with your field teams.
+          <h2 className="text-[2rem] font-extrabold leading-snug mb-3 tracking-tight text-white">
+            Stay connected with your{" "}
+            <span style={{ color: "#00C4A7" }}>field teams.</span>
           </h2>
           <p className="text-white/60 text-sm leading-relaxed mb-10">
             A simple platform for organizations to receive updates from teams working across different locations.
