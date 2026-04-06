@@ -5,6 +5,7 @@ import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import router from "./routes";
 import { logger } from "./lib/logger";
+import { resolveOrg } from "./middleware/org-resolver";
 
 if (!process.env.SESSION_SECRET) {
   throw new Error("SESSION_SECRET must be set.");
@@ -61,6 +62,6 @@ app.use(
   })
 );
 
-app.use("/api", router);
+app.use("/api", resolveOrg, router);
 
 export default app;

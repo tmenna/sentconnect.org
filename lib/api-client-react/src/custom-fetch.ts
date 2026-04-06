@@ -17,6 +17,7 @@ const DEFAULT_JSON_ACCEPT = "application/json, application/problem+json";
 
 let _baseUrl: string | null = null;
 let _authTokenGetter: AuthTokenGetter | null = null;
+let _orgSubdomain: string | null = null;
 
 /**
  * Set a base URL that is prepended to every relative request URL
@@ -42,6 +43,19 @@ export function setBaseUrl(url: string | null): void {
  */
 export function setAuthTokenGetter(getter: AuthTokenGetter | null): void {
   _authTokenGetter = getter;
+}
+
+/**
+ * Set the current organization subdomain.  When set, every API request
+ * includes an `X-Org-Subdomain` header so the backend can scope queries
+ * to the correct organization.
+ *
+ * SWAP POINT — once real subdomain routing is live the backend derives the
+ * org from `req.hostname` and this header (plus this function) are no longer
+ * needed.
+ */
+export function setOrgSubdomain(subdomain: string | null): void {
+  _orgSubdomain = subdomain ?? null;
 }
 
 function isRequest(input: RequestInfo | URL): input is Request {
@@ -356,6 +370,13 @@ export async function customFetch<T = unknown>(
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
     }
+  }
+
+  // Attach org subdomain header for path-based multi-tenant routing.
+  // SWAP POINT: once real subdomain routing is live this header is unused
+  // and can be removed along with setOrgSubdomain().
+  if (_orgSubdomain && !headers.has("x-org-subdomain")) {
+    headers.set("x-org-subdomain", _orgSubdomain);
   }
 
   const requestInfo = { method, url: resolveUrl(input) };

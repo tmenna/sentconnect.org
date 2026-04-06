@@ -73,9 +73,23 @@ router.post("/users/login", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const [user] = await db.select().from(usersTable).where(eq(usersTable.email, parsed.data.email));
+
+  // When an org context is resolved (via X-Org-Subdomain header), scope the
+  // login to that org — preventing cross-org credential reuse.
+  // SWAP POINT: req.resolvedOrg is populated by the org-resolver middleware,
+  // which will later read from req.hostname instead of the header.
+  const orgId = req.resolvedOrg?.id;
+  const whereClause = orgId
+    ? and(eq(usersTable.email, parsed.data.email), eq(usersTable.organizationId, orgId))
+    : eq(usersTable.email, parsed.data.email);
+
+  const [user] = await db.select().from(usersTable).where(whereClause);
   if (!user || !verifyPassword(parsed.data.password, user.passwordHash)) {
     res.status(401).json({ error: "Invalid credentials" });
+    return;
+  }
+  if (user.status === "inactive") {
+    res.status(403).json({ error: "Your account has been deactivated. Contact your admin." });
     return;
   }
   req.session.userId = user.id;

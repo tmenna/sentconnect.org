@@ -1,4 +1,4 @@
-import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
+import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +6,8 @@ import { AuthProvider } from "@/components/auth-provider";
 import { useAuth } from "@/components/auth-provider";
 import { Layout } from "@/components/layout";
 import NotFound from "@/pages/not-found";
+import { OrgProvider } from "@/providers/org-provider";
+import { extractOrgSlug } from "@/lib/org";
 
 import Timeline from "./pages/timeline";
 import ReportDetail from "./pages/report-detail";
@@ -39,10 +41,7 @@ function AdminFeedRoute() {
   return <Timeline />;
 }
 
-// Pages that use the full-screen layout (no navbar)
-const FULL_SCREEN_PATHS = ["/login", "/signup", "/forgot-password", "/reset-password"];
-
-function Router() {
+function AppRoutes() {
   return (
     <Switch>
       <Route path="/login" component={Login} />
@@ -68,17 +67,47 @@ function Router() {
   );
 }
 
+/**
+ * Sits inside WouterRouter so it can read the current location.
+ * Extracts the org slug from the path and sets up the OrgProvider +
+ * a nested router with the org prefix so all routes work under
+ * /:orgSlug/... paths.
+ *
+ * SWAP POINT — when real subdomain routing is enabled:
+ * 1. Remove the `extractOrgSlug` call and the nested router
+ * 2. Keep OrgProvider but derive orgSlug from window.location.hostname
+ * 3. The rest of the app (routes, API calls) needs zero changes
+ */
+function OrgAwareApp() {
+  const [location] = useLocation();
+  const orgSlug = extractOrgSlug(location);
+
+  return (
+    <OrgProvider orgSlug={orgSlug}>
+      <AuthProvider>
+        <TooltipProvider>
+          {orgSlug ? (
+            // Nested router strips the org prefix — all routes inside are identical
+            // to the non-org-prefixed versions, making the swap trivial.
+            <WouterRouter base={`/${orgSlug}`}>
+              <AppRoutes />
+            </WouterRouter>
+          ) : (
+            <AppRoutes />
+          )}
+        </TooltipProvider>
+      </AuthProvider>
+    </OrgProvider>
+  );
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-            <Router />
-          </WouterRouter>
-          <Toaster />
-        </TooltipProvider>
-      </AuthProvider>
+      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+        <OrgAwareApp />
+      </WouterRouter>
+      <Toaster />
     </QueryClientProvider>
   );
 }

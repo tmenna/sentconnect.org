@@ -1,0 +1,74 @@
+Enhance the current SentConnect system to allow Organization Admins to create and manage users within their organization.
+
+Requirement:
+When an admin signs up and creates an organization with a subdomain (for example: [teki.menna@ep2int.com](mailto:teki.menna@ep2int.com) creating ep2.sentconnect.org), they must be able to add additional users to their organization.
+
+Example:
+
+* An admin from ep2 should be able to create users such as:
+  [admin@calvary.org](mailto:admin@calvary.org) or any other team member
+* All created users must automatically belong to the same organization (organization_id)
+
+---
+
+Subdomain Simulation (IMPORTANT)
+
+Since full subdomain routing is not yet implemented, simulate subdomains using path-based routing:
+
+Examples:
+
+* /ep2/dashboard
+* /ep2/login
+* /ep2/feed
+
+Implementation:
+
+* Extract the first path segment (e.g. "ep2") as the organization identifier
+* Resolve organization by subdomain field in database
+* Attach organization_id to request context via middleware
+* Ensure all queries are scoped using organization_id
+
+IMPORTANT:
+
+* This simulation should be designed so it can later be replaced with real subdomain routing (ep2.sentconnect.org) with minimal changes
+
+---
+
+User Management (Admin Feature)
+
+Implementation Details:
+
+* Add a user creation feature in the Admin Dashboard
+
+* Admins can create users with:
+
+  * Name
+  * Email
+  * Password (or generated)
+  * Role (admin or field_user)
+
+* Ensure:
+
+  * All new users inherit the admin’s organization_id
+  * Users can log in within the same organization context
+
+---
+
+Security & Data Isolation
+
+* Do NOT allow users to be created outside the organization
+* Ensure strict organization isolation
+* Prevent cross-organization access at all levels (API + UI)
+
+---
+
+Constraints
+
+* Do NOT rebuild existing functionality
+* Extend current system safely
+* Do NOT introduce categories or complex structures
+
+---
+
+Goal:
+Enable admins to onboard and manage their team members easily, while safely simulating multi-tenant subdomain behavior during development.

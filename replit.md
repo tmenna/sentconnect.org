@@ -40,6 +40,25 @@ A Twitter/Instagram-style private social feed for missionary field teams. Users 
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
 - `pnpm --filter @workspace/api-server run dev` — run API server locally
 
+## Multi-Tenant Subdomain Simulation
+
+Path-based routing simulates subdomain multi-tenancy during development. The first URL segment is treated as the org slug if it is not a reserved route name.
+
+| URL pattern | Meaning |
+|---|---|
+| `/ep2/login` | Login scoped to the "ep2" org |
+| `/ep2/admin` | Admin dashboard for "ep2" org |
+| `/ep2/feed` | Activity feed for "ep2" org |
+| `/login` | Global login (no org scoping) |
+
+**How it works:**
+1. Frontend (`src/lib/org.ts`) extracts the org slug from the URL path
+2. `OrgProvider` calls `setOrgSubdomain(slug)` which injects `X-Org-Subdomain: ep2` on every API request
+3. Backend middleware (`middleware/org-resolver.ts`) reads the header, resolves the org, and attaches it to `req.resolvedOrg`
+4. Login and other routes use `req.resolvedOrg` to scope DB queries
+
+**SWAP POINT for real subdomain routing:** In `org-resolver.ts`, replace `req.headers['x-org-subdomain']` with `req.hostname.split('.')[0]`. No other changes needed.
+
 ## App Pages
 
 - `/` — Timeline feed (main dashboard): chronological social-style feed of all missionary reports
