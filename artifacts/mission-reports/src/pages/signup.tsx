@@ -111,7 +111,7 @@ export default function Signup() {
           {/* Caption */}
           <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
             <p className="text-white/85 text-[12px] font-medium leading-snug">
-              Connecting Global Partners across 40+ countries.
+              Connecting Global Partners across the world.
             </p>
           </div>
         </div>
