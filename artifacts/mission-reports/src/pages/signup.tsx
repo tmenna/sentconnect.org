@@ -56,22 +56,63 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex bg-[#F5F7FA]">
       {/* Left panel */}
-      <div className="hidden md:flex flex-col justify-between w-[420px] flex-shrink-0 bg-[#132272] px-10 py-12 text-white">
-        <div>
-          <div className="flex items-center gap-2 mb-12">
+      <div
+        className="hidden md:flex flex-col justify-between w-[460px] flex-shrink-0 relative overflow-hidden px-10 py-12 text-white"
+        style={{ background: "linear-gradient(155deg, #0d1b5e 0%, #132272 45%, #1a3a9a 100%)" }}
+      >
+        {/* Subtle radial glow for depth */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.06) 0%, transparent 60%)",
+          }}
+        />
+
+        {/* Top content */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-2.5 mb-14">
             <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
               <Shuffle className="h-5 w-5 text-white" />
             </div>
             <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
           </div>
-          <h2 className="text-3xl font-extrabold leading-tight mb-4">
-            Connect your team<br />from anywhere.
+
+          <h2 className="text-[2.1rem] font-extrabold leading-[1.2] mb-5 tracking-tight text-white">
+            Connect your team<br />
+            from{" "}
+            <span style={{ color: "#00C4A7" }}>anywhere.</span>
           </h2>
-          <p className="text-white/65 text-sm leading-relaxed">
-            Create your organization's private workspace and start receiving updates from your field teams in minutes.
+
+          <p className="text-white/70 text-[15px] leading-relaxed max-w-[340px]">
+            Create your organization's private space and stay connected with your team across locations.
           </p>
         </div>
-        <p className="text-white/30 text-xs">sentconnect.org</p>
+
+        {/* Human image block */}
+        <div className="relative z-10 mt-10 rounded-2xl overflow-hidden shadow-2xl">
+          <img
+            src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80&fit=crop"
+            alt="Team collaboration"
+            className="w-full h-52 object-cover object-center"
+            loading="lazy"
+          />
+          {/* Overlay so image blends into dark panel */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(to bottom, rgba(13,27,94,0.25) 0%, rgba(13,27,94,0.55) 100%)",
+            }}
+          />
+          {/* Caption */}
+          <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
+            <p className="text-white/90 text-[12px] font-medium leading-snug">
+              Teams using SentConnect stay connected across 40+ countries.
+            </p>
+          </div>
+        </div>
+
+        {/* Bottom */}
+        <p className="relative z-10 mt-8 text-white/30 text-xs">sentconnect.org</p>
       </div>
 
       {/* Right panel */}
