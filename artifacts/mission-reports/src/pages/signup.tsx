@@ -78,13 +78,13 @@ export default function Signup() {
           </div>
 
           <h2 className="text-[2.1rem] font-extrabold leading-[1.2] mb-5 tracking-tight text-white">
-            Connect your team<br />
+            Connect with your Global Partners<br />
             from{" "}
             <span style={{ color: "#00C4A7" }}>anywhere.</span>
           </h2>
 
           <p className="text-white/70 text-[15px] leading-relaxed max-w-[340px]">
-            Create your organization's private space and stay connected with your team across locations.
+            Create your organization's private space and receive updates from your Global Partners across different locations.
           </p>
         </div>
 
