@@ -70,7 +70,7 @@ export default function Profile() {
       <div className="mb-6">
         <h1 className="text-xl font-bold text-foreground tracking-tight">Profile Settings</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          {user.role === "missionary"
+          {(user.role === "missionary" || user.role === "field_user")
             ? "Your profile is visible to church admins and on your reports."
             : "Your admin account details."}
         </p>
@@ -145,7 +145,7 @@ export default function Profile() {
               />
             </div>
 
-            {user.role === 'missionary' && (
+            {(user.role === 'missionary' || user.role === 'field_user') && (
               <FormField
                 control={form.control}
                 name="bio"

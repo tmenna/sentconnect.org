@@ -61,7 +61,7 @@ export default function SubmitReport() {
 
   if (isLoading) return <div className="text-center py-12">Loading...</div>;
   if (!isAuthenticated || !user) return <Redirect href="/login" />;
-  if (user.role !== "missionary") return <Redirect href="/" />;
+  if (user.role !== "missionary" && user.role !== "field_user") return <Redirect href="/" />;
 
   async function onSubmit(data: ReportFormValues) {
     try {

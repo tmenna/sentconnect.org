@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useLoginUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Redirect } from "wouter";
+import { Redirect, Link } from "wouter";
 import { Shuffle, MapPin, BookOpen, Building } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -169,9 +169,9 @@ export default function Login() {
               </form>
             </Form>
             <p className="text-center mt-4">
-              <span className="text-sm text-muted-foreground hover:text-foreground cursor-default transition-colors">
+              <Link href="/forgot-password" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Forgot password?
-              </span>
+              </Link>
             </p>
           </div>
 
@@ -183,7 +183,7 @@ export default function Login() {
 
           <p className="text-center text-sm text-muted-foreground mt-4">
             Don't have an account?{" "}
-            <span className="text-primary font-semibold cursor-default">Sign Up</span>
+            <Link href="/signup" className="text-primary font-semibold hover:underline">Sign Up</Link>
           </p>
 
         </div>

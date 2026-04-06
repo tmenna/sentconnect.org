@@ -17,7 +17,7 @@ async function getPostWithDetails(postId: number, currentUserId?: number) {
     const [like] = await db.select().from(likesTable).where(and(eq(likesTable.postId, postId), eq(likesTable.userId, currentUserId)));
     likedByMe = !!like;
   }
-  const { passwordHash: _pw, ...authorData } = author;
+  const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...authorData } = author;
   return { ...post, author: authorData, photos, likeCount: likeCount?.count ?? 0, commentCount: commentCount?.count ?? 0, likedByMe };
 }
 
@@ -25,28 +25,35 @@ async function getPostsWithDetails(posts: typeof reportsTable.$inferSelect[], cu
   return await Promise.all(posts.map(p => getPostWithDetails(p.id, currentUserId)));
 }
 
-// Helper: get current user with role
 async function getCurrentUser(userId: number) {
   const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
   return user ?? null;
 }
 
-// GET /timeline — admin only: shows all posts
+// GET /timeline — admin only: shows all posts in same org
 router.get("/timeline", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
   const currentUser = await getCurrentUser(currentUserId);
-  if (!currentUser || currentUser.role !== "admin") {
+  if (!currentUser || (currentUser.role !== "admin" && currentUser.role !== "super_admin")) {
     res.status(403).json({ error: "Admin access required" }); return;
   }
 
   const limit = Math.min(Number(req.query.limit) || 20, 50);
   const offset = Number(req.query.offset) || 0;
 
-  const [countResult] = await db.select({ count: sql<number>`count(*)::int` }).from(reportsTable);
+  const conditions = [];
+  // Super admin sees all; org admin sees own org
+  if (currentUser.role !== "super_admin" && currentUser.organizationId) {
+    conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
+  }
+
+  const [countResult] = await db.select({ count: sql<number>`count(*)::int` }).from(reportsTable)
+    .where(conditions.length > 0 ? and(...conditions) : undefined);
   const total = countResult?.count ?? 0;
   const posts = await db.select().from(reportsTable)
+    .where(conditions.length > 0 ? and(...conditions) : undefined)
     .orderBy(desc(reportsTable.createdAt))
     .limit(limit)
     .offset(offset);
@@ -54,22 +61,24 @@ router.get("/timeline", async (req, res): Promise<void> => {
   res.json({ reports: result, total, hasMore: offset + limit < total });
 });
 
-// GET /reports — admins see all; non-admins see only their own
+// GET /reports — admins see all in org; non-admins see only their own
 router.get("/reports", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
   const currentUser = await getCurrentUser(currentUserId);
-  const isAdmin = currentUser?.role === "admin";
+  const isAdmin = currentUser?.role === "admin" || currentUser?.role === "super_admin";
   const missionaryId = req.query.missionaryId ? Number(req.query.missionaryId) : undefined;
   const limit = Math.min(Number(req.query.limit) || 20, 50);
   const offset = Number(req.query.offset) || 0;
 
   const conditions = [];
   if (isAdmin) {
+    if (currentUser?.organizationId && currentUser.role !== "super_admin") {
+      conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
+    }
     if (missionaryId) conditions.push(eq(reportsTable.missionaryId, missionaryId));
   } else {
-    // Non-admins can ONLY see their own posts, ignore missionaryId param
     conditions.push(eq(reportsTable.missionaryId, currentUserId));
   }
 
@@ -82,7 +91,7 @@ router.get("/reports", async (req, res): Promise<void> => {
   res.json(result);
 });
 
-// GET /users/:id/reports — admins can fetch anyone's; non-admins only their own
+// GET /users/:id/reports
 router.get("/users/:id/reports", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
@@ -90,9 +99,8 @@ router.get("/users/:id/reports", async (req, res): Promise<void> => {
   if (isNaN(userId)) { res.status(400).json({ error: "Invalid user id" }); return; }
 
   const currentUser = await getCurrentUser(currentUserId);
-  const isAdmin = currentUser?.role === "admin";
+  const isAdmin = currentUser?.role === "admin" || currentUser?.role === "super_admin";
 
-  // Non-admins can only fetch their own posts
   if (!isAdmin && userId !== currentUserId) {
     res.status(403).json({ error: "You can only view your own posts" }); return;
   }
@@ -104,17 +112,19 @@ router.get("/users/:id/reports", async (req, res): Promise<void> => {
   res.json(result);
 });
 
-// POST /reports — create a post (simplified: no required fields except missionaryId)
+// POST /reports
 router.post("/reports", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
+  const currentUser = await getCurrentUser(currentUserId);
   const { description, location, visibility, peopleReached } = req.body ?? {};
   const vis = visibility === "private" ? "private" : "public";
   const reached = peopleReached !== undefined && peopleReached !== null && peopleReached !== "" ? Number(peopleReached) : null;
 
   const [post] = await db.insert(reportsTable).values({
     missionaryId: currentUserId,
+    organizationId: currentUser?.organizationId ?? null,
     description: typeof description === "string" ? description : null,
     location: typeof location === "string" ? location : null,
     visibility: vis,
@@ -127,7 +137,7 @@ router.post("/reports", async (req, res): Promise<void> => {
   res.status(201).json(details);
 });
 
-// GET /reports/:id — admins can view any; non-admins only their own
+// GET /reports/:id
 router.get("/reports/:id", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
@@ -137,7 +147,7 @@ router.get("/reports/:id", async (req, res): Promise<void> => {
   if (!details) { res.status(404).json({ error: "Post not found" }); return; }
 
   const currentUser = await getCurrentUser(currentUserId);
-  const isAdmin = currentUser?.role === "admin";
+  const isAdmin = currentUser?.role === "admin" || currentUser?.role === "super_admin";
   if (!isAdmin && details.missionaryId !== currentUserId) {
     res.status(403).json({ error: "You can only view your own posts" }); return;
   }
@@ -173,7 +183,7 @@ router.delete("/reports/:id", async (req, res): Promise<void> => {
   res.sendStatus(204);
 });
 
-// POST /reports/:id/photos — add media to a post
+// POST /reports/:id/photos
 router.post("/reports/:id/photos", async (req, res): Promise<void> => {
   const postId = Number(req.params.id);
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
@@ -220,7 +230,7 @@ router.get("/reports/:id/comments", async (req, res): Promise<void> => {
   const commentsList = await db.select().from(commentsTable).where(eq(commentsTable.postId, postId)).orderBy(commentsTable.createdAt);
   const withAuthors = await Promise.all(commentsList.map(async (c) => {
     const [user] = await db.select().from(usersTable).where(eq(usersTable.id, c.userId));
-    const { passwordHash: _pw, ...u } = user ?? { passwordHash: "", id: 0, name: "Unknown", email: "", role: "user", bio: null, location: null, avatarUrl: null, organization: null, createdAt: new Date(), updatedAt: new Date() };
+    const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...u } = user ?? { passwordHash: "", resetToken: null, resetTokenExpiry: null, id: 0, name: "Unknown", email: "", role: "field_user", bio: null, location: null, avatarUrl: null, organization: null, organizationId: null, createdAt: new Date(), updatedAt: new Date() };
     return { ...c, author: u };
   }));
   res.json(withAuthors);
@@ -238,7 +248,7 @@ router.post("/reports/:id/comments", async (req, res): Promise<void> => {
   }
   const [comment] = await db.insert(commentsTable).values({ postId, userId: currentUserId, text: text.trim().slice(0, 1000) }).returning();
   const [user] = await db.select().from(usersTable).where(eq(usersTable.id, currentUserId));
-  const { passwordHash: _pw, ...authorData } = user;
+  const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...authorData } = user;
   res.status(201).json({ ...comment, author: authorData });
 });
 
@@ -253,16 +263,28 @@ router.delete("/comments/:id", async (req, res): Promise<void> => {
   res.sendStatus(204);
 });
 
-// GET /stats
+// GET /stats — org-scoped
 router.get("/stats", async (req, res): Promise<void> => {
-  const [totalPostsResult] = await db.select({ count: sql<number>`count(*)::int` }).from(reportsTable);
-  const [totalUsersResult] = await db.select({ count: sql<number>`count(*)::int` }).from(usersTable).where(eq(usersTable.role, "user"));
-  const [totalMissionariesResult] = await db.select({ count: sql<number>`count(*)::int` }).from(usersTable).where(eq(usersTable.role, "missionary"));
+  const currentUserId = req.session?.userId as number | undefined;
+  let orgCondition: ReturnType<typeof eq> | undefined = undefined;
+  if (currentUserId) {
+    const [caller] = await db.select().from(usersTable).where(eq(usersTable.id, currentUserId));
+    if (caller?.organizationId && caller.role !== "super_admin") {
+      orgCondition = eq(reportsTable.organizationId, caller.organizationId);
+    }
+  }
+
+  const [totalPostsResult] = await db.select({ count: sql<number>`count(*)::int` }).from(reportsTable)
+    .where(orgCondition);
+  const userOrgCondition = currentUserId ? undefined : undefined; // just show all for now
+  const [totalUsersResult] = await db.select({ count: sql<number>`count(*)::int` }).from(usersTable)
+    .where(eq(usersTable.role, "field_user"));
+
   res.json({
     totalPosts: totalPostsResult?.count ?? 0,
-    totalUsers: (totalUsersResult?.count ?? 0) + (totalMissionariesResult?.count ?? 0),
+    totalUsers: totalUsersResult?.count ?? 0,
     totalReports: totalPostsResult?.count ?? 0,
-    totalMissionaries: (totalUsersResult?.count ?? 0) + (totalMissionariesResult?.count ?? 0),
+    totalMissionaries: totalUsersResult?.count ?? 0,
     totalPeopleReached: 0,
     totalLeadersTrained: 0,
     totalCommunitiesServed: 0,
@@ -275,11 +297,16 @@ router.get("/recent-activity", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
   const currentUser = await getCurrentUser(currentUserId);
-  if (!currentUser || currentUser.role !== "admin") {
+  if (!currentUser || (currentUser.role !== "admin" && currentUser.role !== "super_admin")) {
     res.status(403).json({ error: "Admin access required" }); return;
   }
   const limit = Math.min(Number(req.query.limit) || 5, 20);
+  const conditions = [];
+  if (currentUser.organizationId && currentUser.role !== "super_admin") {
+    conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
+  }
   const posts = await db.select().from(reportsTable)
+    .where(conditions.length > 0 ? and(...conditions) : undefined)
     .orderBy(desc(reportsTable.createdAt))
     .limit(limit);
   const result = await getPostsWithDetails(posts, currentUserId);

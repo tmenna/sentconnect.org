@@ -15,6 +15,10 @@ import SubmitReport from "./pages/submit-report";
 import Login from "./pages/login";
 import AdminDashboard from "./pages/admin";
 import MissionaryDashboard from "./pages/missionary-dashboard";
+import Signup from "./pages/signup";
+import ForgotPassword from "./pages/forgot-password";
+import ResetPassword from "./pages/reset-password";
+import SuperAdminPanel from "./pages/super-admin";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +27,7 @@ function HomeRoute() {
   if (isLoading) return null;
   if (!isAuthenticated) return <Redirect href="/login" />;
   if (user?.role === "admin") return <Redirect href="/admin" />;
+  if (user?.role === "super_admin") return <Redirect href="/super-admin" />;
   return <MissionaryDashboard />;
 }
 
@@ -30,25 +35,36 @@ function AdminFeedRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
   if (isLoading) return null;
   if (!isAuthenticated) return <Redirect href="/login" />;
-  if (user?.role !== "admin") return <Redirect href="/" />;
+  if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
   return <Timeline />;
 }
 
+// Pages that use the full-screen layout (no navbar)
+const FULL_SCREEN_PATHS = ["/login", "/signup", "/forgot-password", "/reset-password"];
+
 function Router() {
   return (
-    <Layout>
-      <Switch>
-        <Route path="/" component={HomeRoute} />
-        <Route path="/feed" component={AdminFeedRoute} />
-        <Route path="/reports/:id" component={ReportDetail} />
-        <Route path="/missionaries/:id" component={MissionaryProfile} />
-        <Route path="/submit" component={SubmitReport} />
-        <Route path="/login" component={Login} />
-        <Route path="/admin" component={AdminDashboard} />
-        <Route path="/profile" component={Profile} />
-        <Route component={NotFound} />
-      </Switch>
-    </Layout>
+    <Switch>
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={Signup} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password" component={ResetPassword} />
+      <Route>
+        <Layout>
+          <Switch>
+            <Route path="/" component={HomeRoute} />
+            <Route path="/feed" component={AdminFeedRoute} />
+            <Route path="/reports/:id" component={ReportDetail} />
+            <Route path="/missionaries/:id" component={MissionaryProfile} />
+            <Route path="/submit" component={SubmitReport} />
+            <Route path="/admin" component={AdminDashboard} />
+            <Route path="/super-admin" component={SuperAdminPanel} />
+            <Route path="/profile" component={Profile} />
+            <Route component={NotFound} />
+          </Switch>
+        </Layout>
+      </Route>
+    </Switch>
   );
 }
 

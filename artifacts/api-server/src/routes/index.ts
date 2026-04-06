@@ -3,12 +3,16 @@ import healthRouter from "./health";
 import usersRouter from "./users";
 import reportsRouter from "./reports";
 import storageRouter from "./storage";
+import authRouter from "./auth";
+import superAdminRouter from "./super-admin";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
+router.use(authRouter);
 router.use(usersRouter);
 router.use(reportsRouter);
 router.use(storageRouter);
+router.use(superAdminRouter);
 
 export default router;

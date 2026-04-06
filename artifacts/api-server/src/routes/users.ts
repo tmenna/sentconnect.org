@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { db, usersTable } from "@workspace/db";
 import {
   ListUsersQueryParams,
@@ -14,7 +14,7 @@ import { hashPassword, verifyPassword } from "../lib/password";
 const router: IRouter = Router();
 
 function toUserResponse(user: typeof usersTable.$inferSelect) {
-  const { passwordHash: _pw, ...rest } = user;
+  const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...rest } = user;
   return rest;
 }
 
@@ -24,13 +24,34 @@ router.get("/users", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const query = db.select().from(usersTable);
+
+  // Determine caller's org
+  const currentUserId = req.session?.userId as number | undefined;
+  let callerOrgId: number | null = null;
+  let isAdmin = false;
+  let isSuperAdmin = false;
+  if (currentUserId) {
+    const [caller] = await db.select().from(usersTable).where(eq(usersTable.id, currentUserId));
+    callerOrgId = caller?.organizationId ?? null;
+    isAdmin = caller?.role === "admin";
+    isSuperAdmin = caller?.role === "super_admin";
+  }
+
   let users;
-  if (parsed.data.role) {
-    users = await db.select().from(usersTable).where(eq(usersTable.role, parsed.data.role));
+  if (isSuperAdmin) {
+    // Super admin sees all users
+    users = parsed.data.role
+      ? await db.select().from(usersTable).where(eq(usersTable.role, parsed.data.role))
+      : await db.select().from(usersTable);
+  } else if (callerOrgId !== null) {
+    // Scoped to org
+    const conditions = [eq(usersTable.organizationId, callerOrgId)];
+    if (parsed.data.role) conditions.push(eq(usersTable.role, parsed.data.role));
+    users = await db.select().from(usersTable).where(and(...conditions));
   } else {
     users = await db.select().from(usersTable);
   }
+
   res.json(users.map(toUserResponse));
 });
 

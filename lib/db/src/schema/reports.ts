@@ -2,6 +2,7 @@ import { pgTable, text, serial, timestamp, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 import { usersTable } from "./users";
+import { organizationsTable } from "./organizations";
 
 export const reportsTable = pgTable("reports", {
   id: serial("id").primaryKey(),
@@ -10,6 +11,7 @@ export const reportsTable = pgTable("reports", {
   category: text("category"),
   reportDate: timestamp("report_date", { withTimezone: true }),
   missionaryId: integer("missionary_id").notNull().references(() => usersTable.id),
+  organizationId: integer("organization_id").references(() => organizationsTable.id, { onDelete: "set null" }),
   peopleReached: integer("people_reached"),
   leadersTrainer: integer("leaders_trainer"),
   communitiesServed: integer("communities_served"),
