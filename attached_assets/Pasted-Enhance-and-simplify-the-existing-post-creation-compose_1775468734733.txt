@@ -1,0 +1,136 @@
+Enhance and simplify the existing post creation (composer) experience in SentConnect.
+
+IMPORTANT:
+
+* Do NOT rebuild the app
+* Refactor the existing post composer UI and logic
+* Keep the experience fast, simple, and social-media-like (similar to Twitter/Instagram)
+* Remove unnecessary complexity and form-like behavior
+
+---
+
+GOAL:
+Make posting quick and intuitive, requiring minimal effort while keeping optional features available.
+
+---
+
+1. REMOVE VISIBILITY OPTION
+
+* Remove the Public / Private toggle completely
+* All posts should follow the system’s default visibility (organization-scoped)
+
+---
+
+2. CORE POST INPUT
+
+* Keep a single main input:
+  → “What’s happening?”
+* This is the ONLY required field
+
+---
+
+3. MEDIA (IMPROVE UX)
+
+* Keep image/video upload
+* Improve UI to:
+
+  * Support drag & drop
+  * Show preview before posting
+* Allow multiple images
+* Keep video optional
+
+---
+
+4. LOCATION (OPTIONAL, ONE-CLICK)
+
+* Keep location as optional
+* Add simple “Add location” button
+* Allow:
+
+  * Auto-detect (if available)
+  * Manual entry
+
+---
+
+5. IMPACT (SIMPLIFIED OPTIONAL FIELD)
+
+* Replace visible “people reached” input with:
+  → “Add impact” button
+
+* When clicked:
+
+  * Expand a small input field:
+    → People reached (number)
+
+* Keep hidden by default
+
+---
+
+6. ADD “HIGHLIGHT” FEATURE (NEW)
+
+* Add a simple toggle:
+  → ⭐ Mark as highlight
+
+* This is optional
+
+* Store as boolean field (e.g., is_highlight)
+
+---
+
+7. POST ACTION
+
+* Keep “Post” button
+* Ensure posting takes less than 30 seconds
+* Show loading state while posting
+
+---
+
+8. EDIT AFTER POST (REQUIRED)
+
+* Add ability to edit posts after publishing
+
+Implementation:
+
+* Add 3-dot menu on each post:
+
+  * Edit
+  * Delete
+
+* Editing should allow:
+
+  * Update text
+  * Add/remove media
+  * Add/update location
+  * Update people reached
+  * Toggle highlight
+
+---
+
+9. UI/UX DESIGN PRINCIPLES
+
+* No form-like layout
+* No categories
+* No required structured fields beyond main text
+* Keep everything optional and collapsible
+* Clean, minimal, mobile-friendly
+
+---
+
+10. DATA MODEL UPDATE (IF NEEDED)
+
+* Add:
+
+  * is_highlight (boolean)
+* Ensure:
+
+  * people_reached remains optional
+  * media stored as array (image_urls)
+
+---
+
+FINAL RULES:
+
+* Do NOT overcomplicate
+* Do NOT add forms or multi-step flows
+* Keep the experience similar to a social feed composer
+* Prioritize speed, clarity, and ease of use

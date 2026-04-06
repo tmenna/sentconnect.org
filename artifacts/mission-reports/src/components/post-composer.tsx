@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Image, MapPin, X, Globe, Lock, Loader2, Users } from "lucide-react";
+import { Image, MapPin, X, Loader2, Users, Star, Navigation } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
@@ -26,19 +26,20 @@ async function uploadFileToGcs(file: File, uploadURL: string) {
   if (!res.ok) throw new Error("Upload failed");
 }
 
-type LocalFile = { file: File; previewUrl: string; objectPath?: string };
+type LocalFile = { file: File; previewUrl: string };
 
 export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
   const { user } = useAuth();
   const [text, setText] = useState("");
   const [location, setLocation] = useState("");
   const [peopleReached, setPeopleReached] = useState("");
-  const [visibility, setVisibility] = useState<"public" | "private">("public");
+  const [isHighlight, setIsHighlight] = useState(false);
   const [files, setFiles] = useState<LocalFile[]>([]);
   const [showLocation, setShowLocation] = useState(false);
-  const [showPeopleReached, setShowPeopleReached] = useState(false);
+  const [showImpact, setShowImpact] = useState(false);
   const [posting, setPosting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState("");
+  const [detectingLocation, setDetectingLocation] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!user) return null;
@@ -64,6 +65,32 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
     addFiles(e.dataTransfer.files);
   }
 
+  function detectLocation() {
+    if (!navigator.geolocation) return;
+    setDetectingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      async pos => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          if (res.ok) {
+            const data = await res.json();
+            const city = data.address?.city || data.address?.town || data.address?.village || data.address?.county || "";
+            const country = data.address?.country || "";
+            setLocation(city && country ? `${city}, ${country}` : data.display_name?.split(",").slice(0, 2).join(", ") || "");
+          }
+        } catch {
+          // fallback: just show coords
+          setLocation(`${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
+        } finally {
+          setDetectingLocation(false);
+        }
+      },
+      () => setDetectingLocation(false),
+      { timeout: 8000 }
+    );
+  }
+
   async function handlePost() {
     if (posting) return;
     if (!text.trim() && files.length === 0) return;
@@ -71,13 +98,13 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
     try {
       const uploadedPaths: string[] = [];
       for (let i = 0; i < files.length; i++) {
-        setUploadProgress(`Uploading media ${i + 1}/${files.length}…`);
+        setUploadProgress(`Uploading ${i + 1}/${files.length}…`);
         const { uploadURL, objectPath } = await requestUploadUrl(files[i].file);
         await uploadFileToGcs(files[i].file, uploadURL);
         uploadedPaths.push(objectPath);
       }
 
-      setUploadProgress("Creating post…");
+      setUploadProgress("Saving…");
       const postRes = await fetch("/api/reports", {
         method: "POST",
         credentials: "include",
@@ -85,20 +112,19 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
         body: JSON.stringify({
           description: text.trim() || null,
           location: location.trim() || null,
-          visibility,
           peopleReached: peopleReached.trim() ? Number(peopleReached) : null,
+          isHighlight,
         }),
       });
       if (!postRes.ok) throw new Error("Failed to create post");
       const newPost = await postRes.json();
 
       for (const objectPath of uploadedPaths) {
-        const photoUrl = `/api/storage${objectPath}`;
         await fetch(`/api/reports/${newPost.id}/photos`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: photoUrl }),
+          body: JSON.stringify({ url: `/api/storage${objectPath}` }),
         });
       }
 
@@ -109,9 +135,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
       setText("");
       setLocation("");
       setPeopleReached("");
+      setIsHighlight(false);
       setShowLocation(false);
-      setShowPeopleReached(false);
-      setVisibility("public");
+      setShowImpact(false);
       files.forEach(f => URL.revokeObjectURL(f.previewUrl));
       setFiles([]);
     } catch (err) {
@@ -126,7 +152,14 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
   const isVideo = (f: LocalFile) => f.file.type.startsWith("video/");
 
   return (
-    <div className="bg-white rounded-xl border border-border/60 shadow-sm p-4">
+    <div
+      className={cn(
+        "bg-white rounded-xl border shadow-sm p-4 transition-colors",
+        isHighlight ? "border-amber-300 bg-amber-50/30" : "border-border/60"
+      )}
+      onDragOver={e => e.preventDefault()}
+      onDrop={handleDrop}
+    >
       <div className="flex gap-3">
         <Avatar className="h-10 w-10 flex-shrink-0">
           <AvatarImage src={user.avatarUrl ?? undefined} />
@@ -153,16 +186,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             }}
           />
 
-          {/* File previews */}
+          {/* Media previews */}
           {files.length > 0 && (
-            <div
-              className={cn(
-                "mt-2 gap-1 rounded-lg overflow-hidden",
-                files.length === 1 ? "block" : "grid grid-cols-2"
-              )}
-              onDragOver={e => e.preventDefault()}
-              onDrop={handleDrop}
-            >
+            <div className={cn("mt-2 gap-1 rounded-lg overflow-hidden", files.length === 1 ? "block" : "grid grid-cols-2")}>
               {files.map((f, i) => (
                 <div key={i} className={cn("relative group bg-black/5", files.length === 1 ? "aspect-[16/10]" : "aspect-square")}>
                   {isVideo(f) ? (
@@ -181,7 +207,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             </div>
           )}
 
-          {/* Location */}
+          {/* Location input */}
           {showLocation && (
             <div className="mt-2 flex items-center gap-2 bg-muted/40 rounded-full px-3 py-1.5">
               <MapPin className="h-3.5 w-3.5 text-primary flex-shrink-0" />
@@ -191,15 +217,24 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
                 placeholder="Add location…"
                 className="flex-1 text-[13px] bg-transparent outline-none"
                 disabled={posting}
+                autoFocus
               />
+              <button
+                onClick={detectLocation}
+                disabled={detectingLocation || posting}
+                title="Auto-detect location"
+                className="text-primary hover:text-primary/70 transition-colors disabled:opacity-40"
+              >
+                {detectingLocation ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Navigation className="h-3.5 w-3.5" />}
+              </button>
               <button onClick={() => { setShowLocation(false); setLocation(""); }}>
                 <X className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground transition-colors" />
               </button>
             </div>
           )}
 
-          {/* People Reached */}
-          {showPeopleReached && (
+          {/* Impact / people reached */}
+          {showImpact && (
             <div className="mt-2 flex items-center gap-2 bg-emerald-50 rounded-full px-3 py-1.5 border border-emerald-100">
               <Users className="h-3.5 w-3.5 text-emerald-600 flex-shrink-0" />
               <input
@@ -207,34 +242,27 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
                 min="0"
                 value={peopleReached}
                 onChange={e => setPeopleReached(e.target.value)}
-                placeholder="How many people reached?"
+                placeholder="People reached…"
                 className="flex-1 text-[13px] bg-transparent outline-none text-emerald-800 placeholder:text-emerald-400"
                 disabled={posting}
+                autoFocus
               />
-              <button onClick={() => { setShowPeopleReached(false); setPeopleReached(""); }}>
+              <button onClick={() => { setShowImpact(false); setPeopleReached(""); }}>
                 <X className="h-3.5 w-3.5 text-emerald-400 hover:text-emerald-700 transition-colors" />
               </button>
             </div>
           )}
 
-          {/* Drag drop zone when no files */}
-          {files.length === 0 && (
-            <div
-              onDragOver={e => e.preventDefault()}
-              onDrop={handleDrop}
-              className="hidden"
-            />
-          )}
-
+          {/* Toolbar */}
           <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border/40">
-            {/* Media button */}
+            {/* Media */}
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={posting || files.length >= 6}
               className="p-2 rounded-full text-primary hover:bg-primary/10 transition-colors disabled:opacity-40"
               title="Add photo or video"
             >
-              <Image className="h-4.5 w-4.5" />
+              <Image className="h-4 w-4" />
             </button>
             <input
               ref={fileInputRef}
@@ -245,7 +273,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onChange={e => addFiles(e.target.files)}
             />
 
-            {/* Location button */}
+            {/* Location */}
             <button
               onClick={() => setShowLocation(s => !s)}
               disabled={posting}
@@ -255,30 +283,36 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               )}
               title="Add location"
             >
-              <MapPin className="h-4.5 w-4.5" />
+              <MapPin className="h-4 w-4" />
             </button>
 
-            {/* People Reached button */}
+            {/* Impact */}
             <button
-              onClick={() => setShowPeopleReached(s => !s)}
+              onClick={() => setShowImpact(s => !s)}
               disabled={posting}
               className={cn(
                 "p-2 rounded-full transition-colors",
-                showPeopleReached ? "text-emerald-600 bg-emerald-50" : "text-primary hover:bg-primary/10"
+                showImpact ? "text-emerald-600 bg-emerald-50" : "text-primary hover:bg-primary/10"
               )}
-              title="People reached"
+              title="Add impact"
             >
-              <Users className="h-4.5 w-4.5" />
+              <Users className="h-4 w-4" />
             </button>
 
-            {/* Visibility toggle */}
+            {/* Highlight */}
             <button
-              onClick={() => setVisibility(v => v === "public" ? "private" : "public")}
+              onClick={() => setIsHighlight(s => !s)}
               disabled={posting}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium text-primary hover:bg-primary/10 transition-colors"
+              className={cn(
+                "flex items-center gap-1 px-2 py-1.5 rounded-full text-[12px] font-medium transition-colors",
+                isHighlight
+                  ? "text-amber-600 bg-amber-100 hover:bg-amber-200"
+                  : "text-primary hover:bg-primary/10"
+              )}
+              title="Mark as highlight"
             >
-              {visibility === "public" ? <Globe className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
-              {visibility === "public" ? "Public" : "Private"}
+              <Star className={cn("h-4 w-4", isHighlight && "fill-amber-500")} />
+              <span className="hidden sm:inline">{isHighlight ? "Highlight" : "Highlight"}</span>
             </button>
 
             <div className="flex-1" />

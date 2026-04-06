@@ -118,8 +118,7 @@ router.post("/reports", async (req, res): Promise<void> => {
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
   const currentUser = await getCurrentUser(currentUserId);
-  const { description, location, visibility, peopleReached } = req.body ?? {};
-  const vis = visibility === "private" ? "private" : "public";
+  const { description, location, peopleReached, isHighlight } = req.body ?? {};
   const reached = peopleReached !== undefined && peopleReached !== null && peopleReached !== "" ? Number(peopleReached) : null;
 
   const [post] = await db.insert(reportsTable).values({
@@ -127,7 +126,8 @@ router.post("/reports", async (req, res): Promise<void> => {
     organizationId: currentUser?.organizationId ?? null,
     description: typeof description === "string" ? description : null,
     location: typeof location === "string" ? location : null,
-    visibility: vis,
+    visibility: "public",
+    isHighlight: isHighlight === true,
     peopleReached: reached && !isNaN(reached) ? reached : null,
     title: null,
     category: "post",
@@ -162,11 +162,15 @@ router.patch("/reports/:id", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
-  const { description, location, visibility } = req.body ?? {};
+  const { description, location, peopleReached, isHighlight } = req.body ?? {};
   const updates: Record<string, unknown> = {};
   if (description != null) updates.description = String(description);
   if (location !== undefined) updates.location = location ?? null;
-  if (visibility === "public" || visibility === "private") updates.visibility = visibility;
+  if (peopleReached !== undefined) {
+    const r = peopleReached !== null && peopleReached !== "" ? Number(peopleReached) : null;
+    updates.peopleReached = r !== null && !isNaN(r) ? r : null;
+  }
+  if (isHighlight !== undefined) updates.isHighlight = isHighlight === true;
 
   const [post] = await db.update(reportsTable).set(updates).where(eq(reportsTable.id, postId)).returning();
   if (!post) { res.status(404).json({ error: "Post not found" }); return; }

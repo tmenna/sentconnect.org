@@ -1,7 +1,10 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
-import { Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Globe, Lock, Send, Users } from "lucide-react";
+import {
+  Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
+  Send, Users, Star, X, Loader2, Check, Navigation
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
@@ -12,6 +15,7 @@ export type PostData = {
   description?: string | null;
   location?: string | null;
   visibility: string;
+  isHighlight?: boolean;
   createdAt: string;
   likeCount: number;
   commentCount: number;
@@ -67,7 +71,7 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
   }
   return (
     <div className="grid grid-cols-2 gap-1 rounded-lg overflow-hidden">
-      <div className="aspect-square bg-black/5 row-span-2 col-span-1">
+      <div className="aspect-square bg-black/5 row-span-2">
         {isVideo(photos[0].url) ? (
           <video src={photos[0].url} className="w-full h-full object-cover" />
         ) : (
@@ -75,7 +79,7 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
         )}
       </div>
       {photos.slice(1, 3).map((p, i) => (
-        <div key={p.id} className={cn("bg-black/5", i === 0 ? "aspect-square" : "aspect-square relative")}>
+        <div key={p.id} className={cn("bg-black/5 aspect-square", i === 1 && "relative")}>
           {isVideo(p.url) ? (
             <video src={p.url} className="w-full h-full object-cover" />
           ) : (
@@ -99,6 +103,172 @@ async function apiFetch(url: string, options?: RequestInit) {
   return res.json();
 }
 
+function EditForm({
+  post,
+  onSave,
+  onCancel,
+}: {
+  post: PostData;
+  onSave: (updated: PostData) => void;
+  onCancel: () => void;
+}) {
+  const [text, setText] = useState(post.description ?? "");
+  const [location, setLocation] = useState(post.location ?? "");
+  const [peopleReached, setPeopleReached] = useState(post.peopleReached?.toString() ?? "");
+  const [isHighlight, setIsHighlight] = useState(post.isHighlight ?? false);
+  const [saving, setSaving] = useState(false);
+  const [detectingLocation, setDetectingLocation] = useState(false);
+  const [showLocation, setShowLocation] = useState(!!post.location);
+  const [showImpact, setShowImpact] = useState(!!post.peopleReached);
+
+  function detectLocation() {
+    if (!navigator.geolocation) return;
+    setDetectingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      async pos => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          if (res.ok) {
+            const data = await res.json();
+            const city = data.address?.city || data.address?.town || data.address?.village || data.address?.county || "";
+            const country = data.address?.country || "";
+            setLocation(city && country ? `${city}, ${country}` : data.display_name?.split(",").slice(0, 2).join(", ") || "");
+          }
+        } catch {
+          setLocation(`${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
+        } finally {
+          setDetectingLocation(false);
+        }
+      },
+      () => setDetectingLocation(false),
+      { timeout: 8000 }
+    );
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const updated = await apiFetch(`/api/reports/${post.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          description: text.trim() || null,
+          location: showLocation ? location.trim() || null : null,
+          peopleReached: showImpact && peopleReached.trim() ? Number(peopleReached) : null,
+          isHighlight,
+        }),
+      });
+      if (updated) onSave(updated as PostData);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="px-4 py-3 space-y-3">
+      <textarea
+        value={text}
+        onChange={e => setText(e.target.value)}
+        rows={4}
+        disabled={saving}
+        className="w-full resize-none text-[14.5px] leading-relaxed outline-none border border-border/60 rounded-lg px-3 py-2 bg-muted/20 focus:bg-white focus:border-primary/40 transition-colors disabled:opacity-50"
+        placeholder="What's happening?"
+      />
+
+      {/* Location */}
+      {showLocation ? (
+        <div className="flex items-center gap-2 bg-muted/40 rounded-full px-3 py-1.5">
+          <MapPin className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+          <input
+            value={location}
+            onChange={e => setLocation(e.target.value)}
+            placeholder="Location…"
+            className="flex-1 text-[13px] bg-transparent outline-none"
+            disabled={saving}
+          />
+          <button
+            onClick={detectLocation}
+            disabled={detectingLocation || saving}
+            title="Auto-detect"
+            className="text-primary hover:text-primary/70 transition-colors disabled:opacity-40"
+          >
+            {detectingLocation ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Navigation className="h-3.5 w-3.5" />}
+          </button>
+          <button onClick={() => { setShowLocation(false); setLocation(""); }}>
+            <X className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => setShowLocation(true)}
+          className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-primary transition-colors"
+        >
+          <MapPin className="h-3.5 w-3.5" /> Add location
+        </button>
+      )}
+
+      {/* Impact */}
+      {showImpact ? (
+        <div className="flex items-center gap-2 bg-emerald-50 rounded-full px-3 py-1.5 border border-emerald-100">
+          <Users className="h-3.5 w-3.5 text-emerald-600 flex-shrink-0" />
+          <input
+            type="number"
+            min="0"
+            value={peopleReached}
+            onChange={e => setPeopleReached(e.target.value)}
+            placeholder="People reached…"
+            className="flex-1 text-[13px] bg-transparent outline-none text-emerald-800 placeholder:text-emerald-400"
+            disabled={saving}
+          />
+          <button onClick={() => { setShowImpact(false); setPeopleReached(""); }}>
+            <X className="h-3.5 w-3.5 text-emerald-400 hover:text-emerald-700" />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => setShowImpact(true)}
+          className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-emerald-600 transition-colors"
+        >
+          <Users className="h-3.5 w-3.5" /> Add impact
+        </button>
+      )}
+
+      {/* Highlight toggle */}
+      <button
+        onClick={() => setIsHighlight(h => !h)}
+        disabled={saving}
+        className={cn(
+          "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors",
+          isHighlight
+            ? "text-amber-700 bg-amber-100 hover:bg-amber-200"
+            : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+        )}
+      >
+        <Star className={cn("h-3.5 w-3.5", isHighlight && "fill-amber-500 text-amber-500")} />
+        {isHighlight ? "Highlighted" : "Mark as highlight"}
+      </button>
+
+      {/* Actions */}
+      <div className="flex items-center justify-end gap-2 pt-1 border-t border-border/30">
+        <Button variant="ghost" size="sm" onClick={onCancel} disabled={saving} className="h-8 text-[13px]">
+          Cancel
+        </Button>
+        <Button
+          size="sm"
+          onClick={handleSave}
+          disabled={saving}
+          className="h-8 px-4 text-[13px] bg-[#132272] hover:bg-[#0e1a5c] text-white"
+        >
+          {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <><Check className="h-3.5 w-3.5 mr-1" />Save</>}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDelete?: (id: number) => void }) {
   const { user } = useAuth();
   const [post, setPost] = useState(initialPost);
@@ -108,10 +278,24 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
   const [commentText, setCommentText] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [editing, setEditing] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const isOwner = user?.id === post.author.id;
-  const isAdmin = user?.role === "admin";
+  const isAdmin = user?.role === "admin" || user?.role === "super_admin";
+  const canManage = isOwner || isAdmin;
+
+  // Close menu on outside click
+  useEffect(() => {
+    if (!showMenu) return;
+    function handler(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowMenu(false);
+      }
+    }
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showMenu]);
 
   async function toggleLike() {
     if (!user) return;
@@ -170,7 +354,18 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
 
   return (
-    <div className="bg-white rounded-xl border border-border/60 shadow-sm overflow-hidden">
+    <div className={cn(
+      "bg-white rounded-xl border shadow-sm overflow-hidden transition-colors",
+      post.isHighlight ? "border-amber-300" : "border-border/60"
+    )}>
+      {/* Highlight banner */}
+      {post.isHighlight && (
+        <div className="flex items-center gap-1.5 px-4 py-1.5 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
+          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+          Highlight
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-start gap-3 px-4 pt-4 pb-2">
         <Link href={`/missionaries/${post.author.id}`}>
@@ -182,18 +377,11 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
           </Avatar>
         </Link>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <Link href={`/missionaries/${post.author.id}`}>
-              <span className="font-semibold text-[14px] text-foreground hover:text-primary transition-colors cursor-pointer leading-tight">
-                {post.author.name}
-              </span>
-            </Link>
-            {post.visibility === "private" ? (
-              <Lock className="h-3 w-3 text-muted-foreground" />
-            ) : (
-              <Globe className="h-3 w-3 text-muted-foreground" />
-            )}
-          </div>
+          <Link href={`/missionaries/${post.author.id}`}>
+            <span className="font-semibold text-[14px] text-foreground hover:text-primary transition-colors cursor-pointer leading-tight">
+              {post.author.name}
+            </span>
+          </Link>
           <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground mt-0.5">
             <span>{timeAgo}</span>
             {post.location && (
@@ -205,7 +393,7 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
             )}
           </div>
         </div>
-        {(isOwner || isAdmin) && (
+        {canManage && !editing && (
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setShowMenu(s => !s)}
@@ -214,7 +402,16 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
               <MoreHorizontal className="h-4 w-4" />
             </button>
             {showMenu && (
-              <div className="absolute right-0 top-7 bg-white border border-border shadow-md rounded-lg z-10 min-w-[120px] py-1">
+              <div className="absolute right-0 top-7 bg-white border border-border shadow-md rounded-lg z-10 min-w-[130px] py-1">
+                {isOwner && (
+                  <button
+                    onClick={() => { setShowMenu(false); setEditing(true); }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                    Edit
+                  </button>
+                )}
                 <button
                   onClick={() => { setShowMenu(false); deletePost(); }}
                   className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
@@ -226,119 +423,139 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
             )}
           </div>
         )}
+        {editing && (
+          <button
+            onClick={() => setEditing(false)}
+            className="p-1 rounded-full hover:bg-muted/60 transition-colors text-muted-foreground"
+            title="Cancel edit"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
-      {/* Text */}
-      {post.description && (
-        <div className="px-4 pb-3">
-          <p className="text-[14.5px] text-foreground leading-relaxed whitespace-pre-wrap">{post.description}</p>
-        </div>
-      )}
-
-      {/* People Reached */}
-      {post.peopleReached != null && post.peopleReached > 0 && (
-        <div className="px-4 pb-3">
-          <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-full">
-            <Users className="h-3.5 w-3.5" />
-            {post.peopleReached.toLocaleString()} people reached
-          </span>
-        </div>
-      )}
-
-      {/* Media */}
-      {post.photos.length > 0 && (
-        <div className="px-4 pb-3">
-          <MediaGrid photos={post.photos} />
-        </div>
-      )}
-
-      {/* Action bar */}
-      <div className="flex items-center gap-1 px-3 pb-2 pt-1 border-t border-border/40">
-        <button
-          onClick={toggleLike}
-          className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all",
-            post.likedByMe
-              ? "text-red-500 bg-red-50 hover:bg-red-100"
-              : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-          )}
-        >
-          <Heart className={cn("h-4 w-4", post.likedByMe && "fill-red-500")} />
-          {post.likeCount > 0 && <span>{post.likeCount}</span>}
-        </button>
-        <button
-          onClick={toggleComments}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all"
-        >
-          <MessageCircle className="h-4 w-4" />
-          {post.commentCount > 0 && <span>{post.commentCount}</span>}
-        </button>
-        <div className="flex-1" />
-        <Link href={`/reports/${post.id}`}>
-          <span className="text-[12px] text-muted-foreground hover:text-primary transition-colors cursor-pointer">
-            View post
-          </span>
-        </Link>
-      </div>
-
-      {/* Comments section */}
-      {showComments && (
-        <div className="border-t border-border/40 px-4 py-3 bg-muted/20 space-y-3">
-          {loadingComments ? (
-            <p className="text-[12px] text-muted-foreground">Loading…</p>
-          ) : comments.length === 0 ? (
-            <p className="text-[12px] text-muted-foreground">No comments yet.</p>
-          ) : (
-            <div className="space-y-2.5">
-              {comments.map(c => (
-                <div key={c.id} className="flex gap-2.5">
-                  <Avatar className="h-7 w-7 flex-shrink-0">
-                    <AvatarImage src={c.author.avatarUrl ?? undefined} />
-                    <AvatarFallback className="text-[10px] font-bold bg-primary/10 text-primary">
-                      {c.author.name.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 bg-white rounded-xl px-3 py-2 border border-border/40">
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="font-semibold text-[12px] text-foreground">{c.author.name}</span>
-                      <span className="text-[11px] text-muted-foreground">
-                        {formatDistanceToNow(new Date(c.createdAt), { addSuffix: true })}
-                      </span>
-                    </div>
-                    <p className="text-[13px] text-foreground mt-0.5">{c.text}</p>
-                  </div>
-                </div>
-              ))}
+      {/* Inline edit form */}
+      {editing ? (
+        <EditForm
+          post={post}
+          onSave={updated => { setPost(updated); setEditing(false); }}
+          onCancel={() => setEditing(false)}
+        />
+      ) : (
+        <>
+          {/* Text */}
+          {post.description && (
+            <div className="px-4 pb-3">
+              <p className="text-[14.5px] text-foreground leading-relaxed whitespace-pre-wrap">{post.description}</p>
             </div>
           )}
 
-          {user && (
-            <form onSubmit={submitComment} className="flex gap-2 items-center">
-              <Avatar className="h-7 w-7 flex-shrink-0">
-                <AvatarImage src={user.avatarUrl ?? undefined} />
-                <AvatarFallback className="text-[10px] font-bold bg-primary/10 text-primary">
-                  {user.name.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 flex items-center gap-2 bg-white border border-border/60 rounded-full px-3 py-1.5">
-                <input
-                  value={commentText}
-                  onChange={e => setCommentText(e.target.value)}
-                  placeholder="Write a comment…"
-                  className="flex-1 text-[13px] bg-transparent outline-none placeholder:text-muted-foreground"
-                  maxLength={500}
-                />
-                <button
-                  type="submit"
-                  disabled={!commentText.trim() || submittingComment}
-                  className="text-primary disabled:opacity-40 transition-opacity"
-                >
-                  <Send className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </form>
+          {/* People Reached */}
+          {post.peopleReached != null && post.peopleReached > 0 && (
+            <div className="px-4 pb-3">
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-full">
+                <Users className="h-3.5 w-3.5" />
+                {post.peopleReached.toLocaleString()} people reached
+              </span>
+            </div>
           )}
-        </div>
+
+          {/* Media */}
+          {post.photos.length > 0 && (
+            <div className="px-4 pb-3">
+              <MediaGrid photos={post.photos} />
+            </div>
+          )}
+
+          {/* Action bar */}
+          <div className="flex items-center gap-1 px-3 pb-2 pt-1 border-t border-border/40">
+            <button
+              onClick={toggleLike}
+              className={cn(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all",
+                post.likedByMe
+                  ? "text-red-500 bg-red-50 hover:bg-red-100"
+                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+              )}
+            >
+              <Heart className={cn("h-4 w-4", post.likedByMe && "fill-red-500")} />
+              {post.likeCount > 0 && <span>{post.likeCount}</span>}
+            </button>
+            <button
+              onClick={toggleComments}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all"
+            >
+              <MessageCircle className="h-4 w-4" />
+              {post.commentCount > 0 && <span>{post.commentCount}</span>}
+            </button>
+            <div className="flex-1" />
+            <Link href={`/reports/${post.id}`}>
+              <span className="text-[12px] text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+                View post
+              </span>
+            </Link>
+          </div>
+
+          {/* Comments */}
+          {showComments && (
+            <div className="border-t border-border/40 px-4 py-3 bg-muted/20 space-y-3">
+              {loadingComments ? (
+                <p className="text-[12px] text-muted-foreground">Loading…</p>
+              ) : comments.length === 0 ? (
+                <p className="text-[12px] text-muted-foreground">No comments yet.</p>
+              ) : (
+                <div className="space-y-2.5">
+                  {comments.map(c => (
+                    <div key={c.id} className="flex gap-2.5">
+                      <Avatar className="h-7 w-7 flex-shrink-0">
+                        <AvatarImage src={c.author.avatarUrl ?? undefined} />
+                        <AvatarFallback className="text-[10px] font-bold bg-primary/10 text-primary">
+                          {c.author.name.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 bg-white rounded-xl px-3 py-2 border border-border/40">
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="font-semibold text-[12px] text-foreground">{c.author.name}</span>
+                          <span className="text-[11px] text-muted-foreground">
+                            {formatDistanceToNow(new Date(c.createdAt), { addSuffix: true })}
+                          </span>
+                        </div>
+                        <p className="text-[13px] text-foreground mt-0.5">{c.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {user && (
+                <form onSubmit={submitComment} className="flex gap-2 items-center">
+                  <Avatar className="h-7 w-7 flex-shrink-0">
+                    <AvatarImage src={user.avatarUrl ?? undefined} />
+                    <AvatarFallback className="text-[10px] font-bold bg-primary/10 text-primary">
+                      {user.name.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 flex items-center gap-2 bg-white border border-border/60 rounded-full px-3 py-1.5">
+                    <input
+                      value={commentText}
+                      onChange={e => setCommentText(e.target.value)}
+                      placeholder="Write a comment…"
+                      className="flex-1 text-[13px] bg-transparent outline-none placeholder:text-muted-foreground"
+                      maxLength={500}
+                    />
+                    <button
+                      type="submit"
+                      disabled={!commentText.trim() || submittingComment}
+                      className="text-primary disabled:opacity-40 transition-opacity"
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
