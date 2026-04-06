@@ -137,17 +137,29 @@ export function PostDetailModal({
   onDelete?: (id: number) => void;
 }) {
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [closing, setClosing] = useState(false);
   const photos = post.photos;
+
+  // Trigger entrance animation on next tick
+  useEffect(() => {
+    const t = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(t);
+  }, []);
+
+  function handleClose() {
+    setClosing(true);
+  }
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") handleClose();
       if (e.key === "ArrowRight" && photos.length > 1) setPhotoIndex(i => (i + 1) % photos.length);
       if (e.key === "ArrowLeft" && photos.length > 1) setPhotoIndex(i => (i - 1 + photos.length) % photos.length);
     }
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [onClose, photos.length]);
+  }, [photos.length]);
 
   // Prevent body scroll while modal open
   useEffect(() => {
@@ -155,24 +167,44 @@ export function PostDetailModal({
     return () => { document.body.style.overflow = ""; };
   }, []);
 
+  const isIn = visible && !closing;
+  const DURATION = 220;
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
       aria-modal="true"
       role="dialog"
+      onTransitionEnd={(e) => {
+        if (closing && e.target === e.currentTarget) onClose();
+      }}
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={onClose}
+        className="absolute inset-0 backdrop-blur-sm"
+        style={{
+          backgroundColor: isIn ? "rgba(0,0,0,0.60)" : "rgba(0,0,0,0)",
+          transition: `background-color ${DURATION}ms ease`,
+        }}
+        onClick={handleClose}
       />
 
       {/* Panel */}
-      <div className="relative z-10 flex flex-col md:flex-row w-full max-w-4xl max-h-[90vh] mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div
+        className="relative z-10 flex flex-col md:flex-row w-full max-w-4xl max-h-[90vh] mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden"
+        style={{
+          opacity: isIn ? 1 : 0,
+          transform: isIn ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.97)",
+          transition: `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`,
+        }}
+        onTransitionEnd={(e) => {
+          if (closing && e.propertyName === "opacity") onClose();
+        }}
+      >
 
         {/* Close button */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors"
           aria-label="Close"
         >

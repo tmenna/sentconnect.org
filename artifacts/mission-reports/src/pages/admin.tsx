@@ -514,7 +514,7 @@ function TeamRow({ u, onUpdated, onDeleted }: { u: any; onUpdated: () => void; o
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<"team" | "feed">("team");
+  const [activeTab, setActiveTab] = useState<"team" | "feed">("feed");
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
   const [filterUserId, setFilterUserId] = useState<string>("");
@@ -634,7 +634,7 @@ export default function AdminDashboard() {
           >
             <span className="flex items-center gap-1.5">
               <Users className="h-4 w-4" />
-              Team
+              Manage Team
               {!usersLoading && (
                 <span className="ml-0.5 text-[11px] bg-muted px-1.5 py-0.5 rounded-full font-medium">
                   {allUsers.length}
