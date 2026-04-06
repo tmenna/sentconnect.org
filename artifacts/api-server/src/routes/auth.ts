@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { db, usersTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
+import { sendPasswordResetEmail, smtpConfigured } from "../lib/mailer";
 
 const router: IRouter = Router();
 
@@ -88,16 +89,21 @@ router.post("/auth/forgot-password", async (req, res): Promise<void> => {
     .set({ resetToken: token, resetTokenExpiry: expiry })
     .where(eq(usersTable.id, user.id));
 
-  // In production, send this via email. For now, log it.
+  const baseUrl = process.env["APP_BASE_URL"] ?? "https://church-connect-tekimenna.replit.app";
   const resetLink = `/reset-password?token=${token}`;
-  logger.info({ email: user.email, resetLink }, "Password reset requested — link logged for development");
+  const resetUrl = `${baseUrl}${resetLink}`;
 
-  res.json({
-    message: "If an account exists, a reset link has been sent.",
-    // Development only — remove in production:
-    devResetLink: resetLink,
-    devToken: token,
-  });
+  if (smtpConfigured) {
+    await sendPasswordResetEmail(user.email, resetUrl);
+    res.json({ message: "If an account exists, a reset link has been sent." });
+  } else {
+    logger.info({ email: user.email, resetUrl }, "SMTP not configured — reset link logged");
+    res.json({
+      message: "If an account exists, a reset link has been sent.",
+      devResetLink: resetLink,
+      devToken: token,
+    });
+  }
 });
 
 // POST /auth/reset-password — consume token, set new password

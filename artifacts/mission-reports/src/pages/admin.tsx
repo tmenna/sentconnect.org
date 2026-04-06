@@ -11,7 +11,7 @@ import {
   Users, FileText, Heart, MessageCircle,
   Globe, Sparkles, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
-  ShieldCheck, Pencil,
+  ShieldCheck, Pencil, Download,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -775,6 +775,14 @@ export default function AdminDashboard() {
                     Clear filters
                   </button>
                 )}
+                <a
+                  href="/api/reports/export"
+                  download
+                  className="ml-auto flex items-center gap-1.5 text-[12px] font-semibold text-muted-foreground hover:text-foreground border border-border/60 bg-background rounded-lg px-3 py-1.5 whitespace-nowrap transition-colors hover:border-border"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  Export CSV
+                </a>
               </div>
               {hasFilters && (
                 <p className="text-[12px] text-muted-foreground mt-2">

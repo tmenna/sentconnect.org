@@ -137,6 +137,45 @@ router.post("/reports", async (req, res): Promise<void> => {
   res.status(201).json(details);
 });
 
+// GET /reports/export — admin only, returns CSV download
+router.get("/reports/export", async (req, res): Promise<void> => {
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const currentUser = await getCurrentUser(currentUserId);
+  if (!currentUser || (currentUser.role !== "admin" && currentUser.role !== "super_admin")) {
+    res.status(403).json({ error: "Admin access required" }); return;
+  }
+
+  const conditions = [];
+  if (currentUser.role !== "super_admin" && currentUser.organizationId) {
+    conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
+  }
+
+  const posts = await db.select().from(reportsTable)
+    .where(conditions.length > 0 ? and(...conditions) : undefined)
+    .orderBy(desc(reportsTable.createdAt));
+
+  const rows = await Promise.all(posts.map(async (post) => {
+    const [author] = await db.select({ name: usersTable.name }).from(usersTable).where(eq(usersTable.id, post.missionaryId));
+    const date = post.createdAt ? new Date(post.createdAt).toISOString().split("T")[0] : "";
+    const escCsv = (v: string | null | undefined) => `"${(v ?? "").replace(/"/g, '""')}"`;
+    return [
+      date,
+      escCsv(author?.name),
+      escCsv(post.location),
+      post.peopleReached ?? "",
+      escCsv(post.description),
+    ].join(",");
+  }));
+
+  const csv = ["Date,Author,Location,People Reached,Description", ...rows].join("\n");
+  const filename = `sentconnect-reports-${new Date().toISOString().split("T")[0]}.csv`;
+  res.setHeader("Content-Type", "text/csv");
+  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+  res.send(csv);
+});
+
 // GET /reports/:id
 router.get("/reports/:id", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;

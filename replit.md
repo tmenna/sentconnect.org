@@ -128,6 +128,7 @@ Tables: `organizations`, `users`, `reports`, `photos`
 
 **Reports**
 - `GET/POST /api/reports` — List/create reports (org-scoped)
+- `GET /api/reports/export` — Download all org reports as CSV (admin only)
 - `GET/PATCH/DELETE /api/reports/:id` — Get/update/delete report
 - `POST /api/reports/:id/photos` — Add photo
 - `DELETE /api/photos/:id` — Delete photo
