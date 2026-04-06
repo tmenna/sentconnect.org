@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
 import { Button } from "./ui/button";
-import { Shuffle, LogOut, LayoutDashboard, Rss } from "lucide-react";
+import { Shuffle, LogOut, Rss } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -55,8 +55,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <>
                 {isAuthenticated && user ? (
                   <>
-                    {user.role === "admin" && navLink("/feed", "Feed", <Rss className="h-3.5 w-3.5" />)}
-                    {user.role === "admin" && navLink("/admin", "Admin", <LayoutDashboard className="h-3.5 w-3.5" />)}
+                    {user.role === "admin" && navLink("/admin", "Activity Feed", <Rss className="h-3.5 w-3.5" />)}
 
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div className="ml-1.5 w-8 h-8 rounded-full bg-white/15 border border-white/25 text-white flex items-center justify-center font-semibold text-[13px] cursor-pointer hover:bg-white/25 transition-colors">

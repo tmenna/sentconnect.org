@@ -3,10 +3,13 @@ import { useParams, Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
+import { useAuth } from "@/components/auth-provider";
 
 export default function ReportDetail() {
   const params = useParams<{ id: string }>();
   const reportId = Number(params.id);
+  const { user } = useAuth();
+  const feedHref = user?.role === "admin" ? "/admin" : "/feed";
 
   const { data: report, isLoading, isError } = useGetReport(reportId, {
     query: { enabled: !!reportId, queryKey: getGetReportQueryKey(reportId) }
@@ -36,8 +39,8 @@ export default function ReportDetail() {
     return (
       <div className="text-center py-20">
         <p className="text-lg font-semibold text-foreground">Post not found</p>
-        <Link href="/feed" className="mt-3 inline-block text-sm text-primary hover:underline">
-          Back to Feed
+        <Link href={feedHref} className="mt-3 inline-block text-sm text-primary hover:underline">
+          Back to Activity Feed
         </Link>
       </div>
     );
@@ -59,12 +62,12 @@ export default function ReportDetail() {
   return (
     <div className="space-y-4">
       <Link
-        href="/feed"
+        href={feedHref}
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
         data-testid="link-back-timeline"
       >
         <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-        Back to Feed
+        Back to Activity Feed
       </Link>
 
       <PostCard post={post} />

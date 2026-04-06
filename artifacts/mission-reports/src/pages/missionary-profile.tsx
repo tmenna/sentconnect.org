@@ -43,11 +43,13 @@ export default function MissionaryProfile() {
     );
   }
 
+  const feedHref = currentUser?.role === "admin" ? "/admin" : "/feed";
+
   if (!user) {
     return (
       <div className="py-10 text-center">
         <p className="text-foreground font-semibold">User not found</p>
-        <Link href="/feed" className="text-sm text-primary mt-2 inline-block hover:underline">Back to feed</Link>
+        <Link href={feedHref} className="text-sm text-primary mt-2 inline-block hover:underline">Back to Activity Feed</Link>
       </div>
     );
   }
@@ -58,11 +60,11 @@ export default function MissionaryProfile() {
     <div className="space-y-5">
       {/* Back link */}
       <Link
-        href="/feed"
+        href={feedHref}
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
       >
         <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-        Back to feed
+        Back to Activity Feed
       </Link>
 
       {/* Profile banner — matches admin/dashboard navy style */}
