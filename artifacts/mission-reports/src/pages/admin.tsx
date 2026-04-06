@@ -15,7 +15,8 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PostCard, type PostData } from "@/components/post-card";
+import { type PostData } from "@/components/post-card";
+import { FeedGridCard, PostDetailModal } from "@/components/feed-grid";
 import { format } from "date-fns";
 // ─── helpers ───────────────────────────────────────────────────────────────
 
@@ -520,6 +521,7 @@ export default function AdminDashboard() {
   const [filterDateFrom, setFilterDateFrom] = useState<string>("");
   const [filterDateTo, setFilterDateTo] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedPost, setSelectedPost] = useState<PostData | null>(null);
 
   const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey() } });
   const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}) } });
@@ -782,18 +784,21 @@ export default function AdminDashboard() {
             </div>
 
             {feedLoading ? (
-              <div className="space-y-4">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="bg-white rounded-xl border border-border/60 shadow-sm p-4 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Skeleton className="h-10 w-10 rounded-full" />
-                      <div className="space-y-1.5 flex-1">
-                        <Skeleton className="h-3.5 w-28" />
-                        <Skeleton className="h-2.5 w-20" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[1, 2, 3, 4, 5, 6].map(i => (
+                  <div key={i} className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden">
+                    <Skeleton className="w-full aspect-[4/3]" />
+                    <div className="p-3.5 space-y-2.5">
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-7 w-7 rounded-full" />
+                        <div className="space-y-1 flex-1">
+                          <Skeleton className="h-2.5 w-24" />
+                          <Skeleton className="h-2 w-16" />
+                        </div>
                       </div>
+                      <Skeleton className="h-3 w-full" />
+                      <Skeleton className="h-3 w-3/4" />
                     </div>
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-4/5" />
                   </div>
                 ))}
               </div>
@@ -804,13 +809,27 @@ export default function AdminDashboard() {
                 <p className="text-muted-foreground text-xs mt-1">{hasFilters ? "Try adjusting your filters above." : "Team updates will appear here once posted."}</p>
               </div>
             ) : (
-              allFeedPosts.map(post => (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                  onDelete={(id) => setFeedPosts(prev => prev ? prev.filter(p => p.id !== id) : null)}
-                />
-              ))
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {allFeedPosts.map(post => (
+                  <FeedGridCard
+                    key={post.id}
+                    post={post}
+                    onClick={() => setSelectedPost(post)}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Post detail modal */}
+            {selectedPost && (
+              <PostDetailModal
+                post={selectedPost}
+                onClose={() => setSelectedPost(null)}
+                onDelete={(id) => {
+                  setFeedPosts(prev => prev ? prev.filter(p => p.id !== id) : null);
+                  setSelectedPost(null);
+                }}
+              />
             )}
           </div>
         )}
