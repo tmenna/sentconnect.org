@@ -32,12 +32,42 @@ async function apiFetch(path: string, options: RequestInit = {}) {
 
 // ─── sub-components ────────────────────────────────────────────────────────
 
-function StatCard({ label, value, icon, accent }: {
-  label: string; value: number | string; icon: React.ReactNode; accent?: string;
+function StatCard({ label, value, icon, accent, onClick }: {
+  label: string; value: number | string; icon: React.ReactNode; accent?: string; onClick?: () => void;
 }) {
+  const isClickable = Boolean(onClick);
+  const [hovered, setHovered] = useState(false);
+  const [pressed, setPressed] = useState(false);
+
+  const transform = isClickable
+    ? pressed ? "translateY(0px)" : hovered ? "translateY(-4px)" : "translateY(0px)"
+    : undefined;
+  const shadow = isClickable && hovered && !pressed
+    ? "0 8px 24px rgba(0,0,0,0.10)"
+    : undefined;
+
   return (
-    <div className="bg-white rounded-2xl border border-border/60 shadow-sm p-5 flex items-center gap-4">
-      <div className={`p-3 rounded-xl ${accent ?? "bg-primary/10 text-primary"}`}>{icon}</div>
+    <div
+      role={isClickable ? "button" : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      onClick={onClick}
+      onKeyDown={isClickable ? (e) => { if (e.key === "Enter" || e.key === " ") onClick?.(); } : undefined}
+      onMouseEnter={() => isClickable && setHovered(true)}
+      onMouseLeave={() => { setHovered(false); setPressed(false); }}
+      onMouseDown={() => isClickable && setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      style={{
+        transform,
+        boxShadow: shadow,
+        transition: "transform 150ms ease-out, box-shadow 150ms ease-out",
+        cursor: isClickable ? "pointer" : undefined,
+      }}
+      className={[
+        "bg-white rounded-2xl border border-border/60 shadow-sm p-5 flex items-center gap-4",
+        isClickable ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40" : "",
+      ].join(" ")}
+    >
+      <div className={`p-3 rounded-xl flex-shrink-0 ${accent ?? "bg-primary/10 text-primary"}`}>{icon}</div>
       <div>
         <p className="text-[28px] font-extrabold text-foreground leading-none">{value}</p>
         <p className="text-[12px] text-muted-foreground mt-1 font-medium">{label}</p>
@@ -580,13 +610,14 @@ export default function AdminDashboard() {
             [1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24 rounded-2xl" />)
           ) : (
             <>
-              <StatCard label="Total Posts" value={stats?.totalPosts ?? 0} icon={<FileText className="h-5 w-5" />} accent="bg-blue-50 text-blue-600" />
-              <StatCard label="Field Users" value={nonAdmins.length} icon={<Users className="h-5 w-5" />} accent="bg-emerald-50 text-emerald-600" />
+              <StatCard label="Total Posts" value={stats?.totalPosts ?? 0} icon={<FileText className="h-5 w-5" />} accent="bg-blue-50 text-blue-600" onClick={() => setActiveTab("feed")} />
+              <StatCard label="Field Users" value={nonAdmins.length} icon={<Users className="h-5 w-5" />} accent="bg-emerald-50 text-emerald-600" onClick={() => setActiveTab("team")} />
               <StatCard
                 label="Countries"
                 value={new Set(nonAdmins.map((u: any) => u.location?.split(",").pop()?.trim()).filter(Boolean)).size || "—"}
                 icon={<Globe className="h-5 w-5" />}
                 accent="bg-violet-50 text-violet-600"
+                onClick={() => setActiveTab("team")}
               />
               <StatCard label="Your Role" value="Admin" icon={<Sparkles className="h-5 w-5" />} accent="bg-amber-50 text-amber-600" />
             </>
