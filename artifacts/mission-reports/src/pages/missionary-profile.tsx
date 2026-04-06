@@ -49,7 +49,7 @@ export default function MissionaryProfile() {
     return (
       <div className="py-10 text-center">
         <p className="text-foreground font-semibold">User not found</p>
-        <Link href={feedHref} className="text-sm text-primary mt-2 inline-block hover:underline">Back to View Updates</Link>
+        <Link href={feedHref} className="text-sm text-primary mt-2 inline-block hover:underline">Back to Updates</Link>
       </div>
     );
   }
@@ -64,7 +64,7 @@ export default function MissionaryProfile() {
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
       >
         <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-        Back to View Updates
+        Back to Updates
       </Link>
 
       {/* Profile banner — matches admin/dashboard navy style */}

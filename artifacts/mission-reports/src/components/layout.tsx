@@ -55,7 +55,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <>
                 {isAuthenticated && user ? (
                   <>
-                    {user.role === "admin" && navLink("/admin", "View Updates", <Rss className="h-3.5 w-3.5" />)}
+                    {user.role === "admin" && navLink("/admin", "Updates", <Rss className="h-3.5 w-3.5" />)}
 
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div className="ml-1.5 w-8 h-8 rounded-full bg-white/15 border border-white/25 text-white flex items-center justify-center font-semibold text-[13px] cursor-pointer hover:bg-white/25 transition-colors">

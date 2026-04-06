@@ -40,7 +40,7 @@ export default function ReportDetail() {
       <div className="text-center py-20">
         <p className="text-lg font-semibold text-foreground">Post not found</p>
         <Link href={feedHref} className="mt-3 inline-block text-sm text-primary hover:underline">
-          Back to View Updates
+          Back to Updates
         </Link>
       </div>
     );
@@ -67,7 +67,7 @@ export default function ReportDetail() {
         data-testid="link-back-timeline"
       >
         <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-        Back to View Updates
+        Back to Updates
       </Link>
 
       <PostCard post={post} />
