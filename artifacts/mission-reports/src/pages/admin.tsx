@@ -648,7 +648,7 @@ export default function AdminDashboard() {
           >
             <span className="flex items-center gap-1.5">
               <Heart className="h-4 w-4" />
-              Activity Feed
+              View Updates
             </span>
           </button>
         </div>
