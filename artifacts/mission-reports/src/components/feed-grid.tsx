@@ -191,8 +191,10 @@ export function PostDetailModal({
 
       {/* Panel */}
       <div
-        className="relative z-10 flex flex-col md:flex-row w-full max-w-4xl max-h-[90vh] mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden"
+        className="relative z-10 flex flex-col md:flex-row w-full max-w-5xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden"
         style={{
+          maxHeight: "92vh",
+          minHeight: "min(78vh, 600px)",
           opacity: isIn ? 1 : 0,
           transform: isIn ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.97)",
           transition: `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`,
@@ -213,11 +215,11 @@ export function PostDetailModal({
 
         {/* Image gallery panel */}
         {photos.length > 0 && (
-          <div className="relative flex-shrink-0 w-full md:w-[55%] bg-black flex items-center justify-center">
+          <div className="relative flex-shrink-0 w-full md:w-[48%] bg-black flex items-center justify-center">
             <img
               src={photos[photoIndex]?.url}
               alt={photos[photoIndex]?.caption || ""}
-              className="w-full h-60 md:h-full max-h-[90vh] object-contain"
+              className="w-full h-64 md:h-full max-h-[92vh] object-contain"
             />
 
             {/* Gallery nav */}
