@@ -93,29 +93,6 @@ export default function Signup() {
           </p>
         </div>
 
-        {/* World map image */}
-        <div className="relative z-10 mt-8 rounded-2xl overflow-hidden shadow-2xl">
-          <img
-            src={`${import.meta.env.BASE_URL}world-map.jpg`}
-            alt="Global partner map"
-            className="w-full h-52 object-cover object-center"
-            loading="lazy"
-          />
-          {/* Overlay to blend with panel */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: "linear-gradient(to bottom, rgba(13,27,94,0.15) 0%, rgba(13,27,94,0.60) 100%)",
-            }}
-          />
-          {/* Caption */}
-          <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
-            <p className="text-white/85 text-[12px] font-medium leading-snug">
-              Connecting Global Partners across the world.
-            </p>
-          </div>
-        </div>
-
         {/* Bottom */}
         <p className="relative z-10 mt-6 text-white/30 text-xs">© SentConnect</p>
       </div>
