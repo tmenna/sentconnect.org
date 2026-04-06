@@ -106,25 +106,12 @@ export default function Login() {
           </div>
         </div>
 
-        {/* World map image — matches signup */}
-        <div className="relative z-10 mt-8 rounded-2xl overflow-hidden shadow-2xl">
-          <img
-            src={`${import.meta.env.BASE_URL}world-map.jpg`}
-            alt="Global partner map"
-            className="w-full h-44 object-cover object-center"
-            loading="lazy"
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background: "linear-gradient(to bottom, rgba(13,27,94,0.15) 0%, rgba(13,27,94,0.60) 100%)",
-            }}
-          />
-          <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
-            <p className="text-white/85 text-[12px] font-medium leading-snug">
-              Connecting Global Partners across the world.
-            </p>
-          </div>
+        {/* Bible verse */}
+        <div className="relative z-10 mt-auto border-l-2 border-white/15 pl-4">
+          <p className="text-white/40 text-sm italic leading-relaxed">
+            "Declare his glory among the nations, his marvelous works among all the peoples!"
+          </p>
+          <p className="text-white/25 text-xs mt-1.5 font-medium">— Psalm 96:3</p>
         </div>
 
         {/* Footer — matches signup */}
