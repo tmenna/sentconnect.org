@@ -1,0 +1,216 @@
+Update and enhance the existing SentConnect application.
+
+IMPORTANT:
+
+* This is NOT a new project
+* DO NOT rebuild from scratch
+* DO NOT remove existing working features unless necessary
+* EXTEND and REFACTOR the current codebase to support multi-tenancy, roles, and proper authentication flows
+
+Preserve current UI and functionality where possible.
+
+---
+
+GOAL:
+Convert the current app into a proper multi-tenant SaaS with organization-based isolation, role-based access, and complete authentication flows.
+
+---
+
+1. MULTI-TENANT UPGRADE (CRITICAL)
+
+Enhance the existing backend to support organizations:
+
+* Add Organization model if it does not exist
+
+* Add organization_id to:
+
+  * Users
+  * Posts
+  * All relevant data
+
+* Implement middleware:
+
+  * Extract subdomain from request (req.hostname)
+  * Resolve organization
+  * Attach organization_id to request
+
+* Update ALL queries to filter by organization_id
+
+IMPORTANT:
+Do NOT break existing data — add migrations safely.
+
+---
+
+2. USER ROLES (ADD TO EXISTING USERS)
+
+Extend current user system:
+
+Roles:
+
+* super_admin
+
+* admin
+
+* field_user
+
+* Add role field to User model
+
+* Default:
+
+  * Existing users → admin (safe fallback)
+
+Implement role-based access control:
+
+* Admin: manage users + view all posts
+* Field user: create/view posts
+* Super admin: global access
+
+---
+
+3. ORGANIZATION SIGNUP (NEW FEATURE)
+
+Add a new signup flow without breaking existing login:
+
+Create route: /signup
+
+Flow:
+
+* User enters:
+
+  * Organization name
+  * Subdomain
+  * Name
+  * Email
+  * Password
+
+System:
+
+* Create organization
+* Create user as admin
+* Link via organization_id
+* Log user in
+
+---
+
+4. LOGIN FLOW (UPDATE, NOT REPLACE)
+
+Enhance existing login:
+
+* Support login per subdomain:
+  org1.sentconnect.org/login
+
+* Ensure users are authenticated ONLY within their organization
+
+Do NOT break existing login routes — extend them.
+
+---
+
+5. PASSWORD RESET (NEW – REQUIRED)
+
+Add password reset functionality:
+
+* “Forgot password” page
+* Generate reset token
+* Store securely
+* Reset password page
+
+This must work for:
+
+* admins
+* field users
+* super admins
+
+---
+
+6. POSTS (KEEP SIMPLE – DO NOT OVERBUILD)
+
+Keep current post system but refine:
+
+* Ensure posts include organization_id
+* Keep fields simple:
+
+  * content (required)
+  * optional: title, location, people_reached, media
+
+DO NOT add categories
+
+---
+
+7. FEED (KEEP EXISTING, IMPROVE IF NEEDED)
+
+* Ensure feed only shows posts from same organization
+* Add filters if not present:
+
+  * by user
+  * by date
+
+---
+
+8. ENGAGEMENT (ADD IF MISSING)
+
+* Add:
+
+  * Likes
+  * Comments
+
+Keep lightweight
+
+---
+
+9. ADMIN DASHBOARD (ENHANCE)
+
+* Ensure admins can:
+
+  * View users in their organization
+  * View all posts
+  * See basic stats
+
+Improve UI but do not rebuild layout
+
+---
+
+10. SUPER ADMIN (NEW, ISOLATED)
+
+Add global admin capability:
+
+* Route: /super-admin
+* Features:
+
+  * View all organizations
+  * Activate/deactivate organizations
+  * View total users/posts
+  * Impersonate organization admin
+
+---
+
+11. DATA SAFETY (VERY IMPORTANT)
+
+* Do NOT delete existing data
+* Use safe migrations
+* Default existing records:
+
+  * Assign them to a default organization if needed
+
+---
+
+12. FINAL RULES
+
+* DO NOT rebuild the app
+* DO NOT remove working features
+* ONLY extend and refactor
+* Maintain current UI where possible
+* PRIORITIZE multi-tenancy and authentication correctness
+
+---
+
+IMPLEMENTATION ORDER:
+
+1. Add organization + organization_id
+2. Add middleware for subdomain
+3. Update queries
+4. Add roles
+5. Add signup flow
+6. Add password reset
+7. Enhance dashboards
+
+Proceed step-by-step and ensure app remains functional after each step.
