@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { eq, desc, and, sql, count } from "drizzle-orm";
+import { eq, desc, and, sql, count, gte, lte } from "drizzle-orm";
 import { db, reportsTable, usersTable, photosTable, likesTable, commentsTable } from "@workspace/db";
 
 const router: IRouter = Router();
@@ -150,6 +150,25 @@ router.get("/reports/export", async (req, res): Promise<void> => {
   const conditions = [];
   if (currentUser.role !== "super_admin" && currentUser.organizationId) {
     conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
+  }
+
+  // Optional filters: missionaryId, dateFrom (YYYY-MM-DD), dateTo (YYYY-MM-DD)
+  const missionaryIdParam = req.query.missionaryId ? Number(req.query.missionaryId) : null;
+  const dateFromParam = typeof req.query.dateFrom === "string" && req.query.dateFrom ? req.query.dateFrom : null;
+  const dateToParam = typeof req.query.dateTo === "string" && req.query.dateTo ? req.query.dateTo : null;
+
+  if (missionaryIdParam && !isNaN(missionaryIdParam)) {
+    conditions.push(eq(reportsTable.missionaryId, missionaryIdParam));
+  }
+  if (dateFromParam) {
+    const from = new Date(dateFromParam);
+    from.setHours(0, 0, 0, 0);
+    conditions.push(gte(reportsTable.createdAt, from));
+  }
+  if (dateToParam) {
+    const to = new Date(dateToParam);
+    to.setHours(23, 59, 59, 999);
+    conditions.push(lte(reportsTable.createdAt, to));
   }
 
   const posts = await db.select().from(reportsTable)
