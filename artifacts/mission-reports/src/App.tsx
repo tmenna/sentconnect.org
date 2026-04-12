@@ -6,7 +6,7 @@ import { AuthProvider } from "@/components/auth-provider";
 import { useAuth } from "@/components/auth-provider";
 import { Layout } from "@/components/layout";
 import NotFound from "@/pages/not-found";
-import { OrgProvider } from "@/providers/org-provider";
+import { OrgProvider, useOrg } from "@/providers/org-provider";
 import { extractOrgSlug } from "@/lib/org";
 
 import Timeline from "./pages/timeline";
@@ -26,10 +26,13 @@ const queryClient = new QueryClient();
 
 function HomeRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
+  const { orgSlug } = useOrg();
   if (isLoading) return null;
   if (!isAuthenticated) return <Redirect href="/login" />;
   if (user?.role === "admin") return <Redirect href="/admin" />;
-  if (user?.role === "super_admin") return <Redirect href="/super-admin" />;
+  // Super admins: go to platform admin (/admin) when at root; go to org admin when in org context
+  if (user?.role === "super_admin") return <Redirect href="/admin" />;
+  if (orgSlug) return <MissionaryDashboard />;
   return <MissionaryDashboard />;
 }
 
@@ -39,6 +42,32 @@ function AdminFeedRoute() {
   if (!isAuthenticated) return <Redirect href="/login" />;
   if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
   return <Timeline />;
+}
+
+/**
+ * Context-aware /admin route:
+ * - With org context (e.g. /ep2/admin) → org admin dashboard (requires admin role)
+ * - Without org context (e.g. sentconnect.org/admin) → platform admin (requires super_admin)
+ *
+ * This is the core of the platform vs. tenant context separation.
+ * In production with subdomain routing, the org context comes from req.hostname on
+ * the backend; on the frontend, orgSlug indicates whether we're in an org or root context.
+ */
+function AdminRoute() {
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const { orgSlug } = useOrg();
+  if (isLoading) return null;
+  if (!isAuthenticated) return <Redirect href="/login" />;
+
+  if (orgSlug) {
+    // Org context: show org admin dashboard
+    if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
+    return <AdminDashboard />;
+  }
+
+  // Platform context: show platform-wide admin (super_admin only)
+  if (user?.role !== "super_admin") return <Redirect href="/" />;
+  return <SuperAdminPanel />;
 }
 
 function AppRoutes() {
@@ -56,8 +85,8 @@ function AppRoutes() {
             <Route path="/reports/:id" component={ReportDetail} />
             <Route path="/missionaries/:id" component={MissionaryProfile} />
             <Route path="/submit" component={SubmitReport} />
-            <Route path="/admin" component={AdminDashboard} />
-            <Route path="/super-admin" component={SuperAdminPanel} />
+            <Route path="/admin" component={AdminRoute} />
+            <Route path="/super-admin"><Redirect href="/admin" /></Route>
             <Route path="/profile" component={Profile} />
             <Route component={NotFound} />
           </Switch>

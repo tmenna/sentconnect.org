@@ -71,6 +71,26 @@ router.get("/super-admin/stats", async (req, res): Promise<void> => {
   });
 });
 
+// GET /super-admin/users — list all users across all orgs
+router.get("/super-admin/users", async (req, res): Promise<void> => {
+  if (!await requireSuperAdmin(req, res)) return;
+
+  const users = await db.select({
+    id: usersTable.id,
+    name: usersTable.name,
+    email: usersTable.email,
+    role: usersTable.role,
+    status: usersTable.status,
+    organizationId: usersTable.organizationId,
+    organization: usersTable.organization,
+    createdAt: usersTable.createdAt,
+    avatarUrl: usersTable.avatarUrl,
+    location: usersTable.location,
+  }).from(usersTable).orderBy(usersTable.organizationId, usersTable.name);
+
+  res.json(users);
+});
+
 // POST /super-admin/impersonate/:userId — set session to another user
 router.post("/super-admin/impersonate/:userId", async (req, res): Promise<void> => {
   if (!await requireSuperAdmin(req, res)) return;

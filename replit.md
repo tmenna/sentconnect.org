@@ -11,7 +11,8 @@ A Twitter/Instagram-style private social feed for missionary field teams. Users 
 - **super_admin** — platform-wide access: manage all organizations, impersonate users
 
 **Demo accounts:**
-- Admin: `admin@calvary.org` / `password123`
+- Platform Admin (super_admin): `superadmin@sentconnect.org` / `password123`
+- Org Admin: `admin@calvary.org` / `password123`
 - User: `james@mission.org` / `password123`
 - User: `maria@mission.org` / `password123`
 - User: `david@mission.org` / `password123`
