@@ -45,13 +45,18 @@ function AdminFeedRoute() {
 }
 
 /**
- * Context-aware /admin route:
- * - With org context (e.g. /ep2/admin) → org admin dashboard (requires admin role)
- * - Without org context (e.g. sentconnect.org/admin) → platform admin (requires super_admin)
+ * Context-aware /admin route.
  *
- * This is the core of the platform vs. tenant context separation.
- * In production with subdomain routing, the org context comes from req.hostname on
- * the backend; on the frontend, orgSlug indicates whether we're in an org or root context.
+ * With org slug in URL (e.g. /ep2/admin, or in production ep2.sentconnect.org/admin):
+ *   → Org admin dashboard (admin or super_admin)
+ *
+ * Without org slug (e.g. sentconnect.org/admin):
+ *   → Platform admin panel  (super_admin only)
+ *   → Org admin dashboard   (admin role — org scoping comes from their session/organizationId,
+ *                             no subdomain header needed)
+ *
+ * Important: "admin" is in RESERVED_PATHS so it never gets an org slug itself,
+ * which means both roles reach this branch when visiting the bare /admin URL.
  */
 function AdminRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -60,14 +65,14 @@ function AdminRoute() {
   if (!isAuthenticated) return <Redirect href="/login" />;
 
   if (orgSlug) {
-    // Org context: show org admin dashboard
     if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
     return <AdminDashboard />;
   }
 
-  // Platform context: show platform-wide admin (super_admin only)
-  if (user?.role !== "super_admin") return <Redirect href="/" />;
-  return <SuperAdminPanel />;
+  // No org slug — determine by role
+  if (user?.role === "super_admin") return <SuperAdminPanel />;
+  if (user?.role === "admin") return <AdminDashboard />;  // org-scoped via session
+  return <Redirect href="/" />;
 }
 
 function AppRoutes() {
