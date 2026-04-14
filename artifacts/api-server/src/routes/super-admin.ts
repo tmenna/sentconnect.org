@@ -120,18 +120,35 @@ router.get("/super-admin/users", requirePermission("canViewUsers"), async (req, 
 
 // ─── Platform User Management ─────────────────────────────────────────────────
 
-// POST /super-admin/users — create a platform-level user
+// POST /super-admin/users — create a platform-level or org user
 router.post("/super-admin/users", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
-  const { name, email, password, role, permissions } = req.body ?? {};
+  const { name, email, password, role, permissions, organizationId } = req.body ?? {};
   if (!name || !email || !password) {
     res.status(400).json({ error: "name, email, and password are required" }); return;
   }
-  const validPlatformRoles = ["platform_admin", "platform_manager"];
-  if (!validPlatformRoles.includes(role)) {
-    res.status(400).json({ error: "role must be platform_admin or platform_manager" }); return;
+
+  const platformRoles = ["platform_admin", "platform_manager"];
+  const orgRoles = ["admin", "field_user"];
+  const allValidRoles = [...platformRoles, ...orgRoles];
+
+  if (!allValidRoles.includes(role)) {
+    res.status(400).json({ error: `role must be one of: ${allValidRoles.join(", ")}` }); return;
   }
+
+  // Org roles require an organizationId
+  if (orgRoles.includes(role) && !organizationId) {
+    res.status(400).json({ error: "organizationId is required for admin and field_user roles" }); return;
+  }
+
   const [existing] = await db.select({ id: usersTable.id }).from(usersTable).where(eq(usersTable.email, email));
   if (existing) { res.status(409).json({ error: "Email already in use" }); return; }
+
+  let orgRecord: typeof organizationsTable.$inferSelect | undefined;
+  if (organizationId) {
+    const [org] = await db.select().from(organizationsTable).where(eq(organizationsTable.id, Number(organizationId)));
+    if (!org) { res.status(404).json({ error: "Organization not found" }); return; }
+    orgRecord = org;
+  }
 
   const permsJson = role === "platform_manager" && permissions
     ? JSON.stringify(permissions)
@@ -143,7 +160,8 @@ router.post("/super-admin/users", requireSuperOrPlatformAdmin, async (req, res):
     passwordHash: hashPassword(password),
     role,
     permissions: permsJson,
-    organization: "SentConnect Platform",
+    organizationId: orgRecord?.id ?? null,
+    organization: orgRecord?.name ?? "SentConnect Platform",
   }).returning();
 
   res.status(201).json(toSafeUser(created));

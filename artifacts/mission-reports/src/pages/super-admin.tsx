@@ -679,6 +679,137 @@ function UserActionMenu({
   );
 }
 
+// ─── Create Org User Modal ────────────────────────────────────────────────────
+
+function CreateOrgUserModal({
+  org,
+  onClose,
+  onCreated,
+}: {
+  org: OrgWithStats;
+  onClose: () => void;
+  onCreated: (user: PlatformUser) => void;
+}) {
+  const { toast } = useToast();
+  const [form, setForm] = useState({ name: "", email: "", password: "", role: "field_user" });
+  const [showPw, setShowPw] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const res = await fetch("/api/super-admin/users", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, organizationId: org.id }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "Failed to create user");
+      }
+      const user = await res.json();
+      toast({ title: `${form.name} added to ${org.name}` });
+      onCreated(user);
+    } catch (err: any) {
+      toast({ title: err.message ?? "Failed to create user", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
+        <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between">
+          <div>
+            <h2 className="text-[15px] font-bold text-foreground">Add User to Organization</h2>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <Building2 className="h-3 w-3 text-[#00C4A7]" />
+              <p className="text-[12px] text-muted-foreground font-medium">{org.name}</p>
+              <span className="text-[11px] text-muted-foreground/60">·</span>
+              <a href={`/${org.subdomain}/`} target="_blank" rel="noreferrer" className="text-[11px] text-[#132272] font-mono hover:underline">/{org.subdomain}/</a>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60">
+            <X className="h-4 w-4 text-muted-foreground" />
+          </button>
+        </div>
+        <form onSubmit={submit} className="p-6 space-y-4">
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Full Name</label>
+            <input
+              required
+              value={form.name}
+              onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+              placeholder="Jane Smith"
+            />
+          </div>
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Email</label>
+            <input
+              required
+              type="email"
+              value={form.email}
+              onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+              placeholder="jane@example.org"
+            />
+          </div>
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Password</label>
+            <div className="relative">
+              <input
+                required
+                type={showPw ? "text" : "password"}
+                value={form.password}
+                onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
+                className="w-full px-3 py-2.5 pr-10 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+                placeholder="Min. 8 characters"
+                minLength={8}
+              />
+              <button type="button" onClick={() => setShowPw(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Role</label>
+            <select
+              value={form.role}
+              onChange={e => setForm(f => ({ ...f, role: e.target.value }))}
+              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="field_user">Field User — can submit reports</option>
+              <option value="admin">Admin — manages this organization</option>
+            </select>
+          </div>
+          <div className="rounded-lg bg-[#132272]/5 border border-[#132272]/10 px-4 py-3 text-[12px] text-[#132272]/80 flex items-start gap-2">
+            <Globe className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
+            <span>This user will log in at <strong className="font-mono">/{org.subdomain}/login</strong> with the credentials you set above.</span>
+          </div>
+          <div className="flex gap-3 pt-1">
+            <button type="button" onClick={onClose} disabled={saving} className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors disabled:opacity-50">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#00C4A7] text-white rounded-lg hover:bg-[#00C4A7]/90 transition-colors disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+              Add to {org.name}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // ─── Assign Org Modal ─────────────────────────────────────────────────────────
 
 function AssignOrgModal({
@@ -823,6 +954,7 @@ export default function SuperAdminPanel() {
   const [confirmDeleteOrg, setConfirmDeleteOrg] = useState<OrgWithStats | null>(null);
   const [confirmDeleteUser, setConfirmDeleteUser] = useState<PlatformUser | null>(null);
   const [assigningOrgUser, setAssigningOrgUser] = useState<PlatformUser | null>(null);
+  const [addingUserToOrg, setAddingUserToOrg] = useState<OrgWithStats | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   const loadData = useCallback(async () => {
@@ -1103,6 +1235,20 @@ export default function SuperAdminPanel() {
           }}
         />
       )}
+      {addingUserToOrg && (
+        <CreateOrgUserModal
+          org={addingUserToOrg}
+          onClose={() => setAddingUserToOrg(null)}
+          onCreated={newUser => {
+            setAllUsers(prev => prev ? [newUser, ...prev] : [newUser]);
+            setOrgs(prev => prev ? prev.map(o =>
+              o.id === addingUserToOrg.id ? { ...o, userCount: o.userCount + 1 } : o
+            ) : prev);
+            setStats(prev => prev ? { ...prev, totalUsers: prev.totalUsers + 1 } : null);
+            setAddingUserToOrg(null);
+          }}
+        />
+      )}
 
       {/* Header */}
       <div
@@ -1320,6 +1466,20 @@ export default function SuperAdminPanel() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                      onClick={() => setAddingUserToOrg(org)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-[#00C4A7]/10 text-[#00C4A7] hover:bg-[#00C4A7]/20 border border-[#00C4A7]/20 transition-colors"
+                    >
+                      <Plus className="h-3.5 w-3.5" /> Add User
+                    </button>
+                    <a
+                      href={`/${org.subdomain}/`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-[#132272]/5 text-[#132272] hover:bg-[#132272]/10 border border-[#132272]/10 transition-colors"
+                    >
+                      <Globe className="h-3.5 w-3.5" /> Open
+                    </a>
                     <button
                       onClick={() => toggleOrgStatus(org)}
                       disabled={toggling === org.id}
