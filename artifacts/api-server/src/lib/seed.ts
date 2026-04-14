@@ -1,6 +1,34 @@
 import { db, usersTable, reportsTable, organizationsTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { logger } from "./logger";
+import { hashPassword } from "./password";
+
+/**
+ * Ensures at least one super_admin exists in the database.
+ * Called at every startup — safe to run repeatedly (no-ops if already present).
+ * In production, change the default password immediately after first login.
+ */
+export async function ensureSuperAdmin() {
+  const [existing] = await db
+    .select({ id: usersTable.id })
+    .from(usersTable)
+    .where(eq(usersTable.role, "super_admin"))
+    .limit(1);
+
+  if (existing) return;
+
+  await db.insert(usersTable).values({
+    name: "Platform Admin",
+    email: "superadmin@sentconnect.org",
+    passwordHash: hashPassword("password123"),
+    role: "super_admin",
+    organization: "SentConnect",
+  });
+
+  logger.info(
+    "Super-admin created: superadmin@sentconnect.org / password123 — change this password after first login!"
+  );
+}
 
 export async function seedIfEmpty() {
   const existing = await db.select().from(usersTable).limit(1);
