@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useLoginUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Redirect, Link } from "wouter";
+import { Redirect, Link, useSearch } from "wouter";
 import { Shuffle, MapPin, BookOpen, Building } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -27,6 +27,15 @@ export default function Login() {
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const search = useSearch();
+
+  // Where to send the user after they authenticate.
+  // Protected routes pass ?from=<path> so we land them exactly where they
+  // intended — no double-hop through / needed.
+  const from = (() => {
+    const raw = new URLSearchParams(search).get("from") ?? "/";
+    return raw.startsWith("/") ? raw : "/";
+  })();
 
   const login = useLoginUser({
     mutation: {
@@ -50,7 +59,7 @@ export default function Login() {
       <div className="animate-pulse text-muted-foreground text-sm">Loading…</div>
     </div>
   );
-  if (isAuthenticated) return <Redirect href="/" />;
+  if (isAuthenticated) return <Redirect href={from} />;
 
   function onSubmit(data: LoginFormValues) {
     login.mutate({ data });

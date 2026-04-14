@@ -24,22 +24,40 @@ import SuperAdminPanel from "./pages/super-admin";
 
 const queryClient = new QueryClient();
 
+/**
+ * Builds a login redirect URL that encodes where the user was trying to go.
+ * After login they'll be sent directly there — no double-hop via /.
+ */
+function loginRedirect(from: string): string {
+  const safe = from.startsWith("/") ? from : "/";
+  return `/login?from=${encodeURIComponent(safe)}`;
+}
+
+/**
+ * Loading shell shown while the auth query is in flight.
+ * Prevents a flash of the redirect-to-login before the session resolves.
+ */
+function AuthLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F5F7FA]">
+      <div className="animate-pulse text-muted-foreground text-sm">Loading…</div>
+    </div>
+  );
+}
+
 function HomeRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
-  const { orgSlug } = useOrg();
-  if (isLoading) return null;
+  if (isLoading) return <AuthLoading />;
   if (!isAuthenticated) return <Redirect href="/login" />;
-  if (user?.role === "admin") return <Redirect href="/admin" />;
-  // Super admins: go to platform admin (/admin) when at root; go to org admin when in org context
-  if (user?.role === "super_admin") return <Redirect href="/admin" />;
-  if (orgSlug) return <MissionaryDashboard />;
+  if (user?.role === "admin" || user?.role === "super_admin") return <Redirect href="/admin" />;
   return <MissionaryDashboard />;
 }
 
 function AdminFeedRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
-  if (isLoading) return null;
-  if (!isAuthenticated) return <Redirect href="/login" />;
+  const [location] = useLocation();
+  if (isLoading) return <AuthLoading />;
+  if (!isAuthenticated) return <Redirect href={loginRedirect(location)} />;
   if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
   return <Timeline />;
 }
@@ -47,31 +65,33 @@ function AdminFeedRoute() {
 /**
  * Context-aware /admin route.
  *
- * With org slug in URL (e.g. /ep2/admin, or in production ep2.sentconnect.org/admin):
- *   → Org admin dashboard (admin or super_admin)
+ * Platform context  (no org slug in URL, e.g. sentconnect.org/admin):
+ *   super_admin → SuperAdminPanel   (full platform view)
+ *   admin       → AdminDashboard    (org-scoped via session.organizationId)
  *
- * Without org slug (e.g. sentconnect.org/admin):
- *   → Platform admin panel  (super_admin only)
- *   → Org admin dashboard   (admin role — org scoping comes from their session/organizationId,
- *                             no subdomain header needed)
+ * Org context (org slug in URL, e.g. /allerweg/admin, or allerweg.sentconnect.org/admin):
+ *   admin or super_admin → AdminDashboard for that org
  *
- * Important: "admin" is in RESERVED_PATHS so it never gets an org slug itself,
- * which means both roles reach this branch when visiting the bare /admin URL.
+ * SWAP POINT: org slug will come from req.hostname instead of the URL path
+ * once USE_HOSTNAME_ROUTING=true is set in production.
  */
 function AdminRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { orgSlug } = useOrg();
-  if (isLoading) return null;
-  if (!isAuthenticated) return <Redirect href="/login" />;
+  const [location] = useLocation();
 
+  if (isLoading) return <AuthLoading />;
+  if (!isAuthenticated) return <Redirect href={loginRedirect(location)} />;
+
+  // Org context — both admin roles can manage this org
   if (orgSlug) {
     if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
     return <AdminDashboard />;
   }
 
-  // No org slug — determine by role
+  // Platform context — route by role
   if (user?.role === "super_admin") return <SuperAdminPanel />;
-  if (user?.role === "admin") return <AdminDashboard />;  // org-scoped via session
+  if (user?.role === "admin") return <AdminDashboard />; // org scoped via session.organizationId
   return <Redirect href="/" />;
 }
 
