@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/components/auth-provider";
 import {
   Building2, Users, FileText, CheckCircle2, XCircle,
@@ -609,6 +609,27 @@ function UserActionMenu({
   canDelete?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  function handleOpen() {
+    if (isSelf) return;
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      setMenuPos({
+        top: rect.bottom + 4,
+        right: window.innerWidth - rect.right,
+      });
+    }
+    setOpen(v => !v);
+  }
+
+  useEffect(() => {
+    if (!open) return;
+    function onScroll() { setOpen(false); }
+    window.addEventListener("scroll", onScroll, true);
+    return () => window.removeEventListener("scroll", onScroll, true);
+  }, [open]);
 
   const actions = [
     { id: "reset-password", label: "Reset Password", icon: KeyRound, color: "text-foreground" },
@@ -623,19 +644,23 @@ function UserActionMenu({
   ];
 
   return (
-    <div className="relative">
+    <div>
       <button
-        onClick={() => setOpen(v => !v)}
+        ref={btnRef}
+        onClick={handleOpen}
         disabled={isSelf}
         title={isSelf ? "Cannot act on your own account" : undefined}
         className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/60 border border-border/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Actions <ChevronDown className="h-3 w-3" />
       </button>
-      {open && (
+      {open && menuPos && (
         <>
-          <div className="fixed inset-0 z-20" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-1 z-30 bg-white border border-border/60 rounded-xl shadow-lg py-1 w-44">
+          <div className="fixed inset-0 z-[998]" onClick={() => setOpen(false)} />
+          <div
+            className="fixed z-[999] bg-white border border-border/60 rounded-xl shadow-xl py-1 min-w-[176px]"
+            style={{ top: menuPos.top, right: menuPos.right }}
+          >
             {actions.map(({ id, label, icon: Icon, color }) => (
               <button
                 key={id}
