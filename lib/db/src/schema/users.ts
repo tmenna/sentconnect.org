@@ -15,6 +15,7 @@ export const usersTable = pgTable("users", {
   avatarUrl: text("avatar_url"),
   organization: text("organization"),
   organizationId: integer("organization_id").references(() => organizationsTable.id, { onDelete: "set null" }),
+  permissions: text("permissions"),
   resetToken: text("reset_token"),
   resetTokenExpiry: timestamp("reset_token_expiry", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

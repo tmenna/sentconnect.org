@@ -7,8 +7,17 @@ A Twitter/Instagram-style private social feed for missionary field teams. Users 
 ## Users & Access
 
 - **field_user (missionaries)** — post updates, like/comment, manage own posts
-- **admin** — full team management: add/edit/deactivate/delete users, view all reports/stats
-- **super_admin** — platform-wide access: manage all organizations, impersonate users
+- **admin** — org-level: add/edit/deactivate/delete users, view all reports/stats
+- **super_admin** — platform-wide full access: manage all organizations, platform users, impersonate
+- **platform_admin** — platform-wide full access (same as super_admin minus the role promotion gate)
+- **platform_manager** — platform access gated by a JSON `permissions` field on the user record
+
+### Platform Permissions (platform_manager only)
+`canViewOrganizations`, `canManageOrganizations`, `canViewUsers`, `canManageUsers`,
+`canResetPasswords`, `canLockUnlockUsers`, `canSuspendUsers`, `canImpersonateUsers`
+
+### User Status Values
+`active` | `inactive` | `locked` | `suspended`
 
 **Demo accounts:**
 - Platform Admin (super_admin): `superadmin@sentconnect.org` / `password123`

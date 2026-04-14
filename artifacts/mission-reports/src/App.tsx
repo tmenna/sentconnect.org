@@ -45,11 +45,16 @@ function AuthLoading() {
   );
 }
 
+const PLATFORM_ROLES = ["super_admin", "platform_admin", "platform_manager"] as const;
+function isPlatformRole(role: string | undefined) {
+  return (PLATFORM_ROLES as readonly string[]).includes(role ?? "");
+}
+
 function HomeRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
   if (isLoading) return <AuthLoading />;
   if (!isAuthenticated) return <Redirect href="/login" />;
-  if (user?.role === "admin" || user?.role === "super_admin") return <Redirect href="/admin" />;
+  if (isPlatformRole(user?.role) || user?.role === "admin") return <Redirect href="/admin" />;
   return <MissionaryDashboard />;
 }
 
@@ -58,7 +63,7 @@ function AdminFeedRoute() {
   const [location] = useLocation();
   if (isLoading) return <AuthLoading />;
   if (!isAuthenticated) return <Redirect href={loginRedirect(location)} />;
-  if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
+  if (user?.role !== "admin" && !isPlatformRole(user?.role)) return <Redirect href="/" />;
   return <Timeline />;
 }
 
@@ -83,14 +88,14 @@ function AdminRoute() {
   if (isLoading) return <AuthLoading />;
   if (!isAuthenticated) return <Redirect href={loginRedirect(location)} />;
 
-  // Org context — both admin roles can manage this org
+  // Org context — org admin roles can manage this org
   if (orgSlug) {
     if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
     return <AdminDashboard />;
   }
 
   // Platform context — route by role
-  if (user?.role === "super_admin") return <SuperAdminPanel />;
+  if (isPlatformRole(user?.role)) return <SuperAdminPanel />;
   if (user?.role === "admin") return <AdminDashboard />; // org scoped via session.organizationId
   return <Redirect href="/" />;
 }
