@@ -149,7 +149,7 @@ router.post("/super-admin/users", requireSuperOrPlatformAdmin, async (req, res):
   res.status(201).json(toSafeUser(created));
 });
 
-// PATCH /super-admin/users/:id — update role, permissions, or status
+// PATCH /super-admin/users/:id — update role, permissions, status, or organizationId
 router.patch("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
   const userId = Number(req.params.id);
   if (isNaN(userId)) { res.status(400).json({ error: "Invalid user id" }); return; }
@@ -159,13 +159,11 @@ router.patch("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req, 
     res.status(403).json({ error: "Cannot modify your own account" }); return;
   }
 
-  const { role, permissions, status } = req.body ?? {};
+  const { role, permissions, status, organizationId } = req.body ?? {};
   const updates: Partial<typeof usersTable.$inferInsert> = {};
 
   if (role !== undefined) {
-    const allowed = ["platform_admin", "platform_manager"];
-    if (caller.role !== "super_admin") allowed.push(); // only super_admin can promote to super_admin
-    if (!["platform_admin", "platform_manager", "super_admin"].includes(role)) {
+    if (!["platform_admin", "platform_manager", "super_admin", "admin", "field_user"].includes(role)) {
       res.status(400).json({ error: "Invalid role" }); return;
     }
     if (role === "super_admin" && caller.role !== "super_admin") {
@@ -183,6 +181,21 @@ router.patch("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req, 
       res.status(400).json({ error: "Invalid status" }); return;
     }
     updates.status = status;
+  }
+
+  // organizationId: null removes from org; number assigns to org
+  if ("organizationId" in (req.body ?? {})) {
+    if (organizationId === null) {
+      updates.organizationId = null;
+      updates.organization = null;
+    } else {
+      const orgId = Number(organizationId);
+      if (isNaN(orgId)) { res.status(400).json({ error: "Invalid organizationId" }); return; }
+      const [org] = await db.select().from(organizationsTable).where(eq(organizationsTable.id, orgId));
+      if (!org) { res.status(404).json({ error: "Organization not found" }); return; }
+      updates.organizationId = org.id;
+      updates.organization = org.name;
+    }
   }
 
   const [updated] = await db.update(usersTable).set(updates)

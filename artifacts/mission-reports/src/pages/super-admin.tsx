@@ -639,6 +639,7 @@ function UserActionMenu({
     ...(user.status === "suspended"
       ? [{ id: "unsuspend", label: "Unsuspend", icon: UserCheck, color: "text-emerald-600" }]
       : [{ id: "suspend", label: "Suspend", icon: Ban, color: "text-orange-600" }]),
+    { id: "assign-org", label: "Assign to Organization", icon: Building2, color: "text-foreground" },
     ...(!isPlatformRole(user.role) ? [{ id: "impersonate", label: "Sign in as", icon: UserCog, color: "text-[#132272]" }] : []),
     ...(canDelete && user.role !== "super_admin" ? [{ id: "delete", label: "Delete User", icon: Trash2, color: "text-red-600" }] : []),
   ];
@@ -678,6 +679,130 @@ function UserActionMenu({
   );
 }
 
+// ─── Assign Org Modal ─────────────────────────────────────────────────────────
+
+function AssignOrgModal({
+  user,
+  orgs,
+  onClose,
+  onUpdated,
+}: {
+  user: PlatformUser;
+  orgs: OrgWithStats[];
+  onClose: () => void;
+  onUpdated: (user: PlatformUser) => void;
+}) {
+  const { toast } = useToast();
+  const [orgId, setOrgId] = useState<string>(
+    user.organizationId !== null ? String(user.organizationId) : ""
+  );
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    setSaving(true);
+    try {
+      const body: Record<string, unknown> = {
+        organizationId: orgId === "" ? null : Number(orgId),
+      };
+      const res = await fetch(`/api/super-admin/users/${user.id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error ?? "Failed to update");
+      }
+      const updated = await res.json();
+      toast({
+        title: orgId === ""
+          ? `${user.name} removed from organization`
+          : `${user.name} assigned to ${orgs.find(o => o.id === Number(orgId))?.name ?? "org"}`,
+      });
+      onUpdated(updated);
+    } catch (err: any) {
+      toast({ title: err.message ?? "Update failed", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const current = orgs.find(o => o.id === user.organizationId);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
+        <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between">
+          <div>
+            <h2 className="text-[15px] font-bold text-foreground">Assign Organization</h2>
+            <p className="text-[12px] text-muted-foreground mt-0.5">{user.name} · {user.email}</p>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60">
+            <X className="h-4 w-4 text-muted-foreground" />
+          </button>
+        </div>
+        <div className="p-6 space-y-4">
+          {current && (
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/30 border border-border/50">
+              <Building2 className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              <div>
+                <p className="text-[12px] font-medium text-foreground">Currently in: {current.name}</p>
+                <p className="text-[11px] text-muted-foreground">{current.subdomain}.sentconnect.org</p>
+              </div>
+            </div>
+          )}
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">
+              Select Organization
+            </label>
+            <select
+              value={orgId}
+              onChange={e => setOrgId(e.target.value)}
+              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="">— No Organization (platform user) —</option>
+              {orgs.map(o => (
+                <option key={o.id} value={String(o.id)}>
+                  {o.name} ({o.subdomain}) · {o.userCount} users
+                </option>
+              ))}
+            </select>
+          </div>
+          {orgId !== "" && (
+            <p className="text-[12px] text-muted-foreground flex items-center gap-1.5">
+              <Globe className="h-3.5 w-3.5" />
+              Will be accessible at{" "}
+              <a
+                href={`/${orgs.find(o => o.id === Number(orgId))?.subdomain ?? ""}/`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#132272] underline font-mono"
+              >
+                /{orgs.find(o => o.id === Number(orgId))?.subdomain}/
+              </a>
+            </p>
+          )}
+          <div className="flex gap-3 pt-1">
+            <button onClick={onClose} disabled={saving} className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors disabled:opacity-50">
+              Cancel
+            </button>
+            <button
+              onClick={save}
+              disabled={saving}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              Save Assignment
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────────────────────────
 
 export default function SuperAdminPanel() {
@@ -697,6 +822,7 @@ export default function SuperAdminPanel() {
   const [resetLink, setResetLink] = useState<string | null>(null);
   const [confirmDeleteOrg, setConfirmDeleteOrg] = useState<OrgWithStats | null>(null);
   const [confirmDeleteUser, setConfirmDeleteUser] = useState<PlatformUser | null>(null);
+  const [assigningOrgUser, setAssigningOrgUser] = useState<PlatformUser | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   const loadData = useCallback(async () => {
@@ -803,6 +929,10 @@ export default function SuperAdminPanel() {
     }
     if (action === "delete") {
       setConfirmDeleteUser(targetUser);
+      return;
+    }
+    if (action === "assign-org") {
+      setAssigningOrgUser(targetUser);
       return;
     }
 
@@ -960,6 +1090,17 @@ export default function SuperAdminPanel() {
           loading={deleting}
           onConfirm={() => deleteUser(confirmDeleteUser)}
           onClose={() => setConfirmDeleteUser(null)}
+        />
+      )}
+      {assigningOrgUser && (
+        <AssignOrgModal
+          user={assigningOrgUser}
+          orgs={orgs ?? []}
+          onClose={() => setAssigningOrgUser(null)}
+          onUpdated={updated => {
+            setAllUsers(prev => prev ? prev.map(u => u.id === updated.id ? { ...u, ...updated } : u) : prev);
+            setAssigningOrgUser(null);
+          }}
         />
       )}
 
@@ -1164,7 +1305,15 @@ export default function SuperAdminPanel() {
                       </span>
                     </div>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5 text-[12px] text-muted-foreground">
-                      <span className="flex items-center gap-1"><Globe className="h-3 w-3" />{org.subdomain}.sentconnect.org</span>
+                      <a
+                        href={`/${org.subdomain}/`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-1 hover:text-[#132272] hover:underline transition-colors"
+                        title={`Open ${org.name} portal`}
+                      >
+                        <Globe className="h-3 w-3" />/{org.subdomain}/
+                      </a>
                       <span className="flex items-center gap-1"><Users className="h-3 w-3" />{org.userCount} users</span>
                       <span className="flex items-center gap-1"><FileText className="h-3 w-3" />{org.postCount} posts</span>
                       <span>Created {formatDistanceToNow(new Date(org.createdAt), { addSuffix: true })}</span>
