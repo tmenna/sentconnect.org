@@ -5,6 +5,7 @@ import {
   Loader2, Globe, ShieldCheck, UserCog, Search,
   Plus, Lock, Unlock, Ban, UserCheck, KeyRound, ChevronDown,
   ShieldAlert, Shield, Edit3, X, Save, Eye, EyeOff,
+  Trash2, AlertTriangle,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
@@ -154,6 +155,184 @@ function PermissionsEditor({
           <span className="text-[12px] font-medium text-foreground">{label}</span>
         </label>
       ))}
+    </div>
+  );
+}
+
+// ─── Confirm Delete Dialog (inline) ──────────────────────────────────────────
+
+function ConfirmDeleteModal({
+  title,
+  description,
+  confirmLabel = "Delete",
+  onConfirm,
+  onClose,
+  loading,
+}: {
+  title: string;
+  description: string;
+  confirmLabel?: string;
+  onConfirm: () => void;
+  onClose: () => void;
+  loading?: boolean;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm">
+        <div className="p-6 space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-red-100 rounded-xl flex-shrink-0">
+              <AlertTriangle className="h-5 w-5 text-red-600" />
+            </div>
+            <div>
+              <h2 className="text-[15px] font-bold text-foreground">{title}</h2>
+              <p className="text-[13px] text-muted-foreground mt-1">{description}</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <button onClick={onClose} disabled={loading} className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors disabled:opacity-50">
+              Cancel
+            </button>
+            <button
+              onClick={onConfirm}
+              disabled={loading}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+            >
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+              {confirmLabel}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Create Organization Modal ────────────────────────────────────────────────
+
+function CreateOrgModal({
+  onClose,
+  onCreated,
+}: {
+  onClose: () => void;
+  onCreated: (org: OrgWithStats) => void;
+}) {
+  const { toast } = useToast();
+  const [form, setForm] = useState({ name: "", subdomain: "", plan: "free" });
+  const [saving, setSaving] = useState(false);
+  const [slugError, setSlugError] = useState<string | null>(null);
+
+  function validateSlug(val: string) {
+    if (!val) return null;
+    if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(val) && val.length > 1) return "Only lowercase letters, numbers, hyphens; must start/end with letter or number";
+    return null;
+  }
+
+  function handleNameChange(name: string) {
+    const auto = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    setForm(f => ({ ...f, name, subdomain: f.subdomain || auto }));
+  }
+
+  function handleSubdomainChange(val: string) {
+    const cleaned = val.toLowerCase().replace(/[^a-z0-9-]/g, "");
+    setSlugError(validateSlug(cleaned));
+    setForm(f => ({ ...f, subdomain: cleaned }));
+  }
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    const err = validateSlug(form.subdomain);
+    if (err) { setSlugError(err); return; }
+    setSaving(true);
+    try {
+      const res = await fetch("/api/super-admin/orgs", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error ?? "Failed to create organization");
+      }
+      const org = await res.json();
+      toast({ title: `Organization "${org.name}" created` });
+      onCreated({ ...org, userCount: 0, postCount: 0 });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Failed to create organization", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
+        <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between">
+          <div>
+            <h2 className="text-[15px] font-bold text-foreground">New Organization</h2>
+            <p className="text-[12px] text-muted-foreground mt-0.5">Creates a new tenant with its own subdomain</p>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60"><X className="h-4 w-4 text-muted-foreground" /></button>
+        </div>
+        <form onSubmit={submit} className="p-6 space-y-4">
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Organization Name</label>
+            <input
+              required
+              value={form.name}
+              onChange={e => handleNameChange(e.target.value)}
+              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+              placeholder="Calvary Church"
+            />
+          </div>
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Subdomain</label>
+            <div className="flex items-center gap-0">
+              <input
+                required
+                value={form.subdomain}
+                onChange={e => handleSubdomainChange(e.target.value)}
+                className="flex-1 px-3 py-2.5 text-[13px] border border-border/60 rounded-l-lg bg-white outline-none focus:ring-2 focus:ring-primary/20 font-mono"
+                placeholder="calvary"
+                minLength={2}
+              />
+              <span className="px-3 py-2.5 text-[12px] text-muted-foreground bg-muted/50 border border-l-0 border-border/60 rounded-r-lg whitespace-nowrap">
+                .sentconnect.org
+              </span>
+            </div>
+            {slugError && <p className="text-[11px] text-red-600 mt-1">{slugError}</p>}
+          </div>
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Plan</label>
+            <select
+              value={form.plan}
+              onChange={e => setForm(f => ({ ...f, plan: e.target.value }))}
+              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="free">Free</option>
+              <option value="starter">Starter</option>
+              <option value="pro">Pro</option>
+              <option value="enterprise">Enterprise</option>
+            </select>
+          </div>
+          <div className="flex gap-3 pt-1">
+            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving || !!slugError}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+              Create Organization
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
@@ -421,11 +600,13 @@ function UserActionMenu({
   currentUserId,
   onAction,
   isSelf,
+  canDelete,
 }: {
   user: PlatformUser;
   currentUserId: number;
   onAction: (action: string, user: PlatformUser) => void;
   isSelf?: boolean;
+  canDelete?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -438,6 +619,7 @@ function UserActionMenu({
       ? [{ id: "unsuspend", label: "Unsuspend", icon: UserCheck, color: "text-emerald-600" }]
       : [{ id: "suspend", label: "Suspend", icon: Ban, color: "text-orange-600" }]),
     ...(!isPlatformRole(user.role) ? [{ id: "impersonate", label: "Sign in as", icon: UserCog, color: "text-[#132272]" }] : []),
+    ...(canDelete && user.role !== "super_admin" ? [{ id: "delete", label: "Delete User", icon: Trash2, color: "text-red-600" }] : []),
   ];
 
   return (
@@ -485,8 +667,12 @@ export default function SuperAdminPanel() {
   const [actionPending, setActionPending] = useState<number | null>(null);
   const [userSearch, setUserSearch] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showCreateOrg, setShowCreateOrg] = useState(false);
   const [editingUser, setEditingUser] = useState<PlatformUser | null>(null);
   const [resetLink, setResetLink] = useState<string | null>(null);
+  const [confirmDeleteOrg, setConfirmDeleteOrg] = useState<OrgWithStats | null>(null);
+  const [confirmDeleteUser, setConfirmDeleteUser] = useState<PlatformUser | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -535,6 +721,50 @@ export default function SuperAdminPanel() {
     }
   }
 
+  async function deleteOrg(org: OrgWithStats) {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/super-admin/orgs/${org.id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error ?? "Failed to delete organization");
+      }
+      setOrgs(prev => prev ? prev.filter(o => o.id !== org.id) : null);
+      setStats(prev => prev ? { ...prev, totalOrgs: prev.totalOrgs - 1 } : null);
+      setConfirmDeleteOrg(null);
+      toast({ title: `Organization "${org.name}" deleted` });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Delete failed", variant: "destructive" });
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  async function deleteUser(targetUser: PlatformUser) {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/super-admin/users/${targetUser.id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error ?? "Failed to delete user");
+      }
+      setAllUsers(prev => prev ? prev.filter(u => u.id !== targetUser.id) : null);
+      setStats(prev => prev ? { ...prev, totalUsers: prev.totalUsers - 1 } : null);
+      setConfirmDeleteUser(null);
+      toast({ title: `User "${targetUser.name}" deleted` });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Delete failed", variant: "destructive" });
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   // ─── User Actions ────────────────────────────────────────────────────────────
 
   async function handleUserAction(action: string, targetUser: PlatformUser) {
@@ -544,6 +774,10 @@ export default function SuperAdminPanel() {
     }
     if (action === "edit") {
       setEditingUser(targetUser);
+      return;
+    }
+    if (action === "delete") {
+      setConfirmDeleteUser(targetUser);
       return;
     }
 
@@ -673,6 +907,36 @@ export default function SuperAdminPanel() {
         />
       )}
       {resetLink && <ResetLinkModal resetUrl={resetLink} onClose={() => setResetLink(null)} />}
+      {showCreateOrg && (
+        <CreateOrgModal
+          onClose={() => setShowCreateOrg(false)}
+          onCreated={org => {
+            setOrgs(prev => prev ? [...prev, org] : [org]);
+            setStats(prev => prev ? { ...prev, totalOrgs: prev.totalOrgs + 1 } : null);
+            setShowCreateOrg(false);
+          }}
+        />
+      )}
+      {confirmDeleteOrg && (
+        <ConfirmDeleteModal
+          title={`Delete "${confirmDeleteOrg.name}"?`}
+          description={`This will permanently delete the organization and clear the org reference from all its users and posts. This cannot be undone.`}
+          confirmLabel="Delete Organization"
+          loading={deleting}
+          onConfirm={() => deleteOrg(confirmDeleteOrg)}
+          onClose={() => setConfirmDeleteOrg(null)}
+        />
+      )}
+      {confirmDeleteUser && (
+        <ConfirmDeleteModal
+          title={`Delete "${confirmDeleteUser.name}"?`}
+          description={`This permanently removes the user account and all their session data. Their posts will remain but be anonymized. This cannot be undone.`}
+          confirmLabel="Delete User"
+          loading={deleting}
+          onConfirm={() => deleteUser(confirmDeleteUser)}
+          onClose={() => setConfirmDeleteUser(null)}
+        />
+      )}
 
       {/* Header */}
       <div
@@ -787,18 +1051,29 @@ export default function SuperAdminPanel() {
                           </button>
                         )}
                         {u.role !== "super_admin" && !isSelf && (
-                          <button
-                            onClick={() => deactivatePlatformUser(u)}
-                            disabled={actionPending === u.id}
-                            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold border transition-colors ${
-                              u.status === "active"
-                                ? "text-red-600 border-red-200 bg-red-50 hover:bg-red-100"
-                                : "text-emerald-600 border-emerald-200 bg-emerald-50 hover:bg-emerald-100"
-                            } disabled:opacity-40`}
-                          >
-                            {actionPending === u.id ? <Loader2 className="h-3 w-3 animate-spin" /> : u.status === "active" ? <XCircle className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}
-                            {u.status === "active" ? "Deactivate" : "Activate"}
-                          </button>
+                          <>
+                            <button
+                              onClick={() => deactivatePlatformUser(u)}
+                              disabled={actionPending === u.id}
+                              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold border transition-colors ${
+                                u.status === "active"
+                                  ? "text-red-600 border-red-200 bg-red-50 hover:bg-red-100"
+                                  : "text-emerald-600 border-emerald-200 bg-emerald-50 hover:bg-emerald-100"
+                              } disabled:opacity-40`}
+                            >
+                              {actionPending === u.id ? <Loader2 className="h-3 w-3 animate-spin" /> : u.status === "active" ? <XCircle className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}
+                              {u.status === "active" ? "Deactivate" : "Activate"}
+                            </button>
+                            {user?.role === "super_admin" && (
+                              <button
+                                onClick={() => setConfirmDeleteUser(u)}
+                                title="Delete user"
+                                className="p-1.5 rounded-lg text-muted-foreground hover:text-red-600 hover:bg-red-50 border border-border/50 hover:border-red-200 transition-colors"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>
@@ -825,7 +1100,21 @@ export default function SuperAdminPanel() {
 
       {/* ─── Tab: Organizations ───────────────────────────────────────────────── */}
       {activeTab === "orgs" && (
-        <div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[14px] font-bold text-foreground">Organizations</p>
+              <p className="text-[12px] text-muted-foreground mt-0.5">Manage all tenant organizations and their subdomains</p>
+            </div>
+            {user?.role === "super_admin" && (
+              <button
+                onClick={() => setShowCreateOrg(true)}
+                className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors"
+              >
+                <Plus className="h-3.5 w-3.5" /> New Organization
+              </button>
+            )}
+          </div>
           {loading ? (
             <div className="space-y-3">
               {[1, 2, 3].map(i => <div key={i} className="h-20 bg-white rounded-xl border border-border/60 animate-pulse" />)}
@@ -856,17 +1145,28 @@ export default function SuperAdminPanel() {
                       <span>Created {formatDistanceToNow(new Date(org.createdAt), { addSuffix: true })}</span>
                     </div>
                   </div>
-                  <button
-                    onClick={() => toggleOrgStatus(org)}
-                    disabled={toggling === org.id}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors flex-shrink-0 ${
-                      org.status === "active"
-                        ? "bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
-                        : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
-                    }`}
-                  >
-                    {toggling === org.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : org.status === "active" ? <><XCircle className="h-3.5 w-3.5" /> Suspend</> : <><CheckCircle2 className="h-3.5 w-3.5" /> Activate</>}
-                  </button>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                      onClick={() => toggleOrgStatus(org)}
+                      disabled={toggling === org.id}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors ${
+                        org.status === "active"
+                          ? "bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
+                          : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
+                      }`}
+                    >
+                      {toggling === org.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : org.status === "active" ? <><XCircle className="h-3.5 w-3.5" /> Suspend</> : <><CheckCircle2 className="h-3.5 w-3.5" /> Activate</>}
+                    </button>
+                    {user?.role === "super_admin" && (
+                      <button
+                        onClick={() => setConfirmDeleteOrg(org)}
+                        title="Delete organization"
+                        className="p-1.5 rounded-lg text-muted-foreground hover:text-red-600 hover:bg-red-50 border border-border/50 hover:border-red-200 transition-colors"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -940,6 +1240,7 @@ export default function SuperAdminPanel() {
                                 currentUserId={user?.id ?? 0}
                                 onAction={handleUserAction}
                                 isSelf={isSelf}
+                                canDelete={user?.role === "super_admin"}
                               />
                             )}
                           </div>

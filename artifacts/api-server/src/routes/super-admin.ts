@@ -18,6 +18,13 @@ function toSafeUser(user: typeof usersTable.$inferSelect) {
   return rest;
 }
 
+async function requireSuperAdminOnly(req: any, res: any): Promise<boolean> {
+  const caller = req.platformUser;
+  if (caller?.role === "super_admin") return true;
+  res.status(403).json({ error: "Only super_admin can perform this action" });
+  return false;
+}
+
 // ─── Stats ────────────────────────────────────────────────────────────────────
 
 router.get("/super-admin/stats", requirePlatformAccess, async (req, res): Promise<void> => {
@@ -45,6 +52,26 @@ router.get("/super-admin/orgs", requirePermission("canViewOrganizations"), async
   res.json(orgsWithStats);
 });
 
+// POST /super-admin/orgs — create a new organization
+router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
+  const { name, subdomain, plan } = req.body ?? {};
+  if (!name || !subdomain) {
+    res.status(400).json({ error: "name and subdomain are required" }); return;
+  }
+  const slug = subdomain.toLowerCase().trim().replace(/[^a-z0-9-]/g, "-");
+  if (!/^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/.test(slug)) {
+    res.status(400).json({ error: "subdomain must be lowercase letters, numbers, and hyphens" }); return;
+  }
+  const [existing] = await db.select({ id: organizationsTable.id })
+    .from(organizationsTable).where(eq(organizationsTable.subdomain, slug));
+  if (existing) { res.status(409).json({ error: "Subdomain already in use" }); return; }
+
+  const [org] = await db.insert(organizationsTable)
+    .values({ name: name.trim(), subdomain: slug, plan: plan ?? "free" })
+    .returning();
+  res.status(201).json(org);
+});
+
 router.patch("/super-admin/orgs/:id", requirePermission("canManageOrganizations"), async (req, res): Promise<void> => {
   const orgId = Number(req.params.id);
   if (isNaN(orgId)) { res.status(400).json({ error: "Invalid org id" }); return; }
@@ -56,6 +83,20 @@ router.patch("/super-admin/orgs/:id", requirePermission("canManageOrganizations"
     .where(eq(organizationsTable.id, orgId)).returning();
   if (!org) { res.status(404).json({ error: "Organization not found" }); return; }
   res.json(org);
+});
+
+// DELETE /super-admin/orgs/:id — permanently delete an organization
+router.delete("/super-admin/orgs/:id", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
+  if (!await requireSuperAdminOnly(req, res)) return;
+
+  const orgId = Number(req.params.id);
+  if (isNaN(orgId)) { res.status(400).json({ error: "Invalid org id" }); return; }
+
+  const [org] = await db.select().from(organizationsTable).where(eq(organizationsTable.id, orgId));
+  if (!org) { res.status(404).json({ error: "Organization not found" }); return; }
+
+  await db.delete(organizationsTable).where(eq(organizationsTable.id, orgId));
+  res.json({ message: `Organization "${org.name}" deleted`, id: orgId });
 });
 
 // ─── All Users (cross-org view) ───────────────────────────────────────────────
@@ -207,6 +248,24 @@ router.post("/super-admin/users/:id/unsuspend", requirePermission("canSuspendUse
     .where(eq(usersTable.id, userId)).returning();
   if (!updated) { res.status(404).json({ error: "User not found" }); return; }
   res.json({ message: "User unsuspended", user: toSafeUser(updated) });
+});
+
+// DELETE /super-admin/users/:id — permanently delete a user
+router.delete("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
+  if (!await requireSuperAdminOnly(req, res)) return;
+
+  const userId = Number(req.params.id);
+  if (isNaN(userId)) { res.status(400).json({ error: "Invalid user id" }); return; }
+
+  const caller = req.platformUser!;
+  if (caller.id === userId) { res.status(403).json({ error: "Cannot delete your own account" }); return; }
+
+  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
+  if (!user) { res.status(404).json({ error: "User not found" }); return; }
+  if (user.role === "super_admin") { res.status(403).json({ error: "Cannot delete another super_admin" }); return; }
+
+  await db.delete(usersTable).where(eq(usersTable.id, userId));
+  res.json({ message: `User "${user.name}" deleted`, id: userId });
 });
 
 // ─── Impersonation ────────────────────────────────────────────────────────────
