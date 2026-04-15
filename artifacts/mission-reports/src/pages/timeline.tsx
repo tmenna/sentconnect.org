@@ -3,7 +3,9 @@ import { useGetTimeline, getGetTimelineQueryKey } from "@workspace/api-client-re
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { useAuth } from "@/components/auth-provider";
-import { Globe } from "lucide-react";
+import { Globe, BookOpen } from "lucide-react";
+
+type TimelineTab = "all" | "moments";
 
 function PostSkeleton() {
   return (
@@ -25,6 +27,7 @@ function PostSkeleton() {
 export default function Feed() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const [posts, setPosts] = useState<PostData[] | null>(null);
+  const [activeTab, setActiveTab] = useState<TimelineTab>("all");
 
   if (!authLoading && !isAuthenticated) {
     if (typeof window !== "undefined") window.location.replace("/login");
@@ -45,6 +48,8 @@ export default function Feed() {
   );
 
   const allPosts: PostData[] = posts ?? (data?.reports ?? []) as PostData[];
+  const missionMoments = allPosts.filter(p => p.isMissionMoment);
+  const displayedPosts = activeTab === "moments" ? missionMoments : allPosts;
 
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : null);
@@ -70,14 +75,54 @@ export default function Feed() {
 
   return (
     <div className="space-y-4">
-      {allPosts.length === 0 ? (
+      {/* Filter Tabs */}
+      <div className="flex items-center gap-1 border-b border-border/50 pb-0">
+        <button
+          onClick={() => setActiveTab("all")}
+          className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
+            activeTab === "all"
+              ? "border-[#132272] text-[#132272]"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Globe className="h-3.5 w-3.5" />
+          All Posts
+          <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{allPosts.length}</span>
+        </button>
+        <button
+          onClick={() => setActiveTab("moments")}
+          className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
+            activeTab === "moments"
+              ? "border-[#132272] text-[#132272]"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <BookOpen className="h-3.5 w-3.5" />
+          Mission Moments
+          {missionMoments.length > 0 && (
+            <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{missionMoments.length}</span>
+          )}
+        </button>
+      </div>
+
+      {displayedPosts.length === 0 ? (
         <div className="bg-white rounded-xl border border-dashed border-border py-20 text-center shadow-sm">
-          <Globe className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
-          <p className="font-semibold text-foreground text-sm">No posts yet</p>
-          <p className="text-muted-foreground text-xs mt-1">Team updates will appear here once posted.</p>
+          {activeTab === "moments" ? (
+            <>
+              <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+              <p className="font-semibold text-foreground text-sm">No Mission Moments yet</p>
+              <p className="text-muted-foreground text-xs mt-1">Team members can mark posts as Mission Moments when sharing updates.</p>
+            </>
+          ) : (
+            <>
+              <Globe className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+              <p className="font-semibold text-foreground text-sm">No posts yet</p>
+              <p className="text-muted-foreground text-xs mt-1">Team updates will appear here once posted.</p>
+            </>
+          )}
         </div>
       ) : (
-        allPosts.map(post => (
+        displayedPosts.map(post => (
           <PostCard key={post.id} post={post} onDelete={handleDelete} />
         ))
       )}

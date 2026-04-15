@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
   Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
-  Send, Users, Star, X, Loader2, Check, Navigation
+  Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ export type PostData = {
   location?: string | null;
   visibility: string;
   isHighlight?: boolean;
+  isMissionMoment?: boolean;
   createdAt: string;
   likeCount: number;
   commentCount: number;
@@ -117,6 +118,7 @@ function EditForm({
   const [location, setLocation] = useState(post.location ?? "");
   const [peopleReached, setPeopleReached] = useState(post.peopleReached?.toString() ?? "");
   const [isHighlight, setIsHighlight] = useState(post.isHighlight ?? false);
+  const [isMissionMoment, setIsMissionMoment] = useState(post.isMissionMoment ?? false);
   const [saving, setSaving] = useState(false);
   const [detectingLocation, setDetectingLocation] = useState(false);
   const [showLocation, setShowLocation] = useState(!!post.location);
@@ -158,6 +160,7 @@ function EditForm({
           location: showLocation ? location.trim() || null : null,
           peopleReached: showImpact && peopleReached.trim() ? Number(peopleReached) : null,
           isHighlight,
+          isMissionMoment,
         }),
       });
       if (updated) onSave(updated as PostData);
@@ -250,6 +253,22 @@ function EditForm({
       >
         <Star className={cn("h-3.5 w-3.5", isHighlight && "fill-amber-500 text-amber-500")} />
         {isHighlight ? "Highlighted" : "Mark as highlight"}
+      </button>
+
+      {/* Mission Moment toggle */}
+      <button
+        onClick={() => setIsMissionMoment(m => !m)}
+        disabled={saving}
+        title="A 3–5 minute story or update that celebrates and connects people to God's work in the world."
+        className={cn(
+          "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors",
+          isMissionMoment
+            ? "text-[#132272] bg-[#132272]/10 hover:bg-[#132272]/15 border border-[#132272]/20"
+            : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+        )}
+      >
+        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#132272]")} />
+        {isMissionMoment ? "Mission Moment" : "Mark as Mission Moment"}
       </button>
 
       {/* Actions */}
@@ -357,15 +376,30 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
   return (
     <div className={cn(
       "bg-white rounded-xl border shadow-sm overflow-hidden transition-colors",
-      post.isHighlight ? "border-amber-300" : "border-border/60"
+      post.isMissionMoment
+        ? "border-[#132272]/25 shadow-[0_2px_8px_rgba(19,34,114,0.08)]"
+        : post.isHighlight ? "border-amber-300" : "border-border/60"
     )}>
-      {/* Highlight banner */}
-      {post.isHighlight && (
+      {/* Mission Moment banner — takes priority over Highlight */}
+      {post.isMissionMoment ? (
+        <div
+          className="flex items-center gap-2 px-4 py-2 border-b border-[#132272]/10"
+          style={{ background: "linear-gradient(90deg, #132272 0%, #1e3a8a 100%)" }}
+        >
+          <BookOpen className="h-3.5 w-3.5 text-white/90 flex-shrink-0" />
+          <span className="text-[12px] font-bold text-white tracking-wide uppercase">Mission Moment</span>
+          {post.isHighlight && (
+            <Star className="h-3 w-3 fill-amber-300 text-amber-300 ml-0.5" />
+          )}
+          <div className="flex-1" />
+          <Sparkles className="h-3 w-3 text-white/40" />
+        </div>
+      ) : post.isHighlight ? (
         <div className="flex items-center gap-1.5 px-4 py-1.5 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
           <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
           Highlight
         </div>
-      )}
+      ) : null}
 
       {/* Header */}
       <div className="flex items-start gap-3 px-4 pt-4 pb-2">

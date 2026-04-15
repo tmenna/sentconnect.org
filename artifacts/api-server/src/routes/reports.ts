@@ -118,7 +118,7 @@ router.post("/reports", async (req, res): Promise<void> => {
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
   const currentUser = await getCurrentUser(currentUserId);
-  const { description, location, peopleReached, isHighlight } = req.body ?? {};
+  const { description, location, peopleReached, isHighlight, isMissionMoment } = req.body ?? {};
   const reached = peopleReached !== undefined && peopleReached !== null && peopleReached !== "" ? Number(peopleReached) : null;
 
   const [post] = await db.insert(reportsTable).values({
@@ -128,6 +128,7 @@ router.post("/reports", async (req, res): Promise<void> => {
     location: typeof location === "string" ? location : null,
     visibility: "public",
     isHighlight: isHighlight === true,
+    isMissionMoment: isMissionMoment === true,
     peopleReached: reached && !isNaN(reached) ? reached : null,
     title: null,
     category: "post",
@@ -195,6 +196,36 @@ router.get("/reports/export", async (req, res): Promise<void> => {
   res.send(csv);
 });
 
+// GET /reports/mission-moments — paginated Mission Moments, scoped to org
+router.get("/reports/mission-moments", async (req, res): Promise<void> => {
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const currentUser = await getCurrentUser(currentUserId);
+  if (!currentUser) { res.status(403).json({ error: "Forbidden" }); return; }
+
+  const limit = Math.min(Number(req.query.limit) || 20, 50);
+  const offset = Number(req.query.offset) || 0;
+
+  const conditions = [eq(reportsTable.isMissionMoment, true)];
+
+  if (currentUser.role === "field_user" || currentUser.role === "missionary") {
+    conditions.push(eq(reportsTable.missionaryId, currentUser.id));
+  } else if (currentUser.role === "admin" && currentUser.organizationId) {
+    conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
+  }
+
+  const [countResult] = await db.select({ count: sql<number>`count(*)::int` })
+    .from(reportsTable).where(and(...conditions));
+  const total = countResult?.count ?? 0;
+  const posts = await db.select().from(reportsTable)
+    .where(and(...conditions))
+    .orderBy(desc(reportsTable.createdAt))
+    .limit(limit).offset(offset);
+  const result = await getPostsWithDetails(posts, currentUserId);
+  res.json({ reports: result, total, hasMore: offset + limit < total });
+});
+
 // GET /reports/:id
 router.get("/reports/:id", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
@@ -220,7 +251,7 @@ router.patch("/reports/:id", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
-  const { description, location, peopleReached, isHighlight } = req.body ?? {};
+  const { description, location, peopleReached, isHighlight, isMissionMoment } = req.body ?? {};
   const updates: Record<string, unknown> = {};
   if (description != null) updates.description = String(description);
   if (location !== undefined) updates.location = location ?? null;
@@ -229,6 +260,7 @@ router.patch("/reports/:id", async (req, res): Promise<void> => {
     updates.peopleReached = r !== null && !isNaN(r) ? r : null;
   }
   if (isHighlight !== undefined) updates.isHighlight = isHighlight === true;
+  if (isMissionMoment !== undefined) updates.isMissionMoment = isMissionMoment === true;
 
   const [post] = await db.update(reportsTable).set(updates).where(eq(reportsTable.id, postId)).returning();
   if (!post) { res.status(404).json({ error: "Post not found" }); return; }

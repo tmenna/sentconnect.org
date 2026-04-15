@@ -5,12 +5,15 @@ import { Redirect } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
-import { MapPin, Building2, FileText } from "lucide-react";
+import { MapPin, Building2, FileText, BookOpen, Globe } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+type FeedTab = "all" | "moments";
 
 export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [posts, setPosts] = useState<PostData[] | null>(null);
+  const [activeTab, setActiveTab] = useState<FeedTab>("all");
 
   const { data, isLoading: postsLoading } = useGetUserReports(
     user?.id ?? 0,
@@ -26,7 +29,9 @@ export default function MissionaryDashboard() {
   if (!isAuthenticated) return <Redirect href="/login" />;
   if (user?.role === "admin") return <Redirect href="/admin" />;
 
-  const myPosts: PostData[] = posts ?? ((data ?? []) as PostData[]);
+  const allPosts: PostData[] = posts ?? ((data ?? []) as PostData[]);
+  const missionMoments = allPosts.filter(p => p.isMissionMoment);
+  const myPosts = activeTab === "moments" ? missionMoments : allPosts;
 
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : null);
@@ -62,11 +67,21 @@ export default function MissionaryDashboard() {
             )}
           </div>
         </div>
-        <div className="hidden sm:block text-right flex-shrink-0">
-          <p className="text-[28px] font-extrabold text-white leading-none">{myPosts.length}</p>
-          <p className="text-[11px] text-white/60 mt-0.5 flex items-center gap-1 justify-end">
-            <FileText className="h-3 w-3" />posts
-          </p>
+        <div className="hidden sm:flex gap-5 flex-shrink-0">
+          <div className="text-right">
+            <p className="text-[28px] font-extrabold text-white leading-none">{allPosts.length}</p>
+            <p className="text-[11px] text-white/60 mt-0.5 flex items-center gap-1 justify-end">
+              <FileText className="h-3 w-3" />posts
+            </p>
+          </div>
+          {missionMoments.length > 0 && (
+            <div className="text-right border-l border-white/20 pl-5">
+              <p className="text-[28px] font-extrabold text-white leading-none">{missionMoments.length}</p>
+              <p className="text-[11px] text-white/60 mt-0.5 flex items-center gap-1 justify-end">
+                <BookOpen className="h-3 w-3" />moments
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -74,6 +89,36 @@ export default function MissionaryDashboard() {
       <PostComposer
         onPost={(newPost) => setPosts(prev => [newPost, ...(prev ?? (data as PostData[] ?? []))])}
       />
+
+      {/* Filter Tabs */}
+      <div className="flex items-center gap-1 border-b border-border/50 pb-0">
+        <button
+          onClick={() => setActiveTab("all")}
+          className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
+            activeTab === "all"
+              ? "border-[#132272] text-[#132272]"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Globe className="h-3.5 w-3.5" />
+          All Posts
+          <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{allPosts.length}</span>
+        </button>
+        <button
+          onClick={() => setActiveTab("moments")}
+          className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
+            activeTab === "moments"
+              ? "border-[#132272] text-[#132272]"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <BookOpen className="h-3.5 w-3.5" />
+          Mission Moments
+          {missionMoments.length > 0 && (
+            <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{missionMoments.length}</span>
+          )}
+        </button>
+      </div>
 
       {/* Timeline */}
       {postsLoading && posts === null ? (
@@ -94,9 +139,19 @@ export default function MissionaryDashboard() {
         </div>
       ) : myPosts.length === 0 ? (
         <div className="bg-white rounded-xl border border-dashed border-border py-20 text-center shadow-sm">
-          <FileText className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
-          <p className="font-semibold text-foreground text-sm">No posts yet</p>
-          <p className="text-muted-foreground text-xs mt-1">Share your first update above.</p>
+          {activeTab === "moments" ? (
+            <>
+              <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+              <p className="font-semibold text-foreground text-sm">No Mission Moments yet</p>
+              <p className="text-muted-foreground text-xs mt-1">Mark a post as a Mission Moment using the toolbar.</p>
+            </>
+          ) : (
+            <>
+              <FileText className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+              <p className="font-semibold text-foreground text-sm">No posts yet</p>
+              <p className="text-muted-foreground text-xs mt-1">Share your first update above.</p>
+            </>
+          )}
         </div>
       ) : (
         <div className="space-y-4">

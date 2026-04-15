@@ -1,16 +1,20 @@
+import { useState } from "react";
 import { useGetUser, getGetUserQueryKey, useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
 import { useParams, Link, Redirect } from "wouter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Building, Calendar, ArrowLeft, FileText } from "lucide-react";
+import { MapPin, Building, Calendar, ArrowLeft, FileText, BookOpen, Globe } from "lucide-react";
 import { format } from "date-fns";
 import { useAuth } from "@/components/auth-provider";
 import { PostCard, type PostData } from "@/components/post-card";
 import { Skeleton } from "@/components/ui/skeleton";
 
+type ProfileTab = "all" | "moments";
+
 export default function MissionaryProfile() {
   const params = useParams<{ id: string }>();
   const userId = Number(params.id);
   const { user: currentUser, isAuthenticated, isLoading: authLoading } = useAuth();
+  const [activeTab, setActiveTab] = useState<ProfileTab>("all");
 
   const { data: user, isLoading: loadingUser } = useGetUser(userId, {
     query: { enabled: !!userId && !!currentUser, queryKey: getGetUserQueryKey(userId) }
@@ -55,6 +59,8 @@ export default function MissionaryProfile() {
   }
 
   const posts = (reports ?? []) as PostData[];
+  const missionMoments = posts.filter(p => p.isMissionMoment);
+  const displayedPosts = activeTab === "moments" ? missionMoments : posts;
 
   return (
     <div className="space-y-5">
@@ -67,7 +73,7 @@ export default function MissionaryProfile() {
         Back to Updates
       </Link>
 
-      {/* Profile banner — matches admin/dashboard navy style */}
+      {/* Profile banner */}
       <div
         className="rounded-2xl px-6 py-5 flex items-center gap-4"
         style={{ background: "linear-gradient(135deg, #132272 0%, #1e3a8a 100%)" }}
@@ -101,12 +107,52 @@ export default function MissionaryProfile() {
           )}
         </div>
 
-        <div className="hidden sm:block text-right flex-shrink-0">
-          <p className="text-[28px] font-extrabold text-white leading-none">{posts.length}</p>
-          <p className="text-[11px] text-white/60 mt-0.5 flex items-center gap-1 justify-end">
-            <FileText className="h-3 w-3" />posts
-          </p>
+        <div className="hidden sm:flex gap-5 flex-shrink-0">
+          <div className="text-right">
+            <p className="text-[28px] font-extrabold text-white leading-none">{posts.length}</p>
+            <p className="text-[11px] text-white/60 mt-0.5 flex items-center gap-1 justify-end">
+              <FileText className="h-3 w-3" />posts
+            </p>
+          </div>
+          {missionMoments.length > 0 && (
+            <div className="text-right border-l border-white/20 pl-5">
+              <p className="text-[28px] font-extrabold text-white leading-none">{missionMoments.length}</p>
+              <p className="text-[11px] text-white/60 mt-0.5 flex items-center gap-1 justify-end">
+                <BookOpen className="h-3 w-3" />moments
+              </p>
+            </div>
+          )}
         </div>
+      </div>
+
+      {/* Filter Tabs */}
+      <div className="flex items-center gap-1 border-b border-border/50 pb-0">
+        <button
+          onClick={() => setActiveTab("all")}
+          className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
+            activeTab === "all"
+              ? "border-[#132272] text-[#132272]"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Globe className="h-3.5 w-3.5" />
+          All Posts
+          <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{posts.length}</span>
+        </button>
+        <button
+          onClick={() => setActiveTab("moments")}
+          className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
+            activeTab === "moments"
+              ? "border-[#132272] text-[#132272]"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <BookOpen className="h-3.5 w-3.5" />
+          Mission Moments
+          {missionMoments.length > 0 && (
+            <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{missionMoments.length}</span>
+          )}
+        </button>
       </div>
 
       {/* Posts feed */}
@@ -126,15 +172,25 @@ export default function MissionaryProfile() {
             </div>
           ))}
         </div>
-      ) : posts.length === 0 ? (
+      ) : displayedPosts.length === 0 ? (
         <div className="bg-white rounded-xl border border-dashed border-border py-20 text-center shadow-sm">
-          <FileText className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
-          <p className="font-semibold text-foreground text-sm">No posts yet</p>
-          <p className="text-muted-foreground text-xs mt-1">This team member hasn't shared any updates.</p>
+          {activeTab === "moments" ? (
+            <>
+              <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+              <p className="font-semibold text-foreground text-sm">No Mission Moments yet</p>
+              <p className="text-muted-foreground text-xs mt-1">This member hasn't marked any posts as Mission Moments.</p>
+            </>
+          ) : (
+            <>
+              <FileText className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+              <p className="font-semibold text-foreground text-sm">No posts yet</p>
+              <p className="text-muted-foreground text-xs mt-1">This team member hasn't shared any updates.</p>
+            </>
+          )}
         </div>
       ) : (
         <div className="space-y-4">
-          {posts.map(post => (
+          {displayedPosts.map(post => (
             <PostCard key={post.id} post={post} />
           ))}
         </div>

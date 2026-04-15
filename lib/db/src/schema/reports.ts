@@ -18,6 +18,7 @@ export const reportsTable = pgTable("reports", {
   location: text("location"),
   visibility: text("visibility").notNull().default("public"),
   isHighlight: boolean("is_highlight").notNull().default(false),
+  isMissionMoment: boolean("is_mission_moment").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });

@@ -13,7 +13,7 @@ import { Redirect, useLocation } from "wouter";
 import { CATEGORY_LABELS } from "@/lib/constants";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Plus, Trash2, Image as ImageIcon, Send, FileText } from "lucide-react";
+import { Plus, Trash2, Image as ImageIcon, Send, FileText, BookOpen, Info } from "lucide-react";
 import { format } from "date-fns";
 
 const reportSchema = z.object({
@@ -22,6 +22,7 @@ const reportSchema = z.object({
   category: z.enum(["church_planting", "leadership_training", "humanitarian_work", "education", "other"]),
   reportDate: z.string(),
   location: z.string().optional(),
+  isMissionMoment: z.boolean().default(false),
   photos: z.array(z.object({
     url: z.string().url("Must be a valid URL"),
     caption: z.string().optional()
@@ -50,6 +51,7 @@ export default function SubmitReport() {
       category: preselectedCategory as ReportFormValues["category"],
       reportDate: format(new Date(), "yyyy-MM-dd"),
       location: user?.location || "",
+      isMissionMoment: false,
       photos: [{ url: "", caption: "" }]
     }
   });
@@ -73,7 +75,8 @@ export default function SubmitReport() {
           reportDate: new Date(data.reportDate).toISOString(),
           missionaryId: user!.id,
           location: data.location || null,
-        }
+          isMissionMoment: data.isMissionMoment,
+        } as any
       });
 
       // Add photos if provided
@@ -208,6 +211,50 @@ export default function SubmitReport() {
               )}
             />
           </div>
+
+          {/* Mission Moment toggle */}
+          <FormField
+            control={form.control}
+            name="isMissionMoment"
+            render={({ field }) => (
+              <div
+                className={`rounded-xl border shadow-sm p-5 cursor-pointer transition-all ${
+                  field.value
+                    ? "border-[#132272]/30 bg-[#132272]/[0.03]"
+                    : "bg-white border-border"
+                }`}
+                onClick={() => field.onChange(!field.value)}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={`p-2.5 rounded-xl flex-shrink-0 transition-colors ${
+                    field.value ? "bg-[#132272] text-white" : "bg-muted/50 text-muted-foreground"
+                  }`}>
+                    <BookOpen className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <p className="text-[14px] font-bold text-foreground">Mark as Mission Moment</p>
+                      <span title="A mission moment in a church context is a dedicated segment designed to highlight, celebrate, and pray for God's work in the world. It is typically a 3–5 minute story, video, or presentation that connects people to the broader mission—locally or globally.">
+                        <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                      </span>
+                    </div>
+                    <p className="text-[12px] text-muted-foreground leading-relaxed">
+                      A 3–5 minute story that highlights, celebrates, and invites prayer for what God is doing locally or globally.
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0 mt-0.5">
+                    <div className={`w-10 h-6 rounded-full transition-all relative ${
+                      field.value ? "bg-[#132272]" : "bg-muted"
+                    }`}>
+                      <div className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-all ${
+                        field.value ? "left-5" : "left-1"
+                      }`} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          />
 
           <div className="bg-white rounded-xl border border-border shadow-sm p-6 space-y-4">
             <div className="flex items-center justify-between">
