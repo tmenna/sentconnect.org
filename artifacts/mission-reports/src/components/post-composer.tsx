@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Image, MapPin, X, Loader2, Users, Navigation, BookOpen, Video, PlayCircle } from "lucide-react";
+import { Image, MapPin, X, Loader2, Users, Navigation, Star, Video, PlayCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
@@ -346,11 +346,11 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               className={cn(
                 "flex items-center gap-1 px-2 py-1.5 rounded-full text-[12px] font-medium transition-colors",
                 isMissionMoment
-                  ? "text-[#132272] bg-[#132272]/10 hover:bg-[#132272]/15"
+                  ? "text-amber-600 bg-amber-100 hover:bg-amber-200"
                   : "text-primary hover:bg-primary/10"
               )}
             >
-              <BookOpen className={cn("h-4 w-4", isMissionMoment && "fill-[#132272] text-[#132272]")} />
+              <Star className={cn("h-4 w-4", isMissionMoment && "fill-amber-500")} />
               <span className="hidden sm:inline">Mission Moment</span>
             </button>
 
