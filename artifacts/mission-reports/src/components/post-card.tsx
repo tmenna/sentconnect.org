@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
   Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
-  Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles
+  Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ export type PostData = {
     role?: string;
     bio?: string | null;
   };
-  photos: { id: number; url: string; caption?: string | null }[];
+  photos: { id: number; url: string; caption?: string | null; mimeType?: string | null }[];
 };
 
 type Comment = {
@@ -39,20 +39,44 @@ type Comment = {
   author: { id: number; name: string; avatarUrl?: string | null };
 };
 
+function isVideoItem(p: PostData["photos"][number]) {
+  if (p.mimeType) return p.mimeType.startsWith("video/");
+  return /\.(mp4|webm|ogg|mov)$/i.test(p.url);
+}
+
+function MediaItem({ p, controls = false, className = "" }: { p: PostData["photos"][number]; controls?: boolean; className?: string }) {
+  if (isVideoItem(p)) {
+    return (
+      <div className={cn("relative w-full h-full bg-black", className)}>
+        <video
+          src={p.url}
+          controls={controls}
+          playsInline
+          preload="metadata"
+          className="w-full h-full object-contain"
+        />
+        {!controls && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="bg-black/50 rounded-full p-2">
+              <PlayCircle className="h-8 w-8 text-white" />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+  return <img src={p.url} alt={p.caption || ""} className={cn("w-full h-full object-cover", className)} />;
+}
+
 function MediaGrid({ photos }: { photos: PostData["photos"] }) {
   const count = photos.length;
   if (count === 0) return null;
-  const isVideo = (url: string) => /\.(mp4|webm|ogg|mov)$/i.test(url);
 
   if (count === 1) {
     const p = photos[0];
     return (
-      <div className="w-full aspect-[16/10] overflow-hidden bg-black/5 rounded-lg">
-        {isVideo(p.url) ? (
-          <video src={p.url} controls className="w-full h-full object-cover" />
-        ) : (
-          <img src={p.url} alt={p.caption || ""} className="w-full h-full object-cover" />
-        )}
+      <div className={cn("w-full overflow-hidden rounded-lg bg-black/5", isVideoItem(p) ? "aspect-video" : "aspect-[16/10]")}>
+        <MediaItem p={p} controls={isVideoItem(p)} className="w-full h-full" />
       </div>
     );
   }
@@ -60,12 +84,8 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
     return (
       <div className="grid grid-cols-2 gap-1 rounded-lg overflow-hidden">
         {photos.map(p => (
-          <div key={p.id} className="aspect-square bg-black/5">
-            {isVideo(p.url) ? (
-              <video src={p.url} className="w-full h-full object-cover" />
-            ) : (
-              <img src={p.url} alt={p.caption || ""} className="w-full h-full object-cover" />
-            )}
+          <div key={p.id} className="aspect-square bg-black/5 relative overflow-hidden">
+            <MediaItem p={p} controls={false} />
           </div>
         ))}
       </div>
@@ -73,20 +93,12 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
   }
   return (
     <div className="grid grid-cols-2 gap-1 rounded-lg overflow-hidden">
-      <div className="aspect-square bg-black/5 row-span-2">
-        {isVideo(photos[0].url) ? (
-          <video src={photos[0].url} className="w-full h-full object-cover" />
-        ) : (
-          <img src={photos[0].url} alt="" className="w-full h-full object-cover" />
-        )}
+      <div className="aspect-square bg-black/5 row-span-2 relative overflow-hidden">
+        <MediaItem p={photos[0]} controls={false} />
       </div>
       {photos.slice(1, 3).map((p, i) => (
-        <div key={p.id} className={cn("bg-black/5 aspect-square", i === 1 && "relative")}>
-          {isVideo(p.url) ? (
-            <video src={p.url} className="w-full h-full object-cover" />
-          ) : (
-            <img src={p.url} alt="" className="w-full h-full object-cover" />
-          )}
+        <div key={p.id} className={cn("bg-black/5 aspect-square relative overflow-hidden")}>
+          <MediaItem p={p} controls={false} />
           {i === 1 && count > 3 && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
               <span className="text-white text-xl font-bold">+{count - 3}</span>

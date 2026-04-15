@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Image, MapPin, X, Loader2, Users, Star, Navigation, BookOpen } from "lucide-react";
+import { Image, MapPin, X, Loader2, Users, Star, Navigation, BookOpen, Video, PlayCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
@@ -42,6 +42,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
   const [uploadProgress, setUploadProgress] = useState("");
   const [detectingLocation, setDetectingLocation] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   if (!user) return null;
 
@@ -121,12 +122,15 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
       if (!postRes.ok) throw new Error("Failed to create post");
       const newPost = await postRes.json();
 
-      for (const objectPath of uploadedPaths) {
+      for (let i = 0; i < uploadedPaths.length; i++) {
         await fetch(`/api/reports/${newPost.id}/photos`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: `/api/storage${objectPath}` }),
+          body: JSON.stringify({
+            url: `/api/storage${uploadedPaths[i]}`,
+            mimeType: files[i].file.type,
+          }),
         });
       }
 
@@ -195,15 +199,30 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
           {files.length > 0 && (
             <div className={cn("mt-2 gap-1 rounded-lg overflow-hidden", files.length === 1 ? "block" : "grid grid-cols-2")}>
               {files.map((f, i) => (
-                <div key={i} className={cn("relative group bg-black/5", files.length === 1 ? "aspect-[16/10]" : "aspect-square")}>
+                <div
+                  key={i}
+                  className={cn(
+                    "relative group bg-black overflow-hidden",
+                    files.length === 1
+                      ? isVideo(f) ? "aspect-video" : "aspect-[16/10]"
+                      : "aspect-square"
+                  )}
+                >
                   {isVideo(f) ? (
-                    <video src={f.previewUrl} className="w-full h-full object-cover" />
+                    <>
+                      <video src={f.previewUrl} playsInline preload="metadata" className="w-full h-full object-contain" />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="bg-black/50 rounded-full p-2">
+                          <PlayCircle className="h-8 w-8 text-white" />
+                        </div>
+                      </div>
+                    </>
                   ) : (
                     <img src={f.previewUrl} alt="" className="w-full h-full object-cover" />
                   )}
                   <button
                     onClick={() => removeFile(i)}
-                    className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -260,12 +279,12 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
 
           {/* Toolbar */}
           <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border/40">
-            {/* Media */}
+            {/* Photo */}
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={posting || files.length >= 6}
               className="p-2 rounded-full text-primary hover:bg-primary/10 transition-colors disabled:opacity-40"
-              title="Add photo or video"
+              title="Add photo"
             >
               <Image className="h-4 w-4" />
             </button>
@@ -273,7 +292,27 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               ref={fileInputRef}
               type="file"
               multiple
-              accept="image/*,video/*"
+              accept="image/*"
+              className="hidden"
+              onChange={e => addFiles(e.target.files)}
+            />
+
+            {/* Video */}
+            <button
+              onClick={() => videoInputRef.current?.click()}
+              disabled={posting || files.length >= 6}
+              className={cn(
+                "p-2 rounded-full transition-colors disabled:opacity-40",
+                files.some(f => isVideo(f)) ? "text-[#132272] bg-[#132272]/10" : "text-primary hover:bg-primary/10"
+              )}
+              title="Add short video"
+            >
+              <Video className="h-4 w-4" />
+            </button>
+            <input
+              ref={videoInputRef}
+              type="file"
+              accept="video/*"
               className="hidden"
               onChange={e => addFiles(e.target.files)}
             />

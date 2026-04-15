@@ -281,11 +281,11 @@ router.delete("/reports/:id", async (req, res): Promise<void> => {
 router.post("/reports/:id/photos", async (req, res): Promise<void> => {
   const postId = Number(req.params.id);
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
-  const { url, caption } = req.body ?? {};
+  const { url, caption, mimeType } = req.body ?? {};
   if (!url || typeof url !== "string") { res.status(400).json({ error: "url is required" }); return; }
   const [report] = await db.select().from(reportsTable).where(eq(reportsTable.id, postId));
   if (!report) { res.status(404).json({ error: "Post not found" }); return; }
-  const [photo] = await db.insert(photosTable).values({ reportId: postId, url, caption: caption ?? null }).returning();
+  const [photo] = await db.insert(photosTable).values({ reportId: postId, url, caption: caption ?? null, mimeType: mimeType ?? null }).returning();
   res.status(201).json(photo);
 });
 

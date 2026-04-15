@@ -8,6 +8,7 @@ export const photosTable = pgTable("photos", {
   reportId: integer("report_id").notNull().references(() => reportsTable.id, { onDelete: "cascade" }),
   url: text("url").notNull(),
   caption: text("caption"),
+  mimeType: text("mime_type"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
