@@ -3,7 +3,7 @@ import { useGetTimeline, getGetTimelineQueryKey } from "@workspace/api-client-re
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { useAuth } from "@/components/auth-provider";
-import { Globe, BookOpen } from "lucide-react";
+import { Globe, Star } from "lucide-react";
 
 type TimelineTab = "all" | "moments";
 
@@ -93,11 +93,11 @@ export default function Feed() {
           onClick={() => setActiveTab("moments")}
           className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
             activeTab === "moments"
-              ? "border-[#132272] text-[#132272]"
+              ? "border-amber-500 text-amber-600"
               : "border-transparent text-muted-foreground hover:text-foreground"
           }`}
         >
-          <BookOpen className="h-3.5 w-3.5" />
+          <Star className={`h-3.5 w-3.5 ${activeTab === "moments" ? "fill-amber-500 text-amber-500" : ""}`} />
           Mission Moments
           {missionMoments.length > 0 && (
             <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{missionMoments.length}</span>
@@ -109,7 +109,7 @@ export default function Feed() {
         <div className="bg-white rounded-xl border border-dashed border-border py-20 text-center shadow-sm">
           {activeTab === "moments" ? (
             <>
-              <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+              <Star className="h-10 w-10 mx-auto text-amber-300/50 mb-3" />
               <p className="font-semibold text-foreground text-sm">No Mission Moments yet</p>
               <p className="text-muted-foreground text-xs mt-1">Team members can mark posts as Mission Moments when sharing updates.</p>
             </>
