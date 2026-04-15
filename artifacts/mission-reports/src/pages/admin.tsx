@@ -11,7 +11,8 @@ import {
   Users, FileText, Heart, MessageCircle,
   Globe, Sparkles, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
-  ShieldCheck, Pencil, Download,
+  ShieldCheck, Pencil, Download, Settings2, Save, Loader2,
+  FileOutput, BarChart3, Star, UserCog, BookOpen,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -29,6 +30,224 @@ async function apiFetch(path: string, options: RequestInit = {}) {
   const data = await res.json().catch(() => null);
   if (!res.ok) throw new Error(data?.error ?? `Request failed (${res.status})`);
   return data;
+}
+
+// ─── Org Permissions ───────────────────────────────────────────────────────
+
+type OrgPermissions = {
+  canSubmitReports: boolean;
+  canViewAllReports: boolean;
+  canHighlightReports: boolean;
+  canManageTeam: boolean;
+  canExportData: boolean;
+  canViewAnalytics: boolean;
+};
+
+const ORG_DEFAULT_PERMS: OrgPermissions = {
+  canSubmitReports: true,
+  canViewAllReports: false,
+  canHighlightReports: false,
+  canManageTeam: false,
+  canExportData: false,
+  canViewAnalytics: false,
+};
+
+const ORG_ADMIN_PERMS: OrgPermissions = {
+  canSubmitReports: true,
+  canViewAllReports: true,
+  canHighlightReports: true,
+  canManageTeam: true,
+  canExportData: true,
+  canViewAnalytics: true,
+};
+
+const ORG_PERM_META: { key: keyof OrgPermissions; label: string; desc: string; icon: React.ReactNode }[] = [
+  { key: "canSubmitReports",    label: "Submit Reports",      desc: "Post mission reports to the feed",       icon: <BookOpen className="h-3.5 w-3.5" /> },
+  { key: "canViewAllReports",   label: "View All Reports",    desc: "See reports from all team members",      icon: <Eye className="h-3.5 w-3.5" /> },
+  { key: "canHighlightReports", label: "Highlight Reports",   desc: "Star / feature important updates",       icon: <Star className="h-3.5 w-3.5" /> },
+  { key: "canManageTeam",       label: "Manage Team",         desc: "Add, edit and remove team members",      icon: <UserCog className="h-3.5 w-3.5" /> },
+  { key: "canExportData",       label: "Export Data",         desc: "Download reports as CSV or PDF",         icon: <FileOutput className="h-3.5 w-3.5" /> },
+  { key: "canViewAnalytics",    label: "View Analytics",      desc: "Access stats and activity dashboards",   icon: <BarChart3 className="h-3.5 w-3.5" /> },
+];
+
+function parseOrgPerms(raw: string | null | undefined): OrgPermissions {
+  if (!raw) return { ...ORG_DEFAULT_PERMS };
+  try { return { ...ORG_DEFAULT_PERMS, ...JSON.parse(raw) }; } catch { return { ...ORG_DEFAULT_PERMS }; }
+}
+
+function OrgPermissionsEditor({
+  perms,
+  onChange,
+  disabled,
+}: {
+  perms: OrgPermissions;
+  onChange: (p: OrgPermissions) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <div className="space-y-1.5">
+      {ORG_PERM_META.map(({ key, label, desc, icon }) => (
+        <label
+          key={key}
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors ${
+            perms[key]
+              ? "bg-[#132272]/5 border-[#132272]/20"
+              : "bg-muted/30 border-border/40 hover:bg-muted/50"
+          } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
+        >
+          <div className={`flex-shrink-0 ${perms[key] ? "text-[#132272]" : "text-muted-foreground"}`}>
+            {icon}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[12px] font-semibold text-foreground">{label}</p>
+            <p className="text-[11px] text-muted-foreground">{desc}</p>
+          </div>
+          <input
+            type="checkbox"
+            checked={perms[key]}
+            disabled={disabled}
+            onChange={e => onChange({ ...perms, [key]: e.target.checked })}
+            className="h-4 w-4 rounded accent-[#132272] cursor-pointer"
+          />
+        </label>
+      ))}
+    </div>
+  );
+}
+
+// ─── Edit Role & Permissions Modal ─────────────────────────────────────────
+
+function EditRolePermissionsModal({
+  user: targetUser,
+  isSelf,
+  onClose,
+  onUpdated,
+}: {
+  user: any;
+  isSelf: boolean;
+  onClose: () => void;
+  onUpdated: () => void;
+}) {
+  const [role, setRole] = useState<"admin" | "field_user">(targetUser.role === "admin" ? "admin" : "field_user");
+  const [perms, setPerms] = useState<OrgPermissions>(
+    targetUser.role === "admin" ? { ...ORG_ADMIN_PERMS } : parseOrgPerms(targetUser.permissions)
+  );
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const isAdmin = role === "admin";
+
+  function handleRoleChange(newRole: "admin" | "field_user") {
+    setRole(newRole);
+    if (newRole === "admin") setPerms({ ...ORG_ADMIN_PERMS });
+    else setPerms(parseOrgPerms(targetUser.permissions));
+  }
+
+  async function save() {
+    setSaving(true);
+    setError(null);
+    try {
+      await apiFetch(`/admin/users/${targetUser.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          role,
+          permissions: isAdmin ? null : perms,
+        }),
+      });
+      onUpdated();
+      onClose();
+    } catch (err: any) {
+      setError(err.message ?? "Failed to save");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-border/60 overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border/60">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 bg-[#132272]/10 rounded-lg">
+              <Settings2 className="h-4 w-4 text-[#132272]" />
+            </div>
+            <div>
+              <h2 className="font-bold text-[15px] text-foreground">Role & Permissions</h2>
+              <p className="text-[11px] text-muted-foreground">{targetUser.name}</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-1.5 hover:bg-muted rounded-lg transition-colors">
+            <X className="h-4 w-4 text-muted-foreground" />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 text-[13px] px-3 py-2 rounded-lg">{error}</div>
+          )}
+
+          {/* Role switcher */}
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-2">Role</label>
+            <div className="grid grid-cols-2 gap-2">
+              {(["field_user", "admin"] as const).map(r => (
+                <button
+                  key={r}
+                  type="button"
+                  disabled={isSelf && r !== "admin"}
+                  onClick={() => handleRoleChange(r)}
+                  className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all ${
+                    role === r
+                      ? "bg-[#132272] text-white border-[#132272] shadow-sm"
+                      : "bg-white text-foreground border-border/60 hover:border-[#132272]/30 hover:bg-[#132272]/5"
+                  } disabled:opacity-40 disabled:cursor-not-allowed`}
+                >
+                  {r === "admin"
+                    ? <><ShieldCheck className="h-4 w-4 flex-shrink-0" /> Admin</>
+                    : <><Globe className="h-4 w-4 flex-shrink-0" /> Field User</>
+                  }
+                </button>
+              ))}
+            </div>
+            {isSelf && (
+              <p className="text-[11px] text-amber-600 mt-1.5">You cannot change your own role.</p>
+            )}
+          </div>
+
+          {/* Permissions */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[12px] font-semibold text-foreground">Permissions</label>
+              {isAdmin && (
+                <span className="text-[11px] text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full">
+                  All permissions granted (Admin)
+                </span>
+              )}
+            </div>
+            <OrgPermissionsEditor perms={perms} onChange={setPerms} disabled={isAdmin} />
+          </div>
+
+          <div className="flex gap-3 pt-1">
+            <button
+              onClick={onClose}
+              disabled={saving}
+              className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-xl hover:bg-muted transition-colors disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={save}
+              disabled={saving}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-xl hover:bg-[#132272]/90 transition-colors disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 // ─── sub-components ────────────────────────────────────────────────────────
@@ -317,12 +536,14 @@ function DeleteConfirmModal({ userName, onConfirm, onClose, loading }: {
 
 // ─── Team Table Row ────────────────────────────────────────────────────────
 
-function TeamRow({ u, onUpdated, onDeleted }: { u: any; onUpdated: () => void; onDeleted: () => void }) {
+function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUserId: number; onUpdated: () => void; onDeleted: () => void }) {
   const [busy, setBusy] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditPerms, setShowEditPerms] = useState(false);
   const [resetLink, setResetLink] = useState<string | null>(null);
   const [editingBio, setEditingBio] = useState(false);
   const [bioText, setBioText] = useState(u.bio ?? "");
+  const isSelf = u.id === currentUserId;
 
   async function toggleStatus() {
     setBusy(true);
@@ -392,6 +613,14 @@ function TeamRow({ u, onUpdated, onDeleted }: { u: any; onUpdated: () => void; o
       )}
       {resetLink && (
         <ResetLinkModal link={resetLink} onClose={() => setResetLink(null)} />
+      )}
+      {showEditPerms && (
+        <EditRolePermissionsModal
+          user={u}
+          isSelf={isSelf}
+          onClose={() => setShowEditPerms(false)}
+          onUpdated={() => { setShowEditPerms(false); onUpdated(); }}
+        />
       )}
       <tr className="border-b border-border/40 hover:bg-muted/30 transition-colors">
         {/* User */}
@@ -471,6 +700,15 @@ function TeamRow({ u, onUpdated, onDeleted }: { u: any; onUpdated: () => void; o
         {/* Actions */}
         <td className="px-4 py-3">
           <div className="flex items-center gap-1.5 justify-end">
+            {/* Edit role & permissions */}
+            <button
+              title="Edit role & permissions"
+              onClick={() => setShowEditPerms(true)}
+              disabled={busy}
+              className="p-1.5 rounded-lg hover:bg-[#132272]/10 text-[#132272] transition-colors"
+            >
+              <Settings2 className="h-3.5 w-3.5" />
+            </button>
             {/* Toggle status */}
             <button
               title={u.status === "active" ? "Deactivate" : "Activate"}
@@ -494,14 +732,16 @@ function TeamRow({ u, onUpdated, onDeleted }: { u: any; onUpdated: () => void; o
               <RefreshCw className="h-3.5 w-3.5" />
             </button>
             {/* Delete */}
-            <button
-              title="Remove member"
-              onClick={() => setShowDeleteModal(true)}
-              disabled={busy}
-              className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
+            {!isSelf && (
+              <button
+                title="Remove member"
+                onClick={() => setShowDeleteModal(true)}
+                disabled={busy}
+                className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            )}
           </div>
         </td>
       </tr>
@@ -721,6 +961,7 @@ export default function AdminDashboard() {
                         <TeamRow
                           key={u.id}
                           u={u}
+                          currentUserId={user.id}
                           onUpdated={refreshUsers}
                           onDeleted={refreshUsers}
                         />

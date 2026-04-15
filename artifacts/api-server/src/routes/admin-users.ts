@@ -82,9 +82,12 @@ router.patch("/admin/users/:id", async (req, res): Promise<void> => {
   }
 
   const updates: Record<string, unknown> = {};
-  const { role, status } = req.body ?? {};
+  const { role, status, permissions } = req.body ?? {};
   if (role === "admin" || role === "field_user") updates.role = role;
   if (status === "active" || status === "inactive") updates.status = status;
+  if (permissions !== undefined) {
+    updates.permissions = JSON.stringify(permissions);
+  }
 
   if (Object.keys(updates).length === 0) {
     res.status(400).json({ error: "No valid fields to update" }); return;
