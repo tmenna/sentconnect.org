@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Image, MapPin, X, Loader2, Users, Star, Navigation, BookOpen, Video, PlayCircle } from "lucide-react";
+import { Image, MapPin, X, Loader2, Users, Navigation, BookOpen, Video, PlayCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
@@ -33,7 +33,6 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
   const [text, setText] = useState("");
   const [location, setLocation] = useState("");
   const [peopleReached, setPeopleReached] = useState("");
-  const [isHighlight, setIsHighlight] = useState(false);
   const [isMissionMoment, setIsMissionMoment] = useState(false);
   const [files, setFiles] = useState<LocalFile[]>([]);
   const [showLocation, setShowLocation] = useState(false);
@@ -115,7 +114,6 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
           description: text.trim() || null,
           location: location.trim() || null,
           peopleReached: peopleReached.trim() ? Number(peopleReached) : null,
-          isHighlight,
           isMissionMoment,
         }),
       });
@@ -141,7 +139,6 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
       setText("");
       setLocation("");
       setPeopleReached("");
-      setIsHighlight(false);
       setIsMissionMoment(false);
       setShowLocation(false);
       setShowImpact(false);
@@ -162,9 +159,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
     <div
       className={cn(
         "bg-white rounded-xl border shadow-sm p-4 transition-colors",
-        isMissionMoment
-          ? "border-[#132272]/30 bg-[#132272]/[0.02]"
-          : isHighlight ? "border-amber-300 bg-amber-50/30" : "border-border/60"
+        isMissionMoment ? "border-[#132272]/30 bg-[#132272]/[0.02]" : "border-border/60"
       )}
       onDragOver={e => e.preventDefault()}
       onDrop={handleDrop}
@@ -343,22 +338,6 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               <Users className="h-4 w-4" />
             </button>
 
-            {/* Highlight */}
-            <button
-              onClick={() => setIsHighlight(s => !s)}
-              disabled={posting}
-              className={cn(
-                "flex items-center gap-1 px-2 py-1.5 rounded-full text-[12px] font-medium transition-colors",
-                isHighlight
-                  ? "text-amber-600 bg-amber-100 hover:bg-amber-200"
-                  : "text-primary hover:bg-primary/10"
-              )}
-              title="Mark as highlight"
-            >
-              <Star className={cn("h-4 w-4", isHighlight && "fill-amber-500")} />
-              <span className="hidden sm:inline">Highlight</span>
-            </button>
-
             {/* Mission Moment */}
             <button
               onClick={() => setIsMissionMoment(s => !s)}
@@ -371,7 +350,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
                   : "text-primary hover:bg-primary/10"
               )}
             >
-              <BookOpen className={cn("h-4 w-4", isMissionMoment && "text-[#132272]")} />
+              <BookOpen className={cn("h-4 w-4", isMissionMoment && "fill-[#132272] text-[#132272]")} />
               <span className="hidden sm:inline">Mission Moment</span>
             </button>
 
