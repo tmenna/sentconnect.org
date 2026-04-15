@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
 import { eq, and } from "drizzle-orm";
-import { db, usersTable } from "@workspace/db";
+import { db, usersTable, organizationsTable } from "@workspace/db";
 import {
   ListUsersQueryParams,
   CreateUserBody,
@@ -88,6 +88,22 @@ router.post("/users/login", async (req, res): Promise<void> => {
     res.status(401).json({ error: "Invalid credentials" });
     return;
   }
+
+  // Org users (admin / field_user) may ONLY log in through their organization's
+  // portal (i.e. when an org context is resolved).  Block them from the main
+  // platform login so credentials stay scoped to their org.
+  if (!orgId && user.organizationId != null && (user.role === "admin" || user.role === "field_user")) {
+    const [userOrg] = await db
+      .select({ subdomain: organizationsTable.subdomain })
+      .from(organizationsTable)
+      .where(eq(organizationsTable.id, user.organizationId));
+    res.status(403).json({
+      error: "Please sign in through your organization's portal.",
+      subdomain: userOrg?.subdomain ?? null,
+    });
+    return;
+  }
+
   if (user.status === "inactive") {
     res.status(403).json({ error: "Your account has been deactivated. Contact your admin." });
     return;

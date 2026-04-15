@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useLoginUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { Redirect, Link, useSearch } from "wouter";
-import { Shuffle, MapPin, BookOpen, Building } from "lucide-react";
+import { Shuffle, MapPin, BookOpen, Building, ExternalLink } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
@@ -28,6 +29,7 @@ export default function Login() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const search = useSearch();
+  const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
 
   // Where to send the user after they authenticate.
   // Protected routes pass ?from=<path> so we land them exactly where they
@@ -40,11 +42,17 @@ export default function Login() {
   const login = useLoginUser({
     mutation: {
       onSuccess: () => {
+        setOrgPortalError(null);
         queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
         toast({ title: "Welcome back!" });
       },
-      onError: () => {
-        toast({ title: "Sign in failed", description: "Check your email and password.", variant: "destructive" });
+      onError: (error: any) => {
+        if (error?.status === 403 && error?.data?.error?.includes("organization")) {
+          setOrgPortalError({ subdomain: error?.data?.subdomain ?? null });
+        } else {
+          setOrgPortalError(null);
+          toast({ title: "Sign in failed", description: "Check your email and password.", variant: "destructive" });
+        }
       }
     }
   });
@@ -143,6 +151,23 @@ export default function Login() {
           </div>
 
           <div className="bg-white rounded-2xl border border-border shadow-sm p-7">
+            {orgPortalError && (
+              <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <p className="text-[13px] font-semibold text-amber-800 mb-1">Wrong login portal</p>
+                <p className="text-[12px] text-amber-700 leading-relaxed">
+                  This account belongs to an organization. Please sign in through your organization's portal.
+                </p>
+                {orgPortalError.subdomain && (
+                  <a
+                    href={`/${orgPortalError.subdomain}/login`}
+                    className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-amber-800 hover:text-amber-900 underline underline-offset-2"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    Go to /{orgPortalError.subdomain}/login
+                  </a>
+                )}
+              </div>
+            )}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField

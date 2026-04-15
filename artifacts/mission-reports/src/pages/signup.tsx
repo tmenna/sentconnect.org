@@ -20,8 +20,10 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
   if (isLoading) return null;
+  if (redirectTo) return <Redirect href={redirectTo} />;
   if (isAuthenticated) return <Redirect href="/" />;
 
   function generateSubdomain(org: string) {
@@ -46,6 +48,8 @@ export default function Signup() {
       }
       queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
       toast({ title: "Welcome to SentConnect!", description: `Your organization "${orgName}" is ready.` });
+      const slug = data.organization?.subdomain;
+      setRedirectTo(slug ? `/${slug}/` : "/");
     } catch {
       setErrors({ general: "Something went wrong. Please try again." });
     } finally {
