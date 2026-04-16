@@ -1729,10 +1729,9 @@ export default function SuperAdminPanel() {
                     {user?.role === "super_admin" && (
                       <button
                         onClick={() => setConfirmDeleteOrg(org)}
-                        title="Delete organization"
-                        className="p-1.5 rounded-lg text-muted-foreground hover:text-red-600 hover:bg-red-50 border border-border/50 hover:border-red-200 transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 transition-colors"
                       >
-                        <Trash2 className="h-3.5 w-3.5" />
+                        <Trash2 className="h-3.5 w-3.5" /> Delete
                       </button>
                     )}
                   </div>
