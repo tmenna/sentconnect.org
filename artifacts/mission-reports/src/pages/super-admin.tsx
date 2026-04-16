@@ -222,7 +222,7 @@ function CreateOrgModal({
   onCreated: (org: OrgWithStats) => void;
 }) {
   const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", subdomain: "", plan: "free" });
+  const [form, setForm] = useState({ name: "", subdomain: "", plan: "trial" });
   const [saving, setSaving] = useState(false);
   const [slugError, setSlugError] = useState<string | null>(null);
 
@@ -315,10 +315,8 @@ function CreateOrgModal({
               onChange={e => setForm(f => ({ ...f, plan: e.target.value }))}
               className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
             >
-              <option value="free">Free</option>
-              <option value="starter">Starter</option>
-              <option value="pro">Pro</option>
-              <option value="enterprise">Enterprise</option>
+              <option value="trial">Trial</option>
+              <option value="paid">Paid</option>
             </select>
           </div>
           <div className="flex gap-3 pt-1">
@@ -1155,6 +1153,136 @@ function AssignOrgModal({
   );
 }
 
+// ─── Edit Profile Modal ────────────────────────────────────────────────────────
+
+function EditProfileModal({ currentUser, onClose, onUpdated }: {
+  currentUser: { name: string; email: string };
+  onClose: () => void;
+  onUpdated: () => void;
+}) {
+  const { toast } = useToast();
+  const [form, setForm] = useState({
+    name: currentUser.name,
+    email: currentUser.email,
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [saving, setSaving] = useState(false);
+  const [showPw, setShowPw] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    if (form.newPassword && form.newPassword !== form.confirmPassword) {
+      setError("Passwords do not match"); return;
+    }
+    if (form.newPassword && form.newPassword.length < 8) {
+      setError("New password must be at least 8 characters"); return;
+    }
+    setSaving(true);
+    try {
+      const body: Record<string, string> = {};
+      if (form.name.trim() !== currentUser.name) body.name = form.name.trim();
+      if (form.email.trim() !== currentUser.email) body.email = form.email.trim();
+      if (form.newPassword) body.newPassword = form.newPassword;
+      if (Object.keys(body).length === 0) { onClose(); return; }
+      const res = await fetch("/api/super-admin/profile", {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error ?? "Update failed"); }
+      await res.json();
+      toast({ title: "Profile updated successfully" });
+      onUpdated();
+      onClose();
+    } catch (err: any) {
+      setError(err.message ?? "Update failed");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
+        <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between">
+          <div>
+            <h2 className="text-[15px] font-bold text-foreground">Edit Account</h2>
+            <p className="text-[12px] text-muted-foreground mt-0.5">Update your platform admin username, email, or password</p>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60"><X className="h-4 w-4 text-muted-foreground" /></button>
+        </div>
+        <form onSubmit={submit} className="p-6 space-y-4">
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Display Name</label>
+            <input
+              value={form.name}
+              onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-[#172A7D]/20"
+              placeholder="Platform Admin"
+            />
+          </div>
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Email Address</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-[#172A7D]/20"
+              placeholder="superadmin@sentconnect.org"
+            />
+          </div>
+          <div className="border-t border-border/40 pt-4">
+            <label className="block text-[12px] font-semibold text-foreground mb-1">New Password <span className="text-muted-foreground font-normal">(leave blank to keep current)</span></label>
+            <div className="relative">
+              <input
+                type={showPw ? "text" : "password"}
+                value={form.newPassword}
+                onChange={e => setForm(f => ({ ...f, newPassword: e.target.value }))}
+                className="w-full px-3 py-2.5 pr-10 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-[#172A7D]/20"
+                placeholder="Min 8 characters"
+              />
+              <button type="button" onClick={() => setShowPw(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+          {form.newPassword && (
+            <div>
+              <label className="block text-[12px] font-semibold text-foreground mb-1">Confirm New Password</label>
+              <input
+                type={showPw ? "text" : "password"}
+                value={form.confirmPassword}
+                onChange={e => setForm(f => ({ ...f, confirmPassword: e.target.value }))}
+                className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-[#172A7D]/20"
+                placeholder="Re-enter new password"
+              />
+            </div>
+          )}
+          {error && <p className="text-[12px] text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
+          <div className="flex gap-3 pt-1">
+            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#172A7D] text-white rounded-lg hover:bg-[#172A7D]/90 transition-colors disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────────────────────────
 
 export default function SuperAdminPanel() {
@@ -1178,6 +1306,7 @@ export default function SuperAdminPanel() {
   const [userSearch, setUserSearch] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showCreateOrg, setShowCreateOrg] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
   const [editingUser, setEditingUser] = useState<PlatformUser | null>(null);
   const [resetLink, setResetLink] = useState<string | null>(null);
   const [confirmDeleteOrg, setConfirmDeleteOrg] = useState<OrgWithStats | null>(null);
@@ -1440,6 +1569,16 @@ export default function SuperAdminPanel() {
           }}
         />
       )}
+      {showEditProfile && user && (
+        <EditProfileModal
+          currentUser={{ name: user.name ?? "", email: user.email ?? "" }}
+          onClose={() => setShowEditProfile(false)}
+          onUpdated={() => {
+            queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
+            setShowEditProfile(false);
+          }}
+        />
+      )}
       {confirmDeleteOrg && (
         <ConfirmDeleteModal
           title={`Delete "${confirmDeleteOrg.name}"?`}
@@ -1518,10 +1657,18 @@ export default function SuperAdminPanel() {
           </span>
         </div>
         <button
+          onClick={() => setShowEditProfile(true)}
+          title="Edit account"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/15 transition-colors ml-2"
+        >
+          <Settings2 className="h-4 w-4" />
+          <span className="hidden sm:inline">Edit Account</span>
+        </button>
+        <button
           onClick={() => logout.mutate({ data: undefined })}
           disabled={logout.isPending}
           title="Sign out"
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/15 transition-colors ml-2"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/15 transition-colors ml-1"
         >
           {logout.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
           <span className="hidden sm:inline">Sign Out</span>

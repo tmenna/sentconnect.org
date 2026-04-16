@@ -327,6 +327,40 @@ router.delete("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req,
   res.json({ message: `User "${user.name}" deleted`, id: userId });
 });
 
+// ─── Own Profile ──────────────────────────────────────────────────────────────
+
+// PATCH /super-admin/profile — update the signed-in platform user's own name, email, or password
+router.patch("/super-admin/profile", requirePlatformAccess, async (req, res): Promise<void> => {
+  const caller = req.platformUser!;
+  const { name, email, newPassword } = req.body ?? {};
+
+  const updates: Partial<typeof usersTable.$inferInsert> = {};
+  if (name && typeof name === "string" && name.trim()) updates.name = name.trim();
+  if (email && typeof email === "string" && email.trim()) {
+    // Ensure no other user has this email
+    const [conflict] = await db.select({ id: usersTable.id })
+      .from(usersTable).where(and(eq(usersTable.email, email.trim()), eq(usersTable.id, caller.id)));
+    // conflict means it's already their own email — fine; if a different user has it, block it
+    const [otherConflict] = await db.select({ id: usersTable.id })
+      .from(usersTable).where(eq(usersTable.email, email.trim()));
+    if (otherConflict && otherConflict.id !== caller.id) {
+      res.status(409).json({ error: "Email already in use by another account" }); return;
+    }
+    updates.email = email.trim();
+  }
+  if (newPassword && typeof newPassword === "string" && newPassword.length >= 8) {
+    updates.passwordHash = hashPassword(newPassword);
+  }
+
+  if (Object.keys(updates).length === 0) {
+    res.status(400).json({ error: "No valid fields to update" }); return;
+  }
+
+  const [updated] = await db.update(usersTable).set(updates)
+    .where(eq(usersTable.id, caller.id)).returning();
+  res.json(toSafeUser(updated));
+});
+
 // ─── Impersonation ────────────────────────────────────────────────────────────
 
 router.post("/super-admin/impersonate/:userId", requirePermission("canImpersonateUsers"), async (req, res): Promise<void> => {

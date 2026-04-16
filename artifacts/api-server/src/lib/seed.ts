@@ -8,8 +8,8 @@ import { hashPassword } from "./password";
  * Called at every startup — safe to run repeatedly (no-ops if already present).
  * In production, change the default password immediately after first login.
  */
-const SUPER_ADMIN_EMAIL = "teki.menna@gmail.com";
-const SUPER_ADMIN_NAME  = "Teki Menna";
+const SUPER_ADMIN_EMAIL = "superadmin@sentconnect.org";
+const SUPER_ADMIN_NAME  = "Platform Admin";
 
 export async function ensureSuperAdmin() {
   const [existing] = await db
