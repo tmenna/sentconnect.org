@@ -19,14 +19,14 @@ export async function ensureSuperAdmin() {
 
   await db.insert(usersTable).values({
     name: "Platform Admin",
-    email: "superadmin@sentconnect.org",
+    email: "teki.menna@gmail.com",
     passwordHash: hashPassword("password123"),
     role: "super_admin",
     organization: "SentConnect",
   });
 
   logger.info(
-    "Super-admin created: superadmin@sentconnect.org / password123 — change this password after first login!"
+    "Super-admin created: teki.menna@gmail.com / password123 — change this password after first login!"
   );
 }
 

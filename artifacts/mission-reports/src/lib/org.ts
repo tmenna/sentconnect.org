@@ -23,6 +23,7 @@ export const RESERVED_PATHS = new Set([
   "super-admin",
   "forgot-password",
   "reset-password",
+  "platform",
   "api",
   "health",
   "static",

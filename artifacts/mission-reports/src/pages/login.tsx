@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useLoginUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Redirect, Link, useSearch } from "wouter";
+import { Redirect, Link, useSearch, useLocation } from "wouter";
 import { Shuffle, MapPin, BookOpen, Building, ExternalLink } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -30,13 +30,17 @@ export default function Login() {
   const queryClient = useQueryClient();
   const search = useSearch();
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
+  const [location] = useLocation();
 
   // Where to send the user after they authenticate.
   // Protected routes pass ?from=<path> so we land them exactly where they
   // intended — no double-hop through / needed.
+  // Platform logins (/platform/login) default to /platform/admin.
   const from = (() => {
-    const raw = new URLSearchParams(search).get("from") ?? "/";
-    return raw.startsWith("/") ? raw : "/";
+    const raw = new URLSearchParams(search).get("from") ?? null;
+    if (raw && raw.startsWith("/")) return raw;
+    if (location.startsWith("/platform")) return "/platform/admin";
+    return "/";
   })();
 
   const login = useLoginUser({

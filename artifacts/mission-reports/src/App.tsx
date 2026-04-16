@@ -100,6 +100,15 @@ function AdminRoute() {
   return <Redirect href="/" />;
 }
 
+function PlatformAdminRoute() {
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const [location] = useLocation();
+  if (isLoading) return <AuthLoading />;
+  if (!isAuthenticated) return <Redirect href={loginRedirect(location)} />;
+  if (!isPlatformRole(user?.role)) return <Redirect href="/platform/login" />;
+  return <SuperAdminPanel />;
+}
+
 function AppRoutes() {
   return (
     <Switch>
@@ -107,6 +116,10 @@ function AppRoutes() {
       <Route path="/signup" component={Signup} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
+      {/* Platform super-admin routes — no org prefix */}
+      <Route path="/platform/login" component={Login} />
+      <Route path="/platform/admin" component={PlatformAdminRoute} />
+      <Route path="/platform"><Redirect href="/platform/admin" /></Route>
       <Route>
         <Layout>
           <Switch>
