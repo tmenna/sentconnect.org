@@ -1726,7 +1726,7 @@ export default function SuperAdminPanel() {
                     >
                       {toggling === org.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : org.status === "active" ? <><XCircle className="h-3.5 w-3.5" /> Suspend</> : <><CheckCircle2 className="h-3.5 w-3.5" /> Activate</>}
                     </button>
-                    {user?.role === "super_admin" && (
+                    {(user?.role === "super_admin" || user?.role === "platform_admin") && (
                       <button
                         onClick={() => setConfirmDeleteOrg(org)}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 transition-colors"
