@@ -8,26 +8,36 @@ import { hashPassword } from "./password";
  * Called at every startup — safe to run repeatedly (no-ops if already present).
  * In production, change the default password immediately after first login.
  */
+const SUPER_ADMIN_EMAIL = "teki.menna@gmail.com";
+const SUPER_ADMIN_NAME  = "Teki Menna";
+
 export async function ensureSuperAdmin() {
   const [existing] = await db
-    .select({ id: usersTable.id })
+    .select({ id: usersTable.id, email: usersTable.email, name: usersTable.name })
     .from(usersTable)
     .where(eq(usersTable.role, "super_admin"))
     .limit(1);
 
-  if (existing) return;
+  if (!existing) {
+    await db.insert(usersTable).values({
+      name: SUPER_ADMIN_NAME,
+      email: SUPER_ADMIN_EMAIL,
+      passwordHash: hashPassword("password123"),
+      role: "super_admin",
+      organization: "SentConnect",
+    });
+    logger.info(`Super-admin created: ${SUPER_ADMIN_EMAIL} / password123 — change this password after first login!`);
+    return;
+  }
 
-  await db.insert(usersTable).values({
-    name: "Teki Menna",
-    email: "teki.menna@gmail.com",
-    passwordHash: hashPassword("password123"),
-    role: "super_admin",
-    organization: "SentConnect",
-  });
-
-  logger.info(
-    "Super-admin created: teki.menna@gmail.com / password123 — change this password after first login!"
-  );
+  // Keep email and name in sync with the canonical values above
+  if (existing.email !== SUPER_ADMIN_EMAIL || existing.name !== SUPER_ADMIN_NAME) {
+    await db
+      .update(usersTable)
+      .set({ email: SUPER_ADMIN_EMAIL, name: SUPER_ADMIN_NAME })
+      .where(eq(usersTable.id, existing.id));
+    logger.info(`Super-admin updated: email → ${SUPER_ADMIN_EMAIL}, name → ${SUPER_ADMIN_NAME}`);
+  }
 }
 
 /**
