@@ -18,7 +18,7 @@ export async function ensureSuperAdmin() {
   if (existing) return;
 
   await db.insert(usersTable).values({
-    name: "Platform Admin",
+    name: "Teki Menna",
     email: "teki.menna@gmail.com",
     passwordHash: hashPassword("password123"),
     role: "super_admin",

@@ -6,10 +6,13 @@ import {
   Plus, Lock, Unlock, Ban, UserCheck, KeyRound, ChevronDown,
   ShieldAlert, Shield, Edit3, X, Save, Eye, EyeOff,
   Trash2, AlertTriangle, Settings2, BookOpen, Star, FileOutput, BarChart3,
+  LogOut,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -1157,6 +1160,14 @@ function AssignOrgModal({
 export default function SuperAdminPanel() {
   const { user, isLoading } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const logout = useLogoutUser({
+    mutation: {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
+      },
+    },
+  });
   const [activeTab, setActiveTab] = useState<"platform-users" | "orgs" | "users">("platform-users");
   const [orgs, setOrgs] = useState<OrgWithStats[] | null>(null);
   const [allUsers, setAllUsers] = useState<PlatformUser[] | null>(null);
@@ -1506,6 +1517,15 @@ export default function SuperAdminPanel() {
             {roleBadge(user?.role ?? "").label}
           </span>
         </div>
+        <button
+          onClick={() => logout.mutate({ data: undefined })}
+          disabled={logout.isPending}
+          title="Sign out"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/15 transition-colors ml-2"
+        >
+          {logout.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
+          <span className="hidden sm:inline">Sign Out</span>
+        </button>
       </div>
 
       {/* Platform Stats */}
