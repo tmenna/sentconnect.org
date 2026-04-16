@@ -42,7 +42,7 @@ export default function MissionaryDashboard() {
       {/* Identity banner — matches admin welcome banner width */}
       <div
         className="rounded-2xl px-6 py-5 flex items-center gap-4"
-        style={{ background: "linear-gradient(135deg, #132272 0%, #1e3a8a 100%)" }}
+        style={{ background: "linear-gradient(135deg, #172A7D 0%, #1e3a8a 100%)" }}
       >
         <Avatar className="h-14 w-14 ring-2 ring-white/30 flex-shrink-0">
           <AvatarImage src={user?.avatarUrl ?? undefined} />
@@ -96,7 +96,7 @@ export default function MissionaryDashboard() {
           onClick={() => setActiveTab("all")}
           className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
             activeTab === "all"
-              ? "border-[#132272] text-[#132272]"
+              ? "border-[#172A7D] text-[#172A7D]"
               : "border-transparent text-muted-foreground hover:text-foreground"
           }`}
         >

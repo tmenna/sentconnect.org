@@ -110,7 +110,7 @@ const PERM_LABELS: { key: keyof Permissions; label: string }[] = [
 function StatCard({ label, value, icon }: { label: string; value: number | string; icon: React.ReactNode }) {
   return (
     <div className="bg-white rounded-xl border border-border/60 shadow-sm p-5 flex items-center gap-4">
-      <div className="p-3 bg-[#132272]/8 rounded-xl text-[#132272]">{icon}</div>
+      <div className="p-3 bg-[#172A7D]/8 rounded-xl text-[#172A7D]">{icon}</div>
       <div>
         <p className="text-[13px] text-muted-foreground font-medium">{label}</p>
         <p className="text-2xl font-extrabold text-foreground">{value}</p>
@@ -124,7 +124,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
     <button
       onClick={onClick}
       className={`px-4 py-2 text-[13px] font-semibold rounded-lg transition-colors ${
-        active ? "bg-[#132272] text-white" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+        active ? "bg-[#172A7D] text-white" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
       }`}
     >
       {children}
@@ -144,13 +144,13 @@ function PermissionsEditor({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
       {PERM_LABELS.map(({ key, label }) => (
-        <label key={key} className={`flex items-center gap-2.5 p-2.5 rounded-lg border border-border/50 cursor-pointer select-none transition-colors ${perms[key] ? "bg-[#132272]/5 border-[#132272]/20" : "bg-muted/20"} ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-muted/40"}`}>
+        <label key={key} className={`flex items-center gap-2.5 p-2.5 rounded-lg border border-border/50 cursor-pointer select-none transition-colors ${perms[key] ? "bg-[#172A7D]/5 border-[#172A7D]/20" : "bg-muted/20"} ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-muted/40"}`}>
           <input
             type="checkbox"
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            className="w-4 h-4 accent-[#132272]"
+            className="w-4 h-4 accent-[#172A7D]"
           />
           <span className="text-[12px] font-medium text-foreground">{label}</span>
         </label>
@@ -325,7 +325,7 @@ function CreateOrgModal({
             <button
               type="submit"
               disabled={saving || !!slugError}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#172A7D] text-white rounded-lg hover:bg-[#172A7D]/90 transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Create Organization
@@ -457,7 +457,7 @@ function CreatePlatformUserModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#172A7D] text-white rounded-lg hover:bg-[#172A7D]/90 transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Create User
@@ -548,7 +548,7 @@ function EditPermissionsModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#172A7D] text-white rounded-lg hover:bg-[#172A7D]/90 transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -586,7 +586,7 @@ function ResetLinkModal({ resetUrl, onClose }: { resetUrl: string; onClose: () =
               {copied ? "Copied!" : "Copy"}
             </button>
           </div>
-          <button onClick={onClose} className="w-full px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors">Done</button>
+          <button onClick={onClose} className="w-full px-4 py-2.5 text-[13px] font-semibold bg-[#172A7D] text-white rounded-lg hover:bg-[#172A7D]/90 transition-colors">Done</button>
         </div>
       </div>
     </div>
@@ -644,11 +644,11 @@ function UserActionMenu({
       ? [{ id: "unsuspend", label: "Unsuspend", icon: UserCheck, color: "text-emerald-600" }]
       : [{ id: "suspend", label: "Suspend", icon: Ban, color: "text-orange-600" }]),
     ...(isOrgUser
-      ? [{ id: "edit-org-user", label: "Edit Role & Permissions", icon: Settings2, color: "text-[#132272]" }]
-      : [{ id: "edit", label: "Edit Platform Role", icon: Settings2, color: "text-[#132272]" }]
+      ? [{ id: "edit-org-user", label: "Edit Role & Permissions", icon: Settings2, color: "text-[#172A7D]" }]
+      : [{ id: "edit", label: "Edit Platform Role", icon: Settings2, color: "text-[#172A7D]" }]
     ),
     { id: "assign-org", label: "Assign to Organization", icon: Building2, color: "text-foreground" },
-    ...(isOrgUser ? [{ id: "impersonate", label: "Sign in as", icon: UserCog, color: "text-[#132272]" }] : []),
+    ...(isOrgUser ? [{ id: "impersonate", label: "Sign in as", icon: UserCog, color: "text-[#172A7D]" }] : []),
     ...(canDelete && user.role !== "super_admin" && (callerRole === "super_admin" || isOrgUser)
       ? [{ id: "delete", label: "Delete User", icon: Trash2, color: "text-red-600" }]
       : []),
@@ -748,11 +748,11 @@ function OrgPermissionsEditor({
           key={key}
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors ${
             perms[key]
-              ? "bg-[#132272]/5 border-[#132272]/20"
+              ? "bg-[#172A7D]/5 border-[#172A7D]/20"
               : "bg-muted/30 border-border/40 hover:bg-muted/50"
           } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
         >
-          <div className={`flex-shrink-0 ${perms[key] ? "text-[#132272]" : "text-muted-foreground"}`}>{icon}</div>
+          <div className={`flex-shrink-0 ${perms[key] ? "text-[#172A7D]" : "text-muted-foreground"}`}>{icon}</div>
           <div className="flex-1 min-w-0">
             <p className="text-[12px] font-semibold text-foreground">{label}</p>
             <p className="text-[11px] text-muted-foreground">{desc}</p>
@@ -762,7 +762,7 @@ function OrgPermissionsEditor({
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            className="h-4 w-4 rounded accent-[#132272] cursor-pointer"
+            className="h-4 w-4 rounded accent-[#172A7D] cursor-pointer"
           />
         </label>
       ))}
@@ -828,8 +828,8 @@ function EditOrgUserModal({
       <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 bg-[#132272]/10 rounded-lg">
-              <Settings2 className="h-4 w-4 text-[#132272]" />
+            <div className="p-1.5 bg-[#172A7D]/10 rounded-lg">
+              <Settings2 className="h-4 w-4 text-[#172A7D]" />
             </div>
             <div>
               <h2 className="text-[15px] font-bold text-foreground">Role & Permissions</h2>
@@ -852,8 +852,8 @@ function EditOrgUserModal({
                   onClick={() => handleRoleChange(r)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all ${
                     role === r
-                      ? "bg-[#132272] text-white border-[#132272] shadow-sm"
-                      : "bg-white text-foreground border-border/60 hover:border-[#132272]/30 hover:bg-[#132272]/5"
+                      ? "bg-[#172A7D] text-white border-[#172A7D] shadow-sm"
+                      : "bg-white text-foreground border-border/60 hover:border-[#172A7D]/30 hover:bg-[#172A7D]/5"
                   }`}
                 >
                   {r === "admin"
@@ -885,7 +885,7 @@ function EditOrgUserModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#172A7D] text-white rounded-lg hover:bg-[#172A7D]/90 transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -948,7 +948,7 @@ function CreateOrgUserModal({
               <Building2 className="h-3 w-3 text-[#00C4A7]" />
               <p className="text-[12px] text-muted-foreground font-medium">{org.name}</p>
               <span className="text-[11px] text-muted-foreground/60">·</span>
-              <a href={`/${org.subdomain}/`} target="_blank" rel="noreferrer" className="text-[11px] text-[#132272] font-mono hover:underline">/{org.subdomain}/</a>
+              <a href={`/${org.subdomain}/`} target="_blank" rel="noreferrer" className="text-[11px] text-[#172A7D] font-mono hover:underline">/{org.subdomain}/</a>
             </div>
           </div>
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60">
@@ -1005,7 +1005,7 @@ function CreateOrgUserModal({
               <option value="admin">Admin — manages this organization</option>
             </select>
           </div>
-          <div className="rounded-lg bg-[#132272]/5 border border-[#132272]/10 px-4 py-3 text-[12px] text-[#132272]/80 flex items-start gap-2">
+          <div className="rounded-lg bg-[#172A7D]/5 border border-[#172A7D]/10 px-4 py-3 text-[12px] text-[#172A7D]/80 flex items-start gap-2">
             <Globe className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
             <span>This user will log in at <strong className="font-mono">/{org.subdomain}/login</strong> with the credentials you set above.</span>
           </div>
@@ -1127,7 +1127,7 @@ function AssignOrgModal({
                 href={`/${orgs.find(o => o.id === Number(orgId))?.subdomain ?? ""}/`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#132272] underline font-mono"
+                className="text-[#172A7D] underline font-mono"
               >
                 /{orgs.find(o => o.id === Number(orgId))?.subdomain}/
               </a>
@@ -1140,7 +1140,7 @@ function AssignOrgModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#172A7D] text-white rounded-lg hover:bg-[#172A7D]/90 transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Assignment
@@ -1198,7 +1198,9 @@ export default function SuperAdminPanel() {
     if (!isLoading && user && isPlatformRole(user.role)) {
       loadData();
     }
-  }, [isLoading, user, loadData]);
+    // Use stable primitives (id, role) instead of the user object to avoid re-renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, user?.id, user?.role, loadData]);
 
   // ─── Org Actions ────────────────────────────────────────────────────────────
 
@@ -1486,7 +1488,7 @@ export default function SuperAdminPanel() {
       {/* Header */}
       <div
         className="rounded-2xl px-6 py-5 flex items-center gap-4"
-        style={{ background: "linear-gradient(135deg, #132272 0%, #1e3a8a 100%)" }}
+        style={{ background: "linear-gradient(135deg, #172A7D 0%, #1e3a8a 100%)" }}
       >
         <div className="p-3 bg-white/15 rounded-xl">
           <ShieldCheck className="h-6 w-6 text-white" />
@@ -1542,7 +1544,7 @@ export default function SuperAdminPanel() {
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#172A7D] text-white rounded-lg hover:bg-[#172A7D]/90 transition-colors"
             >
               <Plus className="h-3.5 w-3.5" /> Add Platform User
             </button>
@@ -1569,14 +1571,14 @@ export default function SuperAdminPanel() {
                     <div className="flex items-center gap-3">
                       <Avatar className="h-9 w-9 flex-shrink-0">
                         <AvatarImage src={u.avatarUrl ?? undefined} />
-                        <AvatarFallback className="text-[11px] font-bold bg-[#132272]/10 text-[#132272]">
+                        <AvatarFallback className="text-[11px] font-bold bg-[#172A7D]/10 text-[#172A7D]">
                           {initials(u.name)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-[13px] font-semibold text-foreground">{u.name}</span>
-                          {isSelf && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#132272]/10 text-[#132272]">You</span>}
+                          {isSelf && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#172A7D]/10 text-[#172A7D]">You</span>}
                           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${badge.bg}`}>{badge.label}</span>
                           {u.status !== "active" && (
                             <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${statusBadge(u.status)}`}>
@@ -1654,7 +1656,7 @@ export default function SuperAdminPanel() {
             {user?.role === "super_admin" && (
               <button
                 onClick={() => setShowCreateOrg(true)}
-                className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#132272] text-white rounded-lg hover:bg-[#132272]/90 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#172A7D] text-white rounded-lg hover:bg-[#172A7D]/90 transition-colors"
               >
                 <Plus className="h-3.5 w-3.5" /> New Organization
               </button>
@@ -1688,7 +1690,7 @@ export default function SuperAdminPanel() {
                         href={`/${org.subdomain}/`}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-1 hover:text-[#132272] hover:underline transition-colors"
+                        className="flex items-center gap-1 hover:text-[#172A7D] hover:underline transition-colors"
                         title={`Open ${org.name} portal`}
                       >
                         <Globe className="h-3 w-3" />/{org.subdomain}/
@@ -1709,7 +1711,7 @@ export default function SuperAdminPanel() {
                       href={`/${org.subdomain}/`}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-[#132272]/5 text-[#132272] hover:bg-[#132272]/10 border border-[#132272]/10 transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-[#172A7D]/5 text-[#172A7D] hover:bg-[#172A7D]/10 border border-[#172A7D]/10 transition-colors"
                     >
                       <Globe className="h-3.5 w-3.5" /> Open
                     </a>
@@ -1783,7 +1785,7 @@ export default function SuperAdminPanel() {
                           <div key={u.id} className={`flex items-center gap-3 px-4 py-3 ${idx < orgUsers.length - 1 ? "border-b border-border/40" : ""}`}>
                             <Avatar className="h-8 w-8 flex-shrink-0">
                               <AvatarImage src={u.avatarUrl ?? undefined} />
-                              <AvatarFallback className="text-[11px] font-bold bg-[#132272]/10 text-[#132272]">
+                              <AvatarFallback className="text-[11px] font-bold bg-[#172A7D]/10 text-[#172A7D]">
                                 {initials(u.name)}
                               </AvatarFallback>
                             </Avatar>

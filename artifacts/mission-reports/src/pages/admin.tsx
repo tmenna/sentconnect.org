@@ -91,11 +91,11 @@ function OrgPermissionsEditor({
           key={key}
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors ${
             perms[key]
-              ? "bg-[#132272]/5 border-[#132272]/20"
+              ? "bg-[#172A7D]/5 border-[#172A7D]/20"
               : "bg-muted/30 border-border/40 hover:bg-muted/50"
           } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
         >
-          <div className={`flex-shrink-0 ${perms[key] ? "text-[#132272]" : "text-muted-foreground"}`}>
+          <div className={`flex-shrink-0 ${perms[key] ? "text-[#172A7D]" : "text-muted-foreground"}`}>
             {icon}
           </div>
           <div className="flex-1 min-w-0">
@@ -107,7 +107,7 @@ function OrgPermissionsEditor({
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            className="h-4 w-4 rounded accent-[#132272] cursor-pointer"
+            className="h-4 w-4 rounded accent-[#172A7D] cursor-pointer"
           />
         </label>
       ))}
@@ -168,8 +168,8 @@ function EditRolePermissionsModal({
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-border/60 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/60">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 bg-[#132272]/10 rounded-lg">
-              <Settings2 className="h-4 w-4 text-[#132272]" />
+            <div className="p-1.5 bg-[#172A7D]/10 rounded-lg">
+              <Settings2 className="h-4 w-4 text-[#172A7D]" />
             </div>
             <div>
               <h2 className="font-bold text-[15px] text-foreground">Role & Permissions</h2>
@@ -198,8 +198,8 @@ function EditRolePermissionsModal({
                   onClick={() => handleRoleChange(r)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all ${
                     role === r
-                      ? "bg-[#132272] text-white border-[#132272] shadow-sm"
-                      : "bg-white text-foreground border-border/60 hover:border-[#132272]/30 hover:bg-[#132272]/5"
+                      ? "bg-[#172A7D] text-white border-[#172A7D] shadow-sm"
+                      : "bg-white text-foreground border-border/60 hover:border-[#172A7D]/30 hover:bg-[#172A7D]/5"
                   } disabled:opacity-40 disabled:cursor-not-allowed`}
                 >
                   {r === "admin"
@@ -238,7 +238,7 @@ function EditRolePermissionsModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#132272] text-white rounded-xl hover:bg-[#132272]/90 transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#172A7D] text-white rounded-xl hover:bg-[#172A7D]/90 transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -727,7 +727,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               title="Edit role & permissions"
               onClick={() => setShowEditPerms(true)}
               disabled={busy}
-              className="p-1.5 rounded-lg hover:bg-[#132272]/10 text-[#132272] transition-colors"
+              className="p-1.5 rounded-lg hover:bg-[#172A7D]/10 text-[#172A7D] transition-colors"
             >
               <Settings2 className="h-3.5 w-3.5" />
             </button>
@@ -856,7 +856,7 @@ export default function AdminDashboard() {
         {/* Welcome Banner */}
         <div
           className="rounded-2xl px-6 py-5 flex items-center gap-4"
-          style={{ background: "linear-gradient(135deg, #132272 0%, #1e3a8a 100%)" }}
+          style={{ background: "linear-gradient(135deg, #172A7D 0%, #1e3a8a 100%)" }}
         >
           <div className="p-3 bg-white/15 rounded-xl">
             <Sparkles className="h-6 w-6 text-white" />
@@ -1246,7 +1246,7 @@ export default function AdminDashboard() {
                 }`}
                 download
                 onClick={() => setTimeout(() => setShowExportModal(false), 300)}
-                className="flex-1 h-10 flex items-center justify-center gap-1.5 text-[13px] font-bold bg-[#132272] hover:bg-[#0d1b5e] text-white rounded-lg transition-colors"
+                className="flex-1 h-10 flex items-center justify-center gap-1.5 text-[13px] font-bold bg-[#172A7D] hover:bg-[#0d1b5e] text-white rounded-lg transition-colors"
               >
                 <Download className="h-3.5 w-3.5" />
                 Download CSV

@@ -78,7 +78,7 @@ export default function Login() {
       {/* Left: Brand Panel */}
       <div
         className="hidden lg:flex lg:w-[44%] flex-col text-white p-12 relative overflow-hidden"
-        style={{ background: "linear-gradient(155deg, #0d1b5e 0%, #132272 45%, #1a3a9a 100%)" }}
+        style={{ background: "linear-gradient(155deg, #0d1b5e 0%, #172A7D 45%, #1a3a9a 100%)" }}
       >
         {/* Radial glow — matches signup page */}
         <div

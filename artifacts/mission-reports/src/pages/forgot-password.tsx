@@ -36,10 +36,10 @@ export default function ForgotPassword() {
     <div className="min-h-screen flex items-center justify-center bg-[#F5F7FA] px-4">
       <div className="w-full max-w-sm">
         <div className="flex items-center gap-2 mb-8 justify-center">
-          <div className="w-9 h-9 bg-[#132272] rounded-xl flex items-center justify-center">
+          <div className="w-9 h-9 bg-[#172A7D] rounded-xl flex items-center justify-center">
             <Shuffle className="h-5 w-5 text-white" />
           </div>
-          <span className="text-lg font-extrabold text-[#132272]">SentConnect</span>
+          <span className="text-lg font-extrabold text-[#172A7D]">SentConnect</span>
         </div>
 
         {done ? (

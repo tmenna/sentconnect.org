@@ -32,7 +32,7 @@ export default function MissionaryProfile() {
   if (authLoading || loadingUser) {
     return (
       <div className="space-y-5">
-        <div className="rounded-2xl h-24 animate-pulse" style={{ background: "linear-gradient(135deg, #132272 0%, #1e3a8a 100%)" }} />
+        <div className="rounded-2xl h-24 animate-pulse" style={{ background: "linear-gradient(135deg, #172A7D 0%, #1e3a8a 100%)" }} />
         <div className="bg-white rounded-xl border border-border/60 shadow-sm p-4 space-y-3">
           <div className="flex items-center gap-3">
             <Skeleton className="h-10 w-10 rounded-full" />
@@ -76,7 +76,7 @@ export default function MissionaryProfile() {
       {/* Profile banner */}
       <div
         className="rounded-2xl px-6 py-5 flex items-center gap-4"
-        style={{ background: "linear-gradient(135deg, #132272 0%, #1e3a8a 100%)" }}
+        style={{ background: "linear-gradient(135deg, #172A7D 0%, #1e3a8a 100%)" }}
       >
         <Avatar className="h-16 w-16 ring-2 ring-white/30 flex-shrink-0">
           <AvatarImage src={user.avatarUrl || undefined} alt={user.name} />
@@ -131,7 +131,7 @@ export default function MissionaryProfile() {
           onClick={() => setActiveTab("all")}
           className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
             activeTab === "all"
-              ? "border-[#132272] text-[#132272]"
+              ? "border-[#172A7D] text-[#172A7D]"
               : "border-transparent text-muted-foreground hover:text-foreground"
           }`}
         >

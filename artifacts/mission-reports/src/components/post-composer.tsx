@@ -159,7 +159,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
     <div
       className={cn(
         "bg-white rounded-xl border shadow-sm p-4 transition-colors",
-        isMissionMoment ? "border-[#132272]/30 bg-[#132272]/[0.02]" : "border-border/60"
+        isMissionMoment ? "border-[#172A7D]/30 bg-[#172A7D]/[0.02]" : "border-border/60"
       )}
       onDragOver={e => e.preventDefault()}
       onDrop={handleDrop}
@@ -298,7 +298,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               disabled={posting || files.length >= 6}
               className={cn(
                 "p-2 rounded-full transition-colors disabled:opacity-40",
-                files.some(f => isVideo(f)) ? "text-[#132272] bg-[#132272]/10" : "text-primary hover:bg-primary/10"
+                files.some(f => isVideo(f)) ? "text-[#172A7D] bg-[#172A7D]/10" : "text-primary hover:bg-primary/10"
               )}
               title="Add short video"
             >
@@ -367,7 +367,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               size="sm"
               onClick={handlePost}
               disabled={!canPost}
-              className="rounded-full px-5 bg-[#132272] hover:bg-[#0e1a5c] text-white font-semibold h-8 text-[13px]"
+              className="rounded-full px-5 bg-[#172A7D] hover:bg-[#0e1a5c] text-white font-semibold h-8 text-[13px]"
             >
               Post
             </Button>
