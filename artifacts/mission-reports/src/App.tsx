@@ -25,15 +25,6 @@ import SuperAdminPanel from "./pages/super-admin";
 const queryClient = new QueryClient();
 
 /**
- * Builds a login redirect URL that encodes where the user was trying to go.
- * After login they'll be sent directly there — no double-hop via /.
- */
-function loginRedirect(from: string): string {
-  const safe = from.startsWith("/") ? from : "/";
-  return `/login?from=${encodeURIComponent(safe)}`;
-}
-
-/**
  * Loading shell shown while the auth query is in flight.
  * Prevents a flash of the redirect-to-login before the session resolves.
  */
@@ -62,23 +53,22 @@ function AdminFeedRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [location] = useLocation();
   if (isLoading) return <AuthLoading />;
-  if (!isAuthenticated) return <Redirect href={loginRedirect(location)} />;
+  if (!isAuthenticated) return <Redirect href={`/login?from=${encodeURIComponent(location)}`} />;
   if (user?.role !== "admin" && !isPlatformRole(user?.role)) return <Redirect href="/" />;
   return <Timeline />;
 }
 
 /**
- * Context-aware /admin route.
+ * /admin — two contexts:
  *
- * Platform context  (no org slug in URL, e.g. sentconnect.org/admin):
- *   super_admin → SuperAdminPanel   (full platform view)
- *   admin       → AdminDashboard    (org-scoped via session.organizationId)
+ * Platform context (no org slug in URL, e.g. sentconnect.org/admin):
+ *   - Not authenticated  → render Login directly (so /admin IS the login page)
+ *   - super_admin / platform_admin / platform_manager → SuperAdminPanel
+ *   - admin (org-level)  → AdminDashboard scoped to their org via session
  *
- * Org context (org slug in URL, e.g. /allerweg/admin, or allerweg.sentconnect.org/admin):
- *   admin or super_admin → AdminDashboard for that org
- *
- * SWAP POINT: org slug will come from req.hostname instead of the URL path
- * once USE_HOSTNAME_ROUTING=true is set in production.
+ * Org context (e.g. /calvary/admin):
+ *   - Not authenticated  → redirect to /{org}/login
+ *   - admin / super_admin → AdminDashboard for that org
  */
 function AdminRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -86,40 +76,33 @@ function AdminRoute() {
   const [location] = useLocation();
 
   if (isLoading) return <AuthLoading />;
-  if (!isAuthenticated) return <Redirect href={loginRedirect(location)} />;
 
-  // Org context — org admin roles can manage this org
+  // Org context — send unauthenticated users to the org login page
   if (orgSlug) {
+    if (!isAuthenticated) return <Redirect href={`/login?from=${encodeURIComponent(location)}`} />;
     if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
     return <AdminDashboard />;
   }
 
-  // Platform context — route by role
-  if (isPlatformRole(user?.role)) return <SuperAdminPanel />;
-  if (user?.role === "admin") return <AdminDashboard />; // org scoped via session.organizationId
-  return <Redirect href="/" />;
-}
+  // Platform context — /admin is itself the login page for platform accounts
+  if (!isAuthenticated) return <Login platformMode />;
 
-function PlatformAdminRoute() {
-  const { user, isAuthenticated, isLoading } = useAuth();
-  const [location] = useLocation();
-  if (isLoading) return <AuthLoading />;
-  if (!isAuthenticated) return <Redirect href={loginRedirect(location)} />;
-  if (!isPlatformRole(user?.role)) return <Redirect href="/platform/login" />;
-  return <SuperAdminPanel />;
+  if (isPlatformRole(user?.role)) return <SuperAdminPanel />;
+  if (user?.role === "admin") return <AdminDashboard />;
+  return <Redirect href="/" />;
 }
 
 function AppRoutes() {
   return (
     <Switch>
+      {/* Org user login — always /{org}/login */}
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
-      {/* Platform super-admin routes — no org prefix */}
-      <Route path="/platform/login" component={Login} />
-      <Route path="/platform/admin" component={PlatformAdminRoute} />
-      <Route path="/platform"><Redirect href="/platform/admin" /></Route>
+      {/* /admin handles its own layout (login page or panel) */}
+      <Route path="/admin" component={AdminRoute} />
+      <Route path="/super-admin"><Redirect href="/admin" /></Route>
       <Route>
         <Layout>
           <Switch>
@@ -128,8 +111,6 @@ function AppRoutes() {
             <Route path="/reports/:id" component={ReportDetail} />
             <Route path="/missionaries/:id" component={MissionaryProfile} />
             <Route path="/submit" component={SubmitReport} />
-            <Route path="/admin" component={AdminRoute} />
-            <Route path="/super-admin"><Redirect href="/admin" /></Route>
             <Route path="/profile" component={Profile} />
             <Route component={NotFound} />
           </Switch>
