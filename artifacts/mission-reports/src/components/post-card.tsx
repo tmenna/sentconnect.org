@@ -389,10 +389,10 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
     <div className={cn(
       "bg-white rounded-2xl overflow-hidden transition-all",
       post.isMissionMoment
-        ? "border border-[#172A7D]/20 shadow-[0_2px_12px_rgba(23,42,125,0.10)]"
+        ? "border border-[#172A7D]/30 shadow-[0_2px_12px_rgba(23,42,125,0.12)]"
         : post.isHighlight
-          ? "border border-[#00C4A7]/40 shadow-[0_2px_8px_rgba(0,196,167,0.08)]"
-          : "border border-[#00C4A7]/35 shadow-[0_2px_8px_rgba(0,196,167,0.06)]"
+          ? "border border-[#00C4A7]/65 shadow-[0_2px_8px_rgba(0,196,167,0.10)]"
+          : "border border-[#00C4A7]/55 shadow-[0_2px_8px_rgba(0,196,167,0.08)]"
     )}>
       {/* Mission Moment banner — takes priority over Highlight */}
       {post.isMissionMoment ? (
@@ -498,7 +498,14 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
           {/* Text */}
           {post.description && (
             <div className="px-5 pb-4">
-              <p className="text-[15.5px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
+              <div className={cn(
+                "rounded-xl px-4 py-3 border",
+                post.isMissionMoment
+                  ? "border-[#172A7D]/15 bg-[#172A7D]/[0.02]"
+                  : "border-[#00C4A7]/40 bg-[#00C4A7]/[0.02]"
+              )}>
+                <p className="text-[15.5px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
+              </div>
             </div>
           )}
 
