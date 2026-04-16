@@ -15,7 +15,8 @@ function toUserResponse(user: typeof usersTable.$inferSelect) {
 
 // POST /auth/signup — create a new organization + first admin user
 router.post("/auth/signup", async (req, res): Promise<void> => {
-  const { orgName, subdomain, name, email, password } = req.body ?? {};
+  const { orgName, subdomain, plan, name, email, password } = req.body ?? {};
+  const orgPlan = plan === "paid" ? "paid" : "trial";
 
   if (!orgName || typeof orgName !== "string" || orgName.trim().length < 2) {
     res.status(400).json({ error: "Organization name must be at least 2 characters" }); return;
@@ -49,7 +50,7 @@ router.post("/auth/signup", async (req, res): Promise<void> => {
   const [org] = await db.insert(organizationsTable).values({
     name: orgName.trim(),
     subdomain: subdomain.trim().toLowerCase(),
-    plan: "free",
+    plan: orgPlan,
     status: "active",
   }).returning();
 

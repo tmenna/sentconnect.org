@@ -15,6 +15,7 @@ export default function Signup() {
 
   const [orgName, setOrgName] = useState("");
   const [subdomain, setSubdomain] = useState("");
+  const [plan, setPlan] = useState<"trial" | "paid">("trial");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,7 +40,7 @@ export default function Signup() {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orgName, subdomain, name, email, password }),
+        body: JSON.stringify({ orgName, subdomain, plan, name, email, password }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -148,6 +149,37 @@ export default function Signup() {
                 <span className="px-3 text-[12px] text-muted-foreground bg-muted h-full flex items-center border-l border-input">
                   .sentconnect.org
                 </span>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[13px] font-semibold text-foreground mb-2">Plan</label>
+              <div className="grid grid-cols-2 gap-3">
+                {([
+                  { value: "trial", label: "Free Trial", desc: "Get started, no card needed" },
+                  { value: "paid",  label: "Paid",        desc: "Full access, all features" },
+                ] as const).map(opt => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setPlan(opt.value)}
+                    className={`text-left px-4 py-3 rounded-xl border-2 transition-all ${
+                      plan === opt.value
+                        ? "border-[#00C4A7] bg-[#00C4A7]/5 shadow-sm"
+                        : "border-border/60 hover:border-[#00C4A7]/40 bg-white"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className={`w-3.5 h-3.5 rounded-full border-2 flex-shrink-0 transition-colors ${
+                        plan === opt.value ? "border-[#00C4A7] bg-[#00C4A7]" : "border-border"
+                      }`} />
+                      <span className={`text-[13px] font-bold ${plan === opt.value ? "text-[#00C4A7]" : "text-foreground"}`}>
+                        {opt.label}
+                      </span>
+                    </div>
+                    <p className="text-[11.5px] text-muted-foreground pl-5">{opt.desc}</p>
+                  </button>
+                ))}
               </div>
             </div>
 
