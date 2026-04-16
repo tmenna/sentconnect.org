@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, and } from "drizzle-orm";
 import crypto from "crypto";
 import { db, organizationsTable, usersTable, reportsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
@@ -282,18 +282,46 @@ router.post("/super-admin/users/:id/unsuspend", requirePermission("canSuspendUse
 });
 
 // DELETE /super-admin/users/:id — permanently delete a user
+// super_admin: can delete any non-super_admin user
+// platform_admin: can delete org-level users (admin, field_user) only
 router.delete("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
-  if (!await requireSuperAdminOnly(req, res)) return;
+  const caller = req.platformUser!;
 
   const userId = Number(req.params.id);
   if (isNaN(userId)) { res.status(400).json({ error: "Invalid user id" }); return; }
-
-  const caller = req.platformUser!;
   if (caller.id === userId) { res.status(403).json({ error: "Cannot delete your own account" }); return; }
 
   const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
   if (!user) { res.status(404).json({ error: "User not found" }); return; }
-  if (user.role === "super_admin") { res.status(403).json({ error: "Cannot delete another super_admin" }); return; }
+
+  const isPlatformRole = (r: string) => ["super_admin", "platform_admin", "platform_manager"].includes(r);
+
+  // super_admin: cannot delete other super_admins
+  if (user.role === "super_admin") {
+    res.status(403).json({ error: "Cannot delete another super_admin" }); return;
+  }
+
+  // platform_admin: can only delete org-level roles (admin, field_user), not other platform users
+  if (caller.role === "platform_admin" && isPlatformRole(user.role)) {
+    res.status(403).json({ error: "Platform administrators can only delete organization users" }); return;
+  }
+
+  // Guard: cannot remove the only admin from an org
+  if (user.role === "admin" && user.organizationId) {
+    const orgAdmins = await db.select({ id: usersTable.id })
+      .from(usersTable)
+      .where(and(eq(usersTable.organizationId, user.organizationId), eq(usersTable.role, "admin")));
+    const otherAdmins = orgAdmins.filter(a => a.id !== userId);
+    if (otherAdmins.length === 0) {
+      res.status(400).json({
+        error: "Cannot remove the only administrator. Please promote another member to Admin first.",
+      });
+      return;
+    }
+  }
+
+  // Delete user's reports first (foreign key constraint)
+  await db.delete(reportsTable).where(eq(reportsTable.missionaryId, userId));
 
   await db.delete(usersTable).where(eq(usersTable.id, userId));
   res.json({ message: `User "${user.name}" deleted`, id: userId });

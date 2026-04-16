@@ -601,12 +601,14 @@ function UserActionMenu({
   onAction,
   isSelf,
   canDelete,
+  callerRole,
 }: {
   user: PlatformUser;
   currentUserId: number;
   onAction: (action: string, user: PlatformUser) => void;
   isSelf?: boolean;
   canDelete?: boolean;
+  callerRole?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(null);
@@ -647,7 +649,9 @@ function UserActionMenu({
     ),
     { id: "assign-org", label: "Assign to Organization", icon: Building2, color: "text-foreground" },
     ...(isOrgUser ? [{ id: "impersonate", label: "Sign in as", icon: UserCog, color: "text-[#132272]" }] : []),
-    ...(canDelete && user.role !== "super_admin" ? [{ id: "delete", label: "Delete User", icon: Trash2, color: "text-red-600" }] : []),
+    ...(canDelete && user.role !== "super_admin" && (callerRole === "super_admin" || isOrgUser)
+      ? [{ id: "delete", label: "Delete User", icon: Trash2, color: "text-red-600" }]
+      : []),
   ];
 
   return (
@@ -1803,7 +1807,8 @@ export default function SuperAdminPanel() {
                                 currentUserId={user?.id ?? 0}
                                 onAction={handleUserAction}
                                 isSelf={isSelf}
-                                canDelete={user?.role === "super_admin"}
+                                canDelete={user?.role === "super_admin" || user?.role === "platform_admin"}
+                                callerRole={user?.role}
                               />
                             )}
                           </div>

@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
 import { eq, and } from "drizzle-orm";
 import crypto from "crypto";
-import { db, usersTable } from "@workspace/db";
+import { db, usersTable, reportsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
 
@@ -110,8 +110,27 @@ router.delete("/admin/users/:id", async (req, res): Promise<void> => {
   if (caller.role !== "super_admin" && caller.organizationId) {
     conditions.push(eq(usersTable.organizationId, caller.organizationId));
   }
-  const [deleted] = await db.delete(usersTable).where(and(...conditions)).returning();
-  if (!deleted) { res.status(404).json({ error: "User not found" }); return; }
+  const [target] = await db.select().from(usersTable).where(and(...conditions));
+  if (!target) { res.status(404).json({ error: "User not found" }); return; }
+
+  // Guard: cannot remove the last admin from an org
+  if (target.role === "admin" && target.organizationId) {
+    const orgAdmins = await db.select({ id: usersTable.id })
+      .from(usersTable)
+      .where(and(eq(usersTable.organizationId, target.organizationId), eq(usersTable.role, "admin")));
+    const otherAdmins = orgAdmins.filter(a => a.id !== userId);
+    if (otherAdmins.length === 0) {
+      res.status(400).json({
+        error: "Cannot remove the only administrator. Please promote another member to Admin first.",
+      });
+      return;
+    }
+  }
+
+  // Delete user's reports first (foreign key constraint — missionaryId is notNull)
+  await db.delete(reportsTable).where(eq(reportsTable.missionaryId, target.id));
+
+  await db.delete(usersTable).where(eq(usersTable.id, target.id));
   res.sendStatus(204);
 });
 

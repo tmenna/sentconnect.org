@@ -50,7 +50,28 @@ export async function seedIfEmpty() {
     .limit(1);
 
   if (calvaryOrg) {
-    logger.info("Demo org 'calvary' already present — skipping seed");
+    // Org already exists — but still ensure admin@calvary.org exists
+    const [existingAdmin] = await db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.email, "admin@calvary.org"))
+      .limit(1);
+
+    if (!existingAdmin) {
+      await db.insert(usersTable).values({
+        name: "Sarah Mitchell",
+        email: "admin@calvary.org",
+        passwordHash: hashPassword("password123"),
+        role: "admin",
+        bio: "Church administrator at Calvary Community Church, managing missionary outreach since 2015.",
+        location: "Dallas, TX",
+        organization: "Calvary Community Church",
+        organizationId: calvaryOrg.id,
+      });
+      logger.info("Calvary admin user created (was missing): admin@calvary.org");
+    } else {
+      logger.info("Demo org 'calvary' already present — skipping seed");
+    }
     return;
   }
 

@@ -506,9 +506,10 @@ function ResetLinkModal({ link, onClose }: { link: string; onClose: () => void }
 
 // ─── Delete Confirm Modal ──────────────────────────────────────────────────
 
-function DeleteConfirmModal({ userName, onConfirm, onClose, loading }: {
-  userName: string; onConfirm: () => void; onClose: () => void; loading: boolean;
+function DeleteConfirmModal({ userName, role, onConfirm, onClose, loading, error }: {
+  userName: string; role?: string; onConfirm: () => void; onClose: () => void; loading: boolean; error?: string | null;
 }) {
+  const isAdmin = role === "admin";
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm border border-border/60 p-6 space-y-4">
@@ -516,14 +517,26 @@ function DeleteConfirmModal({ userName, onConfirm, onClose, loading }: {
           <div className="p-2 bg-red-50 rounded-xl"><Trash2 className="h-5 w-5 text-red-500" /></div>
           <div>
             <h2 className="font-bold text-[15px]">Remove team member?</h2>
-            <p className="text-[13px] text-muted-foreground mt-0.5">This will permanently delete <strong>{userName}</strong>.</p>
+            <p className="text-[13px] text-muted-foreground mt-0.5">This will permanently remove <strong>{userName}</strong>.</p>
           </div>
         </div>
+        {isAdmin && !error && (
+          <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 text-amber-800 text-[12px] rounded-xl px-3 py-2.5">
+            <ShieldCheck className="h-4 w-4 flex-shrink-0 mt-0.5 text-amber-600" />
+            <span>This user is an <strong>Admin</strong>. Removal will be blocked if they are the only administrator in this organization.</span>
+          </div>
+        )}
+        {error && (
+          <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 text-[12px] rounded-xl px-3 py-2.5">
+            <Trash2 className="h-4 w-4 flex-shrink-0 mt-0.5 text-red-500" />
+            <span>{error}</span>
+          </div>
+        )}
         <div className="flex gap-3">
           <button onClick={onClose} className="flex-1 px-4 py-2 text-sm font-semibold border border-border/60 rounded-xl hover:bg-muted transition-colors">Cancel</button>
           <button
             onClick={onConfirm}
-            disabled={loading}
+            disabled={loading || !!error}
             className="flex-1 px-4 py-2 text-sm font-semibold bg-red-500 text-white rounded-xl hover:bg-red-600 disabled:opacity-60 transition"
           >
             {loading ? "Removing…" : "Remove"}
@@ -539,6 +552,7 @@ function DeleteConfirmModal({ userName, onConfirm, onClose, loading }: {
 function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUserId: number; onUpdated: () => void; onDeleted: () => void }) {
   const [busy, setBusy] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [showEditPerms, setShowEditPerms] = useState(false);
   const [resetLink, setResetLink] = useState<string | null>(null);
   const [editingBio, setEditingBio] = useState(false);
@@ -574,12 +588,18 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
 
   async function deleteUser() {
     setBusy(true);
+    setDeleteError(null);
     try {
-      await fetch(`/api/admin/users/${u.id}`, { method: "DELETE", credentials: "include" });
+      const res = await fetch(`/api/admin/users/${u.id}`, { method: "DELETE", credentials: "include" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setDeleteError(data?.error ?? `Request failed (${res.status})`);
+        return;
+      }
       setShowDeleteModal(false);
       onDeleted();
     } catch (err: any) {
-      alert(err.message);
+      setDeleteError(err.message ?? "An unexpected error occurred");
     } finally {
       setBusy(false);
     }
@@ -606,9 +626,11 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
       {showDeleteModal && (
         <DeleteConfirmModal
           userName={u.name}
+          role={u.role}
           onConfirm={deleteUser}
-          onClose={() => setShowDeleteModal(false)}
+          onClose={() => { setShowDeleteModal(false); setDeleteError(null); }}
           loading={busy}
+          error={deleteError}
         />
       )}
       {resetLink && (
