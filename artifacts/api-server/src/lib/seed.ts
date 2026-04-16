@@ -1,5 +1,5 @@
 import { db, usersTable, reportsTable, organizationsTable } from "@workspace/db";
-import { eq } from "drizzle-orm";
+import { eq, and, isNull } from "drizzle-orm";
 import { logger } from "./logger";
 import { hashPassword } from "./password";
 
@@ -30,14 +30,33 @@ export async function ensureSuperAdmin() {
   );
 }
 
+/**
+ * Idempotent demo seed — safe to call on any database state, including production.
+ *
+ * What it does:
+ *  1. Checks for the "calvary" demo org by subdomain — skips everything if it already exists.
+ *  2. Creates Calvary Community Church org.
+ *  3. Creates admin@calvary.org if not present.
+ *  4. Creates/updates demo field users (james, maria, david) linked to the Calvary org.
+ *  5. Links any existing unattached reports for those users to the Calvary org.
+ *  6. Creates demo posts if those users currently have none under the Calvary org.
+ */
 export async function seedIfEmpty() {
-  const existing = await db.select().from(usersTable).limit(1);
-  if (existing.length > 0) {
+  // --- Guard: skip if the Calvary demo org already exists ---
+  const [calvaryOrg] = await db
+    .select({ id: organizationsTable.id })
+    .from(organizationsTable)
+    .where(eq(organizationsTable.subdomain, "calvary"))
+    .limit(1);
+
+  if (calvaryOrg) {
+    logger.info("Demo org 'calvary' already present — skipping seed");
     return;
   }
 
-  logger.info("Database empty — seeding demo data");
+  logger.info("Seeding Calvary demo org and field users…");
 
+  // 1. Create the Calvary org
   const [defaultOrg] = await db.insert(organizationsTable).values({
     name: "Calvary Community Church",
     subdomain: "calvary",
@@ -45,94 +64,142 @@ export async function seedIfEmpty() {
     status: "active",
   }).returning();
 
-  const DEMO_USERS = [
-    {
-      name: "Sarah Mitchell",
-      email: "admin@calvary.org",
-      role: "admin" as const,
-      passwordHash: "a2303eaa9f39c4e4a2dc66e4cf080bcd:b1570d98601cc852048eab43d1a868f4118b7ceb62bbf7315f1841bc15ebe4709cd9b8ee2f2fc609ce49a3818cc92e6130156d1716ca534496369304f9181454",
-      bio: "Church administrator at Calvary Community Church, managing missionary outreach since 2015.",
-      location: "Dallas, TX",
-      organization: "Calvary Community Church",
-      organizationId: defaultOrg.id,
-    },
+  // 2. Ensure demo field users exist and are linked to the org
+  const DEMO_FIELD_USERS = [
     {
       name: "James Okafor",
       email: "james@mission.org",
-      role: "field_user" as const,
       passwordHash: "0e44db8a79b659cb03b27518e524301e:4f2fe8547195d219cf0fb74f1c0bf2ea56cfbf0740589353a5f1e7c1648d8f61bd5130564613a28302a409efa5f4516cd7dc7f20e1c64ed07ee9016e822aacb8",
       bio: "Serving the people of rural Nigeria with church planting and leadership training.",
       location: "Enugu, Nigeria",
       organization: "Africa Inland Mission",
-      organizationId: defaultOrg.id,
     },
     {
       name: "Maria Santos",
       email: "maria@mission.org",
-      role: "field_user" as const,
       passwordHash: "20750c2e3781cc77d70730328f8ee260:b3c1a0d5436fb2b8a4812a6fb2fa76c4b469a6dad5abc5ccd5af22c6dbaa4bfcac8c5b19d419501d6058ebf27a82c4c295f8aaf13092682c90d2999e4e1efca8",
       bio: "Working in remote villages in Guatemala, focused on education and literacy programs.",
       location: "Huehuetenango, Guatemala",
       organization: "Latin America Mission",
-      organizationId: defaultOrg.id,
     },
     {
       name: "David Chen",
       email: "david@mission.org",
-      role: "field_user" as const,
       passwordHash: "4bc4e298eff5cb0f5de695bec16fcb2f:6639b49f86292bdec45311a01d0c0e2f4ee317784e60961bf8105e84d5501fbea43d625301ab14c3812ebc8ba95def912181732f4934b1f268578f8c58b56701",
       bio: "Church planting pioneer working with unreached people groups in Southeast Asia.",
       location: "Chiang Mai, Thailand",
       organization: "OMF International",
-      organizationId: defaultOrg.id,
     },
   ];
 
-  const insertedUsers = await db.insert(usersTable).values(DEMO_USERS).returning();
-  const userMap = Object.fromEntries(insertedUsers.map((u) => [u.email, u.id]));
+  const userIds: Record<string, number> = {};
 
-  await db.insert(reportsTable).values([
-    {
-      missionaryId: userMap["james@mission.org"],
-      organizationId: defaultOrg.id,
-      title: "A New Church Planted in Achi Village",
-      description: `Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy. Three local men have expressed a calling to pastoral leadership.`,
-      category: "post",
-      location: "Achi Village, Enugu State, Nigeria",
-      reportDate: new Date("2026-03-15"),
-      peopleReached: 230,
-    },
-    {
-      missionaryId: userMap["james@mission.org"],
-      organizationId: defaultOrg.id,
-      title: "Leadership Training Camp: 18 Emerging Pastors Equipped",
-      description: `For two weeks in January, we gathered 18 young leaders from five different villages. These leaders wake before dawn to study. They argued passionately over Scripture. One young woman, Adaeze, is leading a fellowship of 34 women in her village.`,
-      category: "post",
-      location: "Nsukka, Enugu State, Nigeria",
-      reportDate: new Date("2026-02-10"),
-      peopleReached: 450,
-    },
-    {
-      missionaryId: userMap["maria@mission.org"],
-      organizationId: defaultOrg.id,
-      title: "Literacy Opens Hearts in San Pedro Village",
-      description: `We launched our first women's literacy program. 28 women gathered every Tuesday and Thursday. By month four, they were reading full sentences. The day Maria Elena — a 52-year-old grandmother — read a verse from John aloud for the first time, the room went silent.`,
-      category: "post",
-      location: "San Pedro Soloma, Huehuetenango, Guatemala",
-      reportDate: new Date("2026-03-20"),
-      peopleReached: 340,
-    },
-    {
-      missionaryId: userMap["david@mission.org"],
-      organizationId: defaultOrg.id,
-      title: "Three New House Churches Among the Akha People",
-      description: `Over the past eighteen months, God has been doing something quiet and extraordinary. It began with a young man named Amu. Today, there are three house churches among the Akha villages within our reach — small, fragile, and full of the Spirit.`,
-      category: "post",
-      location: "Chiang Rai Province, Thailand",
-      reportDate: new Date("2026-03-08"),
-      peopleReached: 180,
-    },
-  ]);
+  for (const u of DEMO_FIELD_USERS) {
+    // Check if user already exists by email
+    const [existing] = await db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.email, u.email))
+      .limit(1);
 
-  logger.info("Demo seed complete: 1 org, 4 users, 4 posts");
+    if (existing) {
+      // Update them to link to the new org and ensure correct role
+      await db.update(usersTable)
+        .set({ organizationId: defaultOrg.id, role: "field_user", organization: u.organization })
+        .where(eq(usersTable.id, existing.id));
+      userIds[u.email] = existing.id;
+    } else {
+      const [created] = await db.insert(usersTable).values({
+        ...u,
+        role: "field_user",
+        organizationId: defaultOrg.id,
+      }).returning({ id: usersTable.id });
+      userIds[u.email] = created.id;
+    }
+  }
+
+  // 3. Ensure admin user for Calvary exists
+  const [existingAdmin] = await db
+    .select({ id: usersTable.id })
+    .from(usersTable)
+    .where(eq(usersTable.email, "admin@calvary.org"))
+    .limit(1);
+
+  if (!existingAdmin) {
+    await db.insert(usersTable).values({
+      name: "Sarah Mitchell",
+      email: "admin@calvary.org",
+      passwordHash: "a2303eaa9f39c4e4a2dc66e4cf080bcd:b1570d98601cc852048eab43d1a868f4118b7ceb62bbf7315f1841bc15ebe4709cd9b8ee2f2fc609ce49a3818cc92e6130156d1716ca534496369304f9181454",
+      role: "admin",
+      bio: "Church administrator at Calvary Community Church, managing missionary outreach since 2015.",
+      location: "Dallas, TX",
+      organization: "Calvary Community Church",
+      organizationId: defaultOrg.id,
+    });
+  }
+
+  // 4. Link any existing org-less reports from these users to the Calvary org
+  for (const email of Object.keys(userIds)) {
+    const userId = userIds[email];
+    await db.update(reportsTable)
+      .set({ organizationId: defaultOrg.id })
+      .where(and(
+        eq(reportsTable.missionaryId, userId),
+        isNull(reportsTable.organizationId)
+      ));
+  }
+
+  // 5. Check if any reports already exist under Calvary — if not, create demo posts
+  const [sampleReport] = await db
+    .select({ id: reportsTable.id })
+    .from(reportsTable)
+    .where(eq(reportsTable.organizationId, defaultOrg.id))
+    .limit(1);
+
+  if (!sampleReport) {
+    await db.insert(reportsTable).values([
+      {
+        missionaryId: userIds["james@mission.org"],
+        organizationId: defaultOrg.id,
+        title: "A New Church Planted in Achi Village",
+        description: `Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy. Three local men have expressed a calling to pastoral leadership.`,
+        category: "post",
+        location: "Achi Village, Enugu State, Nigeria",
+        reportDate: new Date("2026-03-15"),
+        peopleReached: 230,
+      },
+      {
+        missionaryId: userIds["james@mission.org"],
+        organizationId: defaultOrg.id,
+        title: "Leadership Training Camp: 18 Emerging Pastors Equipped",
+        description: `For two weeks in January, we gathered 18 young leaders from five different villages. These leaders wake before dawn to study. They argued passionately over Scripture. One young woman, Adaeze, is leading a fellowship of 34 women in her village.`,
+        category: "post",
+        location: "Nsukka, Enugu State, Nigeria",
+        reportDate: new Date("2026-02-10"),
+        peopleReached: 450,
+      },
+      {
+        missionaryId: userIds["maria@mission.org"],
+        organizationId: defaultOrg.id,
+        title: "Literacy Opens Hearts in San Pedro Village",
+        description: `We launched our first women's literacy program. 28 women gathered every Tuesday and Thursday. By month four, they were reading full sentences. The day Maria Elena — a 52-year-old grandmother — read a verse from John aloud for the first time, the room went silent.`,
+        category: "post",
+        location: "San Pedro Soloma, Huehuetenango, Guatemala",
+        reportDate: new Date("2026-03-20"),
+        peopleReached: 340,
+      },
+      {
+        missionaryId: userIds["david@mission.org"],
+        organizationId: defaultOrg.id,
+        title: "Three New House Churches Among the Akha People",
+        description: `Over the past eighteen months, God has been doing something quiet and extraordinary. It began with a young man named Amu. Today, there are three house churches among the Akha villages within our reach — small, fragile, and full of the Spirit.`,
+        category: "post",
+        location: "Chiang Rai Province, Thailand",
+        reportDate: new Date("2026-03-08"),
+        peopleReached: 180,
+      },
+    ]);
+  }
+
+  logger.info("Demo seed complete: Calvary org, 3 field users, 1 admin, demo posts");
 }
