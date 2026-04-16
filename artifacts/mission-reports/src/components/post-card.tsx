@@ -75,14 +75,14 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
   if (count === 1) {
     const p = photos[0];
     return (
-      <div className={cn("w-full overflow-hidden rounded-lg bg-black/5", isVideoItem(p) ? "aspect-video" : "aspect-[16/10]")}>
+      <div className={cn("w-full overflow-hidden bg-black/5", isVideoItem(p) ? "aspect-video" : "aspect-[16/10]")}>
         <MediaItem p={p} controls={isVideoItem(p)} className="w-full h-full" />
       </div>
     );
   }
   if (count === 2) {
     return (
-      <div className="grid grid-cols-2 gap-1 rounded-lg overflow-hidden">
+      <div className="grid grid-cols-2 gap-[2px] overflow-hidden">
         {photos.map(p => (
           <div key={p.id} className="aspect-square bg-black/5 relative overflow-hidden">
             <MediaItem p={p} controls={false} />
@@ -92,7 +92,7 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
     );
   }
   return (
-    <div className="grid grid-cols-2 gap-1 rounded-lg overflow-hidden">
+    <div className="grid grid-cols-2 gap-[2px] overflow-hidden">
       <div className="aspect-square bg-black/5 row-span-2 relative overflow-hidden">
         <MediaItem p={photos[0]} controls={false} />
       </div>
@@ -387,10 +387,12 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
 
   return (
     <div className={cn(
-      "bg-white rounded-xl border shadow-sm overflow-hidden transition-colors",
+      "bg-white rounded-2xl overflow-hidden transition-all",
       post.isMissionMoment
-        ? "border-[#132272]/25 shadow-[0_2px_8px_rgba(19,34,114,0.08)]"
-        : post.isHighlight ? "border-amber-300" : "border-border/60"
+        ? "border border-[#132272]/20 shadow-[0_2px_12px_rgba(19,34,114,0.10)]"
+        : post.isHighlight
+          ? "border border-amber-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
+          : "border border-[#e8eaed] shadow-[0_2px_8px_rgba(0,0,0,0.05)]"
     )}>
       {/* Mission Moment banner — takes priority over Highlight */}
       {post.isMissionMoment ? (
@@ -414,11 +416,11 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
       ) : null}
 
       {/* Header */}
-      <div className="flex items-start gap-3 px-4 pt-4 pb-2">
+      <div className="flex items-start gap-3 px-5 pt-5 pb-3">
         <Link href={`/missionaries/${post.author.id}`}>
-          <Avatar className="h-10 w-10 cursor-pointer flex-shrink-0">
+          <Avatar className="h-11 w-11 cursor-pointer flex-shrink-0 ring-2 ring-white shadow-sm">
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm">
+            <AvatarFallback className="bg-[#132272]/10 text-[#132272] font-bold text-sm">
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -426,25 +428,19 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
         <div className="flex-1 min-w-0">
           <Link
             href={`/missionaries/${post.author.id}`}
-            className="font-semibold text-[14px] text-foreground hover:text-primary transition-colors leading-tight block"
+            className="font-bold text-[15px] text-[#111827] hover:text-[#132272] transition-colors leading-tight block"
           >
             {post.author.name}
           </Link>
-          {post.author.bio && (
-            <p
-              className="text-[12px] text-muted-foreground leading-snug truncate"
-              title={post.author.bio}
-            >
-              {post.author.bio}
-            </p>
-          )}
-          <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground mt-0.5">
-            <span>{timeAgo}</span>
+          <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
+            <span className="text-[12.5px] text-[#6b7280]">{timeAgo}</span>
             {post.location && (
               <>
-                <span>·</span>
-                <MapPin className="h-3 w-3" />
-                <span>{post.location}</span>
+                <span className="text-[#d1d5db] text-[10px]">•</span>
+                <span className="flex items-center gap-1 text-[12.5px] text-[#6b7280]">
+                  <MapPin className="h-3 w-3 text-[#9ca3af]" />
+                  {post.location}
+                </span>
               </>
             )}
           </div>
@@ -501,30 +497,30 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
         <>
           {/* Text */}
           {post.description && (
-            <div className="px-4 pb-3">
-              <p className="text-[14.5px] text-foreground leading-relaxed whitespace-pre-wrap">{post.description}</p>
+            <div className="px-5 pb-4">
+              <p className="text-[15.5px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
             </div>
           )}
 
           {/* People Reached */}
           {post.peopleReached != null && post.peopleReached > 0 && (
-            <div className="px-4 pb-3">
-              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-full">
+            <div className="px-5 pb-4">
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-full">
                 <Users className="h-3.5 w-3.5" />
                 {post.peopleReached.toLocaleString()} people reached
               </span>
             </div>
           )}
 
-          {/* Media */}
+          {/* Media — no horizontal padding for a clean full-bleed look */}
           {post.photos.length > 0 && (
-            <div className="px-4 pb-3">
+            <div className="pb-1">
               <MediaGrid photos={post.photos} />
             </div>
           )}
 
           {/* Action bar */}
-          <div className="flex items-center gap-1 px-3 pb-2 pt-1 border-t border-border/40">
+          <div className="flex items-center gap-1 px-4 pb-3 pt-2 border-t border-[#f3f4f6]">
             <button
               onClick={toggleLike}
               className={cn(
