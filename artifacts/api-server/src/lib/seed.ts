@@ -11,6 +11,8 @@ import { hashPassword } from "./password";
 const SUPER_ADMIN_EMAIL = "superadmin@sentconnect.org";
 const SUPER_ADMIN_NAME  = "Platform Admin";
 
+const SUPER_ADMIN_PASSWORD = "password123";
+
 export async function ensureSuperAdmin() {
   const [existing] = await db
     .select({ id: usersTable.id, email: usersTable.email, name: usersTable.name })
@@ -22,22 +24,25 @@ export async function ensureSuperAdmin() {
     await db.insert(usersTable).values({
       name: SUPER_ADMIN_NAME,
       email: SUPER_ADMIN_EMAIL,
-      passwordHash: hashPassword("password123"),
+      passwordHash: hashPassword(SUPER_ADMIN_PASSWORD),
       role: "super_admin",
       organization: "SentConnect",
     });
-    logger.info(`Super-admin created: ${SUPER_ADMIN_EMAIL} / password123 — change this password after first login!`);
+    logger.info(`Super-admin created: ${SUPER_ADMIN_EMAIL} / ${SUPER_ADMIN_PASSWORD}`);
     return;
   }
 
-  // Keep email and name in sync with the canonical values above
-  if (existing.email !== SUPER_ADMIN_EMAIL || existing.name !== SUPER_ADMIN_NAME) {
-    await db
-      .update(usersTable)
-      .set({ email: SUPER_ADMIN_EMAIL, name: SUPER_ADMIN_NAME })
-      .where(eq(usersTable.id, existing.id));
-    logger.info(`Super-admin updated: email → ${SUPER_ADMIN_EMAIL}, name → ${SUPER_ADMIN_NAME}`);
-  }
+  // Always sync email, name, and password to the canonical values above.
+  // This ensures the known credentials always work after a fresh deploy.
+  await db
+    .update(usersTable)
+    .set({
+      email: SUPER_ADMIN_EMAIL,
+      name: SUPER_ADMIN_NAME,
+      passwordHash: hashPassword(SUPER_ADMIN_PASSWORD),
+    })
+    .where(eq(usersTable.id, existing.id));
+  logger.info(`Super-admin synced: ${SUPER_ADMIN_EMAIL} / ${SUPER_ADMIN_PASSWORD}`);
 }
 
 /**
