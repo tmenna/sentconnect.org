@@ -280,7 +280,7 @@ function EditForm({
         )}
       >
         <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#132272]")} />
-        {isMissionMoment ? "Mission Moment" : "Mark as Mission Moment"}
+        {isMissionMoment ? "Mission Moments" : "Mark as Mission Moments"}
       </button>
 
       {/* Actions */}
@@ -399,7 +399,7 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
           style={{ background: "linear-gradient(90deg, #132272 0%, #1e3a8a 100%)" }}
         >
           <BookOpen className="h-3.5 w-3.5 text-white/90 flex-shrink-0" />
-          <span className="text-[12px] font-bold text-white tracking-wide uppercase">Mission Moment</span>
+          <span className="text-[12px] font-bold text-white tracking-wide uppercase">Mission Moments</span>
           {post.isHighlight && (
             <Star className="h-3 w-3 fill-amber-300 text-amber-300 ml-0.5" />
           )}

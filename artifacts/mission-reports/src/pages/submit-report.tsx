@@ -233,7 +233,7 @@ export default function SubmitReport() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <p className="text-[14px] font-bold text-foreground">Mark as Mission Moment</p>
+                      <p className="text-[14px] font-bold text-foreground">Mark as Mission Moments</p>
                       <span title="A mission moment in a church context is a dedicated segment designed to highlight, celebrate, and pray for God's work in the world. It is typically a 3–5 minute story, video, or presentation that connects people to the broader mission—locally or globally.">
                         <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
                       </span>

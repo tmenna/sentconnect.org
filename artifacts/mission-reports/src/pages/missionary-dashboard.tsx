@@ -143,7 +143,7 @@ export default function MissionaryDashboard() {
             <>
               <Star className="h-10 w-10 mx-auto text-amber-300/50 mb-3" />
               <p className="font-semibold text-foreground text-sm">No Mission Moments yet</p>
-              <p className="text-muted-foreground text-xs mt-1">Mark a post as a Mission Moment using the toolbar.</p>
+              <p className="text-muted-foreground text-xs mt-1">Mark a post as Mission Moments using the toolbar.</p>
             </>
           ) : (
             <>

@@ -351,7 +351,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               )}
             >
               <Star className={cn("h-4 w-4", isMissionMoment && "fill-amber-500")} />
-              <span className="hidden sm:inline">Mission Moment</span>
+              <span className="hidden sm:inline">Mission Moments</span>
             </button>
 
             <div className="flex-1" />

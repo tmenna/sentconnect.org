@@ -755,6 +755,7 @@ export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<"team" | "feed">("feed");
+  const [feedMomentFilter, setFeedMomentFilter] = useState<"all" | "moments">("all");
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
   const [filterUserId, setFilterUserId] = useState<string>("");
@@ -813,6 +814,10 @@ export default function AdminDashboard() {
     return true;
   });
   const hasFilters = filterUserId || filterDateFrom || filterDateTo;
+  const missionMomentsCount = allFeedPosts.filter(p => p.isMissionMoment).length;
+  const displayedFeedPosts = feedMomentFilter === "moments"
+    ? allFeedPosts.filter(p => p.isMissionMoment)
+    : allFeedPosts;
   const firstName = user.name.split(" ")[0];
 
   return (
@@ -984,6 +989,38 @@ export default function AdminDashboard() {
         {/* ── Tab: Activity Feed ── */}
         {activeTab === "feed" && (
           <div className="space-y-4">
+            {/* Mission Moments sub-tab */}
+            <div className="flex items-center gap-1 border-b border-border/50">
+              <button
+                onClick={() => setFeedMomentFilter("all")}
+                className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
+                  feedMomentFilter === "all"
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Globe className="h-3.5 w-3.5" />
+                All Posts
+                {!feedLoading && (
+                  <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{allFeedPosts.length}</span>
+                )}
+              </button>
+              <button
+                onClick={() => setFeedMomentFilter("moments")}
+                className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
+                  feedMomentFilter === "moments"
+                    ? "border-amber-500 text-amber-600"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Star className={`h-3.5 w-3.5 ${feedMomentFilter === "moments" ? "fill-amber-500 text-amber-500" : ""}`} />
+                Mission Moments
+                {!feedLoading && missionMomentsCount > 0 && (
+                  <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{missionMomentsCount}</span>
+                )}
+              </button>
+            </div>
+
             {/* Filters */}
             <div className="bg-white border border-border/60 rounded-xl px-4 py-3 shadow-sm">
               <div className="flex flex-wrap items-end gap-3">
@@ -1030,7 +1067,7 @@ export default function AdminDashboard() {
               </div>
               {hasFilters && (
                 <p className="text-[12px] text-muted-foreground mt-2">
-                  Showing {allFeedPosts.length} of {rawFeedPosts.length} posts
+                  Showing {displayedFeedPosts.length} of {rawFeedPosts.length} posts
                 </p>
               )}
             </div>
@@ -1054,15 +1091,25 @@ export default function AdminDashboard() {
                   </div>
                 ))}
               </div>
-            ) : allFeedPosts.length === 0 ? (
+            ) : displayedFeedPosts.length === 0 ? (
               <div className="bg-white rounded-2xl border border-dashed border-border py-16 text-center shadow-sm">
-                <MessageCircle className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
-                <p className="font-semibold text-sm text-foreground">{hasFilters ? "No posts match your filters" : "No posts yet"}</p>
-                <p className="text-muted-foreground text-xs mt-1">{hasFilters ? "Try adjusting your filters above." : "Team updates will appear here once posted."}</p>
+                {feedMomentFilter === "moments" ? (
+                  <>
+                    <Star className="h-10 w-10 mx-auto text-amber-300/50 mb-3" />
+                    <p className="font-semibold text-sm text-foreground">No Mission Moments yet</p>
+                    <p className="text-muted-foreground text-xs mt-1">Team members can mark posts as Mission Moments when sharing updates.</p>
+                  </>
+                ) : (
+                  <>
+                    <MessageCircle className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+                    <p className="font-semibold text-sm text-foreground">{hasFilters ? "No posts match your filters" : "No posts yet"}</p>
+                    <p className="text-muted-foreground text-xs mt-1">{hasFilters ? "Try adjusting your filters above." : "Team updates will appear here once posted."}</p>
+                  </>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {allFeedPosts.map(post => (
+                {displayedFeedPosts.map(post => (
                   <FeedGridCard
                     key={post.id}
                     post={post}
