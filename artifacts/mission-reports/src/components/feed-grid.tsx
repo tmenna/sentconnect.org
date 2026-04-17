@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow, format } from "date-fns";
 import { Heart, MessageCircle, MapPin, Star, Users, X, ChevronLeft, ChevronRight, ArrowRight, FileText } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -326,6 +326,7 @@ export function PostDetailModal({
 }) {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const hasPrev = allPosts.length > 1 && postIndex > 0;
   const hasNext = allPosts.length > 1 && postIndex < allPosts.length - 1;
 
@@ -333,6 +334,11 @@ export function PostDetailModal({
     const t = requestAnimationFrame(() => setVisible(true));
     return () => cancelAnimationFrame(t);
   }, []);
+
+  // Scroll panel back to top whenever the post changes
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0, behavior: "instant" });
+  }, [post.id]);
 
   function handleClose() { setClosing(true); }
   function goPrev() { if (hasPrev) onNavigate?.(postIndex - 1); }
@@ -358,16 +364,13 @@ export function PostDetailModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-6 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
       aria-modal="true"
       role="dialog"
-      onTransitionEnd={(e) => {
-        if (closing && e.target === e.currentTarget) onClose();
-      }}
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 backdrop-blur-sm"
+        className="absolute inset-0 backdrop-blur-sm"
         style={{
           backgroundColor: isIn ? "rgba(0,0,0,0.65)" : "rgba(0,0,0,0)",
           transition: `background-color ${DURATION}ms ease`,
@@ -379,7 +382,7 @@ export function PostDetailModal({
       {hasPrev && (
         <button
           onClick={(e) => { e.stopPropagation(); goPrev(); }}
-          className="fixed left-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
           aria-label="Previous post"
         >
           <ChevronLeft className="h-6 w-6" />
@@ -390,18 +393,19 @@ export function PostDetailModal({
       {hasNext && (
         <button
           onClick={(e) => { e.stopPropagation(); goNext(); }}
-          className="fixed right-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
           aria-label="Next post"
         >
           <ChevronRight className="h-6 w-6" />
         </button>
       )}
 
-      {/* Post panel — wide, centered, full PostCard */}
+      {/* Post panel — scrolls internally, starts at the top */}
       <div
-        className="relative z-10 w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
+        className="relative z-10 w-full bg-white rounded-2xl shadow-2xl flex flex-col"
         style={{
-          maxWidth: 920,
+          maxWidth: 1020,
+          maxHeight: "92vh",
           opacity: isIn ? 1 : 0,
           transform: isIn ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.97)",
           transition: `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`,
@@ -411,8 +415,8 @@ export function PostDetailModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Top bar: counter + close */}
-        <div className="flex items-center justify-between px-5 pt-4 pb-0">
+        {/* Sticky top bar: counter + close — always visible */}
+        <div className="flex-shrink-0 flex items-center justify-between px-5 pt-4 pb-3 border-b border-gray-100 bg-white rounded-t-2xl sticky top-0 z-10">
           {allPosts.length > 1 ? (
             <span className="text-[12px] font-medium text-gray-400">
               {postIndex + 1} / {allPosts.length}
@@ -427,13 +431,15 @@ export function PostDetailModal({
           </button>
         </div>
 
-        {/* Full PostCard — comments open by default, no "View post" link */}
-        <PostCard
-          post={post}
-          defaultShowComments
-          hideViewPost
-          onDelete={(id) => { onDelete?.(id); onClose(); }}
-        />
+        {/* Scrollable post content — starts at the top */}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto min-h-0">
+          <PostCard
+            post={post}
+            defaultShowComments
+            hideViewPost
+            onDelete={(id) => { onDelete?.(id); onClose(); }}
+          />
+        </div>
       </div>
     </div>
   );
