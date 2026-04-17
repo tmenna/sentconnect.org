@@ -401,7 +401,7 @@ export function PostDetailModal({
       <div
         className="relative z-10 w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
         style={{
-          maxWidth: 780,
+          maxWidth: 920,
           opacity: isIn ? 1 : 0,
           transform: isIn ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.97)",
           transition: `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`,
@@ -427,9 +427,11 @@ export function PostDetailModal({
           </button>
         </div>
 
-        {/* Full PostCard — no truncation, all content visible */}
+        {/* Full PostCard — comments open by default, no "View post" link */}
         <PostCard
           post={post}
+          defaultShowComments
+          hideViewPost
           onDelete={(id) => { onDelete?.(id); onClose(); }}
         />
       </div>

@@ -301,14 +301,25 @@ function EditForm({
   );
 }
 
-export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDelete?: (id: number) => void }) {
+export function PostCard({
+  post: initialPost,
+  onDelete,
+  defaultShowComments = false,
+  hideViewPost = false,
+}: {
+  post: PostData;
+  onDelete?: (id: number) => void;
+  defaultShowComments?: boolean;
+  hideViewPost?: boolean;
+}) {
   const { user } = useAuth();
   const [post, setPost] = useState(initialPost);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(defaultShowComments);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loadingComments, setLoadingComments] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
+  const commentInputRef = useRef<HTMLInputElement>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [editing, setEditing] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -340,6 +351,16 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
       setPost(p => ({ ...p, likedByMe: prev.liked, likeCount: prev.count }));
     }
   }
+
+  // Auto-load comments when opened in modal (defaultShowComments=true)
+  useEffect(() => {
+    if (defaultShowComments) {
+      loadComments().then(() => {
+        // Small delay so the DOM has rendered the input
+        setTimeout(() => commentInputRef.current?.focus(), 80);
+      });
+    }
+  }, []);
 
   async function loadComments() {
     if (loadingComments) return;
@@ -547,11 +568,13 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
               {post.commentCount > 0 && <span>{post.commentCount}</span>}
             </button>
             <div className="flex-1" />
-            <Link href={`/reports/${post.id}`}>
-              <span className="text-[12px] text-muted-foreground hover:text-primary transition-colors cursor-pointer">
-                View post
-              </span>
-            </Link>
+            {!hideViewPost && (
+              <Link href={`/reports/${post.id}`}>
+                <span className="text-[12px] text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+                  View post
+                </span>
+              </Link>
+            )}
           </div>
 
           {/* Comments */}
@@ -595,6 +618,7 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
                   </Avatar>
                   <div className="flex-1 flex items-center gap-2 bg-white border border-border/60 rounded-full px-3 py-1.5">
                     <input
+                      ref={commentInputRef}
                       value={commentText}
                       onChange={e => setCommentText(e.target.value)}
                       placeholder="Write a comment…"
