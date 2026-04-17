@@ -1,0 +1,216 @@
+Refactor the user dashboard and posts page to remove heavy visual elements (especially the dark blue banner) and replace them with a soft, clean, white-dominant design. The goal is a calm, modern interface that feels lightweight, readable, and distraction-free for field users.
+
+---
+
+1. REMOVE / REPLACE DARK BLUE HEADER
+
+* Remove the full-width dark blue "Welcome back" banner.
+
+Replace with a soft, minimal header section:
+
+Option A (preferred):
+
+* No background (transparent)
+* Just text and avatar, left-aligned
+
+Option B (if a card is preferred):
+
+* background: #FFFFFF
+* border: 1px solid #E5E7EB
+* border-radius: 16px
+* padding: 20–24px
+
+---
+
+2. HEADER CONTENT (WELCOME AREA)
+
+Layout:
+[Avatar]  Welcome back, Holly
+Here’s what’s happening today
+
+Styling:
+
+* Title:
+  font-size: 24–28px
+  font-weight: 600
+  color: #111827
+
+* Subtitle:
+  font-size: 14–15px
+  color: #6B7280
+
+* Avatar:
+  size: 40px
+  background: #E5E7EB
+  text color: #374151
+
+* Add spacing below header: 24–32px
+
+---
+
+3. GLOBAL PAGE STYLE
+
+* Page background:
+  background: #F9FAFB
+
+* Use consistent spacing between sections:
+  28–40px
+
+* Font:
+  font-family: "Inter", system-ui, sans-serif
+
+* Base font size:
+  15–16px
+
+---
+
+4. POST COMPOSER (What's happening?)
+
+Card style:
+
+* background: #FFFFFF
+* border-radius: 14px
+* padding: 20–24px
+* box-shadow: 0 2px 8px rgba(0,0,0,0.04)
+
+Textarea:
+
+* font-size: 15–16px
+* placeholder color: #9CA3AF
+* remove heavy borders
+* use subtle divider instead:
+  border-bottom: 1px solid #F1F5F9
+
+Icons (image, video, location, etc):
+
+* color: #6B7280
+* hover: #111827
+* keep consistent size and spacing
+
+"Mission Moments":
+
+* style as a soft toggle or tag:
+  background: #EFF6FF
+  color: #2563EB
+  border-radius: 999px
+  padding: 4px 10px
+  font-size: 12–13px
+
+Post button:
+
+* background: #10B981
+* hover: #059669
+* color: white
+* height: 40–44px
+* border-radius: 10px
+* font-weight: 600
+
+---
+
+5. TABS (All Posts / Mission Moments)
+
+* Remove heavy borders
+* Use clean tab style:
+
+Active:
+
+* color: #111827
+* border-bottom: 2px solid #3B82F6
+
+Inactive:
+
+* color: #9CA3AF
+
+Spacing between tabs: 16–24px
+
+---
+
+6. POSTS FEED (MAIN CONTENT)
+
+Each post card:
+
+* background: #FFFFFF
+* border-radius: 14px
+* padding: 18–22px
+* box-shadow: 0 2px 8px rgba(0,0,0,0.04)
+
+Spacing between posts:
+
+* 16–20px
+
+Post header:
+
+* Name: font-weight 600, color #111827
+* Meta (time/location): #6B7280, font-size 13–14px
+
+Post content:
+
+* font-size: 15–16px
+* line-height: 1.6
+
+---
+
+7. EMPTY STATE (NO POSTS)
+
+* Remove heavy dashed border look
+
+Use:
+
+* centered content
+* soft card style
+
+Styling:
+
+* Icon: small, muted (#D1D5DB)
+* Title: #374151, font-weight 500
+* Subtitle: #9CA3AF, font-size 14px
+
+Message:
+"No posts yet"
+"Share your first update above."
+
+---
+
+8. COLOR SYSTEM (KEEP SIMPLE)
+
+Use ONLY:
+
+* Background: #F9FAFB
+* Cards: #FFFFFF
+* Borders: #E5E7EB
+* Primary text: #111827
+* Secondary text: #6B7280
+* Accent:
+  Blue: #3B82F6 OR Green: #10B981 (choose one primary)
+
+Avoid using too many accent colors.
+
+---
+
+9. MICRO INTERACTIONS (MAKE IT FEEL SLICK)
+
+* Add global:
+  transition: all 0.2s ease
+
+* Card hover:
+  slight lift (translateY -1px)
+
+* Buttons:
+  smooth hover + subtle shadow
+
+* Icons:
+  soft hover color change
+
+---
+
+10. FINAL RESULT
+
+The dashboard and posts page should feel:
+
+* Light and breathable
+* Minimal and modern
+* Easy to scan quickly in the field
+* Calm (not heavy or saturated)
+* Consistent across all users
+
+Focus on removing visual weight, increasing spacing, and using softer colors instead of bold blocks.

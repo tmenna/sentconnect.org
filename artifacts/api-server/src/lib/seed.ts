@@ -103,7 +103,7 @@ export async function seedIfEmpty() {
     {
       name: "James Okafor",
       email: "james@mission.org",
-      passwordHash: "0e44db8a79b659cb03b27518e524301e:4f2fe8547195d219cf0fb74f1c0bf2ea56cfbf0740589353a5f1e7c1648d8f61bd5130564613a28302a409efa5f4516cd7dc7f20e1c64ed07ee9016e822aacb8",
+      passwordHash: hashPassword("password123"),
       bio: "Serving the people of rural Nigeria with church planting and leadership training.",
       location: "Enugu, Nigeria",
       organization: "Africa Inland Mission",
@@ -111,7 +111,7 @@ export async function seedIfEmpty() {
     {
       name: "Maria Santos",
       email: "maria@mission.org",
-      passwordHash: "20750c2e3781cc77d70730328f8ee260:b3c1a0d5436fb2b8a4812a6fb2fa76c4b469a6dad5abc5ccd5af22c6dbaa4bfcac8c5b19d419501d6058ebf27a82c4c295f8aaf13092682c90d2999e4e1efca8",
+      passwordHash: hashPassword("password123"),
       bio: "Working in remote villages in Guatemala, focused on education and literacy programs.",
       location: "Huehuetenango, Guatemala",
       organization: "Latin America Mission",
@@ -119,7 +119,7 @@ export async function seedIfEmpty() {
     {
       name: "David Chen",
       email: "david@mission.org",
-      passwordHash: "4bc4e298eff5cb0f5de695bec16fcb2f:6639b49f86292bdec45311a01d0c0e2f4ee317784e60961bf8105e84d5501fbea43d625301ab14c3812ebc8ba95def912181732f4934b1f268578f8c58b56701",
+      passwordHash: hashPassword("password123"),
       bio: "Church planting pioneer working with unreached people groups in Southeast Asia.",
       location: "Chiang Mai, Thailand",
       organization: "OMF International",
@@ -137,9 +137,9 @@ export async function seedIfEmpty() {
       .limit(1);
 
     if (existing) {
-      // Update them to link to the new org and ensure correct role
+      // Update them to link to the new org, ensure correct role, and refresh password
       await db.update(usersTable)
-        .set({ organizationId: defaultOrg.id, role: "field_user", organization: u.organization })
+        .set({ organizationId: defaultOrg.id, role: "field_user", organization: u.organization, passwordHash: u.passwordHash })
         .where(eq(usersTable.id, existing.id));
       userIds[u.email] = existing.id;
     } else {

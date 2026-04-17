@@ -275,11 +275,11 @@ function EditForm({
         className={cn(
           "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors",
           isMissionMoment
-            ? "text-[#172A7D] bg-[#172A7D]/10 hover:bg-[#172A7D]/15 border border-[#172A7D]/20"
+            ? "text-[#2563eb] bg-[#2563eb]/10 hover:bg-[#2563eb]/15 border border-[#2563eb]/20"
             : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
         )}
       >
-        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#172A7D]")} />
+        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#2563eb]")} />
         {isMissionMoment ? "Mission Moments" : "Mark as Mission Moments"}
       </button>
 
@@ -292,7 +292,7 @@ function EditForm({
           size="sm"
           onClick={handleSave}
           disabled={saving}
-          className="h-8 px-4 text-[13px] bg-[#172A7D] hover:bg-[#0e1a5c] text-white"
+          className="h-8 px-4 text-[13px] bg-[#2563eb] hover:bg-[#0e1a5c] text-white"
         >
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <><Check className="h-3.5 w-3.5 mr-1" />Save</>}
         </Button>
@@ -386,27 +386,26 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
 
   return (
-    <div className={cn(
-      "bg-white rounded-2xl overflow-hidden transition-all",
-      post.isMissionMoment
-        ? "border border-[#172A7D]/30 shadow-[0_2px_12px_rgba(23,42,125,0.12)]"
-        : post.isHighlight
-          ? "border border-[#00C4A7]/65 shadow-[0_2px_8px_rgba(0,196,167,0.10)]"
-          : "border border-[#00C4A7]/55 shadow-[0_2px_8px_rgba(0,196,167,0.08)]"
-    )}>
+    <div
+      className="bg-white rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-px"
+      style={{
+        border: "1px solid #E5E7EB",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+      }}
+    >
       {/* Mission Moment banner — takes priority over Highlight */}
       {post.isMissionMoment ? (
         <div
-          className="flex items-center gap-2 px-4 py-2 border-b border-[#172A7D]/10"
-          style={{ background: "linear-gradient(90deg, #172A7D 0%, #1e3a8a 100%)" }}
+          className="flex items-center gap-2 px-4 py-2 border-b"
+          style={{ background: "#EFF6FF", borderColor: "#BFDBFE" }}
         >
-          <BookOpen className="h-3.5 w-3.5 text-white/90 flex-shrink-0" />
-          <span className="text-[12px] font-bold text-white tracking-wide uppercase">Mission Moments</span>
+          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#3B82F6" }} />
+          <span className="text-[12px] font-semibold" style={{ color: "#2563EB" }}>Mission Moments</span>
           {post.isHighlight && (
-            <Star className="h-3 w-3 fill-amber-300 text-amber-300 ml-0.5" />
+            <Star className="h-3 w-3 fill-amber-400 text-amber-400 ml-0.5" />
           )}
           <div className="flex-1" />
-          <Sparkles className="h-3 w-3 text-white/40" />
+          <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />
         </div>
       ) : post.isHighlight ? (
         <div className="flex items-center gap-1.5 px-4 py-1.5 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
@@ -420,7 +419,7 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
         <Link href={`/missionaries/${post.author.id}`}>
           <Avatar className="h-11 w-11 cursor-pointer flex-shrink-0 ring-2 ring-white shadow-sm">
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="bg-[#172A7D]/10 text-[#172A7D] font-bold text-sm">
+            <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#E5E7EB", color: "#374151" }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -428,7 +427,7 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
         <div className="flex-1 min-w-0">
           <Link
             href={`/missionaries/${post.author.id}`}
-            className="font-bold text-[15px] text-[#111827] hover:text-[#172A7D] transition-colors leading-tight block"
+            className="font-bold text-[15px] text-[#111827] hover:text-[#2563eb] transition-colors leading-tight block"
           >
             {post.author.name}
           </Link>
@@ -501,8 +500,8 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
               <div className={cn(
                 "rounded-xl px-4 py-3 border",
                 post.isMissionMoment
-                  ? "border-[#172A7D]/15 bg-[#172A7D]/[0.02]"
-                  : "border-[#00C4A7]/40 bg-[#00C4A7]/[0.02]"
+                  ? "border-blue-100 bg-blue-50/30"
+                  : "border-gray-100 bg-gray-50/50"
               )}>
                 <p className="text-[17px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
               </div>

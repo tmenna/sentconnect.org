@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { Image, MapPin, X, Loader2, Users, Navigation, Star, Video, PlayCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
 import { cn } from "@/lib/utils";
 import type { PostData } from "./post-card";
@@ -157,17 +156,19 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
 
   return (
     <div
-      className={cn(
-        "bg-white rounded-xl border shadow-sm p-4 transition-colors",
-        isMissionMoment ? "border-[#172A7D]/30 bg-[#172A7D]/[0.02]" : "border-border/60"
-      )}
+      className={cn("bg-white rounded-2xl p-5 transition-all duration-200")}
+      style={{
+        border: isMissionMoment ? "1px solid #BFDBFE" : "1px solid #E5E7EB",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+        background: isMissionMoment ? "#FAFBFF" : "#FFFFFF",
+      }}
       onDragOver={e => e.preventDefault()}
       onDrop={handleDrop}
     >
       <div className="flex gap-3">
         <Avatar className="h-10 w-10 flex-shrink-0">
           <AvatarImage src={user.avatarUrl ?? undefined} />
-          <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm">
+          <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#E5E7EB", color: "#374151" }}>
             {user.name.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
@@ -178,7 +179,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             placeholder="What's happening?"
             disabled={posting}
             rows={text.length > 80 ? 4 : 2}
-            className="w-full resize-none bg-transparent text-[15px] placeholder:text-muted-foreground outline-none leading-relaxed disabled:opacity-50"
+            className="w-full resize-none bg-transparent text-[16px] outline-none leading-relaxed disabled:opacity-50 placeholder:text-[#9CA3AF]"
             onPaste={e => {
               const items = e.clipboardData.items;
               const imageItems = Array.from(items).filter(i => i.kind === "file");
@@ -273,53 +274,43 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
           )}
 
           {/* Toolbar */}
-          <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border/40">
+          <div className="flex items-center gap-0.5 mt-3 pt-3" style={{ borderTop: "1px solid #F1F5F9" }}>
             {/* Photo */}
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={posting || files.length >= 6}
-              className="p-2 rounded-full text-primary hover:bg-primary/10 transition-colors disabled:opacity-40"
+              className="p-2 rounded-full transition-colors disabled:opacity-40"
+              style={{ color: "#6B7280" }}
+              onMouseEnter={e => { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; }}
               title="Add photo"
             >
               <Image className="h-4 w-4" />
             </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              accept="image/*"
-              className="hidden"
-              onChange={e => addFiles(e.target.files)}
-            />
+            <input ref={fileInputRef} type="file" multiple accept="image/*" className="hidden" onChange={e => addFiles(e.target.files)} />
 
             {/* Video */}
             <button
               onClick={() => videoInputRef.current?.click()}
               disabled={posting || files.length >= 6}
-              className={cn(
-                "p-2 rounded-full transition-colors disabled:opacity-40",
-                files.some(f => isVideo(f)) ? "text-[#172A7D] bg-[#172A7D]/10" : "text-primary hover:bg-primary/10"
-              )}
+              className="p-2 rounded-full transition-colors disabled:opacity-40"
+              style={{ color: files.some(f => isVideo(f)) ? "#3B82F6" : "#6B7280", background: files.some(f => isVideo(f)) ? "#EFF6FF" : "" }}
+              onMouseEnter={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
+              onMouseLeave={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add short video"
             >
               <Video className="h-4 w-4" />
             </button>
-            <input
-              ref={videoInputRef}
-              type="file"
-              accept="video/*"
-              className="hidden"
-              onChange={e => addFiles(e.target.files)}
-            />
+            <input ref={videoInputRef} type="file" accept="video/*" className="hidden" onChange={e => addFiles(e.target.files)} />
 
             {/* Location */}
             <button
               onClick={() => setShowLocation(s => !s)}
               disabled={posting}
-              className={cn(
-                "p-2 rounded-full transition-colors",
-                showLocation ? "text-primary bg-primary/10" : "text-primary hover:bg-primary/10"
-              )}
+              className="p-2 rounded-full transition-colors"
+              style={{ color: showLocation ? "#3B82F6" : "#6B7280", background: showLocation ? "#EFF6FF" : "" }}
+              onMouseEnter={e => { if (!showLocation) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
+              onMouseLeave={e => { if (!showLocation) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add location"
             >
               <MapPin className="h-4 w-4" />
@@ -329,48 +320,50 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={() => setShowImpact(s => !s)}
               disabled={posting}
-              className={cn(
-                "p-2 rounded-full transition-colors",
-                showImpact ? "text-emerald-600 bg-emerald-50" : "text-primary hover:bg-primary/10"
-              )}
+              className="p-2 rounded-full transition-colors"
+              style={{ color: showImpact ? "#10B981" : "#6B7280", background: showImpact ? "#ECFDF5" : "" }}
+              onMouseEnter={e => { if (!showImpact) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
+              onMouseLeave={e => { if (!showImpact) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add impact"
             >
               <Users className="h-4 w-4" />
             </button>
 
-            {/* Mission Moment */}
+            {/* Mission Moment — soft blue pill */}
             <button
               onClick={() => setIsMissionMoment(s => !s)}
               disabled={posting}
               title="A Mission Moment is a 3–5 minute story, video, or update that highlights God's work and connects people to the broader mission."
-              className={cn(
-                "flex items-center gap-1 px-2 py-1.5 rounded-full text-[12px] font-medium transition-colors",
-                isMissionMoment
-                  ? "text-amber-600 bg-amber-100 hover:bg-amber-200"
-                  : "text-primary hover:bg-primary/10"
-              )}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200"
+              style={{
+                background: isMissionMoment ? "#EFF6FF" : "transparent",
+                color: isMissionMoment ? "#2563EB" : "#6B7280",
+                border: isMissionMoment ? "1px solid #BFDBFE" : "1px solid transparent",
+              }}
             >
-              <Star className={cn("h-4 w-4", isMissionMoment && "fill-amber-500")} />
+              <Star className={cn("h-3.5 w-3.5", isMissionMoment ? "fill-blue-400 text-blue-400" : "")} />
               <span className="hidden sm:inline">Mission Moments</span>
             </button>
 
             <div className="flex-1" />
 
             {posting && uploadProgress && (
-              <span className="text-[12px] text-muted-foreground flex items-center gap-1.5">
+              <span className="text-[12px] flex items-center gap-1.5" style={{ color: "#9CA3AF" }}>
                 <Loader2 className="h-3 w-3 animate-spin" />
                 {uploadProgress}
               </span>
             )}
 
-            <Button
-              size="sm"
+            <button
               onClick={handlePost}
               disabled={!canPost}
-              className="rounded-full px-5 bg-[#172A7D] hover:bg-[#0e1a5c] text-white font-semibold h-8 text-[13px]"
+              className="px-5 font-semibold text-[13px] text-white rounded-xl transition-all duration-200 disabled:opacity-40"
+              style={{ background: "#10B981", height: "36px", boxShadow: canPost ? "0 2px 8px rgba(16,185,129,0.25)" : "none" }}
+              onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#059669"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#10B981"; }}
             >
               Post
-            </Button>
+            </button>
           </div>
         </div>
       </div>
