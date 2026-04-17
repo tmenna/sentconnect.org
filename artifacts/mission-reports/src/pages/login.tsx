@@ -140,7 +140,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         <div className="relative z-10 max-w-[260px]">
           <h2 className="text-[1.75rem] font-extrabold leading-snug mb-3 tracking-tight text-white">
             Stay connected with your{" "}
-            <span style={{ color: "#bfefea" }}>field teams.</span>
+            <span className="text-white font-black">field teams.</span>
           </h2>
           <p className="text-white/65 text-[13px] leading-relaxed mb-7">
             A simple platform for organizations to receive updates from teams working across different locations.

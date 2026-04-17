@@ -59,17 +59,17 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-screen flex bg-[#F5F7FA]">
+    <div className="min-h-screen flex bg-white">
       {/* Left panel */}
       <div
-        className="hidden md:flex flex-col justify-between w-[460px] flex-shrink-0 relative overflow-hidden px-10 py-12 text-white"
-        style={{ background: "linear-gradient(155deg, #0d1b5e 0%, #172A7D 45%, #1a3a9a 100%)" }}
+        className="hidden md:flex flex-col justify-between w-[420px] flex-shrink-0 relative overflow-hidden px-10 py-12 text-white"
+        style={{ background: "linear-gradient(160deg, #2563eb 0%, #3b82f6 60%, #60a5fa 100%)" }}
       >
         {/* Subtle radial glow for depth */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.06) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.12) 0%, transparent 55%)",
           }}
         />
 
@@ -90,7 +90,7 @@ export default function Signup() {
           <h2 className="text-[2.1rem] font-extrabold leading-[1.2] mb-5 tracking-tight text-white">
             Connect with your Global Partners<br />
             from{" "}
-            <span style={{ color: "#00C4A7" }}>anywhere.</span>
+            <span className="text-white font-black">anywhere.</span>
           </h2>
 
           <p className="text-white/70 text-[15px] leading-relaxed max-w-[340px]">
@@ -106,10 +106,10 @@ export default function Signup() {
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="md:hidden flex items-center gap-2 mb-8">
-            <div className="w-8 h-8 bg-[#172A7D] rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
               <Shuffle className="h-4 w-4 text-white" />
             </div>
-            <span className="text-base font-extrabold text-[#172A7D]">SentConnect</span>
+            <span className="text-base font-extrabold text-blue-600">SentConnect</span>
           </div>
 
           <h1 className="text-2xl font-extrabold text-foreground mb-1">Create your organization</h1>
