@@ -42,7 +42,7 @@ export function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-[100dvh] flex flex-col text-foreground" style={{ backgroundColor: "#ffffff" }}>
       <header className="sticky top-0 z-50 w-full" style={{ backgroundColor: BRAND_NAVY }}>
-        <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
             <div className="bg-white/15 border border-white/20 p-1.5 rounded-lg">
               <Shuffle className="h-4 w-4 text-white" />
@@ -91,12 +91,12 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-8">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-8 py-8">
         {children}
       </main>
 
       <footer className="border-t border-border py-5 mt-12" style={{ backgroundColor: BRAND_NAVY }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-white/10 p-1 rounded-md border border-white/15">
               <Shuffle className="h-3 w-3 text-white/70" />

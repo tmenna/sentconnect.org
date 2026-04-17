@@ -504,7 +504,7 @@ export function PostCard({ post: initialPost, onDelete }: { post: PostData; onDe
                   ? "border-[#172A7D]/15 bg-[#172A7D]/[0.02]"
                   : "border-[#00C4A7]/40 bg-[#00C4A7]/[0.02]"
               )}>
-                <p className="text-[15.5px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
+                <p className="text-[17px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
               </div>
             </div>
           )}
