@@ -40,7 +40,7 @@ export function Layout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="min-h-[100dvh] flex flex-col text-foreground" style={{ backgroundColor: "#eef1fa" }}>
+    <div className="min-h-[100dvh] flex flex-col text-foreground" style={{ backgroundColor: "#ffffff" }}>
       <header className="sticky top-0 z-50 w-full" style={{ backgroundColor: BRAND_NAVY }}>
         <div className="max-w-5xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
