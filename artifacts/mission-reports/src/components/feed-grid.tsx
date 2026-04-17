@@ -1,9 +1,185 @@
 import { useState, useEffect } from "react";
-import { formatDistanceToNow } from "date-fns";
-import { Heart, MessageCircle, MapPin, Star, Users, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { formatDistanceToNow, format } from "date-fns";
+import { Heart, MessageCircle, MapPin, Star, Users, X, ChevronLeft, ChevronRight, ArrowRight, FileText } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PostCard, type PostData } from "@/components/post-card";
 import { cn } from "@/lib/utils";
+
+// ─── Masonry helpers ─────────────────────────────────────────────────────────
+
+function ordinalSuffix(d: number) {
+  if (d >= 11 && d <= 13) return "th";
+  switch (d % 10) {
+    case 1: return "st";
+    case 2: return "nd";
+    case 3: return "rd";
+    default: return "th";
+  }
+}
+
+function formatPostDate(dateStr: string) {
+  const d = new Date(dateStr);
+  const day = d.getDate();
+  return `${format(d, "MMM")} ${day}${ordinalSuffix(day)}, ${format(d, "yyyy")}`;
+}
+
+function extractTitleAndExcerpt(description: string | null | undefined) {
+  if (!description?.trim()) return { title: "", excerpt: "" };
+  const lines = description.split("\n").map(l => l.trim()).filter(Boolean);
+  const title = lines[0].length > 80 ? lines[0].slice(0, 78) + "…" : lines[0];
+  const excerpt = lines.slice(1).join(" ").trim();
+  return { title, excerpt };
+}
+
+function isVideoUrl(url: string) {
+  return /\.(mp4|webm|ogg|mov)$/i.test(url);
+}
+
+// ─── Masonry card ─────────────────────────────────────────────────────────────
+
+export function MasonryCard({
+  post,
+  onClick,
+}: {
+  post: PostData;
+  onClick: () => void;
+}) {
+  const cover = post.photos[0];
+  const isVideo = cover && isVideoUrl(cover.url);
+  const { title, excerpt } = extractTitleAndExcerpt(post.description);
+  const dateLabel = formatPostDate(post.createdAt);
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onClick}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onClick(); }}
+      className="bg-white rounded-xl overflow-hidden cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+      style={{
+        border: "1px solid #E5E7EB",
+        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+        transition: "transform 150ms ease-out, box-shadow 150ms ease-out",
+        breakInside: "avoid",
+        marginBottom: "16px",
+        display: "block",
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.10)";
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(0px)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 1px 4px rgba(0,0,0,0.06)";
+      }}
+    >
+      {/* Media — natural height, no forced aspect ratio */}
+      {cover && (
+        <div className="w-full overflow-hidden bg-gray-100">
+          {isVideo ? (
+            <video
+              src={cover.url}
+              preload="metadata"
+              muted
+              className="w-full object-cover"
+              style={{ display: "block" }}
+            />
+          ) : (
+            <img
+              src={cover.url}
+              alt={cover.caption || ""}
+              loading="lazy"
+              className="w-full object-cover block group-hover:scale-[1.02] transition-transform duration-300"
+            />
+          )}
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="px-4 pt-3.5 pb-3">
+        {/* Mission Moment badge */}
+        {post.isMissionMoment && (
+          <span className="inline-block text-[11px] font-semibold text-blue-600 bg-blue-50 border border-blue-100 rounded-full px-2 py-0.5 mb-2">
+            Mission Moment
+          </span>
+        )}
+
+        {/* Title */}
+        {title && (
+          <p className="font-bold text-[15px] leading-snug text-gray-900 mb-1.5">
+            {title}
+          </p>
+        )}
+
+        {/* Excerpt */}
+        {excerpt && (
+          <p className="text-[13.5px] leading-relaxed text-gray-500 line-clamp-4 mb-3">
+            {excerpt}
+          </p>
+        )}
+
+        {/* No excerpt but description exists — show single-line description as excerpt */}
+        {!excerpt && !title && post.description && (
+          <p className="text-[13.5px] leading-relaxed text-gray-500 line-clamp-4 mb-3">
+            {post.description}
+          </p>
+        )}
+
+        {/* Footer: date + open */}
+        <div className="flex items-center justify-between pt-2" style={{ borderTop: "1px solid #F3F4F6" }}>
+          <span className="text-[12px] text-gray-400">{dateLabel}</span>
+          <span className="text-[12px] font-medium text-blue-500 group-hover:text-blue-700 flex items-center gap-0.5 transition-colors">
+            open <ArrowRight className="h-3 w-3" />
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Masonry feed ─────────────────────────────────────────────────────────────
+
+export function MasonryFeed({
+  posts,
+  onDelete,
+}: {
+  posts: PostData[];
+  onDelete?: (id: number) => void;
+}) {
+  const [selected, setSelected] = useState<PostData | null>(null);
+
+  const sorted = [...posts].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+  if (sorted.length === 0) {
+    return (
+      <div className="bg-white rounded-2xl py-16 text-center" style={{ border: "1px solid #E5E7EB", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+        <FileText className="h-8 w-8 mx-auto mb-3" style={{ color: "#D1D5DB" }} />
+        <p className="font-medium text-[15px]" style={{ color: "#374151" }}>No posts yet</p>
+        <p className="text-[14px] mt-1" style={{ color: "#9CA3AF" }}>Share your first update above.</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div style={{ columns: "4 200px", columnGap: "16px" }}>
+        {sorted.map(post => (
+          <MasonryCard key={post.id} post={post} onClick={() => setSelected(post)} />
+        ))}
+      </div>
+
+      {selected && (
+        <PostDetailModal
+          post={selected}
+          onClose={() => setSelected(null)}
+          onDelete={(id) => { onDelete?.(id); setSelected(null); }}
+        />
+      )}
+    </>
+  );
+}
 
 // ─── Grid card ──────────────────────────────────────────────────────────────
 
