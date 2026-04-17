@@ -8,14 +8,13 @@ import { hashPassword } from "./password";
  * Called at every startup — safe to run repeatedly (no-ops if already present).
  * In production, change the default password immediately after first login.
  */
-const SUPER_ADMIN_EMAIL = "superadmin@sentconnect.org";
+const SUPER_ADMIN_EMAIL = "teki.menna@gmail.com";
 const SUPER_ADMIN_NAME  = "Platform Admin";
-
-const SUPER_ADMIN_PASSWORD = "password123";
+const SUPER_ADMIN_PASSWORD = "Pr@xis188*";
 
 export async function ensureSuperAdmin() {
   const [existing] = await db
-    .select({ id: usersTable.id, email: usersTable.email, name: usersTable.name })
+    .select({ id: usersTable.id })
     .from(usersTable)
     .where(eq(usersTable.role, "super_admin"))
     .limit(1);
@@ -28,19 +27,20 @@ export async function ensureSuperAdmin() {
       role: "super_admin",
       organization: "SentConnect",
     });
-    logger.info(`Super-admin created: ${SUPER_ADMIN_EMAIL} / ${SUPER_ADMIN_PASSWORD}`);
+    logger.info(`Super-admin created: ${SUPER_ADMIN_EMAIL}`);
     return;
   }
 
-  // Only sync email and name — never overwrite a password the user has intentionally changed.
+  // Always sync email, name and password so credentials defined here always work.
   await db
     .update(usersTable)
     .set({
       email: SUPER_ADMIN_EMAIL,
       name: SUPER_ADMIN_NAME,
+      passwordHash: hashPassword(SUPER_ADMIN_PASSWORD),
     })
     .where(eq(usersTable.id, existing.id));
-  logger.info(`Super-admin synced: email → ${SUPER_ADMIN_EMAIL}, name → ${SUPER_ADMIN_NAME}`);
+  logger.info(`Super-admin synced: ${SUPER_ADMIN_EMAIL}`);
 }
 
 /**
