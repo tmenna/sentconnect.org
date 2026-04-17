@@ -32,17 +32,15 @@ export async function ensureSuperAdmin() {
     return;
   }
 
-  // Always sync email, name, and password to the canonical values above.
-  // This ensures the known credentials always work after a fresh deploy.
+  // Only sync email and name — never overwrite a password the user has intentionally changed.
   await db
     .update(usersTable)
     .set({
       email: SUPER_ADMIN_EMAIL,
       name: SUPER_ADMIN_NAME,
-      passwordHash: hashPassword(SUPER_ADMIN_PASSWORD),
     })
     .where(eq(usersTable.id, existing.id));
-  logger.info(`Super-admin synced: ${SUPER_ADMIN_EMAIL} / ${SUPER_ADMIN_PASSWORD}`);
+  logger.info(`Super-admin synced: email → ${SUPER_ADMIN_EMAIL}, name → ${SUPER_ADMIN_NAME}`);
 }
 
 /**
