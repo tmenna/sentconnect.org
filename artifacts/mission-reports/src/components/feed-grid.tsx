@@ -324,17 +324,11 @@ export function PostDetailModal({
   onClose: () => void;
   onDelete?: (id: number) => void;
 }) {
-  const [photoIndex, setPhotoIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
-  const photos = post.photos;
   const hasPrev = allPosts.length > 1 && postIndex > 0;
   const hasNext = allPosts.length > 1 && postIndex < allPosts.length - 1;
 
-  // Reset photo index when post changes
-  useEffect(() => { setPhotoIndex(0); }, [post.id]);
-
-  // Trigger entrance animation on next tick
   useEffect(() => {
     const t = requestAnimationFrame(() => setVisible(true));
     return () => cancelAnimationFrame(t);
@@ -354,7 +348,6 @@ export function PostDetailModal({
     return () => document.removeEventListener("keydown", handleKey);
   }, [postIndex, hasPrev, hasNext]);
 
-  // Prevent body scroll while modal open
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -365,7 +358,7 @@ export function PostDetailModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-2 sm:px-6"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-6 px-4"
       aria-modal="true"
       role="dialog"
       onTransitionEnd={(e) => {
@@ -374,45 +367,43 @@ export function PostDetailModal({
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 backdrop-blur-sm"
+        className="fixed inset-0 backdrop-blur-sm"
         style={{
-          backgroundColor: isIn ? "rgba(0,0,0,0.72)" : "rgba(0,0,0,0)",
+          backgroundColor: isIn ? "rgba(0,0,0,0.65)" : "rgba(0,0,0,0)",
           transition: `background-color ${DURATION}ms ease`,
         }}
         onClick={handleClose}
       />
 
-      {/* Prev post arrow — floats on backdrop left */}
+      {/* Prev post arrow */}
       {hasPrev && (
         <button
           onClick={(e) => { e.stopPropagation(); goPrev(); }}
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
+          className="fixed left-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
           aria-label="Previous post"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
       )}
 
-      {/* Next post arrow — floats on backdrop right */}
+      {/* Next post arrow */}
       {hasNext && (
         <button
           onClick={(e) => { e.stopPropagation(); goNext(); }}
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
+          className="fixed right-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
           aria-label="Next post"
         >
           <ChevronRight className="h-6 w-6" />
         </button>
       )}
 
-      {/* Panel */}
+      {/* Post panel — wide, centered, full PostCard */}
       <div
-        className="relative z-10 flex flex-col md:flex-row w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
+        className="relative z-10 w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
         style={{
-          maxWidth: "min(1100px, calc(100vw - 80px))",
-          maxHeight: "92vh",
-          minHeight: "min(72vh, 520px)",
+          maxWidth: 780,
           opacity: isIn ? 1 : 0,
-          transform: isIn ? "translateY(0px) scale(1)" : "translateY(16px) scale(0.97)",
+          transform: isIn ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.97)",
           transition: `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`,
         }}
         onTransitionEnd={(e) => {
@@ -420,72 +411,27 @@ export function PostDetailModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
-        <button
-          onClick={handleClose}
-          className="absolute top-3.5 right-3.5 z-30 flex items-center justify-center w-9 h-9 rounded-full bg-black/10 hover:bg-black/15 text-gray-700 transition-colors"
-          aria-label="Close"
-        >
-          <X className="h-5 w-5" />
-        </button>
-
-        {/* Post counter badge */}
-        {allPosts.length > 1 && (
-          <div className="absolute top-3.5 left-3.5 z-30 text-[11px] font-medium text-gray-400 bg-white/80 backdrop-blur-sm px-2.5 py-1 rounded-full border border-gray-100">
-            {postIndex + 1} / {allPosts.length}
-          </div>
-        )}
-
-        {/* Image panel — full left side when photos exist */}
-        {photos.length > 0 && (
-          <div className="relative flex-shrink-0 w-full md:w-[50%] bg-gray-950 flex items-center justify-center overflow-hidden">
-            <img
-              key={photos[photoIndex]?.url}
-              src={photos[photoIndex]?.url}
-              alt={photos[photoIndex]?.caption || ""}
-              className="w-full h-56 md:h-full object-contain"
-              style={{ maxHeight: "92vh" }}
-            />
-
-            {/* In-photo gallery nav */}
-            {photos.length > 1 && (
-              <>
-                <button
-                  onClick={() => setPhotoIndex(i => (i - 1 + photos.length) % photos.length)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/65 text-white transition-colors"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => setPhotoIndex(i => (i + 1) % photos.length)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/65 text-white transition-colors"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  {photos.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setPhotoIndex(i)}
-                      className={cn(
-                        "w-1.5 h-1.5 rounded-full transition-all",
-                        i === photoIndex ? "bg-white scale-125" : "bg-white/45"
-                      )}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Post content scroll panel */}
-        <div className="flex-1 overflow-y-auto min-w-0">
-          <PostCard
-            post={post}
-            onDelete={(id) => { onDelete?.(id); onClose(); }}
-          />
+        {/* Top bar: counter + close */}
+        <div className="flex items-center justify-between px-5 pt-4 pb-0">
+          {allPosts.length > 1 ? (
+            <span className="text-[12px] font-medium text-gray-400">
+              {postIndex + 1} / {allPosts.length}
+            </span>
+          ) : <span />}
+          <button
+            onClick={handleClose}
+            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-800 transition-colors"
+            aria-label="Close"
+          >
+            <X className="h-[18px] w-[18px]" />
+          </button>
         </div>
+
+        {/* Full PostCard — no truncation, all content visible */}
+        <PostCard
+          post={post}
+          onDelete={(id) => { onDelete?.(id); onClose(); }}
+        />
       </div>
     </div>
   );

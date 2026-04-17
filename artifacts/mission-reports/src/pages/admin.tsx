@@ -794,7 +794,7 @@ export default function AdminDashboard() {
   const [filterDateFrom, setFilterDateFrom] = useState<string>("");
   const [filterDateTo, setFilterDateTo] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedPost, setSelectedPost] = useState<PostData | null>(null);
+  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportMissionaryId, setExportMissionaryId] = useState<string>("");
   const [exportDateFrom, setExportDateFrom] = useState<string>("");
@@ -1174,24 +1174,27 @@ export default function AdminDashboard() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {displayedFeedPosts.map(post => (
+                {displayedFeedPosts.map((post, i) => (
                   <FeedGridCard
                     key={post.id}
                     post={post}
-                    onClick={() => setSelectedPost(post)}
+                    onClick={() => setSelectedPostIndex(i)}
                   />
                 ))}
               </div>
             )}
 
             {/* Post detail modal */}
-            {selectedPost && (
+            {selectedPostIndex !== null && displayedFeedPosts[selectedPostIndex] && (
               <PostDetailModal
-                post={selectedPost}
-                onClose={() => setSelectedPost(null)}
+                post={displayedFeedPosts[selectedPostIndex]}
+                allPosts={displayedFeedPosts}
+                postIndex={selectedPostIndex}
+                onNavigate={setSelectedPostIndex}
+                onClose={() => setSelectedPostIndex(null)}
                 onDelete={(id) => {
                   setFeedPosts(prev => prev ? prev.filter(p => p.id !== id) : null);
-                  setSelectedPost(null);
+                  setSelectedPostIndex(null);
                 }}
               />
             )}
