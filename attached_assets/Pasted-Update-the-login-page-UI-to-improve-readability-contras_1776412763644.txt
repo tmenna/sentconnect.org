@@ -1,0 +1,107 @@
+Update the login page UI to improve readability, contrast, and overall visual clarity while keeping a clean, white-dominant design.
+
+Goals:
+
+* Make text sharp and easy to read (no “blurry” feel)
+* Improve contrast on the blue panel
+* Keep the design modern, minimal, and fast-loading
+
+Design Updates:
+
+1. LEFT PANEL (Blue Section)
+
+* Use a slightly darker gradient:
+  background: linear-gradient(135deg, #3B82F6, #2563EB);
+* Add a subtle dark overlay for better contrast:
+  background-blend: overlay with rgba(0,0,0,0.15)
+
+Typography:
+
+* Heading:
+  font-size: 36px
+  font-weight: 700
+  color: #FFFFFF
+* Subtext:
+  font-size: 17px
+  color: #E5E7EB (not transparent white)
+* Feature list text:
+  font-size: 15–16px
+  color: #E5E7EB
+
+Spacing:
+
+* Increase vertical spacing between elements (24px–32px)
+* Add more breathing room around content
+
+Icons:
+
+* Use white icons at ~85–90% opacity
+* Slightly increase size for clarity
+
+---
+
+2. RIGHT PANEL (Login Form)
+
+* Keep background pure white (#FFFFFF)
+* Increase card shadow slightly for depth:
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08)
+
+Form Card:
+
+* Border radius: 12–16px
+* Padding: 24–32px
+
+Typography:
+
+* "Welcome back":
+  font-size: 24–28px
+  font-weight: 600–700
+* Labels:
+  font-size: 14–15px
+  font-weight: 500
+* Inputs:
+  font-size: 15–16px
+
+Inputs:
+
+* Increase height (44–48px)
+* Border: 1px solid #E5E7EB
+* Focus state:
+  border-color: #3B82F6
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.15)
+
+---
+
+3. BUTTON (Sign In)
+
+* Use a more refined green:
+  background: #10B981
+* Hover:
+  background: #059669
+* Text:
+  font-weight: 600
+  font-size: 15–16px
+* Border radius: 10–12px
+* Add slight transition (0.2s ease)
+
+---
+
+4. GENERAL IMPROVEMENTS
+
+* Avoid using low-opacity white text (causes blur effect)
+* Ensure all text contrast passes accessibility (WCAG AA minimum)
+* Use line-height: 1.5–1.7 for readability
+* Increase spacing between sections for a cleaner layout
+
+---
+
+5. OPTIONAL POLISH
+
+* Add subtle animation on load (fade-in or slight slide)
+* Add hover effect to inputs and links
+* Slightly increase max width of login card for balance
+
+---
+
+Result:
+A sharper, higher-contrast, modern SaaS-style login page that feels clean, professional, and easy to read.
