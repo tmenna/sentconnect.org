@@ -113,10 +113,10 @@ const PERM_LABELS: { key: keyof Permissions; label: string }[] = [
 function StatCard({ label, value, icon }: { label: string; value: number | string; icon: React.ReactNode }) {
   return (
     <div className="bg-white rounded-xl border border-border/60 shadow-sm p-5 flex items-center gap-4">
-      <div className="p-3 bg-[#2563eb]/8 rounded-xl text-[#2563eb]">{icon}</div>
+      <div className="p-3 bg-[#2563eb]/10 rounded-xl text-[#2563eb]">{icon}</div>
       <div>
-        <p className="text-[13px] text-muted-foreground font-medium">{label}</p>
-        <p className="text-2xl font-extrabold text-foreground">{value}</p>
+        <p className="text-[14px] text-muted-foreground font-medium">{label}</p>
+        <p className="text-[28px] font-extrabold text-foreground leading-tight">{value}</p>
       </div>
     </div>
   );
@@ -126,7 +126,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-2 text-[13px] font-semibold rounded-lg transition-colors ${
+      className={`px-5 py-2.5 text-[14px] font-semibold rounded-lg transition-colors ${
         active ? "bg-[#2563eb] text-white" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
       }`}
     >
@@ -1644,22 +1644,22 @@ export default function SuperAdminPanel() {
           <ShieldCheck className="h-6 w-6 text-white" />
         </div>
         <div className="flex-1">
-          <h1 className="text-[20px] font-extrabold text-white tracking-tight">Platform Admin</h1>
-          <p className="text-white/65 text-sm mt-0.5">
+          <h1 className="text-[24px] font-extrabold text-white tracking-tight">Platform Admin</h1>
+          <p className="text-white/80 text-[15px] mt-0.5">
             Global view — no organization filter applied.
           </p>
         </div>
         <div className="hidden sm:flex flex-col items-end text-right">
-          <span className="text-[11px] font-bold text-white/50 uppercase tracking-wide">Signed in as</span>
-          <span className="text-[13px] font-semibold text-white/90">{user?.name}</span>
-          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 ${roleBadge(user?.role ?? "").bg}`}>
+          <span className="text-[12px] font-bold text-white/60 uppercase tracking-wide">Signed in as</span>
+          <span className="text-[15px] font-semibold text-white">{user?.name}</span>
+          <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full mt-1.5 ${roleBadge(user?.role ?? "").bg}`}>
             {roleBadge(user?.role ?? "").label}
           </span>
         </div>
         <button
           onClick={() => setShowEditProfile(true)}
           title="Edit account"
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/15 transition-colors ml-2"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-colors ml-2"
         >
           <Settings2 className="h-4 w-4" />
           <span className="hidden sm:inline">Edit Account</span>
@@ -1668,7 +1668,7 @@ export default function SuperAdminPanel() {
           onClick={() => logout.mutate({ data: undefined })}
           disabled={logout.isPending}
           title="Sign out"
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/15 transition-colors ml-1"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-colors ml-1"
         >
           {logout.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
           <span className="hidden sm:inline">Sign Out</span>
@@ -1706,14 +1706,14 @@ export default function SuperAdminPanel() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[14px] font-bold text-foreground">Platform Team</p>
-              <p className="text-[12px] text-muted-foreground mt-0.5">Manage super admins, platform admins, and platform managers</p>
+              <p className="text-[17px] font-bold text-foreground">Platform Team</p>
+              <p className="text-[14px] text-muted-foreground mt-0.5">Manage super admins, platform admins, and platform managers</p>
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#2563eb] text-white rounded-lg hover:bg-[#2563eb]/90 transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold bg-[#2563eb] text-white rounded-lg hover:bg-[#2563eb]/90 transition-colors"
             >
-              <Plus className="h-3.5 w-3.5" /> Add Platform User
+              <Plus className="h-4 w-4" /> Add Platform User
             </button>
           </div>
 
@@ -1744,16 +1744,16 @@ export default function SuperAdminPanel() {
                       </Avatar>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[13px] font-semibold text-foreground">{u.name}</span>
-                          {isSelf && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#2563eb]/10 text-[#2563eb]">You</span>}
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${badge.bg}`}>{badge.label}</span>
+                          <span className="text-[15px] font-semibold text-foreground">{u.name}</span>
+                          {isSelf && <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#2563eb]/10 text-[#2563eb]">You</span>}
+                          <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${badge.bg}`}>{badge.label}</span>
                           {u.status !== "active" && (
-                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${statusBadge(u.status)}`}>
+                            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${statusBadge(u.status)}`}>
                               {u.status}
                             </span>
                           )}
                         </div>
-                        <p className="text-[12px] text-muted-foreground truncate">{u.email}</p>
+                        <p className="text-[13px] text-muted-foreground truncate mt-0.5">{u.email}</p>
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {u.role === "platform_manager" && !isSelf && (
