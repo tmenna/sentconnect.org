@@ -357,7 +357,7 @@ export function PostCard({
     if (defaultShowComments) {
       loadComments().then(() => {
         // Small delay so the DOM has rendered the input
-        setTimeout(() => commentInputRef.current?.focus(), 80);
+        setTimeout(() => commentInputRef.current?.focus({ preventScroll: true }), 80);
       });
     }
   }, []);
