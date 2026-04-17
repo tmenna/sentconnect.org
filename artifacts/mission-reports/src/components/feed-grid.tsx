@@ -364,13 +364,14 @@ export function PostDetailModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      ref={scrollRef}
+      className="fixed inset-0 z-50 overflow-y-auto"
       aria-modal="true"
       role="dialog"
     >
-      {/* Backdrop */}
+      {/* Fixed backdrop */}
       <div
-        className="absolute inset-0 backdrop-blur-sm"
+        className="fixed inset-0 backdrop-blur-sm"
         style={{
           backgroundColor: isIn ? "rgba(0,0,0,0.65)" : "rgba(0,0,0,0)",
           transition: `background-color ${DURATION}ms ease`,
@@ -378,61 +379,40 @@ export function PostDetailModal({
         onClick={handleClose}
       />
 
-      {/* Prev post arrow */}
-      {hasPrev && (
-        <button
-          onClick={(e) => { e.stopPropagation(); goPrev(); }}
-          className="absolute left-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
-          aria-label="Previous post"
+      {/* Scrollable page content */}
+      <div className="relative min-h-full flex flex-col items-center py-8 px-4 sm:px-8">
+
+        {/* Post panel — full natural height, page scrolls */}
+        <div
+          className="relative z-10 w-full bg-white rounded-2xl shadow-2xl"
+          style={{
+            maxWidth: 1020,
+            opacity: isIn ? 1 : 0,
+            transform: isIn ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.97)",
+            transition: `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`,
+          }}
+          onTransitionEnd={(e) => {
+            if (closing && e.propertyName === "opacity") onClose();
+          }}
+          onClick={(e) => e.stopPropagation()}
         >
-          <ChevronLeft className="h-6 w-6" />
-        </button>
-      )}
+          {/* Sticky top bar — stays pinned while scrolling */}
+          <div className="sticky top-0 z-20 flex items-center justify-between px-5 py-3 bg-white border-b border-gray-100 rounded-t-2xl">
+            {allPosts.length > 1 ? (
+              <span className="text-[12px] font-medium text-gray-400">
+                {postIndex + 1} / {allPosts.length}
+              </span>
+            ) : <span />}
+            <button
+              onClick={handleClose}
+              className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-800 transition-colors"
+              aria-label="Close"
+            >
+              <X className="h-[18px] w-[18px]" />
+            </button>
+          </div>
 
-      {/* Next post arrow */}
-      {hasNext && (
-        <button
-          onClick={(e) => { e.stopPropagation(); goNext(); }}
-          className="absolute right-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
-          aria-label="Next post"
-        >
-          <ChevronRight className="h-6 w-6" />
-        </button>
-      )}
-
-      {/* Post panel — scrolls internally, starts at the top */}
-      <div
-        className="relative z-10 w-full bg-white rounded-2xl shadow-2xl flex flex-col"
-        style={{
-          maxWidth: 1020,
-          maxHeight: "92vh",
-          opacity: isIn ? 1 : 0,
-          transform: isIn ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.97)",
-          transition: `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`,
-        }}
-        onTransitionEnd={(e) => {
-          if (closing && e.propertyName === "opacity") onClose();
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Sticky top bar: counter + close — always visible */}
-        <div className="flex-shrink-0 flex items-center justify-between px-5 pt-4 pb-3 border-b border-gray-100 bg-white rounded-t-2xl sticky top-0 z-10">
-          {allPosts.length > 1 ? (
-            <span className="text-[12px] font-medium text-gray-400">
-              {postIndex + 1} / {allPosts.length}
-            </span>
-          ) : <span />}
-          <button
-            onClick={handleClose}
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-800 transition-colors"
-            aria-label="Close"
-          >
-            <X className="h-[18px] w-[18px]" />
-          </button>
-        </div>
-
-        {/* Scrollable post content — starts at the top */}
-        <div ref={scrollRef} className="flex-1 overflow-y-auto min-h-0">
+          {/* Full post content */}
           <PostCard
             post={post}
             defaultShowComments
@@ -440,6 +420,26 @@ export function PostDetailModal({
             onDelete={(id) => { onDelete?.(id); onClose(); }}
           />
         </div>
+
+        {/* Prev / Next arrows float beside the panel */}
+        {hasPrev && (
+          <button
+            onClick={(e) => { e.stopPropagation(); goPrev(); }}
+            className="fixed left-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
+            aria-label="Previous post"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+        )}
+        {hasNext && (
+          <button
+            onClick={(e) => { e.stopPropagation(); goNext(); }}
+            className="fixed right-3 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
+            aria-label="Next post"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+        )}
       </div>
     </div>
   );
