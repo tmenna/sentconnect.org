@@ -3,8 +3,7 @@ import { useAuth } from "@/components/auth-provider";
 import { useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
 import { Redirect } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
-import { type PostData } from "@/components/post-card";
-import { MasonryFeed } from "@/components/feed-grid";
+import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
 import { MapPin, Building2, FileText, Star, Globe } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -125,20 +124,20 @@ export default function MissionaryDashboard() {
         </button>
       </div>
 
-      {/* Masonry feed */}
+      {/* Blog-style post feed */}
       {postsLoading && posts === null ? (
-        <div style={{ columns: "4 200px", columnGap: "16px" }}>
-          {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-            <div key={i} style={{ breakInside: "avoid", marginBottom: "16px" }}>
-              <div className="bg-white rounded-xl overflow-hidden" style={{ border: "1px solid #E5E7EB" }}>
-                <Skeleton className={`w-full ${i % 3 === 0 ? "h-48" : i % 3 === 1 ? "h-32" : "h-56"}`} />
-                <div className="px-4 pt-3.5 pb-3 space-y-2">
-                  <Skeleton className="h-4 w-3/4" />
-                  <Skeleton className="h-3 w-full" />
-                  <Skeleton className="h-3 w-5/6" />
-                  <Skeleton className="h-3 w-1/3 mt-2" />
+        <div className="space-y-4">
+          {[1, 2].map(i => (
+            <div key={i} className="bg-white rounded-2xl p-5 space-y-3" style={{ border: "1px solid #E5E7EB", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <div className="space-y-1.5 flex-1">
+                  <Skeleton className="h-3.5 w-28" />
+                  <Skeleton className="h-2.5 w-20" />
                 </div>
               </div>
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-48 w-full rounded-xl" />
             </div>
           ))}
         </div>
@@ -159,7 +158,11 @@ export default function MissionaryDashboard() {
           )}
         </div>
       ) : (
-        <MasonryFeed posts={myPosts} onDelete={handleDelete} />
+        <div className="space-y-4">
+          {myPosts.map(post => (
+            <PostCard key={post.id} post={post} onDelete={handleDelete} />
+          ))}
+        </div>
       )}
     </div>
   );
