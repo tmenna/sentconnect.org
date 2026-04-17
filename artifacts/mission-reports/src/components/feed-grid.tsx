@@ -146,7 +146,7 @@ export function MasonryFeed({
   posts: PostData[];
   onDelete?: (id: number) => void;
 }) {
-  const [selected, setSelected] = useState<PostData | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const sorted = [...posts].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -165,16 +165,22 @@ export function MasonryFeed({
   return (
     <>
       <div style={{ columns: "4 200px", columnGap: "16px" }}>
-        {sorted.map(post => (
-          <MasonryCard key={post.id} post={post} onClick={() => setSelected(post)} />
+        {sorted.map((post, i) => (
+          <MasonryCard key={post.id} post={post} onClick={() => setSelectedIndex(i)} />
         ))}
       </div>
 
-      {selected && (
+      {selectedIndex !== null && (
         <PostDetailModal
-          post={selected}
-          onClose={() => setSelected(null)}
-          onDelete={(id) => { onDelete?.(id); setSelected(null); }}
+          post={sorted[selectedIndex]}
+          allPosts={sorted}
+          postIndex={selectedIndex}
+          onNavigate={setSelectedIndex}
+          onClose={() => setSelectedIndex(null)}
+          onDelete={(id) => {
+            onDelete?.(id);
+            setSelectedIndex(null);
+          }}
         />
       )}
     </>
@@ -305,10 +311,16 @@ export function FeedGridCard({
 
 export function PostDetailModal({
   post,
+  allPosts = [],
+  postIndex = 0,
+  onNavigate,
   onClose,
   onDelete,
 }: {
   post: PostData;
+  allPosts?: PostData[];
+  postIndex?: number;
+  onNavigate?: (index: number) => void;
   onClose: () => void;
   onDelete?: (id: number) => void;
 }) {
@@ -316,6 +328,11 @@ export function PostDetailModal({
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
   const photos = post.photos;
+  const hasPrev = allPosts.length > 1 && postIndex > 0;
+  const hasNext = allPosts.length > 1 && postIndex < allPosts.length - 1;
+
+  // Reset photo index when post changes
+  useEffect(() => { setPhotoIndex(0); }, [post.id]);
 
   // Trigger entrance animation on next tick
   useEffect(() => {
@@ -323,19 +340,19 @@ export function PostDetailModal({
     return () => cancelAnimationFrame(t);
   }, []);
 
-  function handleClose() {
-    setClosing(true);
-  }
+  function handleClose() { setClosing(true); }
+  function goPrev() { if (hasPrev) onNavigate?.(postIndex - 1); }
+  function goNext() { if (hasNext) onNavigate?.(postIndex + 1); }
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === "Escape") handleClose();
-      if (e.key === "ArrowRight" && photos.length > 1) setPhotoIndex(i => (i + 1) % photos.length);
-      if (e.key === "ArrowLeft" && photos.length > 1) setPhotoIndex(i => (i - 1 + photos.length) % photos.length);
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
     }
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [photos.length]);
+  }, [postIndex, hasPrev, hasNext]);
 
   // Prevent body scroll while modal open
   useEffect(() => {
@@ -344,11 +361,11 @@ export function PostDetailModal({
   }, []);
 
   const isIn = visible && !closing;
-  const DURATION = 220;
+  const DURATION = 200;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center px-2 sm:px-6"
       aria-modal="true"
       role="dialog"
       onTransitionEnd={(e) => {
@@ -359,70 +376,100 @@ export function PostDetailModal({
       <div
         className="absolute inset-0 backdrop-blur-sm"
         style={{
-          backgroundColor: isIn ? "rgba(0,0,0,0.60)" : "rgba(0,0,0,0)",
+          backgroundColor: isIn ? "rgba(0,0,0,0.72)" : "rgba(0,0,0,0)",
           transition: `background-color ${DURATION}ms ease`,
         }}
         onClick={handleClose}
       />
 
+      {/* Prev post arrow — floats on backdrop left */}
+      {hasPrev && (
+        <button
+          onClick={(e) => { e.stopPropagation(); goPrev(); }}
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
+          aria-label="Previous post"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </button>
+      )}
+
+      {/* Next post arrow — floats on backdrop right */}
+      {hasNext && (
+        <button
+          onClick={(e) => { e.stopPropagation(); goNext(); }}
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white border border-white/20 transition-all"
+          aria-label="Next post"
+        >
+          <ChevronRight className="h-6 w-6" />
+        </button>
+      )}
+
       {/* Panel */}
       <div
-        className="relative z-10 flex flex-col md:flex-row w-full max-w-5xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden"
+        className="relative z-10 flex flex-col md:flex-row w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
         style={{
+          maxWidth: "min(1100px, calc(100vw - 80px))",
           maxHeight: "92vh",
-          minHeight: "min(78vh, 600px)",
+          minHeight: "min(72vh, 520px)",
           opacity: isIn ? 1 : 0,
-          transform: isIn ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.97)",
+          transform: isIn ? "translateY(0px) scale(1)" : "translateY(16px) scale(0.97)",
           transition: `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`,
         }}
         onTransitionEnd={(e) => {
           if (closing && e.propertyName === "opacity") onClose();
         }}
+        onClick={(e) => e.stopPropagation()}
       >
-
         {/* Close button */}
         <button
           onClick={handleClose}
-          className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors"
+          className="absolute top-3.5 right-3.5 z-30 flex items-center justify-center w-9 h-9 rounded-full bg-black/10 hover:bg-black/15 text-gray-700 transition-colors"
           aria-label="Close"
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </button>
 
-        {/* Image gallery panel */}
+        {/* Post counter badge */}
+        {allPosts.length > 1 && (
+          <div className="absolute top-3.5 left-3.5 z-30 text-[11px] font-medium text-gray-400 bg-white/80 backdrop-blur-sm px-2.5 py-1 rounded-full border border-gray-100">
+            {postIndex + 1} / {allPosts.length}
+          </div>
+        )}
+
+        {/* Image panel — full left side when photos exist */}
         {photos.length > 0 && (
-          <div className="relative flex-shrink-0 w-full md:w-[48%] bg-black flex items-center justify-center">
+          <div className="relative flex-shrink-0 w-full md:w-[50%] bg-gray-950 flex items-center justify-center overflow-hidden">
             <img
+              key={photos[photoIndex]?.url}
               src={photos[photoIndex]?.url}
               alt={photos[photoIndex]?.caption || ""}
-              className="w-full h-64 md:h-full max-h-[92vh] object-contain"
+              className="w-full h-56 md:h-full object-contain"
+              style={{ maxHeight: "92vh" }}
             />
 
-            {/* Gallery nav */}
+            {/* In-photo gallery nav */}
             {photos.length > 1 && (
               <>
                 <button
-                  onClick={(e) => { e.stopPropagation(); setPhotoIndex(i => (i - 1 + photos.length) % photos.length); }}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
+                  onClick={() => setPhotoIndex(i => (i - 1 + photos.length) % photos.length)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/65 text-white transition-colors"
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronLeft className="h-4 w-4" />
                 </button>
                 <button
-                  onClick={(e) => { e.stopPropagation(); setPhotoIndex(i => (i + 1) % photos.length); }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
+                  onClick={() => setPhotoIndex(i => (i + 1) % photos.length)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/65 text-white transition-colors"
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className="h-4 w-4" />
                 </button>
-
-                {/* Dots */}
                 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
                   {photos.map((_, i) => (
                     <button
                       key={i}
-                      onClick={(e) => { e.stopPropagation(); setPhotoIndex(i); }}
+                      onClick={() => setPhotoIndex(i)}
                       className={cn(
                         "w-1.5 h-1.5 rounded-full transition-all",
-                        i === photoIndex ? "bg-white scale-125" : "bg-white/50"
+                        i === photoIndex ? "bg-white scale-125" : "bg-white/45"
                       )}
                     />
                   ))}
@@ -432,11 +479,8 @@ export function PostDetailModal({
           </div>
         )}
 
-        {/* Post card scroll panel */}
-        <div
-          className="flex-1 overflow-y-auto"
-          onClick={(e) => e.stopPropagation()}
-        >
+        {/* Post content scroll panel */}
+        <div className="flex-1 overflow-y-auto min-w-0">
           <PostCard
             post={post}
             onDelete={(id) => { onDelete?.(id); onClose(); }}
