@@ -1,0 +1,58 @@
+Update the existing login page UI to make it more clean, white-dominant, and lightweight while maintaining a modern look.
+
+Goals:
+
+* Prioritize a white and light UI for better readability and faster perceived load time
+* Reduce heavy visual elements, especially dark colors
+* Keep the interface simple and distraction-free for field users
+
+Design Updates:
+
+1. Left Panel (Brand Section):
+
+* Lighten the current dark blue background to a softer blue (e.g., #3b82f6 or similar)
+* Optionally apply a very subtle gradient (light blue tones only)
+* Reduce the width of the left panel to about 35–40% of the screen
+* Keep the content (logo, headline, bullet points), but slightly reduce text contrast if too sharp
+* Ensure text remains readable but less visually heavy
+
+2. Right Panel (Login Section):
+
+* Keep a clean white background (#ffffff)
+* Optionally use a very light gray background (#f9fafb) for subtle contrast
+* Maintain centered login card with soft shadow (reduce heavy shadows if present)
+* Keep spacing generous and consistent
+
+3. Top Bar / Header:
+
+* Remove or avoid strong blue top bars
+* Use white or very light gray background
+* Keep branding minimal (logo only or small accent color)
+
+4. CTA Button:
+
+* Keep the green “Sign In” button as the primary accent color
+* Ensure good contrast and hover state
+* Avoid adding additional competing colors
+
+5. Visual Consistency:
+
+* Add a subtle divider or smooth transition between left and right panels
+* Use consistent border radius (rounded corners)
+* Keep typography simple and clean (no heavy font weights)
+
+6. Performance Considerations:
+
+* Avoid heavy images or large gradients
+* Use solid colors or very subtle gradients only
+* Ensure fast load and responsiveness on low-bandwidth environments
+
+7. Multi-Tenant Readiness:
+
+* Structure the left panel so it can be easily customized per organization (logo, text, color)
+* Keep the right login panel consistent across all tenants
+
+Deliverable:
+
+* Updated responsive login page UI
+* Clean, minimal, and modern design with improved balance between branding and usability

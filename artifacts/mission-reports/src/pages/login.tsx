@@ -32,7 +32,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const [, navigate] = useLocation();
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
 
-  // Where to send the user after they authenticate.
   const from = (() => {
     if (platformMode) return "/admin";
     const raw = new URLSearchParams(search).get("from") ?? null;
@@ -73,30 +72,29 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   });
 
   if (isLoading) return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F5F7FA]">
+    <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="animate-pulse text-muted-foreground text-sm">Loading…</div>
     </div>
   );
 
-  // Already signed in — show a friendly screen instead of an invisible redirect
   if (isAuthenticated && user) return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F5F7FA] px-4">
-      <div className="w-full max-w-sm bg-white rounded-2xl border border-border shadow-sm p-8 text-center">
-        <div className="w-12 h-12 rounded-full bg-[#172A7D]/10 flex items-center justify-center mx-auto mb-4">
-          <span className="text-[#172A7D] font-extrabold text-lg">{user.name.charAt(0).toUpperCase()}</span>
+    <div className="min-h-screen flex items-center justify-center bg-[#f9fafb] px-4">
+      <div className="w-full max-w-sm bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
+        <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
+          <span className="text-blue-600 font-extrabold text-lg">{user.name.charAt(0).toUpperCase()}</span>
         </div>
         <h2 className="text-[17px] font-bold text-foreground mb-1">You're signed in</h2>
         <p className="text-[13px] text-muted-foreground mb-6">{user.name} · {user.email}</p>
         <Button
           className="w-full h-10 font-semibold mb-3"
-          style={{ backgroundColor: "#172A7D" }}
+          style={{ backgroundColor: "#00C4A7" }}
           onClick={() => navigate(from)}
         >
           Continue to app
         </Button>
         <Button
           variant="outline"
-          className="w-full h-10 font-semibold text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+          className="w-full h-10 font-semibold text-red-600 border-red-100 hover:bg-red-50 hover:border-red-200"
           onClick={() => logout.mutate({ data: undefined })}
           disabled={logout.isPending}
         >
@@ -113,82 +111,82 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
   return (
     <div className="min-h-screen flex">
-      {/* Left: Brand Panel */}
+      {/* Left: Brand Panel — lighter blue, narrower */}
       <div
-        className="hidden lg:flex lg:w-[44%] flex-col text-white p-12 relative overflow-hidden"
-        style={{ background: "linear-gradient(155deg, #0d1b5e 0%, #172A7D 45%, #1a3a9a 100%)" }}
+        className="hidden lg:flex lg:w-[38%] flex-col text-white px-10 py-12 relative overflow-hidden"
+        style={{ background: "linear-gradient(160deg, #2563eb 0%, #3b82f6 60%, #60a5fa 100%)" }}
       >
-        {/* Radial glow — matches signup page */}
+        {/* Subtle radial highlight */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.06) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.12) 0%, transparent 55%)",
           }}
         />
 
         {/* Logo */}
-        <div className="flex items-center gap-2.5 relative z-10 mb-6">
-          <div className="bg-white/10 p-2 rounded-xl border border-white/10">
+        <div className="flex items-center gap-2.5 relative z-10 mb-5">
+          <div className="bg-white/15 p-2 rounded-xl border border-white/15">
             <Shuffle className="h-5 w-5 text-white" />
           </div>
           <span className="text-lg font-extrabold tracking-tight text-white">SentConnect</span>
         </div>
 
-        {/* Domain — matches signup */}
-        <p className="relative z-10 text-white/40 text-[11px] font-medium tracking-widest uppercase mb-8">
+        <p className="relative z-10 text-white/50 text-[10px] font-medium tracking-widest uppercase mb-8">
           www.sentconnect.org
         </p>
 
-        {/* Headline + description */}
-        <div className="relative z-10 max-w-xs">
-          <h2 className="text-[2rem] font-extrabold leading-snug mb-3 tracking-tight text-white">
+        {/* Headline */}
+        <div className="relative z-10 max-w-[260px]">
+          <h2 className="text-[1.75rem] font-extrabold leading-snug mb-3 tracking-tight text-white">
             Stay connected with your{" "}
-            <span style={{ color: "#00C4A7" }}>field teams.</span>
+            <span style={{ color: "#bfefea" }}>field teams.</span>
           </h2>
-          <p className="text-white/60 text-sm leading-relaxed mb-8">
+          <p className="text-white/65 text-[13px] leading-relaxed mb-7">
             A simple platform for organizations to receive updates from teams working across different locations.
           </p>
 
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             {FEATURES.map(({ icon: Icon, text }, i) => (
               <div key={i} className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-lg bg-white/8 border border-white/10 flex items-center justify-center flex-shrink-0">
-                  <Icon className="h-3.5 w-3.5 text-blue-300" />
+                <div className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0">
+                  <Icon className="h-3.5 w-3.5 text-white/80" />
                 </div>
-                <span className="text-white/60 text-sm">{text}</span>
+                <span className="text-white/70 text-[13px]">{text}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Bible verse */}
-        <div className="relative z-10 mt-auto border-l-2 border-white/15 pl-4">
-          <p className="text-white/40 text-sm italic leading-relaxed">
+        <div className="relative z-10 mt-auto border-l-2 border-white/20 pl-4">
+          <p className="text-white/50 text-[12px] italic leading-relaxed">
             "Declare his glory among the nations, his marvelous works among all the peoples!"
           </p>
-          <p className="text-white/25 text-xs mt-1.5 font-medium">— Psalm 96:3</p>
+          <p className="text-white/35 text-[11px] mt-1.5 font-medium">— Psalm 96:3</p>
         </div>
 
-        {/* Footer — matches signup */}
-        <p className="relative z-10 mt-6 text-white/30 text-xs">© SentConnect</p>
+        <p className="relative z-10 mt-5 text-white/30 text-[11px]">© SentConnect</p>
       </div>
 
-      {/* Right: Login Form */}
-      <div className="flex-1 flex flex-col items-center justify-center bg-[#F5F7FA] px-6 py-12">
+      {/* Right: Login Form — clean white */}
+      <div className="flex-1 flex flex-col items-center justify-center bg-white px-6 py-12">
+
+        {/* Mobile logo (shown only when left panel is hidden) */}
         <div className="lg:hidden flex items-center gap-2.5 mb-10">
-          <div className="bg-primary p-2 rounded-xl text-white">
+          <div className="bg-blue-500 p-2 rounded-xl text-white">
             <Shuffle className="h-5 w-5" />
           </div>
-          <span className="text-lg font-semibold">SentConnect</span>
+          <span className="text-lg font-semibold text-gray-800">SentConnect</span>
         </div>
 
-        <div className="w-full max-w-[380px]">
+        <div className="w-full max-w-[360px]">
           <div className="mb-7">
-            <h1 className="text-2xl font-bold text-foreground tracking-tight">Welcome back</h1>
-            <p className="text-muted-foreground mt-1 text-sm">Sign in to your account to continue.</p>
+            <h1 className="text-[22px] font-bold text-gray-900 tracking-tight">Welcome back</h1>
+            <p className="text-gray-500 mt-1 text-[14px]">Sign in to your account to continue.</p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-7">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_12px_rgba(0,0,0,0.06)] p-6">
             {orgPortalError && (
               <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
                 <p className="text-[13px] font-semibold text-amber-800 mb-1">Wrong login portal</p>
@@ -206,6 +204,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 )}
               </div>
             )}
+
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
@@ -213,12 +212,12 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-foreground">Email</FormLabel>
+                      <FormLabel className="text-[13px] font-medium text-gray-700">Email</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="you@mission.org"
                           autoComplete="email"
-                          className="h-10 text-sm"
+                          className="h-10 text-sm border-gray-200 focus:border-blue-400 rounded-lg"
                           {...field}
                           data-testid="input-login-email"
                         />
@@ -232,13 +231,18 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-foreground">Password</FormLabel>
+                      <div className="flex items-center justify-between mb-1">
+                        <FormLabel className="text-[13px] font-medium text-gray-700">Password</FormLabel>
+                        <Link href="/forgot-password" className="text-[12px] text-blue-500 hover:text-blue-600 transition-colors">
+                          Forgot password?
+                        </Link>
+                      </div>
                       <FormControl>
                         <Input
                           type="password"
                           placeholder="••••••••"
                           autoComplete="current-password"
-                          className="h-10 text-sm"
+                          className="h-10 text-sm border-gray-200 focus:border-blue-400 rounded-lg"
                           {...field}
                           data-testid="input-login-password"
                         />
@@ -249,7 +253,8 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 />
                 <Button
                   type="submit"
-                  className="w-full h-10 text-sm font-semibold mt-1"
+                  className="w-full h-10 text-sm font-semibold mt-1 rounded-lg"
+                  style={{ backgroundColor: "#00C4A7", color: "#fff" }}
                   disabled={login.isPending}
                   data-testid="btn-login-submit"
                 >
@@ -257,24 +262,14 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </Button>
               </form>
             </Form>
-            <p className="text-center mt-4">
-              <Link href="/forgot-password" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Forgot password?
-              </Link>
-            </p>
           </div>
 
-          <div className="flex items-center gap-3 mt-5">
-            <div className="flex-1 h-px bg-border" />
-            <span className="text-xs text-muted-foreground">or</span>
-            <div className="flex-1 h-px bg-border" />
-          </div>
-
-          <p className="text-center text-sm text-muted-foreground mt-4">
+          <p className="text-center text-[13px] text-gray-500 mt-5">
             Don't have an account?{" "}
-            <Link href="/signup" className="text-primary font-semibold hover:underline">Sign Up</Link>
+            <Link href="/signup" className="text-blue-500 font-semibold hover:text-blue-600 hover:underline transition-colors">
+              Sign Up
+            </Link>
           </p>
-
         </div>
       </div>
     </div>
