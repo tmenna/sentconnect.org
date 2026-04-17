@@ -1638,7 +1638,7 @@ export default function SuperAdminPanel() {
       {/* Header */}
       <div
         className="rounded-2xl px-6 py-5 flex items-center gap-4"
-        style={{ background: "linear-gradient(135deg, #172A7D 0%, #1e3a8a 100%)" }}
+        style={{ background: "linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)" }}
       >
         <div className="p-3 bg-white/15 rounded-xl">
           <ShieldCheck className="h-6 w-6 text-white" />
