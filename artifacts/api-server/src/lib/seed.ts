@@ -244,15 +244,16 @@ export async function seedIfEmpty() {
  *
  * Safe to run on every startup — once the orgs are gone it becomes a no-op.
  */
-const KEEP_ORG_SUBDOMAINS = ["gbc"];
+// Specific orgs to purge on every startup (one-time cleanup list)
+const PURGE_ORG_SUBDOMAINS = ["gbc"];
 
 export async function cleanupDemoOrgs() {
-  // Find orgs that are NOT in the keep list
+  // Delete only the specific listed orgs (not a whitelist — future orgs are safe)
   const allOrgs = await db
     .select({ id: organizationsTable.id, subdomain: organizationsTable.subdomain, name: organizationsTable.name })
     .from(organizationsTable);
 
-  const orgsToDelete = allOrgs.filter(o => !KEEP_ORG_SUBDOMAINS.includes(o.subdomain));
+  const orgsToDelete = allOrgs.filter(o => PURGE_ORG_SUBDOMAINS.includes(o.subdomain));
   if (orgsToDelete.length === 0) {
     logger.info("cleanupDemoOrgs: nothing to remove");
     return;

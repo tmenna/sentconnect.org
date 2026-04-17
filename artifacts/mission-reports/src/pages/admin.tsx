@@ -5,6 +5,7 @@ import {
   useGetStats, getGetStatsQueryKey,
   useListUsers, getListUsersQueryKey,
   useGetTimeline, getGetTimelineQueryKey,
+  useLogoutUser,
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -12,7 +13,7 @@ import {
   Globe, Sparkles, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
   ShieldCheck, Pencil, Download, Settings2, Save, Loader2,
-  FileOutput, BarChart3, Star, UserCog, BookOpen,
+  FileOutput, BarChart3, Star, UserCog, BookOpen, LogOut,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -790,6 +791,15 @@ export default function AdminDashboard() {
   const [exportDateFrom, setExportDateFrom] = useState<string>("");
   const [exportDateTo, setExportDateTo] = useState<string>("");
 
+  const logout = useLogoutUser({
+    mutation: {
+      onSuccess: () => {
+        queryClient.clear();
+        window.location.href = "/login";
+      },
+    },
+  });
+
   const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey() } });
   const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}) } });
   const { data: timelineData, isLoading: feedLoading } = useGetTimeline(
@@ -867,13 +877,24 @@ export default function AdminDashboard() {
             </h1>
             <p className="text-white/65 text-sm mt-0.5">Here's what your team has been up to.</p>
           </div>
-          <div className="hidden sm:flex items-center gap-2">
-            <Avatar className="h-10 w-10 ring-2 ring-white/30">
+          <div className="flex items-center gap-2">
+            <Avatar className="hidden sm:flex h-10 w-10 ring-2 ring-white/30">
               <AvatarImage src={user.avatarUrl ?? undefined} />
               <AvatarFallback className="bg-white/20 text-white font-bold">
                 {user.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
+            <button
+              onClick={() => logout.mutate({ data: undefined })}
+              disabled={logout.isPending}
+              title="Sign out"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20 transition-colors"
+            >
+              {logout.isPending
+                ? <Loader2 className="h-4 w-4 animate-spin" />
+                : <LogOut className="h-4 w-4" />}
+              <span className="hidden sm:inline">Sign Out</span>
+            </button>
           </div>
         </div>
 

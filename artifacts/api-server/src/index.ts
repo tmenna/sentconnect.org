@@ -16,21 +16,6 @@ if (Number.isNaN(port) || port <= 0) {
   throw new Error(`Invalid PORT value: "${rawPort}"`);
 }
 
-cleanupDemoOrgs().catch((err) => {
-  logger.error({ err }, "cleanupDemoOrgs failed");
-});
-
-// Only seed demo data in development — never recreate cleaned-up orgs in production
-if (process.env["NODE_ENV"] !== "production") {
-  seedIfEmpty().catch((err) => {
-    logger.error({ err }, "Seed failed");
-  });
-}
-
-ensureSuperAdmin().catch((err) => {
-  logger.error({ err }, "ensureSuperAdmin failed");
-});
-
 app.listen(port, (err) => {
   if (err) {
     logger.error({ err }, "Error listening on port");
@@ -39,3 +24,27 @@ app.listen(port, (err) => {
 
   logger.info({ port }, "Server listening");
 });
+
+// Run startup tasks sequentially so cleanup completes before super-admin sync
+(async () => {
+  try {
+    await cleanupDemoOrgs();
+  } catch (err) {
+    logger.error({ err }, "cleanupDemoOrgs failed");
+  }
+
+  // Only seed demo data in development — never recreate cleaned-up orgs in production
+  if (process.env["NODE_ENV"] !== "production") {
+    try {
+      await seedIfEmpty();
+    } catch (err) {
+      logger.error({ err }, "Seed failed");
+    }
+  }
+
+  try {
+    await ensureSuperAdmin();
+  } catch (err) {
+    logger.error({ err }, "ensureSuperAdmin failed");
+  }
+})();
