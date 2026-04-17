@@ -1,5 +1,5 @@
 import { db, usersTable, reportsTable, organizationsTable } from "@workspace/db";
-import { eq, and, isNull } from "drizzle-orm";
+import { eq, and, isNull, inArray, notInArray } from "drizzle-orm";
 import { logger } from "./logger";
 import { hashPassword } from "./password";
 
@@ -238,4 +238,51 @@ export async function seedIfEmpty() {
   }
 
   logger.info("Demo seed complete: Calvary org, 3 field users, 1 admin, demo posts");
+}
+
+/**
+ * One-shot cleanup: removes any demo/test organizations that are NOT in the
+ * keep list, along with all their users and those users' reports.
+ *
+ * Safe to run on every startup — once the orgs are gone it becomes a no-op.
+ */
+const KEEP_ORG_SUBDOMAINS = ["gbc"];
+
+export async function cleanupDemoOrgs() {
+  // Find orgs that are NOT in the keep list
+  const allOrgs = await db
+    .select({ id: organizationsTable.id, subdomain: organizationsTable.subdomain, name: organizationsTable.name })
+    .from(organizationsTable);
+
+  const orgsToDelete = allOrgs.filter(o => !KEEP_ORG_SUBDOMAINS.includes(o.subdomain));
+  if (orgsToDelete.length === 0) {
+    logger.info("cleanupDemoOrgs: nothing to remove");
+    return;
+  }
+
+  for (const org of orgsToDelete) {
+    logger.info(`cleanupDemoOrgs: removing org "${org.name}" (${org.subdomain})`);
+
+    // Find all users in this org
+    const users = await db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.organizationId, org.id));
+
+    if (users.length > 0) {
+      const userIds = users.map(u => u.id);
+
+      // Delete all reports posted by these users
+      await db.delete(reportsTable).where(inArray(reportsTable.missionaryId, userIds));
+
+      // Delete the users themselves
+      await db.delete(usersTable).where(inArray(usersTable.id, userIds));
+
+      logger.info(`cleanupDemoOrgs: removed ${users.length} user(s) from "${org.name}"`);
+    }
+
+    // Delete the org
+    await db.delete(organizationsTable).where(eq(organizationsTable.id, org.id));
+    logger.info(`cleanupDemoOrgs: org "${org.name}" deleted`);
+  }
 }

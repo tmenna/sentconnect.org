@@ -6,10 +6,10 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useLoginUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
+import { useLoginUser, useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Redirect, Link, useSearch } from "wouter";
-import { Shuffle, MapPin, BookOpen, Building, ExternalLink } from "lucide-react";
+import { Link, useSearch, useLocation } from "wouter";
+import { Shuffle, MapPin, BookOpen, Building, ExternalLink, LogOut } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
@@ -25,15 +25,14 @@ const FEATURES = [
 ];
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const search = useSearch();
+  const [, navigate] = useLocation();
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
 
   // Where to send the user after they authenticate.
-  // Platform mode (/admin) always lands back at /admin.
-  // Org pages pass ?from=<path> so we land them exactly where they intended.
   const from = (() => {
     if (platformMode) return "/admin";
     const raw = new URLSearchParams(search).get("from") ?? null;
@@ -59,6 +58,15 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
     }
   });
 
+  const logout = useLogoutUser({
+    mutation: {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
+        toast({ title: "Signed out" });
+      }
+    }
+  });
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" }
@@ -69,7 +77,35 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       <div className="animate-pulse text-muted-foreground text-sm">Loading…</div>
     </div>
   );
-  if (isAuthenticated) return <Redirect href={from} />;
+
+  // Already signed in — show a friendly screen instead of an invisible redirect
+  if (isAuthenticated && user) return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F5F7FA] px-4">
+      <div className="w-full max-w-sm bg-white rounded-2xl border border-border shadow-sm p-8 text-center">
+        <div className="w-12 h-12 rounded-full bg-[#172A7D]/10 flex items-center justify-center mx-auto mb-4">
+          <span className="text-[#172A7D] font-extrabold text-lg">{user.name.charAt(0).toUpperCase()}</span>
+        </div>
+        <h2 className="text-[17px] font-bold text-foreground mb-1">You're signed in</h2>
+        <p className="text-[13px] text-muted-foreground mb-6">{user.name} · {user.email}</p>
+        <Button
+          className="w-full h-10 font-semibold mb-3"
+          style={{ backgroundColor: "#172A7D" }}
+          onClick={() => navigate(from)}
+        >
+          Continue to app
+        </Button>
+        <Button
+          variant="outline"
+          className="w-full h-10 font-semibold text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+          onClick={() => logout.mutate({ data: undefined })}
+          disabled={logout.isPending}
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          {logout.isPending ? "Signing out…" : "Sign out"}
+        </Button>
+      </div>
+    </div>
+  );
 
   function onSubmit(data: LoginFormValues) {
     login.mutate({ data });
