@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { Redirect, Link } from "wouter";
 import {
@@ -92,11 +92,11 @@ function OrgPermissionsEditor({
           key={key}
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors ${
             perms[key]
-              ? "bg-[#172A7D]/5 border-[#172A7D]/20"
+              ? "bg-[#2563eb]/5 border-[#2563eb]/20"
               : "bg-muted/30 border-border/40 hover:bg-muted/50"
           } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
         >
-          <div className={`flex-shrink-0 ${perms[key] ? "text-[#172A7D]" : "text-muted-foreground"}`}>
+          <div className={`flex-shrink-0 ${perms[key] ? "text-[#2563eb]" : "text-muted-foreground"}`}>
             {icon}
           </div>
           <div className="flex-1 min-w-0">
@@ -108,7 +108,7 @@ function OrgPermissionsEditor({
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            className="h-4 w-4 rounded accent-[#172A7D] cursor-pointer"
+            className="h-4 w-4 rounded accent-[#2563eb] cursor-pointer"
           />
         </label>
       ))}
@@ -169,8 +169,8 @@ function EditRolePermissionsModal({
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-border/60 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/60">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 bg-[#172A7D]/10 rounded-lg">
-              <Settings2 className="h-4 w-4 text-[#172A7D]" />
+            <div className="p-1.5 bg-[#2563eb]/10 rounded-lg">
+              <Settings2 className="h-4 w-4 text-[#2563eb]" />
             </div>
             <div>
               <h2 className="font-bold text-[15px] text-foreground">Role & Permissions</h2>
@@ -199,8 +199,8 @@ function EditRolePermissionsModal({
                   onClick={() => handleRoleChange(r)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all ${
                     role === r
-                      ? "bg-[#172A7D] text-white border-[#172A7D] shadow-sm"
-                      : "bg-white text-foreground border-border/60 hover:border-[#172A7D]/30 hover:bg-[#172A7D]/5"
+                      ? "bg-[#2563eb] text-white border-[#2563eb] shadow-sm"
+                      : "bg-white text-foreground border-border/60 hover:border-[#2563eb]/30 hover:bg-[#2563eb]/5"
                   } disabled:opacity-40 disabled:cursor-not-allowed`}
                 >
                   {r === "admin"
@@ -239,7 +239,7 @@ function EditRolePermissionsModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#172A7D] text-white rounded-xl hover:bg-[#172A7D]/90 transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#2563eb] text-white rounded-xl hover:bg-[#2563eb]/90 transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -279,19 +279,20 @@ function StatCard({ label, value, icon, accent, onClick }: {
       onMouseUp={() => setPressed(false)}
       style={{
         transform,
-        boxShadow: shadow,
+        border: "1px solid #F1F5F9",
+        boxShadow: shadow ?? "0 4px 12px rgba(0,0,0,0.05)",
         transition: "transform 150ms ease-out, box-shadow 150ms ease-out",
         cursor: isClickable ? "pointer" : undefined,
       }}
       className={[
-        "bg-white rounded-2xl border border-border/60 shadow-sm p-5 flex items-center gap-4",
+        "bg-white rounded-2xl p-5 flex items-center gap-4",
         isClickable ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40" : "",
       ].join(" ")}
     >
       <div className={`p-3 rounded-xl flex-shrink-0 ${accent ?? "bg-primary/10 text-primary"}`}>{icon}</div>
       <div>
-        <p className="text-[28px] font-extrabold text-foreground leading-none">{value}</p>
-        <p className="text-[12px] text-muted-foreground mt-1 font-medium">{label}</p>
+        <p className="text-[28px] font-extrabold leading-none" style={{ color: "#111827" }}>{value}</p>
+        <p className="text-[13px] mt-1 font-medium" style={{ color: "#9CA3AF" }}>{label}</p>
       </div>
     </div>
   );
@@ -299,12 +300,12 @@ function StatCard({ label, value, icon, accent, onClick }: {
 
 function RoleBadge({ role }: { role: string }) {
   if (role === "admin") return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-violet-50 text-violet-700 border border-violet-200 px-2 py-0.5 rounded-full">
+    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#EEF2FF", color: "#4338CA" }}>
       <ShieldCheck className="h-3 w-3" /> Admin
     </span>
   );
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#EFF6FF", color: "#2563eb" }}>
       <Globe className="h-3 w-3" /> Field User
     </span>
   );
@@ -312,11 +313,11 @@ function RoleBadge({ role }: { role: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   return status === "active" ? (
-    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#ECFDF5", color: "#065F46" }}>
       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" /> Active
     </span>
   ) : (
-    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-gray-500 bg-gray-50 border border-gray-200 px-2 py-0.5 rounded-full">
+    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#F9FAFB", color: "#6B7280" }}>
       <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block" /> Inactive
     </span>
   );
@@ -645,19 +646,19 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           onUpdated={() => { setShowEditPerms(false); onUpdated(); }}
         />
       )}
-      <tr className="border-b border-border/40 hover:bg-muted/30 transition-colors">
+      <tr className="border-b transition-colors" style={{ borderColor: "#F1F5F9" }} onMouseEnter={e => e.currentTarget.style.backgroundColor = "#FAFBFD"} onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}>
         {/* User */}
-        <td className="px-4 py-3">
-          <div className="flex items-start gap-3">
-            <Avatar className="h-9 w-9 flex-shrink-0 mt-0.5">
+        <td className="px-5 py-4">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10 flex-shrink-0">
               <AvatarImage src={u.avatarUrl ?? undefined} />
-              <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
+              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#EFF6FF", color: "#2563eb" }}>
                 {u.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-semibold text-foreground leading-none">{u.name}</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">{u.email}</p>
+              <p className="text-[15px] font-semibold leading-tight" style={{ color: "#111827" }}>{u.name}</p>
+              <p className="text-[13px] mt-0.5" style={{ color: "#9CA3AF" }}>{u.email}</p>
               {editingBio ? (
                 <div className="mt-1.5 space-y-1.5">
                   <textarea
@@ -707,28 +708,31 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           </div>
         </td>
         {/* Role */}
-        <td className="px-4 py-3 hidden sm:table-cell">
+        <td className="px-5 py-4 hidden sm:table-cell">
           <RoleBadge role={u.role} />
         </td>
         {/* Status */}
-        <td className="px-4 py-3 hidden md:table-cell">
+        <td className="px-5 py-4 hidden md:table-cell">
           <StatusBadge status={u.status} />
         </td>
         {/* Joined */}
-        <td className="px-4 py-3 hidden lg:table-cell">
-          <span className="text-[12px] text-muted-foreground">
+        <td className="px-5 py-4 hidden lg:table-cell">
+          <span className="text-[13px]" style={{ color: "#9CA3AF" }}>
             {format(new Date(u.createdAt), "MMM d, yyyy")}
           </span>
         </td>
         {/* Actions */}
-        <td className="px-4 py-3">
-          <div className="flex items-center gap-1.5 justify-end">
+        <td className="px-5 py-4">
+          <div className="flex items-center gap-1 justify-end">
             {/* Edit role & permissions */}
             <button
               title="Edit role & permissions"
               onClick={() => setShowEditPerms(true)}
               disabled={busy}
-              className="p-1.5 rounded-lg hover:bg-[#172A7D]/10 text-[#172A7D] transition-colors"
+              className="p-2 rounded-lg transition-colors"
+              style={{ color: "#6B7280" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#2563eb"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
               <Settings2 className="h-3.5 w-3.5" />
             </button>
@@ -737,22 +741,24 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               title={u.status === "active" ? "Deactivate" : "Activate"}
               onClick={toggleStatus}
               disabled={busy}
-              className={`p-1.5 rounded-lg transition-colors text-[11px] font-semibold ${
-                u.status === "active"
-                  ? "hover:bg-amber-50 text-amber-600"
-                  : "hover:bg-emerald-50 text-emerald-600"
-              }`}
+              className="p-2 rounded-lg transition-colors"
+              style={{ color: u.status === "active" ? "#D97706" : "#10B981" }}
+              onMouseEnter={e => { e.currentTarget.style.background = u.status === "active" ? "#FFFBEB" : "#ECFDF5"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = ""; }}
             >
-              {u.status === "active" ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+              {u.status === "active" ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
             {/* Reset password */}
             <button
               title="Generate reset link"
               onClick={generateResetLink}
               disabled={busy}
-              className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-500 transition-colors"
+              className="p-2 rounded-lg transition-colors"
+              style={{ color: "#6B7280" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#2563eb"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
-              <RefreshCw className="h-3.5 w-3.5" />
+              <RefreshCw className="h-4 w-4" />
             </button>
             {/* Delete */}
             {!isSelf && (
@@ -760,9 +766,12 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
                 title="Remove member"
                 onClick={() => setShowDeleteModal(true)}
                 disabled={busy}
-                className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+                className="p-2 rounded-lg transition-colors"
+                style={{ color: "#6B7280" }}
+                onMouseEnter={e => { e.currentTarget.style.background = "#FEF2F2"; e.currentTarget.style.color = "#EF4444"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
               >
-                <Trash2 className="h-3.5 w-3.5" />
+                <Trash2 className="h-4 w-4" />
               </button>
             )}
           </div>
@@ -808,12 +817,15 @@ export default function AdminDashboard() {
       query: {
         enabled: activeTab === "feed",
         queryKey: getGetTimelineQueryKey({ limit: 50 }),
-        onSuccess: (data: any) => {
-          if (feedPosts === null) setFeedPosts(data?.reports ?? []);
-        },
       },
     }
   );
+
+  useEffect(() => {
+    if (feedPosts === null && timelineData?.reports) {
+      setFeedPosts(timelineData.reports as PostData[]);
+    }
+  }, [timelineData, feedPosts]);
 
   if (isLoading) return null;
   if (!isAuthenticated || !user) return <Redirect href="/login" />;
@@ -865,22 +877,22 @@ export default function AdminDashboard() {
 
         {/* Welcome Banner */}
         <div
-          className="rounded-2xl px-6 py-5 flex items-center gap-4"
-          style={{ background: "linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)" }}
+          className="rounded-2xl px-7 py-6 flex items-center gap-4"
+          style={{ background: "linear-gradient(135deg, #3B82F6 0%, #4F8DF7 100%)" }}
         >
-          <div className="p-3 bg-white/15 rounded-xl">
+          <div className="p-3 bg-white/15 rounded-xl hidden sm:flex">
             <Sparkles className="h-6 w-6 text-white" />
           </div>
           <div className="flex-1">
-            <h1 className="text-[20px] font-extrabold text-white tracking-tight">
+            <h1 className="text-[28px] font-semibold text-white tracking-tight leading-tight">
               Welcome back, {firstName}!
             </h1>
-            <p className="text-white/65 text-sm mt-0.5">Here's what your team has been up to.</p>
+            <p className="text-[15px] mt-1" style={{ color: "rgba(255,255,255,0.85)" }}>Here's what your team has been up to.</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <Avatar className="hidden sm:flex h-10 w-10 ring-2 ring-white/30">
               <AvatarImage src={user.avatarUrl ?? undefined} />
-              <AvatarFallback className="bg-white/20 text-white font-bold">
+              <AvatarFallback className="bg-white/20 text-white font-semibold text-[15px]">
                 {user.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -888,7 +900,7 @@ export default function AdminDashboard() {
               onClick={() => logout.mutate({ data: undefined })}
               disabled={logout.isPending}
               title="Sign out"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20 transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-all duration-200"
             >
               {logout.isPending
                 ? <Loader2 className="h-4 w-4 animate-spin" />
@@ -919,29 +931,33 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-1 border-b border-border/60">
+        <div className="flex items-center gap-2 border-b border-gray-100">
           <button
             onClick={() => setActiveTab("team")}
-            className={`px-4 py-2.5 text-sm font-semibold transition-colors border-b-2 -mb-px ${activeTab === "team" ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+            className={`flex items-center gap-2 px-1 pb-3 pt-1 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200 ${
+              activeTab === "team"
+                ? "border-blue-500 text-gray-900"
+                : "border-transparent text-gray-400 hover:text-gray-600"
+            }`}
           >
-            <span className="flex items-center gap-1.5">
-              <Users className="h-4 w-4" />
-              Manage Team
-              {!usersLoading && (
-                <span className="ml-0.5 text-[11px] bg-muted px-1.5 py-0.5 rounded-full font-medium">
-                  {allUsers.length}
-                </span>
-              )}
-            </span>
+            <Users className="h-4 w-4" />
+            Manage Team
+            {!usersLoading && (
+              <span className="text-[12px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">
+                {allUsers.length}
+              </span>
+            )}
           </button>
           <button
             onClick={() => setActiveTab("feed")}
-            className={`px-4 py-2.5 text-sm font-semibold transition-colors border-b-2 -mb-px ${activeTab === "feed" ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+            className={`flex items-center gap-2 px-1 pb-3 pt-1 ml-4 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200 ${
+              activeTab === "feed"
+                ? "border-blue-500 text-gray-900"
+                : "border-transparent text-gray-400 hover:text-gray-600"
+            }`}
           >
-            <span className="flex items-center gap-1.5">
-              <Heart className="h-4 w-4" />
-              Updates
-            </span>
+            <Heart className="h-4 w-4" />
+            Updates
           </button>
         </div>
 
@@ -955,11 +971,17 @@ export default function AdminDashboard() {
                 placeholder="Search by name or email…"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="flex-1 min-w-[180px] text-sm border border-border/60 rounded-xl px-3.5 py-2 outline-none focus:ring-2 focus:ring-primary/30 bg-white transition"
+                className="flex-1 min-w-[180px] text-[15px] border rounded-xl px-4 py-3 outline-none bg-white transition-all duration-200"
+                style={{ borderColor: "#E5E7EB", height: "48px" }}
+                onFocus={e => { e.target.style.borderColor = "#3B82F6"; e.target.style.boxShadow = "0 0 0 2px rgba(59,130,246,0.15)"; }}
+                onBlur={e => { e.target.style.borderColor = "#E5E7EB"; e.target.style.boxShadow = "none"; }}
               />
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-xl hover:opacity-90 transition shadow-sm whitespace-nowrap"
+                className="flex items-center gap-2 px-5 text-[14px] font-semibold text-white rounded-xl whitespace-nowrap transition-all duration-200 hover:-translate-y-px"
+                style={{ backgroundColor: "#10B981", height: "48px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#059669"; e.currentTarget.style.boxShadow = "0 6px 12px rgba(0,0,0,0.08)"; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#10B981"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; }}
               >
                 <Plus className="h-4 w-4" />
                 Add Team Member
@@ -996,12 +1018,12 @@ export default function AdminDashboard() {
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="bg-muted/40 border-b border-border/40">
-                        <th className="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Member</th>
-                        <th className="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground hidden sm:table-cell">Role</th>
-                        <th className="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground hidden md:table-cell">Status</th>
-                        <th className="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground hidden lg:table-cell">Joined</th>
-                        <th className="px-4 py-2.5 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Actions</th>
+                      <tr className="border-b" style={{ borderColor: "#F1F5F9" }}>
+                        <th className="px-5 py-3.5 text-left text-[13px] font-medium tracking-wide" style={{ color: "#9CA3AF" }}>Member</th>
+                        <th className="px-5 py-3.5 text-left text-[13px] font-medium tracking-wide hidden sm:table-cell" style={{ color: "#9CA3AF" }}>Role</th>
+                        <th className="px-5 py-3.5 text-left text-[13px] font-medium tracking-wide hidden md:table-cell" style={{ color: "#9CA3AF" }}>Status</th>
+                        <th className="px-5 py-3.5 text-left text-[13px] font-medium tracking-wide hidden lg:table-cell" style={{ color: "#9CA3AF" }}>Joined</th>
+                        <th className="px-5 py-3.5 text-right text-[13px] font-medium tracking-wide" style={{ color: "#9CA3AF" }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1267,7 +1289,7 @@ export default function AdminDashboard() {
                 }`}
                 download
                 onClick={() => setTimeout(() => setShowExportModal(false), 300)}
-                className="flex-1 h-10 flex items-center justify-center gap-1.5 text-[13px] font-bold bg-[#172A7D] hover:bg-[#0d1b5e] text-white rounded-lg transition-colors"
+                className="flex-1 h-10 flex items-center justify-center gap-1.5 text-[13px] font-bold bg-[#2563eb] hover:bg-[#0d1b5e] text-white rounded-lg transition-colors"
               >
                 <Download className="h-3.5 w-3.5" />
                 Download CSV

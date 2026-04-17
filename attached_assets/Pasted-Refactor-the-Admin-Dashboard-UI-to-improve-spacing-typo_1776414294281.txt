@@ -1,0 +1,211 @@
+Refactor the Admin Dashboard UI to improve spacing, typography, and visual hierarchy. The goal is a clean, modern SaaS-style interface that feels smooth, uncluttered, and easy to scan.
+
+---
+
+1. GLOBAL STYLING
+
+* Use font family: "Inter", system-ui, sans-serif
+
+* Base font size: 15–16px
+
+* Line height: 1.5–1.6
+
+* Text color:
+
+  * Primary: #111827
+  * Secondary: #6B7280
+  * Muted: #9CA3AF
+
+* Increase overall spacing between sections (32px–40px)
+
+* Use soft background:
+  background: #F9FAFB
+
+---
+
+2. HEADER (BLUE TOP BAR)
+
+* Use softer gradient:
+  background: linear-gradient(135deg, #3B82F6, #4F8DF7)
+
+* Reduce vertical height slightly
+
+* Add padding: 20px–24px
+
+Typography:
+
+* Title ("Welcome back, Teki!"):
+  font-size: 28–32px
+  font-weight: 600–700
+  color: #FFFFFF
+
+* Subtitle:
+  font-size: 15–16px
+  color: rgba(255,255,255,0.85)
+
+* Profile circle:
+  slightly larger (36–40px)
+  subtle border: 2px solid rgba(255,255,255,0.3)
+
+---
+
+3. STATS CARDS (Top Metrics)
+
+* Card style:
+  background: #FFFFFF
+  border-radius: 14px
+  padding: 20–24px
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05)
+
+* Increase spacing between cards
+
+Typography:
+
+* Numbers (e.g. "0"):
+  font-size: 26–30px
+  font-weight: 600
+
+* Labels:
+  font-size: 13–14px
+  color: #6B7280
+
+* Reduce icon prominence:
+  opacity: 70–80%
+  keep consistent icon style
+
+---
+
+4. TABS (Manage Team / Updates)
+
+* Increase spacing between tabs
+
+* Active tab:
+  color: #111827
+  font-weight: 500–600
+  border-bottom: 2–3px solid #3B82F6
+
+* Inactive tab:
+  color: #9CA3AF
+
+* Add smooth transition (0.2s ease)
+
+---
+
+5. SEARCH + ACTION BAR
+
+* Increase input height: 44–48px
+
+* Add padding: 12px–16px
+
+* Border:
+  1px solid #E5E7EB
+  border-radius: 10–12px
+
+* Focus state:
+  border-color: #3B82F6
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.15)
+
+* Button ("+ Add Team Member"):
+  height: 44–48px
+  padding: 0 18–22px
+  border-radius: 12px
+  background: #10B981
+  color: #FFFFFF
+  font-weight: 600
+
+* Hover effect:
+  transform: translateY(-1px)
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08)
+
+---
+
+6. TABLE DESIGN (MAIN IMPROVEMENT AREA)
+
+* Increase row height: 56–64px
+
+* Add horizontal padding inside cells
+
+* Use subtle row separators:
+  border-bottom: 1px solid #F1F5F9
+
+* Header text:
+  font-size: 13px
+  font-weight: 500
+  color: #9CA3AF
+  letter-spacing: 0.02em
+
+* Body text:
+  font-size: 15–16px
+  color: #111827
+
+* Secondary info (email, notes):
+  font-size: 13–14px
+  color: #6B7280
+
+* Add row hover:
+  background: #F9FAFB
+
+---
+
+7. BADGES (Role / Status)
+
+* Use softer colors (less saturated)
+
+Example:
+
+* Admin:
+  background: #EEF2FF
+  color: #4338CA
+
+* Active:
+  background: #ECFDF5
+  color: #065F46
+
+* Border radius: 999px (pill style)
+
+* Padding: 4px 10px
+
+* Font size: 12–13px
+  font-weight: 500
+
+---
+
+8. ACTION ICONS (Right side of table)
+
+* Reduce size slightly
+* Use neutral color: #6B7280
+* Hover:
+  color: #111827
+  background: #F3F4F6
+  border-radius: 6px
+  padding: 4–6px
+
+---
+
+9. MICRO INTERACTIONS (IMPORTANT FOR “SLICK” FEEL)
+
+* Add transition globally:
+  transition: all 0.2s ease
+
+* Cards:
+  slight hover lift
+
+* Buttons:
+  smooth hover + press states
+
+* Table rows:
+  subtle hover highlight
+
+---
+
+10. FINAL RESULT
+
+The dashboard should feel:
+
+* Less crowded
+* Easier to scan
+* More modern (Stripe / Notion style)
+* More readable (bigger fonts, better contrast)
+* Smooth and responsive
+
+Focus on spacing, typography, and reducing visual noise rather than adding more elements.
