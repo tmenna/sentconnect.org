@@ -63,7 +63,7 @@ export default function Signup() {
       {/* Left panel */}
       <div
         className="hidden md:flex flex-col justify-between w-[420px] flex-shrink-0 relative overflow-hidden px-10 py-12 text-white"
-        style={{ background: "linear-gradient(160deg, #2563eb 0%, #3b82f6 60%, #60a5fa 100%)" }}
+        style={{ background: "linear-gradient(160deg, #111827 0%, #1f2937 60%, #374151 100%)" }}
       >
         {/* Subtle radial glow for depth */}
         <div
@@ -106,10 +106,10 @@ export default function Signup() {
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="md:hidden flex items-center gap-2 mb-8">
-            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-[#111827] rounded-lg flex items-center justify-center">
               <Shuffle className="h-4 w-4 text-white" />
             </div>
-            <span className="text-base font-extrabold text-blue-600">SentConnect</span>
+            <span className="text-base font-extrabold text-[#111827]">SentConnect</span>
           </div>
 
           <h1 className="text-2xl font-extrabold text-foreground mb-1">Create your organization</h1>

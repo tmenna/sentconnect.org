@@ -275,11 +275,11 @@ function EditForm({
         className={cn(
           "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors",
           isMissionMoment
-            ? "text-[#2563eb] bg-[#2563eb]/10 hover:bg-[#2563eb]/15 border border-[#2563eb]/20"
+            ? "text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200"
             : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
         )}
       >
-        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#2563eb]")} />
+        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-emerald-600")} />
         {isMissionMoment ? "Mission Moments" : "Mark as Mission Moments"}
       </button>
 
@@ -292,7 +292,7 @@ function EditForm({
           size="sm"
           onClick={handleSave}
           disabled={saving}
-          className="h-8 px-4 text-[13px] bg-[#2563eb] hover:bg-[#0e1a5c] text-white"
+          className="h-8 px-4 text-[13px] bg-[#111827] hover:bg-[#1f2937] text-white"
         >
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <><Check className="h-3.5 w-3.5 mr-1" />Save</>}
         </Button>
@@ -418,15 +418,15 @@ export function PostCard({
       {post.isMissionMoment ? (
         <div
           className="flex items-center gap-2 px-4 py-2 border-b"
-          style={{ background: "#EFF6FF", borderColor: "#BFDBFE" }}
+          style={{ background: "#ECFDF5", borderColor: "#A7F3D0" }}
         >
-          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#3B82F6" }} />
-          <span className="text-[12px] font-semibold" style={{ color: "#2563EB" }}>Mission Moments</span>
+          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#059669" }} />
+          <span className="text-[12px] font-semibold" style={{ color: "#065F46" }}>Mission Moments</span>
           {post.isHighlight && (
             <Star className="h-3 w-3 fill-amber-400 text-amber-400 ml-0.5" />
           )}
           <div className="flex-1" />
-          <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />
+          <Sparkles className="h-3 w-3" style={{ color: "#6EE7B7" }} />
         </div>
       ) : post.isHighlight ? (
         <div className="flex items-center gap-1.5 px-4 py-1.5 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
@@ -448,7 +448,7 @@ export function PostCard({
         <div className="flex-1 min-w-0">
           <Link
             href={`/missionaries/${post.author.id}`}
-            className="font-bold text-[15px] text-[#111827] hover:text-[#2563eb] transition-colors leading-tight block"
+            className="font-bold text-[15px] text-[#111827] hover:text-[#374151] transition-colors leading-tight block"
           >
             {post.author.name}
           </Link>
@@ -521,7 +521,7 @@ export function PostCard({
               <div className={cn(
                 "rounded-xl px-4 py-3 border",
                 post.isMissionMoment
-                  ? "border-blue-100 bg-blue-50/30"
+                  ? "border-emerald-100 bg-emerald-50/20"
                   : "border-gray-100 bg-gray-50/50"
               )}>
                 <p className="text-[17px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>

@@ -92,11 +92,11 @@ function OrgPermissionsEditor({
           key={key}
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors ${
             perms[key]
-              ? "bg-[#2563eb]/5 border-[#2563eb]/20"
+              ? "bg-gray-50 border-gray-200"
               : "bg-muted/30 border-border/40 hover:bg-muted/50"
           } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
         >
-          <div className={`flex-shrink-0 ${perms[key] ? "text-[#2563eb]" : "text-muted-foreground"}`}>
+          <div className={`flex-shrink-0 ${perms[key] ? "text-gray-800" : "text-muted-foreground"}`}>
             {icon}
           </div>
           <div className="flex-1 min-w-0">
@@ -108,7 +108,7 @@ function OrgPermissionsEditor({
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            className="h-4 w-4 rounded accent-[#2563eb] cursor-pointer"
+            className="h-4 w-4 rounded accent-gray-800 cursor-pointer"
           />
         </label>
       ))}
@@ -169,8 +169,8 @@ function EditRolePermissionsModal({
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-border/60 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/60">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 bg-[#2563eb]/10 rounded-lg">
-              <Settings2 className="h-4 w-4 text-[#2563eb]" />
+            <div className="p-1.5 bg-gray-100 rounded-lg">
+              <Settings2 className="h-4 w-4 text-gray-600" />
             </div>
             <div>
               <h2 className="font-bold text-[15px] text-foreground">Role & Permissions</h2>
@@ -199,8 +199,8 @@ function EditRolePermissionsModal({
                   onClick={() => handleRoleChange(r)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all ${
                     role === r
-                      ? "bg-[#2563eb] text-white border-[#2563eb] shadow-sm"
-                      : "bg-white text-foreground border-border/60 hover:border-[#2563eb]/30 hover:bg-[#2563eb]/5"
+                      ? "bg-[#111827] text-white border-[#111827] shadow-sm"
+                      : "bg-white text-foreground border-border/60 hover:border-gray-400 hover:bg-gray-50"
                   } disabled:opacity-40 disabled:cursor-not-allowed`}
                 >
                   {r === "admin"
@@ -239,7 +239,7 @@ function EditRolePermissionsModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#2563eb] text-white rounded-xl hover:bg-[#2563eb]/90 transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#111827] text-white rounded-xl hover:bg-[#1f2937] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -305,7 +305,7 @@ function RoleBadge({ role }: { role: string }) {
     </span>
   );
   return (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#EFF6FF", color: "#2563eb" }}>
+    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#F3F4F6", color: "#374151" }}>
       <Globe className="h-3 w-3" /> Field User
     </span>
   );
@@ -652,7 +652,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 flex-shrink-0">
               <AvatarImage src={u.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#EFF6FF", color: "#2563eb" }}>
+              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#F3F4F6", color: "#374151" }}>
                 {u.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -731,7 +731,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               disabled={busy}
               className="p-2 rounded-lg transition-colors"
               style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#2563eb"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#111827"; }}
               onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
               <Settings2 className="h-3.5 w-3.5" />
@@ -755,7 +755,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               disabled={busy}
               className="p-2 rounded-lg transition-colors"
               style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#2563eb"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#111827"; }}
               onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
               <RefreshCw className="h-4 w-4" />
@@ -878,7 +878,7 @@ export default function AdminDashboard() {
         {/* Welcome Banner */}
         <div
           className="rounded-2xl px-7 py-6 flex items-center gap-4"
-          style={{ background: "linear-gradient(135deg, #3B82F6 0%, #4F8DF7 100%)" }}
+          style={{ background: "linear-gradient(135deg, #111827 0%, #1f2937 100%)" }}
         >
           <div className="p-3 bg-white/15 rounded-xl hidden sm:flex">
             <Sparkles className="h-6 w-6 text-white" />
@@ -916,7 +916,7 @@ export default function AdminDashboard() {
             [1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24 rounded-2xl" />)
           ) : (
             <>
-              <StatCard label="Total Posts" value={stats?.totalPosts ?? 0} icon={<FileText className="h-5 w-5" />} accent="bg-blue-50 text-blue-600" onClick={() => setActiveTab("feed")} />
+              <StatCard label="Total Posts" value={stats?.totalPosts ?? 0} icon={<FileText className="h-5 w-5" />} accent="bg-gray-100 text-gray-600" onClick={() => setActiveTab("feed")} />
               <StatCard label="Field Users" value={nonAdmins.length} icon={<Users className="h-5 w-5" />} accent="bg-emerald-50 text-emerald-600" onClick={() => setActiveTab("team")} />
               <StatCard
                 label="Countries"
@@ -936,7 +936,7 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab("team")}
             className={`flex items-center gap-2 px-1 pb-3 pt-1 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200 ${
               activeTab === "team"
-                ? "border-blue-500 text-gray-900"
+                ? "border-gray-900 text-gray-900"
                 : "border-transparent text-gray-400 hover:text-gray-600"
             }`}
           >
@@ -952,7 +952,7 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab("feed")}
             className={`flex items-center gap-2 px-1 pb-3 pt-1 ml-4 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200 ${
               activeTab === "feed"
-                ? "border-blue-500 text-gray-900"
+                ? "border-gray-900 text-gray-900"
                 : "border-transparent text-gray-400 hover:text-gray-600"
             }`}
           >
@@ -973,7 +973,7 @@ export default function AdminDashboard() {
                 onChange={e => setSearchQuery(e.target.value)}
                 className="flex-1 min-w-[180px] text-[15px] border rounded-xl px-4 py-3 outline-none bg-white transition-all duration-200"
                 style={{ borderColor: "#E5E7EB", height: "48px" }}
-                onFocus={e => { e.target.style.borderColor = "#3B82F6"; e.target.style.boxShadow = "0 0 0 2px rgba(59,130,246,0.15)"; }}
+                onFocus={e => { e.target.style.borderColor = "#6B7280"; e.target.style.boxShadow = "0 0 0 2px rgba(107,114,128,0.12)"; }}
                 onBlur={e => { e.target.style.borderColor = "#E5E7EB"; e.target.style.boxShadow = "none"; }}
               />
               <button
@@ -1292,7 +1292,7 @@ export default function AdminDashboard() {
                 }`}
                 download
                 onClick={() => setTimeout(() => setShowExportModal(false), 300)}
-                className="flex-1 h-10 flex items-center justify-center gap-1.5 text-[13px] font-bold bg-[#2563eb] hover:bg-[#0d1b5e] text-white rounded-lg transition-colors"
+                className="flex-1 h-10 flex items-center justify-center gap-1.5 text-[13px] font-bold bg-[#111827] hover:bg-[#1f2937] text-white rounded-lg transition-colors"
               >
                 <Download className="h-3.5 w-3.5" />
                 Download CSV

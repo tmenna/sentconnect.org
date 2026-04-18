@@ -7,7 +7,7 @@ import { Shuffle, LogOut, Rss, ShieldCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
-const BRAND_NAVY = "#2563eb";
+const BRAND_NAVY = "#111827";
 
 export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -79,7 +79,7 @@ export function Layout({ children }: { children: ReactNode }) {
                   <Link href="/login" data-testid="link-nav-login">
                     <Button
                       size="sm"
-                      className="h-8 px-5 text-sm font-bold rounded-md bg-white text-[#2563eb] border border-white/60 hover:bg-white/90 transition-colors"
+                      className="h-8 px-5 text-sm font-bold rounded-md bg-white text-[#111827] border border-white/60 hover:bg-white/90 transition-colors"
                     >
                       Sign In
                     </Button>

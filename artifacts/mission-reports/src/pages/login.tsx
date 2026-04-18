@@ -80,8 +80,8 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   if (isAuthenticated && user) return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-sm bg-white rounded-2xl border border-gray-100 shadow-[0_10px_25px_rgba(0,0,0,0.08)] p-8 text-center">
-        <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
-          <span className="text-blue-600 font-bold text-lg">{user.name.charAt(0).toUpperCase()}</span>
+        <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+          <span className="text-gray-700 font-bold text-lg">{user.name.charAt(0).toUpperCase()}</span>
         </div>
         <h2 className="text-[17px] font-semibold text-gray-900 mb-1">You're signed in</h2>
         <p className="text-[13px] text-gray-500 mb-6">{user.name} · {user.email}</p>
@@ -123,7 +123,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       {/* ── Left: Brand Panel ── */}
       <div
         className="hidden lg:flex lg:w-[40%] flex-col text-white px-12 py-14 relative overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)" }}
+        style={{ background: "linear-gradient(135deg, #111827 0%, #1f2937 100%)" }}
       >
         {/* Dark overlay for contrast */}
         <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(0,0,0,0.15)" }} />
@@ -182,7 +182,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
         {/* Mobile logo */}
         <div className="lg:hidden flex items-center gap-2.5 mb-10">
-          <div className="bg-blue-500 p-2 rounded-xl text-white">
+          <div className="bg-[#111827] p-2 rounded-xl text-white">
             <Shuffle className="h-5 w-5" />
           </div>
           <span className="text-[17px] font-semibold text-gray-800">SentConnect</span>
@@ -228,7 +228,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                         <Input
                           placeholder="you@mission.org"
                           autoComplete="email"
-                          className="h-12 text-[15px] border-gray-200 rounded-xl focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:border-blue-400 transition-all"
+                          className="h-12 text-[15px] border-gray-200 rounded-xl focus-visible:ring-2 focus-visible:ring-gray-900/10 focus-visible:border-gray-400 transition-all"
                           {...field}
                           data-testid="input-login-email"
                         />
@@ -246,7 +246,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                         <FormLabel className="text-[14px] font-medium text-gray-700">Password</FormLabel>
                         <Link
                           href="/forgot-password"
-                          className="text-[13px] text-blue-500 hover:text-blue-600 transition-colors font-medium"
+                          className="text-[13px] text-gray-500 hover:text-gray-700 transition-colors font-medium"
                         >
                           Forgot password?
                         </Link>
@@ -256,7 +256,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                           type="password"
                           placeholder="••••••••"
                           autoComplete="current-password"
-                          className="h-12 text-[15px] border-gray-200 rounded-xl focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:border-blue-400 transition-all"
+                          className="h-12 text-[15px] border-gray-200 rounded-xl focus-visible:ring-2 focus-visible:ring-gray-900/10 focus-visible:border-gray-400 transition-all"
                           {...field}
                           data-testid="input-login-password"
                         />
@@ -282,7 +282,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
           <p className="text-center text-[14px] text-gray-500 mt-6">
             Don't have an account?{" "}
-            <Link href="/signup" className="text-blue-500 font-semibold hover:text-blue-600 hover:underline transition-colors">
+            <Link href="/signup" className="text-gray-700 font-semibold hover:text-gray-900 hover:underline transition-colors">
               Sign Up
             </Link>
           </p>

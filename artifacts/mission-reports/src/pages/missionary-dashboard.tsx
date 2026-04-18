@@ -96,7 +96,7 @@ export default function MissionaryDashboard() {
           onClick={() => setActiveTab("all")}
           className="flex items-center gap-2 px-1 pb-3 pt-1 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200"
           style={{
-            borderColor: activeTab === "all" ? "#3B82F6" : "transparent",
+            borderColor: activeTab === "all" ? "#111827" : "transparent",
             color: activeTab === "all" ? "#111827" : "#9CA3AF",
           }}
         >
@@ -110,7 +110,7 @@ export default function MissionaryDashboard() {
           onClick={() => setActiveTab("moments")}
           className="flex items-center gap-2 px-1 pb-3 pt-1 ml-4 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200"
           style={{
-            borderColor: activeTab === "moments" ? "#3B82F6" : "transparent",
+            borderColor: activeTab === "moments" ? "#111827" : "transparent",
             color: activeTab === "moments" ? "#111827" : "#9CA3AF",
           }}
         >
