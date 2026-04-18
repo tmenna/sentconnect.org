@@ -81,7 +81,7 @@ export default function Feed() {
           onClick={() => setActiveTab("all")}
           className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
             activeTab === "all"
-              ? "border-[#172A7D] text-[#172A7D]"
+              ? "border-[#006BD5] text-[#006BD5]"
               : "border-transparent text-muted-foreground hover:text-foreground"
           }`}
         >

@@ -79,18 +79,18 @@
   --sidebar: 0 0% 100%;
   --sidebar-foreground: 230 35% 14%;
   --sidebar-border: 220 18% 90%;
-  --sidebar-primary: 171 100% 34%;
+  --sidebar-primary: 210 100% 42%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 171 60% 95%;
-  --sidebar-accent-foreground: 171 100% 20%;
-  --sidebar-ring: 171 100% 34%;
+  --sidebar-accent: 210 60% 95%;
+  --sidebar-accent-foreground: 210 100% 28%;
+  --sidebar-ring: 210 100% 42%;
 
   --popover: 0 0% 100%;
   --popover-foreground: 230 35% 14%;
   --popover-border: 220 18% 91%;
 
-  /* mint-teal: #00C4A7 → hsl(171 100% 38%) */
-  --primary: 171 100% 34%;
+  /* SentConnect blue: #006BD5 → hsl(210 100% 42%) */
+  --primary: 210 100% 42%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 220 18% 95%;
@@ -99,14 +99,14 @@
   --muted: 220 18% 93%;
   --muted-foreground: 220 14% 46%;
 
-  --accent: 171 60% 93%;
-  --accent-foreground: 171 100% 22%;
+  --accent: 210 60% 94%;
+  --accent-foreground: 210 100% 28%;
 
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
 
   --input: 220 18% 88%;
-  --ring: 171 100% 34%;
+  --ring: 210 100% 42%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-serif: 'Inter', sans-serif;
