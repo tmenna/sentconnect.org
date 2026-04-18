@@ -226,6 +226,15 @@ router.get("/reports/mission-moments", async (req, res): Promise<void> => {
   res.json({ reports: result, total, hasMore: offset + limit < total });
 });
 
+// GET /reports/:id/public — no auth required, used for shareable links
+router.get("/reports/:id/public", async (req, res): Promise<void> => {
+  const postId = Number(req.params.id);
+  if (isNaN(postId)) { res.status(400).json({ error: "Invalid post ID" }); return; }
+  const post = await getPostWithDetails(postId);
+  if (!post) { res.status(404).json({ error: "Post not found" }); return; }
+  res.json(post);
+});
+
 // GET /reports/:id
 router.get("/reports/:id", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;

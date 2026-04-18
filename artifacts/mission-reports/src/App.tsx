@@ -21,6 +21,7 @@ import Signup from "./pages/signup";
 import ForgotPassword from "./pages/forgot-password";
 import ResetPassword from "./pages/reset-password";
 import SuperAdminPanel from "./pages/super-admin";
+import PublicPost from "./pages/public-post";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +101,8 @@ function AppRoutes() {
       <Route path="/signup" component={Signup} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
+      {/* Public shareable post view — no auth required */}
+      <Route path="/post/:id" component={PublicPost} />
       {/* /admin handles its own layout (login page or panel) */}
       <Route path="/admin" component={AdminRoute} />
       <Route path="/super-admin"><Redirect href="/admin" /></Route>

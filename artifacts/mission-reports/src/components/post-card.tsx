@@ -3,11 +3,13 @@ import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
   Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
-  Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle
+  Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
+  Link2
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
+import { useOrg } from "@/providers/org-provider";
 import { cn } from "@/lib/utils";
 
 export type PostData = {
@@ -315,8 +317,10 @@ export function PostCard({
   flat?: boolean;
 }) {
   const { user } = useAuth();
+  const { orgSlug } = useOrg();
   const [post, setPost] = useState(initialPost);
   const [showComments, setShowComments] = useState(defaultShowComments);
+  const [copied, setCopied] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loadingComments, setLoadingComments] = useState(false);
   const [commentText, setCommentText] = useState("");
@@ -407,6 +411,16 @@ export function PostCard({
   }
 
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
+
+  function copyShareLink() {
+    const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+    const orgPrefix = orgSlug ? `/${orgSlug}` : "";
+    const url = `${window.location.origin}${base}${orgPrefix}/post/${post.id}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   return (
     <div
@@ -575,6 +589,18 @@ export function PostCard({
               {post.commentCount > 0 && <span>{post.commentCount}</span>}
             </button>
             <div className="flex-1" />
+            <button
+              onClick={copyShareLink}
+              className={cn(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all",
+                copied
+                  ? "text-[#005BBC] bg-blue-50"
+                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+              )}
+            >
+              {copied ? <Check className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
+              {copied ? "Copied!" : "Share"}
+            </button>
             {!hideViewPost && (
               <Link href={`/reports/${post.id}`}>
                 <span className="text-[12px] text-muted-foreground hover:text-primary transition-colors cursor-pointer">
