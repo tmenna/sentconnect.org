@@ -5,7 +5,7 @@ import {
   Loader2, Globe, ShieldCheck, UserCog, Search,
   Plus, Lock, Unlock, Ban, UserCheck, KeyRound, ChevronDown,
   ShieldAlert, Shield, Edit3, X, Save, Eye, EyeOff,
-  Trash2, AlertTriangle, Settings2, BookOpen, Star, FileOutput, BarChart3,
+  Trash2, AlertTriangle, Settings2, BookOpen, Star, BarChart3,
   LogOut,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
@@ -697,7 +697,6 @@ type OrgPermissions = {
   canViewAllReports: boolean;
   canHighlightReports: boolean;
   canManageTeam: boolean;
-  canExportData: boolean;
   canViewAnalytics: boolean;
 };
 
@@ -706,7 +705,6 @@ const ORG_DEFAULT_PERMS: OrgPermissions = {
   canViewAllReports: false,
   canHighlightReports: false,
   canManageTeam: false,
-  canExportData: false,
   canViewAnalytics: false,
 };
 
@@ -715,7 +713,6 @@ const ORG_ADMIN_PERMS: OrgPermissions = {
   canViewAllReports: true,
   canHighlightReports: true,
   canManageTeam: true,
-  canExportData: true,
   canViewAnalytics: true,
 };
 
@@ -724,7 +721,6 @@ const ORG_PERM_META: { key: keyof OrgPermissions; label: string; desc: string; i
   { key: "canViewAllReports",   label: "View All Reports",  desc: "See reports from all team members",    icon: <Eye className="h-3.5 w-3.5" /> },
   { key: "canHighlightReports", label: "Highlight Reports", desc: "Star / feature important updates",     icon: <Star className="h-3.5 w-3.5" /> },
   { key: "canManageTeam",       label: "Manage Team",       desc: "Add, edit and remove team members",    icon: <UserCog className="h-3.5 w-3.5" /> },
-  { key: "canExportData",       label: "Export Data",       desc: "Download reports as CSV or PDF",       icon: <FileOutput className="h-3.5 w-3.5" /> },
   { key: "canViewAnalytics",    label: "View Analytics",    desc: "Access stats and activity dashboards", icon: <BarChart3 className="h-3.5 w-3.5" /> },
 ];
 

@@ -12,8 +12,8 @@ import {
   Users, FileText, Heart, MessageCircle,
   Globe, Sparkles, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
-  ShieldCheck, Pencil, Download, Settings2, Save, Loader2,
-  FileOutput, BarChart3, Star, UserCog, BookOpen, LogOut,
+  ShieldCheck, Pencil, Settings2, Save, Loader2,
+  BarChart3, Star, UserCog, BookOpen, LogOut,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,7 +40,6 @@ type OrgPermissions = {
   canViewAllReports: boolean;
   canHighlightReports: boolean;
   canManageTeam: boolean;
-  canExportData: boolean;
   canViewAnalytics: boolean;
 };
 
@@ -49,7 +48,6 @@ const ORG_DEFAULT_PERMS: OrgPermissions = {
   canViewAllReports: false,
   canHighlightReports: false,
   canManageTeam: false,
-  canExportData: false,
   canViewAnalytics: false,
 };
 
@@ -58,7 +56,6 @@ const ORG_ADMIN_PERMS: OrgPermissions = {
   canViewAllReports: true,
   canHighlightReports: true,
   canManageTeam: true,
-  canExportData: true,
   canViewAnalytics: true,
 };
 
@@ -67,7 +64,6 @@ const ORG_PERM_META: { key: keyof OrgPermissions; label: string; desc: string; i
   { key: "canViewAllReports",   label: "View All Reports",    desc: "See reports from all team members",      icon: <Eye className="h-3.5 w-3.5" /> },
   { key: "canHighlightReports", label: "Highlight Reports",   desc: "Star / feature important updates",       icon: <Star className="h-3.5 w-3.5" /> },
   { key: "canManageTeam",       label: "Manage Team",         desc: "Add, edit and remove team members",      icon: <UserCog className="h-3.5 w-3.5" /> },
-  { key: "canExportData",       label: "Export Data",         desc: "Download reports as CSV or PDF",         icon: <FileOutput className="h-3.5 w-3.5" /> },
   { key: "canViewAnalytics",    label: "View Analytics",      desc: "Access stats and activity dashboards",   icon: <BarChart3 className="h-3.5 w-3.5" /> },
 ];
 
@@ -795,11 +791,6 @@ export default function AdminDashboard() {
   const [filterDateTo, setFilterDateTo] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
-  const [showExportModal, setShowExportModal] = useState(false);
-  const [exportMissionaryId, setExportMissionaryId] = useState<string>("");
-  const [exportDateFrom, setExportDateFrom] = useState<string>("");
-  const [exportDateTo, setExportDateTo] = useState<string>("");
-
   const logout = useLogoutUser({
     mutation: {
       onSuccess: () => {
@@ -1119,13 +1110,6 @@ export default function AdminDashboard() {
                     Clear filters
                   </button>
                 )}
-                <button
-                  onClick={() => setShowExportModal(true)}
-                  className="ml-auto flex items-center gap-1.5 text-[12px] font-semibold text-muted-foreground hover:text-foreground border border-border/60 bg-background rounded-lg px-3 py-1.5 whitespace-nowrap transition-colors hover:border-border"
-                >
-                  <Download className="h-3.5 w-3.5" />
-                  Export CSV
-                </button>
               </div>
               {hasFilters && (
                 <p className="text-[12px] text-muted-foreground mt-2">
@@ -1200,104 +1184,6 @@ export default function AdminDashboard() {
 
       </div>
 
-      {/* Export CSV modal */}
-      {showExportModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-          onClick={(e) => { if (e.target === e.currentTarget) setShowExportModal(false); }}
-        >
-          <div className="bg-white rounded-2xl border border-border/60 shadow-xl w-full max-w-sm mx-4 p-6">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h3 className="text-[16px] font-extrabold text-foreground">Export Reports</h3>
-                <p className="text-[12px] text-muted-foreground mt-0.5">Download as CSV. Leave filters blank to export all.</p>
-              </div>
-              <button
-                onClick={() => setShowExportModal(false)}
-                className="text-muted-foreground hover:text-foreground rounded-lg p-1 transition-colors"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Team member</label>
-                <select
-                  value={exportMissionaryId}
-                  onChange={e => setExportMissionaryId(e.target.value)}
-                  className="w-full text-[13px] border border-border/60 rounded-lg px-3 py-2 bg-background outline-none focus:ring-2 focus:ring-primary/20"
-                >
-                  <option value="">All members</option>
-                  {nonAdmins.map((u: any) => (
-                    <option key={u.id} value={String(u.id)}>{u.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">From date</label>
-                  <input
-                    type="date"
-                    value={exportDateFrom}
-                    onChange={e => setExportDateFrom(e.target.value)}
-                    className="w-full text-[13px] border border-border/60 rounded-lg px-3 py-2 bg-background outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">To date</label>
-                  <input
-                    type="date"
-                    value={exportDateTo}
-                    onChange={e => setExportDateTo(e.target.value)}
-                    className="w-full text-[13px] border border-border/60 rounded-lg px-3 py-2 bg-background outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-              </div>
-
-              {(exportMissionaryId || exportDateFrom || exportDateTo) && (
-                <button
-                  onClick={() => { setExportMissionaryId(""); setExportDateFrom(""); setExportDateTo(""); }}
-                  className="text-[12px] text-muted-foreground hover:text-foreground underline underline-offset-2"
-                >
-                  Clear filters
-                </button>
-              )}
-            </div>
-
-            <div className="mt-6 flex gap-2">
-              <button
-                onClick={() => setShowExportModal(false)}
-                className="flex-1 h-10 text-[13px] font-semibold border border-border/60 rounded-lg text-muted-foreground hover:text-foreground hover:border-border transition-colors"
-              >
-                Cancel
-              </button>
-              <a
-                href={`/api/reports/export${
-                  [
-                    exportMissionaryId ? `missionaryId=${exportMissionaryId}` : "",
-                    exportDateFrom ? `dateFrom=${exportDateFrom}` : "",
-                    exportDateTo ? `dateTo=${exportDateTo}` : "",
-                  ].filter(Boolean).length > 0
-                    ? "?" + [
-                        exportMissionaryId ? `missionaryId=${exportMissionaryId}` : "",
-                        exportDateFrom ? `dateFrom=${exportDateFrom}` : "",
-                        exportDateTo ? `dateTo=${exportDateTo}` : "",
-                      ].filter(Boolean).join("&")
-                    : ""
-                }`}
-                download
-                onClick={() => setTimeout(() => setShowExportModal(false), 300)}
-                className="flex-1 h-10 flex items-center justify-center gap-1.5 text-[13px] font-bold bg-[#111827] hover:bg-[#1f2937] text-white rounded-lg transition-colors"
-              >
-                <Download className="h-3.5 w-3.5" />
-                Download CSV
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
