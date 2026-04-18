@@ -6,15 +6,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { type PostData } from "@/components/post-card";
 import { FeedGridCard, PostDetailModal } from "@/components/feed-grid";
 import { PostComposer } from "@/components/post-composer";
-import { MapPin, Building2, FileText, Star, Globe } from "lucide-react";
+import { MapPin, Building2, FileText, Star, BookOpen, Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type FeedTab = "all" | "moments";
+
+const EMERALD = "#059669";
 
 export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [posts, setPosts] = useState<PostData[] | null>(null);
   const [activeTab, setActiveTab] = useState<FeedTab>("all");
+  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
 
   const { data, isLoading: postsLoading } = useGetUserReports(
     user?.id ?? 0,
@@ -34,29 +37,28 @@ export default function MissionaryDashboard() {
   const missionMoments = allPosts.filter(p => p.isMissionMoment);
   const myPosts = activeTab === "moments" ? missionMoments : allPosts;
 
-  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
-
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : (data as PostData[] ?? []).filter(p => p.id !== id));
     setSelectedPostIndex(null);
   }
 
+  const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
+
   return (
-    <div className="space-y-6">
-      {/* Minimal welcome header */}
-      <div className="flex items-center gap-4 pt-1 pb-2">
-        <Avatar className="h-11 w-11 flex-shrink-0">
-          <AvatarImage src={user?.avatarUrl ?? undefined} />
-          <AvatarFallback className="font-semibold text-[15px]" style={{ background: "#E5E7EB", color: "#374151" }}>
-            {user?.name?.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex-1 min-w-0">
-          <h1 className="text-[26px] font-semibold leading-tight" style={{ color: "#111827" }}>
-            Welcome back, {user?.name?.split(" ")[0]}!
+    <div className="space-y-8">
+
+      {/* ── Page header ── */}
+      <div className="flex items-start justify-between gap-4 pb-6" style={{ borderBottom: "1px solid #E9E9E9" }}>
+        <div>
+          <h1 className="text-[32px] font-bold leading-tight tracking-tight" style={{ color: "#1F2937" }}>
+            My Updates
           </h1>
-          <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
-            <p className="text-[14px]" style={{ color: "#6B7280" }}>Here's what's happening today</p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
+            <p className="text-[15px]" style={{ color: "#6B7280" }}>
+              {allPosts.length > 0
+                ? `${allPosts.length} post${allPosts.length !== 1 ? "s" : ""} shared`
+                : "Share your first update below"}
+            </p>
             {user?.location && (
               <span className="flex items-center gap-1 text-[13px]" style={{ color: "#9CA3AF" }}>
                 <MapPin className="h-3 w-3" />{user.location}
@@ -69,73 +71,91 @@ export default function MissionaryDashboard() {
             )}
           </div>
         </div>
-        {allPosts.length > 0 && (
-          <div className="hidden sm:flex gap-4 flex-shrink-0 text-right">
-            <div>
-              <p className="text-[22px] font-bold leading-none" style={{ color: "#111827" }}>{allPosts.length}</p>
-              <p className="text-[12px] mt-0.5 flex items-center gap-1 justify-end" style={{ color: "#9CA3AF" }}>
-                <FileText className="h-3 w-3" />posts
-              </p>
-            </div>
-            {missionMoments.length > 0 && (
-              <div className="border-l pl-4" style={{ borderColor: "#E5E7EB" }}>
-                <p className="text-[22px] font-bold leading-none" style={{ color: "#111827" }}>{missionMoments.length}</p>
-                <p className="text-[12px] mt-0.5 flex items-center gap-1 justify-end" style={{ color: "#9CA3AF" }}>
-                  <Star className="h-3 w-3 fill-amber-400 text-amber-400" />moments
+
+        {/* Avatar + quick stats */}
+        <div className="flex items-center gap-4 flex-shrink-0">
+          {allPosts.length > 0 && (
+            <div className="hidden sm:flex gap-4 text-right">
+              <div>
+                <p className="text-[20px] font-bold leading-none" style={{ color: "#1F2937" }}>{allPosts.length}</p>
+                <p className="text-[11px] mt-0.5 flex items-center gap-1 justify-end" style={{ color: "#9CA3AF" }}>
+                  <FileText className="h-3 w-3" />posts
                 </p>
               </div>
-            )}
-          </div>
-        )}
+              {missionMoments.length > 0 && (
+                <div className="border-l pl-4" style={{ borderColor: "#E5E7EB" }}>
+                  <p className="text-[20px] font-bold leading-none" style={{ color: "#1F2937" }}>{missionMoments.length}</p>
+                  <p className="text-[11px] mt-0.5 flex items-center gap-1 justify-end" style={{ color: "#9CA3AF" }}>
+                    <Star className="h-3 w-3 fill-amber-400 text-amber-400" />moments
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+          <Avatar className="h-10 w-10 flex-shrink-0" style={{ border: "2px solid #A7F3D0" }}>
+            <AvatarImage src={user?.avatarUrl ?? undefined} />
+            <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#ECFDF5", color: EMERALD }}>
+              {user?.name?.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+        </div>
       </div>
 
-      {/* Composer */}
+      {/* ── Composer ── */}
       <PostComposer
         onPost={(newPost) => setPosts(prev => [newPost, ...(prev ?? (data as PostData[] ?? []))])}
       />
 
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-2" style={{ borderBottom: "1px solid #D1D5DB" }}>
-        <button
-          onClick={() => setActiveTab("all")}
-          className="flex items-center gap-2 px-1 pb-3 pt-1 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200"
-          style={{
-            borderColor: activeTab === "all" ? "#111827" : "transparent",
-            color: activeTab === "all" ? "#111827" : "#9CA3AF",
-          }}
-        >
-          <Globe className="h-4 w-4" />
-          All Posts
-          <span className="text-[12px] px-2 py-0.5 rounded-full font-medium" style={{ background: "#F3F4F6", color: "#6B7280" }}>
-            {allPosts.length}
+      {/* ── Filter tabs ── */}
+      <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
+        {[
+          { id: "all" as FeedTab, label: "All Posts", icon: <Send className="h-3.5 w-3.5" />, count: allPosts.length },
+          { id: "moments" as FeedTab, label: "Mission Moments", icon: <BookOpen className="h-3.5 w-3.5" />, count: missionMoments.length },
+        ].map(tab => {
+          const active = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className="flex items-center gap-2 px-1 pb-3 pt-1 mr-5 text-[14px] font-semibold border-b-2 -mb-px transition-all duration-200"
+              style={{
+                borderColor: active ? EMERALD : "transparent",
+                color: active ? EMERALD : "#9CA3AF",
+              }}
+            >
+              {tab.icon}
+              {tab.label}
+              {tab.count > 0 && (
+                <span
+                  className="text-[11px] px-2 py-0.5 rounded-full font-medium"
+                  style={{
+                    background: active ? "#ECFDF5" : "#F3F4F6",
+                    color: active ? EMERALD : "#6B7280",
+                  }}
+                >
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          );
+        })}
+
+        {/* Results label aligned right */}
+        {!postsLoading && (
+          <span className="ml-auto pb-3 text-[13px]" style={{ color: "#9CA3AF" }}>
+            {displayedCount} result{displayedCount !== 1 ? "s" : ""}
           </span>
-        </button>
-        <button
-          onClick={() => setActiveTab("moments")}
-          className="flex items-center gap-2 px-1 pb-3 pt-1 ml-4 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200"
-          style={{
-            borderColor: activeTab === "moments" ? "#111827" : "transparent",
-            color: activeTab === "moments" ? "#111827" : "#9CA3AF",
-          }}
-        >
-          <Star className={`h-4 w-4 ${activeTab === "moments" ? "fill-amber-500 text-amber-500" : ""}`} />
-          Mission Moments
-          {missionMoments.length > 0 && (
-            <span className="text-[12px] px-2 py-0.5 rounded-full font-medium" style={{ background: "#F3F4F6", color: "#6B7280" }}>
-              {missionMoments.length}
-            </span>
-          )}
-        </button>
+        )}
       </div>
 
-      {/* Card grid feed */}
+      {/* ── Card grid ── */}
       {postsLoading && posts === null ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-white rounded-2xl overflow-hidden" style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+            <div key={i} className="bg-white rounded-2xl overflow-hidden" style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
               <Skeleton className="w-full aspect-[16/9]" />
               <div className="p-4 space-y-2.5">
-                <Skeleton className="h-4 w-28 rounded-full" />
+                <Skeleton className="h-5 w-28 rounded-full" />
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-3.5 w-4/5" />
                 <Skeleton className="h-3 w-2/3" />
@@ -144,24 +164,28 @@ export default function MissionaryDashboard() {
           ))}
         </div>
       ) : myPosts.length === 0 ? (
-        <div className="bg-white rounded-2xl py-16 text-center" style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+        <div className="py-20 text-center">
           {activeTab === "moments" ? (
             <>
-              <Star className="h-8 w-8 mx-auto mb-3" style={{ color: "#D1D5DB" }} />
-              <p className="font-medium text-[15px]" style={{ color: "#374151" }}>No Mission Moments yet</p>
-              <p className="text-[14px] mt-1" style={{ color: "#9CA3AF" }}>Mark a post as Mission Moments using the toolbar.</p>
+              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#ECFDF5" }}>
+                <BookOpen className="h-6 w-6" style={{ color: EMERALD }} />
+              </div>
+              <p className="font-semibold text-[16px]" style={{ color: "#374151" }}>No Mission Moments yet</p>
+              <p className="text-[14px] mt-1.5" style={{ color: "#9CA3AF" }}>Mark a post as Mission Moments when you share an update.</p>
             </>
           ) : (
             <>
-              <FileText className="h-8 w-8 mx-auto mb-3" style={{ color: "#D1D5DB" }} />
-              <p className="font-medium text-[15px]" style={{ color: "#374151" }}>No posts yet</p>
-              <p className="text-[14px] mt-1" style={{ color: "#9CA3AF" }}>Share your first update above.</p>
+              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
+                <FileText className="h-6 w-6" style={{ color: "#9CA3AF" }} />
+              </div>
+              <p className="font-semibold text-[16px]" style={{ color: "#374151" }}>No posts yet</p>
+              <p className="text-[14px] mt-1.5" style={{ color: "#9CA3AF" }}>Share your first update using the composer above.</p>
             </>
           )}
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {myPosts.map((post, i) => (
               <FeedGridCard key={post.id} post={post} onClick={() => setSelectedPostIndex(i)} />
             ))}

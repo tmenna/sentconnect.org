@@ -1635,27 +1635,23 @@ export default function SuperAdminPanel() {
         />
       )}
 
-      {/* Header */}
-      <div
-        className="bg-white rounded-2xl px-6 py-5 flex items-center gap-4"
-        style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 16px rgba(0,0,0,0.06)" }}
-      >
-        <div className="p-2.5 bg-gray-100 rounded-xl flex-shrink-0">
-          <ShieldCheck className="h-5 w-5 text-gray-600" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h1 className="text-[20px] font-semibold leading-tight" style={{ color: "#374151" }}>Platform Admin</h1>
-          <p className="text-[13px] mt-0.5" style={{ color: "#9CA3AF" }}>
-            Global view — no organization filter applied.
+      {/* ── Page header ── */}
+      <div className="flex items-start justify-between gap-4 pb-6" style={{ borderBottom: "1px solid #E9E9E9" }}>
+        <div>
+          <h1 className="text-[32px] font-bold leading-tight tracking-tight" style={{ color: "#1F2937" }}>
+            Platform Admin
+          </h1>
+          <p className="text-[15px] mt-1.5" style={{ color: "#6B7280" }}>
+            Global view — all organizations, no filter applied.
           </p>
         </div>
-        <div className="hidden sm:flex flex-col items-end text-right flex-shrink-0">
-          <span className="text-[13px] font-semibold text-[#374151]">{user?.name}</span>
-          <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full mt-1 ${roleBadge(user?.role ?? "").bg}`}>
-            {roleBadge(user?.role ?? "").label}
-          </span>
-        </div>
-        <div className="flex items-center gap-1 ml-2">
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="hidden sm:flex flex-col items-end text-right">
+            <span className="text-[13px] font-semibold" style={{ color: "#374151" }}>{user?.name}</span>
+            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full mt-1 ${roleBadge(user?.role ?? "").bg}`}>
+              {roleBadge(user?.role ?? "").label}
+            </span>
+          </div>
           <button
             onClick={() => setShowEditProfile(true)}
             title="Edit account"

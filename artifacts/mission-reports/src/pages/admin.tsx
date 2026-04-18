@@ -875,34 +875,35 @@ export default function AdminDashboard() {
 
       <div className="max-w-6xl mx-auto space-y-6">
 
-        {/* Welcome Banner */}
-        <div
-          className="bg-white rounded-2xl px-7 py-5 flex items-center gap-4"
-          style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 16px rgba(0,0,0,0.06)" }}
-        >
-          <Avatar className="hidden sm:flex h-12 w-12 flex-shrink-0">
-            <AvatarImage src={user.avatarUrl ?? undefined} />
-            <AvatarFallback className="font-semibold text-[16px]" style={{ background: "#F3F4F6", color: "#374151" }}>
-              {user.name.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-[22px] font-semibold leading-tight" style={{ color: "#374151" }}>
-              Welcome back, {firstName}!
+        {/* ── Page header ── */}
+        <div className="flex items-start justify-between gap-4 pb-6" style={{ borderBottom: "1px solid #E9E9E9" }}>
+          <div>
+            <h1 className="text-[32px] font-bold leading-tight tracking-tight" style={{ color: "#1F2937" }}>
+              Team Updates
             </h1>
-            <p className="text-[14px] mt-0.5" style={{ color: "#9CA3AF" }}>Here's what your team has been up to.</p>
+            <p className="text-[15px] mt-1.5" style={{ color: "#6B7280" }}>
+              Manage your field team and review their activity.
+            </p>
           </div>
-          <button
-            onClick={() => logout.mutate({ data: undefined })}
-            disabled={logout.isPending}
-            title="Sign out"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all duration-200"
-          >
-            {logout.isPending
-              ? <Loader2 className="h-4 w-4 animate-spin" />
-              : <LogOut className="h-4 w-4" />}
-            <span className="hidden sm:inline">Sign Out</span>
-          </button>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <Avatar className="hidden sm:flex h-10 w-10" style={{ border: "2px solid #A7F3D0" }}>
+              <AvatarImage src={user.avatarUrl ?? undefined} />
+              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#ECFDF5", color: "#059669" }}>
+                {user.name.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <button
+              onClick={() => logout.mutate({ data: undefined })}
+              disabled={logout.isPending}
+              title="Sign out"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all duration-200"
+            >
+              {logout.isPending
+                ? <Loader2 className="h-4 w-4 animate-spin" />
+                : <LogOut className="h-4 w-4" />}
+              <span className="hidden sm:inline">Sign Out</span>
+            </button>
+          </div>
         </div>
 
         {/* Stats */}
@@ -925,35 +926,36 @@ export default function AdminDashboard() {
           )}
         </div>
 
-        {/* Tabs */}
-        <div className="flex items-center gap-2 border-b border-gray-200/70">
-          <button
-            onClick={() => setActiveTab("team")}
-            className={`flex items-center gap-2 px-1 pb-3 pt-1 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200 ${
-              activeTab === "team"
-                ? "border-gray-900 text-gray-900"
-                : "border-transparent text-gray-400 hover:text-gray-600"
-            }`}
-          >
-            <Users className="h-4 w-4" />
-            Manage Team
-            {!usersLoading && (
-              <span className="text-[12px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">
-                {allUsers.length}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("feed")}
-            className={`flex items-center gap-2 px-1 pb-3 pt-1 ml-4 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200 ${
-              activeTab === "feed"
-                ? "border-gray-900 text-gray-900"
-                : "border-transparent text-gray-400 hover:text-gray-600"
-            }`}
-          >
-            <Heart className="h-4 w-4" />
-            Updates
-          </button>
+        {/* ── Tabs ── */}
+        <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
+          {[
+            { id: "team", label: "Manage Team", icon: <Users className="h-3.5 w-3.5" />, badge: !usersLoading ? allUsers.length : null },
+            { id: "feed", label: "Updates", icon: <Heart className="h-3.5 w-3.5" />, badge: null },
+          ].map(tab => {
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className="flex items-center gap-2 px-1 pb-3 pt-1 mr-5 text-[14px] font-semibold border-b-2 -mb-px transition-all duration-200"
+                style={{
+                  borderColor: active ? "#059669" : "transparent",
+                  color: active ? "#059669" : "#9CA3AF",
+                }}
+              >
+                {tab.icon}
+                {tab.label}
+                {tab.badge != null && (
+                  <span
+                    className="text-[11px] px-2 py-0.5 rounded-full font-medium"
+                    style={{ background: active ? "#ECFDF5" : "#F3F4F6", color: active ? "#059669" : "#6B7280" }}
+                  >
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* ── Tab: Team ── */}
@@ -1049,36 +1051,36 @@ export default function AdminDashboard() {
         {/* ── Tab: Activity Feed ── */}
         {activeTab === "feed" && (
           <div className="space-y-4">
-            {/* Mission Moments sub-tab */}
-            <div className="flex items-center gap-1 border-b border-border/50">
-              <button
-                onClick={() => setFeedMomentFilter("all")}
-                className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
-                  feedMomentFilter === "all"
-                    ? "border-primary text-primary"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Globe className="h-3.5 w-3.5" />
-                All Posts
-                {!feedLoading && (
-                  <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{allFeedPosts.length}</span>
-                )}
-              </button>
-              <button
-                onClick={() => setFeedMomentFilter("moments")}
-                className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
-                  feedMomentFilter === "moments"
-                    ? "border-amber-500 text-amber-600"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Star className={`h-3.5 w-3.5 ${feedMomentFilter === "moments" ? "fill-amber-500 text-amber-500" : ""}`} />
-                Mission Moments
-                {!feedLoading && missionMomentsCount > 0 && (
-                  <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{missionMomentsCount}</span>
-                )}
-              </button>
+            {/* Feed sub-tabs */}
+            <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
+              {[
+                { id: "all", label: "All Posts", icon: <Globe className="h-3.5 w-3.5" />, count: !feedLoading ? allFeedPosts.length : null, activeColor: "#059669", activeBg: "#ECFDF5" },
+                { id: "moments", label: "Mission Moments", icon: <Star className={`h-3.5 w-3.5 ${feedMomentFilter === "moments" ? "fill-amber-500 text-amber-500" : ""}`} />, count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null, activeColor: "#B45309", activeBg: "#FFFBEB" },
+              ].map(tab => {
+                const active = feedMomentFilter === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setFeedMomentFilter(tab.id as any)}
+                    className="flex items-center gap-1.5 px-1 pb-3 pt-1 mr-5 text-[13px] font-semibold border-b-2 -mb-px transition-colors"
+                    style={{
+                      borderColor: active ? tab.activeColor : "transparent",
+                      color: active ? tab.activeColor : "#9CA3AF",
+                    }}
+                  >
+                    {tab.icon}
+                    {tab.label}
+                    {tab.count != null && (
+                      <span
+                        className="text-[11px] px-2 py-0.5 rounded-full font-medium"
+                        style={{ background: active ? tab.activeBg : "#F3F4F6", color: active ? tab.activeColor : "#6B7280" }}
+                      >
+                        {tab.count}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Filters */}
