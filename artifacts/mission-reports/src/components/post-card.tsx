@@ -306,11 +306,13 @@ export function PostCard({
   onDelete,
   defaultShowComments = false,
   hideViewPost = false,
+  flat = false,
 }: {
   post: PostData;
   onDelete?: (id: number) => void;
   defaultShowComments?: boolean;
   hideViewPost?: boolean;
+  flat?: boolean;
 }) {
   const { user } = useAuth();
   const [post, setPost] = useState(initialPost);
@@ -408,11 +410,12 @@ export function PostCard({
 
   return (
     <div
-      className="bg-white rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-px"
-      style={{
-        border: "1px solid #E9E9E9",
-        boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
-      }}
+      className={flat
+        ? "bg-white overflow-hidden"
+        : "bg-white rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-px"}
+      style={flat
+        ? { borderBottom: "1px solid #F3F4F6" }
+        : { border: "1px solid #E9E9E9", boxShadow: "0 2px 16px rgba(0,0,0,0.07)" }}
     >
       {/* Mission Moment banner — takes priority over Highlight */}
       {post.isMissionMoment ? (
@@ -518,14 +521,18 @@ export function PostCard({
           {/* Text */}
           {post.description && (
             <div className="px-5 pb-4">
-              <div className={cn(
-                "rounded-xl px-4 py-3 border",
-                post.isMissionMoment
-                  ? "border-blue-100 bg-blue-50/20"
-                  : "border-gray-100 bg-gray-50/50"
-              )}>
+              {flat ? (
                 <p className="text-[17px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
-              </div>
+              ) : (
+                <div className={cn(
+                  "rounded-xl px-4 py-3 border",
+                  post.isMissionMoment
+                    ? "border-blue-100 bg-blue-50/20"
+                    : "border-gray-100 bg-gray-50/50"
+                )}>
+                  <p className="text-[17px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
+                </div>
+              )}
             </div>
           )}
 

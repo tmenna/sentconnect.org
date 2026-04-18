@@ -157,23 +157,24 @@ export default function MissionaryProfile() {
 
       {/* Posts feed */}
       {loadingReports ? (
-        <div className="space-y-4">
-          {[1, 2].map(i => (
-            <div key={i} className="bg-white rounded-xl border border-border/60 shadow-sm p-4 space-y-3">
+        <div className="bg-white rounded-2xl border border-border/50 overflow-hidden divide-y divide-border/40">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="p-5 space-y-3">
               <div className="flex items-center gap-3">
-                <Skeleton className="h-10 w-10 rounded-full" />
+                <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
                 <div className="space-y-1.5 flex-1">
                   <Skeleton className="h-3.5 w-28" />
                   <Skeleton className="h-2.5 w-20" />
                 </div>
               </div>
               <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-48 w-full rounded-lg" />
+              <Skeleton className="h-4 w-4/5" />
+              {i === 1 && <Skeleton className="h-48 w-full rounded-lg" />}
             </div>
           ))}
         </div>
       ) : displayedPosts.length === 0 ? (
-        <div className="bg-white rounded-xl border border-dashed border-border py-20 text-center shadow-sm">
+        <div className="bg-white rounded-2xl border border-dashed border-border py-20 text-center">
           {activeTab === "moments" ? (
             <>
               <Star className="h-10 w-10 mx-auto text-amber-300/50 mb-3" />
@@ -189,9 +190,9 @@ export default function MissionaryProfile() {
           )}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="bg-white rounded-2xl border border-border/50 overflow-hidden">
           {displayedPosts.map(post => (
-            <PostCard key={post.id} post={post} />
+            <PostCard key={post.id} post={post} flat />
           ))}
         </div>
       )}
