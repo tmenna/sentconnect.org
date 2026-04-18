@@ -192,7 +192,7 @@ export default function MissionaryProfile() {
       ) : (
         <div className="bg-white rounded-2xl border border-border/50 overflow-hidden">
           {displayedPosts.map(post => (
-            <PostCard key={post.id} post={post} flat />
+            <PostCard key={post.id} post={post} flat hideViewPost />
           ))}
         </div>
       )}
