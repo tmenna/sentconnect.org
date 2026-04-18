@@ -3,8 +3,7 @@ import { useAuth } from "@/components/auth-provider";
 import { useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
 import { Redirect } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
-import { type PostData } from "@/components/post-card";
-import { FeedGridCard, PostDetailModal } from "@/components/feed-grid";
+import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
 import { MapPin, Building2, FileText, Star, BookOpen, Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,8 +16,6 @@ export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [posts, setPosts] = useState<PostData[] | null>(null);
   const [activeTab, setActiveTab] = useState<FeedTab>("all");
-  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
-
   const { data, isLoading: postsLoading } = useGetUserReports(
     user?.id ?? 0,
     {
@@ -39,7 +36,6 @@ export default function MissionaryDashboard() {
 
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : (data as PostData[] ?? []).filter(p => p.id !== id));
-    setSelectedPostIndex(null);
   }
 
   const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
@@ -148,23 +144,26 @@ export default function MissionaryDashboard() {
         )}
       </div>
 
-      {/* ── Card grid ── */}
+      {/* ── Posts ── */}
       {postsLoading && posts === null ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="bg-white rounded-2xl border border-border/50 overflow-hidden divide-y divide-border/40">
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-white rounded-2xl overflow-hidden" style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
-              <Skeleton className="w-full aspect-[16/9]" />
-              <div className="p-4 space-y-2.5">
-                <Skeleton className="h-5 w-28 rounded-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-3.5 w-4/5" />
-                <Skeleton className="h-3 w-2/3" />
+            <div key={i} className="p-5 space-y-3">
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
+                <div className="space-y-1.5 flex-1">
+                  <Skeleton className="h-3.5 w-28" />
+                  <Skeleton className="h-2.5 w-20" />
+                </div>
               </div>
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-4/5" />
+              {i === 1 && <Skeleton className="h-48 w-full rounded-lg" />}
             </div>
           ))}
         </div>
       ) : myPosts.length === 0 ? (
-        <div className="py-20 text-center">
+        <div className="bg-white rounded-2xl border border-dashed border-border py-20 text-center">
           {activeTab === "moments" ? (
             <>
               <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EFF6FF" }}>
@@ -184,24 +183,11 @@ export default function MissionaryDashboard() {
           )}
         </div>
       ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {myPosts.map((post, i) => (
-              <FeedGridCard key={post.id} post={post} onClick={() => setSelectedPostIndex(i)} />
-            ))}
-          </div>
-
-          {selectedPostIndex !== null && (
-            <PostDetailModal
-              post={myPosts[selectedPostIndex]}
-              allPosts={myPosts}
-              postIndex={selectedPostIndex}
-              onNavigate={setSelectedPostIndex}
-              onClose={() => setSelectedPostIndex(null)}
-              onDelete={handleDelete}
-            />
-          )}
-        </>
+        <div className="bg-white rounded-2xl border border-border/50 overflow-hidden">
+          {myPosts.map(post => (
+            <PostCard key={post.id} post={post} flat onDelete={handleDelete} />
+          ))}
+        </div>
       )}
     </div>
   );
