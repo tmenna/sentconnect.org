@@ -255,20 +255,20 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
 
           {/* Impact / people reached */}
           {showImpact && (
-            <div className="mt-2 flex items-center gap-2 bg-emerald-50 rounded-full px-3 py-1.5 border border-emerald-100">
-              <Users className="h-3.5 w-3.5 text-emerald-600 flex-shrink-0" />
+            <div className="mt-2 flex items-center gap-2 bg-blue-50 rounded-full px-3 py-1.5 border border-blue-100">
+              <Users className="h-3.5 w-3.5 text-[#005BBC] flex-shrink-0" />
               <input
                 type="number"
                 min="0"
                 value={peopleReached}
                 onChange={e => setPeopleReached(e.target.value)}
                 placeholder="People reached…"
-                className="flex-1 text-[13px] bg-transparent outline-none text-emerald-800 placeholder:text-emerald-400"
+                className="flex-1 text-[13px] bg-transparent outline-none text-[#004699] placeholder:text-blue-300"
                 disabled={posting}
                 autoFocus
               />
               <button onClick={() => { setShowImpact(false); setPeopleReached(""); }}>
-                <X className="h-3.5 w-3.5 text-emerald-400 hover:text-emerald-700 transition-colors" />
+                <X className="h-3.5 w-3.5 text-blue-300 hover:text-[#005BBC] transition-colors" />
               </button>
             </div>
           )}
@@ -321,7 +321,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={() => setShowImpact(s => !s)}
               disabled={posting}
               className="p-2 rounded-full transition-colors"
-              style={{ color: showImpact ? "#10B981" : "#6B7280", background: showImpact ? "#ECFDF5" : "" }}
+              style={{ color: showImpact ? "#005BBC" : "#6B7280", background: showImpact ? "#EFF6FF" : "" }}
               onMouseEnter={e => { if (!showImpact) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
               onMouseLeave={e => { if (!showImpact) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add impact"
@@ -336,12 +336,12 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               title="A Mission Moment is a 3–5 minute story, video, or update that highlights God's work and connects people to the broader mission."
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200"
               style={{
-                background: isMissionMoment ? "#ECFDF5" : "transparent",
-                color: isMissionMoment ? "#059669" : "#6B7280",
-                border: isMissionMoment ? "1px solid #A7F3D0" : "1px solid transparent",
+                background: isMissionMoment ? "#EFF6FF" : "transparent",
+                color: isMissionMoment ? "#005BBC" : "#6B7280",
+                border: isMissionMoment ? "1px solid #BFDBFE" : "1px solid transparent",
               }}
             >
-              <Star className={cn("h-3.5 w-3.5", isMissionMoment ? "fill-emerald-500 text-emerald-500" : "")} />
+              <Star className={cn("h-3.5 w-3.5", isMissionMoment ? "fill-[#005BBC] text-[#005BBC]" : "")} />
               <span className="hidden sm:inline">Mission Moments</span>
             </button>
 
@@ -358,9 +358,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={handlePost}
               disabled={!canPost}
               className="px-5 font-semibold text-[13px] text-white rounded-xl transition-all duration-200 disabled:opacity-40"
-              style={{ background: "#006BD5", height: "36px", boxShadow: canPost ? "0 2px 8px rgba(0,107,213,0.25)" : "none" }}
-              onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#004FA8"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#006BD5"; }}
+              style={{ background: "#005BBC", height: "36px", boxShadow: canPost ? "0 2px 8px rgba(0,91,188,0.25)" : "none" }}
+              onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#004699"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#005BBC"; }}
             >
               Post
             </button>

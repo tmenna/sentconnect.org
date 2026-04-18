@@ -228,25 +228,25 @@ function EditForm({
 
       {/* Impact */}
       {showImpact ? (
-        <div className="flex items-center gap-2 bg-emerald-50 rounded-full px-3 py-1.5 border border-emerald-100">
-          <Users className="h-3.5 w-3.5 text-emerald-600 flex-shrink-0" />
+        <div className="flex items-center gap-2 bg-blue-50 rounded-full px-3 py-1.5 border border-blue-100">
+          <Users className="h-3.5 w-3.5 text-[#005BBC] flex-shrink-0" />
           <input
             type="number"
             min="0"
             value={peopleReached}
             onChange={e => setPeopleReached(e.target.value)}
             placeholder="People reached…"
-            className="flex-1 text-[13px] bg-transparent outline-none text-emerald-800 placeholder:text-emerald-400"
+            className="flex-1 text-[13px] bg-transparent outline-none text-[#004699] placeholder:text-blue-300"
             disabled={saving}
           />
           <button onClick={() => { setShowImpact(false); setPeopleReached(""); }}>
-            <X className="h-3.5 w-3.5 text-emerald-400 hover:text-emerald-700" />
+            <X className="h-3.5 w-3.5 text-blue-300 hover:text-[#005BBC]" />
           </button>
         </div>
       ) : (
         <button
           onClick={() => setShowImpact(true)}
-          className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-emerald-600 transition-colors"
+          className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-[#005BBC] transition-colors"
         >
           <Users className="h-3.5 w-3.5" /> Add impact
         </button>
@@ -275,11 +275,11 @@ function EditForm({
         className={cn(
           "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors",
           isMissionMoment
-            ? "text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200"
+            ? "text-[#005BBC] bg-blue-50 hover:bg-blue-100 border border-blue-200"
             : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
         )}
       >
-        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-emerald-600")} />
+        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#005BBC]")} />
         {isMissionMoment ? "Mission Moments" : "Mark as Mission Moments"}
       </button>
 
@@ -292,7 +292,7 @@ function EditForm({
           size="sm"
           onClick={handleSave}
           disabled={saving}
-          className="h-8 px-4 text-[13px] bg-[#111827] hover:bg-[#1f2937] text-white"
+          className="h-8 px-4 text-[13px] bg-[#005BBC] hover:bg-[#004699] text-white"
         >
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <><Check className="h-3.5 w-3.5 mr-1" />Save</>}
         </Button>
@@ -418,15 +418,15 @@ export function PostCard({
       {post.isMissionMoment ? (
         <div
           className="flex items-center gap-2 px-4 py-2 border-b"
-          style={{ background: "#ECFDF5", borderColor: "#A7F3D0" }}
+          style={{ background: "#EFF6FF", borderColor: "#BFDBFE" }}
         >
-          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#059669" }} />
-          <span className="text-[12px] font-semibold" style={{ color: "#065F46" }}>Mission Moments</span>
+          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#005BBC" }} />
+          <span className="text-[12px] font-semibold" style={{ color: "#004699" }}>Mission Moments</span>
           {post.isHighlight && (
             <Star className="h-3 w-3 fill-amber-400 text-amber-400 ml-0.5" />
           )}
           <div className="flex-1" />
-          <Sparkles className="h-3 w-3" style={{ color: "#6EE7B7" }} />
+          <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />
         </div>
       ) : post.isHighlight ? (
         <div className="flex items-center gap-1.5 px-4 py-1.5 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
@@ -521,7 +521,7 @@ export function PostCard({
               <div className={cn(
                 "rounded-xl px-4 py-3 border",
                 post.isMissionMoment
-                  ? "border-emerald-100 bg-emerald-50/20"
+                  ? "border-blue-100 bg-blue-50/20"
                   : "border-gray-100 bg-gray-50/50"
               )}>
                 <p className="text-[17px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
@@ -532,7 +532,7 @@ export function PostCard({
           {/* People Reached */}
           {post.peopleReached != null && post.peopleReached > 0 && (
             <div className="px-5 pb-4">
-              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-full">
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#005BBC] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full">
                 <Users className="h-3.5 w-3.5" />
                 {post.peopleReached.toLocaleString()} people reached
               </span>

@@ -3,8 +3,8 @@ import { Link } from "wouter";
 import { Shuffle, Loader2, CheckCircle2 } from "lucide-react";
 
 const BG    = "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)";
-const BLUE  = "#006BD5";
-const BLUE_DK = "#004FA8";
+const BLUE  = "#005BBC";
+const BLUE_DK = "#004699";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");

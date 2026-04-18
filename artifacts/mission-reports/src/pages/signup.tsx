@@ -8,8 +8,8 @@ import { Shuffle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const BLUE     = "#006BD5";
-const BLUE_DK  = "#004FA8";
+const BLUE     = "#005BBC";
+const BLUE_DK  = "#004699";
 const BLUE_LT  = "#EFF6FF";
 const BLUE_BD  = "#BFDBFE";
 
