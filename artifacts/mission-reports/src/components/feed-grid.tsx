@@ -341,7 +341,7 @@ export function FeedGridCard({
           )}
           <span
             className="ml-auto flex items-center gap-0.5 text-[12px] font-semibold flex-shrink-0 transition-colors"
-            style={{ color: hovered ? "#047857" : "#059669" }}
+            style={{ color: hovered ? "#004FA8" : "#006BD5" }}
           >
             Read more <ArrowRight className="h-3 w-3" />
           </span>

@@ -358,9 +358,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={handlePost}
               disabled={!canPost}
               className="px-5 font-semibold text-[13px] text-white rounded-xl transition-all duration-200 disabled:opacity-40"
-              style={{ background: "#10B981", height: "36px", boxShadow: canPost ? "0 2px 8px rgba(16,185,129,0.25)" : "none" }}
-              onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#059669"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#10B981"; }}
+              style={{ background: "#006BD5", height: "36px", boxShadow: canPost ? "0 2px 8px rgba(0,107,213,0.25)" : "none" }}
+              onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#004FA8"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#006BD5"; }}
             >
               Post
             </button>

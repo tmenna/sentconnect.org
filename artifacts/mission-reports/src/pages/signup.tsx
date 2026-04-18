@@ -8,6 +8,11 @@ import { Shuffle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+const BLUE     = "#006BD5";
+const BLUE_DK  = "#004FA8";
+const BLUE_LT  = "#EFF6FF";
+const BLUE_BD  = "#BFDBFE";
+
 export default function Signup() {
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
@@ -60,35 +65,32 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen flex bg-white">
-      {/* Left panel */}
+      {/* Left panel — blue gradient matching login */}
       <div
         className="hidden md:flex flex-col justify-between w-[420px] flex-shrink-0 relative overflow-hidden px-10 py-12 text-white"
-        style={{ background: "linear-gradient(160deg, #111827 0%, #1f2937 60%, #374151 100%)" }}
+        style={{ background: "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)" }}
       >
-        {/* Subtle radial glow for depth */}
+        {/* Subtle radial glow */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.12) 0%, transparent 55%)",
-          }}
+          style={{ background: "radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.15) 0%, transparent 55%)" }}
         />
 
         {/* Top content */}
         <div className="relative z-10">
           <div className="flex items-center gap-2.5 mb-6">
-            <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
+            <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
               <Shuffle className="h-5 w-5 text-white" />
             </div>
             <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
           </div>
 
-          {/* Subtle domain branding */}
-          <p className="text-white/40 text-[11px] font-medium tracking-widest uppercase mb-8">
+          <p className="text-white/50 text-[11px] font-medium tracking-widest uppercase mb-8">
             www.sentconnect.org
           </p>
 
           <h2 className="text-[2.1rem] font-extrabold leading-[1.2] mb-5 tracking-tight text-white">
-            Connect with your Global Partners<br />
+            Connect with your<br />Global Partners<br />
             from{" "}
             <span className="text-white font-black">anywhere.</span>
           </h2>
@@ -106,10 +108,10 @@ export default function Signup() {
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="md:hidden flex items-center gap-2 mb-8">
-            <div className="w-8 h-8 bg-[#111827] rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: BLUE }}>
               <Shuffle className="h-4 w-4 text-white" />
             </div>
-            <span className="text-base font-extrabold text-[#111827]">SentConnect</span>
+            <span className="text-base font-extrabold" style={{ color: "#1F2937" }}>SentConnect</span>
           </div>
 
           <h1 className="text-2xl font-extrabold text-foreground mb-1">Create your organization</h1>
@@ -133,12 +135,16 @@ export default function Signup() {
                 placeholder="Calvary Community Church"
                 required
                 className="h-10"
+                style={{ "--tw-ring-color": BLUE_BD } as any}
               />
             </div>
 
             <div>
               <label className="block text-[13px] font-semibold text-foreground mb-1">Subdomain</label>
-              <div className="flex items-center gap-0 border border-input rounded-lg overflow-hidden h-10 focus-within:ring-2 focus-within:ring-ring">
+              <div
+                className="flex items-center gap-0 border border-input rounded-lg overflow-hidden h-10 focus-within:ring-2"
+                style={{ "--tw-ring-color": BLUE_BD } as any}
+              >
                 <input
                   value={subdomain}
                   onChange={e => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
@@ -163,17 +169,19 @@ export default function Signup() {
                     key={opt.value}
                     type="button"
                     onClick={() => setPlan(opt.value)}
-                    className={`text-left px-4 py-3 rounded-xl border-2 transition-all ${
-                      plan === opt.value
-                        ? "border-[#00C4A7] bg-[#00C4A7]/5 shadow-sm"
-                        : "border-border/60 hover:border-[#00C4A7]/40 bg-white"
-                    }`}
+                    className="text-left px-4 py-3 rounded-xl border-2 transition-all bg-white"
+                    style={{
+                      borderColor: plan === opt.value ? BLUE : "#E5E7EB",
+                      background: plan === opt.value ? BLUE_LT : "white",
+                      boxShadow: plan === opt.value ? "0 0 0 0px transparent" : "none",
+                    }}
                   >
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className={`w-3.5 h-3.5 rounded-full border-2 flex-shrink-0 transition-colors ${
-                        plan === opt.value ? "border-[#00C4A7] bg-[#00C4A7]" : "border-border"
-                      }`} />
-                      <span className={`text-[13px] font-bold ${plan === opt.value ? "text-[#00C4A7]" : "text-foreground"}`}>
+                      <span
+                        className="w-3.5 h-3.5 rounded-full border-2 flex-shrink-0 transition-colors"
+                        style={{ borderColor: plan === opt.value ? BLUE : "#D1D5DB", background: plan === opt.value ? BLUE : "white" }}
+                      />
+                      <span className="text-[13px] font-bold" style={{ color: plan === opt.value ? BLUE : "#1F2937" }}>
                         {opt.label}
                       </span>
                     </div>
@@ -201,19 +209,22 @@ export default function Signup() {
               </div>
             </div>
 
-            <Button
+            <button
               type="submit"
               disabled={submitting}
-              className="w-full h-11 bg-[hsl(171,100%,34%)] hover:bg-[hsl(171,100%,28%)] text-white font-bold rounded-lg text-[15px]"
+              className="w-full h-11 text-white font-bold rounded-xl text-[15px] flex items-center justify-center gap-2 transition-all"
+              style={{ background: submitting ? "#93C5FD" : BLUE }}
+              onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = BLUE_DK; }}
+              onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = BLUE; }}
             >
-              {submitting ? <><Loader2 className="h-4 w-4 animate-spin mr-2" />Creating…</> : "Create Organization"}
-            </Button>
+              {submitting ? <><Loader2 className="h-4 w-4 animate-spin" />Creating…</> : "Create Organization"}
+            </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-[13px] text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="text-[hsl(171,100%,34%)] font-semibold hover:underline">Sign in</Link>
+              <Link href="/login" className="font-semibold hover:underline" style={{ color: BLUE }}>Sign in</Link>
             </p>
           </div>
         </div>

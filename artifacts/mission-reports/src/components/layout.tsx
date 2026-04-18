@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
 /* Brand tokens */
-const EMERALD   = "#059669";
+const EMERALD   = "#006BD5";
 const CHARCOAL  = "#374151";   /* slightly lighter than #111827 */
 const BORDER    = "#E5E7EB";   /* light gray lines */
 
@@ -33,8 +33,8 @@ export function Layout({ children }: { children: ReactNode }) {
       <span className={cn(
         "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
         currentPath === href
-          ? "bg-emerald-50 text-emerald-700"
-          : "text-gray-500 hover:text-emerald-700 hover:bg-emerald-50"
+          ? "bg-blue-50 text-blue-700"
+          : "text-gray-500 hover:text-blue-700 hover:bg-blue-50"
       )}>
         {icon}
         {label}
@@ -52,7 +52,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <div className="p-1.5 rounded-lg" style={{ background: "#ECFDF5", border: `1px solid #A7F3D0` }}>
+            <div className="p-1.5 rounded-lg" style={{ background: "#EFF6FF", border: `1px solid #BFDBFE` }}>
               <Shuffle className="h-4 w-4" style={{ color: EMERALD }} />
             </div>
             <span className="font-semibold text-[15px] tracking-tight" style={{ color: CHARCOAL }}>SentConnect</span>
@@ -71,7 +71,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
                         className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-semibold text-[13px] cursor-pointer transition-colors"
-                        style={{ background: "#ECFDF5", border: `1.5px solid #6EE7B7`, color: EMERALD }}
+                        style={{ background: "#EFF6FF", border: `1.5px solid #93C5FD`, color: EMERALD }}
                       >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
@@ -116,7 +116,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <footer className="mt-12 py-5 bg-white" style={{ borderTop: `1px solid ${BORDER}` }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-1 rounded-md" style={{ background: "#ECFDF5", border: "1px solid #A7F3D0" }}>
+            <div className="p-1 rounded-md" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
               <Shuffle className="h-3 w-3" style={{ color: EMERALD }} />
             </div>
             <span className="text-xs font-semibold text-gray-400">SentConnect</span>

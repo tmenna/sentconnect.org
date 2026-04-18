@@ -81,7 +81,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   if (isAuthenticated && user) return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ background: BG }}>
       <div className="w-full max-w-sm bg-white rounded-2xl p-8 text-center" style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}>
-        <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "#ECFDF5", border: "2px solid #6EE7B7" }}>
+        <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "#EFF6FF", border: "2px solid #93C5FD" }}>
           <span className="font-bold text-lg" style={{ color: BTN_BASE }}>{user.name.charAt(0).toUpperCase()}</span>
         </div>
         <h2 className="text-[17px] font-semibold text-gray-800 mb-1">You're signed in</h2>
@@ -180,7 +180,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                     <Input
                       placeholder="you@mission.org"
                       autoComplete="email"
-                      className="h-11 text-[14px] border-gray-200 rounded-xl focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-400 transition-all"
+                      className="h-11 text-[14px] border-gray-200 rounded-xl focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:border-blue-400 transition-all"
                       {...field}
                       data-testid="input-login-email"
                     />
@@ -210,7 +210,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                       type="password"
                       placeholder="••••••••"
                       autoComplete="current-password"
-                      className="h-11 text-[14px] border-gray-200 rounded-xl focus-visible:ring-2 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-400 transition-all"
+                      className="h-11 text-[14px] border-gray-200 rounded-xl focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:border-blue-400 transition-all"
                       {...field}
                       data-testid="input-login-password"
                     />

@@ -313,8 +313,8 @@ function RoleBadge({ role }: { role: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   return status === "active" ? (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#ECFDF5", color: "#065F46" }}>
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" /> Active
+    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#EFF6FF", color: "#1D4ED8" }}>
+      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" /> Active
     </span>
   ) : (
     <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#F9FAFB", color: "#6B7280" }}>
@@ -886,9 +886,9 @@ export default function AdminDashboard() {
             </p>
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
-            <Avatar className="hidden sm:flex h-10 w-10" style={{ border: "2px solid #A7F3D0" }}>
+            <Avatar className="hidden sm:flex h-10 w-10" style={{ border: "2px solid #BFDBFE" }}>
               <AvatarImage src={user.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#ECFDF5", color: "#059669" }}>
+              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#EFF6FF", color: "#006BD5" }}>
                 {user.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -913,7 +913,7 @@ export default function AdminDashboard() {
           ) : (
             <>
               <StatCard label="Total Posts" value={stats?.totalPosts ?? 0} icon={<FileText className="h-5 w-5" />} accent="bg-gray-100 text-gray-600" onClick={() => setActiveTab("feed")} />
-              <StatCard label="Field Users" value={nonAdmins.length} icon={<Users className="h-5 w-5" />} accent="bg-emerald-50 text-emerald-600" onClick={() => setActiveTab("team")} />
+              <StatCard label="Field Users" value={nonAdmins.length} icon={<Users className="h-5 w-5" />} accent="bg-blue-50 text-blue-600" onClick={() => setActiveTab("team")} />
               <StatCard
                 label="Countries"
                 value={new Set(nonAdmins.map((u: any) => u.location?.split(",").pop()?.trim()).filter(Boolean)).size || "—"}
@@ -939,8 +939,8 @@ export default function AdminDashboard() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className="flex items-center gap-2 px-1 pb-3 pt-1 mr-5 text-[14px] font-semibold border-b-2 -mb-px transition-all duration-200"
                 style={{
-                  borderColor: active ? "#059669" : "transparent",
-                  color: active ? "#059669" : "#9CA3AF",
+                  borderColor: active ? "#006BD5" : "transparent",
+                  color: active ? "#006BD5" : "#9CA3AF",
                 }}
               >
                 {tab.icon}
@@ -948,7 +948,7 @@ export default function AdminDashboard() {
                 {tab.badge != null && (
                   <span
                     className="text-[11px] px-2 py-0.5 rounded-full font-medium"
-                    style={{ background: active ? "#ECFDF5" : "#F3F4F6", color: active ? "#059669" : "#6B7280" }}
+                    style={{ background: active ? "#EFF6FF" : "#F3F4F6", color: active ? "#006BD5" : "#6B7280" }}
                   >
                     {tab.badge}
                   </span>
@@ -976,9 +976,9 @@ export default function AdminDashboard() {
               <button
                 onClick={() => setShowAddModal(true)}
                 className="flex items-center gap-2 px-5 text-[14px] font-semibold text-white rounded-xl whitespace-nowrap transition-all duration-200 hover:-translate-y-px"
-                style={{ backgroundColor: "#10B981", height: "48px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#059669"; e.currentTarget.style.boxShadow = "0 6px 12px rgba(0,0,0,0.08)"; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#10B981"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; }}
+                style={{ backgroundColor: "#006BD5", height: "48px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#004FA8"; e.currentTarget.style.boxShadow = "0 6px 12px rgba(0,0,0,0.08)"; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#006BD5"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; }}
               >
                 <Plus className="h-4 w-4" />
                 Add Team Member
@@ -1054,7 +1054,7 @@ export default function AdminDashboard() {
             {/* Feed sub-tabs */}
             <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
               {[
-                { id: "all", label: "All Posts", icon: <Globe className="h-3.5 w-3.5" />, count: !feedLoading ? allFeedPosts.length : null, activeColor: "#059669", activeBg: "#ECFDF5" },
+                { id: "all", label: "All Posts", icon: <Globe className="h-3.5 w-3.5" />, count: !feedLoading ? allFeedPosts.length : null, activeColor: "#006BD5", activeBg: "#EFF6FF" },
                 { id: "moments", label: "Mission Moments", icon: <Star className={`h-3.5 w-3.5 ${feedMomentFilter === "moments" ? "fill-amber-500 text-amber-500" : ""}`} />, count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null, activeColor: "#B45309", activeBg: "#FFFBEB" },
               ].map(tab => {
                 const active = feedMomentFilter === tab.id;

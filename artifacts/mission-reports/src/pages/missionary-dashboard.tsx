@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type FeedTab = "all" | "moments";
 
-const EMERALD = "#059669";
+const EMERALD = "#006BD5";
 
 export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -92,9 +92,9 @@ export default function MissionaryDashboard() {
               )}
             </div>
           )}
-          <Avatar className="h-10 w-10 flex-shrink-0" style={{ border: "2px solid #A7F3D0" }}>
+          <Avatar className="h-10 w-10 flex-shrink-0" style={{ border: "2px solid #BFDBFE" }}>
             <AvatarImage src={user?.avatarUrl ?? undefined} />
-            <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#ECFDF5", color: EMERALD }}>
+            <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#EFF6FF", color: EMERALD }}>
               {user?.name?.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -167,7 +167,7 @@ export default function MissionaryDashboard() {
         <div className="py-20 text-center">
           {activeTab === "moments" ? (
             <>
-              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#ECFDF5" }}>
+              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EFF6FF" }}>
                 <BookOpen className="h-6 w-6" style={{ color: EMERALD }} />
               </div>
               <p className="font-semibold text-[16px]" style={{ color: "#374151" }}>No Mission Moments yet</p>
