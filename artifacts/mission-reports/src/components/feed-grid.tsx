@@ -187,6 +187,24 @@ export function MasonryFeed({
   );
 }
 
+// ─── Pastel thumbnail palettes per post type ─────────────────────────────────
+
+const THUMB_MOMENT = {
+  bg: "linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 60%, #6EE7B7 100%)",
+  iconBg: "rgba(255,255,255,0.55)",
+  icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
+};
+const THUMB_HIGHLIGHT = {
+  bg: "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 60%, #FCD34D 100%)",
+  iconBg: "rgba(255,255,255,0.55)",
+  icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+};
+const THUMB_DEFAULT = {
+  bg: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 60%, #BFDBFE 100%)",
+  iconBg: "rgba(255,255,255,0.55)",
+  icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+};
+
 // ─── Grid card ──────────────────────────────────────────────────────────────
 
 export function FeedGridCard({
@@ -201,6 +219,21 @@ export function FeedGridCard({
   const extraPhotos = post.photos.length - 1;
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
 
+  // Category label
+  const category = post.isMissionMoment
+    ? { label: "Mission Moments", color: "#059669", bg: "#ECFDF5", border: "#A7F3D0" }
+    : post.isHighlight
+    ? { label: "Highlight", color: "#B45309", bg: "#FFFBEB", border: "#FDE68A" }
+    : { label: "Update", color: "#6B7280", bg: "#F9FAFB", border: "#E5E7EB" };
+
+  // Thumbnail palette when no photo
+  const thumb = post.isMissionMoment ? THUMB_MOMENT : post.isHighlight ? THUMB_HIGHLIGHT : THUMB_DEFAULT;
+
+  // Extract title + excerpt from description
+  const lines = (post.description ?? "").split("\n").map(l => l.trim()).filter(Boolean);
+  const title = lines[0] ? (lines[0].length > 90 ? lines[0].slice(0, 88) + "…" : lines[0]) : "";
+  const excerpt = lines.slice(1).join(" ").trim();
+
   return (
     <div
       role="button"
@@ -211,17 +244,15 @@ export function FeedGridCard({
       onMouseLeave={() => setHovered(false)}
       style={{
         transform: hovered ? "translateY(-4px)" : "translateY(0px)",
-        boxShadow: hovered ? "0 12px 28px rgba(0,0,0,0.11)" : "0 1px 3px rgba(0,0,0,0.07)",
+        boxShadow: hovered ? "0 12px 32px rgba(0,0,0,0.10)" : "0 2px 8px rgba(0,0,0,0.06)",
         transition: "transform 160ms ease-out, box-shadow 160ms ease-out",
         cursor: "pointer",
+        border: "1px solid #E9E9E9",
       }}
-      className={cn(
-        "bg-white rounded-2xl border overflow-hidden flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
-        post.isHighlight ? "border-amber-300" : "border-border/60"
-      )}
+      className="bg-white rounded-2xl overflow-hidden flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/40"
     >
-      {/* Cover image */}
-      <div className="relative aspect-[4/3] bg-muted/30 overflow-hidden flex-shrink-0">
+      {/* ── Thumbnail ── */}
+      <div className="relative overflow-hidden flex-shrink-0" style={{ aspectRatio: "16/9" }}>
         {coverPhoto ? (
           <img
             src={coverPhoto.url}
@@ -229,79 +260,110 @@ export function FeedGridCard({
             className="w-full h-full object-cover"
             style={{
               transform: hovered ? "scale(1.04)" : "scale(1)",
-              transition: "transform 300ms ease-out",
+              transition: "transform 320ms ease-out",
             }}
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
-            <MessageCircle className="h-10 w-10 text-primary/20" />
+          <div
+            className="w-full h-full flex items-center justify-center"
+            style={{ background: thumb.bg }}
+          >
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center"
+              style={{ background: thumb.iconBg, backdropFilter: "blur(4px)" }}
+            >
+              {thumb.icon}
+            </div>
           </div>
         )}
 
-        {/* Highlight badge */}
-        {post.isHighlight && (
-          <div className="absolute top-2.5 left-2.5 flex items-center gap-1 bg-amber-400/90 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full shadow">
-            <Star className="h-3 w-3 fill-white" /> Highlight
-          </div>
-        )}
-
-        {/* Extra photo count */}
+        {/* Extra photo chip */}
         {extraPhotos > 0 && (
-          <div className="absolute bottom-2.5 right-2.5 bg-black/55 backdrop-blur-sm text-white text-[12px] font-semibold px-2 py-0.5 rounded-full">
-            +{extraPhotos}
+          <div className="absolute bottom-2.5 right-2.5 bg-black/50 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
+            +{extraPhotos} more
           </div>
         )}
 
-        {/* People reached badge */}
+        {/* People reached chip */}
         {post.peopleReached != null && post.peopleReached > 0 && (
-          <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 bg-emerald-500/90 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full shadow">
+          <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 bg-emerald-500/90 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
             <Users className="h-3 w-3" />
-            {post.peopleReached.toLocaleString()}
+            {post.peopleReached.toLocaleString()} reached
           </div>
         )}
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col flex-1 p-3.5">
-        {/* Author row */}
-        <div className="flex items-center gap-2 mb-2.5">
-          <Avatar className="h-7 w-7 flex-shrink-0">
-            <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="bg-primary/10 text-primary text-[10px] font-bold">
-              {post.author.name.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="min-w-0 flex-1">
-            <p className="text-[12px] font-semibold text-foreground leading-tight truncate">{post.author.name}</p>
-            <p className="text-[11px] text-muted-foreground leading-tight">{timeAgo}</p>
-          </div>
-          {post.location && (
-            <div className="flex items-center gap-0.5 text-[10px] text-muted-foreground flex-shrink-0 max-w-[80px]">
-              <MapPin className="h-2.5 w-2.5 flex-shrink-0" />
-              <span className="truncate">{post.location}</span>
-            </div>
-          )}
+      {/* ── Card body ── */}
+      <div className="flex flex-col flex-1 px-4 pt-3.5 pb-4">
+
+        {/* Category label */}
+        <div className="mb-2">
+          <span
+            className="inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full"
+            style={{ color: category.color, background: category.bg, border: `1px solid ${category.border}` }}
+          >
+            {category.label}
+          </span>
         </div>
 
-        {/* Post text preview */}
-        {post.description && (
-          <p className="text-[13px] text-foreground leading-snug line-clamp-3 flex-1 mb-3">
-            {post.description}
+        {/* Title */}
+        {title ? (
+          <p className="font-bold text-[15px] leading-snug mb-1.5" style={{ color: "#1F2937" }}>
+            {title}
+          </p>
+        ) : null}
+
+        {/* Excerpt */}
+        {(excerpt || (!title && post.description)) && (
+          <p className="text-[13px] leading-relaxed line-clamp-3 flex-1 mb-3" style={{ color: "#6B7280" }}>
+            {excerpt || post.description}
           </p>
         )}
 
-        {/* Footer stats */}
-        <div className="flex items-center gap-3 mt-auto pt-2 border-t border-border/30">
-          <div className="flex items-center gap-1 text-[12px] text-muted-foreground">
-            <Heart className={cn("h-3.5 w-3.5", post.likedByMe && "fill-red-500 text-red-500")} />
-            <span>{post.likeCount > 0 ? post.likeCount : ""}</span>
+        {/* ── Footer ── */}
+        <div className="flex items-center gap-2 mt-auto pt-3" style={{ borderTop: "1px solid #F3F4F6" }}>
+          <Avatar className="h-6 w-6 flex-shrink-0">
+            <AvatarImage src={post.author.avatarUrl ?? undefined} />
+            <AvatarFallback className="text-[9px] font-bold" style={{ background: "#ECFDF5", color: "#059669" }}>
+              {post.author.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="text-[11px] font-semibold leading-none truncate" style={{ color: "#374151" }}>{post.author.name}</p>
+            <p className="text-[10px] leading-tight mt-0.5" style={{ color: "#9CA3AF" }}>{timeAgo}</p>
           </div>
-          <div className="flex items-center gap-1 text-[12px] text-muted-foreground">
-            <MessageCircle className="h-3.5 w-3.5" />
-            <span>{post.commentCount > 0 ? post.commentCount : ""}</span>
-          </div>
+          {post.location && (
+            <div className="hidden sm:flex items-center gap-0.5 flex-shrink-0 max-w-[72px]" style={{ color: "#9CA3AF" }}>
+              <MapPin className="h-2.5 w-2.5 flex-shrink-0" />
+              <span className="text-[10px] truncate">{post.location}</span>
+            </div>
+          )}
+          <span
+            className="ml-auto flex items-center gap-0.5 text-[12px] font-semibold flex-shrink-0 transition-colors"
+            style={{ color: hovered ? "#047857" : "#059669" }}
+          >
+            Read more <ArrowRight className="h-3 w-3" />
+          </span>
         </div>
+
+        {/* Engagement micro-stats */}
+        {(post.likeCount > 0 || post.commentCount > 0) && (
+          <div className="flex items-center gap-3 mt-2">
+            {post.likeCount > 0 && (
+              <div className="flex items-center gap-1 text-[11px]" style={{ color: "#9CA3AF" }}>
+                <Heart className={cn("h-3 w-3", post.likedByMe && "fill-red-400 text-red-400")} />
+                {post.likeCount}
+              </div>
+            )}
+            {post.commentCount > 0 && (
+              <div className="flex items-center gap-1 text-[11px]" style={{ color: "#9CA3AF" }}>
+                <MessageCircle className="h-3 w-3" />
+                {post.commentCount}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

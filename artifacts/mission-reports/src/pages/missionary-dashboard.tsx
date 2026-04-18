@@ -3,7 +3,8 @@ import { useAuth } from "@/components/auth-provider";
 import { useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
 import { Redirect } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PostCard, type PostData } from "@/components/post-card";
+import { type PostData } from "@/components/post-card";
+import { FeedGridCard, PostDetailModal } from "@/components/feed-grid";
 import { PostComposer } from "@/components/post-composer";
 import { MapPin, Building2, FileText, Star, Globe } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -33,8 +34,11 @@ export default function MissionaryDashboard() {
   const missionMoments = allPosts.filter(p => p.isMissionMoment);
   const myPosts = activeTab === "moments" ? missionMoments : allPosts;
 
+  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
+
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : (data as PostData[] ?? []).filter(p => p.id !== id));
+    setSelectedPostIndex(null);
   }
 
   return (
@@ -124,25 +128,23 @@ export default function MissionaryDashboard() {
         </button>
       </div>
 
-      {/* Blog-style post feed */}
+      {/* Card grid feed */}
       {postsLoading && posts === null ? (
-        <div className="space-y-4">
-          {[1, 2].map(i => (
-            <div key={i} className="bg-white rounded-2xl p-5 space-y-3" style={{ border: "1px solid #E5E7EB", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
-              <div className="flex items-center gap-3">
-                <Skeleton className="h-10 w-10 rounded-full" />
-                <div className="space-y-1.5 flex-1">
-                  <Skeleton className="h-3.5 w-28" />
-                  <Skeleton className="h-2.5 w-20" />
-                </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="bg-white rounded-2xl overflow-hidden" style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+              <Skeleton className="w-full aspect-[16/9]" />
+              <div className="p-4 space-y-2.5">
+                <Skeleton className="h-4 w-28 rounded-full" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-3.5 w-4/5" />
+                <Skeleton className="h-3 w-2/3" />
               </div>
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-48 w-full rounded-xl" />
             </div>
           ))}
         </div>
       ) : myPosts.length === 0 ? (
-        <div className="bg-white rounded-2xl py-16 text-center" style={{ border: "1px solid #E5E7EB", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+        <div className="bg-white rounded-2xl py-16 text-center" style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
           {activeTab === "moments" ? (
             <>
               <Star className="h-8 w-8 mx-auto mb-3" style={{ color: "#D1D5DB" }} />
@@ -158,11 +160,24 @@ export default function MissionaryDashboard() {
           )}
         </div>
       ) : (
-        <div className="space-y-4">
-          {myPosts.map(post => (
-            <PostCard key={post.id} post={post} onDelete={handleDelete} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {myPosts.map((post, i) => (
+              <FeedGridCard key={post.id} post={post} onClick={() => setSelectedPostIndex(i)} />
+            ))}
+          </div>
+
+          {selectedPostIndex !== null && (
+            <PostDetailModal
+              post={myPosts[selectedPostIndex]}
+              allPosts={myPosts}
+              postIndex={selectedPostIndex}
+              onNavigate={setSelectedPostIndex}
+              onClose={() => setSelectedPostIndex(null)}
+              onDelete={handleDelete}
+            />
+          )}
+        </>
       )}
     </div>
   );
