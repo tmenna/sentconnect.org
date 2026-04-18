@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "wouter";
+import { useParams } from "wouter";
 import { formatDistanceToNow } from "date-fns";
-import { Heart, MessageCircle, MapPin, BookOpen, Sparkles, Star, Users, ArrowLeft } from "lucide-react";
+import { Heart, MessageCircle, MapPin, BookOpen, Sparkles, Star, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -75,12 +75,6 @@ export default function PublicPost() {
             SentConnect
           </div>
           <div className="flex-1" />
-          <Link href="/login">
-            <span className="text-[13px] font-semibold text-white px-4 py-1.5 rounded-full cursor-pointer transition-colors"
-              style={{ background: "#005BBC" }}>
-              Sign in
-            </span>
-          </Link>
         </div>
       </header>
 
@@ -185,7 +179,7 @@ export default function PublicPost() {
               </div>
             )}
 
-            {/* Action bar — read-only counts + sign-in prompt */}
+            {/* Action bar — read-only counts */}
             <div className="flex items-center gap-3 px-5 py-3.5 border-t" style={{ borderColor: "#F3F4F6" }}>
               <span className="flex items-center gap-1.5 text-[13px] font-medium" style={{ color: "#6B7280" }}>
                 <Heart className="h-4 w-4" />
@@ -195,19 +189,6 @@ export default function PublicPost() {
                 <MessageCircle className="h-4 w-4" />
                 {post.commentCount > 0 && post.commentCount}
               </span>
-            </div>
-
-            {/* Sign-in CTA */}
-            <div className="mx-5 mb-5 mt-1 rounded-xl px-4 py-3.5 text-center" style={{ background: "#EFF6FF" }}>
-              <p className="text-[13px] font-medium" style={{ color: "#374151" }}>
-                Join SentConnect to like, comment, and stay connected with field teams.
-              </p>
-              <Link href="/login">
-                <span className="inline-block mt-2 text-[13px] font-bold px-5 py-1.5 rounded-full cursor-pointer text-white transition-colors"
-                  style={{ background: "#005BBC" }}>
-                  Sign in
-                </span>
-              </Link>
             </div>
           </div>
         )}
