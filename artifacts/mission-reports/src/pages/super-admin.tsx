@@ -1637,42 +1637,43 @@ export default function SuperAdminPanel() {
 
       {/* Header */}
       <div
-        className="rounded-2xl px-6 py-5 flex items-center gap-4"
-        style={{ background: "linear-gradient(135deg, #111827 0%, #1f2937 100%)" }}
+        className="bg-white rounded-2xl px-6 py-5 flex items-center gap-4"
+        style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 16px rgba(0,0,0,0.06)" }}
       >
-        <div className="p-3 bg-white/15 rounded-xl">
-          <ShieldCheck className="h-6 w-6 text-white" />
+        <div className="p-2.5 bg-gray-100 rounded-xl flex-shrink-0">
+          <ShieldCheck className="h-5 w-5 text-gray-600" />
         </div>
-        <div className="flex-1">
-          <h1 className="text-[24px] font-extrabold text-white tracking-tight">Platform Admin</h1>
-          <p className="text-white/80 text-[15px] mt-0.5">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-[20px] font-semibold leading-tight" style={{ color: "#111827" }}>Platform Admin</h1>
+          <p className="text-[13px] mt-0.5" style={{ color: "#9CA3AF" }}>
             Global view — no organization filter applied.
           </p>
         </div>
-        <div className="hidden sm:flex flex-col items-end text-right">
-          <span className="text-[12px] font-bold text-white/60 uppercase tracking-wide">Signed in as</span>
-          <span className="text-[15px] font-semibold text-white">{user?.name}</span>
-          <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full mt-1.5 ${roleBadge(user?.role ?? "").bg}`}>
+        <div className="hidden sm:flex flex-col items-end text-right flex-shrink-0">
+          <span className="text-[13px] font-semibold text-[#111827]">{user?.name}</span>
+          <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full mt-1 ${roleBadge(user?.role ?? "").bg}`}>
             {roleBadge(user?.role ?? "").label}
           </span>
         </div>
-        <button
-          onClick={() => setShowEditProfile(true)}
-          title="Edit account"
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-colors ml-2"
-        >
-          <Settings2 className="h-4 w-4" />
-          <span className="hidden sm:inline">Edit Account</span>
-        </button>
-        <button
-          onClick={() => logout.mutate({ data: undefined })}
-          disabled={logout.isPending}
-          title="Sign out"
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-colors ml-1"
-        >
-          {logout.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
-          <span className="hidden sm:inline">Sign Out</span>
-        </button>
+        <div className="flex items-center gap-1 ml-2">
+          <button
+            onClick={() => setShowEditProfile(true)}
+            title="Edit account"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            <Settings2 className="h-4 w-4" />
+            <span className="hidden sm:inline">Edit</span>
+          </button>
+          <button
+            onClick={() => logout.mutate({ data: undefined })}
+            disabled={logout.isPending}
+            title="Sign out"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            {logout.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
+        </div>
       </div>
 
       {/* Platform Stats */}

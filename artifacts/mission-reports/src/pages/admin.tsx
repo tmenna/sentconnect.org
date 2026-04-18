@@ -877,37 +877,32 @@ export default function AdminDashboard() {
 
         {/* Welcome Banner */}
         <div
-          className="rounded-2xl px-7 py-6 flex items-center gap-4"
-          style={{ background: "linear-gradient(135deg, #111827 0%, #1f2937 100%)" }}
+          className="bg-white rounded-2xl px-7 py-5 flex items-center gap-4"
+          style={{ border: "1px solid #E9E9E9", boxShadow: "0 2px 16px rgba(0,0,0,0.06)" }}
         >
-          <div className="p-3 bg-white/15 rounded-xl hidden sm:flex">
-            <Sparkles className="h-6 w-6 text-white" />
-          </div>
-          <div className="flex-1">
-            <h1 className="text-[28px] font-semibold text-white tracking-tight leading-tight">
+          <Avatar className="hidden sm:flex h-12 w-12 flex-shrink-0">
+            <AvatarImage src={user.avatarUrl ?? undefined} />
+            <AvatarFallback className="font-semibold text-[16px]" style={{ background: "#F3F4F6", color: "#374151" }}>
+              {user.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-[22px] font-semibold leading-tight" style={{ color: "#111827" }}>
               Welcome back, {firstName}!
             </h1>
-            <p className="text-[15px] mt-1" style={{ color: "rgba(255,255,255,0.85)" }}>Here's what your team has been up to.</p>
+            <p className="text-[14px] mt-0.5" style={{ color: "#9CA3AF" }}>Here's what your team has been up to.</p>
           </div>
-          <div className="flex items-center gap-2.5">
-            <Avatar className="hidden sm:flex h-10 w-10 ring-2 ring-white/30">
-              <AvatarImage src={user.avatarUrl ?? undefined} />
-              <AvatarFallback className="bg-white/20 text-white font-semibold text-[15px]">
-                {user.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <button
-              onClick={() => logout.mutate({ data: undefined })}
-              disabled={logout.isPending}
-              title="Sign out"
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-all duration-200"
-            >
-              {logout.isPending
-                ? <Loader2 className="h-4 w-4 animate-spin" />
-                : <LogOut className="h-4 w-4" />}
-              <span className="hidden sm:inline">Sign Out</span>
-            </button>
-          </div>
+          <button
+            onClick={() => logout.mutate({ data: undefined })}
+            disabled={logout.isPending}
+            title="Sign out"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all duration-200"
+          >
+            {logout.isPending
+              ? <Loader2 className="h-4 w-4 animate-spin" />
+              : <LogOut className="h-4 w-4" />}
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
         </div>
 
         {/* Stats */}
