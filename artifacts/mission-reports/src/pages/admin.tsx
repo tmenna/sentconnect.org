@@ -887,7 +887,7 @@ export default function AdminDashboard() {
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <h1 className="text-[22px] font-semibold leading-tight" style={{ color: "#111827" }}>
+            <h1 className="text-[22px] font-semibold leading-tight" style={{ color: "#374151" }}>
               Welcome back, {firstName}!
             </h1>
             <p className="text-[14px] mt-0.5" style={{ color: "#9CA3AF" }}>Here's what your team has been up to.</p>

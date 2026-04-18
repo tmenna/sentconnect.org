@@ -1644,13 +1644,13 @@ export default function SuperAdminPanel() {
           <ShieldCheck className="h-5 w-5 text-gray-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <h1 className="text-[20px] font-semibold leading-tight" style={{ color: "#111827" }}>Platform Admin</h1>
+          <h1 className="text-[20px] font-semibold leading-tight" style={{ color: "#374151" }}>Platform Admin</h1>
           <p className="text-[13px] mt-0.5" style={{ color: "#9CA3AF" }}>
             Global view — no organization filter applied.
           </p>
         </div>
         <div className="hidden sm:flex flex-col items-end text-right flex-shrink-0">
-          <span className="text-[13px] font-semibold text-[#111827]">{user?.name}</span>
+          <span className="text-[13px] font-semibold text-[#374151]">{user?.name}</span>
           <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full mt-1 ${roleBadge(user?.role ?? "").bg}`}>
             {roleBadge(user?.role ?? "").label}
           </span>
