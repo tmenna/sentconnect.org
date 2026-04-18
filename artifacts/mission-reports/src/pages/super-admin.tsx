@@ -112,7 +112,7 @@ const PERM_LABELS: { key: keyof Permissions; label: string }[] = [
 
 function StatCard({ label, value, icon }: { label: string; value: number | string; icon: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-xl border border-border/60 shadow-sm p-5 flex items-center gap-4">
+    <div className="bg-white rounded-xl p-5 flex items-center gap-4" style={{ border: "1px solid #E9E9E9", boxShadow: "0 4px 16px rgba(0,0,0,0.07)" }}>
       <div className="p-3 bg-gray-100 rounded-xl text-gray-600">{icon}</div>
       <div>
         <p className="text-[14px] text-muted-foreground font-medium">{label}</p>

@@ -410,8 +410,8 @@ export function PostCard({
     <div
       className="bg-white rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-px"
       style={{
-        border: "1px solid #E5E7EB",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+        border: "1px solid #E9E9E9",
+        boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
       }}
     >
       {/* Mission Moment banner — takes priority over Highlight */}

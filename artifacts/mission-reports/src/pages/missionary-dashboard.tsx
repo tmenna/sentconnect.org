@@ -91,7 +91,7 @@ export default function MissionaryDashboard() {
       />
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2" style={{ borderBottom: "1px solid #F1F5F9" }}>
+      <div className="flex items-center gap-2" style={{ borderBottom: "1px solid #D1D5DB" }}>
         <button
           onClick={() => setActiveTab("all")}
           className="flex items-center gap-2 px-1 pb-3 pt-1 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200"

@@ -68,7 +68,7 @@
   --elevate-2: rgba(0,0,0, .06);
 
   /* smtp.com palette — white body, deep navy brand, mint-teal accent */
-  --background: 0 0% 100%;
+  --background: 0 0% 95%;
   --foreground: 230 35% 14%;
 
   --border: 220 18% 90%;

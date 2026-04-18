@@ -158,9 +158,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
     <div
       className={cn("bg-white rounded-2xl p-5 transition-all duration-200")}
       style={{
-        border: isMissionMoment ? "1px solid #BFDBFE" : "1px solid #E5E7EB",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-        background: isMissionMoment ? "#FAFBFF" : "#FFFFFF",
+        border: isMissionMoment ? "1px solid #A7F3D0" : "1px solid #E9E9E9",
+        boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
+        background: isMissionMoment ? "#F0FDF9" : "#FFFFFF",
       }}
       onDragOver={e => e.preventDefault()}
       onDrop={handleDrop}
@@ -294,7 +294,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={() => videoInputRef.current?.click()}
               disabled={posting || files.length >= 6}
               className="p-2 rounded-full transition-colors disabled:opacity-40"
-              style={{ color: files.some(f => isVideo(f)) ? "#3B82F6" : "#6B7280", background: files.some(f => isVideo(f)) ? "#EFF6FF" : "" }}
+              style={{ color: files.some(f => isVideo(f)) ? "#111827" : "#6B7280", background: files.some(f => isVideo(f)) ? "#F3F4F6" : "" }}
               onMouseEnter={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
               onMouseLeave={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add short video"
@@ -308,7 +308,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={() => setShowLocation(s => !s)}
               disabled={posting}
               className="p-2 rounded-full transition-colors"
-              style={{ color: showLocation ? "#3B82F6" : "#6B7280", background: showLocation ? "#EFF6FF" : "" }}
+              style={{ color: showLocation ? "#111827" : "#6B7280", background: showLocation ? "#F3F4F6" : "" }}
               onMouseEnter={e => { if (!showLocation) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
               onMouseLeave={e => { if (!showLocation) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add location"
@@ -336,12 +336,12 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               title="A Mission Moment is a 3–5 minute story, video, or update that highlights God's work and connects people to the broader mission."
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200"
               style={{
-                background: isMissionMoment ? "#EFF6FF" : "transparent",
-                color: isMissionMoment ? "#2563EB" : "#6B7280",
-                border: isMissionMoment ? "1px solid #BFDBFE" : "1px solid transparent",
+                background: isMissionMoment ? "#ECFDF5" : "transparent",
+                color: isMissionMoment ? "#059669" : "#6B7280",
+                border: isMissionMoment ? "1px solid #A7F3D0" : "1px solid transparent",
               }}
             >
-              <Star className={cn("h-3.5 w-3.5", isMissionMoment ? "fill-blue-400 text-blue-400" : "")} />
+              <Star className={cn("h-3.5 w-3.5", isMissionMoment ? "fill-emerald-500 text-emerald-500" : "")} />
               <span className="hidden sm:inline">Mission Moments</span>
             </button>
 

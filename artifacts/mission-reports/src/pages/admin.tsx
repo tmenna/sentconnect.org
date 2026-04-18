@@ -279,8 +279,8 @@ function StatCard({ label, value, icon, accent, onClick }: {
       onMouseUp={() => setPressed(false)}
       style={{
         transform,
-        border: "1px solid #F1F5F9",
-        boxShadow: shadow ?? "0 4px 12px rgba(0,0,0,0.05)",
+        border: "1px solid #E9E9E9",
+        boxShadow: shadow ?? "0 4px 16px rgba(0,0,0,0.07)",
         transition: "transform 150ms ease-out, box-shadow 150ms ease-out",
         cursor: isClickable ? "pointer" : undefined,
       }}
@@ -931,7 +931,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-2 border-b border-gray-100">
+        <div className="flex items-center gap-2 border-b border-gray-200/70">
           <button
             onClick={() => setActiveTab("team")}
             className={`flex items-center gap-2 px-1 pb-3 pt-1 text-[15px] font-semibold border-b-2 -mb-px transition-all duration-200 ${
