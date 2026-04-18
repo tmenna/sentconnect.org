@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "wouter";
 import { formatDistanceToNow } from "date-fns";
-import { Heart, MessageCircle, MapPin, BookOpen, Sparkles, Star, Users } from "lucide-react";
+import { MapPin, BookOpen, Sparkles, Star, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -27,7 +27,7 @@ function MediaItem({ photo }: { photo: Photo }) {
       <video
         src={photo.url}
         controls
-        className="w-full max-h-[520px] object-contain bg-black rounded-lg"
+        className="w-full max-h-[600px] object-contain bg-black"
       />
     );
   }
@@ -35,8 +35,8 @@ function MediaItem({ photo }: { photo: Photo }) {
     <img
       src={photo.url}
       alt=""
-      className="w-full object-cover rounded-lg"
-      style={{ maxHeight: 520 }}
+      className="w-full object-cover"
+      style={{ maxHeight: 600 }}
     />
   );
 }
@@ -62,137 +62,106 @@ export default function PublicPost() {
   }, [postId]);
 
   return (
-    <div className="min-h-screen" style={{ background: "#F5F7FA" }}>
-      {/* Minimal header */}
-      <header className="bg-white border-b border-border/50 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-          <div className="flex items-center gap-2 font-bold text-[16px]" style={{ color: "#005BBC" }}>
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "#005BBC" }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
+    <div className="min-h-screen bg-white">
+      {loading ? (
+        <div className="max-w-2xl mx-auto px-5 py-8 space-y-4">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
+            <div className="space-y-1.5 flex-1">
+              <Skeleton className="h-3.5 w-32" />
+              <Skeleton className="h-2.5 w-20" />
             </div>
-            SentConnect
           </div>
-          <div className="flex-1" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-5/6" />
+          <Skeleton className="h-4 w-4/5" />
+          <Skeleton className="h-64 w-full rounded-lg" />
         </div>
-      </header>
-
-      <main className="max-w-2xl mx-auto px-4 py-8">
-        {loading ? (
-          <div className="bg-white rounded-2xl border border-border/50 overflow-hidden">
-            <div className="p-5 space-y-4">
-              <div className="flex items-center gap-3">
-                <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
-                <div className="space-y-1.5 flex-1">
-                  <Skeleton className="h-3.5 w-32" />
-                  <Skeleton className="h-2.5 w-20" />
-                </div>
-              </div>
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
-              <Skeleton className="h-4 w-4/5" />
-              <Skeleton className="h-56 w-full rounded-lg" />
+      ) : notFound || !post ? (
+        <div className="max-w-2xl mx-auto px-5 py-24 text-center">
+          <p className="font-semibold text-foreground">Post not found</p>
+          <p className="text-muted-foreground text-sm mt-1">This link may be invalid or the post may have been removed.</p>
+        </div>
+      ) : (
+        <div className="w-full">
+          {/* Mission Moment / Highlight banner */}
+          {post.isMissionMoment ? (
+            <div className="flex items-center gap-2 px-5 py-2.5 border-b" style={{ background: "#EFF6FF", borderColor: "#BFDBFE" }}>
+              <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#005BBC" }} />
+              <span className="text-[12px] font-semibold" style={{ color: "#004699" }}>Mission Moments</span>
+              {post.isHighlight && <Star className="h-3 w-3 fill-amber-400 text-amber-400 ml-0.5" />}
+              <div className="flex-1" />
+              <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />
             </div>
-          </div>
-        ) : notFound || !post ? (
-          <div className="bg-white rounded-2xl border border-dashed border-border py-24 text-center">
-            <p className="font-semibold text-foreground">Post not found</p>
-            <p className="text-muted-foreground text-sm mt-1">This link may be invalid or the post may have been removed.</p>
-          </div>
-        ) : (
-          <div className="bg-white rounded-2xl border border-border/50 overflow-hidden">
-            {/* Mission Moment / Highlight banner */}
-            {post.isMissionMoment ? (
-              <div className="flex items-center gap-2 px-5 py-2.5 border-b" style={{ background: "#EFF6FF", borderColor: "#BFDBFE" }}>
-                <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#005BBC" }} />
-                <span className="text-[12px] font-semibold" style={{ color: "#004699" }}>Mission Moments</span>
-                {post.isHighlight && <Star className="h-3 w-3 fill-amber-400 text-amber-400 ml-0.5" />}
-                <div className="flex-1" />
-                <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />
-              </div>
-            ) : post.isHighlight ? (
-              <div className="flex items-center gap-1.5 px-5 py-2 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
-                <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                Highlight
-              </div>
-            ) : null}
-
-            {/* Author header */}
-            <div className="flex items-start gap-3 px-5 pt-5 pb-3">
-              <Avatar className="h-11 w-11 flex-shrink-0 ring-2 ring-white shadow-sm">
-                <AvatarImage src={post.author.avatarUrl ?? undefined} />
-                <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#E5E7EB", color: "#374151" }}>
-                  {post.author.name.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <p className="font-bold text-[15px]" style={{ color: "#111827" }}>{post.author.name}</p>
-                <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
-                  <span className="text-[12.5px]" style={{ color: "#6B7280" }}>
-                    {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
-                  </span>
-                  {post.location && (
-                    <>
-                      <span style={{ color: "#D1D5DB", fontSize: 10 }}>•</span>
-                      <span className="flex items-center gap-1 text-[12.5px]" style={{ color: "#6B7280" }}>
-                        <MapPin className="h-3 w-3" style={{ color: "#9CA3AF" }} />
-                        {post.location}
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
+          ) : post.isHighlight ? (
+            <div className="flex items-center gap-1.5 px-5 py-2 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
+              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+              Highlight
             </div>
+          ) : null}
 
-            {/* Text */}
-            {post.description && (
-              <div className="px-5 pb-4">
-                <p className="text-[17px] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap" style={{ color: "#111827" }}>
-                  {post.description}
-                </p>
-              </div>
-            )}
-
-            {/* People reached */}
-            {post.peopleReached != null && post.peopleReached > 0 && (
-              <div className="px-5 pb-4">
-                <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#005BBC] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full">
-                  <Users className="h-3.5 w-3.5" />
-                  {post.peopleReached.toLocaleString()} people reached
+          {/* Author header */}
+          <div className="flex items-start gap-3 px-5 pt-5 pb-3">
+            <Avatar className="h-11 w-11 flex-shrink-0 ring-2 ring-white shadow-sm">
+              <AvatarImage src={post.author.avatarUrl ?? undefined} />
+              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#E5E7EB", color: "#374151" }}>
+                {post.author.name.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-[15px]" style={{ color: "#111827" }}>{post.author.name}</p>
+              <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
+                <span className="text-[12.5px]" style={{ color: "#6B7280" }}>
+                  {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                 </span>
-              </div>
-            )}
-
-            {/* Photos */}
-            {post.photos.length > 0 && (
-              <div className={`pb-1 ${post.photos.length === 1 ? "" : "grid grid-cols-2 gap-1 px-1"}`}>
-                {post.photos.length === 1 ? (
-                  <MediaItem photo={post.photos[0]} />
-                ) : (
-                  post.photos.map(photo => (
-                    <div key={photo.id} className="overflow-hidden rounded-lg">
-                      <MediaItem photo={photo} />
-                    </div>
-                  ))
+                {post.location && (
+                  <>
+                    <span style={{ color: "#D1D5DB", fontSize: 10 }}>•</span>
+                    <span className="flex items-center gap-1 text-[12.5px]" style={{ color: "#6B7280" }}>
+                      <MapPin className="h-3 w-3" style={{ color: "#9CA3AF" }} />
+                      {post.location}
+                    </span>
+                  </>
                 )}
               </div>
-            )}
-
-            {/* Action bar — read-only counts */}
-            <div className="flex items-center gap-3 px-5 py-3.5 border-t" style={{ borderColor: "#F3F4F6" }}>
-              <span className="flex items-center gap-1.5 text-[13px] font-medium" style={{ color: "#6B7280" }}>
-                <Heart className="h-4 w-4" />
-                {post.likeCount > 0 && post.likeCount}
-              </span>
-              <span className="flex items-center gap-1.5 text-[13px] font-medium" style={{ color: "#6B7280" }}>
-                <MessageCircle className="h-4 w-4" />
-                {post.commentCount > 0 && post.commentCount}
-              </span>
             </div>
           </div>
-        )}
-      </main>
+
+          {/* Text */}
+          {post.description && (
+            <div className="px-5 pb-4">
+              <p className="text-[17px] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap" style={{ color: "#111827" }}>
+                {post.description}
+              </p>
+            </div>
+          )}
+
+          {/* People reached */}
+          {post.peopleReached != null && post.peopleReached > 0 && (
+            <div className="px-5 pb-4">
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#005BBC] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full">
+                <Users className="h-3.5 w-3.5" />
+                {post.peopleReached.toLocaleString()} people reached
+              </span>
+            </div>
+          )}
+
+          {/* Photos */}
+          {post.photos.length > 0 && (
+            <div className={post.photos.length === 1 ? "" : "grid grid-cols-2 gap-1"}>
+              {post.photos.length === 1 ? (
+                <MediaItem photo={post.photos[0]} />
+              ) : (
+                post.photos.map(photo => (
+                  <div key={photo.id} className="overflow-hidden">
+                    <MediaItem photo={photo} />
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
