@@ -64,7 +64,7 @@ export default function PublicPost() {
   return (
     <div className="min-h-screen bg-white">
       {loading ? (
-        <div className="max-w-2xl mx-auto px-5 py-8 space-y-4">
+        <div className="max-w-lg mx-auto px-5 py-8 space-y-4">
           <div className="flex items-center gap-3">
             <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
             <div className="space-y-1.5 flex-1">
@@ -78,12 +78,12 @@ export default function PublicPost() {
           <Skeleton className="h-64 w-full rounded-lg" />
         </div>
       ) : notFound || !post ? (
-        <div className="max-w-2xl mx-auto px-5 py-24 text-center">
+        <div className="max-w-lg mx-auto px-5 py-24 text-center">
           <p className="font-semibold text-foreground">Post not found</p>
           <p className="text-muted-foreground text-sm mt-1">This link may be invalid or the post may have been removed.</p>
         </div>
       ) : (
-        <div className="w-full">
+        <div className="max-w-lg mx-auto">
           {/* Mission Moment / Highlight banner */}
           {post.isMissionMoment ? (
             <div className="flex items-center gap-2 px-5 py-2.5 border-b" style={{ background: "#EFF6FF", borderColor: "#BFDBFE" }}>
@@ -160,6 +160,11 @@ export default function PublicPost() {
               )}
             </div>
           )}
+
+          {/* Footer */}
+          <div className="px-5 py-4 text-center">
+            <span className="text-[11px]" style={{ color: "#D1D5DB" }}>www.sentconnect.org</span>
+          </div>
         </div>
       )}
     </div>
