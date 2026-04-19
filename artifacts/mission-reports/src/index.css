@@ -79,18 +79,18 @@
   --sidebar: 0 0% 100%;
   --sidebar-foreground: 230 35% 14%;
   --sidebar-border: 220 18% 90%;
-  --sidebar-primary: 213 100% 37%;
+  --sidebar-primary: 213 100% 30%;
   --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 213 60% 95%;
   --sidebar-accent-foreground: 213 100% 28%;
-  --sidebar-ring: 213 100% 37%;
+  --sidebar-ring: 213 100% 30%;
 
   --popover: 0 0% 100%;
   --popover-foreground: 230 35% 14%;
   --popover-border: 220 18% 91%;
 
-  /* SentConnect blue: #005BBC → hsl(213 100% 37%) */
-  --primary: 213 100% 37%;
+  /* SentConnect blue: #004699 → hsl(213 100% 30%) */
+  --primary: 213 100% 30%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 220 18% 95%;
@@ -106,7 +106,7 @@
   --destructive-foreground: 0 0% 100%;
 
   --input: 220 18% 88%;
-  --ring: 213 100% 37%;
+  --ring: 213 100% 30%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-serif: 'Inter', sans-serif;

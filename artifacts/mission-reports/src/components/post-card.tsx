@@ -231,7 +231,7 @@ function EditForm({
       {/* Impact */}
       {showImpact ? (
         <div className="flex items-center gap-2 bg-blue-50 rounded-full px-3 py-1.5 border border-blue-100">
-          <Users className="h-3.5 w-3.5 text-[#005BBC] flex-shrink-0" />
+          <Users className="h-3.5 w-3.5 text-[#004699] flex-shrink-0" />
           <input
             type="number"
             min="0"
@@ -242,13 +242,13 @@ function EditForm({
             disabled={saving}
           />
           <button onClick={() => { setShowImpact(false); setPeopleReached(""); }}>
-            <X className="h-3.5 w-3.5 text-blue-300 hover:text-[#005BBC]" />
+            <X className="h-3.5 w-3.5 text-blue-300 hover:text-[#004699]" />
           </button>
         </div>
       ) : (
         <button
           onClick={() => setShowImpact(true)}
-          className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-[#005BBC] transition-colors"
+          className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-[#004699] transition-colors"
         >
           <Users className="h-3.5 w-3.5" /> Add impact
         </button>
@@ -277,11 +277,11 @@ function EditForm({
         className={cn(
           "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors",
           isMissionMoment
-            ? "text-[#005BBC] bg-blue-50 hover:bg-blue-100 border border-blue-200"
+            ? "text-[#004699] bg-blue-50 hover:bg-blue-100 border border-blue-200"
             : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
         )}
       >
-        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#005BBC]")} />
+        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#004699]")} />
         {isMissionMoment ? "Mission Moments" : "Mark as Mission Moments"}
       </button>
 
@@ -294,7 +294,7 @@ function EditForm({
           size="sm"
           onClick={handleSave}
           disabled={saving}
-          className="h-8 px-4 text-[13px] bg-[#005BBC] hover:bg-[#004699] text-white"
+          className="h-8 px-4 text-[13px] bg-[#004699] hover:bg-[#003a7d] text-white"
         >
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <><Check className="h-3.5 w-3.5 mr-1" />Save</>}
         </Button>
@@ -553,7 +553,7 @@ export function PostCard({
           {/* People Reached */}
           {post.peopleReached != null && post.peopleReached > 0 && (
             <div className="px-5 pb-4">
-              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#005BBC] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full">
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#004699] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full">
                 <Users className="h-3.5 w-3.5" />
                 {post.peopleReached.toLocaleString()} people reached
               </span>
@@ -594,7 +594,7 @@ export function PostCard({
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all",
                 copied
-                  ? "text-[#005BBC] bg-blue-50"
+                  ? "text-[#004699] bg-blue-50"
                   : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               )}
             >

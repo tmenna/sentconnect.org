@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
 /* Brand tokens */
-const EMERALD   = "#005BBC";
+const EMERALD   = "#004699";
 const CHARCOAL  = "#374151";   /* slightly lighter than #111827 */
 const BORDER    = "#E5E7EB";   /* light gray lines */
 
