@@ -252,47 +252,78 @@ export function FeedGridCard({
       className="bg-white rounded-2xl overflow-hidden flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/40"
     >
       {/* ── Thumbnail ── */}
-      <div className="relative overflow-hidden flex-shrink-0" style={{ aspectRatio: "16/9" }}>
-        {coverPhoto ? (
-          <img
-            src={coverPhoto.url}
-            alt={coverPhoto.caption || ""}
-            className="w-full h-full object-cover"
-            style={{
-              transform: hovered ? "scale(1.04)" : "scale(1)",
-              transition: "transform 320ms ease-out",
-            }}
-            loading="lazy"
-          />
-        ) : (
-          <div
-            className="w-full h-full flex items-center justify-center"
-            style={{ background: thumb.bg }}
-          >
-            <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center"
-              style={{ background: thumb.iconBg, backdropFilter: "blur(4px)" }}
-            >
-              {thumb.icon}
-            </div>
-          </div>
-        )}
+      {(() => {
+        const dateLabel = `Update ${format(new Date(post.createdAt), "MM-dd-yyyy")}`;
+        return (
+          <div className="relative overflow-hidden flex-shrink-0" style={{ aspectRatio: "16/9" }}>
+            {coverPhoto ? (
+              <>
+                <img
+                  src={coverPhoto.url}
+                  alt={coverPhoto.caption || ""}
+                  className="w-full h-full object-cover"
+                  style={{
+                    transform: hovered ? "scale(1.04)" : "scale(1)",
+                    transition: "transform 320ms ease-out",
+                  }}
+                  loading="lazy"
+                />
+                {/* Date label overlay on image */}
+                <div
+                  className="absolute top-2.5 left-2.5 text-[11px] font-semibold px-2.5 py-1 rounded-full"
+                  style={{
+                    background: "rgba(0,0,0,0.52)",
+                    backdropFilter: "blur(4px)",
+                    color: "#fff",
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  {dateLabel}
+                </div>
+              </>
+            ) : (
+              <div
+                className="w-full h-full flex flex-col items-center justify-center gap-3"
+                style={{ background: thumb.bg }}
+              >
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                  style={{ background: thumb.iconBg, backdropFilter: "blur(4px)" }}
+                >
+                  {thumb.icon}
+                </div>
+                {/* Date label for no-image posts */}
+                <span
+                  className="text-[12px] font-semibold px-3 py-1 rounded-full"
+                  style={{
+                    background: "rgba(255,255,255,0.72)",
+                    backdropFilter: "blur(4px)",
+                    color: "#374151",
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  {dateLabel}
+                </span>
+              </div>
+            )}
 
-        {/* Extra photo chip */}
-        {extraPhotos > 0 && (
-          <div className="absolute bottom-2.5 right-2.5 bg-black/50 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
-            +{extraPhotos} more
-          </div>
-        )}
+            {/* Extra photo chip */}
+            {extraPhotos > 0 && (
+              <div className="absolute bottom-2.5 right-2.5 bg-black/50 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
+                +{extraPhotos} more
+              </div>
+            )}
 
-        {/* People reached chip */}
-        {post.peopleReached != null && post.peopleReached > 0 && (
-          <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 bg-[#005BBC]/90 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
-            <Users className="h-3 w-3" />
-            {post.peopleReached.toLocaleString()} reached
+            {/* People reached chip */}
+            {post.peopleReached != null && post.peopleReached > 0 && (
+              <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 bg-[#004699]/90 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
+                <Users className="h-3 w-3" />
+                {post.peopleReached.toLocaleString()} reached
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        );
+      })()}
 
       {/* ── Card body ── */}
       <div className="flex flex-col flex-1 px-4 pt-3.5 pb-4">
@@ -325,7 +356,7 @@ export function FeedGridCard({
         <div className="flex items-center gap-2 mt-auto pt-3" style={{ borderTop: "1px solid #F3F4F6" }}>
           <Avatar className="h-6 w-6 flex-shrink-0">
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="text-[9px] font-bold" style={{ background: "#EFF6FF", color: "#005BBC" }}>
+            <AvatarFallback className="text-[9px] font-bold" style={{ background: "#EFF6FF", color: "#004699" }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -341,7 +372,7 @@ export function FeedGridCard({
           )}
           <span
             className="ml-auto flex items-center gap-0.5 text-[12px] font-semibold flex-shrink-0 transition-colors"
-            style={{ color: hovered ? "#004699" : "#005BBC" }}
+            style={{ color: hovered ? "#003a7d" : "#004699" }}
           >
             Read more <ArrowRight className="h-3 w-3" />
           </span>
