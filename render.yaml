@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: APP_NAME=${APP_NAME:-$REPO_NAME}
+    runtime: static
+    branch: main
+    buildCommand: npm install -g pnpm && pnpm install && pnpm --filter @workspace/api-server run build
+    staticPublishPath: ./artifacts/api-server/dist/public
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BASE_PATH
+        value: /
+      - key: PORT
+        value: 3000
