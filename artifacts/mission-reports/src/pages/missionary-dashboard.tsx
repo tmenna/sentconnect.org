@@ -205,9 +205,9 @@ export default function MissionaryDashboard() {
           )}
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-border/50 overflow-hidden">
+        <div className="space-y-3">
           {myPosts.map(post => (
-            <PostCard key={post.id} post={post} flat hideViewPost onDelete={handleDelete} />
+            <PostCard key={post.id} post={post} hideViewPost onDelete={handleDelete} />
           ))}
         </div>
       )}

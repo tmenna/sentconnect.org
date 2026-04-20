@@ -158,7 +158,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
     <div
       className={cn("bg-white rounded-2xl p-5 transition-all duration-200")}
       style={{
-        border: isMissionMoment ? "1px solid #A7F3D0" : "1px solid #E9E9E9",
+        border: isMissionMoment ? "1px solid #A7F3D0" : "1px solid #BFDBFE",
         boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
         background: isMissionMoment ? "#F0FDF9" : "#FFFFFF",
       }}

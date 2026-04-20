@@ -429,7 +429,7 @@ export function PostCard({
         : "bg-white rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-px"}
       style={flat
         ? { borderBottom: "1px solid #F3F4F6" }
-        : { border: "1px solid #E9E9E9", boxShadow: "0 2px 16px rgba(0,0,0,0.07)" }}
+        : { border: "1px solid #BFDBFE", boxShadow: "0 2px 12px rgba(2,104,206,0.06)" }}
     >
       {/* Mission Moment banner — takes priority over Highlight */}
       {post.isMissionMoment ? (
