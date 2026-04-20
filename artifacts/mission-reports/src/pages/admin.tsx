@@ -193,11 +193,11 @@ function EditRolePermissionsModal({
                   type="button"
                   disabled={isSelf && r !== "admin"}
                   onClick={() => handleRoleChange(r)}
-                  className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all ${
-                    role === r
-                      ? "bg-[#0268CE] text-white border-[#0268CE] shadow-sm"
-                      : "bg-white text-foreground border-border/60 hover:border-gray-400 hover:bg-gray-50"
-                  } disabled:opacity-40 disabled:cursor-not-allowed`}
+                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={role === r
+                    ? { background: "#0268CE", color: "#fff", borderColor: "#0268CE", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }
+                    : { background: "#fff", color: undefined, borderColor: undefined }
+                  }
                 >
                   {r === "admin"
                     ? <><ShieldCheck className="h-4 w-4 flex-shrink-0" /> Admin</>
@@ -235,7 +235,10 @@ function EditRolePermissionsModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-xl hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold rounded-xl transition-colors disabled:opacity-50"
+              style={{ background: "#0268CE", color: "#fff" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#0155a5"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#0268CE"; }}
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
