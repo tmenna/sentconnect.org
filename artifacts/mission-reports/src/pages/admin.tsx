@@ -867,7 +867,7 @@ export default function AdminDashboard() {
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* ── Global Partners banner ── */}
-        <div className="relative rounded-2xl bg-primary overflow-hidden">
+        <div className="relative rounded-2xl overflow-hidden" style={{ background: "#066CD1" }}>
 
           {/* Subtle world-grid overlay */}
           <svg
