@@ -82,14 +82,14 @@ function AdminRoute() {
   if (orgSlug) {
     if (!isAuthenticated) return <Redirect href={`/login?from=${encodeURIComponent(location)}`} />;
     if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
-    return <AdminDashboard />;
+    return <Layout><AdminDashboard /></Layout>;
   }
 
   // Platform context — /admin is itself the login page for platform accounts
   if (!isAuthenticated) return <Login platformMode />;
 
   if (isPlatformRole(user?.role)) return <SuperAdminPanel />;
-  if (user?.role === "admin") return <AdminDashboard />;
+  if (user?.role === "admin") return <Layout><AdminDashboard /></Layout>;
   return <Redirect href="/" />;
 }
 
