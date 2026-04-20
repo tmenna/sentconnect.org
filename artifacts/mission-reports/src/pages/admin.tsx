@@ -909,7 +909,7 @@ export default function AdminDashboard() {
                 Global Partners
               </h1>
               <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", marginTop: 6 }}>
-                Manage your field team and review their activity.
+                "Declare his glory among the nations, his marvelous works among all the peoples." — Psalm 96:3
               </p>
             </div>
             <div className="flex items-center gap-4 flex-shrink-0">
