@@ -269,19 +269,18 @@ export function FeedGridCard({
                   }}
                   loading="lazy"
                 />
-                {/* Dark frosted pill over image */}
+                {/* Solid blue date pill */}
                 <div
-                  className="absolute top-2.5 left-2.5"
+                  className="absolute top-3 left-3"
                   style={{
-                    background: "rgba(0,0,0,0.50)",
-                    backdropFilter: "blur(6px)",
-                    WebkitBackdropFilter: "blur(6px)",
+                    background: "#2563EB",
                     color: "#fff",
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: 600,
-                    padding: "4px 10px",
+                    padding: "6px 12px",
                     borderRadius: 9999,
-                    lineHeight: 1.4,
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                    lineHeight: 1.3,
                   }}
                 >
                   {dateLabel}
