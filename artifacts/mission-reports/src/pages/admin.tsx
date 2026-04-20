@@ -864,43 +864,64 @@ export default function AdminDashboard() {
         />
       )}
 
-      {/* ── Full-bleed blue banner ── */}
-      <div
-        className="-mx-4 sm:-mx-8 -mt-8 mb-6 px-8 py-6 flex items-center justify-between gap-4"
-        style={{ background: "#004699" }}
-      >
-        <div>
-          <h1
-            className="font-bold leading-tight tracking-tight"
-            style={{ fontSize: 30, color: "#fff" }}
-          >
-            Global Partners
-          </h1>
-          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", marginTop: 6 }}>
-            Manage your field team and review their activity.
-          </p>
-        </div>
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <Avatar className="hidden sm:flex h-10 w-10" style={{ border: "2px solid rgba(255,255,255,0.35)" }}>
-            <AvatarImage src={user.avatarUrl ?? undefined} />
-            <AvatarFallback className="font-semibold text-[14px]" style={{ background: "rgba(255,255,255,0.15)", color: "#fff" }}>
-              {user.name.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <button
-            onClick={() => logout.mutate({ data: undefined })}
-            disabled={logout.isPending}
-            title="Sign out"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200"
-            style={{ color: "rgba(255,255,255,0.75)" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.color = "#fff"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
-          >
-            {logout.isPending
-              ? <Loader2 className="h-4 w-4 animate-spin" />
-              : <LogOut className="h-4 w-4" />}
-            <span className="hidden sm:inline">Sign Out</span>
-          </button>
+      {/* ── Full-bleed "Global Partners" banner ── */}
+      <div className="relative -mx-4 sm:-mx-8 -mt-8 mb-6 bg-primary overflow-hidden">
+
+        {/* Subtle world-grid overlay — meridians + parallels at low opacity */}
+        <svg
+          aria-hidden
+          className="pointer-events-none select-none absolute inset-0 w-full h-full"
+          preserveAspectRatio="xMidYMid slice"
+          viewBox="0 0 900 120"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ opacity: 0.08 }}
+        >
+          {/* Parallels */}
+          {[15, 30, 45, 60, 75, 90, 105].map(y => (
+            <line key={`h${y}`} x1="0" y1={y} x2="900" y2={y} stroke="white" strokeWidth="1" />
+          ))}
+          {/* Meridians */}
+          {[90, 180, 270, 360, 450, 540, 630, 720, 810].map(x => (
+            <line key={`v${x}`} x1={x} y1="0" x2={x} y2="120" stroke="white" strokeWidth="1" />
+          ))}
+          {/* Globe arcs — top two ellipses for curvature feel */}
+          <ellipse cx="450" cy="60" rx="420" ry="110" fill="none" stroke="white" strokeWidth="1" />
+          <ellipse cx="450" cy="60" rx="280" ry="110" fill="none" stroke="white" strokeWidth="1" />
+          <ellipse cx="450" cy="60" rx="140" ry="110" fill="none" stroke="white" strokeWidth="1" />
+        </svg>
+
+        {/* Banner content */}
+        <div className="relative z-10 px-8 py-6 flex items-center justify-between gap-4">
+          <div>
+            <h1 className="font-bold leading-tight tracking-tight text-white" style={{ fontSize: 30 }}>
+              Global Partners
+            </h1>
+            <p className="text-white mt-1.5" style={{ fontSize: 15, opacity: 0.85 }}>
+              Manage your field team and review their activity.
+            </p>
+          </div>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <Avatar className="hidden sm:flex h-10 w-10" style={{ border: "2px solid rgba(255,255,255,0.35)" }}>
+              <AvatarImage src={user.avatarUrl ?? undefined} />
+              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "rgba(255,255,255,0.15)", color: "#fff" }}>
+                {user.name.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <button
+              onClick={() => logout.mutate({ data: undefined })}
+              disabled={logout.isPending}
+              title="Sign out"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200"
+              style={{ color: "rgba(255,255,255,0.75)" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.color = "#fff"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
+            >
+              {logout.isPending
+                ? <Loader2 className="h-4 w-4 animate-spin" />
+                : <LogOut className="h-4 w-4" />}
+              <span className="hidden sm:inline">Sign Out</span>
+            </button>
+          </div>
         </div>
       </div>
 
