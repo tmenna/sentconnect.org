@@ -5,7 +5,6 @@ import {
   useGetStats, getGetStatsQueryKey,
   useListUsers, getListUsersQueryKey,
   useGetTimeline, getGetTimelineQueryKey,
-  useLogoutUser,
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -13,7 +12,7 @@ import {
   Globe, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
-  BarChart3, Star, UserCog, BookOpen, LogOut,
+  BarChart3, Star, UserCog, BookOpen,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -794,14 +793,6 @@ export default function AdminDashboard() {
   const [filterDateTo, setFilterDateTo] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
-  const logout = useLogoutUser({
-    mutation: {
-      onSuccess: () => {
-        queryClient.clear();
-        window.location.href = "/login";
-      },
-    },
-  });
 
   const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey() } });
   const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}) } });
@@ -912,7 +903,7 @@ export default function AdminDashboard() {
           </svg>
 
           {/* Banner content */}
-          <div className="relative z-10 px-8 py-6 flex items-center justify-between gap-4">
+          <div className="relative z-10 px-6 sm:px-8 py-6 flex items-center justify-between gap-4">
             <div>
               <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#ffffff" }}>
                 Global Partners
@@ -921,27 +912,19 @@ export default function AdminDashboard() {
                 Manage your field team and review their activity.
               </p>
             </div>
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <Avatar className="hidden sm:flex h-10 w-10" style={{ border: "2px solid rgba(255,255,255,0.35)" }}>
+            <div className="flex items-center gap-4 flex-shrink-0">
+              {!usersLoading && allUsers.length > 0 && (
+                <div className="hidden sm:block text-right">
+                  <p className="font-bold leading-none" style={{ fontSize: 28, color: "#fff" }}>{allUsers.length}</p>
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", marginTop: 2 }}>members</p>
+                </div>
+              )}
+              <Avatar className="h-11 w-11 flex-shrink-0" style={{ border: "2.5px solid rgba(255,255,255,0.5)" }}>
                 <AvatarImage src={user.avatarUrl ?? undefined} />
-                <AvatarFallback className="font-semibold text-[14px]" style={{ background: "rgba(255,255,255,0.15)", color: "#fff" }}>
+                <AvatarFallback className="font-bold text-[15px]" style={{ background: "rgba(255,255,255,0.18)", color: "#fff" }}>
                   {user.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <button
-                onClick={() => logout.mutate({ data: undefined })}
-                disabled={logout.isPending}
-                title="Sign out"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200"
-                style={{ color: "rgba(255,255,255,0.75)" }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.color = "#fff"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
-              >
-                {logout.isPending
-                  ? <Loader2 className="h-4 w-4 animate-spin" />
-                  : <LogOut className="h-4 w-4" />}
-                <span className="hidden sm:inline">Sign Out</span>
-              </button>
             </div>
           </div>
         </div>
