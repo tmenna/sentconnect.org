@@ -195,7 +195,7 @@ function EditRolePermissionsModal({
                   onClick={() => handleRoleChange(r)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all ${
                     role === r
-                      ? "bg-[#111827] text-white border-[#111827] shadow-sm"
+                      ? "bg-[#0268CE] text-white border-[#0268CE] shadow-sm"
                       : "bg-white text-foreground border-border/60 hover:border-gray-400 hover:bg-gray-50"
                   } disabled:opacity-40 disabled:cursor-not-allowed`}
                 >
@@ -235,7 +235,7 @@ function EditRolePermissionsModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#111827] text-white rounded-xl hover:bg-[#1f2937] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-xl hover:bg-[#0155a5] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
