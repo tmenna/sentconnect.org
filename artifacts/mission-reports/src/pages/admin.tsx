@@ -872,24 +872,43 @@ export default function AdminDashboard() {
         {/* ── Global Partners banner ── */}
         <div className="relative rounded-2xl overflow-hidden" style={{ background: "#0268CE" }}>
 
-          {/* Subtle world-grid overlay */}
+          {/* World map continent silhouettes */}
           <svg
             aria-hidden
             className="pointer-events-none select-none absolute inset-0 w-full h-full"
             preserveAspectRatio="xMidYMid slice"
             viewBox="0 0 900 120"
             xmlns="http://www.w3.org/2000/svg"
-            style={{ opacity: 0.08 }}
+            style={{ opacity: 0.18 }}
           >
-            {[15, 30, 45, 60, 75, 90, 105].map(y => (
-              <line key={`h${y}`} x1="0" y1={y} x2="900" y2={y} stroke="white" strokeWidth="1" />
-            ))}
-            {[90, 180, 270, 360, 450, 540, 630, 720, 810].map(x => (
-              <line key={`v${x}`} x1={x} y1="0" x2={x} y2="120" stroke="white" strokeWidth="1" />
-            ))}
-            <ellipse cx="450" cy="60" rx="420" ry="110" fill="none" stroke="white" strokeWidth="1" />
-            <ellipse cx="450" cy="60" rx="280" ry="110" fill="none" stroke="white" strokeWidth="1" />
-            <ellipse cx="450" cy="60" rx="140" ry="110" fill="none" stroke="white" strokeWidth="1" />
+            <g fill="white">
+              {/* North America */}
+              <path d="M 32,10 L 65,13 L 102,18 L 145,36 L 158,28 L 178,20 L 208,9 L 248,21 L 282,37 L 308,44 L 322,37 L 308,43 L 285,47 L 268,53 L 256,62 L 252,70 L 238,76 L 225,78 L 212,74 L 198,71 L 182,68 L 165,65 L 152,61 L 143,41 L 118,27 L 78,19 Z" />
+              {/* Greenland */}
+              <path d="M 296,7 L 322,4 L 350,7 L 360,14 L 350,21 L 325,24 L 305,19 Z" />
+              {/* South America */}
+              <path d="M 256,84 L 278,78 L 302,78 L 322,84 L 364,98 L 356,108 L 342,118 L 318,128 L 304,133 L 293,138 L 283,149 L 280,156 L 276,149 L 268,136 L 258,122 L 250,110 L 247,98 L 248,90 Z" />
+              {/* Europe */}
+              <path d="M 428,28 L 448,20 L 470,16 L 494,18 L 512,13 L 522,19 L 514,27 L 502,31 L 492,37 L 507,41 L 512,48 L 502,52 L 488,52 L 474,50 L 458,52 L 448,50 L 438,47 L 430,41 Z" />
+              {/* Africa */}
+              <path d="M 435,52 L 464,49 L 480,49 L 502,52 L 517,58 L 530,67 L 537,80 L 537,94 L 530,107 L 520,120 L 506,130 L 492,134 L 477,131 L 462,122 L 450,110 L 440,97 L 435,82 L 432,67 Z" />
+              {/* Madagascar */}
+              <path d="M 518,110 L 526,106 L 531,112 L 529,121 L 521,123 L 516,117 Z" />
+              {/* Asia – main body */}
+              <path d="M 514,17 L 562,9 L 628,7 L 702,7 L 762,14 L 812,21 L 860,17 L 882,24 L 872,32 L 852,38 L 828,45 L 802,50 L 778,52 L 754,58 L 732,65 L 716,76 L 700,82 L 682,78 L 660,75 L 648,82 L 632,78 L 614,72 L 597,68 L 580,62 L 562,56 L 546,50 L 537,44 L 530,38 L 517,32 Z" />
+              {/* Arabian Peninsula */}
+              <path d="M 557,65 L 572,62 L 588,64 L 595,72 L 590,80 L 578,82 L 565,78 L 558,72 Z" />
+              {/* India */}
+              <path d="M 622,72 L 642,68 L 657,72 L 657,83 L 646,89 L 635,86 L 624,80 Z" />
+              {/* SE Asia peninsula */}
+              <path d="M 700,80 L 722,75 L 740,78 L 744,86 L 734,91 L 716,89 L 705,85 Z" />
+              {/* Japan */}
+              <path d="M 800,44 L 810,41 L 820,45 L 817,52 L 810,54 L 801,50 Z" />
+              {/* Australia */}
+              <path d="M 736,102 L 760,97 L 780,97 L 802,100 L 820,105 L 834,113 L 837,123 L 829,131 L 813,136 L 790,137 L 768,133 L 750,126 L 738,116 Z" />
+              {/* New Zealand */}
+              <path d="M 848,120 L 856,115 L 862,119 L 860,128 L 853,130 L 848,125 Z" />
+            </g>
           </svg>
 
           {/* Banner content */}
