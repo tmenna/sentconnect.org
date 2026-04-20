@@ -12,7 +12,7 @@ import {
   Globe, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
-  BarChart3, Star, UserCog, BookOpen,
+  BarChart3, Star, UserCog, BookOpen, MapPin,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -779,12 +779,22 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
   );
 }
 
+// ─── Helpers ───────────────────────────────────────────────────────────────
+
+function parseLocation(loc: string): { city: string; country: string } {
+  const parts = loc.split(",").map(s => s.trim()).filter(Boolean);
+  if (parts.length >= 2) {
+    return { country: parts[parts.length - 1], city: parts.slice(0, parts.length - 1).join(", ") };
+  }
+  return { country: loc.trim(), city: "" };
+}
+
 // ─── Main ──────────────────────────────────────────────────────────────────
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<"team" | "feed">("feed");
+  const [activeTab, setActiveTab] = useState<"team" | "feed" | "countries">("feed");
   const [feedMomentFilter, setFeedMomentFilter] = useState<"all" | "moments">("all");
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
@@ -844,6 +854,19 @@ export default function AdminDashboard() {
   });
   const hasFilters = filterUserId || filterDateFrom || filterDateTo;
   const missionMomentsCount = allFeedPosts.filter(p => p.isMissionMoment).length;
+
+  // Countries tab data — group field users by country parsed from their location
+  const fieldUsersWithLocation = allUsers.filter((u: any) => u.role !== "admin" && u.location?.trim());
+  const countriesMap = new Map<string, { city: string; members: any[] }>();
+  for (const u of fieldUsersWithLocation) {
+    const { city, country } = parseLocation(u.location);
+    if (!countriesMap.has(country)) countriesMap.set(country, { city, members: [] });
+    countriesMap.get(country)!.members.push(u);
+  }
+  const countriesList = Array.from(countriesMap.entries())
+    .map(([country, { city, members }]) => ({ country, city, members }))
+    .sort((a, b) => a.country.localeCompare(b.country));
+  const countriesCount = countriesList.length;
   const displayedFeedPosts = feedMomentFilter === "moments"
     ? allFeedPosts.filter(p => p.isMissionMoment)
     : allFeedPosts;
@@ -934,6 +957,7 @@ export default function AdminDashboard() {
           {[
             { id: "team", label: "Manage Team", icon: <Users className="h-3.5 w-3.5" />, badge: !usersLoading ? allUsers.length : null },
             { id: "feed", label: "Updates", icon: <Heart className="h-3.5 w-3.5" />, badge: null },
+            { id: "countries", label: "Countries", icon: <MapPin className="h-3.5 w-3.5" />, badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
           ].map(tab => {
             const active = activeTab === tab.id;
             return (
@@ -1190,6 +1214,75 @@ export default function AdminDashboard() {
                   setSelectedPostIndex(null);
                 }}
               />
+            )}
+          </div>
+        )}
+
+        {/* ── Tab: Countries ── */}
+        {activeTab === "countries" && (
+          <div className="space-y-4">
+            {usersLoading ? (
+              <div className="space-y-4">
+                {[1, 2].map(i => (
+                  <div key={i} className="bg-white rounded-2xl border border-border/60 shadow-sm p-5 space-y-3">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-3 w-20" />
+                    <div className="space-y-2 pt-1">
+                      <Skeleton className="h-10 w-full rounded-xl" />
+                      <Skeleton className="h-10 w-full rounded-xl" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : countriesList.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-dashed border-border py-20 text-center shadow-sm">
+                <MapPin className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+                <p className="font-semibold text-sm text-foreground">No locations recorded yet</p>
+                <p className="text-muted-foreground text-xs mt-1">Team members with a location set on their profile will appear here.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {countriesList.map(({ country, city, members }) => (
+                  <div key={country} className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden">
+                    {/* Country header */}
+                    <div className="px-5 py-4 border-b border-border/40 flex items-center gap-3">
+                      <div className="flex items-center justify-center h-8 w-8 rounded-lg flex-shrink-0" style={{ background: "#EFF6FF" }}>
+                        <MapPin className="h-4 w-4" style={{ color: "#0268CE" }} />
+                      </div>
+                      <div>
+                        <p className="font-bold text-[15px] text-foreground">{country}</p>
+                        {city && <p className="text-[12px] text-muted-foreground mt-0.5">{city}</p>}
+                      </div>
+                      <span className="ml-auto text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ background: "#EFF6FF", color: "#0268CE" }}>
+                        {members.length} {members.length === 1 ? "member" : "members"}
+                      </span>
+                    </div>
+
+                    {/* Members list */}
+                    <div className="divide-y divide-border/30">
+                      {members.map((m: any) => {
+                        const initials = m.name?.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "?";
+                        return (
+                          <div key={m.id} className="px-5 py-3.5 flex items-start gap-3">
+                            <Avatar className="h-9 w-9 flex-shrink-0 mt-0.5">
+                              <AvatarImage src={m.avatarUrl ?? undefined} alt={m.name} className="object-cover" />
+                              <AvatarFallback className="text-[13px] font-bold bg-primary/10 text-primary">{initials}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-semibold text-[13px] text-foreground leading-snug">{m.name}</p>
+                              {m.bio ? (
+                                <p className="text-[12px] text-muted-foreground mt-0.5 leading-relaxed line-clamp-2">{m.bio}</p>
+                              ) : (
+                                <p className="text-[12px] italic text-muted-foreground/60 mt-0.5">No description added yet</p>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         )}
