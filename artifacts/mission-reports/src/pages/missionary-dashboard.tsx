@@ -129,7 +129,7 @@ export default function MissionaryDashboard() {
       <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
         {[
           { id: "all" as FeedTab, label: "All Posts", icon: <Send className="h-3.5 w-3.5" />, count: allPosts.length, activeColor: EMERALD, activeBg: "#EFF6FF" },
-          { id: "moments" as FeedTab, label: "Mission Moments", icon: <BookOpen className="h-3.5 w-3.5" />, count: missionMoments.length, activeColor: "#FF3C00", activeBg: "#FFF1EE" },
+          { id: "moments" as FeedTab, label: "Mission Moments", icon: <BookOpen className="h-3.5 w-3.5" />, count: missionMoments.length, activeColor: "#F5692A", activeBg: "#FFF3EE" },
         ].map(tab => {
           const active = activeTab === tab.id;
           return (

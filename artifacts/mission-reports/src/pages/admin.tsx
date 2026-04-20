@@ -1058,7 +1058,7 @@ export default function AdminDashboard() {
             <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
               {[
                 { id: "all", label: "All Posts", icon: <Globe className="h-3.5 w-3.5" />, count: !feedLoading ? allFeedPosts.length : null, activeColor: "#0268CE", activeBg: "#EFF6FF" },
-                { id: "moments", label: "Mission Moments", icon: <Star className="h-3.5 w-3.5" style={{ fill: feedMomentFilter === "moments" ? "#FF3C00" : "none", color: feedMomentFilter === "moments" ? "#FF3C00" : "currentColor" }} />, count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null, activeColor: "#FF3C00", activeBg: "#FFF1EE" },
+                { id: "moments", label: "Mission Moments", icon: <Star className="h-3.5 w-3.5" style={{ fill: feedMomentFilter === "moments" ? "#F5692A" : "none", color: feedMomentFilter === "moments" ? "#F5692A" : "currentColor" }} />, count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null, activeColor: "#F5692A", activeBg: "#FFF3EE" },
               ].map(tab => {
                 const active = feedMomentFilter === tab.id;
                 return (
