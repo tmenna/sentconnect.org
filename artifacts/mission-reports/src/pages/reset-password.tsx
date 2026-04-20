@@ -3,8 +3,8 @@ import { Link, useSearch } from "wouter";
 import { Shuffle, Loader2, CheckCircle2 } from "lucide-react";
 
 const BG    = "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)";
-const BLUE  = "#005BBC";
-const BLUE_DK = "#004699";
+const BLUE  = "#0268CE";
+const BLUE_DK = "#0155a5";
 
 export default function ResetPassword() {
   const search = useSearch();

@@ -127,7 +127,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
     <button
       onClick={onClick}
       className={`px-5 py-2.5 text-[14px] font-semibold rounded-lg transition-colors ${
-        active ? "bg-[#004699] text-white" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+        active ? "bg-[#0268CE] text-white" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
       }`}
     >
       {children}
@@ -326,7 +326,7 @@ function CreateOrgModal({
             <button
               type="submit"
               disabled={saving || !!slugError}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Create Organization
@@ -458,7 +458,7 @@ function CreatePlatformUserModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Create User
@@ -549,7 +549,7 @@ function EditPermissionsModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -583,11 +583,11 @@ function ResetLinkModal({ resetUrl, onClose }: { resetUrl: string; onClose: () =
           <p className="text-[13px] text-muted-foreground">Share this link with the user. It expires in 1 hour.</p>
           <div className="flex gap-2">
             <input readOnly value={resetUrl} className="flex-1 px-3 py-2 text-[12px] border border-border/60 rounded-lg bg-muted/30 text-foreground font-mono truncate" />
-            <button onClick={copy} className={`px-3 py-2 text-[12px] font-semibold rounded-lg border transition-colors ${copied ? "bg-blue-50 text-[#004699] border-blue-200" : "bg-white border-border/60 hover:bg-muted/40"}`}>
+            <button onClick={copy} className={`px-3 py-2 text-[12px] font-semibold rounded-lg border transition-colors ${copied ? "bg-blue-50 text-[#0268CE] border-blue-200" : "bg-white border-border/60 hover:bg-muted/40"}`}>
               {copied ? "Copied!" : "Copy"}
             </button>
           </div>
-          <button onClick={onClose} className="w-full px-4 py-2.5 text-[13px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors">Done</button>
+          <button onClick={onClose} className="w-full px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors">Done</button>
         </div>
       </div>
     </div>
@@ -639,10 +639,10 @@ function UserActionMenu({
   const actions = [
     { id: "reset-password", label: "Reset Password", icon: KeyRound, color: "text-foreground" },
     ...(user.status === "locked"
-      ? [{ id: "unlock", label: "Unlock Account", icon: Unlock, color: "text-[#004699]" }]
+      ? [{ id: "unlock", label: "Unlock Account", icon: Unlock, color: "text-[#0268CE]" }]
       : [{ id: "lock", label: "Lock Account", icon: Lock, color: "text-amber-600" }]),
     ...(user.status === "suspended"
-      ? [{ id: "unsuspend", label: "Unsuspend", icon: UserCheck, color: "text-[#004699]" }]
+      ? [{ id: "unsuspend", label: "Unsuspend", icon: UserCheck, color: "text-[#0268CE]" }]
       : [{ id: "suspend", label: "Suspend", icon: Ban, color: "text-orange-600" }]),
     ...(isOrgUser
       ? [{ id: "edit-org-user", label: "Edit Role & Permissions", icon: Settings2, color: "text-foreground" }]
@@ -849,7 +849,7 @@ function EditOrgUserModal({
                   onClick={() => handleRoleChange(r)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all ${
                     role === r
-                      ? "bg-[#004699] text-white border-[#005BBC] shadow-sm"
+                      ? "bg-[#0268CE] text-white border-[#005BBC] shadow-sm"
                       : "bg-white text-foreground border-border/60 hover:border-gray-300 hover:bg-gray-50"
                   }`}
                 >
@@ -882,7 +882,7 @@ function EditOrgUserModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -942,10 +942,10 @@ function CreateOrgUserModal({
           <div>
             <h2 className="text-[15px] font-bold text-foreground">Add User to Organization</h2>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <Building2 className="h-3 w-3 text-[#004699]" />
+              <Building2 className="h-3 w-3 text-[#0268CE]" />
               <p className="text-[12px] text-muted-foreground font-medium">{org.name}</p>
               <span className="text-[11px] text-muted-foreground/60">·</span>
-              <a href={`/${org.subdomain}/`} target="_blank" rel="noreferrer" className="text-[11px] text-[#004699] font-mono hover:underline">/{org.subdomain}/</a>
+              <a href={`/${org.subdomain}/`} target="_blank" rel="noreferrer" className="text-[11px] text-[#0268CE] font-mono hover:underline">/{org.subdomain}/</a>
             </div>
           </div>
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60">
@@ -1013,7 +1013,7 @@ function CreateOrgUserModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Add to {org.name}
@@ -1124,7 +1124,7 @@ function AssignOrgModal({
                 href={`/${orgs.find(o => o.id === Number(orgId))?.subdomain ?? ""}/`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#004699] underline font-mono"
+                className="text-[#0268CE] underline font-mono"
               >
                 /{orgs.find(o => o.id === Number(orgId))?.subdomain}/
               </a>
@@ -1137,7 +1137,7 @@ function AssignOrgModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Assignment
@@ -1267,7 +1267,7 @@ function EditProfileModal({ currentUser, onClose, onUpdated }: {
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -1704,7 +1704,7 @@ export default function SuperAdminPanel() {
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors"
             >
               <Plus className="h-4 w-4" /> Add Platform User
             </button>
@@ -1765,7 +1765,7 @@ export default function SuperAdminPanel() {
                               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold border transition-colors ${
                                 u.status === "active"
                                   ? "text-red-600 border-red-200 bg-red-50 hover:bg-red-100"
-                                  : "text-[#004699] border-blue-200 bg-blue-50 hover:bg-blue-100"
+                                  : "text-[#0268CE] border-blue-200 bg-blue-50 hover:bg-blue-100"
                               } disabled:opacity-40`}
                             >
                               {actionPending === u.id ? <Loader2 className="h-3 w-3 animate-spin" /> : u.status === "active" ? <XCircle className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}
@@ -1816,7 +1816,7 @@ export default function SuperAdminPanel() {
             {user?.role === "super_admin" && (
               <button
                 onClick={() => setShowCreateOrg(true)}
-                className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#004699] text-white rounded-lg hover:bg-[#003a7d] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors"
               >
                 <Plus className="h-3.5 w-3.5" /> New Organization
               </button>
@@ -1850,7 +1850,7 @@ export default function SuperAdminPanel() {
                         href={`/${org.subdomain}/`}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-1 hover:text-[#004699] hover:underline transition-colors"
+                        className="flex items-center gap-1 hover:text-[#0268CE] hover:underline transition-colors"
                         title={`Open ${org.name} portal`}
                       >
                         <Globe className="h-3 w-3" />/{org.subdomain}/
@@ -1863,7 +1863,7 @@ export default function SuperAdminPanel() {
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <button
                       onClick={() => setAddingUserToOrg(org)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-blue-50 text-[#004699] hover:bg-blue-100 border border-blue-200 transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-blue-50 text-[#0268CE] hover:bg-blue-100 border border-blue-200 transition-colors"
                     >
                       <Plus className="h-3.5 w-3.5" /> Add User
                     </button>
@@ -1881,7 +1881,7 @@ export default function SuperAdminPanel() {
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors ${
                         org.status === "active"
                           ? "bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
-                          : "bg-blue-50 text-[#004699] hover:bg-blue-100 border border-blue-200"
+                          : "bg-blue-50 text-[#0268CE] hover:bg-blue-100 border border-blue-200"
                       }`}
                     >
                       {toggling === org.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : org.status === "active" ? <><XCircle className="h-3.5 w-3.5" /> Suspend</> : <><CheckCircle2 className="h-3.5 w-3.5" /> Activate</>}

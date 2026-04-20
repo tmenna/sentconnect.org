@@ -105,7 +105,7 @@ export default function PublicPost() {
             {post.isMissionMoment ? (
               <div className="flex items-center gap-2 px-6 py-2.5" style={{ background: "#EFF6FF", borderBottom: "1px solid #BFDBFE" }}>
                 <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#005BBC" }} />
-                <span className="text-[12px] font-semibold tracking-wide uppercase" style={{ color: "#004699" }}>Mission Moments</span>
+                <span className="text-[12px] font-semibold tracking-wide uppercase" style={{ color: "#0268CE" }}>Mission Moments</span>
                 {post.isHighlight && <Star className="h-3 w-3 fill-amber-400 text-amber-400 ml-0.5" />}
                 <div className="flex-1" />
                 <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />

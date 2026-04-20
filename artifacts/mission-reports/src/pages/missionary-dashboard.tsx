@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type FeedTab = "all" | "moments";
 
-const EMERALD = "#004699";
+const EMERALD = "#0268CE";
 
 export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();

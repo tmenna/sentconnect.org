@@ -324,7 +324,7 @@ export function FeedGridCard({
 
             {/* People reached chip */}
             {post.peopleReached != null && post.peopleReached > 0 && (
-              <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 bg-[#004699]/90 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
+              <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 bg-[#0268CE]/90 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
                 <Users className="h-3 w-3" />
                 {post.peopleReached.toLocaleString()} reached
               </div>
@@ -364,7 +364,7 @@ export function FeedGridCard({
         <div className="flex items-center gap-2 mt-auto pt-3" style={{ borderTop: "1px solid #F3F4F6" }}>
           <Avatar className="h-6 w-6 flex-shrink-0">
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="text-[9px] font-bold" style={{ background: "#EFF6FF", color: "#004699" }}>
+            <AvatarFallback className="text-[9px] font-bold" style={{ background: "#EFF6FF", color: "#0268CE" }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -380,7 +380,7 @@ export function FeedGridCard({
           )}
           <span
             className="ml-auto flex items-center gap-0.5 text-[12px] font-semibold flex-shrink-0 transition-colors"
-            style={{ color: hovered ? "#003a7d" : "#004699" }}
+            style={{ color: hovered ? "#0155a5" : "#0268CE" }}
           >
             Read more <ArrowRight className="h-3 w-3" />
           </span>

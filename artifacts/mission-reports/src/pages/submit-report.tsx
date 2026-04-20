@@ -220,14 +220,14 @@ export default function SubmitReport() {
               <div
                 className={`rounded-xl border shadow-sm p-5 cursor-pointer transition-all ${
                   field.value
-                    ? "border-[#005BBC]/30 bg-[#004699]/[0.03]"
+                    ? "border-[#005BBC]/30 bg-[#0268CE]/[0.03]"
                     : "bg-white border-border"
                 }`}
                 onClick={() => field.onChange(!field.value)}
               >
                 <div className="flex items-start gap-4">
                   <div className={`p-2.5 rounded-xl flex-shrink-0 transition-colors ${
-                    field.value ? "bg-[#004699] text-white" : "bg-muted/50 text-muted-foreground"
+                    field.value ? "bg-[#0268CE] text-white" : "bg-muted/50 text-muted-foreground"
                   }`}>
                     <BookOpen className="h-5 w-5" />
                   </div>
@@ -244,7 +244,7 @@ export default function SubmitReport() {
                   </div>
                   <div className="flex-shrink-0 mt-0.5">
                     <div className={`w-10 h-6 rounded-full transition-all relative ${
-                      field.value ? "bg-[#004699]" : "bg-muted"
+                      field.value ? "bg-[#0268CE]" : "bg-muted"
                     }`}>
                       <div className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-all ${
                         field.value ? "left-5" : "left-1"
