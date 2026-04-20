@@ -470,7 +470,17 @@ export function PostCard({
             {post.author.name}
           </Link>
           <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
-            <span className="text-[12.5px] text-[#6b7280]">{timeAgo}</span>
+            <span
+              style={{
+                fontSize: 11,
+                background: "#0268CE",
+                color: "#fff",
+                borderRadius: 999,
+                padding: "2px 8px",
+                fontWeight: 500,
+                letterSpacing: "0.01em",
+              }}
+            >{timeAgo}</span>
             {post.location && (
               <>
                 <span className="text-[#d1d5db] text-[10px]">•</span>
