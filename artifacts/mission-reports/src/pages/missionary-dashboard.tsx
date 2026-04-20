@@ -128,8 +128,8 @@ export default function MissionaryDashboard() {
       {/* ── Filter tabs ── */}
       <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
         {[
-          { id: "all" as FeedTab, label: "All Posts", icon: <Send className="h-3.5 w-3.5" />, count: allPosts.length },
-          { id: "moments" as FeedTab, label: "Mission Moments", icon: <BookOpen className="h-3.5 w-3.5" />, count: missionMoments.length },
+          { id: "all" as FeedTab, label: "All Posts", icon: <Send className="h-3.5 w-3.5" />, count: allPosts.length, activeColor: EMERALD, activeBg: "#EFF6FF" },
+          { id: "moments" as FeedTab, label: "Mission Moments", icon: <BookOpen className="h-3.5 w-3.5" />, count: missionMoments.length, activeColor: "#FF3C00", activeBg: "#FFF1EE" },
         ].map(tab => {
           const active = activeTab === tab.id;
           return (
@@ -138,8 +138,8 @@ export default function MissionaryDashboard() {
               onClick={() => setActiveTab(tab.id)}
               className="flex items-center gap-2 px-1 pb-3 pt-1 mr-5 text-[14px] font-semibold border-b-2 -mb-px transition-all duration-200"
               style={{
-                borderColor: active ? EMERALD : "transparent",
-                color: active ? EMERALD : "#9CA3AF",
+                borderColor: active ? tab.activeColor : "transparent",
+                color: active ? tab.activeColor : "#9CA3AF",
               }}
             >
               {tab.icon}
@@ -148,8 +148,8 @@ export default function MissionaryDashboard() {
                 <span
                   className="text-[11px] px-2 py-0.5 rounded-full font-medium"
                   style={{
-                    background: active ? "#EFF6FF" : "#F3F4F6",
-                    color: active ? EMERALD : "#6B7280",
+                    background: active ? tab.activeBg : "#F3F4F6",
+                    color: active ? tab.activeColor : "#6B7280",
                   }}
                 >
                   {tab.count}
