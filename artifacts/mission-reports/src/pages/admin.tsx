@@ -10,7 +10,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import {
   Users, FileText, Heart, MessageCircle,
-  Globe, Sparkles, Plus, X, RefreshCw, Trash2,
+  Globe, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
   BarChart3, Star, UserCog, BookOpen, LogOut,
@@ -870,7 +870,7 @@ export default function AdminDashboard() {
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* ── Global Partners banner ── */}
-        <div className="relative rounded-2xl overflow-hidden" style={{ background: "#0268CE" }}>
+        <div className="relative -mx-4 sm:-mx-8 -mt-8 overflow-hidden" style={{ background: "#0268CE" }}>
 
           {/* World map continent silhouettes */}
           <svg
@@ -944,26 +944,6 @@ export default function AdminDashboard() {
               </button>
             </div>
           </div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {statsLoading ? (
-            [1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24 rounded-2xl" />)
-          ) : (
-            <>
-              <StatCard label="Total Posts" value={stats?.totalPosts ?? 0} icon={<FileText className="h-5 w-5" />} accent="bg-gray-100 text-gray-600" onClick={() => setActiveTab("feed")} />
-              <StatCard label="Field Users" value={nonAdmins.length} icon={<Users className="h-5 w-5" />} accent="bg-blue-50 text-blue-600" onClick={() => setActiveTab("team")} />
-              <StatCard
-                label="Countries"
-                value={new Set(nonAdmins.map((u: any) => u.location?.split(",").pop()?.trim()).filter(Boolean)).size || "—"}
-                icon={<Globe className="h-5 w-5" />}
-                accent="bg-violet-50 text-violet-600"
-                onClick={() => setActiveTab("team")}
-              />
-              <StatCard label="Your Role" value="Admin" icon={<Sparkles className="h-5 w-5" />} accent="bg-amber-50 text-amber-600" />
-            </>
-          )}
         </div>
 
         {/* ── Tabs ── */}
