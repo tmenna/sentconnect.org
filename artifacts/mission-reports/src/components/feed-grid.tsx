@@ -254,6 +254,17 @@ export function FeedGridCard({
       {/* ── Thumbnail ── */}
       {(() => {
         const dateLabel = `Update ${format(new Date(post.createdAt), "MM-dd-yyyy")}`;
+
+        // Solid pill color for image overlay (high contrast on any photo)
+        const overlayColor = post.isMissionMoment ? "#059669" : post.isHighlight ? "#92400E" : "#004699";
+
+        // Soft pill for no-image placeholder (category-tinted, readable)
+        const softPill = post.isMissionMoment
+          ? { bg: "#D1FAE5", color: "#065F46", border: "1px solid #6EE7B7" }
+          : post.isHighlight
+          ? { bg: "#FEF3C7", color: "#78350F", border: "1px solid #FCD34D" }
+          : { bg: "#DBEAFE", color: "#1E3A8A", border: "1px solid #93C5FD" };
+
         return (
           <div className="relative overflow-hidden flex-shrink-0" style={{ aspectRatio: "16/9" }}>
             {coverPhoto ? (
@@ -268,14 +279,19 @@ export function FeedGridCard({
                   }}
                   loading="lazy"
                 />
-                {/* Date label overlay on image */}
+                {/* Solid brand-color date pill on image */}
                 <div
-                  className="absolute top-2.5 left-2.5 text-[11px] font-semibold px-2.5 py-1 rounded-full"
+                  className="absolute top-3 left-3"
                   style={{
-                    background: "rgba(0,0,0,0.52)",
-                    backdropFilter: "blur(4px)",
+                    background: overlayColor,
                     color: "#fff",
+                    fontSize: 13,
+                    fontWeight: 700,
                     letterSpacing: "0.01em",
+                    padding: "5px 12px",
+                    borderRadius: 9999,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.28)",
+                    lineHeight: 1.3,
                   }}
                 >
                   {dateLabel}
@@ -283,7 +299,7 @@ export function FeedGridCard({
               </>
             ) : (
               <div
-                className="w-full h-full flex flex-col items-center justify-center gap-3"
+                className="w-full h-full flex flex-col items-center justify-center gap-4"
                 style={{ background: thumb.bg }}
               >
                 <div
@@ -292,14 +308,19 @@ export function FeedGridCard({
                 >
                   {thumb.icon}
                 </div>
-                {/* Date label for no-image posts */}
+                {/* Category-tinted date pill, centered */}
                 <span
-                  className="text-[12px] font-semibold px-3 py-1 rounded-full"
                   style={{
-                    background: "rgba(255,255,255,0.72)",
-                    backdropFilter: "blur(4px)",
-                    color: "#374151",
+                    background: softPill.bg,
+                    color: softPill.color,
+                    border: softPill.border,
+                    fontSize: 14,
+                    fontWeight: 700,
                     letterSpacing: "0.01em",
+                    padding: "7px 18px",
+                    borderRadius: 9999,
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                    lineHeight: 1.3,
                   }}
                 >
                   {dateLabel}
