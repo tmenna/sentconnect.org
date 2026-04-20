@@ -297,18 +297,17 @@ export function FeedGridCard({
                 >
                   {thumb.icon}
                 </div>
-                {/* White frosted pill on gradient */}
+                {/* Solid pill — green for Mission Moments, blue for everything else */}
                 <span
                   style={{
-                    background: "rgba(255,255,255,0.82)",
-                    backdropFilter: "blur(4px)",
-                    WebkitBackdropFilter: "blur(4px)",
-                    color: "#374151",
-                    fontSize: 12,
+                    background: post.isMissionMoment ? "#16A34A" : "#2563EB",
+                    color: "#fff",
+                    fontSize: 14,
                     fontWeight: 600,
-                    padding: "4px 12px",
+                    padding: "6px 12px",
                     borderRadius: 9999,
-                    lineHeight: 1.4,
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                    lineHeight: 1.3,
                   }}
                 >
                   {dateLabel}
