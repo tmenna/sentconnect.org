@@ -93,11 +93,11 @@ export default function Feed() {
           onClick={() => setActiveTab("moments")}
           className="flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors"
           style={{
-            borderColor: activeTab === "moments" ? "#FF3C00" : "transparent",
-            color: activeTab === "moments" ? "#FF3C00" : undefined,
+            borderColor: activeTab === "moments" ? "#DB1C4F" : "transparent",
+            color: activeTab === "moments" ? "#DB1C4F" : undefined,
           }}
         >
-          <Star className="h-3.5 w-3.5" style={{ fill: activeTab === "moments" ? "#FF3C00" : "none", color: activeTab === "moments" ? "#FF3C00" : "currentColor" }} />
+          <Star className="h-3.5 w-3.5" style={{ fill: activeTab === "moments" ? "#DB1C4F" : "none", color: activeTab === "moments" ? "#DB1C4F" : "currentColor" }} />
           Mission Moments
           {missionMoments.length > 0 && (
             <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{missionMoments.length}</span>
