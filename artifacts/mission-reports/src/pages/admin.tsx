@@ -864,38 +864,47 @@ export default function AdminDashboard() {
         />
       )}
 
-      <div className="max-w-6xl mx-auto space-y-6">
-
-        {/* ── Page header ── */}
-        <div className="flex items-start justify-between gap-4 pb-6" style={{ borderBottom: "1px solid #E9E9E9" }}>
-          <div>
-            <h1 className="text-[32px] font-bold leading-tight tracking-tight" style={{ color: "#1F2937" }}>
-              Team Updates
-            </h1>
-            <p className="text-[15px] mt-1.5" style={{ color: "#6B7280" }}>
-              Manage your field team and review their activity.
-            </p>
-          </div>
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <Avatar className="hidden sm:flex h-10 w-10" style={{ border: "2px solid #BFDBFE" }}>
-              <AvatarImage src={user.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#EFF6FF", color: "#005BBC" }}>
-                {user.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <button
-              onClick={() => logout.mutate({ data: undefined })}
-              disabled={logout.isPending}
-              title="Sign out"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all duration-200"
-            >
-              {logout.isPending
-                ? <Loader2 className="h-4 w-4 animate-spin" />
-                : <LogOut className="h-4 w-4" />}
-              <span className="hidden sm:inline">Sign Out</span>
-            </button>
-          </div>
+      {/* ── Full-bleed blue banner ── */}
+      <div
+        className="-mx-4 sm:-mx-8 -mt-8 mb-6 px-8 py-6 flex items-center justify-between gap-4"
+        style={{ background: "#004699" }}
+      >
+        <div>
+          <h1
+            className="font-bold leading-tight tracking-tight"
+            style={{ fontSize: 30, color: "#fff" }}
+          >
+            Global Partners
+          </h1>
+          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", marginTop: 6 }}>
+            Manage your field team and review their activity.
+          </p>
         </div>
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <Avatar className="hidden sm:flex h-10 w-10" style={{ border: "2px solid rgba(255,255,255,0.35)" }}>
+            <AvatarImage src={user.avatarUrl ?? undefined} />
+            <AvatarFallback className="font-semibold text-[14px]" style={{ background: "rgba(255,255,255,0.15)", color: "#fff" }}>
+              {user.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <button
+            onClick={() => logout.mutate({ data: undefined })}
+            disabled={logout.isPending}
+            title="Sign out"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200"
+            style={{ color: "rgba(255,255,255,0.75)" }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.color = "#fff"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
+          >
+            {logout.isPending
+              ? <Loader2 className="h-4 w-4 animate-spin" />
+              : <LogOut className="h-4 w-4" />}
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto space-y-6">
 
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
