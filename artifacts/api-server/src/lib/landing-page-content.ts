@@ -1,6 +1,11 @@
 import { pool } from "@workspace/db";
 
 export const DEFAULT_LANDING_PAGE_CONTENT = {
+  headerBrandName: "SentConnect",
+  headerPrimaryCtaLabel: "Sign up",
+  headerPrimaryCtaHref: "/signup",
+  headerSecondaryCtaLabel: "How to sign in",
+  headerSecondaryCtaHref: "#signin",
   heroEyebrow: "Private missionary updates",
   heroTitle: "Stay connected with your field teams from one private mission feed.",
   heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
@@ -18,11 +23,18 @@ export const DEFAULT_LANDING_PAGE_CONTENT = {
   step2Description: "Your team signs in at your dedicated address, such as rvc.sentconnect.org/login.",
   step3Title: "3. Share updates",
   step3Description: "Invite field users, collect reports, and keep your church connected to ministry work.",
+  footerBrandName: "SentConnect",
+  footerOwnerText: "Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA",
 };
 
 type LandingPageContentInput = typeof DEFAULT_LANDING_PAGE_CONTENT;
 
 const columnMap = {
+  headerBrandName: "header_brand_name",
+  headerPrimaryCtaLabel: "header_primary_cta_label",
+  headerPrimaryCtaHref: "header_primary_cta_href",
+  headerSecondaryCtaLabel: "header_secondary_cta_label",
+  headerSecondaryCtaHref: "header_secondary_cta_href",
   heroEyebrow: "hero_eyebrow",
   heroTitle: "hero_title",
   heroDescription: "hero_description",
@@ -40,6 +52,8 @@ const columnMap = {
   step2Description: "step_2_description",
   step3Title: "step_3_title",
   step3Description: "step_3_description",
+  footerBrandName: "footer_brand_name",
+  footerOwnerText: "footer_owner_text",
 } as const;
 
 let ensurePromise: Promise<void> | null = null;
@@ -49,7 +63,7 @@ export function cleanLandingPageContent(body: any): LandingPageContentInput | nu
   for (const key of Object.keys(DEFAULT_LANDING_PAGE_CONTENT) as Array<keyof LandingPageContentInput>) {
     const value = typeof body?.[key] === "string" ? body[key].trim() : "";
     if (!value) return null;
-    values[key] = value.slice(0, key.includes("Description") ? 700 : 180);
+    values[key] = value.slice(0, key.includes("Description") || key.includes("Text") ? 700 : 180);
   }
   return values as LandingPageContentInput;
 }
@@ -67,6 +81,11 @@ async function ensureLandingPageTable(): Promise<void> {
     ensurePromise = pool.query(`
       CREATE TABLE IF NOT EXISTS landing_page_content (
         key text PRIMARY KEY,
+        header_brand_name text NOT NULL DEFAULT 'SentConnect',
+        header_primary_cta_label text NOT NULL DEFAULT 'Sign up',
+        header_primary_cta_href text NOT NULL DEFAULT '/signup',
+        header_secondary_cta_label text NOT NULL DEFAULT 'How to sign in',
+        header_secondary_cta_href text NOT NULL DEFAULT '#signin',
         hero_eyebrow text NOT NULL,
         hero_title text NOT NULL,
         hero_description text NOT NULL,
@@ -84,9 +103,20 @@ async function ensureLandingPageTable(): Promise<void> {
         step_2_description text NOT NULL,
         step_3_title text NOT NULL,
         step_3_description text NOT NULL,
+        footer_brand_name text NOT NULL DEFAULT 'SentConnect',
+        footer_owner_text text NOT NULL DEFAULT 'Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA',
         updated_at timestamp with time zone NOT NULL DEFAULT now()
       )
-    `).then(() => undefined);
+    `).then(() => pool.query(`
+      ALTER TABLE landing_page_content
+        ADD COLUMN IF NOT EXISTS header_brand_name text NOT NULL DEFAULT 'SentConnect',
+        ADD COLUMN IF NOT EXISTS header_primary_cta_label text NOT NULL DEFAULT 'Sign up',
+        ADD COLUMN IF NOT EXISTS header_primary_cta_href text NOT NULL DEFAULT '/signup',
+        ADD COLUMN IF NOT EXISTS header_secondary_cta_label text NOT NULL DEFAULT 'How to sign in',
+        ADD COLUMN IF NOT EXISTS header_secondary_cta_href text NOT NULL DEFAULT '#signin',
+        ADD COLUMN IF NOT EXISTS footer_brand_name text NOT NULL DEFAULT 'SentConnect',
+        ADD COLUMN IF NOT EXISTS footer_owner_text text NOT NULL DEFAULT 'Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA'
+    `)).then(() => undefined);
   }
   return ensurePromise;
 }

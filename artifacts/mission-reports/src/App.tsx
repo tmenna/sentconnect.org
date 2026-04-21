@@ -28,6 +28,11 @@ import PublicPost from "./pages/public-post";
 const queryClient = new QueryClient();
 
 type LandingPageContent = {
+  headerBrandName: string;
+  headerPrimaryCtaLabel: string;
+  headerPrimaryCtaHref: string;
+  headerSecondaryCtaLabel: string;
+  headerSecondaryCtaHref: string;
   heroEyebrow: string;
   heroTitle: string;
   heroDescription: string;
@@ -45,9 +50,16 @@ type LandingPageContent = {
   step2Description: string;
   step3Title: string;
   step3Description: string;
+  footerBrandName: string;
+  footerOwnerText: string;
 };
 
 const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
+  headerBrandName: "SentConnect",
+  headerPrimaryCtaLabel: "Sign up",
+  headerPrimaryCtaHref: "/signup",
+  headerSecondaryCtaLabel: "How to sign in",
+  headerSecondaryCtaHref: "#signin",
   heroEyebrow: "Private missionary updates",
   heroTitle: "Stay connected with your field teams from one private mission feed.",
   heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
@@ -65,6 +77,8 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   step2Description: "Your team signs in at your dedicated address, such as rvc.sentconnect.org/login.",
   step3Title: "3. Share updates",
   step3Description: "Invite field users, collect reports, and keep your church connected to ministry work.",
+  footerBrandName: "SentConnect",
+  footerOwnerText: "Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA",
 };
 
 function LandingPage() {
@@ -93,11 +107,11 @@ function LandingPage() {
             <div className="rounded-lg p-1.5" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
               <Shuffle className="h-4 w-4" style={{ color: "#0268CE" }} />
             </div>
-            <span className="text-[15px] font-semibold tracking-tight" style={{ color: "#374151" }}>SentConnect</span>
+            <span className="text-[15px] font-semibold tracking-tight" style={{ color: "#374151" }}>{content.headerBrandName}</span>
           </a>
           <div className="flex items-center gap-3">
-            <a href="/signup" className="rounded-full border border-[#0A70D4]/20 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[#0A70D4] hover:text-[#0A70D4]">Sign up</a>
-            <a href="#signin" className="rounded-full bg-[#0A70D4] px-4 py-2 text-sm font-semibold text-white hover:bg-[#075AAE]">How to sign in</a>
+            <a href={content.headerPrimaryCtaHref} className="rounded-full border border-[#0A70D4]/20 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[#0A70D4] hover:text-[#0A70D4]">{content.headerPrimaryCtaLabel}</a>
+            <a href={content.headerSecondaryCtaHref} className="rounded-full bg-[#0A70D4] px-4 py-2 text-sm font-semibold text-white hover:bg-[#075AAE]">{content.headerSecondaryCtaLabel}</a>
           </div>
         </div>
       </header>
@@ -174,9 +188,9 @@ function LandingPage() {
             <div className="rounded-md p-1" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
               <Shuffle className="h-3 w-3" style={{ color: "#0268CE" }} />
             </div>
-            <span className="text-xs font-semibold text-gray-400">SentConnect</span>
+            <span className="text-xs font-semibold text-gray-400">{content.footerBrandName}</span>
           </div>
-          <p>Platform owner: Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA</p>
+          <p>{content.footerOwnerText}</p>
         </div>
       </footer>
     </div>

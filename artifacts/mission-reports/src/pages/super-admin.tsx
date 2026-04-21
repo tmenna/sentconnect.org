@@ -35,6 +35,11 @@ type PlatformStats = {
 };
 
 type LandingPageContent = {
+  headerBrandName: string;
+  headerPrimaryCtaLabel: string;
+  headerPrimaryCtaHref: string;
+  headerSecondaryCtaLabel: string;
+  headerSecondaryCtaHref: string;
   heroEyebrow: string;
   heroTitle: string;
   heroDescription: string;
@@ -52,6 +57,8 @@ type LandingPageContent = {
   step2Description: string;
   step3Title: string;
   step3Description: string;
+  footerBrandName: string;
+  footerOwnerText: string;
 };
 
 type Permissions = {
@@ -157,6 +164,11 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
 }
 
 const LANDING_FIELDS: Array<{ key: keyof LandingPageContent; label: string; multiline?: boolean }> = [
+  { key: "headerBrandName", label: "Header brand name" },
+  { key: "headerPrimaryCtaLabel", label: "Header first link label" },
+  { key: "headerPrimaryCtaHref", label: "Header first link URL" },
+  { key: "headerSecondaryCtaLabel", label: "Header second link label" },
+  { key: "headerSecondaryCtaHref", label: "Header second link URL" },
   { key: "heroEyebrow", label: "Hero eyebrow" },
   { key: "heroTitle", label: "Hero title", multiline: true },
   { key: "heroDescription", label: "Hero description", multiline: true },
@@ -174,6 +186,8 @@ const LANDING_FIELDS: Array<{ key: keyof LandingPageContent; label: string; mult
   { key: "step2Description", label: "Step 2 description", multiline: true },
   { key: "step3Title", label: "Step 3 title" },
   { key: "step3Description", label: "Step 3 description", multiline: true },
+  { key: "footerBrandName", label: "Footer brand name" },
+  { key: "footerOwnerText", label: "Footer owner text", multiline: true },
 ];
 
 function LandingPageEditor() {
