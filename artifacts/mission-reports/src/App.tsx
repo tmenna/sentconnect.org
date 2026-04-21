@@ -365,6 +365,7 @@ function AppRoutes() {
     <Switch>
       {/* Org user login — always /{org}/login */}
       <Route path="/login" component={LoginRoute} />
+      <Route path="/landing" component={LandingPage} />
       <Route path="/signup" component={Signup} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
