@@ -1,14 +1,15 @@
 services:
   - type: web
-    name: APP_NAME=${APP_NAME:-$REPO_NAME}
-    runtime: static
+    name: sentconnect.org
+    plan: free
+    runtime: node
+    region: oregon
     branch: main
-    buildCommand: npm install -g pnpm && pnpm install && pnpm --filter @workspace/api-server run build
-    staticPublishPath: ./artifacts/api-server/dist/public
+    buildCommand: npm install -g pnpm && pnpm install --include=dev && pnpm --filter @workspace/api-server run build
+    startCommand: pnpm --filter @workspace/api-server run start
+    healthCheckPath: /api/healthz
     envVars:
       - key: NODE_ENV
         value: production
-      - key: BASE_PATH
-        value: /
-      - key: PORT
-        value: 3000
+      - key: SESSION_SECRET
+        generateValue: true
