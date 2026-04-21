@@ -11,7 +11,6 @@
  */
 export const RESERVED_PATHS = new Set([
   "login",
-  "landing",
   "signup",
   "admin",
   "feed",

@@ -84,44 +84,25 @@ function LandingPage() {
     };
   }, []);
 
-  const steps = [
-    {
-      title: content.step1Title,
-      description: content.step1Description,
-      accent: "from-[#0268CE] to-[#23A6F0]",
-    },
-    {
-      title: content.step2Title,
-      description: content.step2Description,
-      accent: "from-[#6D5DFB] to-[#0268CE]",
-    },
-    {
-      title: content.step3Title,
-      description: content.step3Description,
-      accent: "from-[#08A88A] to-[#0268CE]",
-    },
-  ];
-
   return (
-    <div className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(2,104,206,0.14),transparent_34%),radial-gradient(circle_at_top_right,rgba(8,168,138,0.16),transparent_30%),linear-gradient(180deg,#F7FBFF_0%,#FFFFFF_42%,#F3F8FF_100%)] text-slate-900">
-      <header className="sticky top-0 z-20 border-b border-white/70 bg-white/80 shadow-[0_10px_40px_rgba(15,23,42,0.05)] backdrop-blur-xl">
+    <div className="min-h-screen bg-white text-slate-900">
+      <header className="border-b border-slate-100">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <a href="/" className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#0268CE] to-[#23A6F0] font-black text-white shadow-lg shadow-blue-200/70">S</div>
-            <span className="text-lg font-extrabold tracking-tight text-slate-950">SentConnect</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-[#0268CE] font-black">S</div>
+            <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
           </a>
           <div className="flex items-center gap-3">
-            <a href="/signup" className="rounded-full border border-blue-100 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#0268CE] hover:text-[#0268CE] hover:shadow-md">Sign up</a>
-            <a href="#signin" className="rounded-full bg-gradient-to-r from-[#0268CE] to-[#23A6F0] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-200/80 transition hover:-translate-y-0.5 hover:shadow-xl">How to sign in</a>
+            <a href="/signup" className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[#0268CE] hover:text-[#0268CE]">Sign up</a>
+            <a href="#signin" className="rounded-full bg-[#0268CE] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0155a5]">How to sign in</a>
           </div>
         </div>
       </header>
 
       <main>
-        <section className="relative mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-24">
-          <div className="absolute left-1/2 top-8 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-200/30 blur-3xl" />
+        <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-24">
           <div>
-            <p className="mb-5 inline-flex rounded-full border border-blue-100 bg-white/80 px-4 py-2 text-sm font-bold uppercase tracking-[0.22em] text-[#0268CE] shadow-sm">{content.heroEyebrow}</p>
+            <p className="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-[#0268CE]">{content.heroEyebrow}</p>
             <h1 className="max-w-3xl text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl">
               {content.heroTitle}
             </h1>
@@ -129,34 +110,34 @@ function LandingPage() {
               {content.heroDescription}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={content.primaryCtaHref} className="inline-flex h-13 items-center justify-center rounded-2xl bg-gradient-to-r from-[#0268CE] to-[#23A6F0] px-7 text-sm font-bold text-white shadow-xl shadow-blue-200/80 transition hover:-translate-y-0.5 hover:shadow-2xl">
+              <a href={content.primaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl bg-[#0268CE] px-6 text-sm font-bold text-white shadow-sm hover:bg-[#0155a5]">
                 {content.primaryCtaLabel}
               </a>
-              <a href={content.secondaryCtaHref} className="inline-flex h-13 items-center justify-center rounded-2xl border border-blue-100 bg-white/90 px-7 text-sm font-bold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#0268CE] hover:text-[#0268CE] hover:shadow-md">
+              <a href={content.secondaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl border border-slate-200 px-6 text-sm font-bold text-slate-700 hover:border-[#0268CE] hover:text-[#0268CE]">
                 {content.secondaryCtaLabel}
               </a>
             </div>
           </div>
 
-          <div className="rounded-[2.5rem] border border-white bg-white/65 p-4 shadow-[0_30px_90px_rgba(2,104,206,0.16)] backdrop-blur">
-            <div className="rounded-[2rem] bg-white p-5 shadow-sm">
+          <div className="rounded-[2rem] border border-slate-200 bg-slate-50 p-4 shadow-sm">
+            <div className="rounded-[1.5rem] bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <p className="text-sm font-bold text-slate-900">Mission Moments</p>
                   <p className="text-xs text-slate-500">{content.previewLabel}</p>
                 </div>
-                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-[#0268CE] ring-1 ring-blue-100">Private</span>
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-[#0268CE]">Private</span>
               </div>
               {[content.previewTitle1, content.previewTitle2, content.previewTitle3].map((title, index) => (
-                <div key={title} className="mb-3 rounded-3xl border border-blue-50 bg-gradient-to-br from-white to-blue-50/40 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md last:mb-0">
+                <div key={title} className="mb-3 rounded-2xl border border-slate-100 bg-white p-4 last:mb-0">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#0268CE] to-[#23A6F0] shadow-md shadow-blue-100" />
+                    <div className="h-9 w-9 rounded-full bg-blue-100" />
                     <div>
                       <p className="text-sm font-bold text-slate-800">{title}</p>
                       <p className="text-xs text-slate-400">{index + 2} hours ago</p>
                     </div>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-blue-100/70" />
+                  <div className="h-2 w-full rounded-full bg-slate-100" />
                   <div className="mt-2 h-2 w-3/4 rounded-full bg-slate-100" />
                 </div>
               ))}
@@ -164,31 +145,19 @@ function LandingPage() {
           </div>
         </section>
 
-        <section id="signin" className="relative scroll-mt-24 border-y border-blue-100/70 bg-gradient-to-br from-[#EAF5FF] via-white to-[#EDFDF8]">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#0268CE]/30 to-transparent" />
-          <div className="mx-auto max-w-6xl px-6 py-18 md:py-24">
-            <div className="mx-auto mb-10 max-w-3xl text-center">
-              <p className="mb-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-extrabold uppercase tracking-[0.22em] text-[#0268CE] shadow-sm ring-1 ring-blue-100">
-                Learn how sign-in works
-              </p>
-              <h2 className="text-3xl font-black tracking-tight text-slate-950 md:text-5xl">
-                A simple path from signup to your private portal
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">
-                Each organization gets its own secure SentConnect space, so members know exactly where to sign in and see the updates meant for them.
-              </p>
+        <section id="signin" className="border-t border-slate-100 bg-slate-50">
+          <div className="mx-auto grid max-w-6xl gap-6 px-6 py-14 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-black text-slate-950">{content.step1Title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{content.step1Description}</p>
             </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {steps.map((step, index) => (
-                <div key={step.title} className="group relative overflow-hidden rounded-[2rem] border border-white bg-white p-7 shadow-[0_24px_70px_rgba(15,23,42,0.09)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(2,104,206,0.18)]">
-                  <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${step.accent} text-lg font-black text-white shadow-lg shadow-blue-200/70`}>
-                    {index + 1}
-                  </div>
-                  <h3 className="text-xl font-black text-slate-950">{step.title.replace(/^\d+\.\s*/, "")}</h3>
-                  <p className="mt-4 text-sm leading-7 text-slate-600">{step.description}</p>
-                  <div className={`absolute -bottom-10 -right-10 h-28 w-28 rounded-full bg-gradient-to-br ${step.accent} opacity-10 transition group-hover:scale-125 group-hover:opacity-15`} />
-                </div>
-              ))}
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-black text-slate-950">{content.step2Title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{content.step2Description}</p>
+            </div>
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-black text-slate-950">{content.step3Title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{content.step3Description}</p>
             </div>
           </div>
         </section>
@@ -365,7 +334,6 @@ function AppRoutes() {
     <Switch>
       {/* Org user login — always /{org}/login */}
       <Route path="/login" component={LoginRoute} />
-      <Route path="/landing" component={LandingPage} />
       <Route path="/signup" component={Signup} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
