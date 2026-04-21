@@ -26,7 +26,64 @@ import PublicPost from "./pages/public-post";
 
 const queryClient = new QueryClient();
 
+type LandingPageContent = {
+  heroEyebrow: string;
+  heroTitle: string;
+  heroDescription: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+  previewLabel: string;
+  previewTitle1: string;
+  previewTitle2: string;
+  previewTitle3: string;
+  step1Title: string;
+  step1Description: string;
+  step2Title: string;
+  step2Description: string;
+  step3Title: string;
+  step3Description: string;
+};
+
+const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
+  heroEyebrow: "Private missionary updates",
+  heroTitle: "Stay connected with your field teams from one private mission feed.",
+  heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
+  primaryCtaLabel: "Create your organization",
+  primaryCtaHref: "/signup",
+  secondaryCtaLabel: "Learn how sign-in works",
+  secondaryCtaHref: "#signin",
+  previewLabel: "Latest field updates",
+  previewTitle1: "Prayer gathering in Kigali",
+  previewTitle2: "New family visits this week",
+  previewTitle3: "Youth outreach photos shared",
+  step1Title: "1. Sign up",
+  step1Description: "Create your organization and choose a short subdomain, like rvc.",
+  step2Title: "2. Use your portal",
+  step2Description: "Your team signs in at your dedicated address, such as rvc.sentconnect.org/login.",
+  step3Title: "3. Share updates",
+  step3Description: "Invite field users, collect reports, and keep your church connected to ministry work.",
+};
+
 function LandingPage() {
+  const [content, setContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/landing-page")
+      .then((res) => res.ok ? res.json() : DEFAULT_LANDING_PAGE_CONTENT)
+      .then((data) => {
+        if (!cancelled) setContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...data });
+      })
+      .catch(() => {
+        if (!cancelled) setContent(DEFAULT_LANDING_PAGE_CONTENT);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
       <header className="border-b border-slate-100">
@@ -45,19 +102,19 @@ function LandingPage() {
       <main>
         <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-24">
           <div>
-            <p className="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-[#0268CE]">Private missionary updates</p>
+            <p className="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-[#0268CE]">{content.heroEyebrow}</p>
             <h1 className="max-w-3xl text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl">
-              Stay connected with your field teams from one private mission feed.
+              {content.heroTitle}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-              SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.
+              {content.heroDescription}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href="/signup" className="inline-flex h-12 items-center justify-center rounded-xl bg-[#0268CE] px-6 text-sm font-bold text-white shadow-sm hover:bg-[#0155a5]">
-                Create your organization
+              <a href={content.primaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl bg-[#0268CE] px-6 text-sm font-bold text-white shadow-sm hover:bg-[#0155a5]">
+                {content.primaryCtaLabel}
               </a>
-              <a href="#signin" className="inline-flex h-12 items-center justify-center rounded-xl border border-slate-200 px-6 text-sm font-bold text-slate-700 hover:border-[#0268CE] hover:text-[#0268CE]">
-                Learn how sign-in works
+              <a href={content.secondaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl border border-slate-200 px-6 text-sm font-bold text-slate-700 hover:border-[#0268CE] hover:text-[#0268CE]">
+                {content.secondaryCtaLabel}
               </a>
             </div>
           </div>
@@ -67,11 +124,11 @@ function LandingPage() {
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <p className="text-sm font-bold text-slate-900">Mission Moments</p>
-                  <p className="text-xs text-slate-500">Latest field updates</p>
+                  <p className="text-xs text-slate-500">{content.previewLabel}</p>
                 </div>
                 <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-[#0268CE]">Private</span>
               </div>
-              {["Prayer gathering in Kigali", "New family visits this week", "Youth outreach photos shared"].map((title, index) => (
+              {[content.previewTitle1, content.previewTitle2, content.previewTitle3].map((title, index) => (
                 <div key={title} className="mb-3 rounded-2xl border border-slate-100 bg-white p-4 last:mb-0">
                   <div className="mb-3 flex items-center gap-3">
                     <div className="h-9 w-9 rounded-full bg-blue-100" />
@@ -91,16 +148,16 @@ function LandingPage() {
         <section id="signin" className="border-t border-slate-100 bg-slate-50">
           <div className="mx-auto grid max-w-6xl gap-6 px-6 py-14 md:grid-cols-3">
             <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-black text-slate-950">1. Sign up</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">Create your organization and choose a short subdomain, like <strong>rvc</strong>.</p>
+              <h2 className="text-lg font-black text-slate-950">{content.step1Title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{content.step1Description}</p>
             </div>
             <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-black text-slate-950">2. Use your portal</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">Your team signs in at your dedicated address, such as <strong>rvc.sentconnect.org/login</strong>.</p>
+              <h2 className="text-lg font-black text-slate-950">{content.step2Title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{content.step2Description}</p>
             </div>
             <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-black text-slate-950">3. Share updates</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">Invite field users, collect reports, and keep your church connected to ministry work.</p>
+              <h2 className="text-lg font-black text-slate-950">{content.step3Title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{content.step3Description}</p>
             </div>
           </div>
         </section>

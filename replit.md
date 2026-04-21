@@ -106,6 +106,7 @@ Tables: `organizations`, `users`, `reports`, `photos`
 - `organizations`: id, name, subdomain, plan, status, createdAt
 - `users`: id, name, email, passwordHash, role (admin|field_user|super_admin), status (active|inactive), bio, location, avatarUrl, organization, organizationId, resetToken, resetTokenExpiry, createdAt, updatedAt
 - `reports`: id, content, location, peopleReached, authorId, organizationId, createdAt, updatedAt
+- `landing_page_content`: app-managed table for editable public `sentconnect.org` landing page copy, created automatically when first read/saved
 
 ## Artifacts
 
@@ -120,6 +121,7 @@ Tables: `organizations`, `users`, `reports`, `photos`
 ## API Routes
 
 **Auth**
+- `GET /api/landing-page` — Public editable landing page content for `sentconnect.org`
 - `GET /api/orgs/resolve?subdomain=calvary` — Public tenant existence/status check used before showing org login
 - `POST /api/auth/signup` — Create org + first admin user
 - `POST /api/auth/forgot-password` — Generate password reset token
@@ -150,6 +152,7 @@ Tables: `organizations`, `users`, `reports`, `photos`
 - `GET /api/stats` — Impact statistics
 
 **Super Admin** (super_admin role required)
+- `GET/PUT /api/super-admin/landing-page` — View/update public landing page content
 - `GET /api/super-admin/orgs` — List all organizations
 - `PATCH /api/super-admin/orgs/:id` — Update org status
 - `GET /api/super-admin/stats` — Platform-wide stats

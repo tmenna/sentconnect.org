@@ -3,6 +3,7 @@ import { eq, sql, and } from "drizzle-orm";
 import crypto from "crypto";
 import { db, organizationsTable, usersTable, reportsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
+import { cleanLandingPageContent, getLandingPageContent, saveLandingPageContent } from "../lib/landing-page-content";
 import {
   requirePlatformAccess,
   requirePermission,
@@ -36,6 +37,20 @@ router.get("/super-admin/stats", requirePlatformAccess, async (req, res): Promis
     totalUsers: userCount?.count ?? 0,
     totalPosts: postCount?.count ?? 0,
   });
+});
+
+router.get("/super-admin/landing-page", requireSuperOrPlatformAdmin, async (_req, res): Promise<void> => {
+  res.json(await getLandingPageContent());
+});
+
+router.put("/super-admin/landing-page", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
+  const values = cleanLandingPageContent(req.body);
+  if (!values) {
+    res.status(400).json({ error: "All landing page fields are required" });
+    return;
+  }
+
+  res.json(await saveLandingPageContent(values));
 });
 
 // ─── Organizations ────────────────────────────────────────────────────────────

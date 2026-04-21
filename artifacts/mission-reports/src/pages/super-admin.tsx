@@ -34,6 +34,26 @@ type PlatformStats = {
   totalPosts: number;
 };
 
+type LandingPageContent = {
+  heroEyebrow: string;
+  heroTitle: string;
+  heroDescription: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+  previewLabel: string;
+  previewTitle1: string;
+  previewTitle2: string;
+  previewTitle3: string;
+  step1Title: string;
+  step1Description: string;
+  step2Title: string;
+  step2Description: string;
+  step3Title: string;
+  step3Description: string;
+};
+
 type Permissions = {
   canViewOrganizations: boolean;
   canManageOrganizations: boolean;
@@ -133,6 +153,135 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
     >
       {children}
     </button>
+  );
+}
+
+const LANDING_FIELDS: Array<{ key: keyof LandingPageContent; label: string; multiline?: boolean }> = [
+  { key: "heroEyebrow", label: "Hero eyebrow" },
+  { key: "heroTitle", label: "Hero title", multiline: true },
+  { key: "heroDescription", label: "Hero description", multiline: true },
+  { key: "primaryCtaLabel", label: "Primary button label" },
+  { key: "primaryCtaHref", label: "Primary button link" },
+  { key: "secondaryCtaLabel", label: "Secondary button label" },
+  { key: "secondaryCtaHref", label: "Secondary button link" },
+  { key: "previewLabel", label: "Preview subtitle" },
+  { key: "previewTitle1", label: "Preview update 1" },
+  { key: "previewTitle2", label: "Preview update 2" },
+  { key: "previewTitle3", label: "Preview update 3" },
+  { key: "step1Title", label: "Step 1 title" },
+  { key: "step1Description", label: "Step 1 description", multiline: true },
+  { key: "step2Title", label: "Step 2 title" },
+  { key: "step2Description", label: "Step 2 description", multiline: true },
+  { key: "step3Title", label: "Step 3 title" },
+  { key: "step3Description", label: "Step 3 description", multiline: true },
+];
+
+function LandingPageEditor() {
+  const { toast } = useToast();
+  const [content, setContent] = useState<LandingPageContent | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/super-admin/landing-page", { credentials: "include" })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        if (!cancelled) setContent(data);
+      })
+      .catch(() => {
+        if (!cancelled) toast({ title: "Could not load landing page content", variant: "destructive" });
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [toast]);
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    if (!content) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/super-admin/landing-page", {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(content),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "Failed to save landing page");
+      }
+      const updated = await res.json();
+      setContent(updated);
+      toast({ title: "Landing page updated" });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Failed to save landing page", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return <div className="h-40 bg-white rounded-xl border border-border/60 animate-pulse" />;
+  }
+
+  if (!content) {
+    return (
+      <div className="bg-white rounded-xl border border-border/60 p-6">
+        <p className="text-[14px] text-muted-foreground">Landing page content could not be loaded.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={save} className="bg-white rounded-xl border border-border/60 overflow-hidden">
+      <div className="px-5 py-4 border-b border-border/60 flex items-center justify-between">
+        <div>
+          <p className="text-[17px] font-bold text-foreground">Public Landing Page</p>
+          <p className="text-[14px] text-muted-foreground mt-0.5">Edit the content shown on sentconnect.org without changing code.</p>
+        </div>
+        <a href="/" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#0268CE] hover:underline">
+          Preview
+        </a>
+      </div>
+      <div className="p-5 grid gap-4 md:grid-cols-2">
+        {LANDING_FIELDS.map(field => (
+          <label key={field.key} className={field.multiline ? "md:col-span-2" : ""}>
+            <span className="block text-[12px] font-semibold text-foreground mb-1">{field.label}</span>
+            {field.multiline ? (
+              <textarea
+                value={content[field.key]}
+                onChange={e => setContent(prev => prev ? { ...prev, [field.key]: e.target.value } : prev)}
+                rows={3}
+                required
+                className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20 resize-y"
+              />
+            ) : (
+              <input
+                value={content[field.key]}
+                onChange={e => setContent(prev => prev ? { ...prev, [field.key]: e.target.value } : prev)}
+                required
+                className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+              />
+            )}
+          </label>
+        ))}
+      </div>
+      <div className="px-5 py-4 bg-muted/30 border-t border-border/60 flex justify-end">
+        <button
+          type="submit"
+          disabled={saving}
+          className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+        >
+          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          Save Landing Page
+        </button>
+      </div>
+    </form>
   );
 }
 
@@ -1293,7 +1442,7 @@ export default function SuperAdminPanel() {
       },
     },
   });
-  const [activeTab, setActiveTab] = useState<"platform-users" | "orgs" | "users">("platform-users");
+  const [activeTab, setActiveTab] = useState<"platform-users" | "orgs" | "users" | "landing">("platform-users");
   const [orgs, setOrgs] = useState<OrgWithStats[] | null>(null);
   const [allUsers, setAllUsers] = useState<PlatformUser[] | null>(null);
   const [stats, setStats] = useState<PlatformStats | null>(null);
@@ -1693,7 +1842,12 @@ export default function SuperAdminPanel() {
         <TabButton active={activeTab === "users"} onClick={() => setActiveTab("users")}>
           <span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" /> All Users</span>
         </TabButton>
+        <TabButton active={activeTab === "landing"} onClick={() => setActiveTab("landing")}>
+          <span className="flex items-center gap-1.5"><BookOpen className="h-3.5 w-3.5" /> Landing Page</span>
+        </TabButton>
       </div>
+
+      {activeTab === "landing" && <LandingPageEditor />}
 
       {/* ─── Tab: Platform Users ──────────────────────────────────────────────── */}
       {activeTab === "platform-users" && (

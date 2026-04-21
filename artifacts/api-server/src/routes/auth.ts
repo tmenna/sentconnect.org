@@ -5,8 +5,17 @@ import { db, usersTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
 import { sendPasswordResetEmail, smtpConfigured } from "../lib/mailer";
+import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
 
 const router: IRouter = Router();
+
+router.get("/landing-page", async (_req, res): Promise<void> => {
+  try {
+    res.json(await getLandingPageContent());
+  } catch {
+    res.json(DEFAULT_LANDING_PAGE_CONTENT);
+  }
+});
 
 router.get("/orgs/resolve", async (req, res): Promise<void> => {
   const subdomain = typeof req.query.subdomain === "string" ? req.query.subdomain.trim().toLowerCase() : "";
