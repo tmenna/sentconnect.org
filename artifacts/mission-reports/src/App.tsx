@@ -164,6 +164,13 @@ function LandingPage() {
           </div>
         </section>
       </main>
+
+      <footer className="border-t border-[#0A70D4]/10 bg-white">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+          <p className="font-semibold text-slate-700">SentConnect</p>
+          <p>Platform owner: Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA</p>
+        </div>
+      </footer>
     </div>
   );
 }
