@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useRef } from "react";
 import { setOrgSubdomain } from "@workspace/api-client-react";
 
 interface OrgContextValue {
-  /** The org's subdomain slug extracted from the URL path (e.g. "ep2"). */
+  /** The org's subdomain slug from the hostname or URL path (e.g. "ep2"). */
   orgSlug: string | null;
   /** Returns the path prefix to prepend when building intra-app links. */
   prefix: (path: string) => string;
@@ -19,6 +19,7 @@ export function useOrg() {
 
 interface OrgProviderProps {
   orgSlug: string | null;
+  usesPathPrefix?: boolean;
   children: React.ReactNode;
 }
 
@@ -26,11 +27,10 @@ interface OrgProviderProps {
  * Provides org context throughout the app and syncs the current org slug
  * with the API client so every request includes `X-Org-Subdomain`.
  *
- * SWAP POINT — when real subdomain routing is live, this provider can be
- * simplified: orgSlug is derived from the hostname on the backend and this
- * header is no longer required.
+ * In hostname-routing production the header is redundant because the API can
+ * derive the org from req.hostname, but keeping it preserves local path routing.
  */
-export function OrgProvider({ orgSlug, children }: OrgProviderProps) {
+export function OrgProvider({ orgSlug, usesPathPrefix = true, children }: OrgProviderProps) {
   const prevSlug = useRef<string | null>(undefined);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export function OrgProvider({ orgSlug, children }: OrgProviderProps) {
   }, [orgSlug]);
 
   function prefix(path: string): string {
-    if (!orgSlug) return path;
+    if (!orgSlug || !usesPathPrefix) return path;
     const clean = path.startsWith("/") ? path : `/${path}`;
     return `/${orgSlug}${clean}`;
   }

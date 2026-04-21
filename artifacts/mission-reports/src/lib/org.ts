@@ -1,10 +1,8 @@
 /**
- * Org utilities for path-based multi-tenant routing.
+ * Org utilities for multi-tenant routing.
  *
- * SWAP POINT — when real subdomain routing is enabled, `extractOrgSlug`
- * will no longer be needed on the frontend. Instead, the backend will
- * derive the org from `req.hostname`. This file can then be removed and
- * all references to `orgSlug` in the URL can be dropped.
+ * Development/Replit preview uses path-based routing: /calvary/login.
+ * Production custom domains use hostname routing: calvary.sentconnect.org/login.
  */
 
 /**
@@ -54,4 +52,56 @@ export function extractOrgSlug(pathname: string): string | null {
   if (!/^[a-z0-9-]{2,40}$/.test(firstSegment)) return null;
 
   return firstSegment;
+}
+
+const DEFAULT_TENANT_ROOT_DOMAINS = ["sentconnect.org", "sentonnect.org"];
+
+function tenantRootDomains(): string[] {
+  const configured = import.meta.env.VITE_TENANT_ROOT_DOMAINS as string | undefined;
+  return (configured?.split(",") ?? DEFAULT_TENANT_ROOT_DOMAINS)
+    .map((domain) => domain.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+export function extractHostnameOrgSlug(hostname = window.location.hostname): string | null {
+  const host = hostname.toLowerCase().replace(/\.$/, "");
+
+  for (const rootDomain of tenantRootDomains()) {
+    if (host === rootDomain || host === `www.${rootDomain}`) return null;
+    if (!host.endsWith(`.${rootDomain}`)) continue;
+
+    const candidate = host.slice(0, -(rootDomain.length + 1));
+    if (!candidate || candidate === "www") return null;
+    if (!/^[a-z0-9-]{2,40}$/.test(candidate)) return null;
+    return candidate;
+  }
+
+  return null;
+}
+
+export function getOrgRoutingContext(pathname: string): {
+  orgSlug: string | null;
+  usesPathPrefix: boolean;
+} {
+  const hostnameOrgSlug = extractHostnameOrgSlug();
+  if (hostnameOrgSlug) {
+    return { orgSlug: hostnameOrgSlug, usesPathPrefix: false };
+  }
+
+  const pathOrgSlug = extractOrgSlug(pathname);
+  return { orgSlug: pathOrgSlug, usesPathPrefix: Boolean(pathOrgSlug) };
+}
+
+export function buildOrgLoginHref(subdomain: string): string {
+  const cleanSubdomain = subdomain.trim().toLowerCase();
+  const currentHost = window.location.hostname.toLowerCase();
+  const matchedRootDomain = tenantRootDomains().find(
+    (rootDomain) => currentHost === rootDomain || currentHost === `www.${rootDomain}` || currentHost.endsWith(`.${rootDomain}`),
+  );
+
+  if (matchedRootDomain) {
+    return `${window.location.protocol}//${cleanSubdomain}.${matchedRootDomain}/login`;
+  }
+
+  return `/${cleanSubdomain}/login`;
 }

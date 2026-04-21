@@ -11,6 +11,7 @@ import { Link, useSearch, useLocation } from "wouter";
 import { Shuffle, ExternalLink, LogOut, Loader2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { buildOrgLoginHref } from "@/lib/org";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -159,11 +160,11 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             </p>
             {orgPortalError.subdomain && (
               <a
-                href={`/${orgPortalError.subdomain}/login`}
+                href={buildOrgLoginHref(orgPortalError.subdomain)}
                 className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-amber-800 hover:text-amber-900 underline underline-offset-2"
               >
                 <ExternalLink className="h-3 w-3" />
-                Go to /{orgPortalError.subdomain}/login
+                Go to {orgPortalError.subdomain}.sentconnect.org/login
               </a>
             )}
           </div>

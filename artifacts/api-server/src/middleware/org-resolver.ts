@@ -21,12 +21,22 @@ export async function resolveOrg(req: Request, _res: Response, next: NextFunctio
   let subdomain: string | undefined;
 
   if (process.env["USE_HOSTNAME_ROUTING"] === "true") {
-    // Production: derive org from subdomain (e.g. ep2.sentconnect.org → "ep2")
-    const parts = req.hostname?.split(".");
-    const candidate = parts && parts.length >= 3 ? parts[0] : undefined;
-    // Ignore "www" and bare root-domain hits
-    if (candidate && candidate !== "www") {
-      subdomain = candidate.trim().toLowerCase();
+    const host = req.hostname?.toLowerCase().replace(/\.$/, "");
+    const rootDomains = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org,sentonnect.org")
+      .split(",")
+      .map((domain) => domain.trim().toLowerCase())
+      .filter(Boolean);
+
+    for (const rootDomain of rootDomains) {
+      if (!host || host === rootDomain || host === `www.${rootDomain}` || !host.endsWith(`.${rootDomain}`)) {
+        continue;
+      }
+
+      const candidate = host.slice(0, -(rootDomain.length + 1));
+      if (/^[a-z0-9-]{2,40}$/.test(candidate) && candidate !== "www") {
+        subdomain = candidate;
+        break;
+      }
     }
   } else {
     // Development: org slug arrives via header sent by the frontend
