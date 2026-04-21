@@ -40,7 +40,7 @@ A Twitter/Instagram-style private social feed for missionary field teams. Users 
 - **Validation**: Zod (`zod/v4`), `drizzle-zod`
 - **API codegen**: Orval (from OpenAPI spec)
 - **Auth**: Session-based (express-session + crypto PBKDF2)
-- **Build**: esbuild (CJS bundle)
+- **Build**: esbuild (ESM bundle); `connect-pg-simple` is externalized so Render can read its packaged `table.sql` asset for session table setup
 
 ## Key Commands
 
