@@ -44,6 +44,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         setOrgPortalError(null);
         queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
         toast({ title: "Welcome back!" });
+        navigate(from);
       },
       onError: (error: any) => {
         if (error?.status === 403 && error?.data?.error?.includes("organization")) {
