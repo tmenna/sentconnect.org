@@ -18,6 +18,7 @@ export const RESERVED_PATHS = new Set([
   "reports",
   "missionaries",
   "profile",
+  "sentconnect-home",
   "super-admin",
   "forgot-password",
   "reset-password",

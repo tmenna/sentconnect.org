@@ -291,6 +291,11 @@ function LoginRoute() {
   return <Login platformMode={isPlatformAdminHost()} />;
 }
 
+function LandingPreviewRoute() {
+  if (!import.meta.env.DEV) return <NotFound />;
+  return <LandingPage />;
+}
+
 /**
  * /admin — two contexts:
  *
@@ -336,6 +341,7 @@ function AppRoutes() {
     <Switch>
       {/* Org user login — always /{org}/login */}
       <Route path="/login" component={LoginRoute} />
+      <Route path="/sentconnect-home" component={LandingPreviewRoute} />
       <Route path="/signup" component={Signup} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
