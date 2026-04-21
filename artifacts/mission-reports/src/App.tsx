@@ -86,23 +86,24 @@ function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      <header className="border-b border-slate-100">
+      <header className="border-b border-[#0A70D4]/10 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <a href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-[#0268CE] font-black">S</div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0A70D4] text-white font-black shadow-sm">S</div>
             <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
           </a>
           <div className="flex items-center gap-3">
-            <a href="/signup" className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[#0268CE] hover:text-[#0268CE]">Sign up</a>
-            <a href="#signin" className="rounded-full bg-[#0268CE] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0155a5]">How to sign in</a>
+            <a href="/signup" className="rounded-full border border-[#0A70D4]/20 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[#0A70D4] hover:text-[#0A70D4]">Sign up</a>
+            <a href="#signin" className="rounded-full bg-[#0A70D4] px-4 py-2 text-sm font-semibold text-white hover:bg-[#075AAE]">How to sign in</a>
           </div>
         </div>
       </header>
 
       <main>
-        <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-24">
+        <section className="bg-gradient-to-br from-white via-white to-[#0A70D4]/10">
+          <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-24">
           <div>
-            <p className="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-[#0268CE]">{content.heroEyebrow}</p>
+            <p className="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-[#0A70D4]">{content.heroEyebrow}</p>
             <h1 className="max-w-3xl text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl">
               {content.heroTitle}
             </h1>
@@ -110,28 +111,28 @@ function LandingPage() {
               {content.heroDescription}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={content.primaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl bg-[#0268CE] px-6 text-sm font-bold text-white shadow-sm hover:bg-[#0155a5]">
+              <a href={content.primaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl bg-[#0A70D4] px-6 text-sm font-bold text-white shadow-sm shadow-[#0A70D4]/20 hover:bg-[#075AAE]">
                 {content.primaryCtaLabel}
               </a>
-              <a href={content.secondaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl border border-slate-200 px-6 text-sm font-bold text-slate-700 hover:border-[#0268CE] hover:text-[#0268CE]">
+              <a href={content.secondaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl border border-[#0A70D4]/20 bg-white px-6 text-sm font-bold text-slate-700 hover:border-[#0A70D4] hover:text-[#0A70D4]">
                 {content.secondaryCtaLabel}
               </a>
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-slate-200 bg-slate-50 p-4 shadow-sm">
+          <div className="rounded-[2rem] border border-[#0A70D4]/15 bg-white/80 p-4 shadow-sm">
             <div className="rounded-[1.5rem] bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <p className="text-sm font-bold text-slate-900">Mission Moments</p>
                   <p className="text-xs text-slate-500">{content.previewLabel}</p>
                 </div>
-                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-[#0268CE]">Private</span>
+                <span className="rounded-full bg-[#0A70D4]/10 px-3 py-1 text-xs font-bold text-[#0A70D4]">Private</span>
               </div>
               {[content.previewTitle1, content.previewTitle2, content.previewTitle3].map((title, index) => (
-                <div key={title} className="mb-3 rounded-2xl border border-slate-100 bg-white p-4 last:mb-0">
+                <div key={title} className="mb-3 rounded-2xl border border-[#0A70D4]/10 bg-white p-4 last:mb-0">
                   <div className="mb-3 flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-full bg-blue-100" />
+                    <div className="h-9 w-9 rounded-full bg-[#0A70D4]/15" />
                     <div>
                       <p className="text-sm font-bold text-slate-800">{title}</p>
                       <p className="text-xs text-slate-400">{index + 2} hours ago</p>
@@ -143,9 +144,10 @@ function LandingPage() {
               ))}
             </div>
           </div>
+          </div>
         </section>
 
-        <section id="signin" className="border-t border-slate-100 bg-slate-50">
+        <section id="signin" className="border-t border-[#0A70D4]/10 bg-[#0A70D4]">
           <div className="mx-auto grid max-w-6xl gap-6 px-6 py-14 md:grid-cols-3">
             <div className="rounded-2xl bg-white p-6 shadow-sm">
               <h2 className="text-lg font-black text-slate-950">{content.step1Title}</h2>
