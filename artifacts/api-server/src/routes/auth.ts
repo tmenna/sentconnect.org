@@ -8,6 +8,31 @@ import { sendPasswordResetEmail, smtpConfigured } from "../lib/mailer";
 
 const router: IRouter = Router();
 
+router.get("/orgs/resolve", async (req, res): Promise<void> => {
+  const subdomain = typeof req.query.subdomain === "string" ? req.query.subdomain.trim().toLowerCase() : "";
+  if (!/^[a-z0-9-]{2,40}$/.test(subdomain)) {
+    res.status(400).json({ error: "Invalid organization subdomain" });
+    return;
+  }
+
+  const [org] = await db
+    .select({
+      id: organizationsTable.id,
+      name: organizationsTable.name,
+      subdomain: organizationsTable.subdomain,
+      status: organizationsTable.status,
+    })
+    .from(organizationsTable)
+    .where(eq(organizationsTable.subdomain, subdomain));
+
+  if (!org) {
+    res.status(404).json({ error: "Organization not found" });
+    return;
+  }
+
+  res.json(org);
+});
+
 function toUserResponse(user: typeof usersTable.$inferSelect) {
   const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...rest } = user;
   return rest;

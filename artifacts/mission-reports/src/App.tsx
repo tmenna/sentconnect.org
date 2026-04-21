@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -35,6 +36,73 @@ function AuthLoading() {
       <div className="animate-pulse text-muted-foreground text-sm">Loading…</div>
     </div>
   );
+}
+
+function OrgUnavailable({ orgSlug, reason }: { orgSlug: string; reason?: string }) {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ background: "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)" }}>
+      <div className="w-full max-w-[440px] bg-white rounded-2xl px-8 py-10 text-center" style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}>
+        <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 bg-red-50 border-2 border-red-100">
+          <span className="text-red-600 text-2xl font-bold">!</span>
+        </div>
+        <h1 className="text-[22px] font-bold text-gray-900 mb-2">Organization not found</h1>
+        <p className="text-[14px] text-gray-500 mb-6">
+          No SentConnect organization is registered for <span className="font-semibold text-gray-700">{orgSlug}</span>.
+          {reason ? ` ${reason}` : ""}
+        </p>
+        <a href="/" className="inline-flex w-full h-11 items-center justify-center rounded-xl text-[15px] font-bold text-white bg-[#0268CE] hover:bg-[#0155a5] transition-colors">
+          Go to SentConnect
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function OrgGate({ orgSlug, children }: { orgSlug: string | null; children: React.ReactNode }) {
+  const [state, setState] = useState<"loading" | "valid" | "missing" | "inactive">(() => orgSlug ? "loading" : "valid");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function resolveOrg() {
+      if (!orgSlug) {
+        setState("valid");
+        return;
+      }
+
+      setState("loading");
+      try {
+        const res = await fetch(`/api/orgs/resolve?subdomain=${encodeURIComponent(orgSlug)}`, {
+          credentials: "include",
+        });
+
+        if (cancelled) return;
+        if (res.status === 404) {
+          setState("missing");
+          return;
+        }
+        if (!res.ok) {
+          setState("missing");
+          return;
+        }
+
+        const org = await res.json();
+        setState(org.status === "active" ? "valid" : "inactive");
+      } catch {
+        if (!cancelled) setState("missing");
+      }
+    }
+
+    resolveOrg();
+    return () => {
+      cancelled = true;
+    };
+  }, [orgSlug]);
+
+  if (!orgSlug || state === "valid") return <>{children}</>;
+  if (state === "loading") return <AuthLoading />;
+  if (state === "inactive") return <OrgUnavailable orgSlug={orgSlug} reason="This organization is currently inactive." />;
+  return <OrgUnavailable orgSlug={orgSlug} />;
 }
 
 const PLATFORM_ROLES = ["super_admin", "platform_admin", "platform_manager"] as const;
@@ -134,17 +202,19 @@ function OrgAwareApp() {
 
   return (
     <OrgProvider orgSlug={orgSlug} usesPathPrefix={usesPathPrefix}>
-      <AuthProvider>
-        <TooltipProvider>
-          {orgSlug && usesPathPrefix ? (
-            <WouterRouter base={`/${orgSlug}`}>
+      <OrgGate orgSlug={orgSlug}>
+        <AuthProvider>
+          <TooltipProvider>
+            {orgSlug && usesPathPrefix ? (
+              <WouterRouter base={`/${orgSlug}`}>
+                <AppRoutes />
+              </WouterRouter>
+            ) : (
               <AppRoutes />
-            </WouterRouter>
-          ) : (
-            <AppRoutes />
-          )}
-        </TooltipProvider>
-      </AuthProvider>
+            )}
+          </TooltipProvider>
+        </AuthProvider>
+      </OrgGate>
     </OrgProvider>
   );
 }

@@ -118,6 +118,7 @@ Tables: `organizations`, `users`, `reports`, `photos`
 ## API Routes
 
 **Auth**
+- `GET /api/orgs/resolve?subdomain=calvary` — Public tenant existence/status check used before showing org login
 - `POST /api/auth/signup` — Create org + first admin user
 - `POST /api/auth/forgot-password` — Generate password reset token
 - `POST /api/auth/reset-password` — Reset password via token
