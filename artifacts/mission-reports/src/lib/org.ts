@@ -92,16 +92,25 @@ export function getOrgRoutingContext(pathname: string): {
   return { orgSlug: pathOrgSlug, usesPathPrefix: Boolean(pathOrgSlug) };
 }
 
-export function buildOrgLoginHref(subdomain: string): string {
+export function buildOrgHref(subdomain: string, path = "/"): string {
   const cleanSubdomain = subdomain.trim().toLowerCase();
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
   const currentHost = window.location.hostname.toLowerCase();
   const matchedRootDomain = tenantRootDomains().find(
     (rootDomain) => currentHost === rootDomain || currentHost === `www.${rootDomain}` || currentHost.endsWith(`.${rootDomain}`),
   );
 
   if (matchedRootDomain) {
-    return `${window.location.protocol}//${cleanSubdomain}.${matchedRootDomain}/login`;
+    return `${window.location.protocol}//${cleanSubdomain}.${matchedRootDomain}${cleanPath}`;
   }
 
-  return `/${cleanSubdomain}/login`;
+  return `/${cleanSubdomain}${cleanPath}`;
+}
+
+export function buildOrgHomeHref(subdomain: string): string {
+  return buildOrgHref(subdomain, "/");
+}
+
+export function buildOrgLoginHref(subdomain: string): string {
+  return buildOrgHref(subdomain, "/login");
 }

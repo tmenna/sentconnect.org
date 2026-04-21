@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { buildOrgHomeHref, buildOrgLoginHref } from "@/lib/org";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -945,7 +946,7 @@ function CreateOrgUserModal({
               <Building2 className="h-3 w-3 text-[#0268CE]" />
               <p className="text-[12px] text-muted-foreground font-medium">{org.name}</p>
               <span className="text-[11px] text-muted-foreground/60">·</span>
-              <a href={`/${org.subdomain}/`} target="_blank" rel="noreferrer" className="text-[11px] text-[#0268CE] font-mono hover:underline">/{org.subdomain}/</a>
+              <a href={buildOrgHomeHref(org.subdomain)} target="_blank" rel="noreferrer" className="text-[11px] text-[#0268CE] font-mono hover:underline">{buildOrgHomeHref(org.subdomain)}</a>
             </div>
           </div>
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60">
@@ -1004,7 +1005,7 @@ function CreateOrgUserModal({
           </div>
           <div className="rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-[12px] text-gray-600 flex items-start gap-2">
             <Globe className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
-            <span>This user will log in at <strong className="font-mono">/{org.subdomain}/login</strong> with the credentials you set above.</span>
+            <span>This user will log in at <strong className="font-mono">{buildOrgLoginHref(org.subdomain)}</strong> with the credentials you set above.</span>
           </div>
           <div className="flex gap-3 pt-1">
             <button type="button" onClick={onClose} disabled={saving} className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors disabled:opacity-50">
@@ -1477,7 +1478,7 @@ export default function SuperAdminPanel() {
       if (!res.ok) throw new Error();
       toast({ title: `Now impersonating ${targetUser.name}` });
       const orgSubdomain = (orgs ?? []).find(o => o.name === targetUser.organization)?.subdomain;
-      window.location.href = orgSubdomain ? `/${orgSubdomain}/` : "/";
+      window.location.href = orgSubdomain ? buildOrgHomeHref(orgSubdomain) : "/";
     } catch {
       toast({ title: "Impersonation failed", variant: "destructive" });
       setActionPending(null);
@@ -1847,13 +1848,13 @@ export default function SuperAdminPanel() {
                     </div>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5 text-[12px] text-muted-foreground">
                       <a
-                        href={`/${org.subdomain}/`}
+                        href={buildOrgHomeHref(org.subdomain)}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center gap-1 hover:text-[#0268CE] hover:underline transition-colors"
                         title={`Open ${org.name} portal`}
                       >
-                        <Globe className="h-3 w-3" />/{org.subdomain}/
+                        <Globe className="h-3 w-3" />{buildOrgHomeHref(org.subdomain)}
                       </a>
                       <span className="flex items-center gap-1"><Users className="h-3 w-3" />{org.userCount} users</span>
                       <span className="flex items-center gap-1"><FileText className="h-3 w-3" />{org.postCount} posts</span>
@@ -1868,7 +1869,7 @@ export default function SuperAdminPanel() {
                       <Plus className="h-3.5 w-3.5" /> Add User
                     </button>
                     <a
-                      href={`/${org.subdomain}/`}
+                      href={buildOrgHomeHref(org.subdomain)}
                       target="_blank"
                       rel="noreferrer"
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200 transition-colors"

@@ -7,6 +7,7 @@ import { getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { Shuffle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { buildOrgHomeHref } from "@/lib/org";
 
 const BLUE     = "#005BBC";
 const BLUE_DK  = "#0155a5";
@@ -55,7 +56,11 @@ export default function Signup() {
       queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
       toast({ title: "Welcome to SentConnect!", description: `Your organization "${orgName}" is ready.` });
       const slug = data.organization?.subdomain;
-      setRedirectTo(slug ? `/${slug}/` : "/");
+      if (slug) {
+        window.location.assign(buildOrgHomeHref(slug));
+      } else {
+        setRedirectTo("/");
+      }
     } catch {
       setErrors({ general: "Something went wrong. Please try again." });
     } finally {
