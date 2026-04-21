@@ -3,6 +3,8 @@ import cors from "cors";
 import pinoHttp from "pino-http";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
+import path from "path";
+import { existsSync } from "fs";
 import router from "./routes";
 import { logger } from "./lib/logger";
 import { resolveOrg } from "./middleware/org-resolver";
@@ -63,5 +65,20 @@ app.use(
 );
 
 app.use("/api", resolveOrg, router);
+
+const frontendDist = [
+  path.resolve(process.cwd(), "../mission-reports/dist/public"),
+  path.resolve(process.cwd(), "artifacts/mission-reports/dist/public"),
+].find((dir) => existsSync(path.join(dir, "index.html")));
+
+if (frontendDist) {
+  app.use(express.static(frontendDist));
+  app.use((req, res, next) => {
+    if (req.path.startsWith("/api")) return next();
+    res.sendFile(path.join(frontendDist, "index.html"));
+  });
+} else if (process.env.NODE_ENV === "production") {
+  logger.warn("Frontend build output was not found. Root route will not serve the web app.");
+}
 
 export default app;
