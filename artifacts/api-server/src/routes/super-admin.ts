@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { eq, sql, and } from "drizzle-orm";
+import { eq, sql, and, inArray } from "drizzle-orm";
 import crypto from "crypto";
 import { db, organizationsTable, usersTable, reportsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
@@ -110,8 +110,25 @@ router.delete("/super-admin/orgs/:id", requireSuperOrPlatformAdmin, async (req, 
   const [org] = await db.select().from(organizationsTable).where(eq(organizationsTable.id, orgId));
   if (!org) { res.status(404).json({ error: "Organization not found" }); return; }
 
-  await db.delete(organizationsTable).where(eq(organizationsTable.id, orgId));
-  res.json({ message: `Organization "${org.name}" deleted`, id: orgId });
+  const orgUsers = await db.select({ id: usersTable.id })
+    .from(usersTable)
+    .where(eq(usersTable.organizationId, orgId));
+  const orgUserIds = orgUsers.map((user) => user.id);
+
+  await db.transaction(async (tx) => {
+    if (orgUserIds.length > 0) {
+      await tx.delete(reportsTable).where(inArray(reportsTable.missionaryId, orgUserIds));
+    }
+    await tx.delete(reportsTable).where(eq(reportsTable.organizationId, orgId));
+    await tx.delete(usersTable).where(eq(usersTable.organizationId, orgId));
+    await tx.delete(organizationsTable).where(eq(organizationsTable.id, orgId));
+  });
+
+  res.json({
+    message: `Organization "${org.name}" deleted`,
+    id: orgId,
+    deletedUsers: orgUserIds.length,
+  });
 });
 
 // ─── All Users (cross-org view) ───────────────────────────────────────────────
