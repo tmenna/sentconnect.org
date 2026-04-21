@@ -26,6 +26,10 @@ export async function resolveOrg(req: Request, _res: Response, next: NextFunctio
       .split(",")
       .map((domain) => domain.trim().toLowerCase())
       .filter(Boolean);
+    const platformAdminSubdomains = (process.env["PLATFORM_ADMIN_SUBDOMAINS"] ?? "teki")
+      .split(",")
+      .map((domain) => domain.trim().toLowerCase())
+      .filter(Boolean);
 
     for (const rootDomain of rootDomains) {
       if (!host || host === rootDomain || host === `www.${rootDomain}` || !host.endsWith(`.${rootDomain}`)) {
@@ -33,7 +37,7 @@ export async function resolveOrg(req: Request, _res: Response, next: NextFunctio
       }
 
       const candidate = host.slice(0, -(rootDomain.length + 1));
-      if (/^[a-z0-9-]{2,40}$/.test(candidate) && candidate !== "www") {
+      if (/^[a-z0-9-]{2,40}$/.test(candidate) && candidate !== "www" && !platformAdminSubdomains.includes(candidate)) {
         subdomain = candidate;
         break;
       }

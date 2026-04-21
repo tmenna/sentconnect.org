@@ -55,11 +55,19 @@ export function extractOrgSlug(pathname: string): string | null {
 }
 
 const DEFAULT_TENANT_ROOT_DOMAINS = ["sentconnect.org", "sentonnect.org"];
+const DEFAULT_PLATFORM_ADMIN_SUBDOMAINS = ["teki"];
 
 function tenantRootDomains(): string[] {
   const configured = import.meta.env.VITE_TENANT_ROOT_DOMAINS as string | undefined;
   return (configured?.split(",") ?? DEFAULT_TENANT_ROOT_DOMAINS)
     .map((domain) => domain.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function platformAdminSubdomains(): string[] {
+  const configured = import.meta.env.VITE_PLATFORM_ADMIN_SUBDOMAINS as string | undefined;
+  return (configured?.split(",") ?? DEFAULT_PLATFORM_ADMIN_SUBDOMAINS)
+    .map((subdomain) => subdomain.trim().toLowerCase())
     .filter(Boolean);
 }
 
@@ -72,6 +80,7 @@ export function extractHostnameOrgSlug(hostname = window.location.hostname): str
 
     const candidate = host.slice(0, -(rootDomain.length + 1));
     if (!candidate || candidate === "www") return null;
+    if (platformAdminSubdomains().includes(candidate)) return null;
     if (!/^[a-z0-9-]{2,40}$/.test(candidate)) return null;
     return candidate;
   }
@@ -90,6 +99,18 @@ export function getOrgRoutingContext(pathname: string): {
 
   const pathOrgSlug = extractOrgSlug(pathname);
   return { orgSlug: pathOrgSlug, usesPathPrefix: Boolean(pathOrgSlug) };
+}
+
+export function isTenantRootHost(hostname = window.location.hostname): boolean {
+  const host = hostname.toLowerCase().replace(/\.$/, "");
+  return tenantRootDomains().some((rootDomain) => host === rootDomain || host === `www.${rootDomain}`);
+}
+
+export function isPlatformAdminHost(hostname = window.location.hostname): boolean {
+  const host = hostname.toLowerCase().replace(/\.$/, "");
+  return tenantRootDomains().some((rootDomain) =>
+    platformAdminSubdomains().some((subdomain) => host === `${subdomain}.${rootDomain}`),
+  );
 }
 
 export function buildOrgHref(subdomain: string, path = "/"): string {

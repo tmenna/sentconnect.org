@@ -8,7 +8,7 @@ import { useAuth } from "@/components/auth-provider";
 import { Layout } from "@/components/layout";
 import NotFound from "@/pages/not-found";
 import { OrgProvider, useOrg } from "@/providers/org-provider";
-import { getOrgRoutingContext } from "@/lib/org";
+import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
 
 import Timeline from "./pages/timeline";
 import ReportDetail from "./pages/report-detail";
@@ -25,6 +25,105 @@ import SuperAdminPanel from "./pages/super-admin";
 import PublicPost from "./pages/public-post";
 
 const queryClient = new QueryClient();
+
+function LandingPage() {
+  return (
+    <div className="min-h-screen bg-white text-slate-900">
+      <header className="border-b border-slate-100">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+          <a href="/" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-[#0268CE] font-black">S</div>
+            <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
+          </a>
+          <div className="flex items-center gap-3">
+            <a href="/signup" className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[#0268CE] hover:text-[#0268CE]">Sign up</a>
+            <a href="#signin" className="rounded-full bg-[#0268CE] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0155a5]">How to sign in</a>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-24">
+          <div>
+            <p className="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-[#0268CE]">Private missionary updates</p>
+            <h1 className="max-w-3xl text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl">
+              Stay connected with your field teams from one private mission feed.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+              SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="/signup" className="inline-flex h-12 items-center justify-center rounded-xl bg-[#0268CE] px-6 text-sm font-bold text-white shadow-sm hover:bg-[#0155a5]">
+                Create your organization
+              </a>
+              <a href="#signin" className="inline-flex h-12 items-center justify-center rounded-xl border border-slate-200 px-6 text-sm font-bold text-slate-700 hover:border-[#0268CE] hover:text-[#0268CE]">
+                Learn how sign-in works
+              </a>
+            </div>
+          </div>
+
+          <div className="rounded-[2rem] border border-slate-200 bg-slate-50 p-4 shadow-sm">
+            <div className="rounded-[1.5rem] bg-white p-5 shadow-sm">
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-bold text-slate-900">Mission Moments</p>
+                  <p className="text-xs text-slate-500">Latest field updates</p>
+                </div>
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-[#0268CE]">Private</span>
+              </div>
+              {["Prayer gathering in Kigali", "New family visits this week", "Youth outreach photos shared"].map((title, index) => (
+                <div key={title} className="mb-3 rounded-2xl border border-slate-100 bg-white p-4 last:mb-0">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="h-9 w-9 rounded-full bg-blue-100" />
+                    <div>
+                      <p className="text-sm font-bold text-slate-800">{title}</p>
+                      <p className="text-xs text-slate-400">{index + 2} hours ago</p>
+                    </div>
+                  </div>
+                  <div className="h-2 w-full rounded-full bg-slate-100" />
+                  <div className="mt-2 h-2 w-3/4 rounded-full bg-slate-100" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="signin" className="border-t border-slate-100 bg-slate-50">
+          <div className="mx-auto grid max-w-6xl gap-6 px-6 py-14 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-black text-slate-950">1. Sign up</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">Create your organization and choose a short subdomain, like <strong>rvc</strong>.</p>
+            </div>
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-black text-slate-950">2. Use your portal</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">Your team signs in at your dedicated address, such as <strong>rvc.sentconnect.org/login</strong>.</p>
+            </div>
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-black text-slate-950">3. Share updates</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">Invite field users, collect reports, and keep your church connected to ministry work.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+function AdminAccessMoved() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-6">
+      <div className="max-w-md rounded-2xl bg-white p-8 text-center shadow-sm border border-slate-200">
+        <h1 className="text-2xl font-black text-slate-950">Admin access has moved</h1>
+        <p className="mt-3 text-sm leading-6 text-slate-600">
+          The main platform admin is no longer available from sentconnect.org/admin.
+        </p>
+        <a href="/" className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#0268CE] text-sm font-bold text-white hover:bg-[#0155a5]">
+          Return to SentConnect
+        </a>
+      </div>
+    </div>
+  );
+}
 
 /**
  * Loading shell shown while the auth query is in flight.
@@ -127,6 +226,12 @@ function AdminFeedRoute() {
   return <Timeline />;
 }
 
+function LoginRoute() {
+  const { orgSlug } = useOrg();
+  if (!orgSlug && isTenantRootHost() && !isPlatformAdminHost()) return <LandingPage />;
+  return <Login platformMode={isPlatformAdminHost()} />;
+}
+
 /**
  * /admin — two contexts:
  *
@@ -143,6 +248,7 @@ function AdminRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { orgSlug } = useOrg();
   const [location] = useLocation();
+  const platformHost = isPlatformAdminHost();
 
   if (isLoading) return <AuthLoading />;
 
@@ -153,7 +259,9 @@ function AdminRoute() {
     return <Layout><AdminDashboard /></Layout>;
   }
 
-  // Platform context — /admin is itself the login page for platform accounts
+  if (isTenantRootHost() && !platformHost) return <AdminAccessMoved />;
+
+  // Platform context — only available from the reserved platform admin host
   if (!isAuthenticated) return <Login platformMode />;
 
   if (isPlatformRole(user?.role)) return <SuperAdminPanel />;
@@ -162,10 +270,13 @@ function AdminRoute() {
 }
 
 function AppRoutes() {
+  const platformHost = isPlatformAdminHost();
+  const tenantRootHost = isTenantRootHost();
+
   return (
     <Switch>
       {/* Org user login — always /{org}/login */}
-      <Route path="/login" component={Login} />
+      <Route path="/login" component={LoginRoute} />
       <Route path="/signup" component={Signup} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
@@ -175,17 +286,29 @@ function AppRoutes() {
       <Route path="/admin" component={AdminRoute} />
       <Route path="/super-admin"><Redirect href="/admin" /></Route>
       <Route>
-        <Layout>
+        {platformHost ? (
           <Switch>
-            <Route path="/" component={HomeRoute} />
-            <Route path="/feed" component={AdminFeedRoute} />
-            <Route path="/reports/:id" component={ReportDetail} />
-            <Route path="/missionaries/:id" component={MissionaryProfile} />
-            <Route path="/submit" component={SubmitReport} />
-            <Route path="/profile" component={Profile} />
+            <Route path="/"><AdminRoute /></Route>
             <Route component={NotFound} />
           </Switch>
-        </Layout>
+        ) : tenantRootHost ? (
+          <Switch>
+            <Route path="/" component={LandingPage} />
+            <Route component={NotFound} />
+          </Switch>
+        ) : (
+          <Layout>
+            <Switch>
+              <Route path="/" component={HomeRoute} />
+              <Route path="/feed" component={AdminFeedRoute} />
+              <Route path="/reports/:id" component={ReportDetail} />
+              <Route path="/missionaries/:id" component={MissionaryProfile} />
+              <Route path="/submit" component={SubmitReport} />
+              <Route path="/profile" component={Profile} />
+              <Route component={NotFound} />
+            </Switch>
+          </Layout>
+        )}
       </Route>
     </Switch>
   );

@@ -52,7 +52,7 @@ A Twitter/Instagram-style private social feed for missionary field teams. Users 
 
 ## Multi-Tenant Subdomain Simulation
 
-Path-based routing simulates subdomain multi-tenancy during development. The first URL segment is treated as the org slug if it is not a reserved route name. Production custom domains use real hostname routing, e.g. `calvary.sentconnect.org/login`.
+Path-based routing simulates subdomain multi-tenancy during development. The first URL segment is treated as the org slug if it is not a reserved route name. Production custom domains use real hostname routing, e.g. `calvary.sentconnect.org/login`. The reserved platform admin host is `teki.sentconnect.org`; it is not treated as an organization subdomain.
 
 | URL pattern | Meaning |
 |---|---|
@@ -67,7 +67,7 @@ Path-based routing simulates subdomain multi-tenancy during development. The fir
 3. Backend middleware (`middleware/org-resolver.ts`) reads the header, resolves the org, and attaches it to `req.resolvedOrg`
 4. Login and other routes use `req.resolvedOrg` to scope DB queries
 
-**Production hostname routing:** Set `USE_HOSTNAME_ROUTING=true` on Render. The API derives tenant context from hostnames ending in `sentconnect.org` by default; add `TENANT_ROOT_DOMAINS=sentconnect.org,example.org` for additional root domains. The frontend also recognizes `VITE_TENANT_ROOT_DOMAINS` at build time.
+**Production hostname routing:** Set `USE_HOSTNAME_ROUTING=true` on Render. The API derives tenant context from hostnames ending in `sentconnect.org` by default; add `TENANT_ROOT_DOMAINS=sentconnect.org,example.org` for additional root domains. Set `PLATFORM_ADMIN_SUBDOMAINS=teki` to reserve platform admin hosts. The frontend also recognizes `VITE_TENANT_ROOT_DOMAINS` and `VITE_PLATFORM_ADMIN_SUBDOMAINS` at build time.
 
 ## User Identity & Profiles
 - **Profile photo upload**: Users click "Upload Photo" on their profile page — a hidden `<input type="file">` triggers the presigned URL flow (metadata → `/api/storage/uploads/request-url` → PUT directly to GCS → avatar URL auto-saved via `PATCH /api/users/:id`). Avatar shown as circular image in feed, post cards, and admin table. Falls back to initials if no photo.
@@ -86,6 +86,8 @@ Path-based routing simulates subdomain multi-tenancy during development. The fir
 ## App Pages
 
 - `/` — Timeline feed (main dashboard): chronological social-style feed of all missionary reports
+- `sentconnect.org/` — Public marketing landing page with app purpose, signup, and sign-in instructions
+- `teki.sentconnect.org/` — Platform admin login/dashboard
 - `/reports/:id` — Report detail: full story, photo gallery, impact metrics
 - `/missionaries/:id` — Missionary profile: bio, location, report history
 - `/submit` — Submit report form (field users only)
