@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Shuffle } from "lucide-react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/components/auth-provider";
@@ -89,8 +90,10 @@ function LandingPage() {
       <header className="border-b border-[#0A70D4]/10 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <a href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0A70D4] text-white font-black shadow-sm">S</div>
-            <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
+            <div className="rounded-lg p-1.5" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
+              <Shuffle className="h-4 w-4" style={{ color: "#0268CE" }} />
+            </div>
+            <span className="text-[15px] font-semibold tracking-tight" style={{ color: "#374151" }}>SentConnect</span>
           </a>
           <div className="flex items-center gap-3">
             <a href="/signup" className="rounded-full border border-[#0A70D4]/20 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[#0A70D4] hover:text-[#0A70D4]">Sign up</a>
@@ -167,7 +170,12 @@ function LandingPage() {
 
       <footer className="border-t border-[#0A70D4]/10 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
-          <p className="font-semibold text-slate-700">SentConnect</p>
+          <div className="flex items-center gap-2">
+            <div className="rounded-md p-1" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
+              <Shuffle className="h-3 w-3" style={{ color: "#0268CE" }} />
+            </div>
+            <span className="text-xs font-semibold text-gray-400">SentConnect</span>
+          </div>
           <p>Platform owner: Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA</p>
         </div>
       </footer>
