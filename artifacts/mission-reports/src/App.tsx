@@ -178,30 +178,30 @@ function LandingPage() {
             {/* App preview card */}
             <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 28, border: "1px solid rgba(2,104,206,0.1)", boxShadow: "0 32px 80px rgba(2,104,206,0.12), 0 4px 16px rgba(0,0,0,0.05)", padding: 24, position: "relative" }}>
               {/* card header bar */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
-                <div>
-                  <p style={{ fontSize: 14, fontWeight: 800, color: "#0A0F1E", margin: 0 }}>Mission Moments</p>
-                  <p style={{ fontSize: 12, color: "#9CA3AF", margin: "2px 0 0" }}>{content.previewLabel}</p>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid rgba(2,104,206,0.07)" }}>
+                <div style={{ width: 34, height: 34, borderRadius: 10, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Shuffle style={{ width: 16, height: 16, color: "#fff" }} />
                 </div>
-                <span style={{ background: "#EFF6FF", color: BLUE, fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 999, border: "1px solid #BFDBFE" }}>Private</span>
+                <div>
+                  <p style={{ fontSize: 14, fontWeight: 800, color: "#0A0F1E", margin: 0, letterSpacing: "-0.01em" }}>Mission Moments</p>
+                  <p style={{ fontSize: 11, color: "#9CA3AF", margin: "2px 0 0" }}>{content.previewLabel}</p>
+                </div>
               </div>
 
               {/* mock posts */}
               {[
-                { title: content.previewTitle1, ago: "2h ago", w: "85%" },
-                { title: content.previewTitle2, ago: "3h ago", w: "70%" },
-                { title: content.previewTitle3, ago: "5h ago", w: "60%" },
-              ].map(({ title, ago, w }, i) => (
-                <div key={i} style={{ background: i % 2 === 0 ? "#F9FBFF" : "#fff", border: "1px solid rgba(2,104,206,0.08)", borderRadius: 16, padding: "14px 16px", marginBottom: i < 2 ? 10 : 0 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: "50%", background: `rgba(2,104,206,${0.1 + i * 0.05})`, flexShrink: 0 }} />
-                    <div>
-                      <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: 0 }}>{title}</p>
-                      <p style={{ fontSize: 11, color: "#9CA3AF", margin: "2px 0 0" }}>{ago}</p>
-                    </div>
+                { title: content.previewTitle1, ago: "2h ago", w: "82%", avatarOpacity: 0.18 },
+                { title: content.previewTitle2, ago: "3h ago", w: "68%", avatarOpacity: 0.13 },
+                { title: content.previewTitle3, ago: "5h ago", w: "55%", avatarOpacity: 0.09 },
+              ].map(({ title, ago, w, avatarOpacity }, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid rgba(2,104,206,0.06)" : "none" }}>
+                  <div style={{ width: 38, height: 38, borderRadius: "50%", background: `rgba(2,104,206,${avatarOpacity})`, flexShrink: 0, marginTop: 1 }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
+                    <p style={{ fontSize: 11, color: "#9CA3AF", margin: "0 0 8px" }}>{ago}</p>
+                    <div style={{ height: 6, background: "rgba(2,104,206,0.08)", borderRadius: 999, width: "100%" }} />
+                    <div style={{ height: 6, background: "rgba(2,104,206,0.06)", borderRadius: 999, width: w, marginTop: 5 }} />
                   </div>
-                  <div style={{ height: 7, background: "#EEF2FF", borderRadius: 999, width: "100%" }} />
-                  <div style={{ height: 7, background: "#EEF2FF", borderRadius: 999, width: w, marginTop: 6 }} />
                 </div>
               ))}
 
