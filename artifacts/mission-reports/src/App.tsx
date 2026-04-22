@@ -101,7 +101,7 @@ function LandingPage() {
   const BLUE_DARK = "#0155A5";
 
   return (
-    <div className="min-h-screen bg-white text-slate-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
+    <div className="min-h-screen text-slate-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", background: "#ffffff" }}>
       <style>{`
         @keyframes lp-fade-up {
           from { opacity: 0; transform: translateY(22px); }
@@ -143,7 +143,7 @@ function LandingPage() {
 
       <main>
         {/* ── Hero ── */}
-        <section style={{ background: "linear-gradient(160deg, #f0f7ff 0%, #ffffff 55%, #e8f2ff 100%)", padding: "96px 0 80px" }}>
+        <section style={{ background: "#ffffff", padding: "96px 0 80px" }}>
           <div className="mx-auto max-w-6xl px-6" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
             <div>
               <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 24, background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "5px 14px" }}>
