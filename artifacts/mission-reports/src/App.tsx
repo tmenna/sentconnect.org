@@ -214,26 +214,6 @@ function LandingPage() {
           </div>
         </section>
 
-        {/* ── Stats strip ── */}
-        <section style={{ borderTop: "1px solid rgba(2,104,206,0.07)", borderBottom: "1px solid rgba(2,104,206,0.07)", background: "#FAFBFF", padding: "36px 24px" }}>
-          <div className="mx-auto max-w-6xl px-6" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0, flexWrap: "wrap" }}>
-            {[
-              { value: "100%", label: "Private & secure" },
-              { value: "1 min", label: "To get started" },
-              { value: "Any device", label: "Mobile-friendly" },
-              { value: "Real-time", label: "Live updates" },
-            ].map(({ value, label }, i, arr) => (
-              <div key={label} style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ textAlign: "center", padding: "0 40px" }}>
-                  <p style={{ fontSize: 22, fontWeight: 900, color: BLUE, margin: "0 0 2px", letterSpacing: "-0.03em" }}>{value}</p>
-                  <p style={{ fontSize: 12, color: "#6B7280", margin: 0, fontWeight: 500 }}>{label}</p>
-                </div>
-                {i < arr.length - 1 && <div style={{ width: 1, height: 36, background: "rgba(2,104,206,0.12)" }} />}
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* ── How it works ── */}
         <section id="signin" style={{ background: "#fff", padding: "88px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
