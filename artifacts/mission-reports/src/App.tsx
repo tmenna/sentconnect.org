@@ -245,7 +245,7 @@ function LandingPage() {
               Ready to connect your team?
             </h2>
             <p style={{ fontSize: 17, color: "rgba(255,255,255,0.78)", margin: "0 0 36px", lineHeight: 1.65 }}>
-              Set up your organization in minutes. No credit card required.
+              Set up your organization in minutes.
             </p>
             <a
               href={content.primaryCtaHref}
