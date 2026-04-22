@@ -143,8 +143,11 @@ function LandingPage() {
 
       <main>
         {/* ── Hero ── */}
-        <section style={{ background: "#ffffff", padding: "96px 0 80px" }}>
-          <div className="mx-auto max-w-6xl px-6" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
+        <section style={{ background: "#ffffff", padding: "96px 0 80px", position: "relative", overflow: "hidden" }}>
+          {/* decorative orbs */}
+          <div style={{ position: "absolute", top: -120, right: -80, width: 480, height: 480, borderRadius: "50%", background: "radial-gradient(circle, rgba(2,104,206,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: -60, left: -100, width: 360, height: 360, borderRadius: "50%", background: "radial-gradient(circle, rgba(10,138,235,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div className="mx-auto max-w-6xl px-6" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center", position: "relative" }}>
             <div>
               <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 24, background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "5px 14px" }}>
                 <div style={{ width: 7, height: 7, borderRadius: "50%", background: BLUE }} />
@@ -211,27 +214,50 @@ function LandingPage() {
           </div>
         </section>
 
+        {/* ── Stats strip ── */}
+        <section style={{ borderTop: "1px solid rgba(2,104,206,0.07)", borderBottom: "1px solid rgba(2,104,206,0.07)", background: "#FAFBFF", padding: "36px 24px" }}>
+          <div className="mx-auto max-w-6xl px-6" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0, flexWrap: "wrap" }}>
+            {[
+              { value: "100%", label: "Private & secure" },
+              { value: "1 min", label: "To get started" },
+              { value: "Any device", label: "Mobile-friendly" },
+              { value: "Real-time", label: "Live updates" },
+            ].map(({ value, label }, i, arr) => (
+              <div key={label} style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ textAlign: "center", padding: "0 40px" }}>
+                  <p style={{ fontSize: 22, fontWeight: 900, color: BLUE, margin: "0 0 2px", letterSpacing: "-0.03em" }}>{value}</p>
+                  <p style={{ fontSize: 12, color: "#6B7280", margin: 0, fontWeight: 500 }}>{label}</p>
+                </div>
+                {i < arr.length - 1 && <div style={{ width: 1, height: 36, background: "rgba(2,104,206,0.12)" }} />}
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ── How it works ── */}
-        <section id="signin" style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.07)", padding: "88px 0" }}>
+        <section id="signin" style={{ background: "#fff", padding: "88px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <p style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>How it works</p>
               <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 900, letterSpacing: "-0.03em", color: "#0A0F1E", margin: 0 }}>Simple for churches. Powerful for teams.</h2>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, position: "relative" }}>
+              {/* connector line */}
+              <div style={{ position: "absolute", top: 34, left: "calc(16.66% + 14px)", right: "calc(16.66% + 14px)", height: 1, background: `linear-gradient(90deg, transparent, rgba(2,104,206,0.2), transparent)`, pointerEvents: "none" }} />
+
               {[
                 { title: content.step1Title, desc: content.step1Description, n: "01" },
                 { title: content.step2Title, desc: content.step2Description, n: "02" },
                 { title: content.step3Title, desc: content.step3Description, n: "03" },
               ].map(({ title, desc, n }) => (
-                <div key={n} style={{ background: "#F8FAFF", border: "1px solid rgba(2,104,206,0.1)", borderRadius: 22, padding: "32px 28px", position: "relative", overflow: "hidden" }}>
-                  <span style={{ position: "absolute", top: 20, right: 24, fontSize: 44, fontWeight: 900, color: "rgba(2,104,206,0.07)", lineHeight: 1 }}>{n}</span>
-                  <div style={{ width: 44, height: 44, borderRadius: 14, background: "#EFF6FF", border: "1px solid #BFDBFE", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-                    <Shuffle style={{ width: 20, height: 20, color: BLUE }} />
+                <div key={n} style={{ background: "#fff", border: "1px solid #EAECF0", borderRadius: 20, padding: "28px 24px 28px", position: "relative", overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
+                  {/* step number circle */}
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20, boxShadow: "0 4px 12px rgba(2,104,206,0.25)" }}>
+                    <span style={{ fontSize: 13, fontWeight: 900, color: "#fff" }}>{n}</span>
                   </div>
-                  <h3 style={{ fontSize: 18, fontWeight: 800, color: "#0A0F1E", margin: "0 0 10px", letterSpacing: "-0.02em" }}>{title}</h3>
-                  <p style={{ fontSize: 14, lineHeight: 1.7, color: "#6B7280", margin: 0 }}>{desc}</p>
+                  <h3 style={{ fontSize: 17, fontWeight: 800, color: "#0A0F1E", margin: "0 0 10px", letterSpacing: "-0.02em" }}>{title}</h3>
+                  <p style={{ fontSize: 14, lineHeight: 1.75, color: "#6B7280", margin: 0 }}>{desc}</p>
                 </div>
               ))}
             </div>
