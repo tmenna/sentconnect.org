@@ -118,11 +118,11 @@ function LandingPage() {
       {/* ── Header ── */}
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: "rgba(255,255,255,0.88)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(2,104,206,0.08)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 64 }}>
-          <a href="/" className="flex items-center gap-2.5" style={{ textDecoration: "none" }}>
-            <div style={{ background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 10, padding: "7px 8px", display: "flex", alignItems: "center" }}>
-              <Shuffle style={{ width: 16, height: 16, color: BLUE }} />
+          <a href="/" className="flex items-center gap-3" style={{ textDecoration: "none" }}>
+            <div style={{ width: 36, height: 36, borderRadius: 11, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 3px 10px rgba(2,104,206,0.32)` }}>
+              <Shuffle style={{ width: 18, height: 18, color: "#fff" }} />
             </div>
-            <span style={{ fontSize: 15, fontWeight: 700, color: "#111827", letterSpacing: "-0.01em" }}>{content.headerBrandName}</span>
+            <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: "-0.04em", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{content.headerBrandName}</span>
           </a>
           <nav className="flex items-center gap-2">
             <a
@@ -261,10 +261,10 @@ function LandingPage() {
       <footer style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.08)", padding: "32px 24px" }}>
         <div className="mx-auto max-w-6xl" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 8, padding: "5px 6px", display: "flex" }}>
-              <Shuffle style={{ width: 13, height: 13, color: BLUE }} />
+            <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(2,104,206,0.28)" }}>
+              <Shuffle style={{ width: 13, height: 13, color: "#fff" }} />
             </div>
-            <span style={{ fontSize: 13, fontWeight: 700, color: "#374151" }}>{content.footerBrandName}</span>
+            <span style={{ fontSize: 15, fontWeight: 900, letterSpacing: "-0.03em", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{content.footerBrandName}</span>
           </div>
           <p style={{ fontSize: 12, color: "#9CA3AF", margin: 0 }}>{content.footerOwnerText}</p>
         </div>
