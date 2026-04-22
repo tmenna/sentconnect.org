@@ -94,103 +94,179 @@ function LandingPage() {
       .catch(() => {
         if (!cancelled) setContent(DEFAULT_LANDING_PAGE_CONTENT);
       });
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
+  const BLUE = "#0268CE";
+  const BLUE_DARK = "#0155A5";
+
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <header className="border-b border-[#0A70D4]/10 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <a href="/" className="flex items-center gap-2.5">
-            <div className="rounded-lg p-1.5" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
-              <Shuffle className="h-4 w-4" style={{ color: "#0268CE" }} />
+    <div className="min-h-screen bg-white text-slate-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
+      <style>{`
+        @keyframes lp-fade-up {
+          from { opacity: 0; transform: translateY(22px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .lp-animate { animation: lp-fade-up 0.55s cubic-bezier(.22,1,.36,1) both; }
+        .lp-delay-1 { animation-delay: 0.08s; }
+        .lp-delay-2 { animation-delay: 0.16s; }
+        .lp-delay-3 { animation-delay: 0.24s; }
+        .lp-delay-4 { animation-delay: 0.32s; }
+        .lp-delay-5 { animation-delay: 0.40s; }
+      `}</style>
+
+      {/* ── Header ── */}
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: "rgba(255,255,255,0.88)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(2,104,206,0.08)" }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 64 }}>
+          <a href="/" className="flex items-center gap-2.5" style={{ textDecoration: "none" }}>
+            <div style={{ background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 10, padding: "7px 8px", display: "flex", alignItems: "center" }}>
+              <Shuffle style={{ width: 16, height: 16, color: BLUE }} />
             </div>
-            <span className="text-[15px] font-semibold tracking-tight" style={{ color: "#374151" }}>{content.headerBrandName}</span>
+            <span style={{ fontSize: 15, fontWeight: 700, color: "#111827", letterSpacing: "-0.01em" }}>{content.headerBrandName}</span>
           </a>
-          <div className="flex items-center gap-3">
-            <a href={content.headerPrimaryCtaHref} className="rounded-full border border-[#0A70D4]/20 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[#0A70D4] hover:text-[#0A70D4]">{content.headerPrimaryCtaLabel}</a>
-            <a href={content.headerSecondaryCtaHref} className="rounded-full bg-[#0A70D4] px-4 py-2 text-sm font-semibold text-white hover:bg-[#075AAE]">{content.headerSecondaryCtaLabel}</a>
-          </div>
+          <nav className="flex items-center gap-2">
+            <a
+              href={content.headerPrimaryCtaHref}
+              style={{ fontSize: 14, fontWeight: 600, color: "#374151", padding: "9px 18px", borderRadius: 999, border: "1px solid #E5E7EB", textDecoration: "none", transition: "border-color .15s, color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = BLUE; (e.currentTarget as HTMLElement).style.color = BLUE; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLElement).style.color = "#374151"; }}
+            >{content.headerPrimaryCtaLabel}</a>
+            <a
+              href={content.headerSecondaryCtaHref}
+              style={{ fontSize: 14, fontWeight: 600, color: "#fff", padding: "9px 18px", borderRadius: 999, background: BLUE, textDecoration: "none", transition: "background .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = BLUE_DARK; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
+            >{content.headerSecondaryCtaLabel}</a>
+          </nav>
         </div>
       </header>
 
       <main>
-        <section className="bg-gradient-to-br from-white via-white to-[#0A70D4]/10">
-          <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-24">
-          <div>
-            <p className="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-[#0A70D4]">{content.heroEyebrow}</p>
-            <h1 className="max-w-3xl text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl">
-              {content.heroTitle}
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-              {content.heroDescription}
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={content.primaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl bg-[#0A70D4] px-6 text-sm font-bold text-white shadow-sm shadow-[#0A70D4]/20 hover:bg-[#075AAE]">
-                {content.primaryCtaLabel}
-              </a>
-              <a href={content.secondaryCtaHref} className="inline-flex h-12 items-center justify-center rounded-xl border border-[#0A70D4]/20 bg-white px-6 text-sm font-bold text-slate-700 hover:border-[#0A70D4] hover:text-[#0A70D4]">
-                {content.secondaryCtaLabel}
-              </a>
-            </div>
-          </div>
-
-          <div className="rounded-[2rem] border border-[#0A70D4]/15 bg-white/80 p-4 shadow-sm">
-            <div className="rounded-[1.5rem] bg-white p-5 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-bold text-slate-900">Mission Moments</p>
-                  <p className="text-xs text-slate-500">{content.previewLabel}</p>
-                </div>
-                <span className="rounded-full bg-[#0A70D4]/10 px-3 py-1 text-xs font-bold text-[#0A70D4]">Private</span>
+        {/* ── Hero ── */}
+        <section style={{ background: "linear-gradient(160deg, #f0f7ff 0%, #ffffff 55%, #e8f2ff 100%)", padding: "96px 0 80px" }}>
+          <div className="mx-auto max-w-6xl px-6" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
+            <div>
+              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 24, background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "5px 14px" }}>
+                <div style={{ width: 7, height: 7, borderRadius: "50%", background: BLUE }} />
+                <span style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.12em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
               </div>
-              {[content.previewTitle1, content.previewTitle2, content.previewTitle3].map((title, index) => (
-                <div key={title} className="mb-3 rounded-2xl border border-[#0A70D4]/10 bg-white p-4 last:mb-0">
-                  <div className="mb-3 flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-full bg-[#0A70D4]/15" />
+
+              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(40px, 5.5vw, 68px)", fontWeight: 900, lineHeight: 1.05, letterSpacing: "-0.035em", color: "#0A0F1E", margin: "0 0 24px" }}>
+                {content.heroTitle}
+              </h1>
+
+              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.75, color: "#4B5563", maxWidth: 480, margin: "0 0 40px" }}>
+                {content.heroDescription}
+              </p>
+
+              <div className="lp-animate lp-delay-4" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <a
+                  href={content.primaryCtaHref}
+                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 50, padding: "0 28px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 18px rgba(2,104,206,0.28)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 24px rgba(2,104,206,0.36)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 18px rgba(2,104,206,0.28)"; }}
+                >{content.primaryCtaLabel}</a>
+                <a
+                  href={content.secondaryCtaHref}
+                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 50, padding: "0 28px", borderRadius: 14, background: "#fff", color: "#374151", fontSize: 15, fontWeight: 700, textDecoration: "none", border: "1.5px solid #E5E7EB", transition: "border-color .15s, color .15s, transform .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = BLUE; el.style.color = BLUE; el.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#E5E7EB"; el.style.color = "#374151"; el.style.transform = "translateY(0)"; }}
+                >{content.secondaryCtaLabel}</a>
+              </div>
+            </div>
+
+            {/* App preview card */}
+            <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 28, border: "1px solid rgba(2,104,206,0.1)", boxShadow: "0 32px 80px rgba(2,104,206,0.12), 0 4px 16px rgba(0,0,0,0.05)", padding: 24, position: "relative" }}>
+              {/* card header bar */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
+                <div>
+                  <p style={{ fontSize: 14, fontWeight: 800, color: "#0A0F1E", margin: 0 }}>Mission Moments</p>
+                  <p style={{ fontSize: 12, color: "#9CA3AF", margin: "2px 0 0" }}>{content.previewLabel}</p>
+                </div>
+                <span style={{ background: "#EFF6FF", color: BLUE, fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 999, border: "1px solid #BFDBFE" }}>Private</span>
+              </div>
+
+              {/* mock posts */}
+              {[
+                { title: content.previewTitle1, ago: "2h ago", w: "85%" },
+                { title: content.previewTitle2, ago: "3h ago", w: "70%" },
+                { title: content.previewTitle3, ago: "5h ago", w: "60%" },
+              ].map(({ title, ago, w }, i) => (
+                <div key={i} style={{ background: i % 2 === 0 ? "#F9FBFF" : "#fff", border: "1px solid rgba(2,104,206,0.08)", borderRadius: 16, padding: "14px 16px", marginBottom: i < 2 ? 10 : 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: "50%", background: `rgba(2,104,206,${0.1 + i * 0.05})`, flexShrink: 0 }} />
                     <div>
-                      <p className="text-sm font-bold text-slate-800">{title}</p>
-                      <p className="text-xs text-slate-400">{index + 2} hours ago</p>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: 0 }}>{title}</p>
+                      <p style={{ fontSize: 11, color: "#9CA3AF", margin: "2px 0 0" }}>{ago}</p>
                     </div>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-slate-100" />
-                  <div className="mt-2 h-2 w-3/4 rounded-full bg-slate-100" />
+                  <div style={{ height: 7, background: "#EEF2FF", borderRadius: 999, width: "100%" }} />
+                  <div style={{ height: 7, background: "#EEF2FF", borderRadius: 999, width: w, marginTop: 6 }} />
+                </div>
+              ))}
+
+              {/* decorative dot */}
+              <div style={{ position: "absolute", top: -14, right: 28, width: 28, height: 28, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(2,104,206,0.4)" }} />
+            </div>
+          </div>
+        </section>
+
+        {/* ── How it works ── */}
+        <section id="signin" style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.07)", padding: "88px 0" }}>
+          <div className="mx-auto max-w-6xl px-6">
+            <div style={{ textAlign: "center", marginBottom: 56 }}>
+              <p style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>How it works</p>
+              <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 900, letterSpacing: "-0.03em", color: "#0A0F1E", margin: 0 }}>Simple for churches. Powerful for teams.</h2>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+              {[
+                { title: content.step1Title, desc: content.step1Description, n: "01" },
+                { title: content.step2Title, desc: content.step2Description, n: "02" },
+                { title: content.step3Title, desc: content.step3Description, n: "03" },
+              ].map(({ title, desc, n }) => (
+                <div key={n} style={{ background: "#F8FAFF", border: "1px solid rgba(2,104,206,0.1)", borderRadius: 22, padding: "32px 28px", position: "relative", overflow: "hidden" }}>
+                  <span style={{ position: "absolute", top: 20, right: 24, fontSize: 44, fontWeight: 900, color: "rgba(2,104,206,0.07)", lineHeight: 1 }}>{n}</span>
+                  <div style={{ width: 44, height: 44, borderRadius: 14, background: "#EFF6FF", border: "1px solid #BFDBFE", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+                    <Shuffle style={{ width: 20, height: 20, color: BLUE }} />
+                  </div>
+                  <h3 style={{ fontSize: 18, fontWeight: 800, color: "#0A0F1E", margin: "0 0 10px", letterSpacing: "-0.02em" }}>{title}</h3>
+                  <p style={{ fontSize: 14, lineHeight: 1.7, color: "#6B7280", margin: 0 }}>{desc}</p>
                 </div>
               ))}
             </div>
           </div>
-          </div>
         </section>
 
-        <section id="signin" className="border-t border-[#0A70D4]/10 bg-[#0A70D4]">
-          <div className="mx-auto grid max-w-6xl gap-6 px-6 py-14 md:grid-cols-3">
-            <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-black text-slate-950">{content.step1Title}</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{content.step1Description}</p>
-            </div>
-            <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-black text-slate-950">{content.step2Title}</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{content.step2Description}</p>
-            </div>
-            <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-black text-slate-950">{content.step3Title}</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{content.step3Description}</p>
-            </div>
+        {/* ── CTA band ── */}
+        <section style={{ background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, padding: "72px 24px" }}>
+          <div style={{ textAlign: "center", maxWidth: 580, margin: "0 auto" }}>
+            <h2 style={{ fontSize: "clamp(26px, 3.5vw, 42px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", margin: "0 0 16px" }}>
+              Ready to connect your team?
+            </h2>
+            <p style={{ fontSize: 17, color: "rgba(255,255,255,0.78)", margin: "0 0 36px", lineHeight: 1.65 }}>
+              Set up your organization in minutes. No credit card required.
+            </p>
+            <a
+              href={content.primaryCtaHref}
+              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 32px", borderRadius: 14, background: "#fff", color: BLUE, fontSize: 15, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.15)", transition: "transform .15s, box-shadow .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 28px rgba(0,0,0,0.2)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(0,0,0,0.15)"; }}
+            >{content.primaryCtaLabel}</a>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-[#0A70D4]/10 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-2">
-            <div className="rounded-md p-1" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
-              <Shuffle className="h-3 w-3" style={{ color: "#0268CE" }} />
+      {/* ── Footer ── */}
+      <footer style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.08)", padding: "32px 24px" }}>
+        <div className="mx-auto max-w-6xl" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 8, padding: "5px 6px", display: "flex" }}>
+              <Shuffle style={{ width: 13, height: 13, color: BLUE }} />
             </div>
-            <span className="text-xs font-semibold text-gray-400">{content.footerBrandName}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#374151" }}>{content.footerBrandName}</span>
           </div>
-          <p>{content.footerOwnerText}</p>
+          <p style={{ fontSize: 12, color: "#9CA3AF", margin: 0 }}>{content.footerOwnerText}</p>
         </div>
       </footer>
     </div>
