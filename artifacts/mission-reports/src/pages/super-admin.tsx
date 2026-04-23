@@ -187,9 +187,9 @@ const LANDING_SECTIONS: LPSection[] = [
     fields: [
       { key: "headerBrandName", label: "Brand name (shown next to logo)" },
       { key: "headerPrimaryCtaLabel", label: "First nav link label" },
-      { key: "headerPrimaryCtaHref", label: "First nav link URL", url: true },
+      { key: "headerPrimaryCtaHref", label: "First nav link URL (e.g. /signup or https://…)" },
       { key: "headerSecondaryCtaLabel", label: "Second nav link label" },
-      { key: "headerSecondaryCtaHref", label: "Second nav link URL", url: true },
+      { key: "headerSecondaryCtaHref", label: "Second nav link URL (e.g. #signin)" },
     ],
   },
   {
@@ -200,9 +200,9 @@ const LANDING_SECTIONS: LPSection[] = [
       { key: "heroTitle", label: "Main headline", multiline: true },
       { key: "heroDescription", label: "Subheading paragraph", multiline: true },
       { key: "primaryCtaLabel", label: "Primary button label" },
-      { key: "primaryCtaHref", label: "Primary button link", url: true },
+      { key: "primaryCtaHref", label: "Primary button link (e.g. /signup)" },
       { key: "secondaryCtaLabel", label: "Secondary button label" },
-      { key: "secondaryCtaHref", label: "Secondary button link", url: true },
+      { key: "secondaryCtaHref", label: "Secondary button link (e.g. #signin)" },
     ],
   },
   {
@@ -293,7 +293,10 @@ function LogoUploader({
       });
       if (!putRes.ok) throw new Error("Upload failed");
 
-      onChange(`/api/storage/public-objects/${objectPath}`);
+      // objectPath = "/objects/uploads/{uuid}" — strip the /objects prefix
+      // so it can be served via /api/storage/objects/uploads/{uuid}
+      const entityId = objectPath.replace(/^\/objects\//, "");
+      onChange(`/api/storage/objects/${entityId}`);
       toast({ title: "Logo uploaded — click Save to apply" });
     } catch (err: any) {
       toast({ title: err.message ?? "Upload failed", variant: "destructive" });
