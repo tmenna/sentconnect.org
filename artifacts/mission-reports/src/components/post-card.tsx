@@ -317,7 +317,7 @@ export function PostCard({
   flat?: boolean;
 }) {
   const { user } = useAuth();
-  const { orgSlug } = useOrg();
+  const { orgSlug, prefix } = useOrg();
   const [post, setPost] = useState(initialPost);
   const [showComments, setShowComments] = useState(defaultShowComments);
   const [copied, setCopied] = useState(false);
@@ -414,8 +414,7 @@ export function PostCard({
 
   function copyShareLink() {
     const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-    const orgPrefix = orgSlug ? `/${orgSlug}` : "";
-    const url = `${window.location.origin}${base}${orgPrefix}/post/${post.id}`;
+    const url = `${window.location.origin}${base}${prefix(`/post/${post.id}`)}`;
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
