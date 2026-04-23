@@ -6,7 +6,7 @@ import {
   Plus, Lock, Unlock, Ban, UserCheck, KeyRound, ChevronDown,
   ShieldAlert, Shield, Edit3, X, Save, Eye, EyeOff,
   Trash2, AlertTriangle, Settings2, BookOpen, Star, BarChart3,
-  LogOut,
+  LogOut, Upload, ImageOff, ChevronRight,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
@@ -35,6 +35,7 @@ type PlatformStats = {
 };
 
 type LandingPageContent = {
+  logoUrl: string;
   headerBrandName: string;
   headerPrimaryCtaLabel: string;
   headerPrimaryCtaHref: string;
@@ -47,16 +48,21 @@ type LandingPageContent = {
   primaryCtaHref: string;
   secondaryCtaLabel: string;
   secondaryCtaHref: string;
+  previewCardTitle: string;
   previewLabel: string;
   previewTitle1: string;
   previewTitle2: string;
   previewTitle3: string;
+  howItWorksLabel: string;
+  howItWorksHeading: string;
   step1Title: string;
   step1Description: string;
   step2Title: string;
   step2Description: string;
   step3Title: string;
   step3Description: string;
+  ctaBandHeading: string;
+  ctaBandSubtext: string;
   footerBrandName: string;
   footerOwnerText: string;
 };
@@ -163,32 +169,305 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
   );
 }
 
-const LANDING_FIELDS: Array<{ key: keyof LandingPageContent; label: string; multiline?: boolean }> = [
-  { key: "headerBrandName", label: "Header brand name" },
-  { key: "headerPrimaryCtaLabel", label: "Header first link label" },
-  { key: "headerPrimaryCtaHref", label: "Header first link URL" },
-  { key: "headerSecondaryCtaLabel", label: "Header second link label" },
-  { key: "headerSecondaryCtaHref", label: "Header second link URL" },
-  { key: "heroEyebrow", label: "Hero eyebrow" },
-  { key: "heroTitle", label: "Hero title", multiline: true },
-  { key: "heroDescription", label: "Hero description", multiline: true },
-  { key: "primaryCtaLabel", label: "Primary button label" },
-  { key: "primaryCtaHref", label: "Primary button link" },
-  { key: "secondaryCtaLabel", label: "Secondary button label" },
-  { key: "secondaryCtaHref", label: "Secondary button link" },
-  { key: "previewLabel", label: "Preview subtitle" },
-  { key: "previewTitle1", label: "Preview update 1" },
-  { key: "previewTitle2", label: "Preview update 2" },
-  { key: "previewTitle3", label: "Preview update 3" },
-  { key: "step1Title", label: "Step 1 title" },
-  { key: "step1Description", label: "Step 1 description", multiline: true },
-  { key: "step2Title", label: "Step 2 title" },
-  { key: "step2Description", label: "Step 2 description", multiline: true },
-  { key: "step3Title", label: "Step 3 title" },
-  { key: "step3Description", label: "Step 3 description", multiline: true },
-  { key: "footerBrandName", label: "Footer brand name" },
-  { key: "footerOwnerText", label: "Footer owner text", multiline: true },
+type LPSection = {
+  id: string;
+  label: string;
+  fields: Array<{ key: keyof LandingPageContent; label: string; hint?: string; multiline?: boolean; url?: boolean; optional?: boolean }>;
+};
+
+const LANDING_SECTIONS: LPSection[] = [
+  {
+    id: "logo",
+    label: "Logo & Brand Identity",
+    fields: [],
+  },
+  {
+    id: "header",
+    label: "Header",
+    fields: [
+      { key: "headerBrandName", label: "Brand name (shown next to logo)" },
+      { key: "headerPrimaryCtaLabel", label: "First nav link label" },
+      { key: "headerPrimaryCtaHref", label: "First nav link URL", url: true },
+      { key: "headerSecondaryCtaLabel", label: "Second nav link label" },
+      { key: "headerSecondaryCtaHref", label: "Second nav link URL", url: true },
+    ],
+  },
+  {
+    id: "hero",
+    label: "Hero Section",
+    fields: [
+      { key: "heroEyebrow", label: "Eyebrow badge text" },
+      { key: "heroTitle", label: "Main headline", multiline: true },
+      { key: "heroDescription", label: "Subheading paragraph", multiline: true },
+      { key: "primaryCtaLabel", label: "Primary button label" },
+      { key: "primaryCtaHref", label: "Primary button link", url: true },
+      { key: "secondaryCtaLabel", label: "Secondary button label" },
+      { key: "secondaryCtaHref", label: "Secondary button link", url: true },
+    ],
+  },
+  {
+    id: "preview",
+    label: "Preview Card",
+    fields: [
+      { key: "previewCardTitle", label: "Card title" },
+      { key: "previewLabel", label: "Card subtitle" },
+      { key: "previewTitle1", label: "Feed item 1" },
+      { key: "previewTitle2", label: "Feed item 2" },
+      { key: "previewTitle3", label: "Feed item 3" },
+    ],
+  },
+  {
+    id: "howitworks",
+    label: "How It Works Section",
+    fields: [
+      { key: "howItWorksLabel", label: "Section label (small caps above heading)" },
+      { key: "howItWorksHeading", label: "Section heading", multiline: true },
+      { key: "step1Title", label: "Step 1 title" },
+      { key: "step1Description", label: "Step 1 description", multiline: true },
+      { key: "step2Title", label: "Step 2 title" },
+      { key: "step2Description", label: "Step 2 description", multiline: true },
+      { key: "step3Title", label: "Step 3 title" },
+      { key: "step3Description", label: "Step 3 description", multiline: true },
+    ],
+  },
+  {
+    id: "cta",
+    label: "CTA Band",
+    fields: [
+      { key: "ctaBandHeading", label: "Band heading", multiline: true },
+      { key: "ctaBandSubtext", label: "Band subtext" },
+    ],
+  },
+  {
+    id: "footer",
+    label: "Footer",
+    fields: [
+      { key: "footerBrandName", label: "Brand name in footer" },
+      { key: "footerOwnerText", label: "Owner / address text", multiline: true },
+    ],
+  },
 ];
+
+const LOGO_SIZE_PRESETS = [
+  { label: "Small", hint: "32 px — compact nav", value: 32 },
+  { label: "Medium", hint: "44 px — standard", value: 44 },
+  { label: "Large", hint: "60 px — bold header", value: 60 },
+];
+
+function LogoUploader({
+  logoUrl,
+  onChange,
+}: {
+  logoUrl: string;
+  onChange: (url: string) => void;
+}) {
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [previewSize, setPreviewSize] = useState(44);
+
+  async function handleFile(file: File) {
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Please choose an image file (PNG, SVG, JPG, WebP)", variant: "destructive" });
+      return;
+    }
+    if (file.size > 4 * 1024 * 1024) {
+      toast({ title: "Image must be smaller than 4 MB", variant: "destructive" });
+      return;
+    }
+    setUploading(true);
+    try {
+      const urlRes = await fetch("/api/storage/uploads/request-url", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: file.name, size: file.size, contentType: file.type }),
+      });
+      if (!urlRes.ok) throw new Error("Could not get upload URL");
+      const { uploadURL, objectPath } = await urlRes.json();
+
+      const putRes = await fetch(uploadURL, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      if (!putRes.ok) throw new Error("Upload failed");
+
+      onChange(`/api/storage/public-objects/${objectPath}`);
+      toast({ title: "Logo uploaded — click Save to apply" });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Upload failed", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Drop zone / current logo */}
+        <div
+          className="flex-1 rounded-xl border-2 border-dashed border-border/60 flex flex-col items-center justify-center gap-3 p-6 cursor-pointer hover:border-[#0268CE]/50 hover:bg-blue-50/40 transition-colors min-h-[140px]"
+          onClick={() => fileInputRef.current?.click()}
+          onDragOver={e => e.preventDefault()}
+          onDrop={e => {
+            e.preventDefault();
+            const f = e.dataTransfer.files[0];
+            if (f) handleFile(f);
+          }}
+        >
+          {uploading ? (
+            <Loader2 className="h-8 w-8 text-[#0268CE] animate-spin" />
+          ) : logoUrl ? (
+            <img
+              src={logoUrl}
+              alt="Current logo"
+              style={{ height: previewSize, width: "auto", maxWidth: "100%", objectFit: "contain" }}
+            />
+          ) : (
+            <>
+              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
+                <Upload className="h-5 w-5 text-[#0268CE]" />
+              </div>
+              <p className="text-[13px] text-muted-foreground text-center">
+                Drop an image here or <span className="text-[#0268CE] font-semibold">click to browse</span>
+              </p>
+              <p className="text-[11px] text-muted-foreground/70">PNG, SVG, JPG, WebP — max 4 MB</p>
+            </>
+          )}
+          {logoUrl && !uploading && (
+            <p className="text-[11px] text-[#0268CE] font-medium">Click to replace</p>
+          )}
+        </div>
+
+        {/* Size preview panel */}
+        <div className="sm:w-52 rounded-xl border border-border/60 bg-gray-50/60 p-4 space-y-3">
+          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Preview sizes</p>
+          {LOGO_SIZE_PRESETS.map(preset => (
+            <button
+              key={preset.value}
+              type="button"
+              onClick={() => setPreviewSize(preset.value)}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border text-left transition-colors ${
+                previewSize === preset.value
+                  ? "border-[#0268CE] bg-blue-50 text-[#0268CE]"
+                  : "border-border/50 bg-white text-foreground hover:border-[#0268CE]/40"
+              }`}
+            >
+              <div>
+                <p className="text-[13px] font-semibold">{preset.label}</p>
+                <p className="text-[11px] text-muted-foreground">{preset.hint}</p>
+              </div>
+              <ChevronRight className={`h-3.5 w-3.5 ${previewSize === preset.value ? "text-[#0268CE]" : "text-muted-foreground/40"}`} />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Actions row */}
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+          className="flex items-center gap-2 px-3 py-2 text-[13px] font-semibold border border-border/60 rounded-lg bg-white hover:border-[#0268CE]/50 hover:text-[#0268CE] transition-colors disabled:opacity-50"
+        >
+          <Upload className="h-3.5 w-3.5" />
+          {logoUrl ? "Replace logo" : "Upload logo"}
+        </button>
+        {logoUrl && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="flex items-center gap-2 px-3 py-2 text-[13px] font-semibold border border-red-200 text-red-600 rounded-lg bg-white hover:bg-red-50 transition-colors"
+          >
+            <ImageOff className="h-3.5 w-3.5" />
+            Remove logo
+          </button>
+        )}
+      </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={e => {
+          const f = e.target.files?.[0];
+          if (f) handleFile(f);
+          e.target.value = "";
+        }}
+      />
+    </div>
+  );
+}
+
+function SectionAccordion({
+  section,
+  content,
+  onChange,
+  defaultOpen,
+}: {
+  section: LPSection;
+  content: LandingPageContent;
+  onChange: (key: keyof LandingPageContent, val: string) => void;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen ?? false);
+
+  return (
+    <div className="border border-border/60 rounded-xl overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between px-5 py-3.5 bg-white hover:bg-gray-50/60 transition-colors text-left"
+      >
+        <span className="text-[14px] font-bold text-foreground">{section.label}</span>
+        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="border-t border-border/60 bg-white p-5 grid gap-4 md:grid-cols-2">
+          {section.id === "logo" && (
+            <div className="md:col-span-2">
+              <p className="text-[12px] font-semibold text-foreground mb-2">
+                Logo image <span className="font-normal text-muted-foreground">(optional — leave empty to use the default icon)</span>
+              </p>
+              <LogoUploader
+                logoUrl={content.logoUrl}
+                onChange={val => onChange("logoUrl", val)}
+              />
+            </div>
+          )}
+          {section.fields.map(field => (
+            <label key={field.key} className={field.multiline ? "md:col-span-2" : ""}>
+              <span className="block text-[12px] font-semibold text-foreground mb-1">
+                {field.label}
+                {field.optional && <span className="font-normal text-muted-foreground ml-1">(optional)</span>}
+              </span>
+              {field.multiline ? (
+                <textarea
+                  value={content[field.key]}
+                  onChange={e => onChange(field.key, e.target.value)}
+                  rows={3}
+                  required={!field.optional}
+                  className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20 resize-y"
+                />
+              ) : (
+                <input
+                  type={field.url ? "url" : "text"}
+                  value={content[field.key]}
+                  onChange={e => onChange(field.key, e.target.value)}
+                  required={!field.optional}
+                  className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+                />
+              )}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function LandingPageEditor() {
   const { toast } = useToast();
@@ -209,10 +488,12 @@ function LandingPageEditor() {
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [toast]);
+
+  function handleChange(key: keyof LandingPageContent, val: string) {
+    setContent(prev => prev ? { ...prev, [key]: val } : prev);
+  }
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
@@ -252,47 +533,39 @@ function LandingPageEditor() {
   }
 
   return (
-    <form onSubmit={save} className="bg-white rounded-xl border border-border/60 overflow-hidden">
-      <div className="px-5 py-4 border-b border-border/60 flex items-center justify-between">
-        <div>
-          <p className="text-[17px] font-bold text-foreground">Public Landing Page</p>
-          <p className="text-[14px] text-muted-foreground mt-0.5">Edit the content shown on sentconnect.org without changing code.</p>
+    <form onSubmit={save} className="space-y-0">
+      <div className="bg-white rounded-xl border border-border/60 overflow-hidden mb-4">
+        <div className="px-5 py-4 flex items-center justify-between">
+          <div>
+            <p className="text-[17px] font-bold text-foreground">Public Landing Page</p>
+            <p className="text-[13px] text-muted-foreground mt-0.5">Edit every word, button, and image shown on sentconnect.org.</p>
+          </div>
+          <a href="/" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#0268CE] hover:underline">
+            Preview ↗
+          </a>
         </div>
-        <a href="/" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#0268CE] hover:underline">
-          Preview
-        </a>
       </div>
-      <div className="p-5 grid gap-4 md:grid-cols-2">
-        {LANDING_FIELDS.map(field => (
-          <label key={field.key} className={field.multiline ? "md:col-span-2" : ""}>
-            <span className="block text-[12px] font-semibold text-foreground mb-1">{field.label}</span>
-            {field.multiline ? (
-              <textarea
-                value={content[field.key]}
-                onChange={e => setContent(prev => prev ? { ...prev, [field.key]: e.target.value } : prev)}
-                rows={3}
-                required
-                className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20 resize-y"
-              />
-            ) : (
-              <input
-                value={content[field.key]}
-                onChange={e => setContent(prev => prev ? { ...prev, [field.key]: e.target.value } : prev)}
-                required
-                className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
-              />
-            )}
-          </label>
+
+      <div className="space-y-3">
+        {LANDING_SECTIONS.map((section, i) => (
+          <SectionAccordion
+            key={section.id}
+            section={section}
+            content={content}
+            onChange={handleChange}
+            defaultOpen={i === 0}
+          />
         ))}
       </div>
-      <div className="px-5 py-4 bg-muted/30 border-t border-border/60 flex justify-end">
+
+      <div className="mt-4 flex justify-end">
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-5 py-2.5 text-[14px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          Save Landing Page
+          Save Changes
         </button>
       </div>
     </form>

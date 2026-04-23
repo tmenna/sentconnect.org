@@ -28,6 +28,7 @@ import PublicPost from "./pages/public-post";
 const queryClient = new QueryClient();
 
 type LandingPageContent = {
+  logoUrl: string;
   headerBrandName: string;
   headerPrimaryCtaLabel: string;
   headerPrimaryCtaHref: string;
@@ -40,21 +41,27 @@ type LandingPageContent = {
   primaryCtaHref: string;
   secondaryCtaLabel: string;
   secondaryCtaHref: string;
+  previewCardTitle: string;
   previewLabel: string;
   previewTitle1: string;
   previewTitle2: string;
   previewTitle3: string;
+  howItWorksLabel: string;
+  howItWorksHeading: string;
   step1Title: string;
   step1Description: string;
   step2Title: string;
   step2Description: string;
   step3Title: string;
   step3Description: string;
+  ctaBandHeading: string;
+  ctaBandSubtext: string;
   footerBrandName: string;
   footerOwnerText: string;
 };
 
 const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
+  logoUrl: "",
   headerBrandName: "SentConnect",
   headerPrimaryCtaLabel: "Sign up",
   headerPrimaryCtaHref: "/signup",
@@ -67,16 +74,21 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   primaryCtaHref: "/signup",
   secondaryCtaLabel: "Learn how sign-in works",
   secondaryCtaHref: "#signin",
+  previewCardTitle: "Mission Moments",
   previewLabel: "Latest field updates",
   previewTitle1: "Prayer gathering in Kigali",
   previewTitle2: "New family visits this week",
   previewTitle3: "Youth outreach photos shared",
+  howItWorksLabel: "How it works",
+  howItWorksHeading: "Simple for churches. Powerful for teams.",
   step1Title: "1. Sign up",
   step1Description: "Create your organization and choose a short subdomain, like rvc.",
   step2Title: "2. Use your portal",
   step2Description: "Your team signs in at your dedicated address, such as rvc.sentconnect.org/login.",
   step3Title: "3. Share updates",
   step3Description: "Invite field users, collect reports, and keep your church connected to ministry work.",
+  ctaBandHeading: "Ready to connect your team?",
+  ctaBandSubtext: "Set up your organization in minutes.",
   footerBrandName: "SentConnect",
   footerOwnerText: "Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA",
 };
@@ -119,10 +131,16 @@ function LandingPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: "rgba(255,255,255,0.88)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(2,104,206,0.08)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 64 }}>
           <a href="/" className="flex items-center gap-3" style={{ textDecoration: "none" }}>
-            <div style={{ width: 36, height: 36, borderRadius: 11, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 3px 10px rgba(2,104,206,0.32)` }}>
-              <Shuffle style={{ width: 18, height: 18, color: "#fff" }} />
-            </div>
-            <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: "-0.04em", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{content.headerBrandName}</span>
+            {content.logoUrl ? (
+              <img src={content.logoUrl} alt={content.headerBrandName} style={{ height: 36, width: "auto", objectFit: "contain" }} />
+            ) : (
+              <>
+                <div style={{ width: 36, height: 36, borderRadius: 11, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 3px 10px rgba(2,104,206,0.32)` }}>
+                  <Shuffle style={{ width: 18, height: 18, color: "#fff" }} />
+                </div>
+                <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: "-0.04em", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{content.headerBrandName}</span>
+              </>
+            )}
           </a>
           <nav className="flex items-center gap-2">
             <a
@@ -186,7 +204,7 @@ function LandingPage() {
                   <Shuffle style={{ width: 16, height: 16, color: "#fff" }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: 14, fontWeight: 800, color: "#0A0F1E", margin: 0, letterSpacing: "-0.01em" }}>Mission Moments</p>
+                  <p style={{ fontSize: 14, fontWeight: 800, color: "#0A0F1E", margin: 0, letterSpacing: "-0.01em" }}>{content.previewCardTitle}</p>
                   <p style={{ fontSize: 11, color: "#9CA3AF", margin: "2px 0 0" }}>{content.previewLabel}</p>
                 </div>
               </div>
@@ -218,8 +236,8 @@ function LandingPage() {
         <section id="signin" style={{ background: "#fff", padding: "88px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
             <div style={{ textAlign: "center", marginBottom: 56 }}>
-              <p style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>How it works</p>
-              <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 900, letterSpacing: "-0.03em", color: "#0A0F1E", margin: 0 }}>Simple for churches. Powerful for teams.</h2>
+              <p style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>{content.howItWorksLabel}</p>
+              <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 900, letterSpacing: "-0.03em", color: "#0A0F1E", margin: 0 }}>{content.howItWorksHeading}</h2>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, position: "relative" }}>
@@ -248,10 +266,10 @@ function LandingPage() {
         <section style={{ background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, padding: "72px 24px" }}>
           <div style={{ textAlign: "center", maxWidth: 580, margin: "0 auto" }}>
             <h2 style={{ fontSize: "clamp(26px, 3.5vw, 42px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", margin: "0 0 16px" }}>
-              Ready to connect your team?
+              {content.ctaBandHeading}
             </h2>
             <p style={{ fontSize: 17, color: "rgba(255,255,255,0.78)", margin: "0 0 36px", lineHeight: 1.65 }}>
-              Set up your organization in minutes.
+              {content.ctaBandSubtext}
             </p>
             <a
               href={content.primaryCtaHref}
@@ -267,10 +285,16 @@ function LandingPage() {
       <footer style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.08)", padding: "32px 24px" }}>
         <div className="mx-auto max-w-6xl" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(2,104,206,0.28)" }}>
-              <Shuffle style={{ width: 13, height: 13, color: "#fff" }} />
-            </div>
-            <span style={{ fontSize: 15, fontWeight: 900, letterSpacing: "-0.03em", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{content.footerBrandName}</span>
+            {content.logoUrl ? (
+              <img src={content.logoUrl} alt={content.footerBrandName} style={{ height: 28, width: "auto", objectFit: "contain" }} />
+            ) : (
+              <>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(2,104,206,0.28)" }}>
+                  <Shuffle style={{ width: 13, height: 13, color: "#fff" }} />
+                </div>
+                <span style={{ fontSize: 15, fontWeight: 900, letterSpacing: "-0.03em", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{content.footerBrandName}</span>
+              </>
+            )}
           </div>
           <p style={{ fontSize: 12, color: "#9CA3AF", margin: 0 }}>{content.footerOwnerText}</p>
         </div>
