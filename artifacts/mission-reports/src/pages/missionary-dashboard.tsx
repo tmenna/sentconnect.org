@@ -5,7 +5,7 @@ import { Redirect } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
-import { FileText, BookOpen, Send, Star, Plus, PenSquare, Users } from "lucide-react";
+import { FileText, BookOpen, Send, Star, PenSquare } from "lucide-react";
 
 type FeedTab = "all" | "moments";
 
@@ -64,17 +64,8 @@ export default function MissionaryDashboard() {
   const allPosts: PostData[] = posts ?? ((data ?? []) as PostData[]);
   const missionMoments = allPosts.filter(p => p.isMissionMoment);
   const myPosts = activeTab === "moments" ? missionMoments : allPosts;
-  const totalPeopleReached = allPosts.reduce((sum, p) => sum + (p.peopleReached ?? 0), 0);
-
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : (data as PostData[] ?? []).filter(p => p.id !== id));
-  }
-
-  function handleNewPost() {
-    composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    setTimeout(() => {
-      composerRef.current?.querySelector("textarea")?.focus();
-    }, 350);
   }
 
   const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
@@ -85,67 +76,34 @@ export default function MissionaryDashboard() {
       {/* ── Full-bleed "My Updates" banner ── */}
       <div
         className="relative -mx-4 sm:-mx-8 -mt-8 overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)" }}
+        style={{
+          background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)",
+          borderRadius: "16px 16px 0 0",
+        }}
       >
         <WorldMapOverlay />
 
         <div className="relative z-10 px-6 sm:px-8 pt-7 pb-6">
-          {/* Top row: title + New Post button */}
-          <div className="flex items-start justify-between gap-4 mb-1">
-            <div>
-              <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 28, color: "#fff" }}>
-                My Updates
-              </h1>
-              <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>
-                Stay connected. Share what God is doing.
-              </p>
-            </div>
+          <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 28, color: "#fff" }}>
+            My Updates
+          </h1>
+          <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>
+            Stay connected. Share what God is doing.
+          </p>
 
-            {/* New Post button */}
-            <button
-              onClick={handleNewPost}
-              className="flex-shrink-0 flex items-center gap-2 font-semibold rounded-xl px-4 py-2.5 transition-all"
-              style={{
-                background: "#fff",
-                color: "#0268CE",
-                fontSize: 14,
-                boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#EFF6FF"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#fff"; }}
-            >
-              <Plus className="h-4 w-4" />
-              New Post
-            </button>
-          </div>
-
-          {/* Stat boxes */}
+          {/* Stat box */}
           <div className="flex gap-3 mt-5">
             <div
               className="flex items-center gap-3 rounded-xl px-4 py-3"
               style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}
             >
               <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: "rgba(255,255,255,0.18)" }}>
-                <PenSquare className="h-4 w-4 text-white" />
+                style={{ background: "rgba(57,188,122,0.25)" }}>
+                <PenSquare className="h-4 w-4" style={{ color: "#39BC7A" }} />
               </div>
               <div>
                 <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{allPosts.length}</p>
                 <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Posts Shared</p>
-              </div>
-            </div>
-
-            <div
-              className="flex items-center gap-3 rounded-xl px-4 py-3"
-              style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}
-            >
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: "rgba(255,255,255,0.18)" }}>
-                <Users className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{totalPeopleReached}</p>
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>People Reached</p>
               </div>
             </div>
           </div>
