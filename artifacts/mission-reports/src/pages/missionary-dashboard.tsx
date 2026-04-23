@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
 import { Redirect } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
-import { MapPin, Building2, FileText, BookOpen, Send, Star } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FileText, BookOpen, Send, Star, Plus, PenSquare, Users } from "lucide-react";
 
 type FeedTab = "all" | "moments";
 
@@ -46,6 +45,8 @@ export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [posts, setPosts] = useState<PostData[] | null>(null);
   const [activeTab, setActiveTab] = useState<FeedTab>("all");
+  const composerRef = useRef<HTMLDivElement>(null);
+
   const { data, isLoading: postsLoading } = useGetUserReports(
     user?.id ?? 0,
     {
@@ -63,9 +64,17 @@ export default function MissionaryDashboard() {
   const allPosts: PostData[] = posts ?? ((data ?? []) as PostData[]);
   const missionMoments = allPosts.filter(p => p.isMissionMoment);
   const myPosts = activeTab === "moments" ? missionMoments : allPosts;
+  const totalPeopleReached = allPosts.reduce((sum, p) => sum + (p.peopleReached ?? 0), 0);
 
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : (data as PostData[] ?? []).filter(p => p.id !== id));
+  }
+
+  function handleNewPost() {
+    composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => {
+      composerRef.current?.querySelector("textarea")?.focus();
+    }, 350);
   }
 
   const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
@@ -74,56 +83,81 @@ export default function MissionaryDashboard() {
     <div className="space-y-6">
 
       {/* ── Full-bleed "My Updates" banner ── */}
-      <div className="relative -mx-4 sm:-mx-8 -mt-8 overflow-hidden" style={{ background: "#0268CE" }}>
+      <div
+        className="relative -mx-4 sm:-mx-8 -mt-8 overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)" }}
+      >
         <WorldMapOverlay />
 
-        <div className="relative z-10 px-6 sm:px-8 py-6 flex items-center justify-between gap-4">
-          {/* Left: title + meta */}
-          <div>
-            <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#fff" }}>
-              My Updates
-            </h1>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
-              <span style={{ fontSize: 14, color: "rgba(255,255,255,0.85)" }}>
-                {allPosts.length > 0
-                  ? `${allPosts.length} post${allPosts.length !== 1 ? "s" : ""} shared`
-                  : "Share your first update below"}
-              </span>
-              {user?.location && (
-                <span className="flex items-center gap-1" style={{ fontSize: 13, color: "rgba(255,255,255,0.75)" }}>
-                  <MapPin className="h-3 w-3" />{user.location}
-                </span>
-              )}
-              {user?.organization && (
-                <span className="flex items-center gap-1" style={{ fontSize: 13, color: "rgba(255,255,255,0.75)" }}>
-                  <Building2 className="h-3 w-3" />{user.organization}
-                </span>
-              )}
+        <div className="relative z-10 px-6 sm:px-8 pt-7 pb-6">
+          {/* Top row: title + New Post button */}
+          <div className="flex items-start justify-between gap-4 mb-1">
+            <div>
+              <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 28, color: "#fff" }}>
+                My Updates
+              </h1>
+              <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>
+                Stay connected. Share what God is doing.
+              </p>
             </div>
+
+            {/* New Post button */}
+            <button
+              onClick={handleNewPost}
+              className="flex-shrink-0 flex items-center gap-2 font-semibold rounded-xl px-4 py-2.5 transition-all"
+              style={{
+                background: "#fff",
+                color: "#0268CE",
+                fontSize: 14,
+                boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#EFF6FF"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#fff"; }}
+            >
+              <Plus className="h-4 w-4" />
+              New Post
+            </button>
           </div>
 
-          {/* Right: post count + avatar */}
-          <div className="flex items-center gap-4 flex-shrink-0">
-            {allPosts.length > 0 && (
-              <div className="hidden sm:block text-right">
-                <p className="font-bold leading-none" style={{ fontSize: 28, color: "#fff" }}>{allPosts.length}</p>
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", marginTop: 2 }}>posts</p>
+          {/* Stat boxes */}
+          <div className="flex gap-3 mt-5">
+            <div
+              className="flex items-center gap-3 rounded-xl px-4 py-3"
+              style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}
+            >
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: "rgba(255,255,255,0.18)" }}>
+                <PenSquare className="h-4 w-4 text-white" />
               </div>
-            )}
-            <Avatar className="h-11 w-11 flex-shrink-0" style={{ border: "2.5px solid rgba(255,255,255,0.5)" }}>
-              <AvatarImage src={user?.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-bold text-[15px]" style={{ background: "rgba(255,255,255,0.18)", color: "#fff" }}>
-                {user?.name?.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+              <div>
+                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{allPosts.length}</p>
+                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Posts Shared</p>
+              </div>
+            </div>
+
+            <div
+              className="flex items-center gap-3 rounded-xl px-4 py-3"
+              style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}
+            >
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: "rgba(255,255,255,0.18)" }}>
+                <Users className="h-4 w-4 text-white" />
+              </div>
+              <div>
+                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{totalPeopleReached}</p>
+                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>People Reached</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* ── Composer ── */}
-      <PostComposer
-        onPost={(newPost) => setPosts(prev => [newPost, ...(prev ?? (data as PostData[] ?? []))])}
-      />
+      <div ref={composerRef}>
+        <PostComposer
+          onPost={(newPost) => setPosts(prev => [newPost, ...(prev ?? (data as PostData[] ?? []))])}
+        />
+      </div>
 
       {/* ── Filter tabs ── */}
       <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
