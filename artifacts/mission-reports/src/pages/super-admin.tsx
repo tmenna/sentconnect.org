@@ -274,30 +274,22 @@ function LogoUploader({
     }
     setUploading(true);
     try {
-      // Step 1: request presigned POST credentials from our API
-      const urlRes = await fetch("/api/storage/uploads/request-url", {
+      // Send file to our API which streams it directly to Linode
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/storage/uploads", {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: file.name, size: file.size, contentType: file.type }),
+        body: form,
       });
-      if (!urlRes.ok) {
-        const e = await urlRes.json().catch(() => ({}));
-        throw new Error(e.error ?? "Could not get upload URL");
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({}));
+        throw new Error(e.error ?? "Upload failed");
       }
-      const { uploadURL, fields, objectPath } = await urlRes.json();
-
-      // Step 2: upload directly to Linode using presigned POST — bytes bypass our server
-      const form = new FormData();
-      for (const [key, value] of Object.entries(fields as Record<string, string>)) {
-        form.append(key, value);
-      }
-      form.append("file", file);
-      const putRes = await fetch(uploadURL, { method: "POST", body: form });
-      if (!putRes.ok) throw new Error("Upload failed");
+      const { objectPath } = await res.json();
 
       // objectPath = "/objects/uploads/<uuid>.ext"
-      // Served via /api/storage/objects/uploads/<uuid>.ext (presigned redirect)
+      // Served via /api/storage/objects/... which redirects to a presigned Linode URL
       const entityId = objectPath.replace(/^\/objects\//, "");
       onChange(`/api/storage/objects/${entityId}`);
       toast({ title: "Logo uploaded — click Save to apply" });
