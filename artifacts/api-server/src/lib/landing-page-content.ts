@@ -98,8 +98,8 @@ async function ensureLandingPageTable(): Promise<void> {
         hero_description text NOT NULL,
         primary_cta_label text NOT NULL,
         primary_cta_href text NOT NULL,
-        secondary_cta_label text NOT NULL,
-        secondary_cta_href text NOT NULL,
+        secondary_cta_label text NOT NULL DEFAULT '',
+        secondary_cta_href text NOT NULL DEFAULT '',
         preview_card_title text NOT NULL DEFAULT 'Mission Moments',
         preview_label text NOT NULL,
         preview_title_1 text NOT NULL,
@@ -134,6 +134,10 @@ async function ensureLandingPageTable(): Promise<void> {
         ADD COLUMN IF NOT EXISTS how_it_works_heading text NOT NULL DEFAULT 'Simple for churches. Powerful for teams.',
         ADD COLUMN IF NOT EXISTS cta_band_heading text NOT NULL DEFAULT 'Ready to connect your team?',
         ADD COLUMN IF NOT EXISTS cta_band_subtext text NOT NULL DEFAULT 'Set up your organization in minutes.'
+    `)).then(() => pool.query(`
+      ALTER TABLE landing_page_content
+        ALTER COLUMN secondary_cta_label SET DEFAULT '',
+        ALTER COLUMN secondary_cta_href SET DEFAULT ''
     `)).then(() => undefined);
   }
   return ensurePromise;
