@@ -5,24 +5,41 @@ import { useAuth } from "@/components/auth-provider";
 import { cn } from "@/lib/utils";
 import type { PostData } from "./post-card";
 
-async function requestUploadUrl(file: File): Promise<{ uploadURL: string; objectPath: string }> {
+interface UploadUrlResponse {
+  uploadURL: string;
+  fields: Record<string, string>;
+  objectKey: string;
+  objectPath: string;
+}
+
+async function requestUploadUrl(file: File): Promise<UploadUrlResponse> {
   const res = await fetch("/api/storage/uploads/request-url", {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: file.name, size: file.size, contentType: file.type }),
   });
-  if (!res.ok) throw new Error("Failed to get upload URL");
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error ?? "Failed to get upload URL");
+  }
   return res.json();
 }
 
-async function uploadFileToGcs(file: File, uploadURL: string) {
-  const res = await fetch(uploadURL, {
-    method: "PUT",
-    headers: { "Content-Type": file.type },
-    body: file,
-  });
-  if (!res.ok) throw new Error("Upload failed");
+/**
+ * Upload a file directly to Linode Object Storage using a presigned POST.
+ * Bytes never pass through our API server.
+ */
+async function uploadFileToStorage(file: File, uploadURL: string, fields: Record<string, string>) {
+  const form = new FormData();
+  // Presigned POST requires all policy fields to be included before the file
+  for (const [key, value] of Object.entries(fields)) {
+    form.append(key, value);
+  }
+  form.append("file", file);
+
+  const res = await fetch(uploadURL, { method: "POST", body: form });
+  if (!res.ok) throw new Error("Upload to storage failed");
 }
 
 type LocalFile = { file: File; previewUrl: string };
@@ -99,8 +116,8 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
       const uploadedPaths: string[] = [];
       for (let i = 0; i < files.length; i++) {
         setUploadProgress(`Uploading ${i + 1}/${files.length}…`);
-        const { uploadURL, objectPath } = await requestUploadUrl(files[i].file);
-        await uploadFileToGcs(files[i].file, uploadURL);
+        const { uploadURL, fields, objectPath } = await requestUploadUrl(files[i].file);
+        await uploadFileToStorage(files[i].file, uploadURL, fields);
         uploadedPaths.push(objectPath);
       }
 
