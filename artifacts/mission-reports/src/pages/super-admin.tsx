@@ -261,6 +261,7 @@ function LogoUploader({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [previewSize, setPreviewSize] = useState(44);
+  const [urlInput, setUrlInput] = useState("");
 
   async function handleFile(file: File) {
     if (!file.type.startsWith("image/")) {
@@ -295,7 +296,11 @@ function LogoUploader({
       onChange(`/api/storage/objects/${entityId}`);
       toast({ title: "Logo uploaded — click Save to apply" });
     } catch (err: any) {
-      toast({ title: err.message ?? "Upload failed", variant: "destructive" });
+      toast({
+        title: err.message ?? "Upload failed",
+        description: "Try pasting a logo URL directly in the field below.",
+        variant: "destructive",
+      });
     } finally {
       setUploading(false);
     }
@@ -364,7 +369,7 @@ function LogoUploader({
       </div>
 
       {/* Actions row */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
@@ -384,6 +389,34 @@ function LogoUploader({
             Remove logo
           </button>
         )}
+      </div>
+
+      {/* URL paste fallback */}
+      <div>
+        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Or paste a logo URL</p>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={urlInput}
+            onChange={e => setUrlInput(e.target.value)}
+            placeholder="https://example.com/logo.png"
+            className="flex-1 h-9 px-3 text-[13px] border border-border/60 rounded-lg outline-none focus:border-[#0268CE] focus:ring-1 focus:ring-[#0268CE]/20 bg-white"
+          />
+          <button
+            type="button"
+            disabled={!urlInput.trim()}
+            onClick={() => {
+              const u = urlInput.trim();
+              if (!u) return;
+              onChange(u);
+              setUrlInput("");
+              toast({ title: "Logo URL set — click Save to apply" });
+            }}
+            className="px-3 py-2 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-40"
+          >
+            Use URL
+          </button>
+        </div>
       </div>
 
       <input
