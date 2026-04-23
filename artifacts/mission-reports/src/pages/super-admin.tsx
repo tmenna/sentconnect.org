@@ -186,10 +186,8 @@ const LANDING_SECTIONS: LPSection[] = [
     label: "Header",
     fields: [
       { key: "headerBrandName", label: "Brand name (shown next to logo)" },
-      { key: "headerPrimaryCtaLabel", label: "First nav link label" },
-      { key: "headerPrimaryCtaHref", label: "First nav link URL (e.g. /signup or https://…)" },
-      { key: "headerSecondaryCtaLabel", label: "Second nav link label" },
-      { key: "headerSecondaryCtaHref", label: "Second nav link URL (e.g. #signin)" },
+      { key: "headerPrimaryCtaLabel", label: "Nav link label" },
+      { key: "headerPrimaryCtaHref", label: "Nav link URL (e.g. /signup or https://…)" },
     ],
   },
   {
@@ -199,10 +197,8 @@ const LANDING_SECTIONS: LPSection[] = [
       { key: "heroEyebrow", label: "Eyebrow badge text" },
       { key: "heroTitle", label: "Main headline", multiline: true },
       { key: "heroDescription", label: "Subheading paragraph", multiline: true },
-      { key: "primaryCtaLabel", label: "Primary button label" },
-      { key: "primaryCtaHref", label: "Primary button link (e.g. /signup)" },
-      { key: "secondaryCtaLabel", label: "Secondary button label" },
-      { key: "secondaryCtaHref", label: "Secondary button link (e.g. #signin)" },
+      { key: "primaryCtaLabel", label: "CTA button label" },
+      { key: "primaryCtaHref", label: "CTA button link (e.g. /signup)" },
     ],
   },
   {

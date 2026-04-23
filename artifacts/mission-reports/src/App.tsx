@@ -32,15 +32,11 @@ type LandingPageContent = {
   headerBrandName: string;
   headerPrimaryCtaLabel: string;
   headerPrimaryCtaHref: string;
-  headerSecondaryCtaLabel: string;
-  headerSecondaryCtaHref: string;
   heroEyebrow: string;
   heroTitle: string;
   heroDescription: string;
   primaryCtaLabel: string;
   primaryCtaHref: string;
-  secondaryCtaLabel: string;
-  secondaryCtaHref: string;
   previewCardTitle: string;
   previewLabel: string;
   previewTitle1: string;
@@ -65,15 +61,11 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   headerBrandName: "SentConnect",
   headerPrimaryCtaLabel: "Sign up",
   headerPrimaryCtaHref: "/signup",
-  headerSecondaryCtaLabel: "How to sign in",
-  headerSecondaryCtaHref: "#signin",
   heroEyebrow: "Private missionary updates",
   heroTitle: "Stay connected with your field teams from one private mission feed.",
   heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
   primaryCtaLabel: "Create your organization",
   primaryCtaHref: "/signup",
-  secondaryCtaLabel: "Learn how sign-in works",
-  secondaryCtaHref: "#signin",
   previewCardTitle: "Mission Moments",
   previewLabel: "Latest field updates",
   previewTitle1: "Prayer gathering in Kigali",
@@ -198,17 +190,11 @@ function LandingPage() {
           <nav className="flex items-center gap-2">
             <a
               href={content.headerPrimaryCtaHref}
-              style={{ fontSize: 14, fontWeight: 600, color: "#374151", padding: "9px 18px", borderRadius: 999, border: "1px solid #E5E7EB", textDecoration: "none", transition: "border-color .15s, color .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = BLUE; (e.currentTarget as HTMLElement).style.color = BLUE; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLElement).style.color = "#374151"; }}
-            >{content.headerPrimaryCtaLabel}</a>
-            <a
-              href={content.headerSecondaryCtaHref}
               className="lp-nav-secondary"
               style={{ fontSize: 14, fontWeight: 600, color: "#fff", padding: "9px 18px", borderRadius: 999, background: BLUE, textDecoration: "none", transition: "background .15s" }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = BLUE_DARK; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
-            >{content.headerSecondaryCtaLabel}</a>
+            >{content.headerPrimaryCtaLabel}</a>
           </nav>
         </div>
       </header>
@@ -241,12 +227,6 @@ function LandingPage() {
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 24px rgba(2,104,206,0.36)"; }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 18px rgba(2,104,206,0.28)"; }}
                 >{content.primaryCtaLabel}</a>
-                <a
-                  href={content.secondaryCtaHref}
-                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 50, padding: "0 28px", borderRadius: 14, background: "#fff", color: "#374151", fontSize: 15, fontWeight: 700, textDecoration: "none", border: "1.5px solid #E5E7EB", transition: "border-color .15s, color .15s, transform .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = BLUE; el.style.color = BLUE; el.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#E5E7EB"; el.style.color = "#374151"; el.style.transform = "translateY(0)"; }}
-                >{content.secondaryCtaLabel}</a>
               </div>
             </div>
 
@@ -287,7 +267,7 @@ function LandingPage() {
         </section>
 
         {/* ── How it works ── */}
-        <section id="signin" className="lp-howitworks-section" style={{ background: "#fff", padding: "88px 0" }}>
+        <section className="lp-howitworks-section" style={{ background: "#fff", padding: "88px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <p style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>{content.howItWorksLabel}</p>
