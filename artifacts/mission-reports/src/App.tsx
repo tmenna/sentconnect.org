@@ -125,6 +125,59 @@ function LandingPage() {
         .lp-delay-3 { animation-delay: 0.24s; }
         .lp-delay-4 { animation-delay: 0.32s; }
         .lp-delay-5 { animation-delay: 0.40s; }
+
+        /* ── Responsive layout ── */
+        .lp-hero-section { padding: 96px 0 80px; }
+        .lp-hero-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 56px;
+          align-items: center;
+          position: relative;
+        }
+        .lp-steps-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          position: relative;
+        }
+        .lp-connector { display: block; }
+        .lp-nav-secondary { display: inline-flex; }
+        .lp-cta-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+        .lp-footer-inner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        @media (max-width: 900px) {
+          .lp-steps-grid {
+            grid-template-columns: 1fr;
+          }
+          .lp-connector { display: none; }
+        }
+
+        @media (max-width: 767px) {
+          .lp-hero-section { padding: 56px 0 40px; }
+          .lp-hero-grid {
+            grid-template-columns: 1fr;
+            gap: 36px;
+          }
+          .lp-nav-secondary { display: none; }
+          .lp-cta-btns { flex-direction: column; }
+          .lp-cta-btns a { width: 100%; justify-content: center; box-sizing: border-box; }
+          .lp-footer-inner { flex-direction: column; align-items: flex-start; }
+          .lp-howitworks-section { padding: 56px 0 !important; }
+          .lp-cta-band { padding: 52px 20px !important; }
+        }
+
+        @media (max-width: 480px) {
+          .lp-hero-section { padding: 44px 0 32px; }
+          .lp-howitworks-section { padding: 44px 0 !important; }
+          .lp-cta-band { padding: 44px 20px !important; }
+        }
       `}</style>
 
       {/* ── Header ── */}
@@ -151,6 +204,7 @@ function LandingPage() {
             >{content.headerPrimaryCtaLabel}</a>
             <a
               href={content.headerSecondaryCtaHref}
+              className="lp-nav-secondary"
               style={{ fontSize: 14, fontWeight: 600, color: "#fff", padding: "9px 18px", borderRadius: 999, background: BLUE, textDecoration: "none", transition: "background .15s" }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = BLUE_DARK; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
@@ -161,11 +215,11 @@ function LandingPage() {
 
       <main>
         {/* ── Hero ── */}
-        <section style={{ background: "#ffffff", padding: "96px 0 80px", position: "relative", overflow: "hidden" }}>
+        <section className="lp-hero-section" style={{ background: "#ffffff", position: "relative", overflow: "hidden" }}>
           {/* decorative orbs */}
           <div style={{ position: "absolute", top: -120, right: -80, width: 480, height: 480, borderRadius: "50%", background: "radial-gradient(circle, rgba(2,104,206,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", bottom: -60, left: -100, width: 360, height: 360, borderRadius: "50%", background: "radial-gradient(circle, rgba(10,138,235,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
-          <div className="mx-auto max-w-6xl px-6" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center", position: "relative" }}>
+          <div className="lp-hero-grid mx-auto max-w-6xl px-6">
             <div>
               <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 24, background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "5px 14px" }}>
                 <div style={{ width: 7, height: 7, borderRadius: "50%", background: BLUE }} />
@@ -180,7 +234,7 @@ function LandingPage() {
                 {content.heroDescription}
               </p>
 
-              <div className="lp-animate lp-delay-4" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <div className="lp-animate lp-delay-4 lp-cta-btns">
                 <a
                   href={content.primaryCtaHref}
                   style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 50, padding: "0 28px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 18px rgba(2,104,206,0.28)", transition: "background .15s, transform .15s, box-shadow .15s" }}
@@ -233,16 +287,16 @@ function LandingPage() {
         </section>
 
         {/* ── How it works ── */}
-        <section id="signin" style={{ background: "#fff", padding: "88px 0" }}>
+        <section id="signin" className="lp-howitworks-section" style={{ background: "#fff", padding: "88px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <p style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>{content.howItWorksLabel}</p>
               <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 900, letterSpacing: "-0.03em", color: "#0A0F1E", margin: 0 }}>{content.howItWorksHeading}</h2>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, position: "relative" }}>
+            <div className="lp-steps-grid">
               {/* connector line */}
-              <div style={{ position: "absolute", top: 34, left: "calc(16.66% + 14px)", right: "calc(16.66% + 14px)", height: 1, background: `linear-gradient(90deg, transparent, rgba(2,104,206,0.2), transparent)`, pointerEvents: "none" }} />
+              <div className="lp-connector" style={{ position: "absolute", top: 34, left: "calc(16.66% + 14px)", right: "calc(16.66% + 14px)", height: 1, background: `linear-gradient(90deg, transparent, rgba(2,104,206,0.2), transparent)`, pointerEvents: "none" }} />
 
               {[
                 { title: content.step1Title, desc: content.step1Description, n: "01" },
@@ -263,7 +317,7 @@ function LandingPage() {
         </section>
 
         {/* ── CTA band ── */}
-        <section style={{ background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, padding: "72px 24px" }}>
+        <section className="lp-cta-band" style={{ background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, padding: "72px 24px" }}>
           <div style={{ textAlign: "center", maxWidth: 580, margin: "0 auto" }}>
             <h2 style={{ fontSize: "clamp(26px, 3.5vw, 42px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", margin: "0 0 16px" }}>
               {content.ctaBandHeading}
@@ -283,7 +337,7 @@ function LandingPage() {
 
       {/* ── Footer ── */}
       <footer style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.08)", padding: "32px 24px" }}>
-        <div className="mx-auto max-w-6xl" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+        <div className="lp-footer-inner mx-auto max-w-6xl">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             {content.logoUrl ? (
               <img src={content.logoUrl} alt={content.footerBrandName} style={{ height: 28, width: "auto", objectFit: "contain" }} />
