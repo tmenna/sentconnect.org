@@ -1,0 +1,125 @@
+I want to fully remove Linode Object Storage from this application and replace it with Cloudflare R2 for all media storage (images, videos, files).
+
+Please refactor the storage layer cleanly and safely using best practices.
+
+---
+
+### 1. Remove Linode Integration Completely
+
+* Remove any Linode-specific:
+
+  * endpoints (linodeobjects.com)
+  * environment variables (LINODE_*)
+  * SDK configurations tied to Linode
+* Ensure no leftover references remain in services, routes, or config files
+
+---
+
+### 2. Add Cloudflare R2 Integration (S3-compatible)
+
+Use AWS SDK v3 and configure it for R2:
+
+* Use environment variables:
+
+  * R2_ACCESS_KEY_ID
+  * R2_SECRET_ACCESS_KEY
+  * R2_BUCKET
+  * R2_ENDPOINT (https://<ACCOUNT_ID>.r2.cloudflarestorage.com)
+
+* Example configuration:
+
+  * region: "auto"
+  * endpoint: process.env.R2_ENDPOINT
+
+---
+
+### 3. Implement Storage Service Layer
+
+Create a clean, modular storage service (e.g. /services/storage.ts or .js) that:
+
+* Handles uploads to R2
+* Generates object keys using structured paths:
+  organizations/{orgId}/posts/{postId}/{filename}
+* Supports:
+
+  * upload from backend (current flow)
+  * future support for pre-signed URLs
+
+---
+
+### 4. Keep Current Upload Flow (for now)
+
+Maintain working flow:
+
+Browser → Backend → R2
+
+* Accept multipart uploads at:
+  POST /api/storage/uploads
+* Stream file directly to R2 using SDK
+* Return:
+
+  * objectKey
+  * file URL or path
+
+---
+
+### 5. Add Optional Pre-Signed URL Support (prepare for upgrade)
+
+Add endpoint:
+POST /api/storage/upload-url
+
+* Generates pre-signed PUT URL using R2
+* Returns:
+
+  * upload URL
+  * object key
+
+Do not remove current upload flow yet—support both.
+
+---
+
+### 6. File Access (Secure Serving)
+
+* Keep bucket private
+* Continue using signed URLs for access:
+  GET /api/storage/file-url
+* Or keep existing 302 redirect approach if already implemented
+
+---
+
+### 7. Validation & Security
+
+* Validate file types (images/videos only)
+* Add file size limits
+* Prevent arbitrary uploads
+* Do NOT expose credentials to frontend
+
+---
+
+### 8. Code Quality
+
+* Clean separation:
+
+  * config
+  * services
+  * routes
+* Use async/await
+* Add comments for integration points
+* Ensure easy future switch to direct upload flow
+
+---
+
+### 9. Do NOT do the following
+
+* Do NOT hardcode credentials
+* Do NOT expose secrets in frontend
+* Do NOT use local filesystem for storage
+* Do NOT reintroduce Linode references
+
+---
+
+### Goal
+
+A clean, production-ready Cloudflare R2 integration that replaces Linode entirely and supports both current uploads and future direct upload architecture.
+
+Please implement step-by-step and show where each change is applied in the project.
