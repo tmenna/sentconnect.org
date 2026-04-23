@@ -78,7 +78,7 @@ export default function MissionaryDashboard() {
         className="relative -mx-4 sm:-mx-8 -mt-8 overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)",
-          borderRadius: "16px 16px 0 0",
+          borderRadius: "16px",
         }}
       >
         <WorldMapOverlay />

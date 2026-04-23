@@ -884,7 +884,13 @@ export default function AdminDashboard() {
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* ── Global Partners banner ── */}
-        <div className="relative -mx-4 sm:-mx-8 -mt-8 overflow-hidden" style={{ background: "#0268CE" }}>
+        <div
+          className="relative -mx-4 sm:-mx-8 -mt-8 overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)",
+            borderRadius: "16px",
+          }}
+        >
 
           {/* World map continent silhouettes */}
           <svg
@@ -926,28 +932,58 @@ export default function AdminDashboard() {
           </svg>
 
           {/* Banner content */}
-          <div className="relative z-10 px-6 sm:px-8 py-6 flex items-center justify-between gap-4">
-            <div>
-              <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#ffffff" }}>
-                Global Partners
-              </h1>
-              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", marginTop: 6 }}>
-                "Declare his glory among the nations, his marvelous works among all the peoples." — Psalm 96:3
-              </p>
-            </div>
-            <div className="flex items-center gap-4 flex-shrink-0">
-              {!usersLoading && allUsers.length > 0 && (
-                <div className="hidden sm:block text-right">
-                  <p className="font-bold leading-none" style={{ fontSize: 28, color: "#fff" }}>{allUsers.length}</p>
-                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", marginTop: 2 }}>members</p>
-                </div>
-              )}
-              <Avatar className="h-11 w-11 flex-shrink-0" style={{ border: "2.5px solid rgba(255,255,255,0.5)" }}>
+          <div className="relative z-10 px-6 sm:px-8 pt-7 pb-6">
+            {/* Title row */}
+            <div className="flex items-start justify-between gap-4 mb-1">
+              <div>
+                <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 28, color: "#fff" }}>
+                  Global Partners
+                </h1>
+                <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>
+                  Manage your team and track mission activity.
+                </p>
+              </div>
+              <Avatar className="h-10 w-10 flex-shrink-0 mt-0.5" style={{ border: "2.5px solid rgba(255,255,255,0.45)" }}>
                 <AvatarImage src={user.avatarUrl ?? undefined} />
-                <AvatarFallback className="font-bold text-[15px]" style={{ background: "rgba(255,255,255,0.18)", color: "#fff" }}>
+                <AvatarFallback className="font-bold text-[14px]" style={{ background: "rgba(255,255,255,0.18)", color: "#fff" }}>
                   {user.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
+            </div>
+
+            {/* Stat boxes */}
+            <div className="flex gap-3 mt-5">
+              <div
+                className="flex items-center gap-3 rounded-xl px-4 py-3"
+                style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}
+              >
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                  style={{ background: "rgba(57,188,122,0.25)" }}>
+                  <Users className="h-4 w-4" style={{ color: "#39BC7A" }} />
+                </div>
+                <div>
+                  <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>
+                    {usersLoading ? "—" : allUsers.length}
+                  </p>
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Team Members</p>
+                </div>
+              </div>
+
+              <div
+                className="flex items-center gap-3 rounded-xl px-4 py-3"
+                style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}
+              >
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                  style={{ background: "rgba(255,255,255,0.18)" }}>
+                  <Globe className="h-4 w-4 text-white" />
+                </div>
+                <div>
+                  <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>
+                    {usersLoading ? "—" : countriesCount}
+                  </p>
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Countries</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
