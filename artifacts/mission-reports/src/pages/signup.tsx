@@ -69,7 +69,7 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-white overflow-hidden">
       {/* Left panel — blue gradient matching login */}
       <div
         className="hidden md:flex flex-col justify-between w-[420px] flex-shrink-0 relative overflow-hidden px-10 py-12 text-white"
@@ -110,7 +110,7 @@ export default function Signup() {
       </div>
 
       {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
+      <div className="flex-1 flex items-start md:items-center justify-center px-6 py-10 overflow-y-auto min-h-screen">
         <div className="w-full max-w-md">
           <div className="md:hidden flex items-center gap-2 mb-8">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: BLUE }}>
