@@ -27,7 +27,7 @@ export const DEFAULT_LANDING_PAGE_CONTENT = {
   step2Description: "Your team signs in at your dedicated address, such as rvc.sentconnect.org/login.",
   step3Title: "3. Share updates",
   step3Description: "Invite field users, collect reports, and keep your church connected to ministry work.",
-  ctaBandHeading: "Ready to connect your team?",
+  ctaBandHeading: "Bring your church and field teams closer together.",
   ctaBandSubtext: "Set up your organization in minutes.",
   footerBrandName: "SentConnect",
   footerOwnerText: "Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA",
