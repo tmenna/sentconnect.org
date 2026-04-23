@@ -6,6 +6,7 @@ import connectPgSimple from "connect-pg-simple";
 import path from "path";
 import { existsSync } from "fs";
 import router from "./routes";
+import billingRouter from "./routes/billing";
 import { logger } from "./lib/logger";
 import { resolveOrg } from "./middleware/org-resolver";
 
@@ -22,6 +23,16 @@ const PgSession = connectPgSimple(session);
 const app: Express = express();
 
 app.set("trust proxy", 1);
+
+// Webhook must receive raw body — register BEFORE express.json()
+app.post(
+  "/api/webhooks/stripe",
+  express.raw({ type: "application/json" }),
+  async (req, res, next) => {
+    // Delegate to billingRouter's /webhooks/stripe handler
+    billingRouter(req, res, next);
+  }
+);
 
 app.use(
   pinoHttp({

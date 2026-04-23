@@ -6,6 +6,7 @@ import storageRouter from "./storage";
 import authRouter from "./auth";
 import superAdminRouter from "./super-admin";
 import adminUsersRouter from "./admin-users";
+import billingRouter from "./billing";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use(reportsRouter);
 router.use(storageRouter);
 router.use(superAdminRouter);
 router.use(adminUsersRouter);
+router.use(billingRouter);
 
 export default router;

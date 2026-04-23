@@ -24,6 +24,7 @@ import ForgotPassword from "./pages/forgot-password";
 import ResetPassword from "./pages/reset-password";
 import SuperAdminPanel from "./pages/super-admin";
 import PublicPost from "./pages/public-post";
+import SignupSuccess from "./pages/signup-success";
 
 const queryClient = new QueryClient();
 
@@ -512,6 +513,7 @@ function AppRoutes() {
       <Route path="/login" component={LoginRoute} />
       <Route path="/sentconnect-home" component={LandingPreviewRoute} />
       <Route path="/signup" component={Signup} />
+      <Route path="/signup/success" component={SignupSuccess} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
       {/* Public shareable post view — no auth required */}

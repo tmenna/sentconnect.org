@@ -2,35 +2,27 @@ import { useState } from "react";
 import { Link, Redirect } from "wouter";
 import { useAuth } from "@/components/auth-provider";
 import { useToast } from "@/hooks/use-toast";
-import { useQueryClient } from "@tanstack/react-query";
-import { getGetCurrentUserQueryKey } from "@workspace/api-client-react";
-import { Shuffle, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Shuffle, Loader2, CheckCircle2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { buildOrgHomeHref } from "@/lib/org";
 
-const BLUE     = "#005BBC";
-const BLUE_DK  = "#0155a5";
-const BLUE_LT  = "#EFF6FF";
-const BLUE_BD  = "#BFDBFE";
+const BLUE    = "#005BBC";
+const BLUE_DK = "#0155a5";
+const BLUE_LT = "#EFF6FF";
+const BLUE_BD = "#BFDBFE";
 
 export default function Signup() {
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
-  const [orgName, setOrgName] = useState("");
-  const [subdomain, setSubdomain] = useState("");
-  const [plan, setPlan] = useState<"trial" | "paid">("trial");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [orgName, setOrgName]       = useState("");
+  const [subdomain, setSubdomain]   = useState("");
+  const [name, setName]             = useState("");
+  const [email, setEmail]           = useState("");
+  const [password, setPassword]     = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [redirectTo, setRedirectTo] = useState<string | null>(null);
+  const [errors, setErrors]         = useState<Record<string, string>>({});
 
   if (isLoading) return null;
-  if (redirectTo) return <Redirect href={redirectTo} />;
   if (isAuthenticated) return <Redirect href="/" />;
 
   function generateSubdomain(org: string) {
@@ -40,29 +32,49 @@ export default function Signup() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErrors({});
+
+    // Client-side validation
+    if (!orgName.trim() || orgName.trim().length < 2) {
+      setErrors({ general: "Organization name must be at least 2 characters" }); return;
+    }
+    if (!subdomain || !/^[a-z0-9-]{2,30}$/.test(subdomain)) {
+      setErrors({ general: "Subdomain must be 2–30 lowercase letters, numbers, or hyphens" }); return;
+    }
+    if (!name.trim() || name.trim().length < 2) {
+      setErrors({ general: "Full name must be at least 2 characters" }); return;
+    }
+    if (!email.includes("@")) {
+      setErrors({ general: "Valid email is required" }); return;
+    }
+    if (password.length < 8) {
+      setErrors({ general: "Password must be at least 8 characters" }); return;
+    }
+
     setSubmitting(true);
     try {
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch("/api/billing/create-checkout-session", {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orgName, subdomain, plan, name, email, password }),
+        body: JSON.stringify({
+          organizationName: orgName.trim(),
+          subdomain,
+          fullName: name.trim(),
+          email,
+          password,
+        }),
       });
+
       const data = await res.json();
+
       if (!res.ok) {
-        setErrors({ general: data.error ?? "Signup failed" });
+        setErrors({ general: data.error ?? "Something went wrong. Please try again." });
         return;
       }
-      queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
-      toast({ title: "Welcome to SentConnect!", description: `Your organization "${orgName}" is ready.` });
-      const slug = data.organization?.subdomain;
-      if (slug) {
-        window.location.assign(buildOrgHomeHref(slug));
-      } else {
-        setRedirectTo("/");
-      }
+
+      // Redirect to Stripe Checkout
+      window.location.assign(data.checkoutUrl);
     } catch {
-      setErrors({ general: "Something went wrong. Please try again." });
+      toast({ title: "Network error", description: "Please check your connection and try again.", variant: "destructive" });
     } finally {
       setSubmitting(false);
     }
@@ -70,18 +82,14 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen flex bg-white overflow-hidden">
-      {/* Left panel — blue gradient matching login */}
+      {/* Left panel */}
       <div
         className="hidden md:flex flex-col justify-between w-[420px] flex-shrink-0 relative overflow-hidden px-10 py-12 text-white"
         style={{ background: "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)" }}
       >
-        {/* Subtle radial glow */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.15) 0%, transparent 55%)" }}
-        />
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.15) 0%, transparent 55%)" }} />
 
-        {/* Top content */}
         <div className="relative z-10">
           <div className="flex items-center gap-2.5 mb-6">
             <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
@@ -103,9 +111,18 @@ export default function Signup() {
           <p className="text-white/70 text-[15px] leading-relaxed max-w-[340px]">
             Create your organization's private space and receive updates from your Global Partners across different locations.
           </p>
+
+          {/* Trust bullets */}
+          <div className="mt-8 space-y-2.5">
+            {["Unlimited users & media sharing", "Secure, private access", "Cancel anytime — no contracts"].map(item => (
+              <div key={item} className="flex items-center gap-2.5">
+                <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-white/70" />
+                <span className="text-white/80 text-[14px]">{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Bottom */}
         <p className="relative z-10 mt-6 text-white/30 text-xs">© SentConnect</p>
       </div>
 
@@ -127,7 +144,22 @@ export default function Signup() {
           </div>
 
           <h1 className="text-2xl font-extrabold text-foreground mb-1">Create your organization</h1>
-          <p className="text-muted-foreground text-sm mb-6">You'll be the admin. Invite your team after setup.</p>
+          <p className="text-muted-foreground text-sm mb-5">You'll be the admin. Invite your team after setup.</p>
+
+          {/* Pricing card */}
+          <div
+            className="rounded-xl px-5 py-4 mb-6"
+            style={{ background: BLUE_LT, border: `1.5px solid ${BLUE_BD}` }}
+          >
+            <p className="text-[11px] font-bold uppercase tracking-widest mb-1" style={{ color: BLUE }}>Simple, transparent pricing</p>
+            <p className="text-[28px] font-black leading-none mb-1" style={{ color: BLUE }}>
+              $30<span className="text-[16px] font-semibold text-blue-400"> / month per organization</span>
+            </p>
+            <p className="text-[12.5px] text-blue-500 font-medium mb-2">
+              Unlimited users · Media sharing · Secure access
+            </p>
+            <p className="text-[11.5px]" style={{ color: "#6B7280" }}>No contracts. Cancel anytime.</p>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {errors.general && (
@@ -154,7 +186,7 @@ export default function Signup() {
             <div>
               <label className="block text-[13px] font-semibold text-foreground mb-1">Subdomain</label>
               <div
-                className="flex items-center gap-0 border border-input rounded-lg overflow-hidden h-10 focus-within:ring-2"
+                className="flex items-center border border-input rounded-lg overflow-hidden h-10 focus-within:ring-2"
                 style={{ "--tw-ring-color": BLUE_BD } as any}
               >
                 <input
@@ -167,39 +199,6 @@ export default function Signup() {
                 <span className="px-3 text-[12px] text-muted-foreground bg-muted h-full flex items-center border-l border-input">
                   .sentconnect.org
                 </span>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[13px] font-semibold text-foreground mb-2">Plan</label>
-              <div className="grid grid-cols-2 gap-3">
-                {([
-                  { value: "trial", label: "Free Trial", desc: "Get started, no card needed" },
-                  { value: "paid",  label: "Paid",        desc: "Full access, all features" },
-                ] as const).map(opt => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => setPlan(opt.value)}
-                    className="text-left px-4 py-3 rounded-xl border-2 transition-all bg-white"
-                    style={{
-                      borderColor: plan === opt.value ? BLUE : "#E5E7EB",
-                      background: plan === opt.value ? BLUE_LT : "white",
-                      boxShadow: plan === opt.value ? "0 0 0 0px transparent" : "none",
-                    }}
-                  >
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span
-                        className="w-3.5 h-3.5 rounded-full border-2 flex-shrink-0 transition-colors"
-                        style={{ borderColor: plan === opt.value ? BLUE : "#D1D5DB", background: plan === opt.value ? BLUE : "white" }}
-                      />
-                      <span className="text-[13px] font-bold" style={{ color: plan === opt.value ? BLUE : "#1F2937" }}>
-                        {opt.label}
-                      </span>
-                    </div>
-                    <p className="text-[11.5px] text-muted-foreground pl-5">{opt.desc}</p>
-                  </button>
-                ))}
               </div>
             </div>
 
@@ -229,10 +228,15 @@ export default function Signup() {
               onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = BLUE_DK; }}
               onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = BLUE; }}
             >
-              {submitting ? <><Loader2 className="h-4 w-4 animate-spin" />Creating…</> : "Create Organization"}
+              {submitting
+                ? <><Loader2 className="h-4 w-4 animate-spin" />Redirecting to payment…</>
+                : "Start for $30/month →"}
             </button>
-          </form>
 
+            <p className="text-center text-[11.5px] text-muted-foreground">
+              You'll be redirected to Stripe to complete your payment securely.
+            </p>
+          </form>
         </div>
       </div>
     </div>
