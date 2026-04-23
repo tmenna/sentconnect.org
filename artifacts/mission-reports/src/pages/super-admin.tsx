@@ -274,22 +274,34 @@ function LogoUploader({
     }
     setUploading(true);
     try {
-      // Send file to our API which streams it directly to Linode
-      const form = new FormData();
-      form.append("file", file);
-      const res = await fetch("/api/storage/uploads", {
+      // Step 1 — get a presigned PUT URL from the API (5-min expiry)
+      const urlRes = await fetch("/api/storage/upload-url", {
         method: "POST",
         credentials: "include",
-        body: form,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fileName: file.name,
+          contentType: file.type,
+          fileSize: file.size,
+          // no orgId/postId for logos — key will be uploads/{uuid}.ext
+        }),
       });
-      if (!res.ok) {
-        const e = await res.json().catch(() => ({}));
-        throw new Error(e.error ?? "Upload failed");
+      if (!urlRes.ok) {
+        const e = await urlRes.json().catch(() => ({}));
+        throw new Error(e.error ?? "Could not get upload URL");
       }
-      const { objectPath } = await res.json();
+      const { uploadUrl, objectPath } = await urlRes.json();
+
+      // Step 2 — PUT file directly to R2 (browser → R2, no proxy)
+      const putRes = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      if (!putRes.ok) throw new Error("Upload to R2 failed");
 
       // objectPath = "/objects/uploads/<uuid>.ext"
-      // Served via /api/storage/objects/... which redirects to a presigned Linode URL
+      // Served via /api/storage/objects/... which redirects to a presigned R2 URL
       const entityId = objectPath.replace(/^\/objects\//, "");
       onChange(`/api/storage/objects/${entityId}`);
       toast({ title: "Logo uploaded — click Save to apply" });

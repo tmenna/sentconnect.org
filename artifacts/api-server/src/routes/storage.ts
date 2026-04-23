@@ -98,11 +98,15 @@ router.post("/storage/uploads", (req: Request, res: Response) => {
 
 // ── POST /api/storage/upload-url ──────────────────────────────────────────────
 // Generates a presigned PUT URL for direct browser → R2 uploads.
-// Prepared for future upgrade; requires bucket CORS to be configured first.
+// CORS is already enabled on the R2 bucket for sentconnect.org.
+//
+// Body: { fileName, contentType, orgId?, postId? }
+// Returns: { uploadUrl, objectKey, objectPath, expiresIn }
 router.post("/storage/upload-url", async (req: Request, res: Response) => {
-  const { name, contentType } = req.body ?? {};
-  if (!name || !contentType) {
-    res.status(400).json({ error: "name and contentType are required" });
+  const { fileName, contentType, orgId, postId } = req.body ?? {};
+
+  if (!fileName || !contentType) {
+    res.status(400).json({ error: "fileName and contentType are required" });
     return;
   }
   if (!ALLOWED_MIME_TYPES.has(contentType)) {
@@ -112,11 +116,28 @@ router.post("/storage/upload-url", async (req: Request, res: Response) => {
     return;
   }
 
-  const orgId = (req.session as any)?.orgId ?? null;
+  // Validate file size via optional fileSize body field
+  const fileSize = Number(req.body.fileSize ?? 0);
+  if (fileSize > MAX_FILE_SIZE_BYTES) {
+    res.status(400).json({ error: "File too large. Maximum is 200 MB." });
+    return;
+  }
 
   try {
-    const result = await createPresignedPutUrl(contentType, name, orgId);
-    res.json(result);
+    const result = await createPresignedPutUrl(
+      contentType,
+      fileName,
+      orgId ?? null,
+      postId ?? null,
+      300 // 5-minute expiry
+    );
+
+    res.json({
+      uploadUrl: result.uploadURL,   // what the browser PUTs to
+      objectKey: result.objectKey,   // store this in the database
+      objectPath: result.objectPath, // use for /api/storage/objects/* lookups
+      expiresIn: result.expiresIn,
+    });
   } catch (err: any) {
     req.log.error({ err }, "Error generating presigned PUT URL");
     res.status(500).json({ error: err.message ?? "Failed to generate upload URL" });

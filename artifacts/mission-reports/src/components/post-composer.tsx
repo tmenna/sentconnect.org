@@ -11,23 +11,48 @@ interface UploadResult {
 }
 
 /**
- * Upload a file to our API, which streams it directly to Linode Object Storage.
- * Returns the objectPath to store in the database.
+ * Upload a file directly to Cloudflare R2 using a presigned PUT URL.
+ *
+ * Flow:
+ *   1. POST /api/storage/upload-url  → get a 5-minute presigned PUT URL
+ *   2. PUT {uploadUrl}               → file goes straight to R2 (browser → R2)
+ *
+ * Bytes never touch our API server. CORS is already enabled on the R2 bucket
+ * for sentconnect.org and *.sentconnect.org.
  */
-async function uploadFile(file: File): Promise<UploadResult> {
-  const form = new FormData();
-  form.append("file", file);
-
-  const res = await fetch("/api/storage/uploads", {
+async function uploadFileDirect(
+  file: File,
+  orgId?: number | null,
+  postId?: number | null
+): Promise<UploadResult> {
+  // Step 1 — get a presigned PUT URL from our API
+  const urlRes = await fetch("/api/storage/upload-url", {
     method: "POST",
     credentials: "include",
-    body: form,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fileName: file.name,
+      contentType: file.type,
+      fileSize: file.size,
+      orgId: orgId ?? undefined,
+      postId: postId ?? undefined,
+    }),
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error ?? "Upload failed");
+  if (!urlRes.ok) {
+    const err = await urlRes.json().catch(() => ({}));
+    throw new Error(err.error ?? "Failed to get upload URL");
   }
-  return res.json();
+  const { uploadUrl, objectKey, objectPath } = await urlRes.json();
+
+  // Step 2 — PUT the file directly to R2 (no auth headers — it's presigned)
+  const putRes = await fetch(uploadUrl, {
+    method: "PUT",
+    headers: { "Content-Type": file.type },
+    body: file,
+  });
+  if (!putRes.ok) throw new Error("Upload to R2 failed");
+
+  return { objectKey, objectPath };
 }
 
 type LocalFile = { file: File; previewUrl: string };
@@ -101,14 +126,8 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
     if (!text.trim() && files.length === 0) return;
     setPosting(true);
     try {
-      const uploadedPaths: string[] = [];
-      for (let i = 0; i < files.length; i++) {
-        setUploadProgress(`Uploading ${i + 1}/${files.length}…`);
-        const { objectPath } = await uploadFile(files[i].file);
-        uploadedPaths.push(objectPath);
-      }
-
-      setUploadProgress("Saving…");
+      // Step 1 — Create the post first so we have a postId for the object key
+      setUploadProgress("Saving post…");
       const postRes = await fetch("/api/reports", {
         method: "POST",
         credentials: "include",
@@ -123,13 +142,23 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
       if (!postRes.ok) throw new Error("Failed to create post");
       const newPost = await postRes.json();
 
-      for (let i = 0; i < uploadedPaths.length; i++) {
+      // Step 2 — Upload each file directly to R2 (browser → R2, presigned PUT)
+      // Key: organizations/{orgId}/posts/{postId}/{uuid}.ext
+      for (let i = 0; i < files.length; i++) {
+        setUploadProgress(`Uploading ${i + 1}/${files.length}…`);
+        const { objectPath } = await uploadFileDirect(
+          files[i].file,
+          user.organizationId ?? null,
+          newPost.id
+        );
+
+        // Step 3 — Register the uploaded file against the post
         await fetch(`/api/reports/${newPost.id}/photos`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            url: `/api/storage${uploadedPaths[i]}`,
+            url: `/api/storage${objectPath}`,
             mimeType: files[i].file.type,
           }),
         });

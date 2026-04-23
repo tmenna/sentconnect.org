@@ -90,22 +90,24 @@ function getBucket(): string {
 /**
  * Build a structured object key.
  *
- * When orgId is available (from the authenticated session), files are namespaced
- * under the organisation for easy per-tenant lifecycle management.
- *
- * Examples:
- *   organizations/calvary/uploads/a1b2c3d4.jpg
- *   uploads/a1b2c3d4.mp4   ← fallback when orgId is unknown
+ * Key patterns (most to least specific):
+ *   organizations/{orgId}/posts/{postId}/{uuid}.ext  ← post media (preferred)
+ *   organizations/{orgId}/uploads/{uuid}.ext          ← org-scoped, no post yet
+ *   uploads/{uuid}.ext                                ← fallback (logos, misc)
  */
 export function buildObjectKey(
   fileName: string,
-  orgId?: string | null
+  orgId?: string | number | null,
+  postId?: string | number | null
 ): string {
   const uuid = randomUUID();
   const ext = fileName.includes(".")
     ? "." + fileName.split(".").pop()!.toLowerCase().replace(/[^a-z0-9]/g, "")
     : "";
 
+  if (orgId && postId) {
+    return `organizations/${orgId}/posts/${postId}/${uuid}${ext}`;
+  }
   if (orgId) {
     return `organizations/${orgId}/uploads/${uuid}${ext}`;
   }
@@ -204,18 +206,20 @@ export interface PresignedPutResult {
 /**
  * Generate a presigned PUT URL for direct browser → R2 uploads.
  *
- * Requires CORS to be configured on the R2 bucket before the browser can use it.
- * Use this as a future upgrade to the current server-proxy flow for large files.
+ * Requires CORS to be configured on the R2 bucket (already done for sentconnect.org).
+ * The browser PUTs the file directly to R2 — bytes never touch our server.
  *
  * @param contentType MIME type of the file to be uploaded
  * @param fileName    Original file name (used to derive extension + key)
- * @param orgId       Optional organisation ID for namespaced key
+ * @param orgId       Organisation ID (for key namespacing)
+ * @param postId      Post ID (for key namespacing under the post)
  * @param ttlSeconds  URL expiry (default 5 minutes)
  */
 export async function createPresignedPutUrl(
   contentType: string,
   fileName: string,
-  orgId?: string | null,
+  orgId?: string | number | null,
+  postId?: string | number | null,
   ttlSeconds = 300
 ): Promise<PresignedPutResult> {
   if (!ALLOWED_MIME_TYPES.has(contentType)) {
@@ -224,7 +228,7 @@ export async function createPresignedPutUrl(
     );
   }
 
-  const objectKey = buildObjectKey(fileName, orgId);
+  const objectKey = buildObjectKey(fileName, orgId, postId);
 
   const command = new PutObjectCommand({
     Bucket: getBucket(),
