@@ -112,11 +112,18 @@ export default function Signup() {
       {/* Right panel */}
       <div className="flex-1 flex items-start md:items-center justify-center px-6 py-10 overflow-y-auto min-h-screen">
         <div className="w-full max-w-md">
-          <div className="md:hidden flex items-center gap-2 mb-8">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: BLUE }}>
-              <Shuffle className="h-4 w-4 text-white" />
+          <div className="md:hidden flex items-center justify-between mb-8">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: BLUE }}>
+                <Shuffle className="h-4 w-4 text-white" />
+              </div>
+              <span className="text-base font-extrabold" style={{ color: "#1F2937" }}>SentConnect</span>
             </div>
-            <span className="text-base font-extrabold" style={{ color: "#1F2937" }}>SentConnect</span>
+            <Link href="/" className="text-[13px] font-semibold" style={{ color: BLUE }}>← Home</Link>
+          </div>
+
+          <div className="hidden md:block mb-6">
+            <Link href="/" className="text-[13px] font-semibold" style={{ color: BLUE }}>← Back to sentconnect.org</Link>
           </div>
 
           <h1 className="text-2xl font-extrabold text-foreground mb-1">Create your organization</h1>
