@@ -226,12 +226,6 @@ export default function Signup() {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-[13px] text-muted-foreground">
-              Already have an account?{" "}
-              <Link href="/login" className="font-semibold hover:underline" style={{ color: BLUE }}>Sign in</Link>
-            </p>
-          </div>
         </div>
       </div>
     </div>
