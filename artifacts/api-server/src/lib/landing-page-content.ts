@@ -8,7 +8,7 @@ export const DEFAULT_LANDING_PAGE_CONTENT = {
   heroEyebrow: "Private missionary updates",
   heroTitle: "Stay connected with your field teams from one private mission feed.",
   heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
-  primaryCtaLabel: "Create your organization",
+  primaryCtaLabel: "Set Up Your Organization",
   primaryCtaHref: "/signup",
   previewCardTitle: "Mission Moments",
   previewLabel: "Latest field updates",
