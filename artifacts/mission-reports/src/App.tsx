@@ -174,17 +174,17 @@ function LandingPage() {
       `}</style>
 
       {/* ── Header ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: "#fff", borderBottom: "1px solid rgba(0,0,0,0.07)", boxShadow: "0 1px 6px rgba(0,0,0,0.05)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 64 }}>
           <a href="/" className="flex items-center gap-3" style={{ textDecoration: "none" }}>
             {content.logoUrl ? (
-              <img src={content.logoUrl} alt={content.headerBrandName} style={{ height: 52, maxHeight: 52, width: "auto", maxWidth: 200, objectFit: "contain" }} />
+              <img src={content.logoUrl} alt={content.headerBrandName} style={{ height: 44, maxHeight: 44, width: "auto", maxWidth: 220, objectFit: "contain" }} />
             ) : (
               <>
-                <div style={{ width: 36, height: 36, borderRadius: 11, background: "rgba(255,255,255,0.18)", border: "1px solid rgba(255,255,255,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ width: 36, height: 36, borderRadius: 11, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 3px 10px rgba(2,104,206,0.32)` }}>
                   <Shuffle style={{ width: 18, height: 18, color: "#fff" }} />
                 </div>
-                <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: "-0.04em", color: "#fff" }}>{content.headerBrandName}</span>
+                <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: "-0.04em", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{content.headerBrandName}</span>
               </>
             )}
           </a>
@@ -192,9 +192,9 @@ function LandingPage() {
             <a
               href={content.headerPrimaryCtaHref}
               className="lp-nav-secondary"
-              style={{ fontSize: 14, fontWeight: 600, color: BLUE, padding: "9px 18px", borderRadius: 999, background: "#fff", textDecoration: "none", transition: "opacity .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.9"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+              style={{ fontSize: 14, fontWeight: 600, color: "#fff", padding: "9px 18px", borderRadius: 999, background: BLUE, textDecoration: "none", transition: "background .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = BLUE_DARK; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
             >{content.headerPrimaryCtaLabel}</a>
           </nav>
         </div>
