@@ -36,6 +36,8 @@ type PlatformStats = {
 
 type LandingPageContent = {
   logoUrl: string;
+  headerLogoUrl: string;
+  footerLogoUrl: string;
   headerBrandName: string;
   headerPrimaryCtaLabel: string;
   headerPrimaryCtaHref: string;
@@ -470,15 +472,35 @@ function SectionAccordion({
       {open && (
         <div className="border-t border-border/60 bg-white p-5 grid gap-4 md:grid-cols-2">
           {section.id === "logo" && (
-            <div className="md:col-span-2">
-              <p className="text-[12px] font-semibold text-foreground mb-2">
-                Logo image <span className="font-normal text-muted-foreground">(optional — leave empty to use the default icon)</span>
-              </p>
-              <LogoUploader
-                logoUrl={content.logoUrl}
-                onChange={val => onChange("logoUrl", val)}
-              />
-            </div>
+            <>
+              <div className="md:col-span-2">
+                <p className="text-[12px] font-semibold text-foreground mb-1">
+                  Shared logo <span className="font-normal text-muted-foreground">(optional — used as fallback if header/footer logos are not set)</span>
+                </p>
+                <LogoUploader
+                  logoUrl={content.logoUrl}
+                  onChange={val => onChange("logoUrl", val)}
+                />
+              </div>
+              <div>
+                <p className="text-[12px] font-semibold text-foreground mb-1">
+                  Header logo <span className="font-normal text-muted-foreground">(optional — overrides shared logo in the top nav)</span>
+                </p>
+                <LogoUploader
+                  logoUrl={content.headerLogoUrl}
+                  onChange={val => onChange("headerLogoUrl", val)}
+                />
+              </div>
+              <div>
+                <p className="text-[12px] font-semibold text-foreground mb-1">
+                  Footer logo <span className="font-normal text-muted-foreground">(optional — overrides shared logo in the footer)</span>
+                </p>
+                <LogoUploader
+                  logoUrl={content.footerLogoUrl}
+                  onChange={val => onChange("footerLogoUrl", val)}
+                />
+              </div>
+            </>
           )}
           {section.fields.map(field => (
             <label key={field.key} className={field.multiline ? "md:col-span-2" : ""}>

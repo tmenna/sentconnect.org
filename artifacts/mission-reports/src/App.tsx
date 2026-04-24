@@ -30,6 +30,8 @@ const queryClient = new QueryClient();
 
 type LandingPageContent = {
   logoUrl: string;
+  headerLogoUrl: string;
+  footerLogoUrl: string;
   headerBrandName: string;
   headerPrimaryCtaLabel: string;
   headerPrimaryCtaHref: string;
@@ -59,6 +61,8 @@ type LandingPageContent = {
 
 const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   logoUrl: "",
+  headerLogoUrl: "",
+  footerLogoUrl: "",
   headerBrandName: "SentConnect",
   headerPrimaryCtaLabel: "Sign up",
   headerPrimaryCtaHref: "/signup",
@@ -177,9 +181,9 @@ function LandingPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, boxShadow: "0 2px 12px rgba(2,104,206,0.25)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 64 }}>
           <a href="/" className="flex items-center gap-3" style={{ textDecoration: "none" }}>
-            {content.logoUrl ? (
+            {(content.headerLogoUrl || content.logoUrl) ? (
               <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, padding: "4px 10px", display: "flex", alignItems: "center" }}>
-                <img src={content.logoUrl} alt={content.headerBrandName} style={{ height: 36, maxHeight: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
+                <img src={content.headerLogoUrl || content.logoUrl} alt={content.headerBrandName} style={{ height: 36, maxHeight: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
               </div>
             ) : (
               <>
@@ -322,8 +326,8 @@ function LandingPage() {
       <footer style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.08)", padding: "32px 24px" }}>
         <div className="lp-footer-inner mx-auto max-w-6xl">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {content.logoUrl ? (
-              <img src={content.logoUrl} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
+            {(content.footerLogoUrl || content.logoUrl) ? (
+              <img src={content.footerLogoUrl || content.logoUrl} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
             ) : (
               <>
                 <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(2,104,206,0.28)" }}>
