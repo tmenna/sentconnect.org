@@ -126,7 +126,7 @@ export default function Signup() {
           {/* Page heading */}
           <div className="text-center mb-8">
             <h1 className="text-[2rem] font-bold text-gray-900 tracking-tight mb-2">
-              Create your organization
+              Set Up Your Organization
             </h1>
             <p className="text-[15px] text-gray-400 font-normal">
               You'll be the admin. Invite your team after setup.
