@@ -185,7 +185,7 @@ const LANDING_SECTIONS: LPSection[] = [
     id: "header",
     label: "Header",
     fields: [
-      { key: "headerBrandName", label: "Brand name (shown next to logo)" },
+      { key: "headerBrandName", label: "Brand name (shown next to logo)", optional: true },
       { key: "headerPrimaryCtaLabel", label: "Nav link label" },
       { key: "headerPrimaryCtaHref", label: "Nav link URL (e.g. /signup or https://…)" },
     ],
@@ -238,7 +238,7 @@ const LANDING_SECTIONS: LPSection[] = [
     id: "footer",
     label: "Footer",
     fields: [
-      { key: "footerBrandName", label: "Brand name in footer" },
+      { key: "footerBrandName", label: "Brand name in footer", optional: true },
       { key: "footerOwnerText", label: "Owner / address text", multiline: true },
     ],
   },

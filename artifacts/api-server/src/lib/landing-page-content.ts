@@ -31,7 +31,7 @@ export const DEFAULT_LANDING_PAGE_CONTENT = {
 
 type LandingPageContentInput = typeof DEFAULT_LANDING_PAGE_CONTENT;
 
-const OPTIONAL_KEYS = new Set<keyof LandingPageContentInput>(["logoUrl"]);
+const OPTIONAL_KEYS = new Set<keyof LandingPageContentInput>(["logoUrl", "headerBrandName", "footerBrandName"]);
 
 const columnMap = {
   logoUrl: "logo_url",
