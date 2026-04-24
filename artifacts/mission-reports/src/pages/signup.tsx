@@ -163,16 +163,16 @@ export default function Signup() {
           {/* Pricing card */}
           <div
             className="rounded-xl px-5 py-4 mb-6"
-            style={{ background: BLUE_LT, border: `1.5px solid ${BLUE_BD}` }}
+            style={{ background: "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)" }}
           >
-            <p className="text-[11px] font-bold uppercase tracking-widest mb-1" style={{ color: BLUE }}>Simple, transparent pricing</p>
-            <p className="text-[28px] font-black leading-none mb-1" style={{ color: BLUE }}>
-              $30<span className="text-[16px] font-semibold text-blue-400"> / month per organization</span>
+            <p className="text-[11px] font-bold uppercase tracking-widest mb-1 text-white/70">Simple, transparent pricing</p>
+            <p className="text-[28px] font-black leading-none mb-1 text-white">
+              $30<span className="text-[16px] font-semibold text-white/70"> / month per organization</span>
             </p>
-            <p className="text-[12.5px] text-blue-500 font-medium mb-2">
+            <p className="text-[12.5px] text-white/80 font-medium mb-2">
               Unlimited users · Media sharing · Secure access
             </p>
-            <p className="text-[11.5px]" style={{ color: "#6B7280" }}>No contracts. Cancel anytime.</p>
+            <p className="text-[11.5px] text-white/50">No contracts. Cancel anytime.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
