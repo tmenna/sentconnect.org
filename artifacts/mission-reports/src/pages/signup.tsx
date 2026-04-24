@@ -298,7 +298,7 @@ export default function Signup() {
                 {submitting ? (
                   <><Loader2 className="h-4 w-4 animate-spin" /> Redirecting to payment…</>
                 ) : (
-                  "Create your organization →"
+                  "Set Up Your Organization →"
                 )}
               </button>
 
