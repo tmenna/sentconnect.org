@@ -1,0 +1,123 @@
+Refine the organization signup page into a cleaner, more premium minimalist SaaS onboarding experience. Keep the current structure (centered single-column signup flow, pricing card, form, Stripe CTA), but redesign it to feel smoother, more modern, and visually consistent with the rest of SentConnect.
+
+Design goals:
+
+* More white space
+* Larger typography and stronger visual hierarchy
+* Softer, cleaner form styling
+* Modern but simple
+* Feels trustworthy and premium
+* Consistent with the product dashboard aesthetic
+
+### Layout
+
+* Keep a centered single-column layout (max-width ~560-620px)
+* Increase vertical spacing between sections
+* Add more breathing room around the form
+* Use a very light off-white background (#FAFBFD or similar)
+* Keep page mostly white/minimal, not heavy blue
+
+### Top Area
+
+Refine header:
+
+* Larger headline:
+  “Create your organization”
+* Bigger, cleaner typography (bold but elegant)
+* Improve subtitle styling with lighter secondary text
+
+Top logo should feel lighter/minimal, aligned with page center.
+
+### Pricing Card
+
+Redesign pricing card as premium feature card:
+
+* Soft blue gradient (subtle, not loud)
+* Large $30 price treatment
+* More padding
+* 20–24px rounded corners
+* Soft shadow
+* Improve typography hierarchy:
+
+  * Small label:
+    SIMPLE, TRANSPARENT PRICING
+  * Large:
+    $30 / month
+  * Supporting line:
+    Unlimited users • Media sharing • Secure access
+
+Optional:
+Add subtle icon row or checkmarks.
+
+### Form Styling
+
+Make the form feel less “input boxes stacked” and more refined:
+
+* Larger input heights (48–52px)
+* Softer borders
+* 12–14px radius
+* Better label spacing
+* Improve section headings:
+  Organization Details
+  Your Account
+
+Optional:
+Place form inside very subtle white card with shadow:
+
+* bg-white
+* rounded-2xl
+* soft shadow-sm
+
+### Button
+
+Upgrade CTA button:
+
+* Full-width
+* Taller (50–54px)
+* Slight gradient or richer blue
+* Rounded-xl
+* Stronger text:
+  Start for $30/month →
+  or
+  Create Organization →
+
+Hover:
+
+* subtle lift
+* softer shadow
+
+### Trust Row (important)
+
+Improve the trust icons section under button:
+Three compact trust points in one row:
+
+🔒 Secure payments (Powered by Stripe)
+↺ Cancel anytime
+🌍 Built for mission teams
+
+Use cleaner icons, muted text, better spacing.
+
+### Visual Style
+
+Use:
+
+* Larger fonts overall
+* More generous spacing
+* Softer shadows
+* Fewer borders
+* Cleaner typography
+* Reduce visual noise
+
+Reference aesthetic:
+
+* Stripe onboarding
+* Notion/Linear style simplicity
+* Modern SaaS signup page
+
+### Important
+
+Do NOT over-design.
+Keep it minimal, calm, white, elegant, and conversion-focused.
+
+Enhance polish, consistency, spacing, typography, and trust.
+Make it feel like a production SaaS onboarding experience.
