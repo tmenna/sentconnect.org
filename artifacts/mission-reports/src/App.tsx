@@ -178,7 +178,7 @@ function LandingPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 64 }}>
           <a href="/" className="flex items-center gap-3" style={{ textDecoration: "none" }}>
             {content.logoUrl ? (
-              <img src={content.logoUrl} alt={content.headerBrandName} style={{ height: 36, width: "auto", objectFit: "contain" }} />
+              <img src={content.logoUrl} alt={content.headerBrandName} style={{ height: 52, maxHeight: 52, width: "auto", maxWidth: 200, objectFit: "contain" }} />
             ) : (
               <>
                 <div style={{ width: 36, height: 36, borderRadius: 11, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 3px 10px rgba(2,104,206,0.32)` }}>
@@ -321,7 +321,7 @@ function LandingPage() {
         <div className="lp-footer-inner mx-auto max-w-6xl">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             {content.logoUrl ? (
-              <img src={content.logoUrl} alt={content.footerBrandName} style={{ height: 28, width: "auto", objectFit: "contain" }} />
+              <img src={content.logoUrl} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
             ) : (
               <>
                 <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(2,104,206,0.28)" }}>
