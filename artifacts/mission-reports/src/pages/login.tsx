@@ -9,6 +9,7 @@ import { useLoginUser, useLogoutUser, getGetCurrentUserQueryKey } from "@workspa
 import { useToast } from "@/hooks/use-toast";
 import { Link, useSearch, useLocation } from "wouter";
 import { Shuffle, ExternalLink, LogOut, Loader2 } from "lucide-react";
+import { usePlatformLogo } from "@/hooks/use-platform-logo";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { buildOrgLoginHref } from "@/lib/org";
@@ -31,6 +32,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const [, navigate] = useLocation();
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
   const [hoverBtn, setHoverBtn] = useState(false);
+  const logoUrl = usePlatformLogo();
 
   const from = (() => {
     if (platformMode) return "/admin";
@@ -129,13 +131,21 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       {/* ── Logo above card ── */}
       <div className="flex flex-col items-center mb-7 select-none">
         <div className="flex items-center gap-2.5 mb-2">
-          <div
-            className="p-2 rounded-xl flex items-center justify-center"
-            style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.3)" }}
-          >
-            <Shuffle className="h-5 w-5 text-white" />
-          </div>
-          <span className="text-[20px] font-bold text-white tracking-tight">SentConnect</span>
+          {logoUrl ? (
+            <div style={{ background: "#fff", borderRadius: 12, padding: "8px 16px", display: "flex", alignItems: "center" }}>
+              <img src={logoUrl} alt="SentConnect" style={{ height: 36, maxHeight: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
+            </div>
+          ) : (
+            <>
+              <div
+                className="p-2 rounded-xl flex items-center justify-center"
+                style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.3)" }}
+              >
+                <Shuffle className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-[20px] font-bold text-white tracking-tight">SentConnect</span>
+            </>
+          )}
         </div>
         <p className="text-white/70 text-[14px] tracking-wide">Stay connected with your field teams.</p>
       </div>

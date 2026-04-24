@@ -4,6 +4,7 @@ import { useAuth } from "@/components/auth-provider";
 import { useToast } from "@/hooks/use-toast";
 import { Shuffle, Loader2, CheckCircle2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { usePlatformLogo } from "@/hooks/use-platform-logo";
 
 const BLUE    = "#005BBC";
 const BLUE_DK = "#0155a5";
@@ -13,6 +14,7 @@ const BLUE_BD = "#BFDBFE";
 export default function Signup() {
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
+  const logoUrl = usePlatformLogo();
 
   const [orgName, setOrgName]       = useState("");
   const [subdomain, setSubdomain]   = useState("");
@@ -92,10 +94,18 @@ export default function Signup() {
 
         <div className="relative z-10">
           <div className="flex items-center gap-2.5 mb-6">
-            <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
-              <Shuffle className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
+            {logoUrl ? (
+              <div style={{ background: "#fff", borderRadius: 12, padding: "8px 16px", display: "flex", alignItems: "center" }}>
+                <img src={logoUrl} alt="SentConnect" style={{ height: 32, maxHeight: 32, width: "auto", maxWidth: 160, objectFit: "contain" }} />
+              </div>
+            ) : (
+              <>
+                <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
+                  <Shuffle className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
+              </>
+            )}
           </div>
 
           <p className="text-white/50 text-[11px] font-medium tracking-widest uppercase mb-8">
@@ -131,10 +141,16 @@ export default function Signup() {
         <div className="w-full max-w-md">
           <div className="md:hidden flex items-center justify-between mb-8">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: BLUE }}>
-                <Shuffle className="h-4 w-4 text-white" />
-              </div>
-              <span className="text-base font-extrabold" style={{ color: "#1F2937" }}>SentConnect</span>
+              {logoUrl ? (
+                <img src={logoUrl} alt="SentConnect" style={{ height: 28, maxHeight: 28, width: "auto", maxWidth: 140, objectFit: "contain" }} />
+              ) : (
+                <>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: BLUE }}>
+                    <Shuffle className="h-4 w-4 text-white" />
+                  </div>
+                  <span className="text-base font-extrabold" style={{ color: "#1F2937" }}>SentConnect</span>
+                </>
+              )}
             </div>
             <Link href="/" className="text-[13px] font-semibold" style={{ color: BLUE }}>← Home</Link>
           </div>

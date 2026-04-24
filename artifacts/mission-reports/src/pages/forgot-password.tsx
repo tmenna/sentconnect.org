@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { Shuffle, Loader2, CheckCircle2 } from "lucide-react";
+import { usePlatformLogo } from "@/hooks/use-platform-logo";
 
 const BG    = "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)";
 const BLUE  = "#005BBC";
@@ -13,6 +14,7 @@ export default function ForgotPassword() {
   const [devLink, setDevLink] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [hoverBtn, setHoverBtn] = useState(false);
+  const logoUrl = usePlatformLogo();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -42,10 +44,18 @@ export default function ForgotPassword() {
     >
       {/* Logo above card */}
       <div className="flex items-center gap-2.5 mb-8">
-        <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.18)" }}>
-          <Shuffle className="h-5 w-5 text-white" />
-        </div>
-        <span className="text-[18px] font-extrabold tracking-tight text-white">SentConnect</span>
+        {logoUrl ? (
+          <div style={{ background: "#fff", borderRadius: 12, padding: "8px 16px", display: "flex", alignItems: "center" }}>
+            <img src={logoUrl} alt="SentConnect" style={{ height: 34, maxHeight: 34, width: "auto", maxWidth: 180, objectFit: "contain" }} />
+          </div>
+        ) : (
+          <>
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.18)" }}>
+              <Shuffle className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-[18px] font-extrabold tracking-tight text-white">SentConnect</span>
+          </>
+        )}
       </div>
 
       <div

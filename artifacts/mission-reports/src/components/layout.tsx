@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
@@ -6,22 +6,12 @@ import { Button } from "./ui/button";
 import { Shuffle, LogOut, Rss, ShieldCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { usePlatformLogo } from "@/hooks/use-platform-logo";
 
 /* Brand tokens */
 const EMERALD   = "#0268CE";
 const CHARCOAL  = "#374151";
 const BORDER    = "#E5E7EB";
-
-function usePlatformLogo() {
-  const [logoUrl, setLogoUrl] = useState<string>("");
-  useEffect(() => {
-    fetch("/api/landing-page")
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data?.logoUrl) setLogoUrl(data.logoUrl); })
-      .catch(() => {});
-  }, []);
-  return logoUrl;
-}
 
 export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();

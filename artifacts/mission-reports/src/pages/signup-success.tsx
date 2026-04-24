@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearch } from "wouter";
 import { Shuffle, CheckCircle2, Loader2 } from "lucide-react";
+import { usePlatformLogo } from "@/hooks/use-platform-logo";
 import { buildOrgHref } from "@/lib/org";
 
 const BLUE = "#005BBC";
@@ -12,6 +13,7 @@ export default function SignupSuccess() {
 
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [subdomain, setSubdomain] = useState<string | null>(null);
+  const logoUrl = usePlatformLogo();
 
   useEffect(() => {
     if (!sessionId) { setStatus("error"); return; }
@@ -54,10 +56,16 @@ export default function SignupSuccess() {
         style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}>
 
         <div className="flex items-center justify-center gap-2 mb-6">
-          <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
-            <Shuffle className="h-5 w-5 text-white" />
-          </div>
-          <span className="text-lg font-extrabold tracking-tight" style={{ color: BLUE }}>SentConnect</span>
+          {logoUrl ? (
+            <img src={logoUrl} alt="SentConnect" style={{ height: 36, maxHeight: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
+          ) : (
+            <>
+              <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
+                <Shuffle className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-lg font-extrabold tracking-tight" style={{ color: BLUE }}>SentConnect</span>
+            </>
+          )}
         </div>
 
         {status === "loading" && (
