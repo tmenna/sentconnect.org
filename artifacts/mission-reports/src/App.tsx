@@ -214,9 +214,8 @@ function LandingPage() {
           <div style={{ position: "absolute", bottom: -60, left: -100, width: 360, height: 360, borderRadius: "50%", background: "radial-gradient(circle, rgba(10,138,235,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
           <div className="lp-hero-grid mx-auto max-w-6xl px-6">
             <div>
-              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 24, background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "5px 14px" }}>
-                <div style={{ width: 7, height: 7, borderRadius: "50%", background: BLUE }} />
-                <span style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.12em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 24, background: "#FFE020", border: "1px solid #F5C800", borderRadius: 999, padding: "5px 16px", boxShadow: "0 2px 8px rgba(245,200,0,0.25)" }}>
+                <span style={{ fontSize: 12, fontWeight: 800, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
               </div>
 
               <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(40px, 5.5vw, 68px)", fontWeight: 900, lineHeight: 1.05, letterSpacing: "-0.035em", color: "#0A0F1E", margin: "0 0 24px" }}>
