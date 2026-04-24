@@ -268,8 +268,8 @@ function LogoUploader({
       toast({ title: "Please choose an image file (PNG, SVG, JPG, WebP)", variant: "destructive" });
       return;
     }
-    if (file.size > 4 * 1024 * 1024) {
-      toast({ title: "Image must be smaller than 4 MB", variant: "destructive" });
+    if (file.size > 6 * 1024 * 1024) {
+      toast({ title: "Image must be smaller than 6 MB", variant: "destructive" });
       return;
     }
     setUploading(true);
@@ -346,7 +346,7 @@ function LogoUploader({
               <p className="text-[13px] text-muted-foreground text-center">
                 Drop an image here or <span className="text-[#0268CE] font-semibold">click to browse</span>
               </p>
-              <p className="text-[11px] text-muted-foreground/70">PNG, SVG, JPG, WebP — max 4 MB</p>
+              <p className="text-[11px] text-muted-foreground/70">PNG, SVG, JPG, WebP — max 6 MB</p>
             </>
           )}
           {logoUrl && !uploading && (
