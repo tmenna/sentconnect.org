@@ -209,9 +209,6 @@ function LandingPage() {
       <main>
         {/* ── Hero ── */}
         <section className="lp-hero-section" style={{ background: "#ffffff", position: "relative", overflow: "hidden" }}>
-          {/* decorative orbs */}
-          <div style={{ position: "absolute", top: -120, right: -80, width: 480, height: 480, borderRadius: "50%", background: "radial-gradient(circle, rgba(2,104,206,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: -60, left: -100, width: 360, height: 360, borderRadius: "50%", background: "radial-gradient(circle, rgba(10,138,235,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
           <div className="lp-hero-grid mx-auto max-w-6xl px-6">
             <div>
               <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 24, background: "#FFFF00", border: "1px solid #E6E600", borderRadius: 999, padding: "5px 16px", boxShadow: "0 2px 8px rgba(245,200,0,0.25)" }}>
