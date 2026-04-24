@@ -6,8 +6,8 @@ import { Shuffle, Loader2, CheckCircle2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { usePlatformLogo } from "@/hooks/use-platform-logo";
 
-const BLUE    = "#0A70D4";
-const BLUE_DK = "#085FB5";
+const BLUE    = "#005BBC";
+const BLUE_DK = "#0155a5";
 const BLUE_LT = "#EFF6FF";
 const BLUE_BD = "#BFDBFE";
 
@@ -82,41 +82,41 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen flex bg-white overflow-hidden">
-      {/* Left panel — white with blue text */}
+      {/* Left panel */}
       <div
-        className="hidden md:flex flex-col justify-between w-[420px] flex-shrink-0 relative overflow-hidden px-10 py-12"
-        style={{ background: "#fff", borderRight: "1px solid #E8F0FA" }}
+        className="hidden md:flex flex-col justify-between w-[420px] flex-shrink-0 relative overflow-hidden px-10 py-12 text-white"
+        style={{ background: "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)" }}
       >
-        {/* Subtle background tint */}
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at 20% 10%, rgba(10,112,212,0.05) 0%, transparent 60%)" }} />
+          style={{ background: "radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.15) 0%, transparent 55%)" }} />
 
         <div className="relative z-10">
-          {/* Logo */}
           <div className="flex items-center gap-2.5 mb-6">
             {logoUrl ? (
-              <img src={logoUrl} alt="SentConnect" style={{ height: 34, maxHeight: 34, width: "auto", maxWidth: 180, objectFit: "contain" }} />
+              <div style={{ background: "#fff", borderRadius: 12, padding: "8px 16px", display: "flex", alignItems: "center" }}>
+                <img src={logoUrl} alt="SentConnect" style={{ height: 32, maxHeight: 32, width: "auto", maxWidth: 160, objectFit: "contain" }} />
+              </div>
             ) : (
               <>
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: BLUE }}>
+                <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
                   <Shuffle className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-lg font-extrabold tracking-tight" style={{ color: BLUE }}>SentConnect</span>
+                <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
               </>
             )}
           </div>
 
-          <p className="text-[11px] font-semibold tracking-widest uppercase mb-8" style={{ color: `${BLUE}99` }}>
+          <p className="text-white/50 text-[11px] font-medium tracking-widest uppercase mb-8">
             www.sentconnect.org
           </p>
 
-          <h2 className="text-[2.1rem] font-extrabold leading-[1.2] mb-5 tracking-tight" style={{ color: BLUE }}>
+          <h2 className="text-[2.1rem] font-extrabold leading-[1.2] mb-5 tracking-tight text-white">
             Connect with your<br />Global Partners<br />
             from{" "}
-            <span className="font-black" style={{ color: BLUE }}>anywhere.</span>
+            <span className="text-white font-black">anywhere.</span>
           </h2>
 
-          <p className="text-[15px] leading-relaxed max-w-[340px]" style={{ color: "#4A7BAF" }}>
+          <p className="text-white/70 text-[15px] leading-relaxed max-w-[340px]">
             Create your organization's private space and receive updates from your Global Partners across different locations.
           </p>
 
@@ -124,20 +124,19 @@ export default function Signup() {
           <div className="mt-8 space-y-2.5">
             {["Unlimited users & media sharing", "Secure, private access", "Cancel anytime — no contracts"].map(item => (
               <div key={item} className="flex items-center gap-2.5">
-                <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: `${BLUE}AA` }} />
-                <span className="text-[14px]" style={{ color: "#4A7BAF" }}>{item}</span>
+                <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-white/70" />
+                <span className="text-white/80 text-[14px]">{item}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="relative z-10 mt-6 text-[11px]" style={{ color: `${BLUE}55` }}>© SentConnect</p>
+        <p className="relative z-10 mt-6 text-white/30 text-xs">© SentConnect</p>
       </div>
 
-      {/* Right panel — form */}
+      {/* Right panel */}
       <div className="flex-1 flex items-start md:items-center justify-center px-6 py-10 overflow-y-auto min-h-screen">
         <div className="w-full max-w-md">
-          {/* Mobile logo header */}
           <div className="md:hidden flex items-center justify-between mb-8">
             <div className="flex items-center gap-2">
               {logoUrl ? (
@@ -147,7 +146,7 @@ export default function Signup() {
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: BLUE }}>
                     <Shuffle className="h-4 w-4 text-white" />
                   </div>
-                  <span className="text-base font-extrabold" style={{ color: BLUE }}>SentConnect</span>
+                  <span className="text-base font-extrabold" style={{ color: "#1F2937" }}>SentConnect</span>
                 </>
               )}
             </div>
@@ -168,9 +167,9 @@ export default function Signup() {
           >
             <p className="text-[11px] font-bold uppercase tracking-widest mb-1" style={{ color: BLUE }}>Simple, transparent pricing</p>
             <p className="text-[28px] font-black leading-none mb-1" style={{ color: BLUE }}>
-              $30<span className="text-[16px] font-semibold" style={{ color: "#60A5FA" }}> / month per organization</span>
+              $30<span className="text-[16px] font-semibold text-blue-400"> / month per organization</span>
             </p>
-            <p className="text-[12.5px] font-medium mb-2" style={{ color: "#3B82F6" }}>
+            <p className="text-[12.5px] text-blue-500 font-medium mb-2">
               Unlimited users · Media sharing · Secure access
             </p>
             <p className="text-[11.5px]" style={{ color: "#6B7280" }}>No contracts. Cancel anytime.</p>
@@ -239,7 +238,7 @@ export default function Signup() {
               type="submit"
               disabled={submitting}
               className="w-full h-11 text-white font-bold rounded-xl text-[15px] flex items-center justify-center gap-2 transition-all"
-              style={{ background: submitting ? "#7BB8EC" : BLUE }}
+              style={{ background: submitting ? "#93C5FD" : BLUE }}
               onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = BLUE_DK; }}
               onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = BLUE; }}
             >
