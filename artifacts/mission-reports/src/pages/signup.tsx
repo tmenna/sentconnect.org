@@ -2,14 +2,12 @@ import { useState } from "react";
 import { Link, Redirect } from "wouter";
 import { useAuth } from "@/components/auth-provider";
 import { useToast } from "@/hooks/use-toast";
-import { Shuffle, Loader2, CheckCircle2 } from "lucide-react";
+import { Shuffle, Loader2, Eye, EyeOff, ShieldCheck, RefreshCw, Globe, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { usePlatformLogo } from "@/hooks/use-platform-logo";
 
 const BLUE    = "#005BBC";
-const BLUE_DK = "#0155a5";
-const BLUE_LT = "#EFF6FF";
-const BLUE_BD = "#BFDBFE";
+const BLUE_DK = "#0047A8";
 
 export default function Signup() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -21,6 +19,7 @@ export default function Signup() {
   const [name, setName]             = useState("");
   const [email, setEmail]           = useState("");
   const [password, setPassword]     = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors]         = useState<Record<string, string>>({});
 
@@ -80,177 +79,188 @@ export default function Signup() {
     }
   }
 
+  const inputCls = "w-full h-11 px-3 text-[14px] border border-gray-200 rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all placeholder:text-gray-400";
+
   return (
-    <div className="min-h-screen flex bg-white overflow-hidden">
-      {/* Left panel */}
-      <div
-        className="hidden md:flex flex-col justify-between w-[420px] flex-shrink-0 relative overflow-hidden px-10 py-12 text-white"
-        style={{ background: "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)" }}
-      >
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.15) 0%, transparent 55%)" }} />
-
-        <div className="relative z-10">
-          <div className="flex items-center gap-2.5 mb-6">
-            {logoUrl ? (
-              <div style={{ background: "#fff", borderRadius: 12, padding: "8px 16px", display: "flex", alignItems: "center" }}>
-                <img src={logoUrl} alt="SentConnect" style={{ height: 32, maxHeight: 32, width: "auto", maxWidth: 160, objectFit: "contain" }} />
+    <div className="min-h-screen flex flex-col" style={{ background: "#F1F5F9" }}>
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-6 pt-5 pb-2 max-w-2xl mx-auto w-full">
+        {/* Logo */}
+        <div style={{ background: "#fff", borderRadius: 12, padding: logoUrl ? "8px 14px" : "8px 12px", display: "flex", alignItems: "center", boxShadow: "0 1px 4px rgba(0,0,0,0.08)" }}>
+          {logoUrl ? (
+            <img src={logoUrl} alt="SentConnect" style={{ height: 30, maxHeight: 30, width: "auto", maxWidth: 160, objectFit: "contain" }} />
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: BLUE }}>
+                <Shuffle className="h-4 w-4 text-white" />
               </div>
-            ) : (
-              <>
-                <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
-                  <Shuffle className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-lg font-extrabold tracking-tight">SentConnect</span>
-              </>
-            )}
-          </div>
-
-          <p className="text-white/50 text-[11px] font-medium tracking-widest uppercase mb-8">
-            www.sentconnect.org
-          </p>
-
-          <h2 className="text-[2.1rem] font-extrabold leading-[1.2] mb-5 tracking-tight text-white">
-            Connect with your<br />Global Partners<br />
-            from{" "}
-            <span className="text-white font-black">anywhere.</span>
-          </h2>
-
-          <p className="text-white/70 text-[15px] leading-relaxed max-w-[340px]">
-            Create your organization's private space and receive updates from your Global Partners across different locations.
-          </p>
-
-          {/* Trust bullets */}
-          <div className="mt-8 space-y-2.5">
-            {["Unlimited users & media sharing", "Secure, private access", "Cancel anytime — no contracts"].map(item => (
-              <div key={item} className="flex items-center gap-2.5">
-                <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-white/70" />
-                <span className="text-white/80 text-[14px]">{item}</span>
-              </div>
-            ))}
-          </div>
+              <span className="text-[15px] font-extrabold tracking-tight" style={{ color: "#111" }}>SentConnect</span>
+            </div>
+          )}
         </div>
-
-        <p className="relative z-10 mt-6 text-white/30 text-xs">© SentConnect</p>
       </div>
 
-      {/* Right panel */}
-      <div className="flex-1 flex items-start md:items-center justify-center px-6 py-10 overflow-y-auto min-h-screen">
-        <div className="w-full max-w-md">
-          <div className="md:hidden flex items-center justify-between mb-8">
-            <div className="flex items-center gap-2">
-              {logoUrl ? (
-                <img src={logoUrl} alt="SentConnect" style={{ height: 28, maxHeight: 28, width: "auto", maxWidth: 140, objectFit: "contain" }} />
-              ) : (
-                <>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: BLUE }}>
-                    <Shuffle className="h-4 w-4 text-white" />
-                  </div>
-                  <span className="text-base font-extrabold" style={{ color: "#1F2937" }}>SentConnect</span>
-                </>
-              )}
-            </div>
-            <Link href="/" className="text-[13px] font-semibold" style={{ color: BLUE }}>← Home</Link>
-          </div>
-
-          <div className="hidden md:block mb-6">
+      {/* Main content */}
+      <div className="flex-1 flex items-start justify-center px-4 py-6 overflow-y-auto">
+        <div className="w-full max-w-[520px]">
+          {/* Back link */}
+          <div className="text-center mb-5">
             <Link href="/" className="text-[13px] font-semibold" style={{ color: BLUE }}>← Back to sentconnect.org</Link>
           </div>
 
-          <h1 className="text-2xl font-extrabold text-foreground mb-1">Create your organization</h1>
-          <p className="text-muted-foreground text-sm mb-5">You'll be the admin. Invite your team after setup.</p>
+          {/* Page heading */}
+          <h1 className="text-[2rem] font-extrabold text-gray-900 text-center mb-1 tracking-tight">Create your organization</h1>
+          <p className="text-gray-500 text-[14px] text-center mb-6">You'll be the admin. Invite your team after setup.</p>
 
           {/* Pricing card */}
           <div
-            className="rounded-xl px-5 py-4 mb-6"
-            style={{ background: "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)" }}
+            className="rounded-2xl px-6 py-5 mb-6"
+            style={{ background: "linear-gradient(135deg, #004EA8 0%, #0268CE 60%, #1A80E0 100%)" }}
           >
             <p className="text-[11px] font-bold uppercase tracking-widest mb-1 text-white">Simple, transparent pricing</p>
-            <p className="text-[28px] font-black leading-none mb-1 text-white">
-              $30<span className="text-[16px] font-semibold text-white"> / month per organization</span>
+            <p className="text-[32px] font-black leading-none mb-1 text-white">
+              $30 <span className="text-[17px] font-semibold text-white">/ month per organization</span>
             </p>
-            <p className="text-[12.5px] text-white font-medium mb-2">
-              Unlimited users · Media sharing · Secure access
+            <p className="text-[13px] text-white font-medium mb-2">
+              Unlimited users • Media sharing • Secure access
             </p>
-            <p className="text-[11.5px] text-white">No contracts. Cancel anytime.</p>
+            <p className="text-[12px] text-white">No contracts. Cancel anytime.</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Form card */}
+          <div className="bg-white rounded-2xl px-6 py-6" style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
             {errors.general && (
-              <div className="bg-red-50 border border-red-200 text-red-700 text-[13px] px-3 py-2 rounded-lg">
+              <div className="bg-red-50 border border-red-200 text-red-700 text-[13px] px-3 py-2 rounded-lg mb-4">
                 {errors.general}
               </div>
             )}
 
-            <div>
-              <label className="block text-[13px] font-semibold text-foreground mb-1">Organization name</label>
-              <Input
-                value={orgName}
-                onChange={e => {
-                  setOrgName(e.target.value);
-                  if (!subdomain) setSubdomain(generateSubdomain(e.target.value));
-                }}
-                placeholder="Calvary Community Church"
-                required
-                className="h-10"
-                style={{ "--tw-ring-color": BLUE_BD } as any}
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Organization details section */}
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">Organization details</p>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Organization name</label>
+                    <input
+                      value={orgName}
+                      onChange={e => {
+                        setOrgName(e.target.value);
+                        if (!subdomain) setSubdomain(generateSubdomain(e.target.value));
+                      }}
+                      placeholder="Calvary Community Church"
+                      required
+                      className={inputCls}
+                    />
+                  </div>
 
-            <div>
-              <label className="block text-[13px] font-semibold text-foreground mb-1">Subdomain</label>
-              <div
-                className="flex items-center border border-input rounded-lg overflow-hidden h-10 focus-within:ring-2"
-                style={{ "--tw-ring-color": BLUE_BD } as any}
+                  <div>
+                    <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Subdomain</label>
+                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden h-11 focus-within:ring-2 focus-within:ring-blue-300 focus-within:border-blue-400 transition-all bg-white">
+                      <input
+                        value={subdomain}
+                        onChange={e => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+                        placeholder="calvary"
+                        required
+                        className="flex-1 px-3 text-[14px] outline-none bg-transparent placeholder:text-gray-400"
+                      />
+                      <span className="px-3 text-[13px] text-gray-500 bg-gray-50 h-full flex items-center border-l border-gray-200 font-medium">
+                        .sentconnect.org
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Account section */}
+              <div className="border-t border-gray-100 pt-5">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">Your account</p>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Full name</label>
+                    <input
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      placeholder="Sarah Mitchell"
+                      required
+                      className={inputCls}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Email</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      placeholder="you@example.org"
+                      required
+                      className={inputCls}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Password</label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder="Min. 8 characters"
+                        required
+                        className={inputCls + " pr-10"}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(v => !v)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                        tabIndex={-1}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full h-12 text-white font-bold rounded-xl text-[15px] flex items-center justify-center gap-2 transition-all mt-2"
+                style={{ background: submitting ? "#7BB8EC" : BLUE }}
+                onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = BLUE_DK; }}
+                onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = BLUE; }}
               >
-                <input
-                  value={subdomain}
-                  onChange={e => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
-                  placeholder="calvary"
-                  required
-                  className="flex-1 px-3 text-[13px] outline-none bg-transparent"
-                />
-                <span className="px-3 text-[12px] text-muted-foreground bg-muted h-full flex items-center border-l border-input">
-                  .sentconnect.org
-                </span>
+                {submitting
+                  ? <><Loader2 className="h-4 w-4 animate-spin" />Redirecting to payment…</>
+                  : "Create your organization →"}
+              </button>
+
+              {/* Security note */}
+              <p className="text-center text-[12px] text-gray-400 flex items-center justify-center gap-1.5 mt-1">
+                <Lock className="h-3.5 w-3.5 flex-shrink-0" />
+                You'll be redirected to Stripe to complete your payment securely.
+              </p>
+            </form>
+          </div>
+
+          {/* Trust badges */}
+          <div className="flex items-start justify-center gap-6 mt-6 mb-8">
+            {[
+              { icon: <ShieldCheck className="h-5 w-5" style={{ color: BLUE }} />, bg: "#EFF6FF", title: "Secure payments", sub: "Powered by Stripe" },
+              { icon: <RefreshCw className="h-5 w-5" style={{ color: "#16A34A" }} />, bg: "#F0FDF4", title: "Cancel anytime", sub: "No contracts" },
+              { icon: <Globe className="h-5 w-5" style={{ color: "#7C3AED" }} />, bg: "#F5F3FF", title: "Built for mission teams", sub: "Connect and share confidently" },
+            ].map(({ icon, bg, title, sub }) => (
+              <div key={title} className="flex items-start gap-2.5 flex-1 min-w-0">
+                <div className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center mt-0.5" style={{ background: bg }}>
+                  {icon}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[12.5px] font-bold text-gray-800 leading-tight">{title}</p>
+                  <p className="text-[11.5px] text-gray-400 leading-tight mt-0.5">{sub}</p>
+                </div>
               </div>
-            </div>
-
-            <div className="border-t border-border/40 pt-4">
-              <p className="text-[12px] text-muted-foreground font-semibold uppercase tracking-wide mb-3">Your account</p>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-[13px] font-semibold text-foreground mb-1">Full name</label>
-                  <Input value={name} onChange={e => setName(e.target.value)} placeholder="Sarah Mitchell" required className="h-10" />
-                </div>
-                <div>
-                  <label className="block text-[13px] font-semibold text-foreground mb-1">Email</label>
-                  <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.org" required className="h-10" />
-                </div>
-                <div>
-                  <label className="block text-[13px] font-semibold text-foreground mb-1">Password</label>
-                  <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Min. 8 characters" required className="h-10" />
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full h-11 text-white font-bold rounded-xl text-[15px] flex items-center justify-center gap-2 transition-all"
-              style={{ background: submitting ? "#93C5FD" : BLUE }}
-              onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = BLUE_DK; }}
-              onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = BLUE; }}
-            >
-              {submitting
-                ? <><Loader2 className="h-4 w-4 animate-spin" />Redirecting to payment…</>
-                : "Create your organization →"}
-            </button>
-
-            <p className="text-center text-[11.5px] text-muted-foreground">
-              You'll be redirected to Stripe to complete your payment securely.
-            </p>
-          </form>
+            ))}
+          </div>
         </div>
       </div>
     </div>
