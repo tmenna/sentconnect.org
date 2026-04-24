@@ -198,7 +198,7 @@ function LandingPage() {
             <a
               href={content.headerPrimaryCtaHref}
               className="lp-nav-secondary"
-              style={{ fontSize: 14, fontWeight: 700, color: BLUE, padding: "9px 20px", borderRadius: 999, background: "#fff", textDecoration: "none", transition: "opacity .15s, transform .15s", boxShadow: "0 2px 8px rgba(0,0,0,0.12)" }}
+              style={{ fontSize: 14, fontWeight: 700, color: BLUE, padding: "9px 20px", borderRadius: 999, background: "#FFFF00", textDecoration: "none", transition: "opacity .15s, transform .15s", boxShadow: "0 2px 8px rgba(0,0,0,0.12)" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "0.92"; el.style.transform = "translateY(-1px)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "1"; el.style.transform = "translateY(0)"; }}
             >{content.headerPrimaryCtaLabel}</a>
