@@ -214,16 +214,15 @@ function LandingPage() {
         @media (max-width: 640px) {
           .lp-footer-brand-row {
             grid-template-columns: 1fr;
-            gap: 28px;
-            padding-bottom: 36px;
+            gap: 24px;
+            padding-bottom: 32px;
           }
-          .lp-footer-left  { text-align: center; }
-          .lp-footer-right { text-align: center; }
+          .lp-footer-left  { text-align: left; }
+          .lp-footer-right { text-align: left; }
           .lp-footer-legal {
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 8px;
+            align-items: flex-start;
+            gap: 6px;
           }
         }
       `}</style>
