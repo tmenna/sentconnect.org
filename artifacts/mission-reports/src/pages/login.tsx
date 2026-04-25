@@ -32,7 +32,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const [, navigate] = useLocation();
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
   const [hoverBtn, setHoverBtn] = useState(false);
-  const logoUrl = usePlatformLogo();
+  const { white: logoUrl } = usePlatformLogo();
 
   const from = (() => {
     if (platformMode) return "/admin";
@@ -132,9 +132,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       <div className="flex flex-col items-center mb-7 select-none">
         <div className="flex items-center gap-2.5 mb-2">
           {logoUrl ? (
-            <div style={{ background: "#fff", borderRadius: 12, padding: "8px 16px", display: "flex", alignItems: "center" }}>
-              <img src={logoUrl} alt="SentConnect" style={{ height: 36, maxHeight: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
-            </div>
+            <img src={logoUrl} alt="SentConnect" style={{ height: 44, maxHeight: 44, width: "auto", maxWidth: 220, objectFit: "contain" }} />
           ) : (
             <>
               <div

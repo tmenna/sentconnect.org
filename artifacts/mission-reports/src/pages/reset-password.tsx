@@ -18,7 +18,7 @@ export default function ResetPassword() {
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
   const [hoverBtn, setHoverBtn] = useState(false);
-  const logoUrl = usePlatformLogo();
+  const { white: logoUrl } = usePlatformLogo();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -61,9 +61,7 @@ export default function ResetPassword() {
       {/* Logo above card */}
       <div className="flex items-center gap-2.5 mb-8">
         {logoUrl ? (
-          <div style={{ background: "#fff", borderRadius: 12, padding: "8px 16px", display: "flex", alignItems: "center" }}>
-            <img src={logoUrl} alt="SentConnect" style={{ height: 34, maxHeight: 34, width: "auto", maxWidth: 180, objectFit: "contain" }} />
-          </div>
+          <img src={logoUrl} alt="SentConnect" style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 220, objectFit: "contain" }} />
         ) : (
           <>
             <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.18)" }}>

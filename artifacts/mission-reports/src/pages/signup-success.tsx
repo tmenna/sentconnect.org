@@ -13,7 +13,7 @@ export default function SignupSuccess() {
 
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [subdomain, setSubdomain] = useState<string | null>(null);
-  const logoUrl = usePlatformLogo();
+  const { blue: logoUrl } = usePlatformLogo();
 
   useEffect(() => {
     if (!sessionId) { setStatus("error"); return; }

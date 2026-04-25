@@ -11,7 +11,7 @@ const BLUE_DK = "#0055B3";
 export default function Signup() {
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
-  const logoUrl = usePlatformLogo();
+  const { blue: logoUrl } = usePlatformLogo();
 
   const [orgName, setOrgName]           = useState("");
   const [subdomain, setSubdomain]       = useState("");

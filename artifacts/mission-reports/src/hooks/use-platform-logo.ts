@@ -1,12 +1,9 @@
-import { useState, useEffect } from "react";
+import whiteLogo from "@assets/SENTCONNECT_LOGO_-_White_1777111187198.png";
+import blueLogo from "@assets/SENTCONNECT_LOGO_-_Blue_1777111269581.png";
 
-export function usePlatformLogo(): string {
-  const [logoUrl, setLogoUrl] = useState("");
-  useEffect(() => {
-    fetch("/api/landing-page")
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data?.logoUrl) setLogoUrl(data.logoUrl); })
-      .catch(() => {});
-  }, []);
-  return logoUrl;
+export const LOGO_WHITE = whiteLogo;
+export const LOGO_BLUE  = blueLogo;
+
+export function usePlatformLogo(): { white: string; blue: string } {
+  return { white: whiteLogo, blue: blueLogo };
 }

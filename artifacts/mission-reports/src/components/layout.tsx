@@ -17,7 +17,7 @@ export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [currentPath] = useLocation();
   const { toast } = useToast();
-  const logoUrl = usePlatformLogo();
+  const { blue: logoUrl } = usePlatformLogo();
 
   const logout = useLogoutUser({
     mutation: {

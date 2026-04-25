@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Shuffle } from "lucide-react";
+import { LOGO_WHITE, LOGO_BLUE } from "@/hooks/use-platform-logo";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/components/auth-provider";
@@ -181,10 +182,8 @@ function LandingPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, boxShadow: "0 2px 12px rgba(2,104,206,0.25)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 64 }}>
           <a href="/" className="flex items-center gap-3" style={{ textDecoration: "none" }}>
-            {(content.headerLogoUrl || content.logoUrl) ? (
-              <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, padding: "4px 10px", display: "flex", alignItems: "center" }}>
-                <img src={content.headerLogoUrl || content.logoUrl} alt={content.headerBrandName} style={{ height: 36, maxHeight: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
-              </div>
+            {(content.headerLogoUrl || content.logoUrl || LOGO_WHITE) ? (
+              <img src={content.headerLogoUrl || content.logoUrl || LOGO_WHITE} alt={content.headerBrandName} style={{ height: 38, maxHeight: 38, width: "auto", maxWidth: 200, objectFit: "contain" }} />
             ) : (
               <>
                 <div style={{ width: 36, height: 36, borderRadius: 11, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -322,8 +321,8 @@ function LandingPage() {
       <footer style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.08)", padding: "32px 24px" }}>
         <div className="lp-footer-inner mx-auto max-w-6xl">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {(content.footerLogoUrl || content.logoUrl) ? (
-              <img src={content.footerLogoUrl || content.logoUrl} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
+            {(content.footerLogoUrl || content.logoUrl || LOGO_BLUE) ? (
+              <img src={content.footerLogoUrl || content.logoUrl || LOGO_BLUE} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
             ) : (
               <>
                 <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(2,104,206,0.28)" }}>
