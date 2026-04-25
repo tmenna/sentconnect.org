@@ -107,232 +107,290 @@ function LandingPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const BLUE = "#1898F3";
-  const BLUE_DARK = "#1280D0";
+  const BLUE      = "#1E88FF";
+  const BLUE_DARK = "#0A6CFF";
+  const YELLOW    = "#FFEB00";
+  const CHARCOAL  = "#1F2937";
+  const TEXT      = "#0F172A";
+  const TEXT2     = "#64748B";
+  const BG        = "#F8FBFF";
 
   return (
-    <div className="min-h-screen text-slate-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", background: "#ffffff" }}>
+    <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
         @keyframes lp-fade-up {
-          from { opacity: 0; transform: translateY(22px); }
+          from { opacity: 0; transform: translateY(24px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        .lp-animate { animation: lp-fade-up 0.55s cubic-bezier(.22,1,.36,1) both; }
-        .lp-delay-1 { animation-delay: 0.08s; }
-        .lp-delay-2 { animation-delay: 0.16s; }
-        .lp-delay-3 { animation-delay: 0.24s; }
-        .lp-delay-4 { animation-delay: 0.32s; }
-        .lp-delay-5 { animation-delay: 0.40s; }
+        .lp-animate  { animation: lp-fade-up 0.6s cubic-bezier(.22,1,.36,1) both; }
+        .lp-delay-1  { animation-delay: 0.06s; }
+        .lp-delay-2  { animation-delay: 0.14s; }
+        .lp-delay-3  { animation-delay: 0.22s; }
+        .lp-delay-4  { animation-delay: 0.30s; }
+        .lp-delay-5  { animation-delay: 0.40s; }
 
-        /* ── Responsive layout ── */
-        .lp-hero-section { padding: 96px 0 80px; }
         .lp-hero-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 56px;
+          gap: 64px;
           align-items: center;
-          position: relative;
         }
         .lp-steps-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
+          gap: 24px;
           position: relative;
         }
         .lp-connector { display: block; }
-        .lp-nav-secondary { display: inline-flex; }
-        .lp-cta-btns { display: flex; gap: 12px; flex-wrap: wrap; }
-        .lp-footer-inner {
-          display: flex;
+        .lp-footer-cols {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+          gap: 40px;
+        }
+
+        .lp-footer-link {
+          display: block;
+          font-size: 13.5px;
+          color: #9CA3AF;
+          text-decoration: none;
+          margin-bottom: 10px;
+          transition: color .15s;
+        }
+        .lp-footer-link:hover { color: #1E88FF; }
+
+        .lp-social-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          border: 1.5px solid rgba(255,255,255,0.2);
+          display: inline-flex;
           align-items: center;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          gap: 12px;
+          justify-content: center;
+          color: #9CA3AF;
+          font-size: 12px;
+          cursor: pointer;
+          transition: border-color .15s, color .15s;
+          text-decoration: none;
         }
+        .lp-social-btn:hover { border-color: #1E88FF; color: #1E88FF; }
 
+        @media (max-width: 1024px) {
+          .lp-footer-cols { grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+        }
         @media (max-width: 900px) {
-          .lp-steps-grid {
-            grid-template-columns: 1fr;
-          }
-          .lp-connector { display: none; }
+          .lp-steps-grid  { grid-template-columns: 1fr; }
+          .lp-connector   { display: none; }
         }
-
         @media (max-width: 767px) {
-          .lp-hero-section { padding: 56px 0 40px; }
-          .lp-hero-grid {
-            grid-template-columns: 1fr;
-            gap: 36px;
-          }
-          .lp-nav-secondary { display: none; }
-          .lp-cta-btns { flex-direction: column; }
-          .lp-cta-btns a { width: 100%; justify-content: center; box-sizing: border-box; }
-          .lp-footer-inner { flex-direction: column; align-items: flex-start; }
-          .lp-howitworks-section { padding: 56px 0 !important; }
-          .lp-cta-band { padding: 52px 20px !important; }
+          .lp-hero-grid   { grid-template-columns: 1fr; gap: 40px; }
+          .lp-footer-cols { grid-template-columns: 1fr 1fr; gap: 28px; }
         }
-
         @media (max-width: 480px) {
-          .lp-hero-section { padding: 44px 0 32px; }
-          .lp-howitworks-section { padding: 44px 0 !important; }
-          .lp-cta-band { padding: 44px 20px !important; }
+          .lp-footer-cols { grid-template-columns: 1fr; }
         }
       `}</style>
 
-      {/* ── Header ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 12px rgba(24,152,243,0.25)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 64 }}>
-          <a href="/" className="flex items-center gap-3" style={{ textDecoration: "none" }}>
+      {/* ── HEADER ── */}
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(30,136,255,0.28)" }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
+          <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             {(content.headerLogoUrl || content.logoUrl || LOGO_WHITE) ? (
-              <img src={content.headerLogoUrl || content.logoUrl || LOGO_WHITE} alt={content.headerBrandName} style={{ height: 38, maxHeight: 38, width: "auto", maxWidth: 200, objectFit: "contain" }} />
+              <img src={content.headerLogoUrl || content.logoUrl || LOGO_WHITE} alt={content.headerBrandName} style={{ height: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
             ) : (
-              <>
-                <div style={{ width: 36, height: 36, borderRadius: 11, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Shuffle style={{ width: 18, height: 18, color: "#fff" }} />
-                </div>
-                <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: "-0.04em", color: "#fff" }}>{content.headerBrandName}</span>
-              </>
+              <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{content.headerBrandName}</span>
             )}
           </a>
-          <nav className="flex items-center gap-2">
-            <a
-              href={content.headerPrimaryCtaHref}
-              className="lp-nav-secondary"
-              style={{ fontSize: 14, fontWeight: 700, color: BLUE, padding: "9px 20px", borderRadius: 999, background: "#FFFF00", textDecoration: "none", transition: "opacity .15s, transform .15s", boxShadow: "0 2px 8px rgba(0,0,0,0.12)" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "0.92"; el.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "1"; el.style.transform = "translateY(0)"; }}
-            >{content.headerPrimaryCtaLabel}</a>
-          </nav>
+          <a
+            href={content.headerPrimaryCtaHref}
+            style={{ fontSize: 14, fontWeight: 700, color: TEXT, background: YELLOW, padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
+            onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0DE00"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
+            onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = YELLOW; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
+          >{content.headerPrimaryCtaLabel}</a>
         </div>
       </header>
 
       <main>
-        {/* ── Hero ── */}
-        <section className="lp-hero-section" style={{ background: "#ffffff", position: "relative", overflow: "hidden" }}>
+        {/* ── HERO ── */}
+        <section style={{ padding: "112px 0 96px", background: BG, position: "relative", overflow: "hidden" }}>
+          {/* subtle radial glow */}
+          <div style={{ position: "absolute", top: -200, right: -200, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(30,136,255,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+
           <div className="lp-hero-grid mx-auto max-w-6xl px-6">
+            {/* Left */}
             <div>
-              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 24, background: "#FFFF00", border: "1px solid #E6E600", borderRadius: 999, padding: "5px 16px", boxShadow: "0 2px 8px rgba(245,200,0,0.25)" }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: YELLOW, borderRadius: 999, padding: "5px 16px", boxShadow: "0 2px 10px rgba(255,235,0,0.4)" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: TEXT, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
               </div>
 
-              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(40px, 5.5vw, 68px)", fontWeight: 900, lineHeight: 1.05, letterSpacing: "-0.035em", color: "#0A0F1E", margin: "0 0 24px" }}>
+              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px", whiteSpace: "pre-line" }}>
                 {content.heroTitle}
               </h1>
 
-              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.75, color: "#4B5563", maxWidth: 480, margin: "0 0 40px" }}>
+              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.8, color: TEXT2, maxWidth: 460, margin: "0 0 44px" }}>
                 {content.heroDescription}
               </p>
 
-              <div className="lp-animate lp-delay-4 lp-cta-btns">
+              <div className="lp-animate lp-delay-4">
                 <a
                   href={content.primaryCtaHref}
-                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 50, padding: "0 28px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 18px rgba(24,152,243,0.28)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 24px rgba(24,152,243,0.36)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 18px rgba(24,152,243,0.28)"; }}
+                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(30,136,255,0.32)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(30,136,255,0.4)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(30,136,255,0.32)"; }}
                 >{content.primaryCtaLabel}</a>
               </div>
             </div>
 
-            {/* App preview card */}
-            <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 28, border: "1px solid rgba(24,152,243,0.1)", boxShadow: "0 32px 80px rgba(24,152,243,0.12), 0 4px 16px rgba(0,0,0,0.05)", padding: 24, position: "relative" }}>
-              {/* card header bar */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid rgba(24,152,243,0.07)" }}>
-                <div style={{ width: 34, height: 34, borderRadius: 10, background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            {/* Right — Mission Moments card */}
+            <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 24, boxShadow: "0 12px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.04)", padding: "24px", position: "relative" }}>
+              {/* accent dot */}
+              <div style={{ position: "absolute", top: -12, right: 32, width: 24, height: 24, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(30,136,255,0.45)" }} />
+
+              {/* card header */}
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #F1F5F9" }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <Shuffle style={{ width: 16, height: 16, color: "#fff" }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: 14, fontWeight: 800, color: "#0A0F1E", margin: 0, letterSpacing: "-0.01em" }}>{content.previewCardTitle}</p>
-                  <p style={{ fontSize: 11, color: "#9CA3AF", margin: "2px 0 0" }}>{content.previewLabel}</p>
+                  <p style={{ fontSize: 14, fontWeight: 800, color: TEXT, margin: 0, letterSpacing: "-0.01em" }}>{content.previewCardTitle}</p>
+                  <p style={{ fontSize: 11, color: "#94A3B8", margin: "2px 0 0" }}>{content.previewLabel}</p>
                 </div>
+                <div style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#22C55E", boxShadow: "0 0 0 3px rgba(34,197,94,0.2)" }} />
               </div>
 
-              {/* mock posts */}
+              {/* feed rows */}
               {[
-                { title: content.previewTitle1, ago: "2h ago", w: "82%", avatarOpacity: 0.18 },
-                { title: content.previewTitle2, ago: "3h ago", w: "68%", avatarOpacity: 0.13 },
-                { title: content.previewTitle3, ago: "5h ago", w: "55%", avatarOpacity: 0.09 },
-              ].map(({ title, ago, w, avatarOpacity }, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid rgba(24,152,243,0.06)" : "none" }}>
-                  <div style={{ width: 38, height: 38, borderRadius: "50%", background: `rgba(24,152,243,${avatarOpacity})`, flexShrink: 0, marginTop: 1 }} />
+                { title: content.previewTitle1, ago: "2h ago", w: "80%", color: "rgba(30,136,255,0.18)" },
+                { title: content.previewTitle2, ago: "3h ago", w: "65%", color: "rgba(30,136,255,0.12)" },
+                { title: content.previewTitle3, ago: "5h ago", w: "52%", color: "rgba(30,136,255,0.08)" },
+              ].map(({ title, ago, w, color }, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid #F8FAFC" : "none" }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: color, flexShrink: 0 }} />
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
-                    <p style={{ fontSize: 11, color: "#9CA3AF", margin: "0 0 8px" }}>{ago}</p>
-                    <div style={{ height: 6, background: "rgba(24,152,243,0.08)", borderRadius: 999, width: "100%" }} />
-                    <div style={{ height: 6, background: "rgba(24,152,243,0.06)", borderRadius: 999, width: w, marginTop: 5 }} />
+                    <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
+                    <p style={{ fontSize: 11, color: "#94A3B8", margin: "0 0 8px" }}>{ago}</p>
+                    <div style={{ height: 5, background: "rgba(30,136,255,0.08)", borderRadius: 999, width: "100%" }} />
+                    <div style={{ height: 5, background: "rgba(30,136,255,0.06)", borderRadius: 999, width: w, marginTop: 4 }} />
                   </div>
                 </div>
               ))}
-
-              {/* decorative dot */}
-              <div style={{ position: "absolute", top: -14, right: 28, width: 28, height: 28, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(24,152,243,0.4)" }} />
             </div>
           </div>
         </section>
 
-        {/* ── How it works ── */}
-        <section className="lp-howitworks-section" style={{ background: "#fff", padding: "88px 0" }}>
+        {/* ── HOW IT WORKS ── */}
+        <section style={{ background: "#fff", padding: "112px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
-            <div style={{ textAlign: "center", marginBottom: 56 }}>
-              <p style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>{content.howItWorksLabel}</p>
-              <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 900, letterSpacing: "-0.03em", color: "#0A0F1E", margin: 0 }}>{content.howItWorksHeading}</h2>
+            <div style={{ textAlign: "center", marginBottom: 64 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 12 }}>HOW IT WORKS</p>
+              <h2 style={{ fontSize: "clamp(30px, 3.5vw, 46px)", fontWeight: 900, letterSpacing: "-0.035em", color: TEXT, margin: 0 }}>{content.howItWorksHeading}</h2>
             </div>
 
             <div className="lp-steps-grid">
               {/* connector line */}
-              <div className="lp-connector" style={{ position: "absolute", top: 34, left: "calc(16.66% + 14px)", right: "calc(16.66% + 14px)", height: 1, background: `linear-gradient(90deg, transparent, rgba(24,152,243,0.2), transparent)`, pointerEvents: "none" }} />
+              <div className="lp-connector" style={{ position: "absolute", top: 36, left: "calc(16.66% + 16px)", right: "calc(16.66% + 16px)", height: 1, background: "linear-gradient(90deg, transparent, rgba(30,136,255,0.2), transparent)", pointerEvents: "none" }} />
 
               {[
                 { title: content.step1Title, desc: content.step1Description, n: "01" },
                 { title: content.step2Title, desc: content.step2Description, n: "02" },
                 { title: content.step3Title, desc: content.step3Description, n: "03" },
               ].map(({ title, desc, n }) => (
-                <div key={n} style={{ background: "#fff", border: "1px solid #EAECF0", borderRadius: 20, padding: "28px 24px 28px", position: "relative", overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
-                  {/* step number circle */}
-                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20, boxShadow: "0 4px 12px rgba(24,152,243,0.25)" }}>
-                    <span style={{ fontSize: 13, fontWeight: 900, color: "#fff" }}>{n}</span>
+                <div key={n} style={{ background: "#fff", borderRadius: 20, padding: "32px 28px", boxShadow: "0 12px 40px rgba(15,23,42,0.08)", border: "1px solid #F1F5F9" }}>
+                  <div style={{ width: 48, height: 48, borderRadius: "50%", background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, boxShadow: "0 4px 14px rgba(30,136,255,0.3)" }}>
+                    <span style={{ fontSize: 13, fontWeight: 900, color: "#fff", letterSpacing: "0.02em" }}>{n}</span>
                   </div>
-                  <h3 style={{ fontSize: 17, fontWeight: 800, color: "#0A0F1E", margin: "0 0 10px", letterSpacing: "-0.02em" }}>{title}</h3>
-                  <p style={{ fontSize: 14, lineHeight: 1.75, color: "#6B7280", margin: 0 }}>{desc}</p>
+                  <h3 style={{ fontSize: 18, fontWeight: 800, color: TEXT, margin: "0 0 12px", letterSpacing: "-0.025em" }}>{title}</h3>
+                  <p style={{ fontSize: 14.5, lineHeight: 1.75, color: TEXT2, margin: 0 }}>{desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── CTA band ── */}
-        <section className="lp-cta-band" style={{ background: BLUE, padding: "72px 24px" }}>
-          <div style={{ textAlign: "center", maxWidth: 580, margin: "0 auto" }}>
-            <h2 style={{ fontSize: "clamp(26px, 3.5vw, 42px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", margin: "0 0 16px" }}>
+        {/* ── CTA BAND ── */}
+        <section style={{ background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_DARK} 100%)`, padding: "100px 24px" }}>
+          <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto" }}>
+            <h2 style={{ fontSize: "clamp(28px, 3.5vw, 46px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.035em", lineHeight: 1.2, margin: "0 0 18px" }}>
               {content.ctaBandHeading}
             </h2>
-            <p style={{ fontSize: 17, color: "rgba(255,255,255,0.78)", margin: "0 0 36px", lineHeight: 1.65 }}>
+            <p style={{ fontSize: 18, color: "rgba(255,255,255,0.78)", margin: "0 0 40px", lineHeight: 1.7 }}>
               {content.ctaBandSubtext}
             </p>
             <a
               href={content.primaryCtaHref}
-              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 32px", borderRadius: 14, background: "#FFFF00", color: BLUE, fontSize: 15, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.15)", transition: "transform .15s, box-shadow .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 28px rgba(0,0,0,0.2)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(0,0,0,0.15)"; }}
+              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: YELLOW, color: TEXT, fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,0,0,0.18)", transition: "transform .15s, box-shadow .15s, background .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0DE00"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.24)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = YELLOW; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(0,0,0,0.18)"; }}
             >{content.primaryCtaLabel}</a>
           </div>
         </section>
       </main>
 
-      {/* ── Footer ── */}
-      <footer style={{ background: BLUE, padding: "32px 24px" }}>
-        <div className="lp-footer-inner mx-auto max-w-6xl">
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {(content.footerLogoUrl || LOGO_WHITE) ? (
-              <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
-            ) : (
-              <>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Shuffle style={{ width: 13, height: 13, color: "#fff" }} />
-                </div>
-                <span style={{ fontSize: 15, fontWeight: 900, letterSpacing: "-0.03em", color: "#fff" }}>{content.footerBrandName}</span>
-              </>
-            )}
+      {/* ── FOOTER ── */}
+      <footer style={{ background: `linear-gradient(180deg, #263341 0%, ${CHARCOAL} 100%)`, padding: "72px 24px 0" }}>
+        <div className="mx-auto max-w-6xl">
+          <div className="lp-footer-cols" style={{ paddingBottom: 56 }}>
+            {/* Col 1 — brand */}
+            <div>
+              {(content.footerLogoUrl || LOGO_WHITE) ? (
+                <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 16 }} />
+              ) : (
+                <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 16 }}>{content.footerBrandName}</span>
+              )}
+              <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 240, margin: 0 }}>
+                Private updates for churches and mission teams, all in one secure feed.
+              </p>
+            </div>
+
+            {/* Col 2 — Product */}
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>Product</p>
+              <a href="#" className="lp-footer-link">Features</a>
+              <a href="#" className="lp-footer-link">Security</a>
+              <a href={content.primaryCtaHref} className="lp-footer-link">Pricing</a>
+            </div>
+
+            {/* Col 3 — Resources */}
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>Resources</p>
+              <a href="#" className="lp-footer-link">Help Center</a>
+              <a href="#" className="lp-footer-link">Guides</a>
+              <a href="#" className="lp-footer-link">Blog</a>
+            </div>
+
+            {/* Col 4 — Company */}
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>Company</p>
+              <a href="#" className="lp-footer-link">About</a>
+              <a href="#" className="lp-footer-link">Contact</a>
+              <a href="#" className="lp-footer-link">Privacy Policy</a>
+            </div>
+
+            {/* Col 5 — Follow */}
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>Follow Us</p>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {[
+                  { label: "X",  href: "#" },
+                  { label: "in", href: "#" },
+                  { label: "f",  href: "#" },
+                  { label: "ig", href: "#" },
+                ].map(({ label, href }) => (
+                  <a key={label} href={href} className="lp-social-btn">{label}</a>
+                ))}
+              </div>
+            </div>
           </div>
-          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", margin: 0 }}>{content.footerOwnerText}</p>
+
+          {/* Divider */}
+          <div style={{ height: 1, background: "rgba(255,255,255,0.08)", marginBottom: 24 }} />
+
+          {/* Legal bar */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, paddingBottom: 32 }}>
+            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>{content.footerOwnerText}</p>
+            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>© 2026 Holtek Solutions. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>

@@ -1,0 +1,248 @@
+Redesign the SentConnect landing page into a premium modern SaaS homepage inspired by Stripe, Linear, and Framer, following this layout and styling.
+
+GOAL
+Create a clean, trust-building landing page for churches and mission teams with strong whitespace, modern typography, soft shadows, and a polished blue/yellow brand system.
+
+COLOR SYSTEM
+Primary Blue:
+#1E88FF
+
+Gradient Blue:
+linear-gradient(135deg,#1E88FF 0%, #0A6CFF 100%)
+
+Accent Yellow:
+#FFEB00
+
+Page Background:
+#F8FBFF
+
+Footer Charcoal:
+#1F2937
+
+Text:
+#0F172A
+
+Secondary Text:
+#64748B
+
+
+---------------------------------------------------
+1. TOP NAVIGATION
+---------------------------------------------------
+
+Create a slim full-width blue top bar.
+
+Height:
+72px
+
+Left:
+SentConnect logo in white
+
+Right:
+Rounded yellow CTA button:
+Sign Up
+
+Button:
+- background #FFEB00
+- dark text
+- pill radius
+- subtle shadow
+- hover slightly darker yellow
+
+
+---------------------------------------------------
+2. HERO SECTION
+---------------------------------------------------
+
+Two-column layout centered in container (1200px max).
+
+LEFT SIDE:
+Small yellow pill badge:
+CONNECTING CHURCHES AND FIELD TEAMS
+
+Large bold headline:
+Stay connected
+with your field
+teams through
+one secure,
+shared mission
+feed.
+
+Large typography:
+56-64px
+Very bold
+Dark navy text
+
+Paragraph:
+SentConnect gives churches and mission organizations
+a dedicated space where field teams can share
+updates, photos, prayer needs, and impact reports
+with their church community.
+
+Blue primary button:
+Set Up Your Organization
+
+Rounded button with shadow.
+
+RIGHT SIDE:
+Floating white “Mission Moments” card:
+- rounded corners (24px)
+- soft shadow
+- activity feed mockup
+- subtle blue accent dot
+- simple activity rows
+- polished SaaS illustration feel
+
+
+---------------------------------------------------
+3. HOW IT WORKS SECTION
+---------------------------------------------------
+
+Centered section title:
+
+small label:
+HOW IT WORKS
+
+headline:
+Simple for churches. Powerful for teams.
+
+Below:
+3 feature cards in row
+
+Cards:
+white background
+rounded 20px
+soft shadow
+equal width
+
+Each card:
+Blue numbered circle:
+01 / 02 / 03
+
+Card titles:
+1. Sign up
+2. Use your portal
+3. Share updates
+
+Short supporting descriptions.
+
+Add subtle connector line between cards.
+
+
+---------------------------------------------------
+4. BLUE CTA BAND
+---------------------------------------------------
+
+Full width section with gradient:
+
+#1E88FF -> #0A6CFF
+
+Generous vertical padding.
+
+Centered text:
+
+Bring your church and field
+teams closer together.
+
+Subtext:
+Set up your organization in minutes.
+
+Yellow CTA button:
+Set Up Your Organization
+
+Large pill button.
+Strong contrast.
+
+
+---------------------------------------------------
+5. CHARCOAL FOOTER
+---------------------------------------------------
+
+Use sophisticated charcoal footer:
+#1F2937
+
+Optional subtle gradient:
+#263341 -> #1F2937
+
+Five-column footer:
+
+Column 1:
+SentConnect logo
+Short product description
+
+Column 2:
+PRODUCT
+Features
+Security
+Pricing
+
+Column 3:
+RESOURCES
+Help Center
+Guides
+Blog
+
+Column 4:
+COMPANY
+About
+Contact
+Privacy Policy
+
+Column 5:
+FOLLOW US
+Circular outlined social icons
+
+Text:
+white headings
+soft gray secondary text
+
+Hover links:
+#1E88FF
+
+Thin divider line
+
+Bottom legal bar:
+Holtek Solutions LLC...
+© 2026 Holtek Solutions.
+
+
+---------------------------------------------------
+6. GLOBAL DESIGN STYLING
+---------------------------------------------------
+
+Use:
+- Inter font
+- Large whitespace
+- 2xl rounded corners
+- Soft layered shadows
+- Modern SaaS polish
+- Clean responsive layout
+
+Cards:
+shadow:
+0 12px 40px rgba(15,23,42,.08)
+
+Buttons:
+subtle hover transitions
+
+Sections should breathe:
+120px vertical spacing
+
+Mobile responsive:
+Stack hero columns
+Stack feature cards
+Stack footer columns
+
+
+---------------------------------------------------
+DESIGN STYLE REFERENCES
+---------------------------------------------------
+
+Look like:
+- Stripe
+- Linear
+- Framer
+- Notion-quality SaaS landing page
+
+Keep existing SentConnect content and structure,
+but elevate everything visually to match a premium software product homepage.
