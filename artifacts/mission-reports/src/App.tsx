@@ -321,8 +321,8 @@ function LandingPage() {
       <footer style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.08)", padding: "32px 24px" }}>
         <div className="lp-footer-inner mx-auto max-w-6xl">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {(content.footerLogoUrl || content.logoUrl || LOGO_BLUE) ? (
-              <img src={content.footerLogoUrl || content.logoUrl || LOGO_BLUE} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
+            {(content.footerLogoUrl || LOGO_BLUE) ? (
+              <img src={content.footerLogoUrl || LOGO_BLUE} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
             ) : (
               <>
                 <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(2,104,206,0.28)" }}>
