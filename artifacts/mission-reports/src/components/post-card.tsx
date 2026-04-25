@@ -4,7 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import {
   Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
   Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
-  Link2
+  Link2, Share2, HandMetal
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -430,26 +430,13 @@ export function PostCard({
         ? { borderBottom: "1px solid #F3F4F6" }
         : { border: "1px solid #BFDBFE", boxShadow: "0 2px 12px rgba(2,104,206,0.06)" }}
     >
-      {/* Mission Moment banner — takes priority over Highlight */}
-      {post.isMissionMoment ? (
-        <div
-          className="flex items-center gap-2 px-4 py-2 border-b"
-          style={{ background: "#EFF6FF", borderColor: "#BFDBFE" }}
-        >
-          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#005BBC" }} />
-          <span className="text-[12px] font-semibold" style={{ color: "#0268CE" }}>Mission Moments</span>
-          {post.isHighlight && (
-            <Star className="h-3 w-3 fill-amber-400 text-amber-400 ml-0.5" />
-          )}
-          <div className="flex-1" />
-          <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />
-        </div>
-      ) : post.isHighlight ? (
-        <div className="flex items-center gap-1.5 px-4 py-1.5 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
+      {/* Highlight banner (only when not mission moment) */}
+      {!post.isMissionMoment && post.isHighlight && (
+        <div className="flex items-center gap-1.5 px-5 py-1.5 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
           <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
           Highlight
         </div>
-      ) : null}
+      )}
 
       {/* Header */}
       <div className="flex items-start gap-3 px-5 pt-5 pb-3">
@@ -469,21 +456,23 @@ export function PostCard({
             {post.author.name}
           </Link>
           <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
-            <span
-              style={{
-                fontSize: 11,
-                background: "#0268CE",
-                color: "#fff",
-                borderRadius: 999,
-                padding: "2px 8px",
-                fontWeight: 500,
-                letterSpacing: "0.01em",
-              }}
-            >{timeAgo}</span>
+            <span className="text-[12px]" style={{ color: "#9CA3AF" }}>{timeAgo}</span>
+            {post.isMissionMoment && (
+              <>
+                <span className="text-[#d1d5db] text-[10px]">•</span>
+                <span
+                  className="flex items-center gap-1 text-[12px] font-medium"
+                  style={{ color: "#0268CE" }}
+                >
+                  <BookOpen className="h-3 w-3" />
+                  Mission Moment
+                </span>
+              </>
+            )}
             {post.location && (
               <>
                 <span className="text-[#d1d5db] text-[10px]">•</span>
-                <span className="flex items-center gap-1 text-[12.5px] text-[#6b7280]">
+                <span className="flex items-center gap-1 text-[12px] text-[#6b7280]">
                   <MapPin className="h-3 w-3 text-[#9ca3af]" />
                   {post.location}
                 </span>
@@ -544,18 +533,7 @@ export function PostCard({
           {/* Text */}
           {post.description && (
             <div className="px-5 pb-4">
-              {flat ? (
-                <p className="text-[17px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
-              ) : (
-                <div className={cn(
-                  "rounded-xl px-4 py-3 border",
-                  post.isMissionMoment
-                    ? "border-blue-100 bg-blue-50/20"
-                    : "border-gray-100 bg-gray-50/50"
-                )}>
-                  <p className="text-[17px] text-[#111827] leading-[1.8] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
-                </div>
-              )}
+              <p className="text-[15.5px] text-[#111827] leading-[1.75] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
             </div>
           )}
 
@@ -577,46 +555,52 @@ export function PostCard({
           )}
 
           {/* Action bar */}
-          <div className="flex items-center gap-1 px-4 pb-3 pt-2 border-t border-[#f3f4f6]">
+          <div className="flex items-center border-t border-[#f3f4f6] pt-1 pb-1">
+            {/* Like */}
             <button
               onClick={toggleLike}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all",
+                "flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium transition-all rounded-lg mx-1",
                 post.likedByMe
                   ? "text-red-500 bg-red-50 hover:bg-red-100"
-                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                  : "text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#111827]"
               )}
             >
               <Heart className={cn("h-4 w-4", post.likedByMe && "fill-red-500")} />
-              {post.likeCount > 0 && <span>{post.likeCount}</span>}
+              <span>Like{post.likeCount > 0 ? ` ${post.likeCount}` : ""}</span>
             </button>
+
+            {/* Comment */}
             <button
               onClick={toggleComments}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#111827] transition-all rounded-lg mx-1"
             >
               <MessageCircle className="h-4 w-4" />
-              {post.commentCount > 0 && <span>{post.commentCount}</span>}
+              <span>Comment{post.commentCount > 0 ? ` ${post.commentCount}` : ""}</span>
             </button>
-            <div className="flex-1" />
+
+            {/* Pray */}
+            <button
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#111827] transition-all rounded-lg mx-1"
+              title="Pray for this update"
+            >
+              <HandMetal className="h-4 w-4" />
+              <span>Pray</span>
+            </button>
+
+            {/* Share */}
             <button
               onClick={copyShareLink}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all",
+                "flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium transition-all rounded-lg mx-1",
                 copied
                   ? "text-[#0268CE] bg-blue-50"
                   : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               )}
             >
-              {copied ? <Check className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
-              {copied ? "Copied!" : "Share"}
+              {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
+              <span>{copied ? "Copied!" : "Share"}</span>
             </button>
-            {!hideViewPost && (
-              <Link href={`/reports/${post.id}`}>
-                <span className="text-[12px] text-muted-foreground hover:text-primary transition-colors cursor-pointer">
-                  View post
-                </span>
-              </Link>
-            )}
           </div>
 
           {/* Comments */}

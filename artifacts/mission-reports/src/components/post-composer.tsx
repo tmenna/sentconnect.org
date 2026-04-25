@@ -209,7 +209,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
-            placeholder="What's happening?"
+            placeholder="Share an update with your church or field team…"
             disabled={posting}
             rows={text.length > 80 ? 4 : 2}
             className="w-full resize-none bg-transparent text-[16px] outline-none leading-relaxed disabled:opacity-50 placeholder:text-[#9CA3AF]"
@@ -307,18 +307,19 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
           )}
 
           {/* Toolbar */}
-          <div className="flex items-center gap-0.5 mt-3 pt-3" style={{ borderTop: "1px solid #F1F5F9" }}>
+          <div className="flex items-center gap-1 mt-3 pt-3 flex-wrap" style={{ borderTop: "1px solid #F1F5F9" }}>
             {/* Photo */}
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={posting || files.length >= 6}
-              className="p-2 rounded-full transition-colors disabled:opacity-40"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors disabled:opacity-40"
               style={{ color: "#6B7280" }}
               onMouseEnter={e => { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; }}
               onMouseLeave={e => { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; }}
               title="Add photo"
             >
               <Image className="h-4 w-4" />
+              <span>Photo</span>
             </button>
             <input ref={fileInputRef} type="file" multiple accept="image/*" className="hidden" onChange={e => addFiles(e.target.files)} />
 
@@ -326,13 +327,14 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={() => videoInputRef.current?.click()}
               disabled={posting || files.length >= 6}
-              className="p-2 rounded-full transition-colors disabled:opacity-40"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors disabled:opacity-40"
               style={{ color: files.some(f => isVideo(f)) ? "#111827" : "#6B7280", background: files.some(f => isVideo(f)) ? "#F3F4F6" : "" }}
               onMouseEnter={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
               onMouseLeave={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add short video"
             >
               <Video className="h-4 w-4" />
+              <span>Video</span>
             </button>
             <input ref={videoInputRef} type="file" accept="video/*" className="hidden" onChange={e => addFiles(e.target.files)} />
 
@@ -340,42 +342,32 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={() => setShowLocation(s => !s)}
               disabled={posting}
-              className="p-2 rounded-full transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors"
               style={{ color: showLocation ? "#111827" : "#6B7280", background: showLocation ? "#F3F4F6" : "" }}
               onMouseEnter={e => { if (!showLocation) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
               onMouseLeave={e => { if (!showLocation) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add location"
             >
               <MapPin className="h-4 w-4" />
+              <span>Location</span>
             </button>
 
-            {/* Impact */}
-            <button
-              onClick={() => setShowImpact(s => !s)}
-              disabled={posting}
-              className="p-2 rounded-full transition-colors"
-              style={{ color: showImpact ? "#0268CE" : "#6B7280", background: showImpact ? "#EFF6FF" : "" }}
-              onMouseEnter={e => { if (!showImpact) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
-              onMouseLeave={e => { if (!showImpact) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
-              title="Add impact"
-            >
-              <Users className="h-4 w-4" />
-            </button>
-
-            {/* Mission Moment — soft blue pill */}
+            {/* Mission Moment — labeled pill */}
             <button
               onClick={() => setIsMissionMoment(s => !s)}
               disabled={posting}
               title="A Mission Moment is a 3–5 minute story, video, or update that highlights God's work and connects people to the broader mission."
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200"
               style={{
                 background: isMissionMoment ? "#EFF6FF" : "transparent",
                 color: isMissionMoment ? "#0268CE" : "#6B7280",
                 border: isMissionMoment ? "1px solid #BFDBFE" : "1px solid transparent",
               }}
+              onMouseEnter={e => { if (!isMissionMoment) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
+              onMouseLeave={e => { if (!isMissionMoment) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
             >
-              <Star className={cn("h-3.5 w-3.5", isMissionMoment ? "fill-[#0268CE] text-[#0268CE]" : "")} />
-              <span className="hidden sm:inline">Mission Moments</span>
+              <Star className={cn("h-4 w-4", isMissionMoment ? "fill-[#0268CE] text-[#0268CE]" : "")} />
+              <span>Mission Moment</span>
             </button>
 
             <div className="flex-1" />
@@ -395,7 +387,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#0155a5"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "#0268CE"; }}
             >
-              Post
+              Post Update
             </button>
           </div>
         </div>

@@ -11,7 +11,6 @@ type FeedTab = "all" | "moments";
 
 const EMERALD = "#0268CE";
 
-/* Reusable world-map SVG paths (same as admin banner) */
 function WorldMapOverlay() {
   return (
     <svg
@@ -64,6 +63,7 @@ export default function MissionaryDashboard() {
   const allPosts: PostData[] = posts ?? ((data ?? []) as PostData[]);
   const missionMoments = allPosts.filter(p => p.isMissionMoment);
   const myPosts = activeTab === "moments" ? missionMoments : allPosts;
+
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : (data as PostData[] ?? []).filter(p => p.id !== id));
   }
@@ -71,27 +71,29 @@ export default function MissionaryDashboard() {
   const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
 
-      {/* ── Full-bleed "My Updates" banner ── */}
+      {/* ── Mission Feed header card ── */}
       <div
-        className="relative -mx-4 sm:-mx-8 -mt-8 overflow-hidden"
+        className="relative overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)",
-          borderRadius: "16px",
+          borderRadius: 16,
+          border: "1px solid rgba(255,255,255,0.08)",
+          boxShadow: "0 4px 24px rgba(2,104,206,0.18)",
         }}
       >
         <WorldMapOverlay />
 
-        <div className="relative z-10 px-6 sm:px-8 pt-7 pb-6">
-          <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 28, color: "#fff" }}>
-            My Updates
+        <div className="relative z-10 px-8 pt-7 pb-7">
+          <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#fff" }}>
+            Mission Feed
           </h1>
           <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>
-            Stay connected. Share what God is doing.
+            Stay connected. Share what God is doing in the field.
           </p>
 
-          {/* Stat box */}
+          {/* Stat boxes */}
           <div className="flex gap-3 mt-5">
             <div
               className="flex items-center gap-3 rounded-xl px-4 py-3"
@@ -104,6 +106,20 @@ export default function MissionaryDashboard() {
               <div>
                 <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{allPosts.length}</p>
                 <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Posts Shared</p>
+              </div>
+            </div>
+
+            <div
+              className="flex items-center gap-3 rounded-xl px-4 py-3"
+              style={{ background: "rgba(255,255,255,0.15)", minWidth: 160 }}
+            >
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: "rgba(255,214,0,0.18)" }}>
+                <Star className="h-4 w-4" style={{ color: "#FFD600", fill: "#FFD600" }} />
+              </div>
+              <div>
+                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{missionMoments.length}</p>
+                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Mission Moments</p>
               </div>
             </div>
           </div>
@@ -162,7 +178,7 @@ export default function MissionaryDashboard() {
       {postsLoading && posts === null ? (
         <div className="bg-white rounded-2xl border border-border/50 overflow-hidden divide-y divide-border/40">
           {[1, 2, 3].map(i => (
-            <div key={i} className="p-5 space-y-3">
+            <div key={i} className="p-6 space-y-3">
               <div className="flex items-center gap-3">
                 <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
                 <div className="space-y-1.5 flex-1">
@@ -197,7 +213,7 @@ export default function MissionaryDashboard() {
           )}
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {myPosts.map(post => (
             <PostCard key={post.id} post={post} hideViewPost onDelete={handleDelete} />
           ))}
