@@ -12,12 +12,11 @@ import {
   Globe, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
-  BarChart3, Star, UserCog, BookOpen, MapPin, PenSquare, Send,
+  BarChart3, Star, UserCog, BookOpen, MapPin, PenSquare,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PostCard, type PostData } from "@/components/post-card";
-import { PostComposer } from "@/components/post-composer";
+import { type PostData } from "@/components/post-card";
 import { FeedGridCard, PostDetailModal } from "@/components/feed-grid";
 import { format } from "date-fns";
 // ─── helpers ───────────────────────────────────────────────────────────────
@@ -1114,7 +1113,7 @@ export default function AdminDashboard() {
 
         {/* ── Tab: Activity Feed ── */}
         {activeTab === "feed" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          <div className="space-y-4">
 
             {/* Missions Feed hero card */}
             <div
@@ -1159,15 +1158,10 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Post Composer */}
-            <PostComposer
-              onPost={(newPost) => setFeedPosts(prev => [newPost, ...(prev ?? (timelineData?.reports as PostData[] ?? []))])}
-            />
-
             {/* Feed sub-tabs */}
             <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
               {[
-                { id: "all", label: "All Posts", icon: <Send className="h-3.5 w-3.5" />, count: !feedLoading ? allFeedPosts.length : null, activeColor: "#0268CE", activeBg: "#EFF6FF" },
+                { id: "all", label: "All Posts", icon: <Globe className="h-3.5 w-3.5" />, count: !feedLoading ? allFeedPosts.length : null, activeColor: "#0268CE", activeBg: "#EFF6FF" },
                 { id: "moments", label: "Mission Moments", icon: <Star className="h-3.5 w-3.5" style={{ fill: feedMomentFilter === "moments" ? "#DB1C4F" : "none", color: feedMomentFilter === "moments" ? "#DB1C4F" : "currentColor" }} />, count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null, activeColor: "#DB1C4F", activeBg: "#FFF1F4" },
               ].map(tab => {
                 const active = feedMomentFilter === tab.id;
@@ -1175,7 +1169,7 @@ export default function AdminDashboard() {
                   <button
                     key={tab.id}
                     onClick={() => setFeedMomentFilter(tab.id as any)}
-                    className="flex items-center gap-2 px-1 pb-3 pt-1 mr-5 text-[14px] font-semibold border-b-2 -mb-px transition-all duration-200"
+                    className="flex items-center gap-1.5 px-1 pb-3 pt-1 mr-5 text-[13px] font-semibold border-b-2 -mb-px transition-colors"
                     style={{
                       borderColor: active ? tab.activeColor : "transparent",
                       color: active ? tab.activeColor : "#9CA3AF",
@@ -1194,11 +1188,6 @@ export default function AdminDashboard() {
                   </button>
                 );
               })}
-              {!feedLoading && (
-                <span className="ml-auto pb-3 text-[13px]" style={{ color: "#9CA3AF" }}>
-                  {displayedFeedPosts.length} result{displayedFeedPosts.length !== 1 ? "s" : ""}
-                </span>
-              )}
             </div>
 
             {/* Filters */}
@@ -1246,19 +1235,21 @@ export default function AdminDashboard() {
             </div>
 
             {feedLoading ? (
-              <div className="space-y-4">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="bg-white rounded-2xl border border-border/50 overflow-hidden p-6 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
-                      <div className="space-y-1.5 flex-1">
-                        <Skeleton className="h-3.5 w-28" />
-                        <Skeleton className="h-2.5 w-20" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[1, 2, 3, 4, 5, 6].map(i => (
+                  <div key={i} className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden">
+                    <Skeleton className="w-full aspect-[4/3]" />
+                    <div className="p-3.5 space-y-2.5">
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-7 w-7 rounded-full" />
+                        <div className="space-y-1 flex-1">
+                          <Skeleton className="h-2.5 w-24" />
+                          <Skeleton className="h-2 w-16" />
+                        </div>
                       </div>
+                      <Skeleton className="h-3 w-full" />
+                      <Skeleton className="h-3 w-3/4" />
                     </div>
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-4/5" />
-                    {i === 1 && <Skeleton className="h-48 w-full rounded-lg" />}
                   </div>
                 ))}
               </div>
@@ -1279,15 +1270,30 @@ export default function AdminDashboard() {
                 )}
               </div>
             ) : (
-              <div className="space-y-4">
-                {displayedFeedPosts.map(post => (
-                  <PostCard
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {displayedFeedPosts.map((post, i) => (
+                  <FeedGridCard
                     key={post.id}
                     post={post}
-                    onDelete={(id) => setFeedPosts(prev => prev ? prev.filter(p => p.id !== id) : null)}
+                    onClick={() => setSelectedPostIndex(i)}
                   />
                 ))}
               </div>
+            )}
+
+            {/* Post detail modal */}
+            {selectedPostIndex !== null && displayedFeedPosts[selectedPostIndex] && (
+              <PostDetailModal
+                post={displayedFeedPosts[selectedPostIndex]}
+                allPosts={displayedFeedPosts}
+                postIndex={selectedPostIndex}
+                onNavigate={setSelectedPostIndex}
+                onClose={() => setSelectedPostIndex(null)}
+                onDelete={(id) => {
+                  setFeedPosts(prev => prev ? prev.filter(p => p.id !== id) : null);
+                  setSelectedPostIndex(null);
+                }}
+              />
             )}
           </div>
         )}
