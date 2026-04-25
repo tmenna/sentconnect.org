@@ -12,7 +12,7 @@ import {
   Globe, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
-  BarChart3, Star, UserCog, BookOpen, MapPin, PenSquare,
+  BarChart3, Star, UserCog, BookOpen, MapPin,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -885,10 +885,12 @@ export default function AdminDashboard() {
 
         {/* ── Global Partners banner ── */}
         <div
-          className="relative -mx-4 sm:-mx-8 -mt-8 overflow-hidden"
+          className="relative overflow-hidden"
           style={{
             background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)",
-            borderRadius: "16px",
+            borderRadius: 16,
+            border: "1px solid rgba(255,255,255,0.08)",
+            boxShadow: "0 4px 24px rgba(2,104,206,0.18)",
           }}
         >
 
@@ -932,11 +934,11 @@ export default function AdminDashboard() {
           </svg>
 
           {/* Banner content */}
-          <div className="relative z-10 px-6 sm:px-8 pt-7 pb-6">
+          <div className="relative z-10 px-8 pt-7 pb-7">
             {/* Title row */}
             <div className="flex items-start justify-between gap-4 mb-1">
               <div>
-                <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 28, color: "#fff" }}>
+                <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#fff" }}>
                   Global Partners
                 </h1>
                 <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>
@@ -1114,49 +1116,6 @@ export default function AdminDashboard() {
         {/* ── Tab: Activity Feed ── */}
         {activeTab === "feed" && (
           <div className="space-y-4">
-
-            {/* Missions Feed hero card */}
-            <div
-              className="relative overflow-hidden"
-              style={{
-                background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)",
-                borderRadius: 16,
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 4px 24px rgba(2,104,206,0.18)",
-              }}
-            >
-              <svg aria-hidden className="pointer-events-none select-none absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice" viewBox="0 0 900 120" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.18 }}>
-                <g fill="white">
-                  <path d="M 32,10 L 65,13 L 102,18 L 145,36 L 158,28 L 178,20 L 208,9 L 248,21 L 282,37 L 308,44 L 322,37 L 308,43 L 285,47 L 268,53 L 256,62 L 252,70 L 238,76 L 225,78 L 212,74 L 198,71 L 182,68 L 165,65 L 152,61 L 143,41 L 118,27 L 78,19 Z" />
-                  <path d="M 435,52 L 464,49 L 480,49 L 502,52 L 517,58 L 530,67 L 537,80 L 537,94 L 530,107 L 520,120 L 506,130 L 492,134 L 477,131 L 462,122 L 450,110 L 440,97 L 435,82 L 432,67 Z" />
-                  <path d="M 514,17 L 562,9 L 628,7 L 702,7 L 762,14 L 812,21 L 860,17 L 882,24 L 872,32 L 852,38 L 828,45 L 802,50 L 778,52 L 754,58 L 732,65 L 716,76 L 700,82 L 682,78 L 660,75 L 648,82 L 632,78 L 614,72 L 597,68 L 580,62 L 562,56 L 546,50 L 537,44 L 530,38 L 517,32 Z" />
-                </g>
-              </svg>
-              <div className="relative z-10 px-8 pt-7 pb-7">
-                <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#fff" }}>Missions Feed</h1>
-                <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>Stay connected. Share what God is doing in the field.</p>
-                <div className="flex gap-3 mt-5">
-                  <div className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}>
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(57,188,122,0.25)" }}>
-                      <PenSquare className="h-4 w-4" style={{ color: "#39BC7A" }} />
-                    </div>
-                    <div>
-                      <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{feedLoading ? "—" : allFeedPosts.length}</p>
-                      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Posts Shared</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.15)", minWidth: 160 }}>
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(255,214,0,0.18)" }}>
-                      <Star className="h-4 w-4" style={{ color: "#FFD600", fill: "#FFD600" }} />
-                    </div>
-                    <div>
-                      <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{feedLoading ? "—" : missionMomentsCount}</p>
-                      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Mission Moments</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             {/* Feed sub-tabs */}
             <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
