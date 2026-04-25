@@ -87,7 +87,7 @@ export default function MissionaryDashboard() {
 
         <div className="relative z-10 px-8 pt-7 pb-7">
           <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#fff" }}>
-            Mission Feed
+            Missions Feed
           </h1>
           <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>
             Stay connected. Share what God is doing in the field.

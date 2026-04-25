@@ -73,7 +73,7 @@ export function Feed() {
             </svg>
 
             <div style={{ position: "relative", zIndex: 1, padding: "28px 32px" }}>
-              <h1 style={{ fontSize: 30, fontWeight: 900, color: "#fff", margin: 0, lineHeight: 1.2, letterSpacing: "-0.02em" }}>Mission Feed</h1>
+              <h1 style={{ fontSize: 30, fontWeight: 900, color: "#fff", margin: 0, lineHeight: 1.2, letterSpacing: "-0.02em" }}>Missions Feed</h1>
               <p style={{ fontSize: 14, color: "rgba(255,255,255,0.78)", marginTop: 4, marginBottom: 0 }}>Stay connected. Share what God is doing in the field.</p>
 
               <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
