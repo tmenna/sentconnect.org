@@ -70,12 +70,15 @@ export default function Signup() {
     <div className="min-h-screen flex flex-col" style={{ background: "#F0F4F8" }}>
 
       {/* Nav */}
-      <div className="w-full px-8 py-4">
+      <div className="w-full px-8 py-4 flex items-center justify-between">
         {logoUrl ? (
           <img src={logoUrl} alt="SentConnect" style={{ height: 26, width: "auto", maxWidth: 160, objectFit: "contain" }} />
         ) : (
           <span className="text-[15px] font-black tracking-tight" style={{ color: BLUE }}>SentConnect</span>
         )}
+        <Link href="/" className="text-[13px] font-medium text-gray-400 hover:text-gray-600 transition-colors">
+          ← Back to sentconnect.org
+        </Link>
       </div>
 
       {/* Main content */}
