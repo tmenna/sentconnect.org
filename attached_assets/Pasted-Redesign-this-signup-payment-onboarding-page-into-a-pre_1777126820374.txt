@@ -1,0 +1,100 @@
+Redesign this signup/payment onboarding page into a premium modern SaaS checkout experience inspired by Stripe, Linear, and Framer.
+
+Design goals:
+- Minimal, elegant, high-converting payment/signup page
+- Focused checkout feel with almost zero distraction
+- Premium trust-building visual design
+- Soft, polished SaaS aesthetic
+
+Layout:
+Create a centered two-column card layout:
+
+LEFT SIDEBAR (white pricing card):
+- White card with soft shadow and 24px radius
+- Title: "Organization Plan"
+- Large pricing:
+  $30 / month
+  per organization
+- Include feature list with subtle blue check icons:
+  Unlimited users
+  Media & prayer sharing
+  Secure communication
+  Cancel anytime
+
+- Add a small highlighted pill/card near bottom:
+  "14-Day Free Trial"
+  "No payment today"
+- Lots of whitespace and breathing room
+
+RIGHT MAIN PANEL (blue setup panel):
+Use bright premium gradient:
+background:
+linear-gradient(135deg,#1E88FF 0%, #0A6CFF 100%)
+
+- Rounded 28px corners
+- Large soft shadow
+- White typography
+
+Hero section:
+Headline:
+Start Your Organization Trial
+
+Subtext:
+14-day free trial. No payment today.
+
+Trust row under headline with small icons:
+Secure by Stripe • Cancel anytime • Built for mission teams
+
+Form section:
+Use WHITE input fields inside blue panel
+- Inputs white background
+- Black text
+- Soft borders
+- 14-16px input text
+- Large input height (56px)
+- Rounded corners (12px)
+
+Fields:
+Organization Name
+Subdomain with suffix .sentconnect.org
+Full Name
+Email
+Password
+
+Use subtle white dividers between sections.
+
+Primary CTA:
+Large dark navy button:
+Background: #0F172A
+Text: white
+Label:
+Create My Organization →
+
+Button should feel premium and high contrast.
+
+Below button:
+Small lock icon with:
+You'll be redirected to Stripe to complete your payment securely.
+
+Global page styling:
+- Page background: #F5F8FC
+- Very light gradient background
+- Large whitespace around centered card
+- Soft glassy shadows
+- Modern Inter-style typography
+- Large heading (48-56px)
+- Body text 16-18px
+
+Top left:
+SentConnect logo
+
+Top right:
+← Back to sentconnect.org
+
+Style inspiration:
+Stripe checkout + Linear + modern SaaS onboarding
+
+Important:
+Keep form extremely clean and conversion-focused.
+No sidebars, no clutter, no unnecessary footer noise.
+Make it look trustworthy enough for entering payment details.
