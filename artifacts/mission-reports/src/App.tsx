@@ -330,57 +330,16 @@ function LandingPage() {
       {/* ── FOOTER ── */}
       <footer style={{ background: `linear-gradient(180deg, #263341 0%, ${CHARCOAL} 100%)`, padding: "72px 24px 0" }}>
         <div className="mx-auto max-w-6xl">
-          <div className="lp-footer-cols" style={{ paddingBottom: 56 }}>
-            {/* Col 1 — brand */}
-            <div>
-              {(content.footerLogoUrl || LOGO_WHITE) ? (
-                <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 16 }} />
-              ) : (
-                <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 16 }}>{content.footerBrandName}</span>
-              )}
-              <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 240, margin: 0 }}>
-                Private updates for churches and mission teams, all in one secure feed.
-              </p>
-            </div>
-
-            {/* Col 2 — Product */}
-            <div>
-              <p style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>Product</p>
-              <a href="#" className="lp-footer-link">Features</a>
-              <a href="#" className="lp-footer-link">Security</a>
-              <a href={content.primaryCtaHref} className="lp-footer-link">Pricing</a>
-            </div>
-
-            {/* Col 3 — Resources */}
-            <div>
-              <p style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>Resources</p>
-              <a href="#" className="lp-footer-link">Help Center</a>
-              <a href="#" className="lp-footer-link">Guides</a>
-              <a href="#" className="lp-footer-link">Blog</a>
-            </div>
-
-            {/* Col 4 — Company */}
-            <div>
-              <p style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>Company</p>
-              <a href="#" className="lp-footer-link">About</a>
-              <a href="#" className="lp-footer-link">Contact</a>
-              <a href="#" className="lp-footer-link">Privacy Policy</a>
-            </div>
-
-            {/* Col 5 — Follow */}
-            <div>
-              <p style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>Follow Us</p>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {[
-                  { label: "X",  href: "#" },
-                  { label: "in", href: "#" },
-                  { label: "f",  href: "#" },
-                  { label: "ig", href: "#" },
-                ].map(({ label, href }) => (
-                  <a key={label} href={href} className="lp-social-btn">{label}</a>
-                ))}
-              </div>
-            </div>
+          <div style={{ paddingBottom: 40 }}>
+            {/* Brand only */}
+            {(content.footerLogoUrl || LOGO_WHITE) ? (
+              <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 16 }} />
+            ) : (
+              <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 16 }}>{content.footerBrandName}</span>
+            )}
+            <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 320, margin: 0 }}>
+              Private updates for churches and mission teams, all in one secure feed.
+            </p>
           </div>
 
           {/* Divider */}
