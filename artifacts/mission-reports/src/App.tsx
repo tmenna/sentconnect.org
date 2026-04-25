@@ -310,7 +310,7 @@ function LandingPage() {
             </p>
             <a
               href={content.primaryCtaHref}
-              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 32px", borderRadius: 14, background: "#fff", color: BLUE, fontSize: 15, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.15)", transition: "transform .15s, box-shadow .15s" }}
+              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 32px", borderRadius: 14, background: "#FFFF00", color: BLUE, fontSize: 15, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.15)", transition: "transform .15s, box-shadow .15s" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 28px rgba(0,0,0,0.2)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(0,0,0,0.15)"; }}
             >{content.primaryCtaLabel}</a>
