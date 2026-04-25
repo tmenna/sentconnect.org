@@ -209,7 +209,6 @@ export default function Signup() {
               <span style={{ fontSize: "2.4rem", fontWeight: 900, lineHeight: 1, color: BLUE }}>$30</span>
               <span style={{ fontSize: 13, color: "#9CA3AF", fontWeight: 500 }}>/ month</span>
             </div>
-            <p style={{ fontSize: 12, color: "#9CA3AF", marginBottom: 20 }}>per organization</p>
 
             <div style={{ height: 1, background: "#F1F5F9", marginBottom: 20 }} />
 
