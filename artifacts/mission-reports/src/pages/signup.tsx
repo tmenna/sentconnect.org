@@ -5,13 +5,13 @@ import { useToast } from "@/hooks/use-toast";
 import { Shuffle, Loader2, Eye, EyeOff, ShieldCheck, RefreshCw, Globe, Lock } from "lucide-react";
 import { usePlatformLogo } from "@/hooks/use-platform-logo";
 
-const BLUE    = "#0268CE";
-const BLUE_DK = "#0055B3";
+const BLUE    = "#1898F3";
+const BLUE_DK = "#1280D0";
 
 export default function Signup() {
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
-  const { blue: logoUrl } = usePlatformLogo();
+  const { white: logoUrl } = usePlatformLogo();
 
   const [orgName, setOrgName]           = useState("");
   const [subdomain, setSubdomain]       = useState("");
@@ -82,39 +82,28 @@ export default function Signup() {
     "text-gray-900";
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#FAFBFD" }}>
+    <div className="min-h-screen flex flex-col" style={{ background: BLUE }}>
 
       {/* Nav bar */}
       <div className="w-full flex items-center justify-between px-6 pt-5 pb-2">
         {/* Logo */}
-        <div
-          style={{
-            background: "#fff",
-            borderRadius: 10,
-            padding: logoUrl ? "6px 14px" : "6px 10px",
-            display: "flex",
-            alignItems: "center",
-            boxShadow: "0 1px 6px rgba(0,0,0,0.07)",
-          }}
-        >
-          {logoUrl ? (
-            <img
-              src={logoUrl}
-              alt="SentConnect"
-              style={{ height: 28, maxHeight: 28, width: "auto", maxWidth: 160, objectFit: "contain" }}
-            />
-          ) : (
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: BLUE }}>
-                <Shuffle className="h-3.5 w-3.5 text-white" />
-              </div>
-              <span className="text-[13px] font-extrabold tracking-tight text-gray-900">SentConnect</span>
+        {logoUrl ? (
+          <img
+            src={logoUrl}
+            alt="SentConnect"
+            style={{ height: 30, maxHeight: 30, width: "auto", maxWidth: 180, objectFit: "contain" }}
+          />
+        ) : (
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "rgba(255,255,255,0.25)" }}>
+              <Shuffle className="h-3.5 w-3.5 text-white" />
             </div>
-          )}
-        </div>
+            <span className="text-[13px] font-extrabold tracking-tight text-white">SentConnect</span>
+          </div>
+        )}
 
         {/* Back link */}
-        <Link href="/" className="text-[13px] font-medium text-gray-400 hover:text-gray-600 transition-colors">
+        <Link href="/" className="text-[13px] font-medium transition-colors" style={{ color: "rgba(255,255,255,0.75)" }}>
           ← Back to sentconnect.org
         </Link>
       </div>
@@ -125,10 +114,10 @@ export default function Signup() {
 
           {/* Page heading */}
           <div className="text-center mb-8">
-            <h1 className="text-[2rem] font-bold text-gray-900 tracking-tight mb-2">
+            <h1 className="text-[2rem] font-bold tracking-tight mb-2" style={{ color: "#fff" }}>
               Set Up Your Organization
             </h1>
-            <p className="text-[15px] text-gray-400 font-normal">
+            <p className="text-[15px] font-normal" style={{ color: "rgba(255,255,255,0.75)" }}>
               You'll be the admin. Invite your team after setup.
             </p>
           </div>
@@ -137,27 +126,28 @@ export default function Signup() {
           <div
             className="rounded-2xl px-7 py-6 mb-5"
             style={{
-              background: "linear-gradient(135deg, #0047A8 0%, #0268CE 55%, #2B8DE8 100%)",
-              boxShadow: "0 8px 32px rgba(2,104,206,0.22)",
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.25)",
+              backdropFilter: "blur(8px)",
             }}
           >
-            <p className="text-[10.5px] font-bold uppercase tracking-widest text-blue-200 mb-3">
+            <p className="text-[10.5px] font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,0.7)" }}>
               Simple, transparent pricing
             </p>
             <div className="flex items-baseline gap-1.5 mb-2">
-              <span className="text-[3rem] font-black text-white leading-none">$30</span>
-              <span className="text-[16px] font-medium text-blue-100">/ month per organization</span>
+              <span className="text-[3rem] font-black leading-none" style={{ color: "#fff" }}>$30</span>
+              <span className="text-[16px] font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>/ month per organization</span>
             </div>
-            <p className="text-[13px] text-blue-100 mb-1">
+            <p className="text-[13px] mb-1" style={{ color: "rgba(255,255,255,0.8)" }}>
               Unlimited users · Media sharing · Secure access
             </p>
-            <p className="text-[12px] text-blue-200 font-medium">No contracts. Cancel anytime.</p>
+            <p className="text-[12px] font-medium" style={{ color: "rgba(255,255,255,0.65)" }}>No contracts. Cancel anytime.</p>
           </div>
 
           {/* Form card */}
           <div
             className="bg-white rounded-2xl px-7 py-7 mb-5"
-            style={{ boxShadow: "0 2px 16px rgba(0,0,0,0.06)" }}
+            style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.18)" }}
           >
             {errors.general && (
               <div className="bg-red-50 border border-red-200 text-red-700 text-[13px] px-4 py-3 rounded-xl mb-5">
@@ -274,23 +264,21 @@ export default function Signup() {
                 className="w-full text-white font-semibold rounded-xl text-[15px] flex items-center justify-center gap-2 transition-all"
                 style={{
                   height: 52,
-                  background: submitting
-                    ? "#7BB8EC"
-                    : `linear-gradient(135deg, ${BLUE_DK} 0%, ${BLUE} 100%)`,
-                  boxShadow: submitting ? "none" : "0 4px 16px rgba(2,104,206,0.25)",
+                  background: submitting ? "#7BB8EC" : BLUE,
+                  boxShadow: submitting ? "none" : `0 4px 16px rgba(24,152,243,0.35)`,
                   letterSpacing: "0.01em",
                 }}
                 onMouseEnter={e => {
                   if (!submitting) {
-                    e.currentTarget.style.background = `linear-gradient(135deg, #00449A 0%, ${BLUE_DK} 100%)`;
-                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(2,104,206,0.35)";
+                    e.currentTarget.style.background = BLUE_DK;
+                    e.currentTarget.style.boxShadow = `0 6px 20px rgba(24,152,243,0.45)`;
                     e.currentTarget.style.transform = "translateY(-1px)";
                   }
                 }}
                 onMouseLeave={e => {
                   if (!submitting) {
-                    e.currentTarget.style.background = `linear-gradient(135deg, ${BLUE_DK} 0%, ${BLUE} 100%)`;
-                    e.currentTarget.style.boxShadow = "0 4px 16px rgba(2,104,206,0.25)";
+                    e.currentTarget.style.background = BLUE;
+                    e.currentTarget.style.boxShadow = `0 4px 16px rgba(24,152,243,0.35)`;
                     e.currentTarget.style.transform = "translateY(0)";
                   }
                 }}
@@ -314,20 +302,20 @@ export default function Signup() {
           <div className="flex items-start justify-center gap-6 px-2 mb-6">
             {[
               {
-                icon: <ShieldCheck className="h-4 w-4" style={{ color: BLUE }} />,
-                bg: "#EFF6FF",
+                icon: <ShieldCheck className="h-4 w-4 text-white" />,
+                bg: "rgba(255,255,255,0.2)",
                 title: "Secure payments",
                 sub: "Powered by Stripe",
               },
               {
-                icon: <RefreshCw className="h-4 w-4" style={{ color: "#16A34A" }} />,
-                bg: "#F0FDF4",
+                icon: <RefreshCw className="h-4 w-4 text-white" />,
+                bg: "rgba(255,255,255,0.2)",
                 title: "Cancel anytime",
                 sub: "No contracts",
               },
               {
-                icon: <Globe className="h-4 w-4" style={{ color: "#7C3AED" }} />,
-                bg: "#F5F3FF",
+                icon: <Globe className="h-4 w-4 text-white" />,
+                bg: "rgba(255,255,255,0.2)",
                 title: "Built for mission teams",
                 sub: "Connect and share confidently",
               },
@@ -340,8 +328,8 @@ export default function Signup() {
                   {icon}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[12px] font-semibold text-gray-800 leading-tight">{title}</p>
-                  <p className="text-[11px] text-gray-400 leading-snug mt-0.5">{sub}</p>
+                  <p className="text-[12px] font-semibold leading-tight" style={{ color: "#fff" }}>{title}</p>
+                  <p className="text-[11px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.65)" }}>{sub}</p>
                 </div>
               </div>
             ))}
