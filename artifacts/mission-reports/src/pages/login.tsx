@@ -21,8 +21,8 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const BG = "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)";
-const BTN_BASE = "#005BBC";
-const BTN_HOVER = "#0155a5";
+const BTN_BASE = "#0883E5";
+const BTN_HOVER = "#066DC2";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();

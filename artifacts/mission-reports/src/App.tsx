@@ -107,8 +107,8 @@ function LandingPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const BLUE = "#0268CE";
-  const BLUE_DARK = "#0155A5";
+  const BLUE = "#0883E5";
+  const BLUE_DARK = "#066DC2";
 
   return (
     <div className="min-h-screen text-slate-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", background: "#ffffff" }}>
@@ -179,7 +179,7 @@ function LandingPage() {
       `}</style>
 
       {/* ── Header ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, boxShadow: "0 2px 12px rgba(2,104,206,0.25)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: `linear-gradient(130deg, ${BLUE} 0%, #1A9BF5 100%)`, boxShadow: "0 2px 12px rgba(8,131,229,0.25)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 64 }}>
           <a href="/" className="flex items-center gap-3" style={{ textDecoration: "none" }}>
             {(content.headerLogoUrl || content.logoUrl || LOGO_WHITE) ? (
@@ -225,18 +225,18 @@ function LandingPage() {
               <div className="lp-animate lp-delay-4 lp-cta-btns">
                 <a
                   href={content.primaryCtaHref}
-                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 50, padding: "0 28px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 18px rgba(2,104,206,0.28)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 24px rgba(2,104,206,0.36)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 18px rgba(2,104,206,0.28)"; }}
+                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 50, padding: "0 28px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 18px rgba(8,131,229,0.28)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 24px rgba(8,131,229,0.36)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 18px rgba(8,131,229,0.28)"; }}
                 >{content.primaryCtaLabel}</a>
               </div>
             </div>
 
             {/* App preview card */}
-            <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 28, border: "1px solid rgba(2,104,206,0.1)", boxShadow: "0 32px 80px rgba(2,104,206,0.12), 0 4px 16px rgba(0,0,0,0.05)", padding: 24, position: "relative" }}>
+            <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 28, border: "1px solid rgba(8,131,229,0.1)", boxShadow: "0 32px 80px rgba(8,131,229,0.12), 0 4px 16px rgba(0,0,0,0.05)", padding: 24, position: "relative" }}>
               {/* card header bar */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid rgba(2,104,206,0.07)" }}>
-                <div style={{ width: 34, height: 34, borderRadius: 10, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid rgba(8,131,229,0.07)" }}>
+                <div style={{ width: 34, height: 34, borderRadius: 10, background: `linear-gradient(135deg, ${BLUE} 0%, #1A9BF5 100%)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <Shuffle style={{ width: 16, height: 16, color: "#fff" }} />
                 </div>
                 <div>
@@ -251,19 +251,19 @@ function LandingPage() {
                 { title: content.previewTitle2, ago: "3h ago", w: "68%", avatarOpacity: 0.13 },
                 { title: content.previewTitle3, ago: "5h ago", w: "55%", avatarOpacity: 0.09 },
               ].map(({ title, ago, w, avatarOpacity }, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid rgba(2,104,206,0.06)" : "none" }}>
-                  <div style={{ width: 38, height: 38, borderRadius: "50%", background: `rgba(2,104,206,${avatarOpacity})`, flexShrink: 0, marginTop: 1 }} />
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid rgba(8,131,229,0.06)" : "none" }}>
+                  <div style={{ width: 38, height: 38, borderRadius: "50%", background: `rgba(8,131,229,${avatarOpacity})`, flexShrink: 0, marginTop: 1 }} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
                     <p style={{ fontSize: 11, color: "#9CA3AF", margin: "0 0 8px" }}>{ago}</p>
-                    <div style={{ height: 6, background: "rgba(2,104,206,0.08)", borderRadius: 999, width: "100%" }} />
-                    <div style={{ height: 6, background: "rgba(2,104,206,0.06)", borderRadius: 999, width: w, marginTop: 5 }} />
+                    <div style={{ height: 6, background: "rgba(8,131,229,0.08)", borderRadius: 999, width: "100%" }} />
+                    <div style={{ height: 6, background: "rgba(8,131,229,0.06)", borderRadius: 999, width: w, marginTop: 5 }} />
                   </div>
                 </div>
               ))}
 
               {/* decorative dot */}
-              <div style={{ position: "absolute", top: -14, right: 28, width: 28, height: 28, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(2,104,206,0.4)" }} />
+              <div style={{ position: "absolute", top: -14, right: 28, width: 28, height: 28, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(8,131,229,0.4)" }} />
             </div>
           </div>
         </section>
@@ -278,7 +278,7 @@ function LandingPage() {
 
             <div className="lp-steps-grid">
               {/* connector line */}
-              <div className="lp-connector" style={{ position: "absolute", top: 34, left: "calc(16.66% + 14px)", right: "calc(16.66% + 14px)", height: 1, background: `linear-gradient(90deg, transparent, rgba(2,104,206,0.2), transparent)`, pointerEvents: "none" }} />
+              <div className="lp-connector" style={{ position: "absolute", top: 34, left: "calc(16.66% + 14px)", right: "calc(16.66% + 14px)", height: 1, background: `linear-gradient(90deg, transparent, rgba(8,131,229,0.2), transparent)`, pointerEvents: "none" }} />
 
               {[
                 { title: content.step1Title, desc: content.step1Description, n: "01" },
@@ -287,7 +287,7 @@ function LandingPage() {
               ].map(({ title, desc, n }) => (
                 <div key={n} style={{ background: "#fff", border: "1px solid #EAECF0", borderRadius: 20, padding: "28px 24px 28px", position: "relative", overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
                   {/* step number circle */}
-                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20, boxShadow: "0 4px 12px rgba(2,104,206,0.25)" }}>
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: `linear-gradient(135deg, ${BLUE} 0%, #1A9BF5 100%)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20, boxShadow: "0 4px 12px rgba(8,131,229,0.25)" }}>
                     <span style={{ fontSize: 13, fontWeight: 900, color: "#fff" }}>{n}</span>
                   </div>
                   <h3 style={{ fontSize: 17, fontWeight: 800, color: "#0A0F1E", margin: "0 0 10px", letterSpacing: "-0.02em" }}>{title}</h3>
@@ -299,7 +299,7 @@ function LandingPage() {
         </section>
 
         {/* ── CTA band ── */}
-        <section className="lp-cta-band" style={{ background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, padding: "72px 24px" }}>
+        <section className="lp-cta-band" style={{ background: `linear-gradient(130deg, ${BLUE} 0%, #1A9BF5 100%)`, padding: "72px 24px" }}>
           <div style={{ textAlign: "center", maxWidth: 580, margin: "0 auto" }}>
             <h2 style={{ fontSize: "clamp(26px, 3.5vw, 42px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", margin: "0 0 16px" }}>
               {content.ctaBandHeading}
@@ -318,7 +318,7 @@ function LandingPage() {
       </main>
 
       {/* ── Footer ── */}
-      <footer style={{ background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, padding: "32px 24px" }}>
+      <footer style={{ background: `linear-gradient(130deg, ${BLUE} 0%, #1A9BF5 100%)`, padding: "32px 24px" }}>
         <div className="lp-footer-inner mx-auto max-w-6xl">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             {(content.footerLogoUrl || LOGO_WHITE) ? (
@@ -347,7 +347,7 @@ function AdminAccessMoved() {
         <p className="mt-3 text-sm leading-6 text-slate-600">
           The main platform admin is no longer available from sentconnect.org/admin.
         </p>
-        <a href="/" className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#0268CE] text-sm font-bold text-white hover:bg-[#0155a5]">
+        <a href="/" className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#0883E5] text-sm font-bold text-white hover:bg-[#066DC2]">
           Return to SentConnect
         </a>
       </div>
@@ -369,7 +369,7 @@ function AuthLoading() {
 
 function OrgUnavailable({ orgSlug, reason }: { orgSlug: string; reason?: string }) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ background: "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)" }}>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ background: "linear-gradient(150deg, #066DC2 0%, #0883E5 55%, #1A9BF5 100%)" }}>
       <div className="w-full max-w-[440px] bg-white rounded-2xl px-8 py-10 text-center" style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}>
         <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 bg-red-50 border-2 border-red-100">
           <span className="text-red-600 text-2xl font-bold">!</span>
@@ -379,7 +379,7 @@ function OrgUnavailable({ orgSlug, reason }: { orgSlug: string; reason?: string 
           No SentConnect organization is registered for <span className="font-semibold text-gray-700">{orgSlug}</span>.
           {reason ? ` ${reason}` : ""}
         </p>
-        <a href="/" className="inline-flex w-full h-11 items-center justify-center rounded-xl text-[15px] font-bold text-white bg-[#0268CE] hover:bg-[#0155a5] transition-colors">
+        <a href="/" className="inline-flex w-full h-11 items-center justify-center rounded-xl text-[15px] font-bold text-white bg-[#0883E5] hover:bg-[#066DC2] transition-colors">
           Go to SentConnect
         </a>
       </div>
