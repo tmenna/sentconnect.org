@@ -190,6 +190,42 @@ function LandingPage() {
         @media (max-width: 480px) {
           .lp-footer-cols { grid-template-columns: 1fr; }
         }
+
+        /* ── Footer alignment ── */
+        .lp-footer-brand-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: start;
+          gap: 40px;
+          padding-bottom: 48px;
+        }
+        .lp-footer-left  { text-align: left; }
+        .lp-footer-right { text-align: right; }
+
+        .lp-footer-legal {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: nowrap;
+          gap: 16px;
+          padding-bottom: 32px;
+        }
+
+        @media (max-width: 640px) {
+          .lp-footer-brand-row {
+            grid-template-columns: 1fr;
+            gap: 28px;
+            padding-bottom: 36px;
+          }
+          .lp-footer-left  { text-align: center; }
+          .lp-footer-right { text-align: center; }
+          .lp-footer-legal {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+          }
+        }
       `}</style>
 
       {/* ── HEADER ── */}
@@ -330,12 +366,12 @@ function LandingPage() {
       {/* ── FOOTER ── */}
       <footer style={{ background: `linear-gradient(180deg, #263341 0%, ${CHARCOAL} 100%)`, padding: "72px 24px 0" }}>
         <div className="mx-auto max-w-6xl">
-          {/* Brand row — logo left, contact info right */}
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 32, paddingBottom: 40 }}>
+          {/* Row 1 — brand left / contact right */}
+          <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
-            <div>
+            <div className="lp-footer-left">
               {(content.footerLogoUrl || LOGO_WHITE) ? (
-                <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 14 }} />
+                <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 14, display: "block" }} />
               ) : (
                 <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 14 }}>{content.footerBrandName}</span>
               )}
@@ -345,14 +381,14 @@ function LandingPage() {
             </div>
 
             {/* Right: contact info */}
-            <div style={{ textAlign: "right" }}>
+            <div className="lp-footer-right">
               <p style={{ fontSize: 13.5, fontWeight: 600, color: "#D1D5DB", margin: "0 0 6px" }}>Holtek Solutions LLC</p>
-              <p style={{ fontSize: 13, color: "#9CA3AF", margin: "0 0 4px", lineHeight: 1.6 }}>
+              <p style={{ fontSize: 13, color: "#9CA3AF", margin: "0 0 6px", lineHeight: 1.6 }}>
                 2108 N ST STE N, Sacramento, CA 95816
               </p>
               <a
                 href="mailto:support@sentconnect.org"
-                style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }}
+                style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-block" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#1E88FF")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
               >
@@ -361,13 +397,13 @@ function LandingPage() {
             </div>
           </div>
 
-          {/* Divider */}
+          {/* Divider — equal spacing above (from brand row pb) and below (mb) */}
           <div style={{ height: 1, background: "rgba(255,255,255,0.08)", marginBottom: 24 }} />
 
-          {/* Legal bar */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, paddingBottom: 32 }}>
+          {/* Row 2 — legal bar */}
+          <div className="lp-footer-legal">
             <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>{content.footerOwnerText}</p>
-            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>© 2026 Holtek Solutions. All rights reserved.</p>
+            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0, flexShrink: 0 }}>© 2026 Holtek Solutions. All rights reserved.</p>
           </div>
         </div>
       </footer>
