@@ -153,10 +153,14 @@ export default function Signup() {
           gap: 6px;
         }
 
-        /* ── TABLET (≤ 900px): hide plan card ── */
+        /* ── Inline plan summary (shown when sidebar is hidden) ── */
+        .su-plan-inline { display: none; }
+
+        /* ── TABLET (≤ 900px): hide sidebar, show inline summary ── */
         @media (max-width: 900px) {
-          .su-plan { display: none; }
-          .su-nav  { padding: 16px 24px; }
+          .su-plan        { display: none; }
+          .su-plan-inline { display: flex; }
+          .su-nav         { padding: 16px 24px; }
         }
 
         /* ── MOBILE (≤ 640px): single-column, full-width form ── */
@@ -230,6 +234,39 @@ export default function Signup() {
               <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.76)", margin: 0 }}>
                 You'll be the admin. Invite your team after setup.
               </p>
+            </div>
+
+            {/* Inline plan summary — visible only when sidebar is hidden (≤ 900px) */}
+            <div
+              className="su-plan-inline"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 16,
+                marginBottom: 20,
+                background: "rgba(255,255,255,0.15)",
+                borderRadius: 14,
+                padding: "12px 20px",
+                flexWrap: "wrap",
+                rowGap: 8,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+                <span style={{ fontSize: "1.65rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>$30</span>
+                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>/month</span>
+              </div>
+              <div style={{ width: 1, height: 28, background: "rgba(255,255,255,0.25)", flexShrink: 0 }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>Organization Plan</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px" }}>
+                  {FEATURES.map(f => (
+                    <span key={f} style={{ fontSize: 11.5, color: "rgba(255,255,255,0.75)", display: "flex", alignItems: "center", gap: 4 }}>
+                      <CheckCircle2 style={{ width: 11, height: 11, flexShrink: 0, color: "rgba(255,255,255,0.85)" }} />
+                      {f}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Trust badges */}
