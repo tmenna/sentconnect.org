@@ -318,21 +318,21 @@ function LandingPage() {
       </main>
 
       {/* ── Footer ── */}
-      <footer style={{ background: "#fff", borderTop: "1px solid rgba(2,104,206,0.08)", padding: "32px 24px" }}>
+      <footer style={{ background: `linear-gradient(130deg, ${BLUE} 0%, #0A8AEB 100%)`, padding: "32px 24px" }}>
         <div className="lp-footer-inner mx-auto max-w-6xl">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {(content.footerLogoUrl || LOGO_BLUE) ? (
-              <img src={content.footerLogoUrl || LOGO_BLUE} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
+            {(content.footerLogoUrl || LOGO_WHITE) ? (
+              <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 160, objectFit: "contain" }} />
             ) : (
               <>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(2,104,206,0.28)" }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <Shuffle style={{ width: 13, height: 13, color: "#fff" }} />
                 </div>
-                <span style={{ fontSize: 15, fontWeight: 900, letterSpacing: "-0.03em", background: `linear-gradient(135deg, ${BLUE} 0%, #0A8AEB 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{content.footerBrandName}</span>
+                <span style={{ fontSize: 15, fontWeight: 900, letterSpacing: "-0.03em", color: "#fff" }}>{content.footerBrandName}</span>
               </>
             )}
           </div>
-          <p style={{ fontSize: 12, color: "#9CA3AF", margin: 0 }}>{content.footerOwnerText}</p>
+          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", margin: 0 }}>{content.footerOwnerText}</p>
         </div>
       </footer>
     </div>
