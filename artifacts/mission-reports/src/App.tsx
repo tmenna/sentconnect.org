@@ -330,16 +330,35 @@ function LandingPage() {
       {/* ── FOOTER ── */}
       <footer style={{ background: `linear-gradient(180deg, #263341 0%, ${CHARCOAL} 100%)`, padding: "72px 24px 0" }}>
         <div className="mx-auto max-w-6xl">
-          <div style={{ paddingBottom: 40 }}>
-            {/* Brand only */}
-            {(content.footerLogoUrl || LOGO_WHITE) ? (
-              <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 16 }} />
-            ) : (
-              <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 16 }}>{content.footerBrandName}</span>
-            )}
-            <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 320, margin: 0 }}>
-              Private updates for churches and mission teams, all in one secure feed.
-            </p>
+          {/* Brand row — logo left, contact info right */}
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 32, paddingBottom: 40 }}>
+            {/* Left: logo + tagline */}
+            <div>
+              {(content.footerLogoUrl || LOGO_WHITE) ? (
+                <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 14 }} />
+              ) : (
+                <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 14 }}>{content.footerBrandName}</span>
+              )}
+              <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
+                Private updates for churches and mission teams, all in one secure feed.
+              </p>
+            </div>
+
+            {/* Right: contact info */}
+            <div style={{ textAlign: "right" }}>
+              <p style={{ fontSize: 13.5, fontWeight: 600, color: "#D1D5DB", margin: "0 0 6px" }}>Holtek Solutions LLC</p>
+              <p style={{ fontSize: 13, color: "#9CA3AF", margin: "0 0 4px", lineHeight: 1.6 }}>
+                2108 N ST STE N, Sacramento, CA 95816
+              </p>
+              <a
+                href="mailto:support@sentconnect.org"
+                style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#1E88FF")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
+              >
+                support@sentconnect.org
+              </a>
+            </div>
           </div>
 
           {/* Divider */}
