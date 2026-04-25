@@ -4,7 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import {
   Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
   Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
-  Link2, Share2, HandMetal
+  Link2, Share2
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -584,7 +584,22 @@ export function PostCard({
               className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#111827] transition-all rounded-lg mx-1"
               title="Pray for this update"
             >
-              <HandMetal className="h-4 w-4" />
+              <svg className="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                {/* Left-hand fingers */}
+                <path d="M12 11 L12 5 Q12 3.5 10.5 3.5 Q9 3.5 9 5 L9 10" />
+                <path d="M9 9.5 L9 6.5 Q9 5 7.5 5 Q6 5 6 6.5 L6 11" />
+                <path d="M6 10.5 L6 8.5 Q6 7 4.5 7.5" />
+                {/* Right-hand fingers (mirror) */}
+                <path d="M12 11 L12 5 Q12 3.5 13.5 3.5 Q15 3.5 15 5 L15 10" />
+                <path d="M15 9.5 L15 6.5 Q15 5 16.5 5 Q18 5 18 6.5 L18 11" />
+                <path d="M18 10.5 L18 8.5 Q18 7 19.5 7.5" />
+                {/* Palms meeting in centre */}
+                <path d="M4.5 12 Q4 16 6 18.5 L8.5 20.5" />
+                <path d="M19.5 12 Q20 16 18 18.5 L15.5 20.5" />
+                <path d="M8.5 20.5 Q10.5 22 12 22 Q13.5 22 15.5 20.5" />
+                {/* Centre seam */}
+                <line x1="12" y1="11" x2="12" y2="19.5" />
+              </svg>
               <span>Pray</span>
             </button>
 
