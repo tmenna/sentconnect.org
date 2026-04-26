@@ -69,7 +69,7 @@ router.get("/super-admin/orgs", requirePermission("canViewOrganizations"), async
 
 // POST /super-admin/orgs — create a new organization
 router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
-  const { name, subdomain, plan } = req.body ?? {};
+  const { name, subdomain, email } = req.body ?? {};
   if (!name || !subdomain) {
     res.status(400).json({ error: "name and subdomain are required" }); return;
   }
@@ -82,7 +82,11 @@ router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): 
   if (existing) { res.status(409).json({ error: "Subdomain already in use" }); return; }
 
   const [org] = await db.insert(organizationsTable)
-    .values({ name: name.trim(), subdomain: slug, plan: plan ?? "free" })
+    .values({
+      name: name.trim(),
+      subdomain: slug,
+      email: typeof email === "string" && email.trim() ? email.trim().toLowerCase() : null,
+    })
     .returning();
   res.status(201).json(org);
 });

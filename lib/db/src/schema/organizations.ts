@@ -6,6 +6,7 @@ export const organizationsTable = pgTable("organizations", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   subdomain: text("subdomain").notNull().unique(),
+  email: text("email"),
   plan: text("plan").notNull().default("free"),
   status: text("status").notNull().default("active"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
