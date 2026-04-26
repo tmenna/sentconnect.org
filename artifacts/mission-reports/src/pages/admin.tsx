@@ -8,7 +8,7 @@ import {
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  Users, FileText, Heart, MessageCircle,
+  Users, FileText, ThumbsUp, MessageCircle,
   Globe, Plus, X, RefreshCw, Trash2,
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
@@ -994,7 +994,7 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
           {[
             { id: "team", label: "Manage Team", icon: <Users className="h-3.5 w-3.5" />, badge: !usersLoading ? allUsers.length : null },
-            { id: "feed", label: "Updates", icon: <Heart className="h-3.5 w-3.5" />, badge: null },
+            { id: "feed", label: "Updates", icon: <ThumbsUp className="h-3.5 w-3.5" />, badge: null },
             { id: "countries", label: "Countries", icon: <MapPin className="h-3.5 w-3.5" />, badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
           ].map(tab => {
             const active = activeTab === tab.id;

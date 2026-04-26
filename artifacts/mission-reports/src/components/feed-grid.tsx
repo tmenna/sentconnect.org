@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow, format } from "date-fns";
-import { Heart, MessageCircle, MapPin, Star, Users, X, ChevronLeft, ChevronRight, ArrowRight, FileText } from "lucide-react";
+import { ThumbsUp, MessageCircle, MapPin, Star, Users, X, ChevronLeft, ChevronRight, ArrowRight, FileText } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PostCard, type PostData } from "@/components/post-card";
 import { cn } from "@/lib/utils";
@@ -391,7 +391,7 @@ export function FeedGridCard({
           <div className="flex items-center gap-3 mt-2">
             {post.likeCount > 0 && (
               <div className="flex items-center gap-1 text-[11px]" style={{ color: "#9CA3AF" }}>
-                <Heart className={cn("h-3 w-3", post.likedByMe && "fill-red-400 text-red-400")} />
+                <ThumbsUp className={cn("h-3 w-3", post.likedByMe && "fill-blue-500 text-blue-500")} />
                 {post.likeCount}
               </div>
             )}

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
-  Heart, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
+  ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
   Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
   Link2, Share2
 } from "lucide-react";
@@ -566,7 +566,7 @@ export function PostCard({
                   : "text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#111827]"
               )}
             >
-              <Heart className={cn("h-4 w-4", post.likedByMe && "fill-red-500")} />
+              <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-blue-600 text-blue-600")} />
               <span>Like{post.likeCount > 0 ? ` ${post.likeCount}` : ""}</span>
             </button>
 
