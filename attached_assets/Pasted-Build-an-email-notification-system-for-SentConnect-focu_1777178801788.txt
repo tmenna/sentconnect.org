@@ -1,0 +1,165 @@
+Build an email notification system for SentConnect focused on mission team communication, engagement, and account access.
+
+Goal:
+Create a clean, reliable transactional email system that supports:
+1. New post notifications
+2. New comment notifications
+3. Password reset emails
+
+Use a scalable architecture (transactional email service integration such as Resend, Postmark, SendGrid, or equivalent), and design it for future notification expansion.
+
+-----------------------------------
+1. NEW POST EMAIL NOTIFICATIONS
+-----------------------------------
+
+When a new post is published in an organization:
+
+Trigger an email notification to organization admins (and optionally subscribed users).
+
+Email should include:
+- SentConnect branded email template
+- Subject example:
+New Mission Update Posted in SentConnect
+
+Email body:
+- Sender name/avatar
+- Post preview/snippet (first few lines)
+- Optional post image thumbnail if available
+- Timestamp
+- Organization name
+
+Primary CTA button:
+View Update
+
+Clicking “View Update” should:
+- Redirect user to SentConnect
+- If authenticated, open relevant post in dashboard
+- If not authenticated, send user through login first, then redirect to that post
+
+Support secure deep linking.
+
+Optional:
+Allow notification preferences later:
+- Immediate
+- Daily digest
+- Weekly digest
+
+-----------------------------------
+2. COMMENT NOTIFICATIONS
+-----------------------------------
+
+When comments are added to a post:
+
+Notify:
+- Original post author
+- Admins (optional configurable)
+- Users following the post (future ready)
+
+Subject:
+New Comment on Your Post
+
+Email includes:
+- Commenter name
+- Comment preview
+- Related post title/snippet
+- CTA:
+View Conversation
+
+Deep link directly into post comment thread after login.
+
+Optional future support:
+Threaded reply notifications.
+
+-----------------------------------
+3. PASSWORD RESET EMAILS
+-----------------------------------
+
+Build secure password reset flow.
+
+When user requests reset:
+Send branded transactional email containing:
+
+Subject:
+Reset Your SentConnect Password
+
+Email includes:
+- Friendly instructional copy
+- Secure temporary reset link
+- Link expiration (example: 30–60 minutes)
+- Security notice if user did not request reset
+
+CTA:
+Reset Password
+
+Requirements:
+- Signed secure token
+- One-time use
+- Expiring reset link
+- Token invalidation after use
+
+-----------------------------------
+4. EMAIL TEMPLATE DESIGN
+-----------------------------------
+
+Create clean consistent email templates matching SentConnect brand.
+
+Use:
+- SentConnect logo
+- Clean modern layout
+- Mission-oriented friendly tone
+- Mobile responsive email design
+
+Footer:
+You are receiving this because you are part of [Organization Name] on SentConnect.
+
+Include:
+Manage notification preferences (future-ready)
+Support contact link
+
+-----------------------------------
+5. NOTIFICATION SYSTEM ARCHITECTURE
+-----------------------------------
+
+Implement:
+- Event-driven notification triggers
+- Queue/background job processing for email sending
+- Retry handling for failed sends
+- Logging/audit trail for sent emails
+- Email delivery status tracking
+
+Prepare system for future notifications:
+- Prayer response notifications
+- Mention notifications
+- Digest emails
+- In-app + email notification center
+
+-----------------------------------
+6. USER EXPERIENCE
+-----------------------------------
+
+Keep notifications helpful, not noisy.
+
+Emails should feel relational and mission-centered, not generic SaaS alerts.
+
+Tone:
+Warm
+Trustworthy
+Simple
+Supportive
+
+Examples:
+“Addie shared a new mission update”
+“Someone commented on your post”
+“Reset your SentConnect password”
+
+-----------------------------------
+7. BONUS (IF POSSIBLE)
+-----------------------------------
+
+Add in-app notification bell in dashboard later using same event system:
+- New posts
+- Comments
+- Prayer interactions
+- Mentions
+
+Use this as foundation for unified notifications across email + in-app.

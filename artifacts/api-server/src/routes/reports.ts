@@ -1,6 +1,7 @@
 import { Router, type IRouter } from "express";
 import { eq, desc, and, sql, count, gte, lte } from "drizzle-orm";
 import { db, reportsTable, usersTable, photosTable, likesTable, commentsTable } from "@workspace/db";
+import { notifyAdminsOfNewPost, notifyAuthorOfComment } from "../lib/notifier";
 
 const router: IRouter = Router();
 
@@ -136,6 +137,7 @@ router.post("/reports", async (req, res): Promise<void> => {
   }).returning();
   const details = await getPostWithDetails(post.id, currentUserId);
   res.status(201).json(details);
+  notifyAdminsOfNewPost(post.id, currentUserId).catch(() => {});
 });
 
 // GET /reports/export — admin only, returns CSV download
@@ -353,6 +355,7 @@ router.post("/reports/:id/comments", async (req, res): Promise<void> => {
   const [user] = await db.select().from(usersTable).where(eq(usersTable.id, currentUserId));
   const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...authorData } = user;
   res.status(201).json({ ...comment, author: authorData });
+  notifyAuthorOfComment(postId, comment.id, currentUserId, comment.text).catch(() => {});
 });
 
 // DELETE /comments/:id

@@ -5,3 +5,4 @@ export * from "./photos";
 export * from "./likes";
 export * from "./comments";
 export * from "./sessions";
+export * from "./notification_logs";

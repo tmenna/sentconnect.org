@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { db, usersTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
-import { sendPasswordResetEmail, smtpConfigured } from "../lib/mailer";
+import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
 import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
 
 const router: IRouter = Router();
@@ -128,7 +128,7 @@ router.post("/auth/forgot-password", async (req, res): Promise<void> => {
   const resetLink = `/reset-password?token=${token}`;
   const resetUrl = `${baseUrl}${resetLink}`;
 
-  if (smtpConfigured) {
+  if (emailConfigured) {
     await sendPasswordResetEmail(user.email, resetUrl);
     res.json({ message: "If an account exists, a reset link has been sent." });
   } else {
