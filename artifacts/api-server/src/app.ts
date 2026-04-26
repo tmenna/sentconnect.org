@@ -1,4 +1,4 @@
-import express, { type Express } from "express";
+import express, { type Express, type Request, type Response, type NextFunction } from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
 import session from "express-session";
@@ -93,5 +93,21 @@ if (frontendDist) {
 } else if (process.env.NODE_ENV === "production") {
   logger.warn("Frontend build output was not found. Root route will not serve the web app.");
 }
+
+// JSON 404 for any unmatched /api/* routes (must come after the SPA catch-all so
+// non-API unmatched paths still serve index.html)
+app.use("/api", (_req: Request, res: Response) => {
+  res.status(404).json({ error: "Not found" });
+});
+
+// Global JSON error handler — prevents Express from returning an HTML 500 page
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  logger.error(err, "Unhandled error");
+  const status = (err as { status?: number; statusCode?: number })?.status ??
+    (err as { statusCode?: number })?.statusCode ?? 500;
+  const message = (err as { message?: string })?.message ?? "Internal server error";
+  res.status(status).json({ error: message });
+});
 
 export default app;

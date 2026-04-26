@@ -1968,9 +1968,9 @@ export default function SuperAdminPanel() {
     setLoading(true);
     try {
       const [statsData, orgsData, usersData] = await Promise.all([
-        fetch("/api/super-admin/stats", { credentials: "include" }).then(r => r.json()),
-        fetch("/api/super-admin/orgs", { credentials: "include" }).then(r => r.ok ? r.json() : []),
-        fetch("/api/super-admin/users", { credentials: "include" }).then(r => r.ok ? r.json() : []),
+        fetch("/api/super-admin/stats", { credentials: "include" }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch("/api/super-admin/orgs", { credentials: "include" }).then(r => r.ok ? r.json() : []).catch(() => []),
+        fetch("/api/super-admin/users", { credentials: "include" }).then(r => r.ok ? r.json() : []).catch(() => []),
       ]);
       setStats(statsData);
       setOrgs(Array.isArray(orgsData) ? orgsData : []);
