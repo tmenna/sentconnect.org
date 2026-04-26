@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
 import { eq, desc, and, sql, count, gte, lte } from "drizzle-orm";
 import { db, reportsTable, usersTable, photosTable, likesTable, commentsTable } from "@workspace/db";
-import { notifyAdminsOfNewPost, notifyAuthorOfComment } from "../lib/notifier";
+import { notifyAdminsOfNewPost, notifyAuthorOfComment, notifyAdminsOfNewComment } from "../lib/notifier";
 
 const router: IRouter = Router();
 
@@ -355,7 +355,10 @@ router.post("/reports/:id/comments", async (req, res): Promise<void> => {
   const [user] = await db.select().from(usersTable).where(eq(usersTable.id, currentUserId));
   const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...authorData } = user;
   res.status(201).json({ ...comment, author: authorData });
+  // Notify post author that someone commented on their post
   notifyAuthorOfComment(postId, comment.id, currentUserId, comment.text).catch(() => {});
+  // Notify org admins so they can follow the conversation (skips the commenter and post author)
+  notifyAdminsOfNewComment(postId, comment.id, currentUserId, comment.text).catch(() => {});
 });
 
 // DELETE /comments/:id

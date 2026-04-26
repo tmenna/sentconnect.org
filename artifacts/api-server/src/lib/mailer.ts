@@ -254,3 +254,64 @@ export async function sendNewCommentEmail(params: NewCommentEmailParams): Promis
 
   return sendEmail(to, `${commenterName} commented on your post · SentConnect`, html, text);
 }
+
+// ─── 4. Admin comment-alert notification ──────────────────────────────────────
+// Sent to org admins when any member comments on a post in their org.
+
+export interface AdminCommentAlertParams {
+  to: string;
+  commenterName: string;
+  commenterAvatarUrl?: string | null;
+  commentText: string;
+  postAuthorName: string;
+  postSnippet: string;
+  postId: number;
+  orgName: string;
+  orgSubdomain?: string | null;
+  commentedAt: Date;
+}
+
+export async function sendAdminCommentAlertEmail(params: AdminCommentAlertParams): Promise<SendResult> {
+  const { to, commenterName, commenterAvatarUrl, commentText, postAuthorName, postSnippet, postId, orgName, orgSubdomain, commentedAt } = params;
+  const postUrl = postDeepLink(postId, orgSubdomain);
+  const timeStr = commentedAt.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+
+  const html = baseTemplate(`
+    <h2 style="margin:0 0 6px;font-size:20px;font-weight:700;color:#0F172A;">New comment on a member's post</h2>
+    <p style="margin:0 0 20px;font-size:14px;color:#64748B;">
+      In <strong>${orgName}</strong> &nbsp;·&nbsp; ${timeStr}
+    </p>
+
+    <!-- Post snippet -->
+    <div style="background:#F8FAFD;border-left:3px solid #0268CE;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
+      <p style="margin:0 0 4px;font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em;">Post by ${postAuthorName}</p>
+      <p style="margin:0;font-size:13px;color:#64748B;line-height:1.6;font-style:italic;">"${postSnippet}"</p>
+    </div>
+
+    <!-- Commenter -->
+    <div style="display:flex;align-items:center;margin-bottom:12px;">
+      ${avatar(commenterName, commenterAvatarUrl)}
+      <div style="margin-left:12px;display:inline-block;vertical-align:middle;">
+        <div style="font-size:15px;font-weight:700;color:#0F172A;">${commenterName}</div>
+        <div style="font-size:13px;color:#94A3B8;margin-top:2px;">left a comment</div>
+      </div>
+    </div>
+    <p style="margin:0 0 4px;font-size:15px;color:#475569;line-height:1.7;">${commentText}</p>
+
+    ${ctaButton(postUrl, "View Conversation")}
+  `, orgName);
+
+  const text = [
+    `New comment on ${postAuthorName}'s post in ${orgName}`,
+    "",
+    `Post: "${postSnippet}"`,
+    "",
+    `${commenterName} commented: "${commentText}"`,
+    "",
+    `View conversation: ${postUrl}`,
+    "",
+    `— SentConnect · ${orgName}`,
+  ].join("\n");
+
+  return sendEmail(to, `${commenterName} commented on ${postAuthorName}'s post · SentConnect`, html, text);
+}

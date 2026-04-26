@@ -1,6 +1,6 @@
 import { db, usersTable, reportsTable, notificationLogsTable, photosTable, organizationsTable } from "@workspace/db";
 import { eq, and } from "drizzle-orm";
-import { sendNewPostEmail, sendNewCommentEmail } from "./mailer";
+import { sendNewPostEmail, sendNewCommentEmail, sendAdminCommentAlertEmail } from "./mailer";
 import { logger } from "./logger";
 
 async function logNotification(params: {
@@ -20,6 +20,19 @@ async function logNotification(params: {
   }
 }
 
+// ─── Shared helpers ───────────────────────────────────────────────────────────
+
+async function getOrgInfo(orgId: number | null | undefined) {
+  if (!orgId) return null;
+  const [org] = await db
+    .select({ id: organizationsTable.id, name: organizationsTable.name, subdomain: organizationsTable.subdomain })
+    .from(organizationsTable)
+    .where(eq(organizationsTable.id, orgId));
+  return org ?? null;
+}
+
+// ─── 1. New post → notify org admins ─────────────────────────────────────────
+
 export async function notifyAdminsOfNewPost(postId: number, authorId: number): Promise<void> {
   try {
     const [post] = await db.select().from(reportsTable).where(eq(reportsTable.id, postId));
@@ -31,14 +44,11 @@ export async function notifyAdminsOfNewPost(postId: number, authorId: number): P
     const orgId = post.organizationId;
     if (!orgId) return;
 
-    // Fetch org for subdomain (used to build correct deep-link URL in the email)
-    const [org] = await db.select({ name: organizationsTable.name, subdomain: organizationsTable.subdomain })
-      .from(organizationsTable).where(eq(organizationsTable.id, orgId));
+    const org = await getOrgInfo(orgId);
 
     const admins = await db.select().from(usersTable).where(
       and(eq(usersTable.organizationId, orgId), eq(usersTable.role, "admin"))
     );
-
     if (admins.length === 0) return;
 
     const photos = await db.select().from(photosTable).where(eq(photosTable.reportId, postId));
@@ -82,6 +92,8 @@ export async function notifyAdminsOfNewPost(postId: number, authorId: number): P
   }
 }
 
+// ─── 2. New comment → notify post author ─────────────────────────────────────
+
 export async function notifyAuthorOfComment(
   postId: number,
   commentId: number,
@@ -92,6 +104,7 @@ export async function notifyAuthorOfComment(
     const [post] = await db.select().from(reportsTable).where(eq(reportsTable.id, postId));
     if (!post) return;
 
+    // Don't notify if the post author is commenting on their own post
     if (post.missionaryId === commenterId) return;
 
     const [postAuthor] = await db.select().from(usersTable).where(eq(usersTable.id, post.missionaryId));
@@ -100,12 +113,7 @@ export async function notifyAuthorOfComment(
     const [commenter] = await db.select().from(usersTable).where(eq(usersTable.id, commenterId));
     if (!commenter) return;
 
-    // Fetch org for subdomain
-    const orgId = post.organizationId;
-    const [org] = orgId
-      ? await db.select({ name: organizationsTable.name, subdomain: organizationsTable.subdomain })
-          .from(organizationsTable).where(eq(organizationsTable.id, orgId))
-      : [null];
+    const org = await getOrgInfo(post.organizationId);
 
     const snippet = post.description
       ? post.description.slice(0, 120) + (post.description.length > 120 ? "…" : "")
@@ -138,5 +146,76 @@ export async function notifyAuthorOfComment(
     });
   } catch (err) {
     logger.error({ err, postId, commentId }, "[notifier] notifyAuthorOfComment failed");
+  }
+}
+
+// ─── 3. New comment → notify org admins ──────────────────────────────────────
+// Keeps admins in the loop on all conversations in their org.
+// Skips: the admin who wrote the comment, and the post author (already notified above).
+
+export async function notifyAdminsOfNewComment(
+  postId: number,
+  commentId: number,
+  commenterId: number,
+  commentText: string
+): Promise<void> {
+  try {
+    const [post] = await db.select().from(reportsTable).where(eq(reportsTable.id, postId));
+    if (!post || !post.organizationId) return;
+
+    const [commenter] = await db.select().from(usersTable).where(eq(usersTable.id, commenterId));
+    if (!commenter) return;
+
+    const [postAuthor] = post.missionaryId
+      ? await db.select().from(usersTable).where(eq(usersTable.id, post.missionaryId))
+      : [null];
+
+    const org = await getOrgInfo(post.organizationId);
+    if (!org) return;
+
+    const admins = await db.select().from(usersTable).where(
+      and(eq(usersTable.organizationId, post.organizationId), eq(usersTable.role, "admin"))
+    );
+    if (admins.length === 0) return;
+
+    const snippet = post.description
+      ? post.description.slice(0, 120) + (post.description.length > 120 ? "…" : "")
+      : "a mission update";
+
+    const now = new Date();
+
+    await Promise.allSettled(
+      admins
+        // Don't notify the admin who wrote the comment
+        .filter(a => a.id !== commenterId)
+        // Don't notify the post author again — they get the dedicated author notification
+        .filter(a => a.id !== post.missionaryId)
+        .map(async (admin) => {
+          const result = await sendAdminCommentAlertEmail({
+            to: admin.email,
+            commenterName: commenter.name,
+            commenterAvatarUrl: commenter.avatarUrl,
+            commentText: commentText.slice(0, 300),
+            postAuthorName: postAuthor?.name ?? "a team member",
+            postSnippet: snippet,
+            postId,
+            orgName: org.name,
+            orgSubdomain: org.subdomain,
+            commentedAt: now,
+          });
+          await logNotification({
+            type: "admin_comment_alert",
+            recipientId: admin.id,
+            recipientEmail: admin.email,
+            subject: `${commenter.name} commented on ${postAuthor?.name ?? "a member"}'s post`,
+            relatedPostId: postId,
+            relatedCommentId: commentId,
+            sent: result.sent,
+            error: result.error,
+          });
+        })
+    );
+  } catch (err) {
+    logger.error({ err, postId, commentId }, "[notifier] notifyAdminsOfNewComment failed");
   }
 }
