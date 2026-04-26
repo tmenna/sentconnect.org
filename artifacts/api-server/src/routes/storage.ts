@@ -159,7 +159,11 @@ router.get("/storage/objects/*path", async (req: Request, res: Response) => {
 
   try {
     const signedUrl = await createPresignedGetUrl(objectKey, 3600);
-    res.redirect(302, signedUrl);
+    // Cache the redirect for 55 min (safely inside the 1-hour presigned URL window).
+    // This means repeat visitors skip the API entirely on subsequent image loads.
+    res
+      .set("Cache-Control", "public, max-age=3300")
+      .redirect(302, signedUrl);
   } catch (err: any) {
     req.log.error({ err }, "Error generating presigned GET URL");
     res.status(500).json({ error: "Failed to generate file URL" });

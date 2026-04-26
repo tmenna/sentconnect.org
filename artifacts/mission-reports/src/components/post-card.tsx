@@ -47,6 +47,8 @@ function isVideoItem(p: PostData["photos"][number]) {
 }
 
 function MediaItem({ p, controls = false, className = "" }: { p: PostData["photos"][number]; controls?: boolean; className?: string }) {
+  const [loaded, setLoaded] = useState(false);
+
   if (isVideoItem(p)) {
     return (
       <div className={cn("relative w-full h-full bg-black", className)}>
@@ -67,7 +69,23 @@ function MediaItem({ p, controls = false, className = "" }: { p: PostData["photo
       </div>
     );
   }
-  return <img src={p.url} alt={p.caption || ""} className={cn("w-full h-full object-cover", className)} />;
+
+  return (
+    <div className={cn("relative overflow-hidden", className)}>
+      {!loaded && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
+      <img
+        src={p.url}
+        alt={p.caption || ""}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        className={cn(
+          "w-full h-full object-cover transition-opacity duration-300",
+          loaded ? "opacity-100" : "opacity-0"
+        )}
+      />
+    </div>
+  );
 }
 
 function MediaGrid({ photos }: { photos: PostData["photos"] }) {
