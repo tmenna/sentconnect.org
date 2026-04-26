@@ -7,7 +7,7 @@ const resend = process.env["RESEND_API_KEY"]
 
 export const emailConfigured = !!process.env["RESEND_API_KEY"];
 
-const FROM_ADDRESS = process.env["EMAIL_FROM"] ?? "SentConnect <notifications@sentconnect.app>";
+const FROM_ADDRESS = process.env["EMAIL_FROM"] ?? "SentConnect <onboarding@resend.dev>";
 const APP_URL = process.env["APP_BASE_URL"] ?? "https://church-connect-tekimenna.replit.app";
 
 // ─── Shared template helpers ────────────────────────────────────────────────
