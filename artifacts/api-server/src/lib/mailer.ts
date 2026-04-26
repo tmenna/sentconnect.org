@@ -9,6 +9,7 @@ export const emailConfigured = !!process.env["RESEND_API_KEY"];
 
 const FROM_ADDRESS = process.env["EMAIL_FROM"] ?? "SentConnect <onboarding@resend.dev>";
 const APP_URL = process.env["APP_BASE_URL"] ?? "https://church-connect-tekimenna.replit.app";
+const LOGO_URL = `${APP_URL}/public/images/logo-white.png`;
 
 // ─── Shared template helpers ────────────────────────────────────────────────
 
@@ -26,9 +27,9 @@ function baseTemplate(content: string, orgName?: string): string {
     <table width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
 
       <!-- Header -->
-      <tr><td style="background:linear-gradient(135deg,#0047A8 0%,#0268CE 60%,#1A80E0 100%);border-radius:16px 16px 0 0;padding:32px 40px 28px;text-align:center;">
-        <div style="font-size:22px;font-weight:800;letter-spacing:0.08em;color:#fff;text-transform:uppercase;">SENTCONNECT</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.72);margin-top:4px;letter-spacing:0.02em;">Stay connected with your field teams</div>
+      <tr><td style="background:linear-gradient(135deg,#0047A8 0%,#0268CE 60%,#1A80E0 100%);border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
+        <img src="${LOGO_URL}" alt="SentConnect" width="180" style="height:auto;max-width:180px;display:block;margin:0 auto;" />
+        <div style="font-size:12px;color:rgba(255,255,255,0.65);margin-top:8px;letter-spacing:0.03em;">Stay connected with your field teams</div>
       </td></tr>
 
       <!-- Body -->

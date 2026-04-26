@@ -75,6 +75,8 @@ app.use(
   })
 );
 
+app.use("/public", express.static(path.resolve(process.cwd(), "public")));
+
 app.use("/api", resolveOrg, router);
 
 const frontendDist = [
