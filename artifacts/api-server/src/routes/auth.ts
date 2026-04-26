@@ -124,7 +124,8 @@ router.post("/auth/forgot-password", async (req, res): Promise<void> => {
     .set({ resetToken: token, resetTokenExpiry: expiry })
     .where(eq(usersTable.id, user.id));
 
-  const baseUrl = process.env["APP_BASE_URL"] ?? "https://church-connect-tekimenna.replit.app";
+  const canonicalDomain = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org").split(",")[0].trim();
+  const baseUrl = process.env["APP_BASE_URL"] ?? `https://${canonicalDomain}`;
   const resetLink = `/reset-password?token=${token}`;
   const resetUrl = `${baseUrl}${resetLink}`;
 
