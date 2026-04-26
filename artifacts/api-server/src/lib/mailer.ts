@@ -7,7 +7,20 @@ const resend = process.env["RESEND_API_KEY"]
 
 export const emailConfigured = !!process.env["RESEND_API_KEY"];
 
-const FROM_ADDRESS = process.env["EMAIL_FROM"] ?? "SentConnect-Notification <onboarding@resend.dev>";
+const DISPLAY_NAME = "SentConnect Notification";
+
+// Always apply the display name so Gmail shows "SentConnect Notification" in the inbox.
+// If EMAIL_FROM is already formatted as "Name <addr>" we keep it as-is;
+// if it's a bare address like "notifications@sentconnect.org" we wrap it.
+function buildFromAddress(raw: string | undefined): string {
+  if (!raw) return `${DISPLAY_NAME} <onboarding@resend.dev>`;
+  // Already has a display name (contains "<")
+  if (raw.includes("<")) return raw;
+  // Bare email address — prepend the display name
+  return `${DISPLAY_NAME} <${raw.trim()}>`;
+}
+
+const FROM_ADDRESS = buildFromAddress(process.env["EMAIL_FROM"]);
 
 // The root domain used for org-specific deep-link URLs (e.g. sentconnect.org).
 // Take the first entry from TENANT_ROOT_DOMAINS, or fall back to a sane default.
