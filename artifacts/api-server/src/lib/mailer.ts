@@ -7,9 +7,30 @@ const resend = process.env["RESEND_API_KEY"]
 
 export const emailConfigured = !!process.env["RESEND_API_KEY"];
 
-const FROM_ADDRESS = process.env["EMAIL_FROM"] ?? "SentConnect <onboarding@resend.dev>";
-const APP_URL = process.env["APP_BASE_URL"] ?? "https://church-connect-tekimenna.replit.app";
+const FROM_ADDRESS = process.env["EMAIL_FROM"] ?? "SentConnect-Notification <onboarding@resend.dev>";
+
+// The root domain used for org-specific deep-link URLs (e.g. sentconnect.org).
+// Take the first entry from TENANT_ROOT_DOMAINS, or fall back to a sane default.
+const CANONICAL_DOMAIN = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org")
+  .split(",")[0]
+  .trim();
+
+// Base URL used only for the logo image and non-org links (footer, etc.).
+const APP_URL = process.env["APP_BASE_URL"] ?? `https://${CANONICAL_DOMAIN}`;
 const LOGO_URL = `${APP_URL}/public/images/logo-white.png`;
+
+/**
+ * Builds the deep-link URL for an org-specific post.
+ * When an org subdomain is provided, the link goes to
+ *   https://<subdomain>.<canonical-domain>/login?next=/post/<id>
+ * otherwise falls back to the app root.
+ */
+function postDeepLink(postId: number, orgSubdomain?: string | null): string {
+  const base = orgSubdomain
+    ? `https://${orgSubdomain}.${CANONICAL_DOMAIN}`
+    : APP_URL;
+  return `${base}/login?next=/post/${postId}`;
+}
 
 // ─── Shared template helpers ────────────────────────────────────────────────
 
@@ -134,12 +155,13 @@ export interface NewPostEmailParams {
   postImageUrl?: string | null;
   postId: number;
   orgName: string;
+  orgSubdomain?: string | null;
   postedAt: Date;
 }
 
 export async function sendNewPostEmail(params: NewPostEmailParams): Promise<SendResult> {
-  const { to, senderName, senderAvatarUrl, postSnippet, postImageUrl, postId, orgName, postedAt } = params;
-  const postUrl = `${APP_URL}/login?next=/post/${postId}`;
+  const { to, senderName, senderAvatarUrl, postSnippet, postImageUrl, postId, orgName, orgSubdomain, postedAt } = params;
+  const postUrl = postDeepLink(postId, orgSubdomain);
   const timeStr = postedAt.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
 
   const imageBlock = postImageUrl
@@ -188,12 +210,13 @@ export interface NewCommentEmailParams {
   postSnippet: string;
   postId: number;
   orgName: string;
+  orgSubdomain?: string | null;
   commentedAt: Date;
 }
 
 export async function sendNewCommentEmail(params: NewCommentEmailParams): Promise<SendResult> {
-  const { to, commenterName, commenterAvatarUrl, commentText, postSnippet, postId, orgName, commentedAt } = params;
-  const postUrl = `${APP_URL}/login?next=/post/${postId}`;
+  const { to, commenterName, commenterAvatarUrl, commentText, postSnippet, postId, orgName, orgSubdomain, commentedAt } = params;
+  const postUrl = postDeepLink(postId, orgSubdomain);
   const timeStr = commentedAt.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
 
   const html = baseTemplate(`

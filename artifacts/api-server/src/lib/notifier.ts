@@ -1,4 +1,4 @@
-import { db, usersTable, reportsTable, notificationLogsTable, photosTable } from "@workspace/db";
+import { db, usersTable, reportsTable, notificationLogsTable, photosTable, organizationsTable } from "@workspace/db";
 import { eq, and } from "drizzle-orm";
 import { sendNewPostEmail, sendNewCommentEmail } from "./mailer";
 import { logger } from "./logger";
@@ -31,6 +31,10 @@ export async function notifyAdminsOfNewPost(postId: number, authorId: number): P
     const orgId = post.organizationId;
     if (!orgId) return;
 
+    // Fetch org for subdomain (used to build correct deep-link URL in the email)
+    const [org] = await db.select({ name: organizationsTable.name, subdomain: organizationsTable.subdomain })
+      .from(organizationsTable).where(eq(organizationsTable.id, orgId));
+
     const admins = await db.select().from(usersTable).where(
       and(eq(usersTable.organizationId, orgId), eq(usersTable.role, "admin"))
     );
@@ -44,7 +48,8 @@ export async function notifyAdminsOfNewPost(postId: number, authorId: number): P
       ? post.description.slice(0, 200) + (post.description.length > 200 ? "…" : "")
       : "A new mission update has been posted.";
 
-    const orgName = author.organization ?? "your organization";
+    const orgName = org?.name ?? author.organization ?? "your organization";
+    const orgSubdomain = org?.subdomain ?? null;
 
     await Promise.allSettled(
       admins
@@ -58,6 +63,7 @@ export async function notifyAdminsOfNewPost(postId: number, authorId: number): P
             postImageUrl: firstImageUrl,
             postId,
             orgName,
+            orgSubdomain,
             postedAt: post.createdAt,
           });
           await logNotification({
@@ -94,11 +100,19 @@ export async function notifyAuthorOfComment(
     const [commenter] = await db.select().from(usersTable).where(eq(usersTable.id, commenterId));
     if (!commenter) return;
 
+    // Fetch org for subdomain
+    const orgId = post.organizationId;
+    const [org] = orgId
+      ? await db.select({ name: organizationsTable.name, subdomain: organizationsTable.subdomain })
+          .from(organizationsTable).where(eq(organizationsTable.id, orgId))
+      : [null];
+
     const snippet = post.description
       ? post.description.slice(0, 120) + (post.description.length > 120 ? "…" : "")
       : "your post";
 
-    const orgName = postAuthor.organization ?? "your organization";
+    const orgName = org?.name ?? postAuthor.organization ?? "your organization";
+    const orgSubdomain = org?.subdomain ?? null;
 
     const result = await sendNewCommentEmail({
       to: postAuthor.email,
@@ -108,6 +122,7 @@ export async function notifyAuthorOfComment(
       postSnippet: snippet,
       postId,
       orgName,
+      orgSubdomain,
       commentedAt: new Date(),
     });
 
