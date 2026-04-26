@@ -2,6 +2,7 @@ import { db, usersTable, reportsTable, notificationLogsTable, photosTable, organ
 import { eq, and } from "drizzle-orm";
 import { sendNewPostEmail, sendNewCommentEmail, sendAdminCommentAlertEmail } from "./mailer";
 import { logger } from "./logger";
+import { resolveObjectUrl } from "./r2Storage";
 
 async function logNotification(params: {
   type: string;
@@ -52,7 +53,7 @@ export async function notifyAdminsOfNewPost(postId: number, authorId: number): P
     if (admins.length === 0) return;
 
     const photos = await db.select().from(photosTable).where(eq(photosTable.reportId, postId));
-    const firstImageUrl = photos[0]?.url ?? null;
+    const firstImageUrl = await resolveObjectUrl(photos[0]?.url ?? null);
 
     const snippet = post.description
       ? post.description.slice(0, 200) + (post.description.length > 200 ? "…" : "")

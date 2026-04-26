@@ -2,6 +2,7 @@ import { Router, type IRouter } from "express";
 import { eq, desc, and, sql, count, gte, lte, inArray } from "drizzle-orm";
 import { db, reportsTable, usersTable, photosTable, likesTable, commentsTable } from "@workspace/db";
 import { notifyAdminsOfNewPost, notifyAuthorOfComment, notifyAdminsOfNewComment } from "../lib/notifier";
+import { resolveObjectUrls, resolveObjectUrl } from "../lib/r2Storage";
 
 const router: IRouter = Router();
 
@@ -19,11 +20,19 @@ async function getPostWithDetails(postId: number, currentUserId?: number) {
       ? db.select().from(likesTable).where(and(eq(likesTable.postId, postId), eq(likesTable.userId, currentUserId)))
       : Promise.resolve([] as { id: number }[]),
   ]);
+
+  // Pre-sign all /objects/... URLs so the browser loads directly from R2 CDN
+  const urlMap = await resolveObjectUrls([
+    ...photos.map(p => p.url),
+    author.avatarUrl,
+  ]);
+  const ru = (u: string | null | undefined) => (u && urlMap.has(u) ? urlMap.get(u)! : u) ?? null;
+
   const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...authorData } = author;
   return {
     ...post,
-    author: authorData,
-    photos,
+    author: { ...authorData, avatarUrl: ru(authorData.avatarUrl) },
+    photos: photos.map(p => ({ ...p, url: ru(p.url) ?? p.url })),
     likeCount: likeCount[0]?.count ?? 0,
     commentCount: commentCount[0]?.count ?? 0,
     likedByMe: likedRow.length > 0,
@@ -66,6 +75,14 @@ async function getPostsWithDetails(
     photosByPost.get(photo.reportId)!.push(photo);
   }
 
+  // Pre-sign every /objects/... URL (photos + avatars) in a single parallel batch.
+  // Signing is local HMAC crypto — no network call — so this adds < 5 ms for 100 URLs.
+  const urlMap = await resolveObjectUrls([
+    ...photos.map(p => p.url),
+    ...authors.map(a => a.avatarUrl),
+  ]);
+  const ru = (u: string | null | undefined) => (u && urlMap.has(u) ? urlMap.get(u)! : u) ?? null;
+
   return posts
     .map(post => {
       const author = authorMap.get(post.missionaryId!);
@@ -73,8 +90,8 @@ async function getPostsWithDetails(
       const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...authorData } = author;
       return {
         ...post,
-        author: authorData,
-        photos: photosByPost.get(post.id) ?? [],
+        author: { ...authorData, avatarUrl: ru(authorData.avatarUrl) },
+        photos: (photosByPost.get(post.id) ?? []).map(p => ({ ...p, url: ru(p.url) ?? p.url })),
         likeCount: likeCountMap.get(post.id) ?? 0,
         commentCount: commentCountMap.get(post.id) ?? 0,
         likedByMe: likedByMeSet.has(post.id),

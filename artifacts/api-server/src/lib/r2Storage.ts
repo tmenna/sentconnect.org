@@ -268,6 +268,51 @@ export async function createPresignedGetUrl(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// URL resolution — inline presigning for API responses
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Resolve a stored object path to a directly fetchable presigned URL.
+ *
+ * - /objects/... paths  → pre-signed R2 GET URL (2 h expiry by default)
+ * - External URLs       → returned unchanged
+ * - null / undefined    → null
+ *
+ * Signing is pure local HMAC crypto — no network call is made.
+ * Embed the result directly in API responses so browsers can load images
+ * straight from R2's CDN without a redirect through the API server.
+ */
+export async function resolveObjectUrl(
+  url: string | null | undefined,
+  ttlSeconds = 7200,
+): Promise<string | null> {
+  if (!url) return null;
+  if (!url.startsWith("/objects/")) return url;
+  const key = objectPathToKey(url);
+  if (!key) return null;
+  try {
+    return await createPresignedGetUrl(key, ttlSeconds);
+  } catch {
+    return url; // graceful fallback — browser will hit the /api/storage redirect
+  }
+}
+
+/**
+ * Batch-resolve a list of URLs in parallel.
+ * Deduplicates first so each unique path is signed at most once.
+ */
+export async function resolveObjectUrls(
+  urls: (string | null | undefined)[],
+  ttlSeconds = 7200,
+): Promise<Map<string, string>> {
+  const unique = [...new Set(urls.filter((u): u is string => !!u && u.startsWith("/objects/")))];
+  const signed = await Promise.all(unique.map(u => resolveObjectUrl(u, ttlSeconds)));
+  const map = new Map<string, string>();
+  unique.forEach((u, i) => { if (signed[i]) map.set(u, signed[i]!); });
+  return map;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Utility operations
 // ─────────────────────────────────────────────────────────────────────────────
 
