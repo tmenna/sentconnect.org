@@ -81,13 +81,23 @@ router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): 
     .from(organizationsTable).where(eq(organizationsTable.subdomain, slug));
   if (existing) { res.status(409).json({ error: "Subdomain already in use" }); return; }
 
-  const [org] = await db.insert(organizationsTable)
-    .values({
-      name: name.trim(),
-      subdomain: slug,
-      email: typeof email === "string" && email.trim() ? email.trim().toLowerCase() : null,
-    })
-    .returning();
+  let org: typeof organizationsTable.$inferSelect;
+  try {
+    const [inserted] = await db.insert(organizationsTable)
+      .values({
+        name: name.trim(),
+        subdomain: slug,
+        email: typeof email === "string" && email.trim() ? email.trim().toLowerCase() : null,
+      })
+      .returning();
+    org = inserted;
+  } catch (dbErr: unknown) {
+    const msg = (dbErr as { message?: string })?.message ?? "";
+    if (msg.includes("unique") || msg.includes("duplicate")) {
+      res.status(409).json({ error: "Subdomain already in use" }); return;
+    }
+    res.status(500).json({ error: "Failed to create organization. Please try again." }); return;
+  }
   res.status(201).json(org);
 });
 

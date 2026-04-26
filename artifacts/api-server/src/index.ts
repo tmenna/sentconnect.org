@@ -1,6 +1,7 @@
 import app from "./app";
 import { logger } from "./lib/logger";
 import { seedIfEmpty, ensureSuperAdmin, cleanupDemoOrgs } from "./lib/seed";
+import { runMigrations } from "./lib/migrate";
 
 const rawPort = process.env["PORT"];
 
@@ -27,6 +28,12 @@ app.listen(port, (err) => {
 
 // Run startup tasks sequentially so cleanup completes before super-admin sync
 (async () => {
+  try {
+    await runMigrations();
+  } catch (err) {
+    logger.error({ err }, "runMigrations failed");
+  }
+
   try {
     await cleanupDemoOrgs();
   } catch (err) {
