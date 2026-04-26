@@ -41,7 +41,7 @@ function baseTemplate(content: string, orgName?: string): string {
         <p style="margin:0;font-size:12px;color:#94A3B8;line-height:1.6;">
           You are receiving this because you are part of <strong>${orgName ?? "your organization"}</strong> on SentConnect.<br />
           <a href="${APP_URL}" style="color:#0268CE;text-decoration:none;">Manage notification preferences</a> &nbsp;·&nbsp;
-          <a href="mailto:support@sentconnect.app" style="color:#0268CE;text-decoration:none;">Contact support</a>
+          <a href="mailto:support@sentconnect.org" style="color:#0268CE;text-decoration:none;">Contact support</a>
         </p>
       </td></tr>
 
