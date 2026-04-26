@@ -27,7 +27,16 @@ import SuperAdminPanel from "./pages/super-admin";
 import PublicPost from "./pages/public-post";
 import SignupSuccess from "./pages/signup-success";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,      // data stays fresh for 60 s — no redundant refetch on tab switch
+      gcTime: 5 * 60 * 1000,     // keep unused data in cache for 5 min
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 type LandingPageContent = {
   logoUrl: string;

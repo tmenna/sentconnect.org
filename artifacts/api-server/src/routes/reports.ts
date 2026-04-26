@@ -1,29 +1,86 @@
 import { Router, type IRouter } from "express";
-import { eq, desc, and, sql, count, gte, lte } from "drizzle-orm";
+import { eq, desc, and, sql, count, gte, lte, inArray } from "drizzle-orm";
 import { db, reportsTable, usersTable, photosTable, likesTable, commentsTable } from "@workspace/db";
 import { notifyAdminsOfNewPost, notifyAuthorOfComment, notifyAdminsOfNewComment } from "../lib/notifier";
 
 const router: IRouter = Router();
 
+// Single-post fetch — used for POST/PATCH responses and public post view.
 async function getPostWithDetails(postId: number, currentUserId?: number) {
   const [post] = await db.select().from(reportsTable).where(eq(reportsTable.id, postId));
   if (!post) return null;
   const [author] = await db.select().from(usersTable).where(eq(usersTable.id, post.missionaryId));
   if (!author) return null;
-  const photos = await db.select().from(photosTable).where(eq(photosTable.reportId, postId));
-  const [likeCount] = await db.select({ count: count() }).from(likesTable).where(eq(likesTable.postId, postId));
-  const [commentCount] = await db.select({ count: count() }).from(commentsTable).where(eq(commentsTable.postId, postId));
-  let likedByMe = false;
-  if (currentUserId) {
-    const [like] = await db.select().from(likesTable).where(and(eq(likesTable.postId, postId), eq(likesTable.userId, currentUserId)));
-    likedByMe = !!like;
-  }
+  const [photos, likeCount, commentCount, likedRow] = await Promise.all([
+    db.select().from(photosTable).where(eq(photosTable.reportId, postId)),
+    db.select({ count: count() }).from(likesTable).where(eq(likesTable.postId, postId)),
+    db.select({ count: count() }).from(commentsTable).where(eq(commentsTable.postId, postId)),
+    currentUserId
+      ? db.select().from(likesTable).where(and(eq(likesTable.postId, postId), eq(likesTable.userId, currentUserId)))
+      : Promise.resolve([] as { id: number }[]),
+  ]);
   const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...authorData } = author;
-  return { ...post, author: authorData, photos, likeCount: likeCount?.count ?? 0, commentCount: commentCount?.count ?? 0, likedByMe };
+  return {
+    ...post,
+    author: authorData,
+    photos,
+    likeCount: likeCount[0]?.count ?? 0,
+    commentCount: commentCount[0]?.count ?? 0,
+    likedByMe: likedRow.length > 0,
+  };
 }
 
-async function getPostsWithDetails(posts: typeof reportsTable.$inferSelect[], currentUserId?: number) {
-  return await Promise.all(posts.map(p => getPostWithDetails(p.id, currentUserId)));
+// Batched list fetch — replaces the old N+1 loop.
+// 5 queries in parallel regardless of list size (was 5×N queries).
+async function getPostsWithDetails(
+  posts: typeof reportsTable.$inferSelect[],
+  currentUserId?: number,
+) {
+  if (posts.length === 0) return [];
+
+  const postIds = posts.map(p => p.id);
+  const authorIds = [...new Set(posts.map(p => p.missionaryId).filter((id): id is number => id != null))];
+
+  const [authors, photos, likeCounts, commentCounts, likedByMeRows] = await Promise.all([
+    authorIds.length > 0
+      ? db.select().from(usersTable).where(inArray(usersTable.id, authorIds))
+      : ([] as typeof usersTable.$inferSelect[]),
+    db.select().from(photosTable).where(inArray(photosTable.reportId, postIds)),
+    db.select({ postId: likesTable.postId, c: count() }).from(likesTable)
+      .where(inArray(likesTable.postId, postIds)).groupBy(likesTable.postId),
+    db.select({ postId: commentsTable.postId, c: count() }).from(commentsTable)
+      .where(inArray(commentsTable.postId, postIds)).groupBy(commentsTable.postId),
+    currentUserId
+      ? db.select({ postId: likesTable.postId }).from(likesTable)
+          .where(and(inArray(likesTable.postId, postIds), eq(likesTable.userId, currentUserId)))
+      : ([] as { postId: number }[]),
+  ]);
+
+  const authorMap = new Map(authors.map(a => [a.id, a]));
+  const likeCountMap = new Map(likeCounts.map(r => [r.postId, r.c]));
+  const commentCountMap = new Map(commentCounts.map(r => [r.postId, r.c]));
+  const likedByMeSet = new Set(likedByMeRows.map(r => r.postId));
+  const photosByPost = new Map<number, typeof photos>();
+  for (const photo of photos) {
+    if (!photosByPost.has(photo.reportId)) photosByPost.set(photo.reportId, []);
+    photosByPost.get(photo.reportId)!.push(photo);
+  }
+
+  return posts
+    .map(post => {
+      const author = authorMap.get(post.missionaryId!);
+      if (!author) return null;
+      const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...authorData } = author;
+      return {
+        ...post,
+        author: authorData,
+        photos: photosByPost.get(post.id) ?? [],
+        likeCount: likeCountMap.get(post.id) ?? 0,
+        commentCount: commentCountMap.get(post.id) ?? 0,
+        likedByMe: likedByMeSet.has(post.id),
+      };
+    })
+    .filter((p): p is NonNullable<typeof p> => p !== null);
 }
 
 async function getCurrentUser(userId: number) {
@@ -174,22 +231,25 @@ router.get("/reports/export", async (req, res): Promise<void> => {
     conditions.push(lte(reportsTable.createdAt, to));
   }
 
-  const posts = await db.select().from(reportsTable)
+  // Single JOIN query for CSV — no N+1 author lookups
+  const postRows = await db
+    .select({
+      createdAt: reportsTable.createdAt,
+      location: reportsTable.location,
+      peopleReached: reportsTable.peopleReached,
+      description: reportsTable.description,
+      authorName: usersTable.name,
+    })
+    .from(reportsTable)
+    .leftJoin(usersTable, eq(reportsTable.missionaryId, usersTable.id))
     .where(conditions.length > 0 ? and(...conditions) : undefined)
     .orderBy(desc(reportsTable.createdAt));
 
-  const rows = await Promise.all(posts.map(async (post) => {
-    const [author] = await db.select({ name: usersTable.name }).from(usersTable).where(eq(usersTable.id, post.missionaryId));
-    const date = post.createdAt ? new Date(post.createdAt).toISOString().split("T")[0] : "";
-    const escCsv = (v: string | null | undefined) => `"${(v ?? "").replace(/"/g, '""')}"`;
-    return [
-      date,
-      escCsv(author?.name),
-      escCsv(post.location),
-      post.peopleReached ?? "",
-      escCsv(post.description),
-    ].join(",");
-  }));
+  const escCsv = (v: string | null | undefined) => `"${(v ?? "").replace(/"/g, '""')}"`;
+  const rows = postRows.map(row => {
+    const date = row.createdAt ? new Date(row.createdAt).toISOString().split("T")[0] : "";
+    return [date, escCsv(row.authorName), escCsv(row.location), row.peopleReached ?? "", escCsv(row.description)].join(",");
+  });
 
   const csv = ["Date,Author,Location,People Reached,Description", ...rows].join("\n");
   const filename = `sentconnect-reports-${new Date().toISOString().split("T")[0]}.csv`;
@@ -332,12 +392,24 @@ router.post("/reports/:id/likes", async (req, res): Promise<void> => {
 router.get("/reports/:id/comments", async (req, res): Promise<void> => {
   const postId = Number(req.params.id);
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
-  const commentsList = await db.select().from(commentsTable).where(eq(commentsTable.postId, postId)).orderBy(commentsTable.createdAt);
-  const withAuthors = await Promise.all(commentsList.map(async (c) => {
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.id, c.userId));
-    const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...u } = user ?? { passwordHash: "", resetToken: null, resetTokenExpiry: null, id: 0, name: "Unknown", email: "", role: "field_user", bio: null, location: null, avatarUrl: null, organization: null, organizationId: null, createdAt: new Date(), updatedAt: new Date() };
+
+  // Single JOIN query — no N+1
+  const commentsList = await db.select().from(commentsTable)
+    .where(eq(commentsTable.postId, postId))
+    .orderBy(commentsTable.createdAt);
+
+  if (commentsList.length === 0) { res.json([]); return; }
+
+  const userIds = [...new Set(commentsList.map(c => c.userId))];
+  const users = await db.select().from(usersTable).where(inArray(usersTable.id, userIds));
+  const userMap = new Map(users.map(u => [u.id, u]));
+
+  const withAuthors = commentsList.map(c => {
+    const user = userMap.get(c.userId);
+    const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...u } =
+      user ?? { passwordHash: "", resetToken: null, resetTokenExpiry: null, id: 0, name: "Unknown", email: "", role: "field_user", status: "active", bio: null, location: null, avatarUrl: null, organization: null, organizationId: null, permissions: null, createdAt: new Date(), updatedAt: new Date() };
     return { ...c, author: u };
-  }));
+  });
   res.json(withAuthors);
 });
 

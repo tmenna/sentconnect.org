@@ -24,6 +24,37 @@ export async function runMigrations(): Promise<void> {
         created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )`,
     },
+    // ── Performance indexes ──────────────────────────────────────────────────
+    // These indexes are critical for feed query performance as data grows.
+    // Composite index covers the most common query: org feed sorted by date.
+    {
+      name: "idx_reports_org_created (composite)",
+      sql: `CREATE INDEX IF NOT EXISTS idx_reports_org_created ON reports(organization_id, created_at DESC)`,
+    },
+    {
+      name: "idx_reports_missionary_created (composite)",
+      sql: `CREATE INDEX IF NOT EXISTS idx_reports_missionary_created ON reports(missionary_id, created_at DESC)`,
+    },
+    {
+      name: "idx_reports_is_mission_moment",
+      sql: `CREATE INDEX IF NOT EXISTS idx_reports_is_mission_moment ON reports(is_mission_moment) WHERE is_mission_moment = TRUE`,
+    },
+    {
+      name: "idx_photos_report_id",
+      sql: `CREATE INDEX IF NOT EXISTS idx_photos_report_id ON photos(report_id)`,
+    },
+    {
+      name: "idx_comments_post_id",
+      sql: `CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id)`,
+    },
+    {
+      name: "idx_likes_post_id",
+      sql: `CREATE INDEX IF NOT EXISTS idx_likes_post_id ON likes(post_id)`,
+    },
+    {
+      name: "idx_users_organization_id",
+      sql: `CREATE INDEX IF NOT EXISTS idx_users_organization_id ON users(organization_id)`,
+    },
   ];
 
   for (const migration of migrations) {

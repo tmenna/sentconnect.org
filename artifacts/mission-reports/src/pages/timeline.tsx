@@ -1,17 +1,22 @@
-import { useState } from "react";
-import { useGetTimeline, getGetTimelineQueryKey } from "@workspace/api-client-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useGetTimeline } from "@workspace/api-client-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
 import { useAuth } from "@/components/auth-provider";
-import { BookOpen, Send, Star, PenSquare, MessageCircle } from "lucide-react";
+import { BookOpen, Send, Star, PenSquare, MessageCircle, Loader2 } from "lucide-react";
 
+const PAGE_SIZE = 20;
 type TimelineTab = "all" | "moments";
 
 export default function Feed() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
-  const [posts, setPosts] = useState<PostData[] | null>(null);
   const [activeTab, setActiveTab] = useState<TimelineTab>("all");
+  const [accumulatedPosts, setAccumulatedPosts] = useState<PostData[]>([]);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const initializedRef = useRef(false);
 
   if (!authLoading && !isAuthenticated) {
     if (typeof window !== "undefined") window.location.replace("/login");
@@ -22,23 +27,66 @@ export default function Feed() {
     return null;
   }
 
-  const { data, isLoading, isError } = useGetTimeline(
-    { limit: 40 },
-    {
-      query: {
-        queryKey: getGetTimelineQueryKey({ limit: 40 }),
-      },
+  // First page via React Query (benefits from 60 s stale cache)
+  const { data, isLoading, isError } = useGetTimeline({ limit: PAGE_SIZE, offset: 0 });
+
+  // Sync the first page into accumulated state once
+  useEffect(() => {
+    if (data && !initializedRef.current) {
+      initializedRef.current = true;
+      setAccumulatedPosts((data.reports ?? []) as PostData[]);
+      setHasMore(data.hasMore ?? false);
     }
-  );
+  }, [data]);
 
-  const allPosts: PostData[] = posts ?? (data?.reports ?? []) as PostData[];
-  const missionMoments = allPosts.filter(p => p.isMissionMoment);
-  const displayedPosts = activeTab === "moments" ? missionMoments : allPosts;
+  // Load next page using fetch (avoids generating extra React Query keys)
+  const loadMore = useCallback(async () => {
+    if (loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    try {
+      const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+      const resp = await fetch(
+        `${base}/api/timeline?limit=${PAGE_SIZE}&offset=${accumulatedPosts.length}`,
+        { credentials: "include" }
+      );
+      if (!resp.ok) return;
+      const next = await resp.json();
+      setAccumulatedPosts(prev => {
+        // deduplicate by id in case of concurrent inserts
+        const existing = new Set(prev.map(p => p.id));
+        const fresh = ((next.reports ?? []) as PostData[]).filter(p => !existing.has(p.id));
+        return [...prev, ...fresh];
+      });
+      setHasMore(next.hasMore ?? false);
+    } catch {
+      // silent — user can scroll back to trigger again
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [loadingMore, hasMore, accumulatedPosts.length]);
 
-  function handleDelete(id: number) {
-    setPosts(prev => prev ? prev.filter(p => p.id !== id) : (data?.reports as PostData[] ?? []).filter(p => p.id !== id));
+  // IntersectionObserver — auto-trigger load more when sentinel enters viewport
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      entries => { if (entries[0].isIntersecting) loadMore(); },
+      { rootMargin: "300px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loadMore]);
+
+  function handlePost(newPost: PostData) {
+    setAccumulatedPosts(prev => [newPost, ...prev]);
   }
 
+  function handleDelete(id: number) {
+    setAccumulatedPosts(prev => prev.filter(p => p.id !== id));
+  }
+
+  const missionMoments = accumulatedPosts.filter(p => p.isMissionMoment);
+  const displayedPosts = activeTab === "moments" ? missionMoments : accumulatedPosts;
   const EMERALD = "#0268CE";
 
   return (
@@ -70,7 +118,7 @@ export default function Feed() {
                 <PenSquare className="h-4 w-4" style={{ color: "#39BC7A" }} />
               </div>
               <div>
-                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{allPosts.length}</p>
+                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{accumulatedPosts.length}{hasMore ? "+" : ""}</p>
                 <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Posts Shared</p>
               </div>
             </div>
@@ -79,7 +127,7 @@ export default function Feed() {
                 <Star className="h-4 w-4" style={{ color: "#FFD600", fill: "#FFD600" }} />
               </div>
               <div>
-                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{missionMoments.length}</p>
+                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{missionMoments.length}{hasMore ? "+" : ""}</p>
                 <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Mission Moments</p>
               </div>
             </div>
@@ -88,14 +136,12 @@ export default function Feed() {
       </div>
 
       {/* ── Composer ── */}
-      <PostComposer
-        onPost={(newPost) => setPosts(prev => [newPost, ...(prev ?? (data?.reports as PostData[] ?? []))])}
-      />
+      <PostComposer onPost={handlePost} />
 
       {/* ── Filter tabs ── */}
       <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
         {[
-          { id: "all" as TimelineTab, label: "All Posts", icon: <Send className="h-3.5 w-3.5" />, count: allPosts.length, activeColor: EMERALD, activeBg: "#EFF6FF" },
+          { id: "all" as TimelineTab, label: "All Posts", icon: <Send className="h-3.5 w-3.5" />, count: accumulatedPosts.length, activeColor: EMERALD, activeBg: "#EFF6FF" },
           { id: "moments" as TimelineTab, label: "Mission Moments", icon: <Star className="h-3.5 w-3.5" style={{ fill: activeTab === "moments" ? "#DB1C4F" : "none", color: activeTab === "moments" ? "#DB1C4F" : "currentColor" }} />, count: missionMoments.length, activeColor: "#DB1C4F", activeBg: "#FFF1F4" },
         ].map(tab => {
           const active = activeTab === tab.id;
@@ -104,10 +150,7 @@ export default function Feed() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className="flex items-center gap-2 px-1 pb-3 pt-1 mr-5 text-[14px] font-semibold border-b-2 -mb-px transition-all duration-200"
-              style={{
-                borderColor: active ? tab.activeColor : "transparent",
-                color: active ? tab.activeColor : "#9CA3AF",
-              }}
+              style={{ borderColor: active ? tab.activeColor : "transparent", color: active ? tab.activeColor : "#9CA3AF" }}
             >
               {tab.icon}
               {tab.label}
@@ -116,7 +159,7 @@ export default function Feed() {
                   className="text-[11px] px-2 py-0.5 rounded-full font-medium"
                   style={{ background: active ? tab.activeBg : "#F3F4F6", color: active ? tab.activeColor : "#6B7280" }}
                 >
-                  {tab.count}
+                  {tab.count}{hasMore && tab.id === "all" ? "+" : ""}
                 </span>
               )}
             </button>
@@ -130,7 +173,7 @@ export default function Feed() {
       </div>
 
       {/* ── Posts ── */}
-      {isLoading && posts === null ? (
+      {isLoading && accumulatedPosts.length === 0 ? (
         <div className="space-y-4">
           {[1, 2, 3].map(i => (
             <div key={i} className="bg-white rounded-2xl border border-border/50 overflow-hidden p-6 space-y-3">
@@ -172,11 +215,35 @@ export default function Feed() {
           )}
         </div>
       ) : (
-        <div className="space-y-4">
-          {displayedPosts.map(post => (
-            <PostCard key={post.id} post={post} onDelete={handleDelete} />
-          ))}
-        </div>
+        <>
+          <div className="space-y-4">
+            {displayedPosts.map(post => (
+              <PostCard key={post.id} post={post} onDelete={handleDelete} />
+            ))}
+          </div>
+
+          {/* Sentinel + load-more indicator */}
+          {activeTab === "all" && (
+            <div ref={sentinelRef} className="flex justify-center py-4">
+              {loadingMore ? (
+                <div className="flex items-center gap-2" style={{ color: "#9CA3AF" }}>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="text-sm">Loading more posts…</span>
+                </div>
+              ) : hasMore ? (
+                <button
+                  onClick={loadMore}
+                  className="text-sm font-medium px-6 py-2 rounded-full border transition-colors hover:bg-gray-50"
+                  style={{ color: EMERALD, borderColor: EMERALD }}
+                >
+                  Load more
+                </button>
+              ) : accumulatedPosts.length > PAGE_SIZE ? (
+                <p className="text-sm" style={{ color: "#9CA3AF" }}>All posts loaded</p>
+              ) : null}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
