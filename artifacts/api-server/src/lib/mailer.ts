@@ -100,7 +100,13 @@ function avatar(name: string, avatarUrl?: string | null): string {
   if (avatarUrl) {
     return `<img src="${avatarUrl}" alt="${name}" width="44" height="44" style="border-radius:50%;object-fit:cover;vertical-align:middle;" />`;
   }
-  return `<div style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:#0268CE;color:#fff;font-size:17px;font-weight:700;vertical-align:middle;">${initials}</div>`;
+  // Use a table for centering — flexbox is stripped by Gmail and many email clients.
+  return `<table cellpadding="0" cellspacing="0" style="display:inline-table;vertical-align:middle;">
+    <tr><td width="44" height="44" align="center" valign="middle"
+      style="width:44px;height:44px;border-radius:50%;background:#0268CE;color:#fff;font-size:17px;font-weight:700;line-height:44px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+      ${initials}
+    </td></tr>
+  </table>`;
 }
 
 // ─── Email senders ───────────────────────────────────────────────────────────

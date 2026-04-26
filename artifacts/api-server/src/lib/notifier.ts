@@ -104,11 +104,20 @@ export async function notifyAuthorOfComment(
     const [post] = await db.select().from(reportsTable).where(eq(reportsTable.id, postId));
     if (!post) return;
 
+    // Post has no author recorded — nothing to notify
+    if (!post.missionaryId) {
+      logger.warn({ postId }, "[notifier] post has no missionaryId, skipping author notification");
+      return;
+    }
+
     // Don't notify if the post author is commenting on their own post
     if (post.missionaryId === commenterId) return;
 
     const [postAuthor] = await db.select().from(usersTable).where(eq(usersTable.id, post.missionaryId));
-    if (!postAuthor) return;
+    if (!postAuthor) {
+      logger.warn({ postId, missionaryId: post.missionaryId }, "[notifier] post author not found");
+      return;
+    }
 
     const [commenter] = await db.select().from(usersTable).where(eq(usersTable.id, commenterId));
     if (!commenter) return;
