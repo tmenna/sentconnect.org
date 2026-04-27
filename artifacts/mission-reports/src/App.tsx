@@ -526,6 +526,8 @@ function AboutPage() {
             <img
               src={about.aboutImageUrl || "/about-family.png"}
               alt="The Menna family serving in Ethiopia"
+              fetchPriority="high"
+              decoding="async"
               style={{ width: "100%", display: "block", objectFit: "cover", maxHeight: 420 }}
             />
             <div style={{ background: "#F1F5F9", padding: "10px 16px" }}>

@@ -37,9 +37,10 @@ function MediaItem({ photo, single, priority }: { photo: Photo; single?: boolean
       src={photo.url}
       alt=""
       className="w-full object-cover"
+      decoding="async"
       style={{ maxHeight: single ? 560 : 340, borderRadius: single ? "0 0 10px 10px" : 8 }}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      {...(priority ? { fetchpriority: "high" } as any : { loading: "lazy" })}
+      {...(priority ? { fetchPriority: "high" } as any : { loading: "lazy" })}
     />
   );
 }
