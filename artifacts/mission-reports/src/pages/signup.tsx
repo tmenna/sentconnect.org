@@ -186,7 +186,7 @@ export default function Signup() {
       {/* Nav */}
       <div className="su-nav">
         {logoUrl ? (
-          <img src={logoUrl} alt="SentConnect" style={{ height: 26, width: "auto", maxWidth: 160, objectFit: "contain" }} />
+          <img src={logoUrl} alt="SentConnect" fetchPriority="high" decoding="async" style={{ height: 26, width: "auto", maxWidth: 160, objectFit: "contain" }} />
         ) : (
           <span style={{ fontSize: 15, fontWeight: 900, color: BLUE, letterSpacing: "-0.03em" }}>SentConnect</span>
         )}
