@@ -66,6 +66,11 @@ function createR2Client(): S3Client {
     region: "auto",
     endpoint,
     credentials: { accessKeyId, secretAccessKey },
+    // Cloudflare R2 does not support AWS checksum extensions.
+    // These two flags prevent the SDK from appending x-amz-checksum-mode=ENABLED
+    // to presigned GET URLs, which causes R2 to return 403 Forbidden.
+    requestChecksumCalculation: "when_required",
+    responseChecksumValidation: "when_required",
   });
 }
 
