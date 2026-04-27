@@ -7,6 +7,32 @@ import { logger } from "../lib/logger";
 
 const router: IRouter = Router();
 
+// GET /billing/check-availability?subdomain=...&email=...
+// Lightweight pre-flight used by the signup form on blur.
+// Returns { subdomainTaken: bool, emailTaken: bool } — no auth required.
+router.get("/billing/check-availability", async (req, res): Promise<void> => {
+  const { subdomain, email } = req.query;
+
+  let subdomainTaken = false;
+  let emailTaken = false;
+
+  if (subdomain && typeof subdomain === "string" && /^[a-z0-9-]{2,30}$/.test(subdomain.trim())) {
+    const [row] = await db.select({ id: organizationsTable.id })
+      .from(organizationsTable)
+      .where(eq(organizationsTable.subdomain, subdomain.trim().toLowerCase()));
+    subdomainTaken = !!row;
+  }
+
+  if (email && typeof email === "string" && email.includes("@")) {
+    const [row] = await db.select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.email, email.trim().toLowerCase()));
+    emailTaken = !!row;
+  }
+
+  res.json({ subdomainTaken, emailTaken });
+});
+
 // POST /billing/create-checkout-session
 // Validates form data, then redirects to Stripe Checkout.
 // The org + user are created ONLY after payment succeeds (via webhook).

@@ -29,8 +29,10 @@ export default function Signup() {
   const [email, setEmail]               = useState("");
   const [password, setPassword]         = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [submitting, setSubmitting]     = useState(false);
-  const [error, setError]               = useState("");
+  const [submitting, setSubmitting]       = useState(false);
+  const [error, setError]                 = useState("");
+  const [subdomainError, setSubdomainError] = useState("");
+  const [emailError, setEmailError]       = useState("");
 
   if (isLoading) return null;
   if (isAuthenticated) return <Redirect href="/" />;
@@ -39,11 +41,32 @@ export default function Signup() {
     return org.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 30);
   }
 
+  async function checkSubdomainAvailability(value: string) {
+    if (!value || !/^[a-z0-9-]{2,30}$/.test(value)) return;
+    try {
+      const res = await fetch(`/api/billing/check-availability?subdomain=${encodeURIComponent(value)}`);
+      const data = await res.json();
+      if (data.subdomainTaken) setSubdomainError("That subdomain is already taken — choose a different one.");
+      else setSubdomainError("");
+    } catch { /* network failure — silent, submit will re-check */ }
+  }
+
+  async function checkEmailAvailability(value: string) {
+    if (!value || !value.includes("@")) return;
+    try {
+      const res = await fetch(`/api/billing/check-availability?email=${encodeURIComponent(value)}`);
+      const data = await res.json();
+      if (data.emailTaken) setEmailError("An account with that email already exists — try logging in instead.");
+      else setEmailError("");
+    } catch { /* network failure — silent, submit will re-check */ }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     if (!orgName.trim() || orgName.trim().length < 2) { setError("Organization name must be at least 2 characters"); return; }
     if (!subdomain || !/^[a-z0-9-]{2,30}$/.test(subdomain)) { setError("Subdomain: 2–30 lowercase letters, numbers, or hyphens"); return; }
+    if (subdomainError || emailError) return;
     if (!name.trim() || name.trim().length < 2) { setError("Full name must be at least 2 characters"); return; }
     if (!email.includes("@")) { setError("A valid email is required"); return; }
     if (password.length < 8) { setError("Password must be at least 8 characters"); return; }
@@ -312,10 +335,11 @@ export default function Signup() {
                     />
                   </Field>
                   <Field label="Subdomain">
-                    <div style={{ display: "flex", alignItems: "center", background: "#fff", borderRadius: 12, overflow: "hidden", height: 48 }}>
+                    <div style={{ display: "flex", alignItems: "center", background: subdomainError ? "rgba(255,255,255,0.9)" : "#fff", borderRadius: 12, overflow: "hidden", height: 48, outline: subdomainError ? "2px solid #FCA5A5" : "none" }}>
                       <input
                         value={subdomain}
-                        onChange={e => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+                        onChange={e => { setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "")); setSubdomainError(""); }}
+                        onBlur={e => checkSubdomainAvailability(e.target.value)}
                         placeholder="e.g. calvary"
                         required
                         style={{ flex: 1, height: "100%", padding: "0 14px", fontSize: 14, background: "transparent", border: "none", color: "#111827", outline: "none", minWidth: 0 }}
@@ -324,6 +348,9 @@ export default function Signup() {
                         .sentconnect.org
                       </span>
                     </div>
+                    {subdomainError && (
+                      <p style={{ margin: "6px 0 0", fontSize: 12, color: "#FEE2E2", fontWeight: 500 }}>{subdomainError}</p>
+                    )}
                   </Field>
                 </div>
               </div>
@@ -351,11 +378,15 @@ export default function Signup() {
                       <input
                         type="email"
                         value={email}
-                        onChange={e => setEmail(e.target.value)}
+                        onChange={e => { setEmail(e.target.value); setEmailError(""); }}
+                        onBlur={e => checkEmailAvailability(e.target.value)}
                         placeholder="you@example.org"
                         required
-                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
+                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box", outlineOffset: 0, boxShadow: emailError ? "0 0 0 2px #FCA5A5" : "none" }}
                       />
+                      {emailError && (
+                        <p style={{ margin: "6px 0 0", fontSize: 12, color: "#FEE2E2", fontWeight: 500 }}>{emailError}</p>
+                      )}
                     </Field>
                     <Field label="Password">
                       <div style={{ position: "relative" }}>
