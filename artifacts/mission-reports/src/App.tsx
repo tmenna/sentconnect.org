@@ -87,7 +87,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   headerPrimaryCtaHref: "/signup",
   heroEyebrow: "Private missionary updates",
   heroTitle: "Stay connected with your field teams from one private mission feed.",
-  heroDescription: "SENTCONNECT gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
+  heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
   primaryCtaLabel: "Set Up Your Organization",
   primaryCtaHref: "/signup",
   previewCardTitle: "Mission Moments",
@@ -344,7 +344,7 @@ function LandingPage() {
         <section style={{ background: "#fff", padding: "112px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
             <div style={{ textAlign: "center", marginBottom: 64 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 12 }}>How SENTCONNECT Works</p>
+              <p style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 12 }}>How SentConnect Works</p>
               <h2 style={{ fontSize: "clamp(30px, 3.5vw, 46px)", fontWeight: 900, letterSpacing: "-0.035em", color: TEXT, margin: 0 }}>{content.howItWorksHeading}</h2>
             </div>
 
