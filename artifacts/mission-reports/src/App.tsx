@@ -250,7 +250,7 @@ function LandingPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             {(content.headerLogoUrl || content.logoUrl || LOGO_WHITE) ? (
-              <img src={content.headerLogoUrl || content.logoUrl || LOGO_WHITE} alt={content.headerBrandName} style={{ height: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
+              <img src={content.headerLogoUrl || content.logoUrl || LOGO_WHITE} alt={content.headerBrandName} fetchPriority="high" decoding="async" style={{ height: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
             ) : (
               <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{content.headerBrandName}</span>
             )}
@@ -395,8 +395,8 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              {(content.footerLogoUrl || LOGO_WHITE) ? (
-                <img src={content.footerLogoUrl || LOGO_WHITE} alt={content.footerBrandName} style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 14, display: "block" }} />
+              {(content.footerLogoUrl || content.logoUrl || LOGO_WHITE) ? (
+                <img src={content.footerLogoUrl || content.logoUrl || LOGO_WHITE} alt={content.footerBrandName} loading="lazy" decoding="async" style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 14, display: "block" }} />
               ) : (
                 <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 14 }}>{content.footerBrandName}</span>
               )}
@@ -478,7 +478,7 @@ function AboutPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             {(lpContent.headerLogoUrl || lpContent.logoUrl || LOGO_WHITE) ? (
-              <img src={lpContent.headerLogoUrl || lpContent.logoUrl || LOGO_WHITE} alt={lpContent.headerBrandName} style={{ height: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
+              <img src={lpContent.headerLogoUrl || lpContent.logoUrl || LOGO_WHITE} alt={lpContent.headerBrandName} fetchPriority="high" decoding="async" style={{ height: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
             ) : (
               <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{lpContent.headerBrandName}</span>
             )}
@@ -564,7 +564,7 @@ function AboutPage() {
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 24, paddingBottom: 32 }}>
             <div>
               {(lpContent.footerLogoUrl || lpContent.logoUrl || LOGO_WHITE) && (
-                <img src={lpContent.footerLogoUrl || lpContent.logoUrl || LOGO_WHITE} alt={lpContent.footerBrandName || "SentConnect"} style={{ height: 30, width: "auto", objectFit: "contain", marginBottom: 12 }} />
+                <img src={lpContent.footerLogoUrl || lpContent.logoUrl || LOGO_WHITE} alt={lpContent.footerBrandName || "SentConnect"} loading="lazy" decoding="async" style={{ height: 30, width: "auto", objectFit: "contain", marginBottom: 12 }} />
               )}
               <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0, lineHeight: 1.6 }}>
                 Private updates for churches and mission teams, all in one secure feed.
