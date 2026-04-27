@@ -436,10 +436,11 @@ function LandingPage() {
   );
 }
 
-type AboutPageContent = { aboutTitle: string; aboutBody: string };
+type AboutPageContent = { aboutTitle: string; aboutImageUrl: string; aboutBody: string };
 
 const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
   aboutTitle: "Why We Created SentConnect",
+  aboutImageUrl: "",
   aboutBody: "",
 };
 
@@ -523,7 +524,7 @@ function AboutPage() {
           {/* Family photo */}
           <div style={{ marginBottom: 48, borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 32px rgba(15,23,42,0.10)" }}>
             <img
-              src="/about-family.png"
+              src={about.aboutImageUrl || "/about-family.png"}
               alt="The Menna family serving in Ethiopia"
               style={{ width: "100%", display: "block", objectFit: "cover", maxHeight: 420 }}
             />

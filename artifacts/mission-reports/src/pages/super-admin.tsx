@@ -636,7 +636,142 @@ function LandingPageEditor() {
   );
 }
 
-type AboutPageContent = { aboutTitle: string; aboutBody: string };
+type AboutPageContent = { aboutTitle: string; aboutImageUrl: string; aboutBody: string };
+
+function AboutPhotoUploader({
+  imageUrl,
+  onChange,
+}: {
+  imageUrl: string;
+  onChange: (url: string) => void;
+}) {
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
+  async function handleFile(file: File) {
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Please choose an image file (JPG, PNG, WebP)", variant: "destructive" });
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      toast({ title: "Image must be smaller than 10 MB", variant: "destructive" });
+      return;
+    }
+    setUploading(true);
+    try {
+      const urlRes = await fetch("/api/storage/upload-url", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fileName: file.name, contentType: file.type, fileSize: file.size }),
+      });
+      if (!urlRes.ok) {
+        const e = await urlRes.json().catch(() => ({}));
+        throw new Error(e.error ?? "Could not get upload URL");
+      }
+      const { uploadUrl, objectPath } = await urlRes.json();
+      const putRes = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      if (!putRes.ok) throw new Error("Upload failed");
+      const entityId = objectPath.replace(/^\/objects\//, "");
+      onChange(`/api/storage/objects/${entityId}`);
+      toast({ title: "Photo uploaded — click Save Changes to apply" });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Upload failed", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <span className="block text-[12px] font-semibold text-foreground">
+        Family photo
+        <span className="font-normal text-muted-foreground ml-1">(shown below the page title — JPG, PNG, WebP, max 10 MB)</span>
+      </span>
+
+      {/* Preview + drop zone */}
+      <div
+        className="relative rounded-xl border-2 border-dashed border-border/60 overflow-hidden cursor-pointer hover:border-[#0268CE]/50 hover:bg-blue-50/30 transition-colors"
+        style={{ minHeight: 180 }}
+        onClick={() => fileInputRef.current?.click()}
+        onDragOver={e => e.preventDefault()}
+        onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
+      >
+        {imageUrl ? (
+          <>
+            <img
+              src={imageUrl}
+              alt="Family photo preview"
+              className="w-full object-cover"
+              style={{ maxHeight: 260 }}
+            />
+            <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors flex items-center justify-center">
+              <span className="opacity-0 hover:opacity-100 text-white text-[13px] font-semibold bg-black/60 px-3 py-1.5 rounded-lg transition-opacity">
+                Click or drag to replace
+              </span>
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-3 p-10">
+            {uploading ? (
+              <Loader2 className="h-8 w-8 text-[#0268CE] animate-spin" />
+            ) : (
+              <>
+                <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
+                  <Upload className="h-5 w-5 text-[#0268CE]" />
+                </div>
+                <p className="text-[13px] text-muted-foreground text-center">
+                  Drop your family photo here or <span className="text-[#0268CE] font-semibold">click to browse</span>
+                </p>
+              </>
+            )}
+          </div>
+        )}
+        {uploading && imageUrl && (
+          <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 text-[#0268CE] animate-spin" />
+          </div>
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          disabled={uploading}
+          onClick={() => fileInputRef.current?.click()}
+          className="flex items-center gap-1.5 px-3 py-2 text-[13px] font-semibold border border-border/60 rounded-lg bg-white hover:border-[#0268CE]/50 hover:text-[#0268CE] transition-colors disabled:opacity-50"
+        >
+          <Upload className="h-3.5 w-3.5" />
+          {imageUrl ? "Replace photo" : "Upload photo"}
+        </button>
+        {imageUrl && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="flex items-center gap-1.5 px-3 py-2 text-[13px] font-semibold border border-red-200 text-red-600 rounded-lg bg-white hover:bg-red-50 transition-colors"
+          >
+            <ImageOff className="h-3.5 w-3.5" />
+            Remove photo
+          </button>
+        )}
+      </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }}
+      />
+    </div>
+  );
+}
 
 function AboutPageEditor() {
   const { toast } = useToast();
@@ -690,6 +825,7 @@ function AboutPageEditor() {
 
   return (
     <form onSubmit={save} className="space-y-4">
+      {/* Header card */}
       <div className="bg-white rounded-xl border border-border/60 overflow-hidden">
         <div className="px-5 py-4 flex items-center justify-between">
           <div>
@@ -702,7 +838,8 @@ function AboutPageEditor() {
         </div>
       </div>
 
-      <div className="border border-border/60 rounded-xl bg-white p-5 space-y-4">
+      <div className="border border-border/60 rounded-xl bg-white p-5 space-y-5">
+        {/* Title */}
         <label className="block">
           <span className="block text-[12px] font-semibold text-foreground mb-1">Page title</span>
           <input
@@ -714,6 +851,13 @@ function AboutPageEditor() {
           />
         </label>
 
+        {/* Photo uploader */}
+        <AboutPhotoUploader
+          imageUrl={content.aboutImageUrl}
+          onChange={url => setContent(prev => prev ? { ...prev, aboutImageUrl: url } : prev)}
+        />
+
+        {/* Body */}
         <label className="block">
           <span className="block text-[12px] font-semibold text-foreground mb-1">
             Body text

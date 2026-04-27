@@ -2,6 +2,7 @@ import { pool } from "@workspace/db";
 
 export const DEFAULT_ABOUT_PAGE_CONTENT = {
   aboutTitle: "Why We Created SentConnect",
+  aboutImageUrl: "",
   aboutBody: `We are the Menna family, serving in Ethiopia alongside internally displaced persons (IDPs) through local ministry work. Over the years, one consistent gap we have seen in partnerships between churches, missionaries, international ministries, and local field partners is communication and reporting.
 
 Too often, important ministry updates, prayer needs, stories from the field, and impact reports are shared inconsistently or get lost across emails, messaging apps, and informal channels. This can create distance between sending churches, mission organizations, and the teams they support in the field.
@@ -24,12 +25,19 @@ async function ensureAboutPageTable(): Promise<void> {
     ensurePromise = pool
       .query(`
         CREATE TABLE IF NOT EXISTS about_page_content (
-          key         text PRIMARY KEY,
-          about_title text NOT NULL DEFAULT 'Why We Created SentConnect',
-          about_body  text NOT NULL DEFAULT '',
-          updated_at  timestamptz NOT NULL DEFAULT now()
+          key              text PRIMARY KEY,
+          about_title      text NOT NULL DEFAULT 'Why We Created SentConnect',
+          about_image_url  text NOT NULL DEFAULT '',
+          about_body       text NOT NULL DEFAULT '',
+          updated_at       timestamptz NOT NULL DEFAULT now()
         )
       `)
+      .then(() =>
+        pool.query(`
+          ALTER TABLE about_page_content
+            ADD COLUMN IF NOT EXISTS about_image_url text NOT NULL DEFAULT ''
+        `),
+      )
       .then(() => undefined);
   }
   return ensurePromise;
@@ -37,8 +45,9 @@ async function ensureAboutPageTable(): Promise<void> {
 
 function rowToContent(row: any): AboutPageContent {
   return {
-    aboutTitle: row.about_title ?? DEFAULT_ABOUT_PAGE_CONTENT.aboutTitle,
-    aboutBody: row.about_body ?? DEFAULT_ABOUT_PAGE_CONTENT.aboutBody,
+    aboutTitle:    row.about_title     ?? DEFAULT_ABOUT_PAGE_CONTENT.aboutTitle,
+    aboutImageUrl: row.about_image_url ?? DEFAULT_ABOUT_PAGE_CONTENT.aboutImageUrl,
+    aboutBody:     row.about_body      ?? DEFAULT_ABOUT_PAGE_CONTENT.aboutBody,
   };
 }
 
@@ -54,24 +63,27 @@ export async function getAboutPageContent(): Promise<AboutPageContent> {
 export async function saveAboutPageContent(content: AboutPageContent): Promise<AboutPageContent> {
   await ensureAboutPageTable();
   const result = await pool.query(
-    `INSERT INTO about_page_content (key, about_title, about_body)
-     VALUES ($1, $2, $3)
+    `INSERT INTO about_page_content (key, about_title, about_image_url, about_body)
+     VALUES ($1, $2, $3, $4)
      ON CONFLICT (key) DO UPDATE
-       SET about_title = EXCLUDED.about_title,
-           about_body  = EXCLUDED.about_body,
-           updated_at  = now()
+       SET about_title      = EXCLUDED.about_title,
+           about_image_url  = EXCLUDED.about_image_url,
+           about_body       = EXCLUDED.about_body,
+           updated_at       = now()
      RETURNING *`,
-    ["main", content.aboutTitle, content.aboutBody],
+    ["main", content.aboutTitle, content.aboutImageUrl, content.aboutBody],
   );
   return rowToContent(result.rows[0]);
 }
 
 export function cleanAboutPageContent(body: any): AboutPageContent | null {
-  const title = typeof body?.aboutTitle === "string" ? body.aboutTitle.trim() : "";
-  const aboutBody = typeof body?.aboutBody === "string" ? body.aboutBody.trim() : "";
+  const title        = typeof body?.aboutTitle    === "string" ? body.aboutTitle.trim()    : "";
+  const aboutBody    = typeof body?.aboutBody     === "string" ? body.aboutBody.trim()     : "";
+  const aboutImageUrl = typeof body?.aboutImageUrl === "string" ? body.aboutImageUrl.trim() : "";
   if (!title || !aboutBody) return null;
   return {
-    aboutTitle: title.slice(0, 300),
-    aboutBody: aboutBody.slice(0, 20000),
+    aboutTitle:    title.slice(0, 300),
+    aboutImageUrl: aboutImageUrl.slice(0, 1000),
+    aboutBody:     aboutBody.slice(0, 20000),
   };
 }
