@@ -521,21 +521,18 @@ function AboutPage() {
             {about.aboutTitle}
           </h1>
 
-          {/* Family photo */}
-          <div style={{ marginBottom: 48, borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 32px rgba(15,23,42,0.10)" }}>
-            <img
-              src={about.aboutImageUrl || "/about-family.png"}
-              alt="The Menna family serving in Ethiopia"
-              fetchPriority="high"
-              decoding="async"
-              style={{ width: "100%", display: "block", objectFit: "cover", maxHeight: 420 }}
-            />
-            <div style={{ background: "#F1F5F9", padding: "10px 16px" }}>
-              <p style={{ fontSize: 12.5, color: "#64748B", margin: 0, fontStyle: "italic" }}>
-                The Menna family, serving in Ethiopia alongside internally displaced persons through local ministry work.
-              </p>
+          {/* Family photo — only rendered when an image has been uploaded */}
+          {about.aboutImageUrl && (
+            <div style={{ marginBottom: 48, borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 32px rgba(15,23,42,0.10)" }}>
+              <img
+                src={about.aboutImageUrl}
+                alt="The Menna family serving in Ethiopia"
+                fetchPriority="high"
+                decoding="async"
+                style={{ width: "100%", display: "block", objectFit: "cover", maxHeight: 420 }}
+              />
             </div>
-          </div>
+          )}
 
           {/* Body */}
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
