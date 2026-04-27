@@ -255,12 +255,20 @@ function LandingPage() {
               <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{content.headerBrandName}</span>
             )}
           </a>
-          <a
-            href={content.headerPrimaryCtaHref}
-            style={{ fontSize: 14, fontWeight: 700, color: TEXT, background: YELLOW, padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
-            onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0DE00"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
-            onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = YELLOW; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
-          >{content.headerPrimaryCtaLabel}</a>
+          <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
+            <a
+              href="/about"
+              style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+            >About</a>
+            <a
+              href={content.headerPrimaryCtaHref}
+              style={{ fontSize: 14, fontWeight: 700, color: TEXT, background: YELLOW, padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0DE00"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = YELLOW; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
+            >{content.headerPrimaryCtaLabel}</a>
+          </nav>
         </div>
       </header>
 
@@ -421,6 +429,142 @@ function LandingPage() {
           <div className="lp-footer-legal">
             <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>{content.footerOwnerText}</p>
             <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0, flexShrink: 0 }}>© 2026 Holtek Solutions. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+type AboutPageContent = { aboutTitle: string; aboutBody: string };
+
+const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
+  aboutTitle: "Why We Created SentConnect",
+  aboutBody: "",
+};
+
+function AboutPage() {
+  const [lpContent, setLpContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
+  const [about, setAbout] = useState<AboutPageContent>(DEFAULT_ABOUT_PAGE_CONTENT);
+
+  useEffect(() => {
+    fetch("/api/landing-page")
+      .then(r => r.ok ? r.json() : DEFAULT_LANDING_PAGE_CONTENT)
+      .then(d => setLpContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...d }))
+      .catch(() => setLpContent(DEFAULT_LANDING_PAGE_CONTENT));
+
+    fetch("/api/about-page")
+      .then(r => r.ok ? r.json() : DEFAULT_ABOUT_PAGE_CONTENT)
+      .then(d => setAbout({ ...DEFAULT_ABOUT_PAGE_CONTENT, ...d }))
+      .catch(() => setAbout(DEFAULT_ABOUT_PAGE_CONTENT));
+  }, []);
+
+  const BLUE      = "#1E88FF";
+  const BLUE_DARK = "#0A6CFF";
+  const YELLOW    = "#FFEB00";
+  const TEXT      = "#0F172A";
+  const TEXT2     = "#374151";
+  const BG        = "#F8FBFF";
+
+  const paragraphs = about.aboutBody.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
+
+  return (
+    <div style={{ minHeight: "100vh", fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');`}</style>
+
+      {/* ── HEADER ── */}
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(30,136,255,0.28)" }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
+          <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+            {(lpContent.headerLogoUrl || lpContent.logoUrl || LOGO_WHITE) ? (
+              <img src={lpContent.headerLogoUrl || lpContent.logoUrl || LOGO_WHITE} alt={lpContent.headerBrandName} style={{ height: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
+            ) : (
+              <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{lpContent.headerBrandName}</span>
+            )}
+          </a>
+          <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
+            <a
+              href="/about"
+              style={{ fontSize: 14, fontWeight: 700, color: "#fff", textDecoration: "none", borderBottom: "2px solid rgba(255,255,255,0.5)", paddingBottom: 2 }}
+            >About</a>
+            <a
+              href={lpContent.headerPrimaryCtaHref}
+              style={{ fontSize: 14, fontWeight: 700, color: TEXT, background: YELLOW, padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0DE00"; el.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = YELLOW; el.style.transform = "translateY(0)"; }}
+            >{lpContent.headerPrimaryCtaLabel}</a>
+          </nav>
+        </div>
+      </header>
+
+      {/* ── CONTENT ── */}
+      <main style={{ padding: "80px 0 120px" }}>
+        <div className="mx-auto max-w-2xl px-6">
+          {/* Back link */}
+          <a
+            href="/"
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: BLUE, textDecoration: "none", marginBottom: 40 }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.75"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+          >
+            ← Back to home
+          </a>
+
+          {/* Eyebrow */}
+          <div style={{ display: "inline-flex", alignItems: "center", marginBottom: 20, background: YELLOW, borderRadius: 999, padding: "4px 14px" }}>
+            <span style={{ fontSize: 11, fontWeight: 800, color: TEXT, letterSpacing: "0.1em", textTransform: "uppercase" }}>Our Story</span>
+          </div>
+
+          {/* Title */}
+          <h1 style={{ fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.1, color: TEXT, margin: "0 0 48px" }}>
+            {about.aboutTitle}
+          </h1>
+
+          {/* Body */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            {paragraphs.length > 0 ? paragraphs.map((para, i) => (
+              <p key={i} style={{ fontSize: 17, lineHeight: 1.85, color: TEXT2, margin: 0 }}>
+                {para}
+              </p>
+            )) : (
+              <p style={{ fontSize: 17, lineHeight: 1.85, color: TEXT2, margin: 0, opacity: 0.5 }}>Loading…</p>
+            )}
+          </div>
+
+          {/* CTA */}
+          <div style={{ marginTop: 64, paddingTop: 48, borderTop: "1px solid #E2E8F0" }}>
+            <p style={{ fontSize: 17, fontWeight: 700, color: TEXT, marginBottom: 20 }}>Ready to connect your church and field teams?</p>
+            <a
+              href={lpContent.primaryCtaHref}
+              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(30,136,255,0.32)", transition: "background .15s, transform .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; }}
+            >{lpContent.primaryCtaLabel}</a>
+          </div>
+        </div>
+      </main>
+
+      {/* ── FOOTER ── */}
+      <footer style={{ background: "#0B1221", padding: "48px 0 32px" }}>
+        <div className="mx-auto max-w-6xl px-6">
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 24, paddingBottom: 32 }}>
+            <div>
+              {(lpContent.footerLogoUrl || lpContent.logoUrl || LOGO_WHITE) && (
+                <img src={lpContent.footerLogoUrl || lpContent.logoUrl || LOGO_WHITE} alt={lpContent.footerBrandName || "SentConnect"} style={{ height: 30, width: "auto", objectFit: "contain", marginBottom: 12 }} />
+              )}
+              <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0, lineHeight: 1.6 }}>
+                Private updates for churches and mission teams, all in one secure feed.
+              </p>
+            </div>
+            <div>
+              <a href="/about" style={{ display: "block", fontSize: 13.5, color: "#9CA3AF", textDecoration: "none", marginBottom: 8 }}>About</a>
+              <a href={lpContent.primaryCtaHref} style={{ display: "block", fontSize: 13.5, color: "#9CA3AF", textDecoration: "none" }}>{lpContent.primaryCtaLabel}</a>
+            </div>
+          </div>
+          <div style={{ height: 1, background: "rgba(255,255,255,0.08)", marginBottom: 20 }} />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>{lpContent.footerOwnerText}</p>
+            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>© 2026 Holtek Solutions. All rights reserved.</p>
           </div>
         </div>
       </footer>
@@ -600,6 +744,8 @@ function AppRoutes() {
   return (
     <Suspense fallback={<PageFallback />}>
     <Switch>
+      {/* Platform-level public pages — available in all environments */}
+      <Route path="/about" component={AboutPage} />
       {/* Org user login — always /{org}/login */}
       <Route path="/login" component={LoginRoute} />
       <Route path="/sentconnect-home" component={LandingPreviewRoute} />
@@ -621,6 +767,7 @@ function AppRoutes() {
         ) : tenantRootHost ? (
           <Switch>
             <Route path="/" component={LandingPage} />
+            <Route path="/about" component={AboutPage} />
             <Route component={NotFound} />
           </Switch>
         ) : (

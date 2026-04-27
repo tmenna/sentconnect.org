@@ -6,6 +6,7 @@ import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
 import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
 import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
+import { DEFAULT_ABOUT_PAGE_CONTENT, getAboutPageContent } from "../lib/about-page-content";
 
 const router: IRouter = Router();
 
@@ -14,6 +15,14 @@ router.get("/landing-page", async (_req, res): Promise<void> => {
     res.json(await getLandingPageContent());
   } catch {
     res.json(DEFAULT_LANDING_PAGE_CONTENT);
+  }
+});
+
+router.get("/about-page", async (_req, res): Promise<void> => {
+  try {
+    res.json(await getAboutPageContent());
+  } catch {
+    res.json(DEFAULT_ABOUT_PAGE_CONTENT);
   }
 });
 

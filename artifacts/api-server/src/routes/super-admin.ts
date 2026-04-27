@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { db, organizationsTable, usersTable, reportsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { cleanLandingPageContent, getLandingPageContent, saveLandingPageContent } from "../lib/landing-page-content";
+import { cleanAboutPageContent, getAboutPageContent, saveAboutPageContent } from "../lib/about-page-content";
 import {
   requirePlatformAccess,
   requirePermission,
@@ -51,6 +52,19 @@ router.put("/super-admin/landing-page", requireSuperOrPlatformAdmin, async (req,
   }
 
   res.json(await saveLandingPageContent(values));
+});
+
+router.get("/super-admin/about-page", requireSuperOrPlatformAdmin, async (_req, res): Promise<void> => {
+  res.json(await getAboutPageContent());
+});
+
+router.put("/super-admin/about-page", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
+  const values = cleanAboutPageContent(req.body);
+  if (!values) {
+    res.status(400).json({ error: "aboutTitle and aboutBody are required" });
+    return;
+  }
+  res.json(await saveAboutPageContent(values));
 });
 
 // ─── Organizations ────────────────────────────────────────────────────────────

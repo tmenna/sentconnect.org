@@ -636,6 +636,113 @@ function LandingPageEditor() {
   );
 }
 
+type AboutPageContent = { aboutTitle: string; aboutBody: string };
+
+function AboutPageEditor() {
+  const { toast } = useToast();
+  const [content, setContent] = useState<AboutPageContent | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/super-admin/about-page", { credentials: "include" })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => { if (!cancelled) setContent(data); })
+      .catch(() => { if (!cancelled) toast({ title: "Could not load About page content", variant: "destructive" }); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [toast]);
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    if (!content) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/super-admin/about-page", {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(content),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "Failed to save About page");
+      }
+      setContent(await res.json());
+      toast({ title: "About page updated" });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Failed to save About page", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) return <div className="h-40 bg-white rounded-xl border border-border/60 animate-pulse" />;
+
+  if (!content) {
+    return (
+      <div className="bg-white rounded-xl border border-border/60 p-6">
+        <p className="text-[14px] text-muted-foreground">About page content could not be loaded.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={save} className="space-y-4">
+      <div className="bg-white rounded-xl border border-border/60 overflow-hidden">
+        <div className="px-5 py-4 flex items-center justify-between">
+          <div>
+            <p className="text-[17px] font-bold text-foreground">About Page</p>
+            <p className="text-[13px] text-muted-foreground mt-0.5">Edit the About page shown at sentconnect.org/about.</p>
+          </div>
+          <a href="/about" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#0268CE] hover:underline">
+            Preview ↗
+          </a>
+        </div>
+      </div>
+
+      <div className="border border-border/60 rounded-xl bg-white p-5 space-y-4">
+        <label className="block">
+          <span className="block text-[12px] font-semibold text-foreground mb-1">Page title</span>
+          <input
+            type="text"
+            value={content.aboutTitle}
+            onChange={e => setContent(prev => prev ? { ...prev, aboutTitle: e.target.value } : prev)}
+            required
+            className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+          />
+        </label>
+
+        <label className="block">
+          <span className="block text-[12px] font-semibold text-foreground mb-1">
+            Body text
+            <span className="font-normal text-muted-foreground ml-1">— separate paragraphs with a blank line</span>
+          </span>
+          <textarea
+            value={content.aboutBody}
+            onChange={e => setContent(prev => prev ? { ...prev, aboutBody: e.target.value } : prev)}
+            rows={20}
+            required
+            className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20 resize-y font-mono leading-relaxed"
+          />
+        </label>
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          disabled={saving}
+          className="flex items-center gap-2 px-5 py-2.5 text-[14px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+        >
+          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          Save Changes
+        </button>
+      </div>
+    </form>
+  );
+}
+
 function PermissionsEditor({
   perms,
   onChange,
@@ -1943,7 +2050,7 @@ export default function SuperAdminPanel() {
       },
     },
   });
-  const [activeTab, setActiveTab] = useState<"platform-users" | "orgs" | "users" | "landing">("platform-users");
+  const [activeTab, setActiveTab] = useState<"platform-users" | "orgs" | "users" | "landing" | "about">("platform-users");
   const [orgs, setOrgs] = useState<OrgWithStats[] | null>(null);
   const [allUsers, setAllUsers] = useState<PlatformUser[] | null>(null);
   const [stats, setStats] = useState<PlatformStats | null>(null);
@@ -2363,9 +2470,13 @@ export default function SuperAdminPanel() {
         <TabButton active={activeTab === "landing"} onClick={() => setActiveTab("landing")}>
           <span className="flex items-center gap-1.5"><BookOpen className="h-3.5 w-3.5" /> Landing Page</span>
         </TabButton>
+        <TabButton active={activeTab === "about"} onClick={() => setActiveTab("about")}>
+          <span className="flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> About Page</span>
+        </TabButton>
       </div>
 
       {activeTab === "landing" && <LandingPageEditor />}
+      {activeTab === "about" && <AboutPageEditor />}
 
       {/* ─── Tab: Platform Users ──────────────────────────────────────────────── */}
       {activeTab === "platform-users" && (
