@@ -1,0 +1,13 @@
+uploads = []
+
+[[generated]]
+id = "XdVEG6YE98NiB_6RX89Nh"
+uri = "file://attached_assets/about-family.png"
+type = "image"
+title = "missionary family Ethiopia portrait"
+
+[[outputs]]
+id = "_0I-1E3uUCbe2RQXcqpSN"
+uri = "file://attached_assets/about-family.png"
+type = "image"
+title = "Generated family portrait for About page"
