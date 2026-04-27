@@ -69,6 +69,12 @@ export async function runMigrations(): Promise<void> {
             WHERE how_it_works_heading = 'Helping churches and field teams stay connected.'`,
     },
     {
+      name: "landing_page: how_it_works_heading v3",
+      sql: `UPDATE landing_page_content
+              SET how_it_works_heading = 'Connecting churches and field teams'
+            WHERE how_it_works_heading = 'Built from the field, for the field.'`,
+    },
+    {
       name: "landing_page: update hero_description SentConnect → SENTCONNECT",
       sql: `UPDATE landing_page_content
               SET hero_description = replace(hero_description, 'SentConnect gives', 'SENTCONNECT gives')
