@@ -11,6 +11,7 @@ import { Layout } from "@/components/layout";
 import NotFound from "@/pages/not-found";
 import { OrgProvider, useOrg } from "@/providers/org-provider";
 import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
+import "./landing-page.css";
 
 // Critical path — eagerly bundled (small or needed immediately)
 import Login from "./pages/login";
@@ -135,116 +136,7 @@ function LandingPage() {
 
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-        @keyframes lp-fade-up {
-          from { opacity: 0; transform: translateY(24px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .lp-animate  { animation: lp-fade-up 0.6s cubic-bezier(.22,1,.36,1) both; }
-        .lp-delay-1  { animation-delay: 0.06s; }
-        .lp-delay-2  { animation-delay: 0.14s; }
-        .lp-delay-3  { animation-delay: 0.22s; }
-        .lp-delay-4  { animation-delay: 0.30s; }
-        .lp-delay-5  { animation-delay: 0.40s; }
-
-        .lp-hero-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 64px;
-          align-items: center;
-        }
-        .lp-steps-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
-          position: relative;
-        }
-        .lp-connector { display: block; }
-        .lp-footer-cols {
-          display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-          gap: 40px;
-        }
-
-        .lp-footer-link {
-          display: block;
-          font-size: 13.5px;
-          color: #9CA3AF;
-          text-decoration: none;
-          margin-bottom: 10px;
-          transition: color .15s;
-        }
-        .lp-footer-link:hover { color: #1E88FF; }
-
-        .lp-social-btn {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          border: 1.5px solid rgba(255,255,255,0.2);
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          color: #9CA3AF;
-          font-size: 12px;
-          cursor: pointer;
-          transition: border-color .15s, color .15s;
-          text-decoration: none;
-        }
-        .lp-social-btn:hover { border-color: #1E88FF; color: #1E88FF; }
-
-        @media (max-width: 1024px) {
-          .lp-footer-cols { grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
-        }
-        @media (max-width: 900px) {
-          .lp-steps-grid  { grid-template-columns: 1fr; }
-          .lp-connector   { display: none; }
-        }
-        @media (max-width: 767px) {
-          .lp-hero-grid   { grid-template-columns: 1fr; gap: 40px; }
-          .lp-footer-cols { grid-template-columns: 1fr 1fr; gap: 28px; }
-        }
-        @media (max-width: 480px) {
-          .lp-footer-cols { grid-template-columns: 1fr; }
-        }
-
-        /* ── Footer alignment ── */
-        .lp-footer-brand-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          align-items: start;
-          gap: 40px;
-          padding-bottom: 48px;
-        }
-        .lp-footer-left  { text-align: left; }
-        .lp-footer-right { text-align: right; }
-
-        .lp-footer-legal {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          flex-wrap: nowrap;
-          gap: 16px;
-          padding-bottom: 32px;
-        }
-
-        @media (max-width: 640px) {
-          .lp-footer-brand-row {
-            grid-template-columns: 1fr;
-            gap: 24px;
-            padding-bottom: 32px;
-          }
-          .lp-footer-left  { text-align: left; }
-          .lp-footer-right { text-align: left; }
-          .lp-footer-legal {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
-          }
-        }
-      `}</style>
-
+      {/* landing-page.css is imported statically at module level — no inline style needed */}
       {/* ── HEADER ── */}
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(30,136,255,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
@@ -471,8 +363,6 @@ function AboutPage() {
 
   return (
     <div style={{ minHeight: "100vh", fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');`}</style>
-
       {/* ── HEADER ── */}
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(30,136,255,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
