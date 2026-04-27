@@ -55,6 +55,19 @@ export async function runMigrations(): Promise<void> {
       name: "idx_users_organization_id",
       sql: `CREATE INDEX IF NOT EXISTS idx_users_organization_id ON users(organization_id)`,
     },
+    // ── Landing page copy updates ────────────────────────────────────────────
+    {
+      name: "landing_page: update how_it_works_heading copy",
+      sql: `UPDATE landing_page_content
+              SET how_it_works_heading = 'Helping churches and field teams stay connected.'
+            WHERE how_it_works_heading = 'Simple for churches. Powerful for teams.'`,
+    },
+    {
+      name: "landing_page: update hero_description SentConnect → SENTCONNECT",
+      sql: `UPDATE landing_page_content
+              SET hero_description = replace(hero_description, 'SentConnect gives', 'SENTCONNECT gives')
+            WHERE hero_description LIKE 'SentConnect gives%'`,
+    },
   ];
 
   for (const migration of migrations) {
