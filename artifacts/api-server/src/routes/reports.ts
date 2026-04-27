@@ -311,6 +311,10 @@ router.get("/reports/:id/public", async (req, res): Promise<void> => {
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid post ID" }); return; }
   const post = await getPostWithDetails(postId);
   if (!post) { res.status(404).json({ error: "Post not found" }); return; }
+  // Cache for 60 s in the browser; CDN/proxy may cache up to 5 min.
+  // Presigned URLs embedded in the response are valid for 2 h so they outlast
+  // both cache TTLs easily.
+  res.set("Cache-Control", "public, max-age=60, s-maxage=300");
   res.json(post);
 });
 

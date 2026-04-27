@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Shuffle } from "lucide-react";
@@ -12,20 +12,29 @@ import NotFound from "@/pages/not-found";
 import { OrgProvider, useOrg } from "@/providers/org-provider";
 import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
 
-import Timeline from "./pages/timeline";
-import ReportDetail from "./pages/report-detail";
-import Profile from "./pages/profile";
-import MissionaryProfile from "./pages/missionary-profile";
-import SubmitReport from "./pages/submit-report";
+// Critical path — eagerly bundled (small or needed immediately)
 import Login from "./pages/login";
-import AdminDashboard from "./pages/admin";
-import MissionaryDashboard from "./pages/missionary-dashboard";
-import Signup from "./pages/signup";
 import ForgotPassword from "./pages/forgot-password";
 import ResetPassword from "./pages/reset-password";
-import SuperAdminPanel from "./pages/super-admin";
 import PublicPost from "./pages/public-post";
 import SignupSuccess from "./pages/signup-success";
+
+// Heavy pages — code-split so share links and first loads stay fast
+const Timeline = lazy(() => import("./pages/timeline"));
+const ReportDetail = lazy(() => import("./pages/report-detail"));
+const Profile = lazy(() => import("./pages/profile"));
+const MissionaryProfile = lazy(() => import("./pages/missionary-profile"));
+const SubmitReport = lazy(() => import("./pages/submit-report"));
+const AdminDashboard = lazy(() => import("./pages/admin"));
+const MissionaryDashboard = lazy(() => import("./pages/missionary-dashboard"));
+const Signup = lazy(() => import("./pages/signup"));
+const SuperAdminPanel = lazy(() => import("./pages/super-admin"));
+
+const PageFallback = () => (
+  <div className="min-h-screen flex items-center justify-center bg-[#F5F7FA]">
+    <div className="animate-pulse text-muted-foreground text-sm">Loading…</div>
+  </div>
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -589,6 +598,7 @@ function AppRoutes() {
   const tenantRootHost = isTenantRootHost();
 
   return (
+    <Suspense fallback={<PageFallback />}>
     <Switch>
       {/* Org user login — always /{org}/login */}
       <Route path="/login" component={LoginRoute} />
@@ -628,6 +638,7 @@ function AppRoutes() {
         )}
       </Route>
     </Switch>
+    </Suspense>
   );
 }
 
@@ -638,6 +649,17 @@ function AppRoutes() {
  */
 function OrgAwareApp() {
   const [location] = useLocation();
+
+  // Share links (/post/:id) render directly — no org validation or auth check.
+  // Removing those two serial API calls cuts 400–800 ms off the first paint.
+  if (/^\/post\/\d+/.test(location)) {
+    return (
+      <Switch>
+        <Route path="/post/:id" component={PublicPost} />
+      </Switch>
+    );
+  }
+
   const { orgSlug, usesPathPrefix } = getOrgRoutingContext(location);
 
   return (

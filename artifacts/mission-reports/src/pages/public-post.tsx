@@ -20,7 +20,7 @@ type Post = {
   author: { id: number; name: string; avatarUrl?: string | null; location?: string | null; organization?: string | null };
 };
 
-function MediaItem({ photo, single }: { photo: Photo; single?: boolean }) {
+function MediaItem({ photo, single, priority }: { photo: Photo; single?: boolean; priority?: boolean }) {
   const isVideo = photo.mimeType?.startsWith("video/") || /\.(mp4|webm|mov)$/i.test(photo.url);
   if (isVideo) {
     return (
@@ -38,6 +38,8 @@ function MediaItem({ photo, single }: { photo: Photo; single?: boolean }) {
       alt=""
       className="w-full object-cover"
       style={{ maxHeight: single ? 560 : 340, borderRadius: single ? "0 0 10px 10px" : 8 }}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      {...(priority ? { fetchpriority: "high" } as any : { loading: "lazy" })}
     />
   );
 }
@@ -186,11 +188,11 @@ export default function PublicPost() {
                 style={post.photos.length === 1 ? { marginTop: post.description ? 4 : 0 } : {}}
               >
                 {post.photos.length === 1 ? (
-                  <MediaItem photo={post.photos[0]} single />
+                  <MediaItem photo={post.photos[0]} single priority />
                 ) : (
-                  post.photos.map(photo => (
+                  post.photos.map((photo, i) => (
                     <div key={photo.id} className="overflow-hidden" style={{ borderRadius: 8 }}>
-                      <MediaItem photo={photo} />
+                      <MediaItem photo={photo} priority={i === 0} />
                     </div>
                   ))
                 )}
