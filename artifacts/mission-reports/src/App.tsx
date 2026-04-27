@@ -96,7 +96,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   previewTitle2: "New family visits this week",
   previewTitle3: "Youth outreach photos shared",
   howItWorksLabel: "How it works",
-  howItWorksHeading: "Helping churches and field teams stay connected.",
+  howItWorksHeading: "Built from the field, for the field.",
   step1Title: "1. Sign up",
   step1Description: "Create your organization and choose a short subdomain, like rvc.",
   step2Title: "2. Use your portal",

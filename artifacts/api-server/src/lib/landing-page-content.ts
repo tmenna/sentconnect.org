@@ -18,7 +18,7 @@ export const DEFAULT_LANDING_PAGE_CONTENT = {
   previewTitle2: "New family visits this week",
   previewTitle3: "Youth outreach photos shared",
   howItWorksLabel: "How it works",
-  howItWorksHeading: "Helping churches and field teams stay connected.",
+  howItWorksHeading: "Built from the field, for the field.",
   step1Title: "1. Sign up",
   step1Description: "Create your organization and choose a short subdomain, like rvc.",
   step2Title: "2. Use your portal",
@@ -110,7 +110,7 @@ async function ensureLandingPageTable(): Promise<void> {
         preview_title_2 text NOT NULL,
         preview_title_3 text NOT NULL,
         how_it_works_label text NOT NULL DEFAULT 'How it works',
-        how_it_works_heading text NOT NULL DEFAULT 'Helping churches and field teams stay connected.',
+        how_it_works_heading text NOT NULL DEFAULT 'Built from the field, for the field.',
         step_1_title text NOT NULL,
         step_1_description text NOT NULL,
         step_2_title text NOT NULL,
@@ -137,7 +137,7 @@ async function ensureLandingPageTable(): Promise<void> {
         ADD COLUMN IF NOT EXISTS footer_owner_text text NOT NULL DEFAULT 'Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA',
         ADD COLUMN IF NOT EXISTS preview_card_title text NOT NULL DEFAULT 'Mission Moments',
         ADD COLUMN IF NOT EXISTS how_it_works_label text NOT NULL DEFAULT 'How it works',
-        ADD COLUMN IF NOT EXISTS how_it_works_heading text NOT NULL DEFAULT 'Helping churches and field teams stay connected.',
+        ADD COLUMN IF NOT EXISTS how_it_works_heading text NOT NULL DEFAULT 'Built from the field, for the field.',
         ADD COLUMN IF NOT EXISTS cta_band_heading text NOT NULL DEFAULT 'Ready to connect your team?',
         ADD COLUMN IF NOT EXISTS cta_band_subtext text NOT NULL DEFAULT 'Set up your organization in minutes.'
     `)).then(() => pool.query(`
