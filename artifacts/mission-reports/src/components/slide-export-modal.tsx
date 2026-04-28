@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { toPng, toJpeg } from "html-to-image";
+import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {
   X, Download, Loader2, Image, Presentation, Smartphone,
@@ -294,36 +294,45 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
     if (!slideRef.current) return;
     setExporting(format);
     try {
-      const node = slideRef.current;
+      const canvas = await html2canvas(slideRef.current, {
+        useCORS: true,
+        allowTaint: true,
+        width: W,
+        height: H,
+        scale: 1,
+        logging: false,
+        backgroundColor: null,
+      });
+
       const filename = `sentconnect-post-${post.id}`;
 
-      if (format === "png") {
-        const dataUrl = await toPng(node, { pixelRatio: 1, cacheBust: true });
-        download(dataUrl, `${filename}.png`);
-      } else if (format === "jpg") {
-        const dataUrl = await toJpeg(node, { pixelRatio: 1, quality: 0.95, cacheBust: true });
-        download(dataUrl, `${filename}.jpg`);
-      } else if (format === "pdf") {
-        const dataUrl = await toPng(node, { pixelRatio: 1, cacheBust: true });
+      if (format === "pdf") {
+        const dataUrl = canvas.toDataURL("image/png");
         const orientation = W > H ? "landscape" : "portrait";
         const pdf = new jsPDF({ orientation, unit: "px", format: [W, H], compress: true });
         pdf.addImage(dataUrl, "PNG", 0, 0, W, H);
         pdf.save(`${filename}.pdf`);
+      } else {
+        const mimeType = format === "jpg" ? "image/jpeg" : "image/png";
+        const quality = format === "jpg" ? 0.95 : undefined;
+        const blob = await new Promise<Blob>((resolve, reject) => {
+          canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob returned null")), mimeType, quality);
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${filename}.${format}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
       }
     } catch (err) {
       console.error("Export failed", err);
+      alert(`Export failed: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setExporting(null);
     }
-  }
-
-  function download(dataUrl: string, name: string) {
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
   }
 
   return (
@@ -471,7 +480,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
         ref={slideRef}
         aria-hidden
         style={{
-          position: "fixed",
+          position: "absolute",
           top: 0,
           left: -(W + 200),
           width: W,
