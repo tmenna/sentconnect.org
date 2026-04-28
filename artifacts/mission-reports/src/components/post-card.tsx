@@ -522,13 +522,6 @@ export function PostCard({
                   </button>
                 )}
                 <button
-                  onClick={() => { setShowMenu(false); setShowSlideExport(true); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
-                >
-                  <ImageDown className="h-3.5 w-3.5" />
-                  Export as Report
-                </button>
-                <button
                   onClick={() => { setShowMenu(false); deletePost(); }}
                   className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
                 >
@@ -621,6 +614,17 @@ export function PostCard({
               {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
               <span>{copied ? "Copied!" : "Share"}</span>
             </button>
+
+            {/* Export as Report — visible to admins/owners */}
+            {canManage && (
+              <button
+                onClick={() => setShowSlideExport(true)}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all rounded-lg mx-1"
+              >
+                <ImageDown className="h-4 w-4" />
+                <span>Export</span>
+              </button>
+            )}
           </div>
 
           {/* Comments */}
