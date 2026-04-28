@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { toPng, toJpeg } from "html-to-image";
 import jsPDF from "jspdf";
 import {
@@ -326,8 +327,9 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
   }
 
   return (
+    <>
     <div
-      style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(10,20,40,0.7)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, overflow: "hidden" }}
+      style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(10,20,40,0.7)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 24px 80px rgba(0,0,0,0.35)", display: "flex", flexDirection: "column", width: "100%", maxWidth: 1000, maxHeight: "95vh", overflow: "hidden" }}>
@@ -462,14 +464,16 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
 
       </div>
 
-      {/* Off-screen render target — actual export dimensions, hidden inside the backdrop */}
+    </div>
+
+    {createPortal(
       <div
         ref={slideRef}
         aria-hidden
         style={{
-          position: "absolute",
-          left: -W - 100,
+          position: "fixed",
           top: 0,
+          left: -(W + 200),
           width: W,
           height: H,
           overflow: "hidden",
@@ -477,7 +481,9 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
         }}
       >
         {renderSlide()}
-      </div>
-    </div>
+      </div>,
+      document.body
+    )}
+    </>
   );
 }
