@@ -526,7 +526,7 @@ export function PostCard({
                   className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
                 >
                   <ImageDown className="h-3.5 w-3.5" />
-                  Export as Slide
+                  Export as Report
                 </button>
                 <button
                   onClick={() => { setShowMenu(false); deletePost(); }}

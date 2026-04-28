@@ -1,38 +1,13 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import { createPortal } from "react-dom";
-import html2canvas from "html2canvas";
+import { useState, useEffect } from "react";
 import jsPDF from "jspdf";
-import {
-  X, Download, Loader2, Image, Presentation, Smartphone,
-  Sun, Moon, ChevronRight
-} from "lucide-react";
+import { X, Download, Loader2, FileText, MapPin, Users, Calendar } from "lucide-react";
 import type { PostData } from "./post-card";
-
-type Template = "social" | "slide" | "story";
-type Theme = "light" | "dark";
-type ExportFormat = "png" | "jpg" | "pdf";
 
 interface SlideExportModalProps {
   post: PostData;
   orgName?: string;
   orgLogoUrl?: string;
   onClose: () => void;
-}
-
-const TEMPLATES: { id: Template; label: string; icon: React.ReactNode; dims: [number, number] }[] = [
-  { id: "social", label: "Social Card",      icon: <Image className="h-4 w-4" />,        dims: [1080, 1080] },
-  { id: "slide",  label: "Presentation",     icon: <Presentation className="h-4 w-4" />, dims: [1920, 1080] },
-  { id: "story",  label: "Story / Portrait", icon: <Smartphone className="h-4 w-4" />,   dims: [1080, 1920] },
-];
-
-const PREVIEW_SCALE = 0.28;
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-}
-
-function truncate(text: string, max: number) {
-  return text.length <= max ? text : text.slice(0, max).trimEnd() + "…";
 }
 
 async function toDataUrl(src: string): Promise<string | null> {
@@ -51,305 +26,243 @@ async function toDataUrl(src: string): Promise<string | null> {
   }
 }
 
-// ── Shared brand strip at the bottom ──────────────────────────────────────────
-function BrandStrip({ orgName, logoUrl, dark }: { orgName?: string; logoUrl?: string; dark: boolean }) {
-  return (
-    <div style={{
-      display: "flex", alignItems: "center", justifyContent: "space-between",
-      padding: "0 40px",
-      height: 64,
-      background: dark ? "rgba(0,0,0,0.35)" : "rgba(255,255,255,0.9)",
-      borderTop: dark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,71,168,0.1)",
-      flexShrink: 0,
-    }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        {logoUrl && <img src={logoUrl} alt="" style={{ height: 26, width: "auto", objectFit: "contain" }} />}
-        {orgName && (
-          <span style={{ fontSize: 17, fontWeight: 700, color: dark ? "rgba(255,255,255,0.9)" : "#0047A8", letterSpacing: "-0.02em" }}>
-            {orgName}
-          </span>
-        )}
-      </div>
-      <span style={{ fontSize: 13, color: dark ? "rgba(255,255,255,0.45)" : "#9CA3AF", fontWeight: 500 }}>
-        sentconnect.org
-      </span>
-    </div>
-  );
+function imageFormat(dataUrl: string): string {
+  if (dataUrl.startsWith("data:image/jpeg") || dataUrl.startsWith("data:image/jpg")) return "JPEG";
+  if (dataUrl.startsWith("data:image/webp")) return "WEBP";
+  return "PNG";
 }
 
-// ── TEMPLATE 1: Social Card (1080×1080) ──────────────────────────────────────
-function SocialCardTemplate({
-  post, orgName, logoUrl, dark, photoUrl,
-}: { post: PostData; orgName?: string; logoUrl?: string; dark: boolean; photoUrl: string | null }) {
-  const bg = dark ? "#0F172A" : "#F8FBFF";
-  const text = dark ? "#F1F5F9" : "#0F172A";
-  const sub = dark ? "rgba(241,245,249,0.6)" : "#64748B";
-  const accent = "#0268CE";
-  const hasPhoto = !!photoUrl;
-
-  return (
-    <div style={{ width: 1080, height: 1080, background: bg, display: "flex", flexDirection: "column", fontFamily: "'Inter', 'system-ui', sans-serif", overflow: "hidden", position: "relative" }}>
-      {/* Accent bar */}
-      <div style={{ height: 6, background: `linear-gradient(90deg, #0047A8, #1A80E0)`, flexShrink: 0 }} />
-
-      {/* Photo area */}
-      {hasPhoto ? (
-        <div style={{ flex: 1, overflow: "hidden", position: "relative", minHeight: 0 }}>
-          <img src={photoUrl!} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          <div style={{ position: "absolute", inset: 0, background: dark ? "linear-gradient(to bottom, transparent 30%, rgba(15,23,42,0.92) 100%)" : "linear-gradient(to bottom, transparent 30%, rgba(248,251,255,0.97) 100%)" }} />
-          {/* Text overlay on photo */}
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "40px 48px 32px" }}>
-            {post.isMissionMoment && (
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: accent, color: "#fff", borderRadius: 999, padding: "5px 16px", fontSize: 15, fontWeight: 700, marginBottom: 16, letterSpacing: "0.04em", textTransform: "uppercase" }}>
-                Mission Moment
-              </div>
-            )}
-            <div style={{ fontSize: 15, color: dark ? "rgba(255,255,255,0.7)" : "rgba(15,23,42,0.7)", marginBottom: 10, fontWeight: 600 }}>
-              {post.author.name}
-              {post.location && <span style={{ fontWeight: 400 }}> · {post.location}</span>}
-            </div>
-            <p style={{ fontSize: 32, fontWeight: 800, color: dark ? "#F1F5F9" : "#0F172A", lineHeight: 1.25, letterSpacing: "-0.03em", margin: 0 }}>
-              {truncate(post.description ?? "", 160)}
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "56px 64px", minHeight: 0 }}>
-          {post.isMissionMoment && (
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: accent, color: "#fff", borderRadius: 999, padding: "5px 16px", fontSize: 15, fontWeight: 700, marginBottom: 24, letterSpacing: "0.04em", textTransform: "uppercase", width: "fit-content" }}>
-              Mission Moment
-            </div>
-          )}
-          <p style={{ fontSize: 44, fontWeight: 900, color: text, lineHeight: 1.2, letterSpacing: "-0.04em", margin: "0 0 32px" }}>
-            {truncate(post.description ?? "", 280)}
-          </p>
-          <div style={{ fontSize: 18, color: sub, fontWeight: 600 }}>
-            {post.author.name}
-            {post.location && ` · ${post.location}`}
-          </div>
-        </div>
-      )}
-
-      {/* Footer meta */}
-      <div style={{ padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0, borderTop: dark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(0,71,168,0.08)" }}>
-        <span style={{ fontSize: 14, color: sub }}>{formatDate(post.createdAt)}</span>
-        {post.peopleReached && <span style={{ fontSize: 14, color: accent, fontWeight: 700 }}>{post.peopleReached.toLocaleString()} people reached</span>}
-      </div>
-
-      <BrandStrip orgName={orgName} logoUrl={logoUrl} dark={dark} />
-    </div>
-  );
+async function getImageDimensions(dataUrl: string): Promise<{ w: number; h: number }> {
+  return new Promise(resolve => {
+    const img = new globalThis.Image();
+    img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+    img.onerror = () => resolve({ w: 16, h: 9 });
+    img.src = dataUrl;
+  });
 }
 
-// ── TEMPLATE 2: Presentation Slide (1920×1080) ────────────────────────────────
-function PresentationTemplate({
-  post, orgName, logoUrl, dark, photoUrl,
-}: { post: PostData; orgName?: string; logoUrl?: string; dark: boolean; photoUrl: string | null }) {
-  const bg = dark ? "#0F172A" : "#FFFFFF";
-  const text = dark ? "#F1F5F9" : "#0F172A";
-  const sub = dark ? "rgba(241,245,249,0.55)" : "#64748B";
-  const accent = "#0268CE";
-  const panelBg = dark ? "rgba(255,255,255,0.05)" : "#F0F7FF";
-
-  return (
-    <div style={{ width: 1920, height: 1080, background: bg, display: "flex", flexDirection: "column", fontFamily: "'Inter', 'system-ui', sans-serif", overflow: "hidden" }}>
-      {/* Top accent */}
-      <div style={{ height: 8, background: `linear-gradient(90deg, #0047A8, #1A80E0, #0047A8)`, flexShrink: 0 }} />
-
-      {/* Main content */}
-      <div style={{ flex: 1, display: "flex", minHeight: 0 }}>
-        {/* Left: text panel */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "64px 80px", minWidth: 0 }}>
-          {post.isMissionMoment && (
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: accent, color: "#fff", borderRadius: 999, padding: "6px 20px", fontSize: 16, fontWeight: 700, marginBottom: 32, letterSpacing: "0.06em", textTransform: "uppercase", width: "fit-content" }}>
-              Mission Moment
-            </div>
-          )}
-          <p style={{ fontSize: 52, fontWeight: 900, color: text, lineHeight: 1.2, letterSpacing: "-0.04em", margin: "0 0 32px" }}>
-            {truncate(post.description ?? "", 320)}
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <span style={{ fontSize: 22, fontWeight: 700, color: text }}>{post.author.name}</span>
-            {post.location && <span style={{ fontSize: 18, color: sub }}>{post.location}</span>}
-            <span style={{ fontSize: 16, color: sub }}>{formatDate(post.createdAt)}</span>
-          </div>
-          {post.peopleReached && (
-            <div style={{ marginTop: 40, display: "inline-flex", alignItems: "center", gap: 12, background: panelBg, borderRadius: 16, padding: "16px 28px", width: "fit-content" }}>
-              <span style={{ fontSize: 36, fontWeight: 900, color: accent }}>{post.peopleReached.toLocaleString()}</span>
-              <span style={{ fontSize: 16, color: sub, fontWeight: 600 }}>people reached</span>
-            </div>
-          )}
-        </div>
-
-        {/* Right: photo panel */}
-        {photoUrl && (
-          <div style={{ width: 760, flexShrink: 0, overflow: "hidden", position: "relative" }}>
-            <img src={photoUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            <div style={{ position: "absolute", inset: 0, background: dark ? "rgba(15,23,42,0.2)" : "rgba(248,251,255,0.08)" }} />
-          </div>
-        )}
-      </div>
-
-      <BrandStrip orgName={orgName} logoUrl={logoUrl} dark={dark} />
-    </div>
-  );
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
 
-// ── TEMPLATE 3: Story / Portrait (1080×1920) ──────────────────────────────────
-function StoryTemplate({
-  post, orgName, logoUrl, dark, photoUrl,
-}: { post: PostData; orgName?: string; logoUrl?: string; dark: boolean; photoUrl: string | null }) {
-  const bg = dark ? "#0F172A" : "#F8FBFF";
-  const text = dark ? "#F1F5F9" : "#0F172A";
-  const sub = dark ? "rgba(241,245,249,0.6)" : "#64748B";
-  const accent = "#0268CE";
-
-  return (
-    <div style={{ width: 1080, height: 1920, background: bg, display: "flex", flexDirection: "column", fontFamily: "'Inter', 'system-ui', sans-serif", overflow: "hidden" }}>
-      {/* Top accent */}
-      <div style={{ height: 8, background: `linear-gradient(90deg, #0047A8, #1A80E0)`, flexShrink: 0 }} />
-
-      {/* Header brand */}
-      <div style={{ padding: "32px 48px 24px", display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
-        {logoUrl && <img src={logoUrl} alt="" style={{ height: 36, width: "auto", objectFit: "contain" }} />}
-        {orgName && <span style={{ fontSize: 22, fontWeight: 800, color: dark ? "#fff" : "#0047A8", letterSpacing: "-0.02em" }}>{orgName}</span>}
-      </div>
-
-      {/* Photo */}
-      {photoUrl && (
-        <div style={{ height: 840, flexShrink: 0, overflow: "hidden", position: "relative" }}>
-          <img src={photoUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 60%, rgba(15,23,42,0.6) 100%)" }} />
-        </div>
-      )}
-
-      {/* Text body */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "48px 64px", minHeight: 0 }}>
-        {post.isMissionMoment && (
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: accent, color: "#fff", borderRadius: 999, padding: "6px 20px", fontSize: 18, fontWeight: 700, marginBottom: 28, letterSpacing: "0.04em", textTransform: "uppercase", width: "fit-content" }}>
-            Mission Moment
-          </div>
-        )}
-        <p style={{ fontSize: 46, fontWeight: 900, color: text, lineHeight: 1.25, letterSpacing: "-0.04em", margin: "0 0 32px" }}>
-          {truncate(post.description ?? "", 260)}
-        </p>
-        <div style={{ fontSize: 20, color: sub, fontWeight: 600 }}>
-          {post.author.name}
-          {post.location && <span style={{ fontWeight: 400 }}> · {post.location}</span>}
-        </div>
-        <div style={{ fontSize: 18, color: sub, marginTop: 8 }}>{formatDate(post.createdAt)}</div>
-        {post.peopleReached && (
-          <div style={{ marginTop: 32, fontSize: 22, fontWeight: 700, color: accent }}>
-            {post.peopleReached.toLocaleString()} people reached
-          </div>
-        )}
-      </div>
-
-      <BrandStrip orgName={orgName} logoUrl={logoUrl} dark={dark} />
-    </div>
-  );
-}
-
-// ── Main Modal ─────────────────────────────────────────────────────────────────
 export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideExportModalProps) {
-  const [template, setTemplate] = useState<Template>("social");
-  const [theme, setTheme] = useState<Theme>("light");
-  const [exporting, setExporting] = useState<ExportFormat | null>(null);
-  const [blobPhotoUrl, setBlobPhotoUrl] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const [blobPhotoUrls, setBlobPhotoUrls] = useState<(string | null)[]>([]);
   const [blobLogoUrl, setBlobLogoUrl] = useState<string | null>(null);
-  const [photoLoading, setPhotoLoading] = useState(false);
-  const slideRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
 
-  const firstPhoto = post.photos.find(p => !p.mimeType?.startsWith("video/") && !/\.(mp4|webm|mov)$/i.test(p.url));
+  const photos = post.photos.filter(
+    p => !p.mimeType?.startsWith("video/") && !/\.(mp4|webm|mov)$/i.test(p.url)
+  );
 
-  // Pre-fetch photo as data URL to avoid canvas CORS block
   useEffect(() => {
-    if (!firstPhoto?.url) { setBlobPhotoUrl(null); return; }
-    setPhotoLoading(true);
-    toDataUrl(firstPhoto.url).then(url => {
-      setBlobPhotoUrl(url);
-      setPhotoLoading(false);
+    if (photos.length === 0) { setBlobPhotoUrls([]); return; }
+    setLoading(true);
+    Promise.all(photos.map(p => toDataUrl(p.url))).then(urls => {
+      setBlobPhotoUrls(urls);
+      setLoading(false);
     });
-  }, [firstPhoto?.url]);
+  }, []);
 
-  // Pre-fetch logo as data URL too
   useEffect(() => {
-    if (!orgLogoUrl) { setBlobLogoUrl(null); return; }
+    if (!orgLogoUrl) return;
     toDataUrl(orgLogoUrl).then(url => setBlobLogoUrl(url ?? orgLogoUrl ?? null));
   }, [orgLogoUrl]);
 
-  const dims = TEMPLATES.find(t => t.id === template)!.dims;
-  const [W, H] = dims;
-  const scale = PREVIEW_SCALE;
-
-  const templateProps = { post, orgName, dark: theme === "dark", photoUrl: blobPhotoUrl, logoUrl: blobLogoUrl ?? orgLogoUrl };
-
-  const renderSlide = useCallback(() => {
-    if (template === "social") return <SocialCardTemplate {...templateProps} />;
-    if (template === "slide")  return <PresentationTemplate {...templateProps} />;
-    return <StoryTemplate {...templateProps} />;
-  }, [template, theme, blobPhotoUrl, blobLogoUrl, post, orgName, orgLogoUrl]);
-
-  async function doExport(format: ExportFormat) {
-    if (!slideRef.current) return;
-    setExporting(format);
+  async function generatePDF() {
+    setExporting(true);
     try {
-      const canvas = await html2canvas(slideRef.current, {
-        useCORS: true,
-        allowTaint: true,
-        width: W,
-        height: H,
-        scale: 1,
-        logging: false,
-        backgroundColor: null,
-      });
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pageW = 210;
+      const pageH = 297;
+      const margin = 18;
+      const contentW = pageW - margin * 2;
+      const blue = [0, 71, 168] as [number, number, number];
+      const accent = [26, 128, 224] as [number, number, number];
+      const dark = [15, 23, 42] as [number, number, number];
+      const gray = [100, 116, 139] as [number, number, number];
+      const lightBlue = [239, 246, 255] as [number, number, number];
+      const white = [255, 255, 255] as [number, number, number];
 
-      const filename = `sentconnect-post-${post.id}`;
+      function drawHeader() {
+        pdf.setFillColor(...blue);
+        pdf.rect(0, 0, pageW, 26, "F");
+        pdf.setFillColor(...accent);
+        pdf.rect(0, 26, pageW, 2, "F");
 
-      if (format === "pdf") {
-        const dataUrl = canvas.toDataURL("image/png");
-        const orientation = W > H ? "landscape" : "portrait";
-        const pdf = new jsPDF({ orientation, unit: "px", format: [W, H], compress: true });
-        pdf.addImage(dataUrl, "PNG", 0, 0, W, H);
-        pdf.save(`${filename}.pdf`);
-      } else {
-        const mimeType = format === "jpg" ? "image/jpeg" : "image/png";
-        const quality = format === "jpg" ? 0.95 : undefined;
-        const blob = await new Promise<Blob>((resolve, reject) => {
-          canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob returned null")), mimeType, quality);
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${filename}.${format}`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 2000);
+        let logoEndX = margin;
+        if (blobLogoUrl) {
+          try {
+            pdf.addImage(blobLogoUrl, imageFormat(blobLogoUrl), margin, 6, 28, 14);
+            logoEndX = margin + 32;
+          } catch {}
+        }
+
+        pdf.setTextColor(...white);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(13);
+        pdf.text(orgName || "Missionary Report", logoEndX, 16);
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(8);
+        pdf.setTextColor(200, 220, 255);
+        pdf.text("Missionary Report", logoEndX, 22);
       }
+
+      function drawFooter(pageNum: number, totalPages: number) {
+        pdf.setFillColor(248, 251, 255);
+        pdf.rect(0, pageH - 10, pageW, 10, "F");
+        pdf.setDrawColor(220, 230, 245);
+        pdf.line(0, pageH - 10, pageW, pageH - 10);
+        pdf.setTextColor(...gray);
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(7);
+        pdf.text("sentconnect.org", pageW / 2, pageH - 3.5, { align: "center" });
+        pdf.text(`${pageNum} / ${totalPages}`, pageW - margin, pageH - 3.5, { align: "right" });
+      }
+
+      drawHeader();
+
+      let y = 36;
+
+      if (post.isMissionMoment) {
+        pdf.setFillColor(...blue);
+        pdf.roundedRect(margin, y, 38, 6, 1.5, 1.5, "F");
+        pdf.setTextColor(...white);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(7);
+        pdf.text("MISSION MOMENT", margin + 3, y + 4.2);
+        y += 10;
+      }
+
+      pdf.setTextColor(...dark);
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(18);
+      pdf.text(post.author.name, margin, y);
+      y += 6;
+
+      if (post.author.role) {
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(10);
+        pdf.setTextColor(...gray);
+        pdf.text(post.author.role, margin, y);
+        y += 5;
+      }
+
+      const metaParts: string[] = [];
+      if (post.location) metaParts.push(post.location);
+      metaParts.push(formatDate(post.createdAt));
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(9);
+      pdf.setTextColor(...gray);
+      pdf.text(metaParts.join("   ·   "), margin, y);
+      y += 5;
+
+      if (post.peopleReached) {
+        pdf.setFillColor(...lightBlue);
+        pdf.roundedRect(margin, y, 58, 7, 1.5, 1.5, "F");
+        pdf.setTextColor(...accent);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(9);
+        pdf.text(`${post.peopleReached.toLocaleString()}  people reached`, margin + 3.5, y + 4.8);
+        y += 11;
+      }
+
+      pdf.setDrawColor(220, 230, 245);
+      pdf.line(margin, y, pageW - margin, y);
+      y += 8;
+
+      pdf.setTextColor(...dark);
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(11);
+      pdf.setLineHeightFactor(1.55);
+      const descLines = pdf.splitTextToSize(post.description ?? "", contentW);
+      pdf.text(descLines, margin, y);
+      y += descLines.length * 11 * 1.55 * 0.352778 + 8;
+
+      const availPhotos = blobPhotoUrls.filter((u): u is string => !!u);
+      let pageCount = 1;
+      const totalPhotos = availPhotos.length;
+
+      if (totalPhotos > 0) {
+        pdf.setDrawColor(220, 230, 245);
+        pdf.line(margin, y, pageW - margin, y);
+        y += 6;
+        pdf.setTextColor(...gray);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(8);
+        pdf.text("PHOTOS", margin, y);
+        y += 6;
+      }
+
+      for (let i = 0; i < availPhotos.length; i++) {
+        const photoDataUrl = availPhotos[i];
+        const dims = await getImageDimensions(photoDataUrl);
+        const photoW = contentW;
+        const photoH = Math.min(photoW * (dims.h / dims.w), 140);
+
+        const caption = photos[i]?.caption;
+        const captionH = caption ? 6 : 0;
+        const blockH = photoH + captionH + 6;
+
+        if (y + blockH > pageH - 14) {
+          drawFooter(pageCount, 99);
+          pdf.addPage();
+          pageCount++;
+          drawHeader();
+          y = 36;
+        }
+
+        try {
+          pdf.addImage(photoDataUrl, imageFormat(photoDataUrl), margin, y, photoW, photoH);
+        } catch {}
+
+        if (caption) {
+          pdf.setTextColor(...gray);
+          pdf.setFont("helvetica", "italic");
+          pdf.setFontSize(8);
+          pdf.text(caption, margin, y + photoH + 4.5);
+        }
+
+        y += blockH + 2;
+      }
+
+      const totalPages = pageCount;
+      const pageCount2 = pdf.getNumberOfPages();
+      for (let p = 1; p <= pageCount2; p++) {
+        pdf.setPage(p);
+        drawFooter(p, pageCount2);
+      }
+
+      pdf.save(`sentconnect-report-${post.id}.pdf`);
     } catch (err) {
-      console.error("Export failed", err);
-      alert(`Export failed: ${err instanceof Error ? err.message : String(err)}`);
+      console.error("PDF generation failed", err);
+      alert(`PDF generation failed: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
-      setExporting(null);
+      setExporting(false);
     }
   }
 
+  const firstPhoto = blobPhotoUrls.find(u => !!u) ?? null;
+
   return (
-    <>
     <div
-      style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(10,20,40,0.7)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}
+      style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(10,20,40,0.72)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 24px 80px rgba(0,0,0,0.35)", display: "flex", flexDirection: "column", width: "100%", maxWidth: 1000, maxHeight: "95vh", overflow: "hidden" }}>
+      <div style={{ background: "#fff", borderRadius: 20, boxShadow: "0 24px 80px rgba(0,0,0,0.35)", display: "flex", flexDirection: "column", width: "100%", maxWidth: 860, maxHeight: "92vh", overflow: "hidden" }}>
 
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px", borderBottom: "1px solid #F1F5F9", flexShrink: 0 }}>
-          <div>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>Export as Slide</h2>
-            <p style={{ fontSize: 12, color: "#94A3B8", margin: "2px 0 0" }}>Choose a template, then download your image</p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 24px", borderBottom: "1px solid #F1F5F9", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 34, height: 34, background: "#EFF6FF", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <FileText className="h-4 w-4" style={{ color: "#0268CE" }} />
+            </div>
+            <div>
+              <h2 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>Export as Report</h2>
+              <p style={{ fontSize: 11, color: "#94A3B8", margin: "1px 0 0" }}>Generates a full-page PDF with photos and stats</p>
+            </div>
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", display: "flex", padding: 4 }}>
+          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", display: "flex", padding: 4, borderRadius: 6 }}>
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -357,142 +270,131 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
         {/* Body */}
         <div style={{ display: "flex", flex: 1, minHeight: 0, overflow: "hidden" }}>
 
-          {/* Preview pane */}
-          <div style={{ flex: 1, background: "#F8FAFC", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, overflow: "auto", minWidth: 0 }}>
-            {photoLoading ? (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, color: "#94A3B8" }}>
-                <Loader2 className="h-8 w-8 animate-spin" />
-                <span style={{ fontSize: 13 }}>Loading photo…</span>
+          {/* Preview */}
+          <div style={{ flex: 1, background: "#F8FAFC", overflow: "auto", padding: 28, display: "flex", justifyContent: "center" }}>
+            {loading ? (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, color: "#94A3B8", width: "100%" }}>
+                <Loader2 className="h-7 w-7 animate-spin" />
+                <span style={{ fontSize: 12 }}>Loading photos…</span>
               </div>
             ) : (
-              <div style={{
-                width: W * scale,
-                height: H * scale,
-                overflow: "hidden",
-                borderRadius: 12,
-                boxShadow: "0 8px 40px rgba(0,0,0,0.18)",
-                flexShrink: 0,
-                position: "relative",
-              }}>
-                {/* Scaled preview wrapper */}
-                <div style={{ transform: `scale(${scale})`, transformOrigin: "top left", width: W, height: H, pointerEvents: "none" }}>
-                  {renderSlide()}
+              <div style={{ width: "100%", maxWidth: 520, background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.10)", border: "1px solid #E2E8F0", fontFamily: "'Inter', system-ui, sans-serif" }}>
+                {/* Report header preview */}
+                <div style={{ background: "linear-gradient(90deg, #0047A8, #0268CE)", padding: "14px 20px", display: "flex", alignItems: "center", gap: 12 }}>
+                  {orgLogoUrl && <img src={orgLogoUrl} alt="" style={{ height: 22, width: "auto", objectFit: "contain" }} />}
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{orgName || "Missionary Report"}</div>
+                    <div style={{ fontSize: 9, color: "rgba(200,220,255,0.9)", marginTop: 1 }}>Missionary Report</div>
+                  </div>
+                </div>
+                <div style={{ height: 3, background: "linear-gradient(90deg, #1A80E0, #0268CE)" }} />
+
+                <div style={{ padding: "18px 20px" }}>
+                  {post.isMissionMoment && (
+                    <div style={{ display: "inline-flex", background: "#0047A8", color: "#fff", borderRadius: 4, padding: "2px 8px", fontSize: 8, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 10 }}>
+                      Mission Moment
+                    </div>
+                  )}
+
+                  <div style={{ fontSize: 17, fontWeight: 800, color: "#0F172A", marginBottom: 3, letterSpacing: "-0.02em" }}>{post.author.name}</div>
+                  {post.author.role && <div style={{ fontSize: 10, color: "#64748B", marginBottom: 2 }}>{post.author.role}</div>}
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
+                    {post.location && (
+                      <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 9, color: "#94A3B8" }}>
+                        <MapPin className="h-2.5 w-2.5" /> {post.location}
+                      </span>
+                    )}
+                    <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 9, color: "#94A3B8" }}>
+                      <Calendar className="h-2.5 w-2.5" /> {formatDate(post.createdAt)}
+                    </span>
+                    {post.peopleReached && (
+                      <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 9, color: "#0268CE", fontWeight: 700, background: "#EFF6FF", borderRadius: 3, padding: "1px 6px" }}>
+                        <Users className="h-2.5 w-2.5" /> {post.peopleReached.toLocaleString()} people reached
+                      </span>
+                    )}
+                  </div>
+
+                  <div style={{ height: 1, background: "#F1F5F9", marginBottom: 10 }} />
+
+                  <p style={{ fontSize: 10.5, color: "#1E293B", lineHeight: 1.65, margin: "0 0 12px", whiteSpace: "pre-wrap" }}>
+                    {post.description}
+                  </p>
+
+                  {firstPhoto && (
+                    <div style={{ borderRadius: 8, overflow: "hidden", border: "1px solid #E2E8F0" }}>
+                      <img src={firstPhoto} alt="" style={{ width: "100%", display: "block", objectFit: "cover", maxHeight: 240 }} />
+                      {photos[0]?.caption && (
+                        <div style={{ padding: "6px 10px", fontSize: 9, color: "#94A3B8", fontStyle: "italic" }}>{photos[0].caption}</div>
+                      )}
+                    </div>
+                  )}
+
+                  {photos.length > 1 && (
+                    <p style={{ fontSize: 9, color: "#94A3B8", marginTop: 8, marginBottom: 0 }}>
+                      + {photos.length - 1} more photo{photos.length > 2 ? "s" : ""} included in PDF
+                    </p>
+                  )}
+                </div>
+
+                <div style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "8px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: 8, color: "#CBD5E1" }}>sentconnect.org</span>
+                  <span style={{ fontSize: 8, color: "#CBD5E1" }}>Page 1 / …</span>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Controls pane */}
-          <div style={{ width: 240, borderLeft: "1px solid #F1F5F9", display: "flex", flexDirection: "column", overflow: "auto", flexShrink: 0 }}>
+          {/* Sidebar */}
+          <div style={{ width: 220, borderLeft: "1px solid #F1F5F9", display: "flex", flexDirection: "column", padding: 20, gap: 16, flexShrink: 0 }}>
 
-            {/* Template picker */}
-            <div style={{ padding: "20px 16px 12px" }}>
-              <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#94A3B8", marginBottom: 10 }}>Template</p>
-              {TEMPLATES.map(t => (
-                <button
-                  key={t.id}
-                  onClick={() => setTemplate(t.id)}
-                  style={{
-                    width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "10px 12px",
-                    borderRadius: 10, border: template === t.id ? "2px solid #0268CE" : "2px solid transparent",
-                    background: template === t.id ? "#EFF6FF" : "transparent",
-                    cursor: "pointer", marginBottom: 4, color: template === t.id ? "#0268CE" : "#374151",
-                    fontSize: 13, fontWeight: 600, transition: "all .12s",
-                  }}
-                >
-                  {t.icon}
-                  <span style={{ flex: 1, textAlign: "left" }}>{t.label}</span>
-                  {template === t.id && <ChevronRight className="h-3.5 w-3.5" />}
-                </button>
+            <div>
+              <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#94A3B8", margin: "0 0 8px" }}>Includes</p>
+              {[
+                "Full post text",
+                `${photos.length} photo${photos.length !== 1 ? "s" : ""}`,
+                "Author & location",
+                "Date & stats",
+                "Org branding",
+                "Auto page breaks",
+              ].map(item => (
+                <div key={item} style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 6 }}>
+                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#0268CE", flexShrink: 0 }} />
+                  <span style={{ fontSize: 12, color: "#374151" }}>{item}</span>
+                </div>
               ))}
             </div>
 
-            <div style={{ height: 1, background: "#F1F5F9", margin: "0 16px" }} />
+            <div style={{ height: 1, background: "#F1F5F9" }} />
 
-            {/* Theme toggle */}
-            <div style={{ padding: "16px 16px 12px" }}>
-              <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#94A3B8", marginBottom: 10 }}>Theme</p>
-              <div style={{ display: "flex", gap: 8 }}>
-                {(["light", "dark"] as Theme[]).map(t => (
-                  <button
-                    key={t}
-                    onClick={() => setTheme(t)}
-                    style={{
-                      flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-                      padding: "10px 8px", borderRadius: 10,
-                      border: theme === t ? "2px solid #0268CE" : "2px solid #E5E7EB",
-                      background: theme === t ? "#EFF6FF" : (t === "dark" ? "#1E293B" : "#FFFFFF"),
-                      cursor: "pointer",
-                    }}
-                  >
-                    {t === "light"
-                      ? <Sun className="h-4 w-4" style={{ color: theme === "light" ? "#0268CE" : "#94A3B8" }} />
-                      : <Moon className="h-4 w-4" style={{ color: theme === "dark" ? "#60A5FA" : "#9CA3AF" }} />}
-                    <span style={{ fontSize: 11, fontWeight: 600, color: theme === t ? "#0268CE" : "#6B7280", textTransform: "capitalize" }}>{t}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ height: 1, background: "#F1F5F9", margin: "0 16px" }} />
-
-            {/* Slide dimensions info */}
-            <div style={{ padding: "12px 16px" }}>
-              <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#94A3B8", marginBottom: 6 }}>Output Size</p>
-              <p style={{ fontSize: 12, color: "#6B7280", margin: 0 }}>{W} × {H} px · High resolution</p>
+            <div>
+              <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#94A3B8", margin: "0 0 8px" }}>Format</p>
+              <p style={{ fontSize: 12, color: "#6B7280", margin: 0 }}>A4 portrait · PDF</p>
             </div>
 
             <div style={{ flex: 1 }} />
 
-            {/* Export buttons */}
-            <div style={{ padding: "16px", borderTop: "1px solid #F1F5F9", display: "flex", flexDirection: "column", gap: 8 }}>
-              <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#94A3B8", marginBottom: 4 }}>Download</p>
-              {(["png", "jpg", "pdf"] as ExportFormat[]).map(fmt => (
-                <button
-                  key={fmt}
-                  onClick={() => doExport(fmt)}
-                  disabled={!!exporting || photoLoading}
-                  style={{
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                    height: 40, borderRadius: 10, border: "none", cursor: exporting || photoLoading ? "not-allowed" : "pointer",
-                    fontWeight: 700, fontSize: 13, transition: "all .12s",
-                    background: fmt === "png" ? "#0047A8" : fmt === "jpg" ? "#0268CE" : "#1A80E0",
-                    color: "#fff",
-                    opacity: exporting && exporting !== fmt ? 0.5 : 1,
-                  }}
-                >
-                  {exporting === fmt
-                    ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Exporting…</>
-                    : <><Download className="h-3.5 w-3.5" /> {fmt.toUpperCase()}</>
-                  }
-                </button>
-              ))}
-            </div>
+            <button
+              onClick={generatePDF}
+              disabled={exporting || loading}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                height: 44, borderRadius: 12, border: "none",
+                cursor: exporting || loading ? "not-allowed" : "pointer",
+                fontWeight: 700, fontSize: 14,
+                background: exporting || loading ? "#93C5FD" : "linear-gradient(135deg, #0047A8, #0268CE)",
+                color: "#fff",
+                transition: "all .15s",
+              }}
+            >
+              {exporting
+                ? <><Loader2 className="h-4 w-4 animate-spin" /> Generating…</>
+                : <><Download className="h-4 w-4" /> Download PDF</>
+              }
+            </button>
           </div>
         </div>
-
       </div>
-
     </div>
-
-    {createPortal(
-      <div
-        ref={slideRef}
-        aria-hidden
-        style={{
-          position: "absolute",
-          top: 0,
-          left: -(W + 200),
-          width: W,
-          height: H,
-          overflow: "hidden",
-          pointerEvents: "none",
-        }}
-      >
-        {renderSlide()}
-      </div>,
-      document.body
-    )}
-    </>
   );
 }
