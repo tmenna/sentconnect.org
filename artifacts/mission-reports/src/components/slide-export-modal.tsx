@@ -255,6 +255,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
   const [theme, setTheme] = useState<Theme>("light");
   const [exporting, setExporting] = useState<ExportFormat | null>(null);
   const [blobPhotoUrl, setBlobPhotoUrl] = useState<string | null>(null);
+  const [blobLogoUrl, setBlobLogoUrl] = useState<string | null>(null);
   const [photoLoading, setPhotoLoading] = useState(false);
   const slideRef = useRef<HTMLDivElement>(null);
 
@@ -270,17 +271,23 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
     });
   }, [firstPhoto?.url]);
 
+  // Pre-fetch logo as data URL too
+  useEffect(() => {
+    if (!orgLogoUrl) { setBlobLogoUrl(null); return; }
+    toDataUrl(orgLogoUrl).then(url => setBlobLogoUrl(url ?? orgLogoUrl ?? null));
+  }, [orgLogoUrl]);
+
   const dims = TEMPLATES.find(t => t.id === template)!.dims;
   const [W, H] = dims;
   const scale = PREVIEW_SCALE;
 
-  const templateProps = { post, orgName, orgLogoUrl, dark: theme === "dark", photoUrl: blobPhotoUrl };
+  const templateProps = { post, orgName, dark: theme === "dark", photoUrl: blobPhotoUrl, logoUrl: blobLogoUrl ?? orgLogoUrl };
 
   const renderSlide = useCallback(() => {
-    if (template === "social") return <SocialCardTemplate {...templateProps} logoUrl={orgLogoUrl} />;
-    if (template === "slide")  return <PresentationTemplate {...templateProps} logoUrl={orgLogoUrl} />;
-    return <StoryTemplate {...templateProps} logoUrl={orgLogoUrl} />;
-  }, [template, theme, blobPhotoUrl, post, orgName, orgLogoUrl]);
+    if (template === "social") return <SocialCardTemplate {...templateProps} />;
+    if (template === "slide")  return <PresentationTemplate {...templateProps} />;
+    return <StoryTemplate {...templateProps} />;
+  }, [template, theme, blobPhotoUrl, blobLogoUrl, post, orgName, orgLogoUrl]);
 
   async function doExport(format: ExportFormat) {
     if (!slideRef.current) return;
@@ -313,12 +320,14 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
     const a = document.createElement("a");
     a.href = dataUrl;
     a.download = name;
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
   }
 
   return (
     <div
-      style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(10,20,40,0.7)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}
+      style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(10,20,40,0.7)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, overflow: "hidden" }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 24px 80px rgba(0,0,0,0.35)", display: "flex", flexDirection: "column", width: "100%", maxWidth: 1000, maxHeight: "95vh", overflow: "hidden" }}>
@@ -451,10 +460,23 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
           </div>
         </div>
 
-        {/* Off-screen render target — actual export dimensions */}
-        <div style={{ position: "fixed", left: -99999, top: -99999, zIndex: -1 }} ref={slideRef} aria-hidden>
-          {renderSlide()}
-        </div>
+      </div>
+
+      {/* Off-screen render target — actual export dimensions, hidden inside the backdrop */}
+      <div
+        ref={slideRef}
+        aria-hidden
+        style={{
+          position: "absolute",
+          left: -W - 100,
+          top: 0,
+          width: W,
+          height: H,
+          overflow: "hidden",
+          pointerEvents: "none",
+        }}
+      >
+        {renderSlide()}
       </div>
     </div>
   );
