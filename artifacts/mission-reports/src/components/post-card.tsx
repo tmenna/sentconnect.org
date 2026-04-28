@@ -4,13 +4,15 @@ import { formatDistanceToNow } from "date-fns";
 import {
   ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
   Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
-  Link2, Share2
+  Link2, Share2, ImageDown
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth-provider";
 import { useOrg } from "@/providers/org-provider";
 import { cn } from "@/lib/utils";
+import { SlideExportModal } from "./slide-export-modal";
+import { LOGO_BLUE } from "@/hooks/use-platform-logo";
 
 export type PostData = {
   id: number;
@@ -346,6 +348,7 @@ export function PostCard({
   const commentInputRef = useRef<HTMLInputElement>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [showSlideExport, setShowSlideExport] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const isOwner = user?.id === post.author.id;
@@ -440,6 +443,7 @@ export function PostCard({
   }
 
   return (
+    <>
     <div
       className={flat
         ? "bg-white overflow-hidden"
@@ -517,6 +521,13 @@ export function PostCard({
                     Edit
                   </button>
                 )}
+                <button
+                  onClick={() => { setShowMenu(false); setShowSlideExport(true); }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
+                >
+                  <ImageDown className="h-3.5 w-3.5" />
+                  Export as Slide
+                </button>
                 <button
                   onClick={() => { setShowMenu(false); deletePost(); }}
                   className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
@@ -675,5 +686,15 @@ export function PostCard({
         </>
       )}
     </div>
+
+    {showSlideExport && (
+      <SlideExportModal
+        post={post}
+        orgName={user?.organization ?? undefined}
+        orgLogoUrl={LOGO_BLUE}
+        onClose={() => setShowSlideExport(false)}
+      />
+    )}
+  </>
   );
 }
