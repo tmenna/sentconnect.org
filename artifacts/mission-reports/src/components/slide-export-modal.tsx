@@ -90,22 +90,14 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
         pdf.setFillColor(...accent);
         pdf.rect(0, 26, pageW, 2, "F");
 
-        let logoEndX = margin;
-        if (blobLogoUrl) {
-          try {
-            pdf.addImage(blobLogoUrl, imageFormat(blobLogoUrl), margin, 6, 28, 14);
-            logoEndX = margin + 32;
-          } catch {}
-        }
-
         pdf.setTextColor(...white);
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(13);
-        pdf.text(orgName || "Missionary Report", logoEndX, 16);
+        pdf.text(orgName || "Missionary Report", margin, 16);
         pdf.setFont("helvetica", "normal");
         pdf.setFontSize(8);
         pdf.setTextColor(200, 220, 255);
-        pdf.text("Missionary Report", logoEndX, 22);
+        pdf.text("Missionary Report", margin, 22);
       }
 
       function drawFooter(pageNum: number, totalPages: number) {
@@ -138,15 +130,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
       pdf.setFont("helvetica", "bold");
       pdf.setFontSize(18);
       pdf.text(post.author.name, margin, y);
-      y += 6;
-
-      if (post.author.role) {
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(10);
-        pdf.setTextColor(...gray);
-        pdf.text(post.author.role, margin, y);
-        y += 5;
-      }
+      y += 7;
 
       const metaParts: string[] = [];
       if (post.location) metaParts.push(post.location);
@@ -280,12 +264,9 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
             ) : (
               <div style={{ width: "100%", maxWidth: 520, background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.10)", border: "1px solid #E2E8F0", fontFamily: "'Inter', system-ui, sans-serif" }}>
                 {/* Report header preview */}
-                <div style={{ background: "linear-gradient(90deg, #0047A8, #0268CE)", padding: "14px 20px", display: "flex", alignItems: "center", gap: 12 }}>
-                  {orgLogoUrl && <img src={orgLogoUrl} alt="" style={{ height: 22, width: "auto", objectFit: "contain" }} />}
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{orgName || "Missionary Report"}</div>
-                    <div style={{ fontSize: 9, color: "rgba(200,220,255,0.9)", marginTop: 1 }}>Missionary Report</div>
-                  </div>
+                <div style={{ background: "linear-gradient(90deg, #0047A8, #0268CE)", padding: "14px 20px" }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{orgName || "Missionary Report"}</div>
+                  <div style={{ fontSize: 9, color: "rgba(200,220,255,0.9)", marginTop: 1 }}>Missionary Report</div>
                 </div>
                 <div style={{ height: 3, background: "linear-gradient(90deg, #1A80E0, #0268CE)" }} />
 
@@ -296,8 +277,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
                     </div>
                   )}
 
-                  <div style={{ fontSize: 17, fontWeight: 800, color: "#0F172A", marginBottom: 3, letterSpacing: "-0.02em" }}>{post.author.name}</div>
-                  {post.author.role && <div style={{ fontSize: 10, color: "#64748B", marginBottom: 2 }}>{post.author.role}</div>}
+                  <div style={{ fontSize: 17, fontWeight: 800, color: "#0F172A", marginBottom: 6, letterSpacing: "-0.02em" }}>{post.author.name}</div>
 
                   <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
                     {post.location && (
