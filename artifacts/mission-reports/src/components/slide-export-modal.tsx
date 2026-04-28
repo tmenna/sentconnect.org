@@ -65,8 +65,17 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
   }, []);
 
   useEffect(() => {
-    if (!orgLogoUrl) return;
-    toDataUrl(orgLogoUrl).then(url => setBlobLogoUrl(url ?? orgLogoUrl ?? null));
+    fetch("/api/landing-page")
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        const url = data?.logoUrl || data?.headerLogoUrl || orgLogoUrl || null;
+        if (url) {
+          toDataUrl(url).then(blob => setBlobLogoUrl(blob ?? null));
+        }
+      })
+      .catch(() => {
+        if (orgLogoUrl) toDataUrl(orgLogoUrl).then(blob => setBlobLogoUrl(blob ?? null));
+      });
   }, [orgLogoUrl]);
 
   async function generatePDF() {
@@ -83,21 +92,40 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
       const gray = [100, 116, 139] as [number, number, number];
       const lightBlue = [239, 246, 255] as [number, number, number];
       const white = [255, 255, 255] as [number, number, number];
+      const border = [220, 230, 245] as [number, number, number];
+
+      const HEADER_H = 24;
 
       function drawHeader() {
-        pdf.setFillColor(...blue);
-        pdf.rect(0, 0, pageW, 26, "F");
-        pdf.setFillColor(...accent);
-        pdf.rect(0, 26, pageW, 2, "F");
+        pdf.setFillColor(...white);
+        pdf.rect(0, 0, pageW, HEADER_H, "F");
 
-        pdf.setTextColor(...white);
+        pdf.setFillColor(...accent);
+        pdf.rect(0, 0, pageW, 2, "F");
+
+        let textX = margin;
+
+        if (blobLogoUrl) {
+          const logoH = 10;
+          const logoW = 28;
+          try {
+            pdf.addImage(blobLogoUrl, imageFormat(blobLogoUrl), margin, 6, logoW, logoH);
+          } catch {}
+          textX = margin + logoW + 4;
+        }
+
+        pdf.setTextColor(...dark);
         pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(13);
-        pdf.text(orgName || "Missionary Report", margin, 16);
+        pdf.setFontSize(11);
+        pdf.text(orgName || "Missionary Report", textX, 12);
+
         pdf.setFont("helvetica", "normal");
         pdf.setFontSize(8);
-        pdf.setTextColor(200, 220, 255);
-        pdf.text("Missionary Report", margin, 22);
+        pdf.setTextColor(...gray);
+        pdf.text("Missionary Report", textX, 18);
+
+        pdf.setDrawColor(...border);
+        pdf.line(0, HEADER_H, pageW, HEADER_H);
       }
 
       function drawFooter(pageNum: number, totalPages: number) {
@@ -114,16 +142,16 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
 
       drawHeader();
 
-      let y = 36;
+      let y = HEADER_H + 8;
 
       if (post.isMissionMoment) {
         pdf.setFillColor(...blue);
-        pdf.roundedRect(margin, y, 38, 6, 1.5, 1.5, "F");
+        pdf.roundedRect(margin, y, 40, 6, 1.5, 1.5, "F");
         pdf.setTextColor(...white);
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(7);
         pdf.text("MISSION MOMENT", margin + 3, y + 4.2);
-        y += 10;
+        y += 11;
       }
 
       pdf.setTextColor(...dark);
@@ -193,7 +221,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
           pdf.addPage();
           pageCount++;
           drawHeader();
-          y = 36;
+          y = HEADER_H + 8;
         }
 
         try {
@@ -210,7 +238,6 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
         y += blockH + 2;
       }
 
-      const totalPages = pageCount;
       const pageCount2 = pdf.getNumberOfPages();
       for (let p = 1; p <= pageCount2; p++) {
         pdf.setPage(p);
@@ -235,7 +262,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
     >
       <div style={{ background: "#fff", borderRadius: 20, boxShadow: "0 24px 80px rgba(0,0,0,0.35)", display: "flex", flexDirection: "column", width: "100%", maxWidth: 860, maxHeight: "92vh", overflow: "hidden" }}>
 
-        {/* Header */}
+        {/* Modal header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 24px", borderBottom: "1px solid #F1F5F9", flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 34, height: 34, background: "#EFF6FF", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -263,16 +290,23 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
               </div>
             ) : (
               <div style={{ width: "100%", maxWidth: 520, background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.10)", border: "1px solid #E2E8F0", fontFamily: "'Inter', system-ui, sans-serif" }}>
-                {/* Report header preview */}
-                <div style={{ background: "linear-gradient(90deg, #0047A8, #0268CE)", padding: "14px 20px" }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{orgName || "Missionary Report"}</div>
-                  <div style={{ fontSize: 9, color: "rgba(200,220,255,0.9)", marginTop: 1 }}>Missionary Report</div>
-                </div>
-                <div style={{ height: 3, background: "linear-gradient(90deg, #1A80E0, #0268CE)" }} />
 
-                <div style={{ padding: "18px 20px" }}>
+                {/* Report header — plain white */}
+                <div style={{ borderTop: "3px solid #1A80E0", padding: "12px 20px 10px", borderBottom: "1px solid #E2E8F0" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    {blobLogoUrl && (
+                      <img src={blobLogoUrl} alt={orgName} style={{ height: 28, maxWidth: 80, objectFit: "contain", flexShrink: 0 }} />
+                    )}
+                    <div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#0F172A", lineHeight: 1.2 }}>{orgName || "Organization"}</div>
+                      <div style={{ fontSize: 9, color: "#94A3B8", marginTop: 1 }}>Missionary Report</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ padding: "16px 20px" }}>
                   {post.isMissionMoment && (
-                    <div style={{ display: "inline-flex", background: "#0047A8", color: "#fff", borderRadius: 4, padding: "2px 8px", fontSize: 8, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 10 }}>
+                    <div style={{ display: "block", background: "#0047A8", color: "#fff", borderRadius: 4, padding: "3px 8px", fontSize: 8, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 10, width: "fit-content" }}>
                       Mission Moment
                     </div>
                   )}
@@ -331,11 +365,11 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
             <div>
               <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#94A3B8", margin: "0 0 8px" }}>Includes</p>
               {[
+                "Org logo & name",
                 "Full post text",
                 `${photos.length} photo${photos.length !== 1 ? "s" : ""}`,
                 "Author & location",
                 "Date & stats",
-                "Org branding",
                 "Auto page breaks",
               ].map(item => (
                 <div key={item} style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 6 }}>
