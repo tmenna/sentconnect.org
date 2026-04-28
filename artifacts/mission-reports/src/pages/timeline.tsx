@@ -102,13 +102,6 @@ export default function Feed() {
           boxShadow: "0 4px 24px rgba(2,104,206,0.18)",
         }}
       >
-        <svg aria-hidden className="pointer-events-none select-none absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice" viewBox="0 0 900 120" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.18 }}>
-          <g fill="white">
-            <path d="M 32,10 L 65,13 L 102,18 L 145,36 L 158,28 L 178,20 L 208,9 L 248,21 L 282,37 L 308,44 L 322,37 L 308,43 L 285,47 L 268,53 L 256,62 L 252,70 L 238,76 L 225,78 L 212,74 L 198,71 L 182,68 L 165,65 L 152,61 L 143,41 L 118,27 L 78,19 Z" />
-            <path d="M 435,52 L 464,49 L 480,49 L 502,52 L 517,58 L 530,67 L 537,80 L 537,94 L 530,107 L 520,120 L 506,130 L 492,134 L 477,131 L 462,122 L 450,110 L 440,97 L 435,82 L 432,67 Z" />
-            <path d="M 514,17 L 562,9 L 628,7 L 702,7 L 762,14 L 812,21 L 860,17 L 882,24 L 872,32 L 852,38 L 828,45 L 802,50 L 778,52 L 754,58 L 732,65 L 716,76 L 700,82 L 682,78 L 660,75 L 648,82 L 632,78 L 614,72 L 597,68 L 580,62 L 562,56 L 546,50 L 537,44 L 530,38 L 517,32 Z" />
-          </g>
-        </svg>
         <div className="relative z-10 px-8 pt-7 pb-7">
           <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#fff" }}>Missions Feed</h1>
           <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>Stay connected. Share what God is doing in the field.</p>
