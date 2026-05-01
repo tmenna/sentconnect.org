@@ -1,1 +1,90 @@
-[]
+[
+  {
+    "id": "a1b2c3d4-0001-0001-0001-a1b2c3d40001",
+    "position": 1,
+    "filepath": "src/pages/slides/Slide01Title.tsx",
+    "title": "SentConnect Platform Guide",
+    "description": "Title slide — platform overview and new user guide introduction",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0002-0002-0002-a1b2c3d40002",
+    "position": 2,
+    "filepath": "src/pages/slides/Slide02CoreFeatures.tsx",
+    "title": "Platform Overview",
+    "description": "Three-column overview of Mission Feed, Multi-tenant portals, and PDF Export",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0003-0003-0003-a1b2c3d40003",
+    "position": 3,
+    "filepath": "src/pages/slides/Slide03FeedFeatures.tsx",
+    "title": "Private Social Feed",
+    "description": "Detailed breakdown of Mission Feed capabilities — posts, photos, badges, engagement",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0004-0004-0004-a1b2c3d40004",
+    "position": 4,
+    "filepath": "src/pages/slides/Slide04PostComposer.tsx",
+    "title": "Creating Posts",
+    "description": "Post composer fields — text, photos, location, people reached, prayer request, Mission Moment",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0005-0005-0005-a1b2c3d40005",
+    "position": 5,
+    "filepath": "src/pages/slides/Slide05ExportReports.tsx",
+    "title": "Export as Report",
+    "description": "PDF export feature — A4 format, admin access, org branding, included fields",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0006-0006-0006-a1b2c3d40006",
+    "position": 6,
+    "filepath": "src/pages/slides/Slide06AdminControls.tsx",
+    "title": "Admin Controls",
+    "description": "User management, content moderation, role hierarchy, and subdomain portals",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0007-0007-0007-a1b2c3d40007",
+    "position": 7,
+    "filepath": "src/pages/slides/Slide07UserGuideIntro.tsx",
+    "title": "Getting Started",
+    "description": "Section divider — new user guide begins",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0008-0008-0008-a1b2c3d40008",
+    "position": 8,
+    "filepath": "src/pages/slides/Slide08HowToLogin.tsx",
+    "title": "How to Log In",
+    "description": "Step-by-step login instructions — portal URL, credentials, forgot password help",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0009-0009-0009-a1b2c3d40009",
+    "position": 9,
+    "filepath": "src/pages/slides/Slide09CreatePost.tsx",
+    "title": "Creating a Post",
+    "description": "Four-step guide to writing and publishing a post — from compose button to submit",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0010-0010-0010-a1b2c3d40010",
+    "position": 10,
+    "filepath": "src/pages/slides/Slide10Sharing.tsx",
+    "title": "Sharing a Post",
+    "description": "Online sharing via public link and offline sharing via PDF export — full walkthrough",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0011-0011-0011-a1b2c3d40011",
+    "position": 11,
+    "filepath": "src/pages/slides/Slide11Closing.tsx",
+    "title": "Resources",
+    "description": "Closing slide — portal URL, platform address, and support contact",
+    "speakerNotes": ""
+  }
+]
