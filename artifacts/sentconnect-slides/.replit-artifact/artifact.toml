@@ -1,0 +1,31 @@
+kind = "slides"
+previewPath = "/sentconnect-slides/"
+title = "SentConnect Platform Guide"
+version = "1.0.0"
+id = "artifacts/sentconnect-slides"
+router = "path"
+
+[[integratedSkills]]
+name = "slides"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/sentconnect-slides/" ]
+localPort = 22934
+
+[services.development]
+run = "pnpm --filter @workspace/sentconnect-slides run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sentconnect-slides", "run", "build" ]
+publicDir = "artifacts/sentconnect-slides/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22934"
+BASE_PATH = "/sentconnect-slides/"
