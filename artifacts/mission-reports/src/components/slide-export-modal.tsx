@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import jsPDF from "jspdf";
-import { X, Download, Loader2, FileText, MapPin, Users, Calendar } from "lucide-react";
+import { X, Download, Loader2, FileText, MapPin, Calendar } from "lucide-react";
 import type { PostData } from "./post-card";
 
 interface SlideExportModalProps {
@@ -169,16 +169,6 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
       pdf.text(metaParts.join("   ·   "), margin, y);
       y += 5;
 
-      if (post.peopleReached) {
-        pdf.setFillColor(...lightBlue);
-        pdf.roundedRect(margin, y, 58, 7, 1.5, 1.5, "F");
-        pdf.setTextColor(...accent);
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(9);
-        pdf.text(`${post.peopleReached.toLocaleString()}  people reached`, margin + 3.5, y + 4.8);
-        y += 11;
-      }
-
       pdf.setDrawColor(220, 230, 245);
       pdf.line(margin, y, pageW - margin, y);
       y += 8;
@@ -270,7 +260,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
             </div>
             <div>
               <h2 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>Export as Report</h2>
-              <p style={{ fontSize: 11, color: "#94A3B8", margin: "1px 0 0" }}>Generates a full-page PDF with photos and stats</p>
+              <p style={{ fontSize: 11, color: "#94A3B8", margin: "1px 0 0" }}>Generates a full-page PDF with photos</p>
             </div>
           </div>
           <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", display: "flex", padding: 4, borderRadius: 6 }}>
@@ -322,11 +312,6 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
                     <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 9, color: "#94A3B8" }}>
                       <Calendar className="h-2.5 w-2.5" /> {formatDate(post.createdAt)}
                     </span>
-                    {post.peopleReached && (
-                      <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 9, color: "#0268CE", fontWeight: 700, background: "#EFF6FF", borderRadius: 3, padding: "1px 6px" }}>
-                        <Users className="h-2.5 w-2.5" /> {post.peopleReached.toLocaleString()} people reached
-                      </span>
-                    )}
                   </div>
 
                   <div style={{ height: 1, background: "#F1F5F9", marginBottom: 10 }} />

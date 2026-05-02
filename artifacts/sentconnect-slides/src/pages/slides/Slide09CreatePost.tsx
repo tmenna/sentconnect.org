@@ -81,7 +81,7 @@ export default function Slide09CreatePost() {
                 </div>
                 <div>
                   <div style={{ color: "#0D0D0D", fontSize: "1.4vw", fontWeight: 500, marginBottom: "0.3vh" }}>Fill optional fields, then submit</div>
-                  <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.5 }}>Add location and people reached count, then press "Post" to publish to the feed.</div>
+                  <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.5 }}>Add a location if applicable, then press "Post" to publish to the feed.</div>
                 </div>
               </div>
             </div>

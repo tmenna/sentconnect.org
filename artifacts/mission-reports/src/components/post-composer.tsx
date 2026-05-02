@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Image, MapPin, X, Loader2, Users, Navigation, Star, Video, PlayCircle } from "lucide-react";
+import { Image, MapPin, X, Loader2, Navigation, Star, Video, PlayCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/auth-provider";
 import { cn } from "@/lib/utils";
@@ -61,11 +61,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
   const { user } = useAuth();
   const [text, setText] = useState("");
   const [location, setLocation] = useState("");
-  const [peopleReached, setPeopleReached] = useState("");
   const [isMissionMoment, setIsMissionMoment] = useState(false);
   const [files, setFiles] = useState<LocalFile[]>([]);
   const [showLocation, setShowLocation] = useState(false);
-  const [showImpact, setShowImpact] = useState(false);
   const [posting, setPosting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState("");
   const [detectingLocation, setDetectingLocation] = useState(false);
@@ -135,7 +133,6 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
         body: JSON.stringify({
           description: text.trim() || null,
           location: location.trim() || null,
-          peopleReached: peopleReached.trim() ? Number(peopleReached) : null,
           isMissionMoment,
         }),
       });
@@ -170,10 +167,8 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
 
       setText("");
       setLocation("");
-      setPeopleReached("");
       setIsMissionMoment(false);
       setShowLocation(false);
-      setShowImpact(false);
       files.forEach(f => URL.revokeObjectURL(f.previewUrl));
       setFiles([]);
     } catch (err) {
@@ -282,26 +277,6 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               </button>
               <button onClick={() => { setShowLocation(false); setLocation(""); }}>
                 <X className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground transition-colors" />
-              </button>
-            </div>
-          )}
-
-          {/* Impact / people reached */}
-          {showImpact && (
-            <div className="mt-2 flex items-center gap-2 bg-blue-50 rounded-full px-3 py-1.5 border border-blue-100">
-              <Users className="h-3.5 w-3.5 text-[#0268CE] flex-shrink-0" />
-              <input
-                type="number"
-                min="0"
-                value={peopleReached}
-                onChange={e => setPeopleReached(e.target.value)}
-                placeholder="People reached…"
-                className="flex-1 text-[13px] bg-transparent outline-none text-[#0268CE] placeholder:text-blue-300"
-                disabled={posting}
-                autoFocus
-              />
-              <button onClick={() => { setShowImpact(false); setPeopleReached(""); }}>
-                <X className="h-3.5 w-3.5 text-blue-300 hover:text-[#0268CE] transition-colors" />
               </button>
             </div>
           )}

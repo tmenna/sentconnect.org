@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow, format } from "date-fns";
-import { ThumbsUp, MessageCircle, MapPin, Star, Users, X, ChevronLeft, ChevronRight, ArrowRight, FileText } from "lucide-react";
+import { ThumbsUp, MessageCircle, MapPin, Star, X, ChevronLeft, ChevronRight, ArrowRight, FileText } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PostCard, type PostData } from "@/components/post-card";
 import { cn } from "@/lib/utils";
@@ -322,13 +322,6 @@ export function FeedGridCard({
               </div>
             )}
 
-            {/* People reached chip */}
-            {post.peopleReached != null && post.peopleReached > 0 && (
-              <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 bg-[#0268CE]/90 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
-                <Users className="h-3 w-3" />
-                {post.peopleReached.toLocaleString()} reached
-              </div>
-            )}
           </div>
         );
       })()}

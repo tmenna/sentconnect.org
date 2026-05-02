@@ -66,7 +66,7 @@ export default function Slide05ExportReports() {
             {">"} Post text, photos, and captions included
           </div>
           <div style={{ color: "#AAAAAA", fontSize: "1.5vw", fontWeight: 400 }}>
-            {">"} Author name, location, date, and people-reached stat
+            {">"} Author name, location, and date
           </div>
           <div style={{ color: "#AAAAAA", fontSize: "1.5vw", fontWeight: 400 }}>
             {">"} Org logo pulled from platform settings automatically

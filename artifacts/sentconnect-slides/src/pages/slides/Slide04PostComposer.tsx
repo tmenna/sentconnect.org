@@ -67,11 +67,6 @@ export default function Slide04PostComposer() {
           <div style={{ flex: 1 }}>
             <div style={{ borderLeft: "3px solid #0D0D0D", paddingLeft: "2vw", marginBottom: "3.5vh" }}>
               <div style={{ color: "#555555", fontSize: "1vw", marginBottom: "0.6vh", letterSpacing: "0.1em" }}>FIELD</div>
-              <div style={{ color: "#0D0D0D", fontSize: "1.5vw", fontWeight: 500, marginBottom: "0.6vh" }}>People reached</div>
-              <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.6 }}>Record the number of people impacted. Displayed as a stat on the post card.</div>
-            </div>
-            <div style={{ borderLeft: "3px solid #0D0D0D", paddingLeft: "2vw", marginBottom: "3.5vh" }}>
-              <div style={{ color: "#555555", fontSize: "1vw", marginBottom: "0.6vh", letterSpacing: "0.1em" }}>FIELD</div>
               <div style={{ color: "#0D0D0D", fontSize: "1.5vw", fontWeight: 500, marginBottom: "0.6vh" }}>Prayer request</div>
               <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.6 }}>Tag the post as a prayer request — shown with a distinct visual indicator on the feed.</div>
             </div>

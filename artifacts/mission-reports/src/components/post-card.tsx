@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
   ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
-  Send, Users, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
+  Send, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
   Link2, Share2, ImageDown
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -25,7 +25,6 @@ export type PostData = {
   likeCount: number;
   commentCount: number;
   likedByMe: boolean;
-  peopleReached?: number | null;
   author: {
     id: number;
     name: string;
@@ -150,13 +149,11 @@ function EditForm({
 }) {
   const [text, setText] = useState(post.description ?? "");
   const [location, setLocation] = useState(post.location ?? "");
-  const [peopleReached, setPeopleReached] = useState(post.peopleReached?.toString() ?? "");
   const [isHighlight, setIsHighlight] = useState(post.isHighlight ?? false);
   const [isMissionMoment, setIsMissionMoment] = useState(post.isMissionMoment ?? false);
   const [saving, setSaving] = useState(false);
   const [detectingLocation, setDetectingLocation] = useState(false);
   const [showLocation, setShowLocation] = useState(!!post.location);
-  const [showImpact, setShowImpact] = useState(!!post.peopleReached);
 
   function detectLocation() {
     if (!navigator.geolocation) return;
@@ -192,7 +189,6 @@ function EditForm({
         body: JSON.stringify({
           description: text.trim() || null,
           location: showLocation ? location.trim() || null : null,
-          peopleReached: showImpact && peopleReached.trim() ? Number(peopleReached) : null,
           isHighlight,
           isMissionMoment,
         }),
@@ -245,32 +241,6 @@ function EditForm({
           className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-primary transition-colors"
         >
           <MapPin className="h-3.5 w-3.5" /> Add location
-        </button>
-      )}
-
-      {/* Impact */}
-      {showImpact ? (
-        <div className="flex items-center gap-2 bg-blue-50 rounded-full px-3 py-1.5 border border-blue-100">
-          <Users className="h-3.5 w-3.5 text-[#0268CE] flex-shrink-0" />
-          <input
-            type="number"
-            min="0"
-            value={peopleReached}
-            onChange={e => setPeopleReached(e.target.value)}
-            placeholder="People reached…"
-            className="flex-1 text-[13px] bg-transparent outline-none text-[#0268CE] placeholder:text-blue-300"
-            disabled={saving}
-          />
-          <button onClick={() => { setShowImpact(false); setPeopleReached(""); }}>
-            <X className="h-3.5 w-3.5 text-blue-300 hover:text-[#0268CE]" />
-          </button>
-        </div>
-      ) : (
-        <button
-          onClick={() => setShowImpact(true)}
-          className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-[#0268CE] transition-colors"
-        >
-          <Users className="h-3.5 w-3.5" /> Add impact
         </button>
       )}
 
@@ -556,16 +526,6 @@ export function PostCard({
           {post.description && (
             <div className="px-5 pb-4">
               <p className="text-[15.5px] text-[#111827] leading-[1.75] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
-            </div>
-          )}
-
-          {/* People Reached */}
-          {post.peopleReached != null && post.peopleReached > 0 && (
-            <div className="px-5 pb-4">
-              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#0268CE] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full">
-                <Users className="h-3.5 w-3.5" />
-                {post.peopleReached.toLocaleString()} people reached
-              </span>
             </div>
           )}
 

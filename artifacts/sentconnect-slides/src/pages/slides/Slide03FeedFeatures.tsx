@@ -81,13 +81,6 @@ export default function Slide03FeedFeatures() {
             <div style={{ display: "flex", gap: "2vw", alignItems: "flex-start" }}>
               <div style={{ color: "#0047A8", fontSize: "1.3vw", fontWeight: 600, minWidth: "2.5vw", marginTop: "0.1vh" }}>{">"}</div>
               <div>
-                <div style={{ color: "#0D0D0D", fontSize: "1.4vw", fontWeight: 500, marginBottom: "0.5vh" }}>People reached tracking</div>
-                <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.6 }}>Each post can record an impact number shown prominently on the card.</div>
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: "2vw", alignItems: "flex-start" }}>
-              <div style={{ color: "#0047A8", fontSize: "1.3vw", fontWeight: 600, minWidth: "2.5vw", marginTop: "0.1vh" }}>{">"}</div>
-              <div>
                 <div style={{ color: "#0D0D0D", fontSize: "1.4vw", fontWeight: 500, marginBottom: "0.5vh" }}>Location tagging</div>
                 <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.6 }}>Posts include a location field displayed alongside author name and post date.</div>
               </div>

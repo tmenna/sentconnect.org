@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "wouter";
 import { formatDistanceToNow } from "date-fns";
-import { MapPin, BookOpen, Sparkles, Star, Users } from "lucide-react";
+import { MapPin, BookOpen, Sparkles, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -166,19 +166,6 @@ export default function PublicPost() {
                 >
                   {post.description}
                 </p>
-              </div>
-            )}
-
-            {/* People reached badge */}
-            {post.peopleReached != null && post.peopleReached > 0 && (
-              <div className="px-6 pb-5">
-                <span
-                  className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full"
-                  style={{ background: "#EFF6FF", color: "#005BBC", border: "1px solid #BFDBFE" }}
-                >
-                  <Users className="h-3.5 w-3.5" />
-                  {post.peopleReached.toLocaleString()} people reached
-                </span>
               </div>
             )}
 
