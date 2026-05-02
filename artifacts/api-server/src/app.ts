@@ -85,18 +85,12 @@ const slidesDist = [
 ].find((dir) => existsSync(path.join(dir, "index.html")));
 
 if (slidesDist) {
-  const slidesStatic = express.static(slidesDist);
-  app.use((req, res, next) => {
-    if (req.hostname === "help.sentconnect.org") {
-      slidesStatic(req, res, () => {
-        res.sendFile(path.join(slidesDist, "index.html"));
-      });
-    } else {
-      next();
-    }
+  app.use("/help", express.static(slidesDist));
+  app.use("/help/*", (_req, res) => {
+    res.sendFile(path.join(slidesDist, "index.html"));
   });
 } else if (process.env.NODE_ENV === "production") {
-  logger.warn("Slides build output was not found. help.sentconnect.org will not serve the slide deck.");
+  logger.warn("Slides build output was not found. /help will not serve the slide deck.");
 }
 
 const frontendDist = [

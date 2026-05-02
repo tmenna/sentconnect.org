@@ -18,7 +18,7 @@ localPort = 22934
 run = "pnpm --filter @workspace/sentconnect-slides run dev"
 
 [services.production]
-build = ["sh", "-c", "BASE_PATH=/ pnpm --filter @workspace/sentconnect-slides run build"]
+build = ["sh", "-c", "BASE_PATH=/help/ pnpm --filter @workspace/sentconnect-slides run build"]
 publicDir = "artifacts/sentconnect-slides/dist/public"
 serve = "static"
 
