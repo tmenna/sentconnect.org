@@ -55,8 +55,8 @@ export default function Slide07UserGuideIntro() {
 
       {/* Bottom bar */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2vh 5vw", background: "rgba(0,0,0,0.2)", zIndex: 1 }}>
-        <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "1vw", fontWeight: 500 }}>PLATFORM CONTACT: TEKI MENNA: 951-551-4528</span>
-        <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw" }}>sentconnect.org</span>
+        <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "1vw", fontWeight: 500 }}>24/7 Platform Contact: Teki Menna: 951-551-4528</span>
+        <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw" }}>www.sentconnect.org</span>
       </div>
     </div>
   );
