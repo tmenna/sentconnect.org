@@ -54,7 +54,7 @@ export default function Slide03FeedFeatures() {
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "#0047A8" }}>
-        <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95vw", fontWeight: 500 }}>CONTACT: TEKI MENNA · 951-551-4528</span>
+        <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95vw", fontWeight: 500 }}>PLATFORM CONTACT: TEKI MENNA: 951-551-4528</span>
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.95vw" }}>sentconnect.org</span>
       </div>
     </div>

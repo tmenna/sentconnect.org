@@ -60,7 +60,7 @@ export default function Slide05ExportReports() {
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "rgba(0,0,0,0.25)", zIndex: 1 }}>
-        <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.95vw", fontWeight: 500 }}>CONTACT: TEKI MENNA · 951-551-4528</span>
+        <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.95vw", fontWeight: 500 }}>PLATFORM CONTACT: TEKI MENNA: 951-551-4528</span>
         <span style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.95vw" }}>sentconnect.org</span>
       </div>
     </div>
