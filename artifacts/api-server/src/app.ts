@@ -79,6 +79,26 @@ app.use("/public", express.static(path.resolve(process.cwd(), "public")));
 
 app.use("/api", resolveOrg, router);
 
+const slidesDist = [
+  path.resolve(process.cwd(), "../sentconnect-slides/dist/public"),
+  path.resolve(process.cwd(), "artifacts/sentconnect-slides/dist/public"),
+].find((dir) => existsSync(path.join(dir, "index.html")));
+
+if (slidesDist) {
+  const slidesStatic = express.static(slidesDist);
+  app.use((req, res, next) => {
+    if (req.hostname === "help.sentconnect.org") {
+      slidesStatic(req, res, () => {
+        res.sendFile(path.join(slidesDist, "index.html"));
+      });
+    } else {
+      next();
+    }
+  });
+} else if (process.env.NODE_ENV === "production") {
+  logger.warn("Slides build output was not found. help.sentconnect.org will not serve the slide deck.");
+}
+
 const frontendDist = [
   path.resolve(process.cwd(), "../mission-reports/dist/public"),
   path.resolve(process.cwd(), "artifacts/mission-reports/dist/public"),
