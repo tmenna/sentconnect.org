@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
 
 export default function HelpLanding() {
   const [, navigate] = useLocation();
+  const [step, setStep] = useState(0);
 
   const paths = [
     {
@@ -25,6 +27,7 @@ export default function HelpLanding() {
       gradient: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
       border: "#BFDBFE",
       buttonBg: "#0268CE",
+      sectionLabel: "SECTION 01 · FEATURES & SIGN-UP",
     },
     {
       route: "/guide",
@@ -47,10 +50,12 @@ export default function HelpLanding() {
       gradient: "linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)",
       border: "#A7F3D0",
       buttonBg: "#059669",
+      sectionLabel: "SECTION 02 · NEW MEMBER GUIDE",
     },
   ];
 
   const font = "'Inter', system-ui, -apple-system, sans-serif";
+  const p = paths[step];
 
   return (
     <div
@@ -113,10 +118,10 @@ export default function HelpLanding() {
           </a>
         </div>
 
-        {/* Eyebrow pill */}
+        {/* Section label pill */}
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "rgba(255,255,255,0.15)", borderRadius: 50, padding: "5px 14px", marginBottom: 16, position: "relative" }}>
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#93C5FD" }} />
-          <span style={{ color: "rgba(255,255,255,0.9)", fontSize: "clamp(9px, 1vw, 12px)", fontWeight: 600, letterSpacing: "0.07em" }}>CHOOSE WHERE TO BEGIN</span>
+          <span style={{ color: "rgba(255,255,255,0.9)", fontSize: "clamp(9px, 1vw, 12px)", fontWeight: 600, letterSpacing: "0.07em" }}>{p.sectionLabel}</span>
         </div>
 
         <h1 style={{ color: "#FFFFFF", fontSize: "clamp(26px, 5vw, 56px)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.03em", margin: "0 0 14px 0", position: "relative" }}>
@@ -127,103 +132,164 @@ export default function HelpLanding() {
         </p>
       </div>
 
-      {/* ── Cards ───────────────────────────────────────────────────────── */}
+      {/* ── Single card + step navigation ───────────────────────────────── */}
       <div
         style={{
           flex: 1,
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
-          gap: "clamp(14px, 3vw, 28px)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
           padding: "clamp(20px, 4vw, 48px) clamp(16px, 6vw, 100px)",
-          alignItems: "start",
+          gap: "clamp(16px, 2.5vw, 28px)",
           boxSizing: "border-box",
         }}
       >
-        {paths.map((p) => (
+        {/* Step dots */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {paths.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setStep(i)}
+              style={{
+                all: "unset",
+                cursor: "pointer",
+                width: i === step ? 24 : 8,
+                height: 8,
+                borderRadius: 50,
+                background: i === step ? "#0268CE" : "#CBD5E1",
+                transition: "all 0.2s ease",
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Card */}
+        <div
+          key={step}
+          style={{
+            width: "100%",
+            maxWidth: 560,
+            display: "flex",
+            flexDirection: "column",
+            background: "#FFFFFF",
+            borderRadius: 18,
+            border: `2px solid ${p.border}`,
+            overflow: "hidden",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.09)",
+          }}
+        >
+          {/* Gradient top band */}
+          <div style={{ background: p.gradient, padding: "clamp(16px, 3vw, 28px) clamp(16px, 3vw, 28px) clamp(14px, 2.5vw, 24px)" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, marginBottom: 14 }}>
+              <div style={{ width: "clamp(44px, 5vw, 56px)", height: "clamp(44px, 5vw, 56px)", minWidth: "clamp(44px, 5vw, 56px)", borderRadius: 14, background: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "clamp(20px, 2.5vw, 28px)", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
+                {p.icon}
+              </div>
+              <span style={{ background: p.badgeBg, color: p.badgeColor, fontSize: "clamp(8px, 0.8vw, 10px)", fontWeight: 700, letterSpacing: "0.08em", padding: "4px 9px", borderRadius: 50, whiteSpace: "nowrap", marginTop: 4 }}>
+                {p.badge}
+              </span>
+            </div>
+            <div style={{ color: "#94A3B8", fontSize: "clamp(10px, 1vw, 12px)", fontWeight: 600, marginBottom: 5 }}>{p.subtitle}</div>
+            <h2 style={{ color: "#0F172A", fontSize: "clamp(18px, 2.2vw, 26px)", fontWeight: 800, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+              {p.title}
+            </h2>
+          </div>
+
+          {/* Card body */}
+          <div style={{ padding: "clamp(16px, 2.5vw, 24px)", display: "flex", flexDirection: "column", gap: "clamp(14px, 1.8vw, 20px)" }}>
+            <p style={{ color: "#475569", fontSize: "clamp(12px, 1.1vw, 14px)", lineHeight: 1.65, margin: 0 }}>
+              {p.desc}
+            </p>
+
+            <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 9 }}>
+              {p.bullets.map(b => (
+                <li key={b} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ width: 18, height: 18, minWidth: 18, borderRadius: "50%", background: p.slideBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: p.slideColor }} />
+                  </div>
+                  <span style={{ color: "#334155", fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 500 }}>{b}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, paddingTop: "clamp(10px, 1.5vw, 14px)", borderTop: "1px solid #F1F5F9", flexWrap: "wrap" }}>
+              <span style={{ background: p.slideBg, color: p.slideColor, fontSize: "clamp(10px, 0.85vw, 12px)", fontWeight: 600, padding: "4px 10px", borderRadius: 50, whiteSpace: "nowrap" }}>
+                {p.slides}
+              </span>
+              <button
+                onClick={() => navigate(p.route)}
+                style={{
+                  all: "unset",
+                  cursor: "pointer",
+                  background: p.buttonBg,
+                  color: "#FFFFFF",
+                  fontSize: "clamp(12px, 1vw, 14px)",
+                  fontWeight: 600,
+                  padding: "10px clamp(14px, 2vw, 20px)",
+                  borderRadius: 50,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Open guide <span style={{ fontSize: "1.1em" }}>›</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Prev / Next row */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <button
-            key={p.route}
-            onClick={() => navigate(p.route)}
+            onClick={() => setStep(s => Math.max(0, s - 1))}
+            disabled={step === 0}
             style={{
               all: "unset",
-              cursor: "pointer",
+              cursor: step === 0 ? "default" : "pointer",
               display: "flex",
-              flexDirection: "column",
-              background: "#FFFFFF",
-              borderRadius: 18,
-              border: `2px solid ${p.border}`,
-              overflow: "hidden",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.07)",
-              transition: "transform 0.18s ease, box-shadow 0.18s ease",
-              textAlign: "left",
-              width: "100%",
-              boxSizing: "border-box",
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-3px)";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 10px 36px rgba(0,0,0,0.12)";
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.07)";
+              alignItems: "center",
+              gap: 6,
+              background: step === 0 ? "#F1F5F9" : "#FFFFFF",
+              border: "1.5px solid",
+              borderColor: step === 0 ? "#E2E8F0" : "#CBD5E1",
+              borderRadius: 50,
+              padding: "8px 18px",
+              color: step === 0 ? "#CBD5E1" : "#334155",
+              fontSize: 13,
+              fontWeight: 600,
+              fontFamily: font,
+              transition: "all 0.15s",
             }}
           >
-            {/* Gradient top band */}
-            <div style={{ background: p.gradient, padding: "clamp(16px, 3vw, 28px) clamp(16px, 3vw, 28px) clamp(14px, 2.5vw, 24px)" }}>
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, marginBottom: 14 }}>
-                <div style={{ width: "clamp(44px, 5vw, 56px)", height: "clamp(44px, 5vw, 56px)", minWidth: "clamp(44px, 5vw, 56px)", borderRadius: 14, background: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "clamp(20px, 2.5vw, 28px)", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
-                  {p.icon}
-                </div>
-                <span style={{ background: p.badgeBg, color: p.badgeColor, fontSize: "clamp(8px, 0.8vw, 10px)", fontWeight: 700, letterSpacing: "0.08em", padding: "4px 9px", borderRadius: 50, whiteSpace: "nowrap", marginTop: 4 }}>
-                  {p.badge}
-                </span>
-              </div>
-              <div style={{ color: "#94A3B8", fontSize: "clamp(10px, 1vw, 12px)", fontWeight: 600, marginBottom: 5 }}>{p.subtitle}</div>
-              <h2 style={{ color: "#0F172A", fontSize: "clamp(18px, 2.2vw, 26px)", fontWeight: 800, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-                {p.title}
-              </h2>
-            </div>
-
-            {/* Card body */}
-            <div style={{ padding: "clamp(16px, 2.5vw, 24px)", display: "flex", flexDirection: "column", gap: "clamp(14px, 1.8vw, 20px)" }}>
-              <p style={{ color: "#475569", fontSize: "clamp(12px, 1.1vw, 14px)", lineHeight: 1.65, margin: 0 }}>
-                {p.desc}
-              </p>
-
-              <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 9 }}>
-                {p.bullets.map(b => (
-                  <li key={b} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{ width: 18, height: 18, minWidth: 18, borderRadius: "50%", background: p.slideBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: p.slideColor }} />
-                    </div>
-                    <span style={{ color: "#334155", fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 500 }}>{b}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, paddingTop: "clamp(10px, 1.5vw, 14px)", borderTop: "1px solid #F1F5F9", flexWrap: "wrap" }}>
-                <span style={{ background: p.slideBg, color: p.slideColor, fontSize: "clamp(10px, 0.85vw, 12px)", fontWeight: 600, padding: "4px 10px", borderRadius: 50, whiteSpace: "nowrap" }}>
-                  {p.slides}
-                </span>
-                <div
-                  style={{
-                    background: p.buttonBg,
-                    color: "#FFFFFF",
-                    fontSize: "clamp(12px, 1vw, 14px)",
-                    fontWeight: 600,
-                    padding: "10px clamp(14px, 2vw, 20px)",
-                    borderRadius: 50,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  Open guide <span style={{ fontSize: "1.1em" }}>›</span>
-                </div>
-              </div>
-            </div>
+            ← Previous
           </button>
-        ))}
+          <span style={{ color: "#94A3B8", fontSize: 13, fontWeight: 500 }}>
+            {step + 1} of {paths.length}
+          </span>
+          <button
+            onClick={() => setStep(s => Math.min(paths.length - 1, s + 1))}
+            disabled={step === paths.length - 1}
+            style={{
+              all: "unset",
+              cursor: step === paths.length - 1 ? "default" : "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              background: step === paths.length - 1 ? "#F1F5F9" : "#0268CE",
+              border: "1.5px solid",
+              borderColor: step === paths.length - 1 ? "#E2E8F0" : "#0268CE",
+              borderRadius: 50,
+              padding: "8px 18px",
+              color: step === paths.length - 1 ? "#CBD5E1" : "#FFFFFF",
+              fontSize: 13,
+              fontWeight: 600,
+              fontFamily: font,
+              transition: "all 0.15s",
+            }}
+          >
+            Next →
+          </button>
+        </div>
       </div>
 
       {/* ── Footer ──────────────────────────────────────────────────────── */}
