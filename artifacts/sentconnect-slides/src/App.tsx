@@ -163,22 +163,18 @@ function AllSlides() {
   );
 }
 
+function getViewport() {
+  return { w: window.innerWidth, h: window.innerHeight };
+}
+
 // This component is used for the deployed view at `/features` and `/guide`
 function SlideViewer({ startPosition }: { startPosition?: number }) {
   const [, navigate] = useLocation();
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [dims, setDims] = useState(() => ({
-    width: Math.min(window.innerWidth, window.innerHeight * (16 / 9)),
-    height: Math.min(window.innerHeight, window.innerWidth * (9 / 16)),
-  }));
+  const [vp, setVp] = useState(getViewport);
 
   useEffect(() => {
-    const update = () => {
-      setDims({
-        width: Math.min(window.innerWidth, window.innerHeight * (16 / 9)),
-        height: Math.min(window.innerHeight, window.innerWidth * (9 / 16)),
-      });
-    };
+    const update = () => setVp(getViewport());
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
@@ -198,6 +194,61 @@ function SlideViewer({ startPosition }: { startPosition?: number }) {
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   const firstPosition = startPosition ?? (slides.length > 0 ? slides[0].position : 1);
 
+  const isPortrait = vp.h > vp.w * 1.1;
+
+  const font = "'Inter', system-ui, -apple-system, sans-serif";
+
+  // ── Mobile / portrait layout ──────────────────────────────────────────────
+  if (isPortrait) {
+    const slideW = vp.w;
+    const slideH = Math.round(vp.w * (9 / 16));
+    const remainingH = vp.h - 52 - slideH; // 52 = header bar
+
+    return (
+      <div style={{ display: "flex", flexDirection: "column", height: "100dvh", width: "100vw", background: "#05112A", fontFamily: font, overflow: "hidden" }}>
+
+        {/* Header bar */}
+        <div style={{ height: 52, minHeight: 52, background: "#0047A8", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", flexShrink: 0 }}>
+          <button
+            onClick={() => navigate("/")}
+            style={{ all: "unset", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, color: "#FFFFFF", fontSize: 14, fontWeight: 600 }}
+          >
+            <span style={{ fontSize: 16 }}>←</span> Help Home
+          </button>
+          <span style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, fontWeight: 500 }}>SentConnect Help</span>
+        </div>
+
+        {/* Slide iframe — full width, aspect-ratio height */}
+        <div style={{ width: slideW, height: slideH, flexShrink: 0 }} onClick={() => iframeRef.current?.focus()}>
+          <iframe
+            ref={iframeRef}
+            src={`${base}/slide${firstPosition}`}
+            style={{ width: slideW, height: slideH, border: "none", display: "block" }}
+            onLoad={() => iframeRef.current?.focus()}
+            title="Slide viewer"
+          />
+        </div>
+
+        {/* Below-slide area */}
+        {remainingH > 40 && (
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, padding: "16px 24px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.06)", borderRadius: 50, padding: "8px 18px" }}>
+              <span style={{ fontSize: 18 }}>↻</span>
+              <span style={{ color: "rgba(255,255,255,0.55)", fontSize: 13, fontWeight: 500 }}>Rotate for the best experience</span>
+            </div>
+            <p style={{ color: "rgba(255,255,255,0.28)", fontSize: 12, margin: 0, textAlign: "center", lineHeight: 1.5 }}>
+              Use the arrows inside the slide to navigate
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── Desktop / landscape layout ────────────────────────────────────────────
+  const deskW = Math.min(vp.w, vp.h * (16 / 9));
+  const deskH = Math.min(vp.h, vp.w * (9 / 16));
+
   return (
     <div
       className="slide-viewer h-screen w-screen overflow-hidden bg-black flex items-center justify-center"
@@ -207,37 +258,25 @@ function SlideViewer({ startPosition }: { startPosition?: number }) {
       <iframe
         ref={iframeRef}
         src={`${base}/slide${firstPosition}`}
-        style={{ width: dims.width, height: dims.height, border: "none" }}
+        style={{ width: deskW, height: deskH, border: "none" }}
         onLoad={() => iframeRef.current?.focus()}
         title="Slide viewer"
       />
 
-      {/* Back to Help Home button — floats above the slide, never inside the iframe */}
+      {/* Back to Help Home — floating pill */}
       <button
         onClick={(e) => { e.stopPropagation(); navigate("/"); }}
         style={{
-          position: "fixed",
-          top: 14,
-          left: 14,
-          zIndex: 9999,
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
+          position: "fixed", top: 14, left: 14, zIndex: 9999,
+          display: "flex", alignItems: "center", gap: 6,
           background: "rgba(0, 71, 168, 0.88)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-          color: "#FFFFFF",
-          border: "1px solid rgba(255,255,255,0.18)",
-          borderRadius: 50,
-          padding: "7px 14px 7px 10px",
-          fontSize: 13,
-          fontWeight: 600,
-          fontFamily: "'Inter', system-ui, sans-serif",
-          cursor: "pointer",
-          boxShadow: "0 2px 12px rgba(0,0,0,0.35)",
+          backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+          color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.18)",
+          borderRadius: 50, padding: "7px 14px 7px 10px",
+          fontSize: 13, fontWeight: 600, fontFamily: font,
+          cursor: "pointer", boxShadow: "0 2px 12px rgba(0,0,0,0.35)",
           transition: "background 0.15s, transform 0.15s",
-          letterSpacing: "0.01em",
-          lineHeight: 1,
+          letterSpacing: "0.01em", lineHeight: 1,
         }}
         onMouseEnter={e => {
           (e.currentTarget as HTMLButtonElement).style.background = "rgba(0, 71, 168, 1)";
