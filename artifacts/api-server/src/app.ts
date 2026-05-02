@@ -86,7 +86,7 @@ const slidesDist = [
 
 if (slidesDist) {
   app.use("/help", express.static(slidesDist));
-  app.use("/help/*", (_req, res) => {
+  app.use("/help/*splat", (_req, res) => {
     res.sendFile(path.join(slidesDist, "index.html"));
   });
 } else if (process.env.NODE_ENV === "production") {
