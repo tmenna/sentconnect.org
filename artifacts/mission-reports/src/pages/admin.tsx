@@ -883,98 +883,79 @@ export default function AdminDashboard() {
 
       <div className="max-w-6xl mx-auto space-y-6">
 
-        {/* ── Global Partners banner ── */}
-        <div
-          className="relative overflow-hidden"
-          style={{
-            background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)",
-            borderRadius: 16,
-            border: "1px solid rgba(255,255,255,0.08)",
-            boxShadow: "0 4px 24px rgba(2,104,206,0.18)",
-          }}
-        >
-
-          {/* Banner content */}
-          <div className="relative z-10 px-8 pt-7 pb-7">
-            {/* Title row */}
-            <div className="flex items-start justify-between gap-4 mb-1">
-              <div>
-                <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#fff" }}>
-                  Global Partners
-                </h1>
-                <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>
-                  Manage your team and track mission activity.
-                </p>
-              </div>
-              <Avatar className="h-10 w-10 flex-shrink-0 mt-0.5" style={{ border: "2.5px solid rgba(255,255,255,0.45)" }}>
-                <AvatarImage src={user.avatarUrl ?? undefined} />
-                <AvatarFallback className="font-bold text-[14px]" style={{ background: "rgba(255,255,255,0.18)", color: "#fff" }}>
-                  {user.name.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-
-            {/* Stat boxes */}
-            <div className="flex gap-3 mt-5">
-              <div
-                className="flex items-center gap-3 rounded-xl px-4 py-3"
-                style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}
-              >
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: "rgba(57,188,122,0.25)" }}>
-                  <Users className="h-4 w-4" style={{ color: "#39BC7A" }} />
-                </div>
-                <div>
-                  <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>
-                    {usersLoading ? "—" : allUsers.length}
-                  </p>
-                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Team Members</p>
-                </div>
-              </div>
-
-              <div
-                className="flex items-center gap-3 rounded-xl px-4 py-3"
-                style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}
-              >
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: "rgba(255,255,255,0.18)" }}>
-                  <Globe className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>
-                    {usersLoading ? "—" : countriesCount}
-                  </p>
-                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Countries</p>
-                </div>
+        {/* ── Page header ── */}
+        <div style={{ marginBottom: 8 }}>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="font-bold tracking-tight" style={{ fontSize: 26, color: "#111827", marginBottom: 4 }}>
+                Global Partners
+              </h1>
+              <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 16 }}>
+                Manage your team and track mission activity.
+              </p>
+              <div className="flex items-center gap-2">
+                <span
+                  className="inline-flex items-center gap-1.5"
+                  style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+                >
+                  <strong style={{ color: "#111827", fontWeight: 600 }}>{usersLoading ? "—" : allUsers.length}</strong> Team Members
+                </span>
+                <span
+                  className="inline-flex items-center gap-1.5"
+                  style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+                >
+                  <strong style={{ color: "#111827", fontWeight: 600 }}>{usersLoading ? "—" : countriesCount}</strong> Countries
+                </span>
               </div>
             </div>
+            <Avatar className="h-9 w-9 flex-shrink-0 mt-1" style={{ border: "1.5px solid #e5e7eb" }}>
+              <AvatarImage src={user.avatarUrl ?? undefined} />
+              <AvatarFallback className="font-bold text-[13px]" style={{ background: "#eff6ff", color: "#0268CE" }}>
+                {user.name.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
           </div>
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
+        <div className="flex items-center" style={{ borderBottom: "1px solid #e5e7eb" }}>
           {[
-            { id: "team", label: "Manage Team", icon: <Users className="h-3.5 w-3.5" />, badge: !usersLoading ? allUsers.length : null },
-            { id: "feed", label: "Updates", icon: <ThumbsUp className="h-3.5 w-3.5" />, badge: null },
-            { id: "countries", label: "Countries", icon: <MapPin className="h-3.5 w-3.5" />, badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
+            { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
+            { id: "feed", label: "Updates", badge: null },
+            { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
           ].map(tab => {
             const active = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className="flex items-center gap-2 px-1 pb-3 pt-1 mr-5 text-[14px] font-semibold border-b-2 -mb-px transition-all duration-200"
+                className="transition-all duration-150"
                 style={{
-                  borderColor: active ? "#0268CE" : "transparent",
-                  color: active ? "#0268CE" : "#9CA3AF",
+                  paddingBottom: 12,
+                  paddingTop: 4,
+                  marginRight: 24,
+                  marginBottom: -1,
+                  fontSize: 13,
+                  fontWeight: active ? 600 : 400,
+                  color: active ? "#111827" : "#6b7280",
+                  border: "none",
+                  borderBottom: active ? "2px solid #111827" : "2px solid transparent",
+                  background: "transparent",
+                  cursor: "pointer",
                 }}
               >
-                {tab.icon}
                 {tab.label}
                 {tab.badge != null && (
                   <span
-                    className="text-[11px] px-2 py-0.5 rounded-full font-medium"
-                    style={{ background: active ? "#EFF6FF" : "#F3F4F6", color: active ? "#0268CE" : "#6B7280" }}
+                    style={{
+                      marginLeft: 6,
+                      fontSize: 11,
+                      fontWeight: 500,
+                      background: active ? "#f3f4f6" : "transparent",
+                      color: active ? "#374151" : "#9ca3af",
+                      borderRadius: 999,
+                      padding: "1px 7px",
+                    }}
                   >
                     {tab.badge}
                   </span>
@@ -1079,28 +1060,43 @@ export default function AdminDashboard() {
           <div className="space-y-4">
 
             {/* Feed sub-tabs */}
-            <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
+            <div className="flex items-center" style={{ borderBottom: "1px solid #e5e7eb" }}>
               {[
-                { id: "all", label: "All Posts", icon: <Globe className="h-3.5 w-3.5" />, count: !feedLoading ? allFeedPosts.length : null, activeColor: "#0268CE", activeBg: "#EFF6FF" },
-                { id: "moments", label: "Mission Moments", icon: <Star className="h-3.5 w-3.5" style={{ fill: feedMomentFilter === "moments" ? "#DB1C4F" : "none", color: feedMomentFilter === "moments" ? "#DB1C4F" : "currentColor" }} />, count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null, activeColor: "#DB1C4F", activeBg: "#FFF1F4" },
+                { id: "all", label: "All Posts", count: !feedLoading ? allFeedPosts.length : null },
+                { id: "moments", label: "Mission Moments", count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null },
               ].map(tab => {
                 const active = feedMomentFilter === tab.id;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setFeedMomentFilter(tab.id as any)}
-                    className="flex items-center gap-1.5 px-1 pb-3 pt-1 mr-5 text-[13px] font-semibold border-b-2 -mb-px transition-colors"
+                    className="transition-all duration-150"
                     style={{
-                      borderColor: active ? tab.activeColor : "transparent",
-                      color: active ? tab.activeColor : "#9CA3AF",
+                      paddingBottom: 12,
+                      paddingTop: 4,
+                      marginRight: 24,
+                      marginBottom: -1,
+                      fontSize: 13,
+                      fontWeight: active ? 600 : 400,
+                      color: active ? "#111827" : "#6b7280",
+                      border: "none",
+                      borderBottom: active ? "2px solid #111827" : "2px solid transparent",
+                      background: "transparent",
+                      cursor: "pointer",
                     }}
                   >
-                    {tab.icon}
                     {tab.label}
                     {tab.count != null && (
                       <span
-                        className="text-[11px] px-2 py-0.5 rounded-full font-medium"
-                        style={{ background: active ? tab.activeBg : "#F3F4F6", color: active ? tab.activeColor : "#6B7280" }}
+                        style={{
+                          marginLeft: 6,
+                          fontSize: 11,
+                          fontWeight: 500,
+                          background: active ? "#f3f4f6" : "transparent",
+                          color: active ? "#374151" : "#9ca3af",
+                          borderRadius: 999,
+                          padding: "1px 7px",
+                        }}
                       >
                         {tab.count}
                       </span>
