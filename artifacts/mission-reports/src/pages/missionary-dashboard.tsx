@@ -5,11 +5,9 @@ import { Redirect } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
-import { FileText, BookOpen, Send, Star, PenSquare } from "lucide-react";
+import { FileText, BookOpen } from "lucide-react";
 
 type FeedTab = "all" | "moments";
-
-const EMERALD = "#0268CE";
 
 
 export default function MissionaryDashboard() {
@@ -77,30 +75,42 @@ export default function MissionaryDashboard() {
       </div>
 
       {/* ── Filter tabs ── */}
-      <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
+      <div className="flex items-center" style={{ borderBottom: "1px solid #e5e7eb" }}>
         {[
-          { id: "all" as FeedTab, label: "All Posts", icon: <Send className="h-3.5 w-3.5" />, count: allPosts.length, activeColor: EMERALD, activeBg: "#EFF6FF" },
-          { id: "moments" as FeedTab, label: "Mission Moments", icon: <Star className="h-3.5 w-3.5" style={{ fill: activeTab === "moments" ? "#DB1C4F" : "none", color: activeTab === "moments" ? "#DB1C4F" : "currentColor" }} />, count: missionMoments.length, activeColor: "#DB1C4F", activeBg: "#FFF1F4" },
+          { id: "all" as FeedTab, label: "All Posts", count: allPosts.length },
+          { id: "moments" as FeedTab, label: "Mission Moments", count: missionMoments.length },
         ].map(tab => {
           const active = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="flex items-center gap-2 px-1 pb-3 pt-1 mr-5 text-[14px] font-semibold border-b-2 -mb-px transition-all duration-200"
+              className="transition-all duration-150"
               style={{
-                borderColor: active ? tab.activeColor : "transparent",
-                color: active ? tab.activeColor : "#9CA3AF",
+                paddingBottom: 12,
+                paddingTop: 4,
+                marginRight: 24,
+                marginBottom: -1,
+                fontSize: 13,
+                fontWeight: active ? 600 : 400,
+                color: active ? "#111827" : "#6b7280",
+                border: "none",
+                borderBottom: active ? "2px solid #111827" : "2px solid transparent",
+                background: "transparent",
+                cursor: "pointer",
               }}
             >
-              {tab.icon}
               {tab.label}
               {tab.count > 0 && (
                 <span
-                  className="text-[11px] px-2 py-0.5 rounded-full font-medium"
                   style={{
-                    background: active ? tab.activeBg : "#F3F4F6",
-                    color: active ? tab.activeColor : "#6B7280",
+                    marginLeft: 6,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    background: active ? "#f3f4f6" : "transparent",
+                    color: active ? "#374151" : "#9ca3af",
+                    borderRadius: 999,
+                    padding: "1px 7px",
                   }}
                 >
                   {tab.count}
