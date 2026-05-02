@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
 import { useAuth } from "@/components/auth-provider";
-import { BookOpen, Send, Star, PenSquare, MessageCircle, Loader2 } from "lucide-react";
+import { BookOpen, MessageCircle, Loader2 } from "lucide-react";
 
 const PAGE_SIZE = 20;
 type TimelineTab = "all" | "moments";
@@ -90,67 +90,71 @@ export default function Feed() {
   const EMERALD = "#0268CE";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+    <div className="max-w-[720px] mx-auto" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
 
-      {/* ── Missions Feed hero card ── */}
-      <div
-        className="relative overflow-hidden"
-        style={{
-          background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)",
-          borderRadius: 16,
-          border: "1px solid rgba(255,255,255,0.08)",
-          boxShadow: "0 4px 24px rgba(2,104,206,0.18)",
-        }}
-      >
-        <div className="relative z-10 px-8 pt-7 pb-7">
-          <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#fff" }}>Missions Feed</h1>
-          <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>Stay connected. Share what God is doing in the field.</p>
-          <div className="flex gap-3 mt-5">
-            <div className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}>
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(57,188,122,0.25)" }}>
-                <PenSquare className="h-4 w-4" style={{ color: "#39BC7A" }} />
-              </div>
-              <div>
-                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{accumulatedPosts.length}{hasMore ? "+" : ""}</p>
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Posts Shared</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.15)", minWidth: 160 }}>
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(255,214,0,0.18)" }}>
-                <Star className="h-4 w-4" style={{ color: "#FFD600", fill: "#FFD600" }} />
-              </div>
-              <div>
-                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{missionMoments.length}{hasMore ? "+" : ""}</p>
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Mission Moments</p>
-              </div>
-            </div>
-          </div>
+      {/* ── Page title + stats ── */}
+      <div style={{ marginBottom: 32 }}>
+        <h1 className="font-bold tracking-tight" style={{ fontSize: 26, color: "#111827", marginBottom: 4 }}>Missions Feed</h1>
+        <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 20 }}>Updates and stories from the field.</p>
+        <div className="flex items-center gap-2">
+          <span
+            className="inline-flex items-center gap-1.5"
+            style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+          >
+            <strong style={{ color: "#111827", fontWeight: 600 }}>{accumulatedPosts.length}{hasMore ? "+" : ""}</strong> Posts Shared
+          </span>
+          <span
+            className="inline-flex items-center gap-1.5"
+            style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+          >
+            <strong style={{ color: "#111827", fontWeight: 600 }}>{missionMoments.length}{hasMore ? "+" : ""}</strong> Mission Moments
+          </span>
         </div>
       </div>
 
       {/* ── Composer ── */}
-      <PostComposer onPost={handlePost} />
+      <div style={{ marginBottom: 32 }}>
+        <PostComposer onPost={handlePost} />
+      </div>
 
       {/* ── Filter tabs ── */}
-      <div className="flex items-center gap-1" style={{ borderBottom: "1px solid #E9E9E9" }}>
+      <div className="flex items-center" style={{ borderBottom: "1px solid #e5e7eb", marginBottom: 8 }}>
         {[
-          { id: "all" as TimelineTab, label: "All Posts", icon: <Send className="h-3.5 w-3.5" />, count: accumulatedPosts.length, activeColor: EMERALD, activeBg: "#EFF6FF" },
-          { id: "moments" as TimelineTab, label: "Mission Moments", icon: <Star className="h-3.5 w-3.5" style={{ fill: activeTab === "moments" ? "#DB1C4F" : "none", color: activeTab === "moments" ? "#DB1C4F" : "currentColor" }} />, count: missionMoments.length, activeColor: "#DB1C4F", activeBg: "#FFF1F4" },
+          { id: "all" as TimelineTab, label: "All Posts", count: accumulatedPosts.length },
+          { id: "moments" as TimelineTab, label: "Mission Moments", count: missionMoments.length },
         ].map(tab => {
           const active = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="flex items-center gap-2 px-1 pb-3 pt-1 mr-5 text-[14px] font-semibold border-b-2 -mb-px transition-all duration-200"
-              style={{ borderColor: active ? tab.activeColor : "transparent", color: active ? tab.activeColor : "#9CA3AF" }}
+              className="transition-all duration-150"
+              style={{
+                paddingBottom: 12,
+                paddingTop: 4,
+                marginRight: 24,
+                marginBottom: -1,
+                fontSize: 13,
+                fontWeight: active ? 600 : 400,
+                color: active ? "#111827" : "#6b7280",
+                border: "none",
+                borderBottom: active ? "2px solid #111827" : "2px solid transparent",
+                background: "transparent",
+                cursor: "pointer",
+              }}
             >
-              {tab.icon}
               {tab.label}
               {tab.count > 0 && (
                 <span
-                  className="text-[11px] px-2 py-0.5 rounded-full font-medium"
-                  style={{ background: active ? tab.activeBg : "#F3F4F6", color: active ? tab.activeColor : "#6B7280" }}
+                  style={{
+                    marginLeft: 6,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    background: active ? "#f3f4f6" : "transparent",
+                    color: active ? "#374151" : "#9ca3af",
+                    borderRadius: 999,
+                    padding: "1px 7px",
+                  }}
                 >
                   {tab.count}{hasMore && tab.id === "all" ? "+" : ""}
                 </span>
@@ -158,28 +162,23 @@ export default function Feed() {
             </button>
           );
         })}
-        {!isLoading && (
-          <span className="ml-auto pb-3 text-[13px]" style={{ color: "#9CA3AF" }}>
-            {displayedPosts.length} result{displayedPosts.length !== 1 ? "s" : ""}
-          </span>
-        )}
       </div>
 
       {/* ── Posts ── */}
       {isLoading && accumulatedPosts.length === 0 ? (
-        <div className="space-y-4">
+        <div style={{ paddingTop: 16 }}>
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-white rounded-2xl border border-border/50 overflow-hidden p-6 space-y-3">
-              <div className="flex items-center gap-3">
-                <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
+            <div key={i} style={{ paddingTop: 24, paddingBottom: 24, borderBottom: "1px solid #f0f0f0" }}>
+              <div className="flex items-center gap-3" style={{ marginBottom: 12 }}>
+                <Skeleton className="h-9 w-9 rounded-full flex-shrink-0" />
                 <div className="space-y-1.5 flex-1">
-                  <Skeleton className="h-3.5 w-28" />
+                  <Skeleton className="h-3 w-28" />
                   <Skeleton className="h-2.5 w-20" />
                 </div>
               </div>
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-4/5" />
-              {i === 1 && <Skeleton className="h-48 w-full rounded-lg" />}
+              <Skeleton className="h-3.5 w-full" style={{ marginBottom: 6 }} />
+              <Skeleton className="h-3.5 w-4/5" />
+              {i === 1 && <Skeleton className="h-44 w-full rounded-lg" style={{ marginTop: 12 }} />}
             </div>
           ))}
         </div>
@@ -188,36 +187,36 @@ export default function Feed() {
           <p className="text-destructive text-sm font-medium">Could not load posts.</p>
         </div>
       ) : displayedPosts.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-dashed border-border py-20 text-center">
+        <div className="py-20 text-center" style={{ borderTop: "1px solid #f0f0f0" }}>
           {activeTab === "moments" ? (
             <>
-              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EFF6FF" }}>
-                <BookOpen className="h-6 w-6" style={{ color: EMERALD }} />
+              <div className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#eff6ff" }}>
+                <BookOpen className="h-5 w-5" style={{ color: EMERALD }} />
               </div>
-              <p className="font-semibold text-[16px]" style={{ color: "#374151" }}>No Mission Moments yet</p>
-              <p className="text-[14px] mt-1.5" style={{ color: "#9CA3AF" }}>Team members can mark posts as Mission Moments when sharing updates.</p>
+              <p className="font-semibold text-[15px]" style={{ color: "#374151" }}>No Mission Moments yet</p>
+              <p className="text-[13px] mt-1.5" style={{ color: "#9CA3AF" }}>Team members can mark posts as Mission Moments when sharing updates.</p>
             </>
           ) : (
             <>
-              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
-                <MessageCircle className="h-6 w-6" style={{ color: "#9CA3AF" }} />
+              <div className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#f3f4f6" }}>
+                <MessageCircle className="h-5 w-5" style={{ color: "#9CA3AF" }} />
               </div>
-              <p className="font-semibold text-[16px]" style={{ color: "#374151" }}>No posts yet</p>
-              <p className="text-[14px] mt-1.5" style={{ color: "#9CA3AF" }}>Team updates will appear here once posted.</p>
+              <p className="font-semibold text-[15px]" style={{ color: "#374151" }}>No posts yet</p>
+              <p className="text-[13px] mt-1.5" style={{ color: "#9CA3AF" }}>Team updates will appear here once posted.</p>
             </>
           )}
         </div>
       ) : (
         <>
-          <div className="space-y-4">
+          <div>
             {displayedPosts.map(post => (
-              <PostCard key={post.id} post={post} onDelete={handleDelete} />
+              <PostCard key={post.id} post={post} onDelete={handleDelete} flat />
             ))}
           </div>
 
           {/* Sentinel + load-more indicator */}
           {activeTab === "all" && (
-            <div ref={sentinelRef} className="flex justify-center py-4">
+            <div ref={sentinelRef} className="flex justify-center py-6">
               {loadingMore ? (
                 <div className="flex items-center gap-2" style={{ color: "#9CA3AF" }}>
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -227,7 +226,7 @@ export default function Feed() {
                 <button
                   onClick={loadMore}
                   className="text-sm font-medium px-6 py-2 rounded-full border transition-colors hover:bg-gray-50"
-                  style={{ color: EMERALD, borderColor: EMERALD }}
+                  style={{ color: "#6b7280", borderColor: "#e5e7eb" }}
                 >
                   Load more
                 </button>
