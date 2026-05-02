@@ -5,7 +5,7 @@ services:
     runtime: node
     region: oregon
     branch: main
-    buildCommand: npm install -g pnpm && pnpm install --include=dev && pnpm --filter @workspace/api-server run build && BASE_PATH=/help/ pnpm --filter @workspace/sentconnect-slides run build
+    buildCommand: npm install -g pnpm && pnpm install && pnpm --filter @workspace/api-server run build && BASE_PATH=/help/ pnpm --filter @workspace/sentconnect-slides run build
     startCommand: pnpm --filter @workspace/api-server run start
     healthCheckPath: /api/healthz
     envVars:
