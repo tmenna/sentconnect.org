@@ -45,54 +45,27 @@ export default function MissionaryDashboard() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
 
-      {/* ── Mission Feed header card ── */}
-      <div
-        className="relative overflow-hidden"
-        style={{
-          background: "linear-gradient(135deg, #0047A8 0%, #0268CE 60%, #1A80E0 100%)",
-          borderRadius: 16,
-          border: "1px solid rgba(255,255,255,0.08)",
-          boxShadow: "0 4px 24px rgba(2,104,206,0.18)",
-        }}
-      >
-        <div className="relative z-10 px-8 pt-7 pb-7">
-          <h1 className="font-bold leading-tight tracking-tight" style={{ fontSize: 30, color: "#fff" }}>
-            Missions Feed
-          </h1>
-          <p className="mt-1" style={{ fontSize: 14, color: "rgba(255,255,255,0.78)" }}>
-            Stay connected. Share what God is doing in the field.
-          </p>
-
-          {/* Stat boxes */}
-          <div className="flex gap-3 mt-5">
-            <div
-              className="flex items-center gap-3 rounded-xl px-4 py-3"
-              style={{ background: "rgba(255,255,255,0.15)", minWidth: 140 }}
-            >
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: "rgba(57,188,122,0.25)" }}>
-                <PenSquare className="h-4 w-4" style={{ color: "#39BC7A" }} />
-              </div>
-              <div>
-                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{allPosts.length}</p>
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Posts Shared</p>
-              </div>
-            </div>
-
-            <div
-              className="flex items-center gap-3 rounded-xl px-4 py-3"
-              style={{ background: "rgba(255,255,255,0.15)", minWidth: 160 }}
-            >
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: "rgba(255,214,0,0.18)" }}>
-                <Star className="h-4 w-4" style={{ color: "#FFD600", fill: "#FFD600" }} />
-              </div>
-              <div>
-                <p className="font-black leading-none" style={{ fontSize: 22, color: "#fff" }}>{missionMoments.length}</p>
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 2 }}>Mission Moments</p>
-              </div>
-            </div>
-          </div>
+      {/* ── Page header ── */}
+      <div>
+        <h1 className="font-bold tracking-tight" style={{ fontSize: 26, color: "#111827", marginBottom: 4 }}>
+          Missions Feed
+        </h1>
+        <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 16 }}>
+          Stay connected. Share what God is doing in the field.
+        </p>
+        <div className="flex items-center gap-2">
+          <span
+            className="inline-flex items-center gap-1.5"
+            style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+          >
+            <strong style={{ color: "#111827", fontWeight: 600 }}>{allPosts.length}</strong> Posts Shared
+          </span>
+          <span
+            className="inline-flex items-center gap-1.5"
+            style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+          >
+            <strong style={{ color: "#111827", fontWeight: 600 }}>{missionMoments.length}</strong> Mission Moments
+          </span>
         </div>
       </div>
 
