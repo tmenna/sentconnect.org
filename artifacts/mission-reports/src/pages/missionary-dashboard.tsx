@@ -51,22 +51,22 @@ export default function MissionaryDashboard() {
             YOUR MISSIONS FEED
           </span>
         </div>
-        <h1 style={{ fontSize: 28, fontWeight: 800, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 8 }}>
+        <h1 style={{ fontSize: 36, fontWeight: 800, color: "#0F172A", letterSpacing: "-0.04em", lineHeight: 1.08, marginBottom: 10 }}>
           Missions Feed
         </h1>
-        <p style={{ fontSize: 14, color: "#475569", marginBottom: 20, lineHeight: 1.55 }}>
+        <p style={{ fontSize: 15, color: "#475569", marginBottom: 22, lineHeight: 1.55 }}>
           Stay connected. Share what God is doing in the field.
         </p>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <span
             className="inline-flex items-center gap-1.5"
-            style={{ fontSize: 12, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "4px 12px" }}
+            style={{ fontSize: 13, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "5px 14px" }}
           >
             {allPosts.length} <span style={{ fontWeight: 400, color: "#475569" }}>Posts Shared</span>
           </span>
           <span
             className="inline-flex items-center gap-1.5"
-            style={{ fontSize: 12, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "4px 12px" }}
+            style={{ fontSize: 13, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "5px 14px" }}
           >
             {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>Mission Moments</span>
           </span>
@@ -97,7 +97,7 @@ export default function MissionaryDashboard() {
                 paddingTop: 4,
                 marginRight: 24,
                 marginBottom: -1,
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: active ? 700 : 400,
                 color: active ? "#0268CE" : "#94A3B8",
                 border: "none",

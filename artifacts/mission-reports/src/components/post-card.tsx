@@ -422,20 +422,30 @@ export function PostCard({
         ? { borderBottom: "1px solid #E8EEF8" }
         : { border: "1px solid #BFDBFE", boxShadow: "0 4px 16px rgba(2,104,206,0.08)" }}
     >
+      {/* Mission Moment banner */}
+      {post.isMissionMoment && (
+        <div className="flex items-center gap-2 px-6 py-2.5" style={{ background: "#EFF6FF", borderBottom: "1px solid #BFDBFE" }}>
+          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#0268CE" }} />
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#0268CE", letterSpacing: "0.07em", textTransform: "uppercase" }}>
+            Mission Moment
+          </span>
+        </div>
+      )}
+
       {/* Highlight banner (only when not mission moment) */}
       {!post.isMissionMoment && post.isHighlight && (
-        <div className="flex items-center gap-1.5 px-5 py-1.5 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
+        <div className="flex items-center gap-1.5 px-6 py-2 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
           <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
           Highlight
         </div>
       )}
 
       {/* Header */}
-      <div className="flex items-start gap-3 px-5 pt-5 pb-3">
+      <div className="flex items-start gap-3.5 px-6 pt-5 pb-3">
         <Link href={`/missionaries/${post.author.id}`}>
-          <Avatar className="h-11 w-11 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #e5e7eb" }}>
+          <Avatar className="h-12 w-12 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#E5E7EB", color: "#374151" }}>
+            <AvatarFallback style={{ background: "#EFF6FF", color: "#0268CE", fontWeight: 700, fontSize: 15 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -443,29 +453,17 @@ export function PostCard({
         <div className="flex-1 min-w-0">
           <Link
             href={`/missionaries/${post.author.id}`}
-            className="transition-colors leading-tight block" style={{ fontSize: 15, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.01em" }}
+            className="transition-colors leading-tight block" style={{ fontSize: 16, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.02em" }}
           >
             {post.author.name}
           </Link>
-          <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
-            <span style={{ fontSize: 12, color: "#94A3B8" }}>{timeAgo}</span>
-            {post.isMissionMoment && (
-              <>
-                <span style={{ color: "#CBD5E1", fontSize: 10 }}>•</span>
-                <span
-                  className="flex items-center gap-1"
-                  style={{ fontSize: 11, fontWeight: 700, color: "#0268CE", letterSpacing: "0.06em", textTransform: "uppercase" }}
-                >
-                  <BookOpen className="h-3 w-3" />
-                  Mission Moment
-                </span>
-              </>
-            )}
+          <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-1">
+            <span style={{ fontSize: 13, color: "#94A3B8" }}>{timeAgo}</span>
             {post.location && (
               <>
-                <span className="text-[#d1d5db] text-[10px]">•</span>
-                <span className="flex items-center gap-1 text-[12px] text-[#6b7280]">
-                  <MapPin className="h-3 w-3 text-[#9ca3af]" />
+                <span style={{ color: "#CBD5E1", fontSize: 10 }}>•</span>
+                <span className="flex items-center gap-1" style={{ fontSize: 13, color: "#94A3B8" }}>
+                  <MapPin className="h-3 w-3" />
                   {post.location}
                 </span>
               </>
@@ -524,8 +522,8 @@ export function PostCard({
         <>
           {/* Text */}
           {post.description && (
-            <div className="px-5 pb-4">
-              <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.75, letterSpacing: "-0.01em", whiteSpace: "pre-wrap" }}>{post.description}</p>
+            <div className="px-6 pb-5">
+              <p style={{ fontSize: 16, color: "#334155", lineHeight: 1.75, letterSpacing: "-0.01em", whiteSpace: "pre-wrap" }}>{post.description}</p>
             </div>
           )}
 
@@ -537,38 +535,38 @@ export function PostCard({
           )}
 
           {/* Action bar */}
-          <div className="flex items-center border-t border-[#f3f4f6] pt-1 pb-1">
+          <div className="flex items-center" style={{ borderTop: "1px solid #F1F5F9", margin: "0 6px", padding: "2px 0" }}>
             {/* Like */}
             <button
               onClick={toggleLike}
               className={cn(
-                "flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium transition-all rounded-lg mx-1",
+                "flex-1 flex items-center justify-center gap-2 py-3 text-[13.5px] font-semibold transition-all rounded-xl mx-0.5",
                 post.likedByMe
-                  ? "text-red-500 bg-red-50 hover:bg-red-100"
-                  : "text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#111827]"
+                  ? "text-[#0268CE] bg-[#EFF6FF]"
+                  : "text-[#94A3B8] hover:bg-[#F8FAFC] hover:text-[#475569]"
               )}
             >
-              <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-blue-600 text-blue-600")} />
-              <span>Like{post.likeCount > 0 ? ` ${post.likeCount}` : ""}</span>
+              <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-[#0268CE] text-[#0268CE]")} />
+              <span>Like{post.likeCount > 0 ? ` · ${post.likeCount}` : ""}</span>
             </button>
 
             {/* Comment */}
             <button
               onClick={toggleComments}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#111827] transition-all rounded-lg mx-1"
+              className="flex-1 flex items-center justify-center gap-2 py-3 text-[13.5px] font-semibold text-[#94A3B8] hover:bg-[#F8FAFC] hover:text-[#475569] transition-all rounded-xl mx-0.5"
             >
               <MessageCircle className="h-4 w-4" />
-              <span>Comment{post.commentCount > 0 ? ` ${post.commentCount}` : ""}</span>
+              <span>Comment{post.commentCount > 0 ? ` · ${post.commentCount}` : ""}</span>
             </button>
 
             {/* Share */}
             <button
               onClick={copyShareLink}
               className={cn(
-                "flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium transition-all rounded-lg mx-1",
+                "flex-1 flex items-center justify-center gap-2 py-3 text-[13.5px] font-semibold transition-all rounded-xl mx-0.5",
                 copied
-                  ? "text-[#0268CE] bg-blue-50"
-                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                  ? "text-[#0268CE] bg-[#EFF6FF]"
+                  : "text-[#94A3B8] hover:bg-[#F8FAFC] hover:text-[#475569]"
               )}
             >
               {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
@@ -579,7 +577,7 @@ export function PostCard({
             {canManage && (
               <button
                 onClick={() => setShowSlideExport(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[13px] font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all rounded-lg mx-1"
+                className="flex-1 flex items-center justify-center gap-2 py-3 text-[13.5px] font-semibold text-[#94A3B8] hover:bg-[#F8FAFC] hover:text-[#475569] transition-all rounded-xl mx-0.5"
               >
                 <ImageDown className="h-4 w-4" />
                 <span>Export</span>

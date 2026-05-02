@@ -184,19 +184,20 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
 
   return (
     <div
-      className={cn("bg-white rounded-2xl p-5")}
+      className={cn("bg-white rounded-2xl")}
       style={{
-        border: isMissionMoment ? "1px solid #bbf7d0" : "1px solid #e8ecf4",
-        boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-        background: isMissionMoment ? "#f0fdf4" : "#ffffff",
+        border: isMissionMoment ? "1px solid #BFDBFE" : "1px solid #BFDBFE",
+        boxShadow: "0 4px 16px rgba(2,104,206,0.08)",
+        background: isMissionMoment ? "#F8FBFF" : "#ffffff",
+        padding: "22px 24px 18px",
       }}
       onDragOver={e => e.preventDefault()}
       onDrop={handleDrop}
     >
-      <div className="flex gap-3">
-        <Avatar className="h-10 w-10 flex-shrink-0">
+      <div className="flex gap-3.5">
+        <Avatar className="h-11 w-11 flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
           <AvatarImage src={user.avatarUrl ?? undefined} />
-          <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#E5E7EB", color: "#374151" }}>
+          <AvatarFallback style={{ background: "#EFF6FF", color: "#0268CE", fontWeight: 700, fontSize: 15 }}>
             {user.name.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
@@ -357,8 +358,8 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={handlePost}
               disabled={!canPost}
-              className="px-5 font-semibold text-[13px] text-white rounded-xl transition-all duration-200 disabled:opacity-40"
-              style={{ background: "#0268CE", height: "36px", boxShadow: canPost ? "0 2px 8px rgba(2,104,206,0.25)" : "none" }}
+              className="px-6 font-bold text-[14px] text-white rounded-xl transition-all duration-200 disabled:opacity-40"
+              style={{ background: "#0268CE", height: "40px", boxShadow: canPost ? "0 4px 12px rgba(2,104,206,0.3)" : "none", letterSpacing: "-0.01em" }}
               onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#0155a5"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "#0268CE"; }}
             >
