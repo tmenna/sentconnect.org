@@ -3,7 +3,6 @@ export default function Slide03FeedFeatures() {
     { icon: "📝", title: "Rich Text Posts", desc: "Write updates with formatting, share what God is doing in the field." },
     { icon: "📷", title: "Photo & Video", desc: "Attach multiple photos or videos directly to any post." },
     { icon: "📍", title: "Location Tags", desc: "Pin a location to your post so supporters know where you are." },
-    { icon: "🙏", title: "Prayer Requests", desc: "Mark posts as prayer requests to highlight specific needs." },
     { icon: "⭐", title: "Mission Moments", desc: "Admins highlight special posts as featured Mission Moments." },
     { icon: "💬", title: "Comments & Likes", desc: "Org members can react and comment to encourage missionaries." },
   ];

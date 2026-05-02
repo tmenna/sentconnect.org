@@ -3,7 +3,6 @@ export default function Slide04PostComposer() {
     { icon: "📝", label: "Post Text", desc: "Write your update, story, or reflection — no character limit.", color: "#EFF6FF", accent: "#0268CE" },
     { icon: "📷", label: "Photos & Videos", desc: "Attach images or short clips directly from your device.", color: "#F0FDF4", accent: "#16A34A" },
     { icon: "📍", label: "Location", desc: "Optionally tag a city, country, or field location.", color: "#FFF7ED", accent: "#EA580C" },
-    { icon: "🙏", label: "Prayer Request", desc: "Flag this post so supporters know you need prayer.", color: "#FDF4FF", accent: "#9333EA" },
     { icon: "✨", label: "Mission Moment", desc: "Mark this as a special highlight (admin/owner only).", color: "#FFFBEB", accent: "#D97706" },
   ];
 
@@ -39,7 +38,7 @@ export default function Slide04PostComposer() {
             What You Can Include in a Post
           </h2>
           <p style={{ color: "#64748B", fontSize: "1.25vw", lineHeight: 1.65, margin: "0 0 3vh 0" }}>
-            Each post can carry rich context — photos, location, and prayer needs — so your supporters feel truly connected to your work.
+            Each post can carry rich context — photos and location — so your supporters feel truly connected to your work.
           </p>
           <div style={{ background: "#EFF6FF", borderRadius: 12, padding: "2vh 1.8vw", border: "1px solid #BFDBFE" }}>
             <div style={{ color: "#0047A8", fontSize: "0.9vw", fontWeight: 700, marginBottom: "0.8vh", letterSpacing: "0.06em" }}>TIP</div>
