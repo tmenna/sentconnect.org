@@ -165,6 +165,7 @@ function AllSlides() {
 
 // This component is used for the deployed view at `/features` and `/guide`
 function SlideViewer({ startPosition }: { startPosition?: number }) {
+  const [, navigate] = useLocation();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [dims, setDims] = useState(() => ({
     width: Math.min(window.innerWidth, window.innerHeight * (16 / 9)),
@@ -200,6 +201,7 @@ function SlideViewer({ startPosition }: { startPosition?: number }) {
   return (
     <div
       className="slide-viewer h-screen w-screen overflow-hidden bg-black flex items-center justify-center"
+      style={{ position: "relative" }}
       onClick={() => iframeRef.current?.focus()}
     >
       <iframe
@@ -209,6 +211,46 @@ function SlideViewer({ startPosition }: { startPosition?: number }) {
         onLoad={() => iframeRef.current?.focus()}
         title="Slide viewer"
       />
+
+      {/* Back to Help Home button — floats above the slide, never inside the iframe */}
+      <button
+        onClick={(e) => { e.stopPropagation(); navigate("/"); }}
+        style={{
+          position: "fixed",
+          top: 14,
+          left: 14,
+          zIndex: 9999,
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          background: "rgba(0, 71, 168, 0.88)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          color: "#FFFFFF",
+          border: "1px solid rgba(255,255,255,0.18)",
+          borderRadius: 50,
+          padding: "7px 14px 7px 10px",
+          fontSize: 13,
+          fontWeight: 600,
+          fontFamily: "'Inter', system-ui, sans-serif",
+          cursor: "pointer",
+          boxShadow: "0 2px 12px rgba(0,0,0,0.35)",
+          transition: "background 0.15s, transform 0.15s",
+          letterSpacing: "0.01em",
+          lineHeight: 1,
+        }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLButtonElement).style.background = "rgba(0, 71, 168, 1)";
+          (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.04)";
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLButtonElement).style.background = "rgba(0, 71, 168, 0.88)";
+          (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+        }}
+      >
+        <span style={{ fontSize: 15, lineHeight: 1 }}>←</span>
+        Help Home
+      </button>
     </div>
   );
 }
