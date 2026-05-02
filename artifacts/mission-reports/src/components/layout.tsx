@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
 import { Button } from "./ui/button";
-import { Shuffle, LogOut, Rss, ShieldCheck } from "lucide-react";
+import { Shuffle, LogOut, Rss, ShieldCheck, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { usePlatformLogo } from "@/hooks/use-platform-logo";
@@ -72,6 +72,20 @@ export function Layout({ children }: { children: ReactNode }) {
 
           {/* Right nav */}
           <nav className="flex items-center gap-0.5">
+            {/* Help — always visible, opens in new tab */}
+            <a
+              href="/help"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
+                "text-gray-500 hover:text-blue-700 hover:bg-blue-50"
+              )}
+            >
+              <HelpCircle className="h-3.5 w-3.5" />
+              Help
+            </a>
+
             {!isLoading && (
               <>
                 {isAuthenticated && user ? (
