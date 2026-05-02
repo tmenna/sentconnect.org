@@ -17,6 +17,7 @@ import { useLocation } from "wouter";
 
 import { slides } from "@/slideLoader";
 import { SlideNav } from "@/components/SlideNav";
+import HelpLanding from "@/pages/HelpLanding";
 
 function getSlideIndex(pathname: string): number {
   const match = pathname.match(/^\/slide(\d+)$/);
@@ -162,8 +163,8 @@ function AllSlides() {
   );
 }
 
-// This component is used for the deployed view at `/`
-function SlideViewer() {
+// This component is used for the deployed view at `/features` and `/guide`
+function SlideViewer({ startPosition }: { startPosition?: number }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [dims, setDims] = useState(() => ({
     width: Math.min(window.innerWidth, window.innerHeight * (16 / 9)),
@@ -194,7 +195,7 @@ function SlideViewer() {
   }, []);
 
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-  const firstPosition = slides.length > 0 ? slides[0].position : 1;
+  const firstPosition = startPosition ?? (slides.length > 0 ? slides[0].position : 1);
 
   return (
     <div
@@ -216,10 +217,12 @@ export default function App() {
   const [location, navigate] = useLocation();
 
   // DO NOT edit this useEffect - redirects unknown routes to the first slide.
-  // The "/" and "/allslides" routes are handled separately below.
+  // The "/", "/features", "/guide", and "/allslides" routes are handled separately below.
   useEffect(() => {
     if (
       location !== "/" &&
+      location !== "/features" &&
+      location !== "/guide" &&
       location !== "/allslides" &&
       getSlideIndex(location) === -1
     ) {
@@ -247,7 +250,9 @@ export default function App() {
     return () => window.removeEventListener("message", onMessage);
   }, [navigate]);
 
-  if (location === "/") return <SlideViewer />;
+  if (location === "/") return <HelpLanding />;
+  if (location === "/features") return <SlideViewer startPosition={1} />;
+  if (location === "/guide") return <SlideViewer startPosition={7} />;
   if (location === "/allslides") return <AllSlides />;
   return <SlideEditor />;
 }
