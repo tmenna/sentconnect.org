@@ -45,11 +45,11 @@ export function Layout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="min-h-[100dvh] flex flex-col text-foreground bg-white">
+    <div className="min-h-[100dvh] flex flex-col text-foreground" style={{ background: "#f0f4fb" }}>
       {/* ── Nav ── */}
       <header
-        className="sticky top-0 z-50 w-full bg-white"
-        style={{ borderBottom: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
+        className="sticky top-0 z-50 w-full"
+        style={{ background: "#fff", borderBottom: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
       >
         <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
           {/* Logo */}

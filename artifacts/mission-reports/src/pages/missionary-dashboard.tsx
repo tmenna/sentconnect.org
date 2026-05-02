@@ -166,7 +166,7 @@ export default function MissionaryDashboard() {
           )}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-5">
           {myPosts.map(post => (
             <PostCard key={post.id} post={post} hideViewPost onDelete={handleDelete} />
           ))}

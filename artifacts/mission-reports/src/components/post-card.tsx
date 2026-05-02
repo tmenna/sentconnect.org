@@ -417,10 +417,10 @@ export function PostCard({
     <div
       className={flat
         ? "bg-white overflow-hidden"
-        : "bg-white rounded-xl overflow-hidden"}
+        : "bg-white rounded-2xl overflow-hidden"}
       style={flat
         ? { borderBottom: "1px solid #e5e7eb" }
-        : { border: "1px solid #e5e7eb", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+        : { border: "1px solid #e8ecf4", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
     >
       {/* Highlight banner (only when not mission moment) */}
       {!post.isMissionMoment && post.isHighlight && (
