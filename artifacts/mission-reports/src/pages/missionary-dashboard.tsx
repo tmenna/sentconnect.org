@@ -45,24 +45,30 @@ export default function MissionaryDashboard() {
 
       {/* ── Page header ── */}
       <div>
-        <h1 className="font-bold tracking-tight" style={{ fontSize: 26, color: "#111827", marginBottom: 4 }}>
+        <div className="flex items-center gap-2 mb-3">
+          <div style={{ width: 3, height: 18, background: "#0268CE", borderRadius: 2, flexShrink: 0 }} />
+          <span style={{ color: "#0268CE", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+            YOUR MISSIONS FEED
+          </span>
+        </div>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 8 }}>
           Missions Feed
         </h1>
-        <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 16 }}>
+        <p style={{ fontSize: 14, color: "#475569", marginBottom: 20, lineHeight: 1.55 }}>
           Stay connected. Share what God is doing in the field.
         </p>
         <div className="flex items-center gap-2">
           <span
             className="inline-flex items-center gap-1.5"
-            style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+            style={{ fontSize: 12, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "4px 12px" }}
           >
-            <strong style={{ color: "#111827", fontWeight: 600 }}>{allPosts.length}</strong> Posts Shared
+            {allPosts.length} <span style={{ fontWeight: 400, color: "#475569" }}>Posts Shared</span>
           </span>
           <span
             className="inline-flex items-center gap-1.5"
-            style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+            style={{ fontSize: 12, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "4px 12px" }}
           >
-            <strong style={{ color: "#111827", fontWeight: 600 }}>{missionMoments.length}</strong> Mission Moments
+            {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>Mission Moments</span>
           </span>
         </div>
       </div>
@@ -75,7 +81,7 @@ export default function MissionaryDashboard() {
       </div>
 
       {/* ── Filter tabs ── */}
-      <div className="flex items-center" style={{ borderBottom: "1px solid #e5e7eb" }}>
+      <div className="flex items-center" style={{ borderBottom: "1px solid #BFDBFE" }}>
         {[
           { id: "all" as FeedTab, label: "All Posts", count: allPosts.length },
           { id: "moments" as FeedTab, label: "Mission Moments", count: missionMoments.length },
@@ -92,12 +98,13 @@ export default function MissionaryDashboard() {
                 marginRight: 24,
                 marginBottom: -1,
                 fontSize: 13,
-                fontWeight: active ? 600 : 400,
-                color: active ? "#111827" : "#6b7280",
+                fontWeight: active ? 700 : 400,
+                color: active ? "#0268CE" : "#94A3B8",
                 border: "none",
-                borderBottom: active ? "2px solid #111827" : "2px solid transparent",
+                borderBottom: active ? "2px solid #0268CE" : "2px solid transparent",
                 background: "transparent",
                 cursor: "pointer",
+                letterSpacing: active ? "-0.01em" : "normal",
               }}
             >
               {tab.label}
@@ -106,9 +113,9 @@ export default function MissionaryDashboard() {
                   style={{
                     marginLeft: 6,
                     fontSize: 11,
-                    fontWeight: 500,
-                    background: active ? "#f3f4f6" : "transparent",
-                    color: active ? "#374151" : "#9ca3af",
+                    fontWeight: 600,
+                    background: active ? "#EFF6FF" : "transparent",
+                    color: active ? "#0268CE" : "#94A3B8",
                     borderRadius: 999,
                     padding: "1px 7px",
                   }}
@@ -121,7 +128,7 @@ export default function MissionaryDashboard() {
         })}
 
         {!postsLoading && (
-          <span className="ml-auto pb-3 text-[13px]" style={{ color: "#9CA3AF" }}>
+          <span className="ml-auto pb-3 text-[12px]" style={{ color: "#94A3B8", letterSpacing: "0.02em" }}>
             {displayedCount} result{displayedCount !== 1 ? "s" : ""}
           </span>
         )}

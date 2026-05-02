@@ -419,8 +419,8 @@ export function PostCard({
         ? "bg-white overflow-hidden"
         : "bg-white rounded-2xl overflow-hidden"}
       style={flat
-        ? { borderBottom: "1px solid #e5e7eb" }
-        : { border: "1px solid #e8ecf4", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
+        ? { borderBottom: "1px solid #E8EEF8" }
+        : { border: "1px solid #BFDBFE", boxShadow: "0 4px 16px rgba(2,104,206,0.08)" }}
     >
       {/* Highlight banner (only when not mission moment) */}
       {!post.isMissionMoment && post.isHighlight && (
@@ -443,18 +443,18 @@ export function PostCard({
         <div className="flex-1 min-w-0">
           <Link
             href={`/missionaries/${post.author.id}`}
-            className="font-bold text-[15px] text-[#111827] hover:text-[#374151] transition-colors leading-tight block"
+            className="transition-colors leading-tight block" style={{ fontSize: 15, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.01em" }}
           >
             {post.author.name}
           </Link>
           <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
-            <span className="text-[12px]" style={{ color: "#9CA3AF" }}>{timeAgo}</span>
+            <span style={{ fontSize: 12, color: "#94A3B8" }}>{timeAgo}</span>
             {post.isMissionMoment && (
               <>
-                <span className="text-[#d1d5db] text-[10px]">•</span>
+                <span style={{ color: "#CBD5E1", fontSize: 10 }}>•</span>
                 <span
-                  className="flex items-center gap-1 text-[12px] font-medium"
-                  style={{ color: "#0268CE" }}
+                  className="flex items-center gap-1"
+                  style={{ fontSize: 11, fontWeight: 700, color: "#0268CE", letterSpacing: "0.06em", textTransform: "uppercase" }}
                 >
                   <BookOpen className="h-3 w-3" />
                   Mission Moment
@@ -525,7 +525,7 @@ export function PostCard({
           {/* Text */}
           {post.description && (
             <div className="px-5 pb-4">
-              <p className="text-[15.5px] text-[#111827] leading-[1.75] tracking-[-0.01em] whitespace-pre-wrap">{post.description}</p>
+              <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.75, letterSpacing: "-0.01em", whiteSpace: "pre-wrap" }}>{post.description}</p>
             </div>
           )}
 
