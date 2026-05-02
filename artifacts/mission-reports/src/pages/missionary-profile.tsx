@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGetUser, getGetUserQueryKey, useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
 import { useParams, Link, Redirect } from "wouter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Building, Calendar, ArrowLeft, FileText, Star, Globe } from "lucide-react";
+import { MapPin, Building, Calendar, ArrowLeft, FileText, Star } from "lucide-react";
 import { format } from "date-fns";
 import { useAuth } from "@/components/auth-provider";
 import { PostCard, type PostData } from "@/components/post-card";
@@ -32,7 +32,7 @@ export default function MissionaryProfile() {
   if (authLoading || loadingUser) {
     return (
       <div className="space-y-5">
-        <div className="rounded-2xl h-24 animate-pulse" style={{ background: "linear-gradient(135deg, #004EA8 0%, #005BBC 100%)" }} />
+        <div className="rounded-xl h-24 animate-pulse bg-gray-100" />
         <div className="bg-white rounded-xl border border-border/60 shadow-sm p-4 space-y-3">
           <div className="flex items-center gap-3">
             <Skeleton className="h-10 w-10 rounded-full" />
@@ -73,86 +73,100 @@ export default function MissionaryProfile() {
         Back to Updates
       </Link>
 
-      {/* Profile banner */}
-      <div
-        className="rounded-2xl px-6 py-5 flex items-center gap-4"
-        style={{ background: "linear-gradient(135deg, #004EA8 0%, #005BBC 100%)" }}
-      >
-        <Avatar className="h-16 w-16 ring-2 ring-white/30 flex-shrink-0">
+      {/* Profile header */}
+      <div className="flex items-center gap-4 py-2">
+        <Avatar className="h-16 w-16 flex-shrink-0" style={{ border: "1.5px solid #e5e7eb" }}>
           <AvatarImage src={user.avatarUrl || undefined} alt={user.name} />
-          <AvatarFallback className="text-2xl font-bold bg-white/20 text-white">
+          <AvatarFallback className="text-2xl font-bold" style={{ background: "#eff6ff", color: "#0268CE" }}>
             {user.name.charAt(0)}
           </AvatarFallback>
         </Avatar>
 
         <div className="flex-1 min-w-0">
-          <h1 className="text-[20px] font-extrabold text-white tracking-tight leading-snug">{user.name}</h1>
+          <h1 className="font-bold tracking-tight leading-snug" style={{ fontSize: 22, color: "#111827" }}>{user.name}</h1>
           <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1">
             {user.location && (
-              <span className="inline-flex items-center gap-1.5 text-[12px] text-white/70">
+              <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, color: "#6b7280" }}>
                 <MapPin className="h-3 w-3" />{user.location}
               </span>
             )}
             {user.organization && (
-              <span className="inline-flex items-center gap-1.5 text-[12px] text-white/70">
+              <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, color: "#6b7280" }}>
                 <Building className="h-3 w-3" />{user.organization}
               </span>
             )}
-            <span className="inline-flex items-center gap-1.5 text-[12px] text-white/60">
+            <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, color: "#9ca3af" }}>
               <Calendar className="h-3 w-3" />Since {format(new Date(user.createdAt), "MMM yyyy")}
             </span>
           </div>
           {user.bio && (
-            <p className="text-[12px] text-white/60 mt-1.5 leading-relaxed line-clamp-2">{user.bio}</p>
+            <p className="mt-1.5 leading-relaxed line-clamp-2" style={{ fontSize: 12, color: "#9ca3af" }}>{user.bio}</p>
           )}
         </div>
 
-        <div className="hidden sm:flex gap-5 flex-shrink-0">
-          <div className="text-right">
-            <p className="text-[28px] font-extrabold text-white leading-none">{posts.length}</p>
-            <p className="text-[11px] text-white/60 mt-0.5 flex items-center gap-1 justify-end">
-              <FileText className="h-3 w-3" />posts
-            </p>
-          </div>
+        <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
+          <span
+            className="inline-flex items-center gap-1.5"
+            style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+          >
+            <strong style={{ color: "#111827", fontWeight: 600 }}>{posts.length}</strong> posts
+          </span>
           {missionMoments.length > 0 && (
-            <div className="text-right border-l border-white/20 pl-5">
-              <p className="text-[28px] font-extrabold text-white leading-none">{missionMoments.length}</p>
-              <p className="text-[11px] text-white/60 mt-0.5 flex items-center gap-1 justify-end">
-                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />moments
-              </p>
-            </div>
+            <span
+              className="inline-flex items-center gap-1.5"
+              style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
+            >
+              <strong style={{ color: "#111827", fontWeight: 600 }}>{missionMoments.length}</strong> moments
+            </span>
           )}
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-1 border-b border-border/50 pb-0">
-        <button
-          onClick={() => setActiveTab("all")}
-          className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
-            activeTab === "all"
-              ? "border-[#005BBC] text-[#005BBC]"
-              : "border-transparent text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <Globe className="h-3.5 w-3.5" />
-          All Posts
-          <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{posts.length}</span>
-        </button>
-        <button
-          onClick={() => setActiveTab("moments")}
-          className={`flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium border-b-2 -mb-px transition-colors ${
-            activeTab === "moments"
-              ? "border-amber-500 text-amber-600"
-              : "border-transparent text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <Star className={`h-3.5 w-3.5 ${activeTab === "moments" ? "fill-amber-500 text-amber-500" : ""}`} />
-          Mission Moments
-          {missionMoments.length > 0 && (
-            <span className="ml-0.5 text-[11px] font-normal bg-muted rounded-full px-1.5 py-0.5">{missionMoments.length}</span>
-          )}
-        </button>
+      <div className="flex items-center" style={{ borderBottom: "1px solid #e5e7eb" }}>
+        {([
+          { id: "all" as ProfileTab, label: "All Posts", count: posts.length },
+          { id: "moments" as ProfileTab, label: "Mission Moments", count: missionMoments.length },
+        ] as const).map(tab => {
+          const active = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className="transition-all duration-150"
+              style={{
+                paddingBottom: 12,
+                paddingTop: 4,
+                marginRight: 24,
+                marginBottom: -1,
+                fontSize: 13,
+                fontWeight: active ? 600 : 400,
+                color: active ? "#111827" : "#6b7280",
+                border: "none",
+                borderBottom: active ? "2px solid #111827" : "2px solid transparent",
+                background: "transparent",
+                cursor: "pointer",
+              }}
+            >
+              {tab.label}
+              {tab.count > 0 && (
+                <span
+                  style={{
+                    marginLeft: 6,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    background: active ? "#f3f4f6" : "transparent",
+                    color: active ? "#374151" : "#9ca3af",
+                    borderRadius: 999,
+                    padding: "1px 7px",
+                  }}
+                >
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Posts feed */}
