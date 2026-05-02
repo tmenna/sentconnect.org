@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 
 import { slides } from "@/slideLoader";
+import { SlideNav } from "@/components/SlideNav";
 
 function getSlideIndex(pathname: string): number {
   const match = pathname.match(/^\/slide(\d+)$/);
@@ -134,6 +135,7 @@ function SlideEditor() {
           <slide.Component />
         </div>
       ))}
+      <SlideNav />
     </div>
   );
 }

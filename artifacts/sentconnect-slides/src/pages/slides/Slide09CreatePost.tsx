@@ -1,116 +1,87 @@
 export default function Slide09CreatePost() {
+  const steps = [
+    {
+      num: 1,
+      icon: "✏️",
+      title: "Tap the Compose button",
+      desc: "Look for the compose button at the top of your Mission Feed. It's always visible when you're logged in.",
+    },
+    {
+      num: 2,
+      icon: "📝",
+      title: "Write your update",
+      desc: "Type your field report, story, or prayer request. Add photos or videos from your device if you'd like.",
+    },
+    {
+      num: 3,
+      icon: "📍",
+      title: "Add optional details",
+      desc: "Tag a location, mark it as a prayer request, or — if you're an admin — flag it as a Mission Moment.",
+    },
+    {
+      num: 4,
+      icon: "🚀",
+      title: "Tap Post to publish",
+      desc: "Your update is instantly visible to all members of your organization's private feed.",
+    },
+  ];
+
   return (
     <div
-      className="w-screen h-screen overflow-hidden relative"
+      className="w-screen h-screen overflow-hidden"
       style={{
-        backgroundColor: "#FAFAFA",
-        fontFamily: "'DM Mono', Courier, monospace",
+        background: "#F4F7FF",
+        fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
-        padding: "6vh 6vw",
         boxSizing: "border-box",
       }}
     >
-      <div style={{ position: "absolute", top: "4vh", right: "6vw", fontSize: "12vw", color: "#E8E8E8", fontWeight: 400, lineHeight: 1, zIndex: 0 }}>
-        09
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2.5vh 5vw", background: "#FFFFFF", borderBottom: "1px solid #E8EEF8" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.8vw" }}>
+          <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#0268CE" }} />
+          </div>
+          <span style={{ color: "#0047A8", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
+        </div>
+        <span style={{ color: "#1E293B", fontSize: "1.3vw", fontWeight: 600 }}>Creating a Post</span>
+        <span style={{ color: "#94A3B8", fontSize: "1vw", fontWeight: 500 }}>9 of 11</span>
       </div>
 
-      <div style={{ width: "100%", height: "2px", backgroundColor: "#0D0D0D", zIndex: 1 }} />
-
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: "3vh", zIndex: 1 }}>
-        <div style={{ color: "#0D0D0D", fontSize: "1.2vw", fontWeight: 500, letterSpacing: "0.05em" }}>
-          [sentconnect.org]
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "3.5vh 5vw 3vh" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.8vw", marginBottom: "2vh" }}>
+          <div style={{ width: "0.3vw", height: "3vh", background: "#0268CE", borderRadius: 2 }} />
+          <span style={{ color: "#0268CE", fontSize: "1vw", fontWeight: 700, letterSpacing: "0.08em" }}>GUIDE STEP 02 · POSTING</span>
         </div>
-        <div style={{ color: "#555555", fontSize: "1vw", fontWeight: 400 }}>
-          DATE: 2026
-        </div>
-      </div>
-
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start", zIndex: 1, marginTop: "5vh" }}>
-        <div style={{ color: "#0047A8", fontSize: "1vw", fontWeight: 500, marginBottom: "1.5vh", letterSpacing: "0.12em" }}>
-          GUIDE STEP 02 // POSTING
-        </div>
-        <h2
-          style={{
-            color: "#0D0D0D",
-            fontSize: "4vw",
-            margin: "0 0 4vh 0",
-            fontWeight: 500,
-            lineHeight: 1.1,
-            textTransform: "uppercase",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          CREATING A POST
+        <h2 style={{ color: "#0F172A", fontSize: "3.4vw", fontWeight: 800, margin: "0 0 3.5vh 0", letterSpacing: "-0.03em", lineHeight: 1.1 }}>
+          How to Create a Post
         </h2>
 
-        <div style={{ display: "flex", gap: "5vw" }}>
-          <div style={{ flex: 1.4 }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "2.5vh" }}>
-              <div style={{ display: "flex", gap: "2vw", alignItems: "flex-start" }}>
-                <div style={{ minWidth: "3vw", height: "3vw", backgroundColor: "#0047A8", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF", fontSize: "1.3vw", fontWeight: 600, flexShrink: 0 }}>
-                  1
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "2vw", flex: 1 }}>
+          {steps.map((step, idx) => (
+            <div key={step.num} style={{ position: "relative" }}>
+              {idx < steps.length - 1 && (
+                <div style={{ position: "absolute", top: "3.5vh", left: "calc(100% + 0.2vw)", width: "1.6vw", height: "2px", background: "#BFDBFE", zIndex: 0, pointerEvents: "none" }} />
+              )}
+              <div style={{ background: "#FFFFFF", borderRadius: 16, padding: "3vh 2vw", border: "1px solid #E8EEF8", height: "100%", boxSizing: "border-box", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", display: "flex", flexDirection: "column", gap: "1.5vh", position: "relative", zIndex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "1.2vw" }}>
+                  <div style={{ width: "4.5vh", height: "4.5vh", minWidth: "4.5vh", borderRadius: "50%", background: "#0268CE", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.4vw", fontWeight: 800 }}>
+                    {step.num}
+                  </div>
+                  <span style={{ fontSize: "2.8vh" }}>{step.icon}</span>
                 </div>
-                <div>
-                  <div style={{ color: "#0D0D0D", fontSize: "1.4vw", fontWeight: 500, marginBottom: "0.3vh" }}>Click "New Post" on the feed</div>
-                  <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.5 }}>The compose button is at the top of the Mission Feed timeline.</div>
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: "2vw", alignItems: "flex-start" }}>
-                <div style={{ minWidth: "3vw", height: "3vw", backgroundColor: "#0047A8", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF", fontSize: "1.3vw", fontWeight: 600, flexShrink: 0 }}>
-                  2
-                </div>
-                <div>
-                  <div style={{ color: "#0D0D0D", fontSize: "1.4vw", fontWeight: 500, marginBottom: "0.3vh" }}>Write your update</div>
-                  <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.5 }}>Type your field report, story, or prayer request in the text area.</div>
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: "2vw", alignItems: "flex-start" }}>
-                <div style={{ minWidth: "3vw", height: "3vw", backgroundColor: "#0047A8", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF", fontSize: "1.3vw", fontWeight: 600, flexShrink: 0 }}>
-                  3
-                </div>
-                <div>
-                  <div style={{ color: "#0D0D0D", fontSize: "1.4vw", fontWeight: 500, marginBottom: "0.3vh" }}>Add photos or video</div>
-                  <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.5 }}>Use the attachment button to upload images or a video clip from your device.</div>
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: "2vw", alignItems: "flex-start" }}>
-                <div style={{ minWidth: "3vw", height: "3vw", backgroundColor: "#0047A8", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF", fontSize: "1.3vw", fontWeight: 600, flexShrink: 0 }}>
-                  4
-                </div>
-                <div>
-                  <div style={{ color: "#0D0D0D", fontSize: "1.4vw", fontWeight: 500, marginBottom: "0.3vh" }}>Fill optional fields, then submit</div>
-                  <div style={{ color: "#555555", fontSize: "1.2vw", lineHeight: 1.5 }}>Add a location if applicable, then press "Post" to publish to the feed.</div>
-                </div>
+                <div style={{ color: "#0F172A", fontSize: "1.25vw", fontWeight: 700, lineHeight: 1.25 }}>{step.title}</div>
+                <div style={{ color: "#64748B", fontSize: "1.08vw", lineHeight: 1.6, flex: 1 }}>{step.desc}</div>
               </div>
             </div>
-          </div>
-
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0" }}>
-            <div style={{ borderTop: "2px solid #E0E0E0", paddingTop: "2vh", marginBottom: "2vh" }}>
-              <div style={{ color: "#555555", fontSize: "1vw", letterSpacing: "0.1em", marginBottom: "0.6vh" }}>TIPS</div>
-              <div style={{ color: "#0D0D0D", fontSize: "1.3vw", lineHeight: 1.6 }}>Posts appear immediately on the org feed for all members to see.</div>
-            </div>
-            <div style={{ borderTop: "2px solid #E0E0E0", paddingTop: "2vh", marginBottom: "2vh" }}>
-              <div style={{ color: "#555555", fontSize: "1vw", letterSpacing: "0.1em", marginBottom: "0.6vh" }}>EDITING</div>
-              <div style={{ color: "#0D0D0D", fontSize: "1.3vw", lineHeight: 1.6 }}>Use the three-dot menu on your post to edit or delete it after publishing.</div>
-            </div>
-            <div style={{ borderTop: "2px solid #E0E0E0", paddingTop: "2vh" }}>
-              <div style={{ color: "#555555", fontSize: "1vw", letterSpacing: "0.1em", marginBottom: "0.6vh" }}>PRAYER TAG</div>
-              <div style={{ color: "#0D0D0D", fontSize: "1.3vw", lineHeight: 1.6 }}>Toggle the prayer request flag to display a distinct badge on your post card.</div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      <div style={{ marginBottom: "3vh", zIndex: 1 }}>
-        <div style={{ color: "#555555", fontSize: "1vw", fontWeight: 400, letterSpacing: "0.05em" }}>
-          PLATFORM: Holtek Solutions LLC
-        </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "#0047A8" }}>
+        <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95vw", fontWeight: 500 }}>CONTACT: TEKI MENNA · 951-551-4528</span>
+        <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.95vw" }}>sentconnect.org</span>
       </div>
-
-      <div style={{ width: "100%", height: "2px", backgroundColor: "#0D0D0D", zIndex: 1 }} />
     </div>
   );
 }

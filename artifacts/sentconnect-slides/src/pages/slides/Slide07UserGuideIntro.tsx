@@ -1,62 +1,63 @@
 export default function Slide07UserGuideIntro() {
   return (
     <div
-      className="w-screen h-screen overflow-hidden relative"
+      className="w-screen h-screen overflow-hidden"
       style={{
-        backgroundColor: "#0047A8",
-        fontFamily: "'DM Mono', Courier, monospace",
+        background: "linear-gradient(145deg, #005BC4 0%, #0268CE 50%, #1A80E0 100%)",
+        fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
-        padding: "6vh 6vw",
         boxSizing: "border-box",
+        position: "relative",
       }}
     >
-      <div style={{ position: "absolute", top: "4vh", right: "6vw", fontSize: "12vw", color: "rgba(255,255,255,0.08)", fontWeight: 400, lineHeight: 1, zIndex: 0 }}>
-        07
+      <div style={{ position: "absolute", bottom: "-10vh", right: "-8vw", width: "48vw", height: "48vw", borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
+
+      {/* Top bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "3vh 5vw 0", zIndex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.8vw" }}>
+          <div style={{ width: "2.6vw", height: "2.6vw", borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: "1.1vw", height: "1.1vw", borderRadius: "50%", background: "#FFFFFF" }} />
+          </div>
+          <span style={{ color: "#FFFFFF", fontSize: "1.4vw", fontWeight: 700 }}>SentConnect</span>
+        </div>
+        <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw", fontWeight: 500 }}>7 of 11</span>
       </div>
 
-      <div style={{ width: "100%", height: "2px", backgroundColor: "#FFFFFF", zIndex: 1 }} />
+      {/* Main content */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 8vw 4vh", zIndex: 1 }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6vw", background: "rgba(255,255,255,0.15)", borderRadius: 50, padding: "0.5vh 1.4vw", marginBottom: "3.5vh", width: "fit-content" }}>
+          <div style={{ width: "0.5vw", height: "0.5vw", borderRadius: "50%", background: "#BAE6FD" }} />
+          <span style={{ color: "rgba(255,255,255,0.95)", fontSize: "0.95vw", fontWeight: 600, letterSpacing: "0.06em" }}>SECTION 02 · NEW USER GUIDE</span>
+        </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: "3vh", zIndex: 1 }}>
-        <div style={{ color: "#FFFFFF", fontSize: "1.2vw", fontWeight: 500, letterSpacing: "0.05em" }}>
-          [sentconnect.org]
-        </div>
-        <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "1vw", fontWeight: 400 }}>
-          DATE: 2026
-        </div>
-      </div>
-
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start", zIndex: 1 }}>
-        <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "1vw", fontWeight: 500, marginBottom: "2vh", letterSpacing: "0.12em" }}>
-          SECTION 02 // NEW USER GUIDE
-        </div>
-        <h2
-          style={{
-            color: "#FFFFFF",
-            fontSize: "6vw",
-            margin: "0 0 5vh 0",
-            fontWeight: 500,
-            lineHeight: 1.05,
-            textTransform: "uppercase",
-            letterSpacing: "-0.02em",
-            maxWidth: "70vw",
-          }}
-        >
-          GETTING STARTED
+        <h2 style={{ color: "#FFFFFF", fontSize: "6.5vw", fontWeight: 800, lineHeight: 1.0, letterSpacing: "-0.04em", margin: "0 0 4vh 0", maxWidth: "65vw" }}>
+          Getting Started
         </h2>
-        <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "1.8vw", fontWeight: 400, lineHeight: 1.6, margin: 0, maxWidth: "50vw" }}>
-          Step-by-step instructions for new organization members — from first login to sharing your first field report.
-        </p>
-      </div>
 
-      <div style={{ marginBottom: "3vh", zIndex: 1 }}>
-        <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "1vw", fontWeight: 400, letterSpacing: "0.05em" }}>
-          PLATFORM: Holtek Solutions LLC
+        <p style={{ color: "rgba(255,255,255,0.78)", fontSize: "1.8vw", fontWeight: 400, lineHeight: 1.65, margin: 0, maxWidth: "50vw" }}>
+          Step-by-step instructions for new members — from first login to sharing your first field report.
+        </p>
+
+        <div style={{ display: "flex", gap: "2vw", marginTop: "5vh" }}>
+          {[
+            { num: "01", label: "Log In" },
+            { num: "02", label: "Create a Post" },
+            { num: "03", label: "Share Your Report" },
+          ].map(step => (
+            <div key={step.num} style={{ display: "flex", alignItems: "center", gap: "1vw", background: "rgba(255,255,255,0.12)", borderRadius: 50, padding: "0.8vh 1.8vw" }}>
+              <span style={{ color: "#93C5FD", fontSize: "1vw", fontWeight: 800 }}>{step.num}</span>
+              <span style={{ color: "#FFFFFF", fontSize: "1.1vw", fontWeight: 600 }}>{step.label}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div style={{ width: "100%", height: "2px", backgroundColor: "#FFFFFF", zIndex: 1 }} />
+      {/* Bottom bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2vh 5vw", background: "rgba(0,0,0,0.2)", zIndex: 1 }}>
+        <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "1vw", fontWeight: 500 }}>CONTACT: TEKI MENNA · 951-551-4528</span>
+        <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw" }}>sentconnect.org</span>
+      </div>
     </div>
   );
 }

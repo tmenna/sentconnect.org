@@ -1,86 +1,68 @@
 export default function Slide01Title() {
   return (
     <div
-      className="w-screen h-screen overflow-hidden relative"
+      className="w-screen h-screen overflow-hidden"
       style={{
-        backgroundColor: "#FAFAFA",
-        fontFamily: "'DM Mono', Courier, monospace",
+        background: "linear-gradient(145deg, #003A8C 0%, #0268CE 55%, #1A80E0 100%)",
+        fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
-        padding: "6vh 6vw",
         boxSizing: "border-box",
+        position: "relative",
       }}
     >
-      <div style={{ position: "absolute", top: "4vh", right: "6vw", fontSize: "12vw", color: "#E8E8E8", fontWeight: 400, lineHeight: 1, zIndex: 0 }}>
-        01
+      {/* Decorative circles */}
+      <div style={{ position: "absolute", top: "-8vh", right: "-6vw", width: "40vw", height: "40vw", borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: "8vh", left: "-8vw", width: "32vw", height: "32vw", borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
+
+      {/* Top bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "3vh 5vw 0", zIndex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.8vw" }}>
+          <div style={{ width: "2.6vw", height: "2.6vw", borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: "1.1vw", height: "1.1vw", borderRadius: "50%", background: "#FFFFFF" }} />
+          </div>
+          <span style={{ color: "#FFFFFF", fontSize: "1.4vw", fontWeight: 700, letterSpacing: "-0.01em" }}>SentConnect</span>
+        </div>
+        <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw", fontWeight: 500 }}>Platform Guide · 2026</span>
       </div>
 
-      <div style={{ width: "100%", height: "2px", backgroundColor: "#0D0D0D", zIndex: 1 }} />
+      {/* Main content */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 8vw 4vh", zIndex: 1 }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6vw", background: "rgba(255,255,255,0.15)", borderRadius: 50, padding: "0.5vh 1.4vw", marginBottom: "3.5vh", width: "fit-content" }}>
+          <div style={{ width: "0.5vw", height: "0.5vw", borderRadius: "50%", background: "#7DD3FC" }} />
+          <span style={{ color: "rgba(255,255,255,0.9)", fontSize: "0.95vw", fontWeight: 600, letterSpacing: "0.06em" }}>HELP GUIDE</span>
+        </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: "3vh", zIndex: 1 }}>
-        <div style={{ color: "#0D0D0D", fontSize: "1.2vw", fontWeight: 500, letterSpacing: "0.05em" }}>
-          [sentconnect.org]
-        </div>
-        <div style={{ color: "#555555", fontSize: "1vw", fontWeight: 400 }}>
-          DATE: 2026
-        </div>
-      </div>
-
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start", zIndex: 1, marginTop: "6vh" }}>
-        <div style={{ color: "#0047A8", fontSize: "1vw", fontWeight: 500, marginBottom: "2vh", letterSpacing: "0.12em" }}>
-          PLATFORM // GUIDE
-        </div>
-        <h1
-          style={{
-            color: "#0D0D0D",
-            fontSize: "6.5vw",
-            margin: "0 0 5vh 0",
-            fontWeight: 500,
-            lineHeight: 1.05,
-            textTransform: "uppercase",
-            letterSpacing: "-0.02em",
-            maxWidth: "72vw",
-          }}
-        >
-          SENTCONNECT
+        <h1 style={{
+          color: "#FFFFFF",
+          fontSize: "7.5vw",
+          fontWeight: 800,
+          lineHeight: 1.0,
+          letterSpacing: "-0.04em",
+          margin: "0 0 4vh 0",
+        }}>
+          SentConnect
         </h1>
-        <p
-          style={{
-            color: "#555555",
-            fontSize: "1.6vw",
-            margin: 0,
-            fontWeight: 400,
-            lineHeight: 1.6,
-            maxWidth: "52vw",
-          }}
-        >
-          {">"} Core features and platform overview
-        </p>
-        <p
-          style={{
-            color: "#555555",
-            fontSize: "1.6vw",
-            margin: "0.6vh 0 0 0",
-            fontWeight: 400,
-            lineHeight: 1.6,
-            maxWidth: "52vw",
-          }}
-        >
-          {">"} New user navigation guide
-        </p>
-      </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "3vh", zIndex: 1 }}>
-        <div style={{ color: "#555555", fontSize: "1vw", fontWeight: 400, letterSpacing: "0.05em" }}>
-          PLATFORM: Holtek Solutions LLC
-        </div>
-        <div style={{ color: "#0047A8", fontSize: "1vw", fontWeight: 500, letterSpacing: "0.08em" }}>
-          sentconnect.org
+        <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1.9vw", fontWeight: 400, lineHeight: 1.6, margin: "0 0 1.5vh 0", maxWidth: "48vw" }}>
+          Everything you need to stay connected with your mission supporters.
+        </p>
+
+        <div style={{ display: "flex", gap: "2.5vw", marginTop: "4.5vh" }}>
+          {["Core Features Overview", "New User Step-by-Step Guide", "Sharing & Export"].map(item => (
+            <div key={item} style={{ display: "flex", alignItems: "center", gap: "0.7vw" }}>
+              <div style={{ width: "0.6vw", height: "0.6vw", borderRadius: "50%", background: "#93C5FD", flexShrink: 0 }} />
+              <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.1vw", fontWeight: 500 }}>{item}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div style={{ width: "100%", height: "2px", backgroundColor: "#0D0D0D", zIndex: 1 }} />
+      {/* Bottom bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2vh 5vw", background: "rgba(0,0,0,0.2)", zIndex: 1 }}>
+        <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "1vw", fontWeight: 500 }}>CONTACT: TEKI MENNA · 951-551-4528</span>
+        <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw" }}>sentconnect.org</span>
+      </div>
     </div>
   );
 }
