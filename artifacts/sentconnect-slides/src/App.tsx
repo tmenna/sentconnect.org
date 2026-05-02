@@ -168,7 +168,7 @@ function getViewport() {
 }
 
 // This component is used for the deployed view at `/features` and `/guide`
-function SlideViewer({ startPosition }: { startPosition?: number }) {
+function SlideViewer({ startPosition, maxPosition }: { startPosition?: number; maxPosition?: number }) {
   const [, navigate] = useLocation();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [vp, setVp] = useState(getViewport);
@@ -193,6 +193,7 @@ function SlideViewer({ startPosition }: { startPosition?: number }) {
 
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   const firstPosition = startPosition ?? (slides.length > 0 ? slides[0].position : 1);
+  const boundsQuery = maxPosition !== undefined ? `?max=${maxPosition}` : "";
 
   const isPortrait = vp.h > vp.w * 1.1;
 
@@ -222,7 +223,7 @@ function SlideViewer({ startPosition }: { startPosition?: number }) {
         <div style={{ width: slideW, height: slideH, flexShrink: 0 }} onClick={() => iframeRef.current?.focus()}>
           <iframe
             ref={iframeRef}
-            src={`${base}/slide${firstPosition}`}
+            src={`${base}/slide${firstPosition}${boundsQuery}`}
             style={{ width: slideW, height: slideH, border: "none", display: "block" }}
             onLoad={() => iframeRef.current?.focus()}
             title="Slide viewer"
@@ -257,7 +258,7 @@ function SlideViewer({ startPosition }: { startPosition?: number }) {
     >
       <iframe
         ref={iframeRef}
-        src={`${base}/slide${firstPosition}`}
+        src={`${base}/slide${firstPosition}${boundsQuery}`}
         style={{ width: deskW, height: deskH, border: "none" }}
         onLoad={() => iframeRef.current?.focus()}
         title="Slide viewer"
@@ -332,7 +333,7 @@ export default function App() {
   }, [navigate]);
 
   if (location === "/") return <HelpLanding />;
-  if (location === "/features") return <SlideViewer startPosition={1} />;
+  if (location === "/features") return <SlideViewer startPosition={1} maxPosition={6} />;
   if (location === "/guide") return <SlideViewer startPosition={7} />;
   if (location === "/allslides") return <AllSlides />;
   return <SlideEditor />;

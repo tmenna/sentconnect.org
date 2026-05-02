@@ -6,17 +6,28 @@ export function SlideNav() {
   const [location, navigate] = useLocation();
   const match = location.match(/^\/slide(\d+)$/);
   const currentPosition = match ? parseInt(match[1], 10) : -1;
-  const currentIndex = slides.findIndex(s => s.position === currentPosition);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Read optional ?max= bound set by the parent SlideViewer
+  const urlParams = new URLSearchParams(window.location.search);
+  const maxBound = urlParams.has("max") ? parseInt(urlParams.get("max")!, 10) : null;
+  const boundsQuery = maxBound !== null ? `?max=${maxBound}` : "";
+
+  // Only show slides within the section bound
+  const visibleSlides = maxBound !== null
+    ? slides.filter(s => s.position <= maxBound)
+    : slides;
+
+  const currentIndex = visibleSlides.findIndex(s => s.position === currentPosition);
 
   if (currentIndex === -1) return null;
 
-  const total = slides.length;
+  const total = visibleSlides.length;
   const canPrev = currentIndex > 0;
   const canNext = currentIndex < total - 1;
 
   function goTo(index: number) {
-    navigate(`/slide${slides[index].position}`);
+    navigate(`/slide${visibleSlides[index].position}${boundsQuery}`);
     setMenuOpen(false);
   }
 
@@ -55,7 +66,7 @@ export function SlideNav() {
               JUMP TO SLIDE
             </span>
           </div>
-          {slides.map((slide, idx) => (
+          {visibleSlides.map((slide, idx) => (
             <button
               key={slide.id}
               onClick={() => goTo(idx)}

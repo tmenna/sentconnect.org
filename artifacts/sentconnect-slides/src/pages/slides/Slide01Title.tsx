@@ -45,7 +45,7 @@ export default function Slide01Title() {
         </h1>
 
         <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1.9vw", fontWeight: 400, lineHeight: 1.6, margin: "0 0 1.5vh 0", maxWidth: "48vw" }}>
-          Everything you need to stay connected with your mission supporters.
+          Bring your church and field teams closer together.
         </p>
 
         <div style={{ display: "flex", gap: "2.5vw", marginTop: "4.5vh" }}>
