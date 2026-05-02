@@ -77,13 +77,40 @@ export default function HelpLanding() {
         <div style={{ position: "absolute", bottom: "-20%", left: "-8%", width: "clamp(120px,30vw,320px)", height: "clamp(120px,30vw,320px)", borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
 
         {/* Logo row */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: "clamp(20px, 4vw, 40px)", position: "relative", flexWrap: "wrap" }}>
-          <div style={{ width: 32, height: 32, minWidth: 32, borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#FFFFFF" }} />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "clamp(20px, 4vw, 40px)", position: "relative", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <div style={{ width: 32, height: 32, minWidth: 32, borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#FFFFFF" }} />
+            </div>
+            <span style={{ color: "#FFFFFF", fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700 }}>SentConnect</span>
+            <span style={{ color: "rgba(255,255,255,0.35)" }}>·</span>
+            <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "clamp(12px, 1.3vw, 15px)", fontWeight: 500 }}>Help Center</span>
           </div>
-          <span style={{ color: "#FFFFFF", fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700 }}>SentConnect</span>
-          <span style={{ color: "rgba(255,255,255,0.35)" }}>·</span>
-          <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "clamp(12px, 1.3vw, 15px)", fontWeight: 500 }}>Help Center</span>
+
+          {/* Back to main site */}
+          <a
+            href="https://www.sentconnect.org"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              background: "rgba(255,255,255,0.12)",
+              border: "1px solid rgba(255,255,255,0.2)",
+              borderRadius: 50,
+              padding: "6px 14px",
+              color: "rgba(255,255,255,0.88)",
+              fontSize: "clamp(11px, 1vw, 13px)",
+              fontWeight: 600,
+              textDecoration: "none",
+              transition: "background 0.15s",
+              whiteSpace: "nowrap",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.22)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.12)"; }}
+          >
+            <span style={{ fontSize: 13 }}>←</span>
+            sentconnect.org
+          </a>
         </div>
 
         {/* Eyebrow pill */}
