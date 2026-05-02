@@ -417,10 +417,10 @@ export function PostCard({
     <div
       className={flat
         ? "bg-white overflow-hidden"
-        : "bg-white rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-px"}
+        : "bg-white rounded-xl overflow-hidden"}
       style={flat
-        ? { borderBottom: "1px solid #F3F4F6" }
-        : { border: "1px solid #BFDBFE", boxShadow: "0 2px 12px rgba(2,104,206,0.06)" }}
+        ? { borderBottom: "1px solid #e5e7eb" }
+        : { border: "1px solid #e5e7eb", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
     >
       {/* Highlight banner (only when not mission moment) */}
       {!post.isMissionMoment && post.isHighlight && (
@@ -433,7 +433,7 @@ export function PostCard({
       {/* Header */}
       <div className="flex items-start gap-3 px-5 pt-5 pb-3">
         <Link href={`/missionaries/${post.author.id}`}>
-          <Avatar className="h-11 w-11 cursor-pointer flex-shrink-0 ring-2 ring-white shadow-sm">
+          <Avatar className="h-11 w-11 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #e5e7eb" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
             <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#E5E7EB", color: "#374151" }}>
               {post.author.name.charAt(0).toUpperCase()}

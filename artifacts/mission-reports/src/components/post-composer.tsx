@@ -184,11 +184,11 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
 
   return (
     <div
-      className={cn("bg-white rounded-2xl p-5 transition-all duration-200")}
+      className={cn("bg-white rounded-xl p-5")}
       style={{
-        border: isMissionMoment ? "1px solid #A7F3D0" : "1px solid #BFDBFE",
-        boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
-        background: isMissionMoment ? "#F0FDF9" : "#FFFFFF",
+        border: isMissionMoment ? "1px solid #bbf7d0" : "1px solid #e5e7eb",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+        background: isMissionMoment ? "#f0fdf4" : "#ffffff",
       }}
       onDragOver={e => e.preventDefault()}
       onDrop={handleDrop}

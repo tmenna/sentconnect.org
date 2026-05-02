@@ -35,8 +35,8 @@ export function Layout({ children }: { children: ReactNode }) {
       <span className={cn(
         "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
         currentPath === href
-          ? "bg-blue-50 text-blue-700"
-          : "text-gray-500 hover:text-blue-700 hover:bg-blue-50"
+          ? "bg-gray-100 text-gray-900"
+          : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
       )}>
         {icon}
         {label}
@@ -97,7 +97,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
                         className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-semibold text-[13px] cursor-pointer transition-colors"
-                        style={{ background: "#EFF6FF", border: `1.5px solid #93C5FD`, color: EMERALD }}
+                        style={{ background: "#f3f4f6", border: `1.5px solid #e5e7eb`, color: "#374151" }}
                       >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
