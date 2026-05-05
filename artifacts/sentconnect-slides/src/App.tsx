@@ -209,7 +209,7 @@ function SlideViewer({ startPosition, maxPosition }: { startPosition?: number; m
       <div style={{ display: "flex", flexDirection: "column", height: "100dvh", width: "100vw", background: "#05112A", fontFamily: font, overflow: "hidden" }}>
 
         {/* Header bar */}
-        <div style={{ height: 52, minHeight: 52, background: "#0047A8", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", flexShrink: 0 }}>
+        <div style={{ height: 52, minHeight: 52, background: "#5C0099", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", flexShrink: 0 }}>
           <button
             onClick={() => navigate("/")}
             style={{ all: "unset", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, color: "#FFFFFF", fontSize: 14, fontWeight: 600 }}
@@ -270,7 +270,7 @@ function SlideViewer({ startPosition, maxPosition }: { startPosition?: number; m
         style={{
           position: "fixed", top: 14, left: 14, zIndex: 9999,
           display: "flex", alignItems: "center", gap: 6,
-          background: "rgba(0, 71, 168, 0.88)",
+          background: "rgba(92, 0, 153, 0.88)",
           backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
           color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.18)",
           borderRadius: 50, padding: "7px 14px 7px 10px",
@@ -280,11 +280,11 @@ function SlideViewer({ startPosition, maxPosition }: { startPosition?: number; m
           letterSpacing: "0.01em", lineHeight: 1,
         }}
         onMouseEnter={e => {
-          (e.currentTarget as HTMLButtonElement).style.background = "rgba(0, 71, 168, 1)";
+          (e.currentTarget as HTMLButtonElement).style.background = "rgba(92, 0, 153, 1)";
           (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.04)";
         }}
         onMouseLeave={e => {
-          (e.currentTarget as HTMLButtonElement).style.background = "rgba(0, 71, 168, 0.88)";
+          (e.currentTarget as HTMLButtonElement).style.background = "rgba(92, 0, 153, 0.88)";
           (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
         }}
       >

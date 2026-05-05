@@ -7,7 +7,7 @@ import { LogOut, Rss, ShieldCheck, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 /* Brand tokens */
-const EMERALD   = "#0268CE";
+const EMERALD   = "#8A05FF";
 const CHARCOAL  = "#374151";
 const BORDER    = "#E5E7EB";
 
@@ -62,7 +62,7 @@ export function Layout({ children }: { children: ReactNode }) {
               rel="noopener noreferrer"
               className={cn(
                 "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
-                "text-gray-500 hover:text-blue-700 hover:bg-blue-50"
+                "text-gray-500 hover:text-purple-700 hover:bg-purple-50"
               )}
             >
               <HelpCircle className="h-3.5 w-3.5" />

@@ -10,23 +10,23 @@ export default function HelpLanding() {
       route: "/features",
       icon: "🚀",
       badge: "PLATFORM OVERVIEW",
-      badgeColor: "#0268CE",
-      badgeBg: "#EFF6FF",
+      badgeColor: "#8A05FF",
+      badgeBg: "#F3E8FF",
       title: "Features & Sign-Up",
       subtitle: "New to SentConnect?",
       desc: "Get a quick tour of what the platform does — the mission feed, your private portal, PDF reports, and admin tools. Includes sign-up and account setup information.",
       slides: "Slides 1 – 6",
-      slideColor: "#0268CE",
-      slideBg: "#EFF6FF",
+      slideColor: "#8A05FF",
+      slideBg: "#F3E8FF",
       bullets: [
         "What SentConnect does",
         "Mission Feed features",
         "PDF export & sharing",
         "Admin controls & roles",
       ],
-      gradient: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
-      border: "#BFDBFE",
-      buttonBg: "#0268CE",
+      gradient: "linear-gradient(135deg, #F3E8FF 0%, #EDE9FE 100%)",
+      border: "#D8B4FE",
+      buttonBg: "#8A05FF",
       sectionLabel: "SECTION 01 · FEATURES & SIGN-UP",
     },
     {
@@ -61,7 +61,7 @@ export default function HelpLanding() {
     <div
       style={{
         minHeight: "100dvh",
-        background: "#F4F7FF",
+        background: "#F9F5FF",
         fontFamily: font,
         display: "flex",
         flexDirection: "column",
@@ -71,7 +71,7 @@ export default function HelpLanding() {
       {/* ── Hero header ─────────────────────────────────────────────────── */}
       <div
         style={{
-          background: "linear-gradient(145deg, #003A8C 0%, #0268CE 55%, #1A80E0 100%)",
+          background: "linear-gradient(145deg, #3D0066 0%, #8A05FF 55%, #A020F0 100%)",
           padding: "clamp(24px, 5vw, 64px) clamp(20px, 6vw, 100px) clamp(28px, 5vw, 64px)",
           position: "relative",
           overflow: "hidden",
@@ -120,7 +120,7 @@ export default function HelpLanding() {
 
         {/* Section label pill */}
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "rgba(255,255,255,0.15)", borderRadius: 50, padding: "5px 14px", marginBottom: 16, position: "relative" }}>
-          <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#93C5FD" }} />
+          <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#E9D5FF" }} />
           <span style={{ color: "rgba(255,255,255,0.9)", fontSize: "clamp(9px, 1vw, 12px)", fontWeight: 600, letterSpacing: "0.07em" }}>{p.sectionLabel}</span>
         </div>
 
@@ -156,7 +156,7 @@ export default function HelpLanding() {
                 width: i === step ? 24 : 8,
                 height: 8,
                 borderRadius: 50,
-                background: i === step ? "#0268CE" : "#CBD5E1",
+                background: i === step ? "#8A05FF" : "#CBD5E1",
                 transition: "all 0.2s ease",
               }}
             />
@@ -275,9 +275,9 @@ export default function HelpLanding() {
               display: "flex",
               alignItems: "center",
               gap: 6,
-              background: step === paths.length - 1 ? "#F1F5F9" : "#0268CE",
+              background: step === paths.length - 1 ? "#F1F5F9" : "#8A05FF",
               border: "1.5px solid",
-              borderColor: step === paths.length - 1 ? "#E2E8F0" : "#0268CE",
+              borderColor: step === paths.length - 1 ? "#E2E8F0" : "#8A05FF",
               borderRadius: 50,
               padding: "8px 18px",
               color: step === paths.length - 1 ? "#CBD5E1" : "#FFFFFF",
@@ -295,7 +295,7 @@ export default function HelpLanding() {
       {/* ── Footer ──────────────────────────────────────────────────────── */}
       <div
         style={{
-          background: "#0047A8",
+          background: "#5C0099",
           padding: "clamp(12px, 2vw, 18px) clamp(16px, 6vw, 100px)",
           display: "flex",
           justifyContent: "space-between",
