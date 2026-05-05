@@ -169,12 +169,15 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               <span className="font-bold text-[18px] tracking-tight" style={{ color: "#0F172A" }}>SentConnect</span>
             </div>
           )}
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ background: "#EFF6FF" }}>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-4" style={{ background: "#EFF6FF" }}>
             <Globe className="h-3 w-3" style={{ color: BLUE }} />
             <span className="text-[11px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
-          <p style={{ fontSize: 14, color: "#64748B", lineHeight: 1.5, maxWidth: 300 }}>
-            Stay connected with your field teams and church.
+          <h2 style={{ fontSize: 28, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 10 }}>
+            Stay connected<br />with your field teams.
+          </h2>
+          <p style={{ fontSize: 13, color: "#475569", lineHeight: 1.55, maxWidth: 300 }}>
+            Share updates, celebrate Mission Moments, and keep your church engaged with what God is doing across the world.
           </p>
         </div>
 
