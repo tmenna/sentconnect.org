@@ -372,13 +372,26 @@ function AboutPage() {
           <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
             <a
               href="/about"
-              style={{ fontSize: 14, fontWeight: 700, color: "#fff", textDecoration: "none", borderBottom: "2px solid rgba(255,255,255,0.5)", paddingBottom: 2 }}
+              style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
             >About</a>
+            <a
+              href="/help"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s", display: "inline-flex", alignItems: "center", gap: 5 }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Help
+            </a>
             <a
               href={lpContent.headerPrimaryCtaHref}
               style={{ fontSize: 14, fontWeight: 700, color: "#8705FA", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F3E8FF"; el.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F3E8FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
             >{lpContent.headerPrimaryCtaLabel}</a>
           </nav>
         </div>
@@ -445,24 +458,34 @@ function AboutPage() {
       </main>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: "#0B1221", padding: "48px 0 32px" }}>
-        <div className="mx-auto max-w-6xl px-6">
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 24, paddingBottom: 32 }}>
-            <div>
-              <span style={{ fontSize: 15, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 12 }}>{lpContent.footerBrandName || "SentConnect"}</span>
-              <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0, lineHeight: 1.6 }}>
+      <footer style={{ background: "linear-gradient(180deg, #263341 0%, #1F2937 100%)", padding: "72px 24px 0" }}>
+        <div className="mx-auto max-w-6xl">
+          <div className="lp-footer-brand-row">
+            <div className="lp-footer-left">
+              <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 14 }}>{lpContent.footerBrandName || "SentConnect"}</span>
+              <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
             </div>
-            <div>
-              <a href="/about" style={{ display: "block", fontSize: 13.5, color: "#9CA3AF", textDecoration: "none", marginBottom: 8 }}>About</a>
-              <a href={lpContent.primaryCtaHref} style={{ display: "block", fontSize: 13.5, color: "#9CA3AF", textDecoration: "none" }}>{lpContent.primaryCtaLabel}</a>
+            <div className="lp-footer-right">
+              <p style={{ fontSize: 13.5, fontWeight: 600, color: "#D1D5DB", margin: "0 0 6px" }}>Holtek Solutions LLC</p>
+              <p style={{ fontSize: 13, color: "#9CA3AF", margin: "0 0 6px", lineHeight: 1.6 }}>
+                2108 N ST STE N, Sacramento, CA 95816
+              </p>
+              <a
+                href="mailto:support@sentconnect.org"
+                style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-block" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#8705FA")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
+              >
+                support@sentconnect.org
+              </a>
             </div>
           </div>
-          <div style={{ height: 1, background: "rgba(255,255,255,0.08)", marginBottom: 20 }} />
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+          <div style={{ height: 1, background: "rgba(255,255,255,0.08)", marginBottom: 24 }} />
+          <div className="lp-footer-legal">
             <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>{lpContent.footerOwnerText}</p>
-            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>© 2026 Holtek Solutions. All rights reserved.</p>
+            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0, flexShrink: 0 }}>© 2026 Holtek Solutions. All rights reserved.</p>
           </div>
         </div>
       </footer>
