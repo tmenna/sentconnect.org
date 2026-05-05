@@ -73,13 +73,13 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   });
 
   if (isLoading) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "#F8FAFC" }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "#ffffff" }}>
       <Loader2 className="h-6 w-6 animate-spin" style={{ color: BLUE }} />
     </div>
   );
 
   if (isAuthenticated && user) return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ background: "#F8FAFC" }}>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ background: "#ffffff" }}>
       <div className="w-full max-w-sm bg-white rounded-2xl p-8 text-center" style={{ border: "1px solid #E2E8F0", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" }}>
         <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#EFF6FF", border: "1.5px solid #BFDBFE" }}>
           <span className="font-bold text-lg" style={{ color: BLUE }}>{user.name.charAt(0).toUpperCase()}</span>
@@ -113,7 +113,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#F8FAFC" }}>
+    <div className="min-h-screen flex" style={{ background: "#ffffff" }}>
 
       {/* ── Left brand panel (hidden on mobile) ── */}
       <div
