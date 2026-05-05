@@ -1,5 +1,5 @@
 import whiteLogo from "@assets/SENTCONNECT_LOGO_-_White_1777111187198.png";
-import blueLogo from "@assets/SENTCONNECT_LOGO_-_Blue_1777111269581.png";
+import blueLogo from "@assets/SENTCONNECT_LOGO_1777974185305.png";
 
 export const LOGO_WHITE = whiteLogo;
 export const LOGO_BLUE  = blueLogo;
