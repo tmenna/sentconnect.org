@@ -128,11 +128,10 @@ function LandingPage() {
 
   const BLUE      = "#8A05FF";
   const BLUE_DARK = "#6E04CC";
-  const YELLOW    = "#FFEB00";
   const CHARCOAL  = "#1F2937";
   const TEXT      = "#0F172A";
   const TEXT2     = "#64748B";
-  const BG        = "#F9F5FF";
+  const BG        = "#FFFFFF";
 
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
@@ -167,9 +166,9 @@ function LandingPage() {
             </a>
             <a
               href={content.headerPrimaryCtaHref}
-              style={{ fontSize: 14, fontWeight: 700, color: TEXT, background: YELLOW, padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0DE00"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = YELLOW; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
+              style={{ fontSize: 14, fontWeight: 700, color: "#8A05FF", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F3E8FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
             >{content.headerPrimaryCtaLabel}</a>
           </nav>
         </div>
@@ -184,8 +183,8 @@ function LandingPage() {
           <div className="lp-hero-grid mx-auto max-w-6xl px-6">
             {/* Left */}
             <div>
-              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: YELLOW, borderRadius: 999, padding: "5px 16px", boxShadow: "0 2px 10px rgba(255,235,0,0.4)" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: TEXT, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "#F3E8FF", borderRadius: 999, padding: "5px 16px", boxShadow: "0 2px 10px rgba(138,5,255,0.18)" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#8A05FF", letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
               </div>
 
               <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px", whiteSpace: "pre-line" }}>
@@ -283,9 +282,9 @@ function LandingPage() {
             </p>
             <a
               href={content.primaryCtaHref}
-              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: YELLOW, color: TEXT, fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,0,0,0.18)", transition: "transform .15s, box-shadow .15s, background .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0DE00"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.24)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = YELLOW; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(0,0,0,0.18)"; }}
+              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: "#FFFFFF", color: "#5C0099", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,0,0,0.18)", transition: "transform .15s, box-shadow .15s, background .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F3E8FF"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.24)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(0,0,0,0.18)"; }}
             >{content.primaryCtaLabel}</a>
           </div>
         </section>
