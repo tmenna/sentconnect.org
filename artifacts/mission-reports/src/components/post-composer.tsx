@@ -184,12 +184,13 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
 
   return (
     <div
-      className={cn("bg-white rounded-2xl")}
+      className={cn("bg-white rounded-2xl overflow-hidden")}
       style={{
-        border: isMissionMoment ? "1px solid #BFDBFE" : "1px solid #BFDBFE",
-        boxShadow: "0 4px 16px rgba(2,104,206,0.08)",
-        background: isMissionMoment ? "#F8FBFF" : "#ffffff",
-        padding: "22px 24px 18px",
+        border: "1px solid #E2E8F0",
+        borderTop: isMissionMoment ? "3px solid #0268CE" : "3px solid #0F172A",
+        boxShadow: "0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.04)",
+        background: "#ffffff",
+        padding: "20px 24px 18px",
       }}
       onDragOver={e => e.preventDefault()}
       onDrop={handleDrop}
@@ -288,10 +289,10 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={posting || files.length >= 6}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors disabled:opacity-40"
-              style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; }}
-              onMouseLeave={e => { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40"
+              style={{ color: "#475569" }}
+              onMouseEnter={e => { e.currentTarget.style.color = "#0268CE"; e.currentTarget.style.background = "#EFF6FF"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "#475569"; e.currentTarget.style.background = ""; }}
               title="Add photo"
             >
               <Image className="h-4 w-4" />
@@ -303,10 +304,10 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={() => videoInputRef.current?.click()}
               disabled={posting || files.length >= 6}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors disabled:opacity-40"
-              style={{ color: files.some(f => isVideo(f)) ? "#111827" : "#6B7280", background: files.some(f => isVideo(f)) ? "#F3F4F6" : "" }}
-              onMouseEnter={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
-              onMouseLeave={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40"
+              style={{ color: files.some(f => isVideo(f)) ? "#0268CE" : "#475569", background: files.some(f => isVideo(f)) ? "#EFF6FF" : "" }}
+              onMouseEnter={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#0268CE"; e.currentTarget.style.background = "#EFF6FF"; } }}
+              onMouseLeave={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#475569"; e.currentTarget.style.background = ""; } }}
               title="Add short video"
             >
               <Video className="h-4 w-4" />
@@ -318,10 +319,10 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={() => setShowLocation(s => !s)}
               disabled={posting}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors"
-              style={{ color: showLocation ? "#111827" : "#6B7280", background: showLocation ? "#F3F4F6" : "" }}
-              onMouseEnter={e => { if (!showLocation) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F3F4F6"; } }}
-              onMouseLeave={e => { if (!showLocation) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150"
+              style={{ color: showLocation ? "#0268CE" : "#475569", background: showLocation ? "#EFF6FF" : "" }}
+              onMouseEnter={e => { if (!showLocation) { e.currentTarget.style.color = "#0268CE"; e.currentTarget.style.background = "#EFF6FF"; } }}
+              onMouseLeave={e => { if (!showLocation) { e.currentTarget.style.color = "#475569"; e.currentTarget.style.background = ""; } }}
               title="Add location"
             >
               <MapPin className="h-4 w-4" />
@@ -359,9 +360,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={handlePost}
               disabled={!canPost}
               className="px-6 font-bold text-[14px] text-white rounded-xl transition-all duration-200 disabled:opacity-40"
-              style={{ background: "#0268CE", height: "40px", boxShadow: canPost ? "0 4px 12px rgba(2,104,206,0.3)" : "none", letterSpacing: "-0.01em" }}
-              onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#0155a5"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#0268CE"; }}
+              style={{ background: "#0268CE", height: "44px", boxShadow: canPost ? "0 4px 14px rgba(2,104,206,0.35)" : "none", letterSpacing: "-0.02em" }}
+              onMouseEnter={e => { if (canPost) { e.currentTarget.style.background = "#0155a5"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#0268CE"; e.currentTarget.style.transform = ""; }}
             >
               Post Update
             </button>

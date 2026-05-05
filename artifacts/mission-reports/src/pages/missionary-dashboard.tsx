@@ -44,32 +44,26 @@ export default function MissionaryDashboard() {
     <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
 
       {/* ── Page header ── */}
-      <div>
-        <div className="flex items-center gap-2 mb-3">
-          <div style={{ width: 3, height: 18, background: "#0268CE", borderRadius: 2, flexShrink: 0 }} />
-          <span style={{ color: "#0268CE", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-            YOUR MISSIONS FEED
-          </span>
-        </div>
-        <h1 style={{ fontSize: 36, fontWeight: 800, color: "#0F172A", letterSpacing: "-0.04em", lineHeight: 1.08, marginBottom: 10 }}>
-          Missions Feed
-        </h1>
-        <p style={{ fontSize: 15, color: "#475569", marginBottom: 22, lineHeight: 1.55 }}>
-          Stay connected. Share what God is doing in the field.
-        </p>
-        <div className="flex items-center gap-2.5">
-          <span
-            className="inline-flex items-center gap-1.5"
-            style={{ fontSize: 13, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "5px 14px" }}
-          >
-            {allPosts.length} <span style={{ fontWeight: 400, color: "#475569" }}>Posts Shared</span>
-          </span>
-          <span
-            className="inline-flex items-center gap-1.5"
-            style={{ fontSize: 13, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "5px 14px" }}
-          >
-            {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>Mission Moments</span>
-          </span>
+      <div style={{ paddingBottom: 4 }}>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 6 }}>
+              Missions Feed
+            </h1>
+            <p style={{ fontSize: 14, color: "#64748B", lineHeight: 1.5 }}>
+              Stay connected. Share what God is doing in the field.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0 mt-1">
+            <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#0F172A", background: "#F1F5F9", border: "1px solid #E2E8F0", borderRadius: 999, padding: "4px 12px" }}>
+              {allPosts.length} <span style={{ fontWeight: 400, color: "#64748B" }}>posts</span>
+            </span>
+            {missionMoments.length > 0 && (
+              <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "4px 12px" }}>
+                {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>moments</span>
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -81,7 +75,7 @@ export default function MissionaryDashboard() {
       </div>
 
       {/* ── Filter tabs ── */}
-      <div className="flex items-center" style={{ borderBottom: "1px solid #BFDBFE" }}>
+      <div className="flex items-center" style={{ borderBottom: "2px solid #F1F5F9" }}>
         {[
           { id: "all" as FeedTab, label: "All Posts", count: allPosts.length },
           { id: "moments" as FeedTab, label: "Mission Moments", count: missionMoments.length },
@@ -153,7 +147,7 @@ export default function MissionaryDashboard() {
           ))}
         </div>
       ) : myPosts.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-dashed border-border py-20 text-center">
+        <div className="bg-white rounded-2xl py-20 text-center" style={{ border: "1.5px dashed #CBD5E1" }}>
           {activeTab === "moments" ? (
             <>
               <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EFF6FF" }}>

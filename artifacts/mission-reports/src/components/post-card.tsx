@@ -417,18 +417,21 @@ export function PostCard({
     <div
       className={flat
         ? "bg-white overflow-hidden"
-        : "bg-white rounded-2xl overflow-hidden"}
+        : "bg-white rounded-2xl overflow-hidden transition-shadow duration-200"}
       style={flat
-        ? { borderBottom: "1px solid #E8EEF8" }
-        : { border: "1px solid #BFDBFE", boxShadow: "0 4px 16px rgba(2,104,206,0.08)" }}
+        ? { borderBottom: "1px solid #E2E8F0" }
+        : { border: "1px solid #E2E8F0", boxShadow: "0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.05)" }}
+      onMouseEnter={e => { if (!flat) (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 12px rgba(15,23,42,0.10), 0 12px 32px rgba(15,23,42,0.07)"; }}
+      onMouseLeave={e => { if (!flat) (e.currentTarget as HTMLDivElement).style.boxShadow = "0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.05)"; }}
     >
       {/* Mission Moment banner */}
       {post.isMissionMoment && (
-        <div className="flex items-center gap-2 px-6 py-2.5" style={{ background: "#EFF6FF", borderBottom: "1px solid #BFDBFE" }}>
-          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#0268CE" }} />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#0268CE", letterSpacing: "0.07em", textTransform: "uppercase" }}>
+        <div className="flex items-center gap-2.5 px-5 py-3" style={{ background: "linear-gradient(135deg, #003D8F 0%, #0268CE 70%, #1A80E0 100%)" }}>
+          <BookOpen className="h-3.5 w-3.5 flex-shrink-0 text-white" />
+          <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.95)", letterSpacing: "0.09em", textTransform: "uppercase", flexGrow: 1 }}>
             Mission Moment
           </span>
+          <Sparkles className="h-3.5 w-3.5" style={{ color: "rgba(255,255,255,0.55)" }} />
         </div>
       )}
 
@@ -523,7 +526,7 @@ export function PostCard({
           {/* Text */}
           {post.description && (
             <div className="px-6 pb-5">
-              <p style={{ fontSize: 16, color: "#334155", lineHeight: 1.75, letterSpacing: "-0.01em", whiteSpace: "pre-wrap" }}>{post.description}</p>
+              <p style={{ fontSize: 16, color: "#1E293B", lineHeight: 1.7, letterSpacing: "-0.01em", whiteSpace: "pre-wrap" }}>{post.description}</p>
             </div>
           )}
 
@@ -535,15 +538,15 @@ export function PostCard({
           )}
 
           {/* Action bar */}
-          <div className="flex items-center" style={{ borderTop: "1px solid #F1F5F9", margin: "0 6px", padding: "2px 0" }}>
+          <div className="flex items-center mx-2" style={{ borderTop: "1px solid #F1F5F9" }}>
             {/* Like */}
             <button
               onClick={toggleLike}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-3 text-[13.5px] font-semibold transition-all rounded-xl mx-0.5",
+                "flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 post.likedByMe
                   ? "text-[#0268CE] bg-[#EFF6FF]"
-                  : "text-[#94A3B8] hover:bg-[#F8FAFC] hover:text-[#475569]"
+                  : "text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#0268CE]"
               )}
             >
               <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-[#0268CE] text-[#0268CE]")} />
@@ -553,7 +556,7 @@ export function PostCard({
             {/* Comment */}
             <button
               onClick={toggleComments}
-              className="flex-1 flex items-center justify-center gap-2 py-3 text-[13.5px] font-semibold text-[#94A3B8] hover:bg-[#F8FAFC] hover:text-[#475569] transition-all rounded-xl mx-0.5"
+              className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#0268CE] transition-all duration-150 rounded-xl my-1"
             >
               <MessageCircle className="h-4 w-4" />
               <span>Comment{post.commentCount > 0 ? ` · ${post.commentCount}` : ""}</span>
@@ -563,10 +566,10 @@ export function PostCard({
             <button
               onClick={copyShareLink}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-3 text-[13.5px] font-semibold transition-all rounded-xl mx-0.5",
+                "flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 copied
                   ? "text-[#0268CE] bg-[#EFF6FF]"
-                  : "text-[#94A3B8] hover:bg-[#F8FAFC] hover:text-[#475569]"
+                  : "text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#0268CE]"
               )}
             >
               {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
@@ -577,7 +580,7 @@ export function PostCard({
             {canManage && (
               <button
                 onClick={() => setShowSlideExport(true)}
-                className="flex-1 flex items-center justify-center gap-2 py-3 text-[13.5px] font-semibold text-[#94A3B8] hover:bg-[#F8FAFC] hover:text-[#475569] transition-all rounded-xl mx-0.5"
+                className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#0268CE] transition-all duration-150 rounded-xl my-1"
               >
                 <ImageDown className="h-4 w-4" />
                 <span>Export</span>
