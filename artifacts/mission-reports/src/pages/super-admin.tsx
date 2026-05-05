@@ -163,7 +163,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
     <button
       onClick={onClick}
       className={`px-5 py-2.5 text-[14px] font-semibold rounded-lg transition-colors ${
-        active ? "bg-[#0268CE] text-white" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+        active ? "bg-[#8705FA] text-white" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
       }`}
     >
       {children}
@@ -323,7 +323,7 @@ function LogoUploader({
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Drop zone / current logo */}
         <div
-          className="flex-1 rounded-xl border-2 border-dashed border-border/60 flex flex-col items-center justify-center gap-3 p-6 cursor-pointer hover:border-[#0268CE]/50 hover:bg-blue-50/40 transition-colors min-h-[140px]"
+          className="flex-1 rounded-xl border-2 border-dashed border-border/60 flex flex-col items-center justify-center gap-3 p-6 cursor-pointer hover:border-[#8705FA]/50 hover:bg-blue-50/40 transition-colors min-h-[140px]"
           onClick={() => fileInputRef.current?.click()}
           onDragOver={e => e.preventDefault()}
           onDrop={e => {
@@ -333,7 +333,7 @@ function LogoUploader({
           }}
         >
           {uploading ? (
-            <Loader2 className="h-8 w-8 text-[#0268CE] animate-spin" />
+            <Loader2 className="h-8 w-8 text-[#8705FA] animate-spin" />
           ) : logoUrl ? (
             <img
               src={logoUrl}
@@ -343,16 +343,16 @@ function LogoUploader({
           ) : (
             <>
               <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                <Upload className="h-5 w-5 text-[#0268CE]" />
+                <Upload className="h-5 w-5 text-[#8705FA]" />
               </div>
               <p className="text-[13px] text-muted-foreground text-center">
-                Drop an image here or <span className="text-[#0268CE] font-semibold">click to browse</span>
+                Drop an image here or <span className="text-[#8705FA] font-semibold">click to browse</span>
               </p>
               <p className="text-[11px] text-muted-foreground/70">PNG, SVG, JPG, WebP — max 6 MB</p>
             </>
           )}
           {logoUrl && !uploading && (
-            <p className="text-[11px] text-[#0268CE] font-medium">Click to replace</p>
+            <p className="text-[11px] text-[#8705FA] font-medium">Click to replace</p>
           )}
         </div>
 
@@ -366,15 +366,15 @@ function LogoUploader({
               onClick={() => setPreviewSize(preset.value)}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border text-left transition-colors ${
                 previewSize === preset.value
-                  ? "border-[#0268CE] bg-blue-50 text-[#0268CE]"
-                  : "border-border/50 bg-white text-foreground hover:border-[#0268CE]/40"
+                  ? "border-[#8705FA] bg-blue-50 text-[#8705FA]"
+                  : "border-border/50 bg-white text-foreground hover:border-[#8705FA]/40"
               }`}
             >
               <div>
                 <p className="text-[13px] font-semibold">{preset.label}</p>
                 <p className="text-[11px] text-muted-foreground">{preset.hint}</p>
               </div>
-              <ChevronRight className={`h-3.5 w-3.5 ${previewSize === preset.value ? "text-[#0268CE]" : "text-muted-foreground/40"}`} />
+              <ChevronRight className={`h-3.5 w-3.5 ${previewSize === preset.value ? "text-[#8705FA]" : "text-muted-foreground/40"}`} />
             </button>
           ))}
         </div>
@@ -386,7 +386,7 @@ function LogoUploader({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading}
-          className="flex items-center gap-2 px-3 py-2 text-[13px] font-semibold border border-border/60 rounded-lg bg-white hover:border-[#0268CE]/50 hover:text-[#0268CE] transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-3 py-2 text-[13px] font-semibold border border-border/60 rounded-lg bg-white hover:border-[#8705FA]/50 hover:text-[#8705FA] transition-colors disabled:opacity-50"
         >
           <Upload className="h-3.5 w-3.5" />
           {logoUrl ? "Replace logo" : "Upload logo"}
@@ -412,7 +412,7 @@ function LogoUploader({
             value={urlInput}
             onChange={e => setUrlInput(e.target.value)}
             placeholder="https://example.com/logo.png"
-            className="flex-1 h-9 px-3 text-[13px] border border-border/60 rounded-lg outline-none focus:border-[#0268CE] focus:ring-1 focus:ring-[#0268CE]/20 bg-white"
+            className="flex-1 h-9 px-3 text-[13px] border border-border/60 rounded-lg outline-none focus:border-[#8705FA] focus:ring-1 focus:ring-[#8705FA]/20 bg-white"
           />
           <button
             type="button"
@@ -424,7 +424,7 @@ function LogoUploader({
               setUrlInput("");
               toast({ title: "Logo URL set — click Save to apply" });
             }}
-            className="px-3 py-2 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-40"
+            className="px-3 py-2 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-40"
           >
             Use URL
           </button>
@@ -604,7 +604,7 @@ function LandingPageEditor() {
             <p className="text-[17px] font-bold text-foreground">Public Landing Page</p>
             <p className="text-[13px] text-muted-foreground mt-0.5">Edit every word, button, and image shown on sentconnect.org.</p>
           </div>
-          <a href="/" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#0268CE] hover:underline">
+          <a href="/" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#8705FA] hover:underline">
             Preview ↗
           </a>
         </div>
@@ -626,7 +626,7 @@ function LandingPageEditor() {
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 text-[14px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-5 py-2.5 text-[14px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Save Changes
@@ -696,7 +696,7 @@ function AboutPhotoUploader({
 
       {/* Preview + drop zone */}
       <div
-        className="relative rounded-xl border-2 border-dashed border-border/60 overflow-hidden cursor-pointer hover:border-[#0268CE]/50 hover:bg-blue-50/30 transition-colors"
+        className="relative rounded-xl border-2 border-dashed border-border/60 overflow-hidden cursor-pointer hover:border-[#8705FA]/50 hover:bg-blue-50/30 transition-colors"
         style={{ minHeight: 180 }}
         onClick={() => fileInputRef.current?.click()}
         onDragOver={e => e.preventDefault()}
@@ -719,14 +719,14 @@ function AboutPhotoUploader({
         ) : (
           <div className="flex flex-col items-center justify-center gap-3 p-10">
             {uploading ? (
-              <Loader2 className="h-8 w-8 text-[#0268CE] animate-spin" />
+              <Loader2 className="h-8 w-8 text-[#8705FA] animate-spin" />
             ) : (
               <>
                 <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                  <Upload className="h-5 w-5 text-[#0268CE]" />
+                  <Upload className="h-5 w-5 text-[#8705FA]" />
                 </div>
                 <p className="text-[13px] text-muted-foreground text-center">
-                  Drop your family photo here or <span className="text-[#0268CE] font-semibold">click to browse</span>
+                  Drop your family photo here or <span className="text-[#8705FA] font-semibold">click to browse</span>
                 </p>
               </>
             )}
@@ -734,7 +734,7 @@ function AboutPhotoUploader({
         )}
         {uploading && imageUrl && (
           <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
-            <Loader2 className="h-8 w-8 text-[#0268CE] animate-spin" />
+            <Loader2 className="h-8 w-8 text-[#8705FA] animate-spin" />
           </div>
         )}
       </div>
@@ -745,7 +745,7 @@ function AboutPhotoUploader({
           type="button"
           disabled={uploading}
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-1.5 px-3 py-2 text-[13px] font-semibold border border-border/60 rounded-lg bg-white hover:border-[#0268CE]/50 hover:text-[#0268CE] transition-colors disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-2 text-[13px] font-semibold border border-border/60 rounded-lg bg-white hover:border-[#8705FA]/50 hover:text-[#8705FA] transition-colors disabled:opacity-50"
         >
           <Upload className="h-3.5 w-3.5" />
           {imageUrl ? "Replace photo" : "Upload photo"}
@@ -832,7 +832,7 @@ function AboutPageEditor() {
             <p className="text-[17px] font-bold text-foreground">About Page</p>
             <p className="text-[13px] text-muted-foreground mt-0.5">Edit the About page shown at sentconnect.org/about.</p>
           </div>
-          <a href="/about" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#0268CE] hover:underline">
+          <a href="/about" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#8705FA] hover:underline">
             Preview ↗
           </a>
         </div>
@@ -877,7 +877,7 @@ function AboutPageEditor() {
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 text-[14px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-5 py-2.5 text-[14px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Save Changes
@@ -1077,7 +1077,7 @@ function CreateOrgModal({
             <button
               type="submit"
               disabled={saving || !!slugError}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Create Organization
@@ -1209,7 +1209,7 @@ function CreatePlatformUserModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Create User
@@ -1300,7 +1300,7 @@ function EditPermissionsModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -1334,11 +1334,11 @@ function ResetLinkModal({ resetUrl, onClose }: { resetUrl: string; onClose: () =
           <p className="text-[13px] text-muted-foreground">Share this link with the user. It expires in 1 hour.</p>
           <div className="flex gap-2">
             <input readOnly value={resetUrl} className="flex-1 px-3 py-2 text-[12px] border border-border/60 rounded-lg bg-muted/30 text-foreground font-mono truncate" />
-            <button onClick={copy} className={`px-3 py-2 text-[12px] font-semibold rounded-lg border transition-colors ${copied ? "bg-blue-50 text-[#0268CE] border-blue-200" : "bg-white border-border/60 hover:bg-muted/40"}`}>
+            <button onClick={copy} className={`px-3 py-2 text-[12px] font-semibold rounded-lg border transition-colors ${copied ? "bg-blue-50 text-[#8705FA] border-blue-200" : "bg-white border-border/60 hover:bg-muted/40"}`}>
               {copied ? "Copied!" : "Copy"}
             </button>
           </div>
-          <button onClick={onClose} className="w-full px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors">Done</button>
+          <button onClick={onClose} className="w-full px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors">Done</button>
         </div>
       </div>
     </div>
@@ -1390,10 +1390,10 @@ function UserActionMenu({
   const actions = [
     { id: "reset-password", label: "Reset Password", icon: KeyRound, color: "text-foreground" },
     ...(user.status === "locked"
-      ? [{ id: "unlock", label: "Unlock Account", icon: Unlock, color: "text-[#0268CE]" }]
+      ? [{ id: "unlock", label: "Unlock Account", icon: Unlock, color: "text-[#8705FA]" }]
       : [{ id: "lock", label: "Lock Account", icon: Lock, color: "text-amber-600" }]),
     ...(user.status === "suspended"
-      ? [{ id: "unsuspend", label: "Unsuspend", icon: UserCheck, color: "text-[#0268CE]" }]
+      ? [{ id: "unsuspend", label: "Unsuspend", icon: UserCheck, color: "text-[#8705FA]" }]
       : [{ id: "suspend", label: "Suspend", icon: Ban, color: "text-orange-600" }]),
     ...(isOrgUser
       ? [{ id: "edit-org-user", label: "Edit Role & Permissions", icon: Settings2, color: "text-foreground" }]
@@ -1600,7 +1600,7 @@ function EditOrgUserModal({
                   onClick={() => handleRoleChange(r)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all ${
                     role === r
-                      ? "bg-[#0268CE] text-white border-[#005BBC] shadow-sm"
+                      ? "bg-[#8705FA] text-white border-[#5A0097] shadow-sm"
                       : "bg-white text-foreground border-border/60 hover:border-gray-300 hover:bg-gray-50"
                   }`}
                 >
@@ -1633,7 +1633,7 @@ function EditOrgUserModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -1693,10 +1693,10 @@ function CreateOrgUserModal({
           <div>
             <h2 className="text-[15px] font-bold text-foreground">Add User to Organization</h2>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <Building2 className="h-3 w-3 text-[#0268CE]" />
+              <Building2 className="h-3 w-3 text-[#8705FA]" />
               <p className="text-[12px] text-muted-foreground font-medium">{org.name}</p>
               <span className="text-[11px] text-muted-foreground/60">·</span>
-              <a href={buildOrgHomeHref(org.subdomain)} target="_blank" rel="noreferrer" className="text-[11px] text-[#0268CE] font-mono hover:underline">{buildOrgHomeHref(org.subdomain)}</a>
+              <a href={buildOrgHomeHref(org.subdomain)} target="_blank" rel="noreferrer" className="text-[11px] text-[#8705FA] font-mono hover:underline">{buildOrgHomeHref(org.subdomain)}</a>
             </div>
           </div>
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60">
@@ -1764,7 +1764,7 @@ function CreateOrgUserModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Add to {org.name}
@@ -1915,7 +1915,7 @@ function CreateUserModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               Create User
@@ -2026,7 +2026,7 @@ function AssignOrgModal({
                 href={`/${orgs.find(o => o.id === Number(orgId))?.subdomain ?? ""}/`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#0268CE] underline font-mono"
+                className="text-[#8705FA] underline font-mono"
               >
                 /{orgs.find(o => o.id === Number(orgId))?.subdomain}/
               </a>
@@ -2039,7 +2039,7 @@ function AssignOrgModal({
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Assignment
@@ -2169,7 +2169,7 @@ function EditProfileModal({ currentUser, onClose, onUpdated }: {
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -2632,7 +2632,7 @@ export default function SuperAdminPanel() {
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors"
             >
               <Plus className="h-4 w-4" /> Add Platform User
             </button>
@@ -2693,7 +2693,7 @@ export default function SuperAdminPanel() {
                               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold border transition-colors ${
                                 u.status === "active"
                                   ? "text-red-600 border-red-200 bg-red-50 hover:bg-red-100"
-                                  : "text-[#0268CE] border-blue-200 bg-blue-50 hover:bg-blue-100"
+                                  : "text-[#8705FA] border-blue-200 bg-blue-50 hover:bg-blue-100"
                               } disabled:opacity-40`}
                             >
                               {actionPending === u.id ? <Loader2 className="h-3 w-3 animate-spin" /> : u.status === "active" ? <XCircle className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}
@@ -2745,13 +2745,13 @@ export default function SuperAdminPanel() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowCreateUser(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold border border-[#0268CE] text-[#0268CE] rounded-lg hover:bg-blue-50 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold border border-[#8705FA] text-[#8705FA] rounded-lg hover:bg-blue-50 transition-colors"
                 >
                   <Plus className="h-3.5 w-3.5" /> New User
                 </button>
                 <button
                   onClick={() => setShowCreateOrg(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#0268CE] text-white rounded-lg hover:bg-[#0155a5] transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors"
                 >
                   <Plus className="h-3.5 w-3.5" /> New Organization
                 </button>
@@ -2786,7 +2786,7 @@ export default function SuperAdminPanel() {
                         href={buildOrgHomeHref(org.subdomain)}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-1 hover:text-[#0268CE] hover:underline transition-colors"
+                        className="flex items-center gap-1 hover:text-[#8705FA] hover:underline transition-colors"
                         title={`Open ${org.name} portal`}
                       >
                         <Globe className="h-3 w-3" />{buildOrgHomeHref(org.subdomain)}
@@ -2799,7 +2799,7 @@ export default function SuperAdminPanel() {
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <button
                       onClick={() => setAddingUserToOrg(org)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-blue-50 text-[#0268CE] hover:bg-blue-100 border border-blue-200 transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-blue-50 text-[#8705FA] hover:bg-blue-100 border border-blue-200 transition-colors"
                     >
                       <Plus className="h-3.5 w-3.5" /> Add User
                     </button>
@@ -2817,7 +2817,7 @@ export default function SuperAdminPanel() {
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors ${
                         org.status === "active"
                           ? "bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
-                          : "bg-blue-50 text-[#0268CE] hover:bg-blue-100 border border-blue-200"
+                          : "bg-blue-50 text-[#8705FA] hover:bg-blue-100 border border-blue-200"
                       }`}
                     >
                       {toggling === org.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : org.status === "active" ? <><XCircle className="h-3.5 w-3.5" /> Suspend</> : <><CheckCircle2 className="h-3.5 w-3.5" /> Activate</>}

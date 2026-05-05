@@ -24,19 +24,19 @@ export default function Slide08HowToLogin() {
     <div
       className="w-screen h-screen overflow-hidden"
       style={{
-        background: "#F4F7FF",
+        background: "#F9F5FF",
         fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         display: "flex",
         flexDirection: "column",
         boxSizing: "border-box",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2.5vh 5vw", background: "#FFFFFF", borderBottom: "1px solid #E8EEF8" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2.5vh 5vw", background: "#FFFFFF", borderBottom: "1px solid #EDE9FE" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.8vw" }}>
-          <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#0268CE" }} />
+          <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "#F3E8FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#8705FA" }} />
           </div>
-          <span style={{ color: "#0047A8", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
+          <span style={{ color: "#5A0097", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
         </div>
         <span style={{ color: "#1E293B", fontSize: "1.3vw", fontWeight: 600 }}>How to Log In</span>
         <span style={{ color: "#94A3B8", fontSize: "1vw", fontWeight: 500 }}>8 of 11</span>
@@ -45,8 +45,8 @@ export default function Slide08HowToLogin() {
       <div style={{ flex: 1, display: "flex", gap: "4vw", padding: "3.5vh 5vw 3vh", alignItems: "stretch" }}>
         <div style={{ flex: "0 0 55%", display: "flex", flexDirection: "column", justifyContent: "center", gap: "2.5vh" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.8vw", marginBottom: "0.5vh" }}>
-            <div style={{ width: "0.3vw", height: "3vh", background: "#0268CE", borderRadius: 2 }} />
-            <span style={{ color: "#0268CE", fontSize: "1vw", fontWeight: 700, letterSpacing: "0.08em" }}>GUIDE STEP 01 · ACCESS</span>
+            <div style={{ width: "0.3vw", height: "3vh", background: "#8705FA", borderRadius: 2 }} />
+            <span style={{ color: "#8705FA", fontSize: "1vw", fontWeight: 700, letterSpacing: "0.08em" }}>GUIDE STEP 01 · ACCESS</span>
           </div>
           <h2 style={{ color: "#0F172A", fontSize: "3.4vw", fontWeight: 800, margin: 0, letterSpacing: "-0.03em", lineHeight: 1.1 }}>
             Signing In for the First Time
@@ -55,14 +55,14 @@ export default function Slide08HowToLogin() {
           <div style={{ display: "flex", flexDirection: "column", gap: "2vh" }}>
             {steps.map(step => (
               <div key={step.num} style={{ display: "flex", gap: "2vw", alignItems: "flex-start" }}>
-                <div style={{ width: "4.5vh", height: "4.5vh", minWidth: "4.5vh", borderRadius: "50%", background: "#0268CE", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF", fontSize: "1.4vw", fontWeight: 800, flexShrink: 0, marginTop: "0.2vh" }}>
+                <div style={{ width: "4.5vh", height: "4.5vh", minWidth: "4.5vh", borderRadius: "50%", background: "#8705FA", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF", fontSize: "1.4vw", fontWeight: 800, flexShrink: 0, marginTop: "0.2vh" }}>
                   {step.num}
                 </div>
-                <div style={{ background: "#FFFFFF", borderRadius: 12, padding: "1.8vh 2vw", border: "1px solid #E8EEF8", flex: 1, boxShadow: "0 2px 6px rgba(0,0,0,0.04)" }}>
+                <div style={{ background: "#FFFFFF", borderRadius: 12, padding: "1.8vh 2vw", border: "1px solid #EDE9FE", flex: 1, boxShadow: "0 2px 6px rgba(0,0,0,0.04)" }}>
                   <div style={{ color: "#0F172A", fontSize: "1.2vw", fontWeight: 700, marginBottom: "0.6vh" }}>{step.title}</div>
                   <div style={{ color: "#64748B", fontSize: "1.1vw", lineHeight: 1.55 }}>{step.desc}</div>
                   {step.highlight && (
-                    <div style={{ marginTop: "1vh", background: "#EFF6FF", borderRadius: 8, padding: "0.8vh 1.2vw", color: "#0047A8", fontSize: "1.1vw", fontWeight: 600 }}>
+                    <div style={{ marginTop: "1vh", background: "#F3E8FF", borderRadius: 8, padding: "0.8vh 1.2vw", color: "#5A0097", fontSize: "1.1vw", fontWeight: 600 }}>
                       {step.highlight}
                     </div>
                   )}
@@ -73,10 +73,10 @@ export default function Slide08HowToLogin() {
         </div>
 
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <div style={{ background: "#FFFFFF", borderRadius: 16, padding: "3vh 2.5vw", border: "1px solid #E8EEF8", boxShadow: "0 4px 16px rgba(0,0,0,0.06)" }}>
+          <div style={{ background: "#FFFFFF", borderRadius: 16, padding: "3vh 2.5vw", border: "1px solid #EDE9FE", boxShadow: "0 4px 16px rgba(0,0,0,0.06)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.8vw", marginBottom: "2.5vh" }}>
               <span style={{ fontSize: "2.5vh" }}>🆘</span>
-              <span style={{ color: "#0047A8", fontSize: "1.1vw", fontWeight: 700 }}>Need Help?</span>
+              <span style={{ color: "#5A0097", fontSize: "1.1vw", fontWeight: 700 }}>Need Help?</span>
             </div>
             {[
               { q: "Forgot password?", a: "Use the \"Forgot password\" link on the login page to get a reset email." },
@@ -89,13 +89,13 @@ export default function Slide08HowToLogin() {
               </div>
             ))}
             <div style={{ color: "#64748B", fontSize: "1.05vw", lineHeight: 1.55 }}>
-              Still stuck? Reach out to <span style={{ color: "#0268CE", fontWeight: 600 }}>Teki Menna at 951-551-4528</span>
+              Still stuck? Reach out to <span style={{ color: "#8705FA", fontWeight: 600 }}>Teki Menna at 951-551-4528</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "#0047A8" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "#5A0097" }}>
         <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95vw", fontWeight: 500 }}>24/7 Platform Contact: Teki Menna: 951-551-4528</span>
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.95vw" }}>www.sentconnect.org</span>
       </div>

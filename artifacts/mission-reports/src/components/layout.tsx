@@ -7,7 +7,7 @@ import { LogOut, Rss, ShieldCheck, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 /* Brand tokens */
-const EMERALD   = "#8A05FF";
+const EMERALD   = "#8705FA";
 const CHARCOAL  = "#374151";
 const BORDER    = "#E5E7EB";
 

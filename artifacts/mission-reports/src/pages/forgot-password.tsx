@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Shuffle, Loader2, CheckCircle2 } from "lucide-react";
-import { usePlatformLogo } from "@/hooks/use-platform-logo";
+import { Loader2, CheckCircle2 } from "lucide-react";
 
-const BG    = "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)";
-const BLUE  = "#005BBC";
-const BLUE_DK = "#0155a5";
+const BG    = "linear-gradient(150deg, #3D0066 0%, #8705FA 55%, #A020F0 100%)";
+const BLUE  = "#8705FA";
+const BLUE_DK = "#6B04C8";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -14,7 +13,6 @@ export default function ForgotPassword() {
   const [devLink, setDevLink] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [hoverBtn, setHoverBtn] = useState(false);
-  const { white: logoUrl } = usePlatformLogo();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -42,18 +40,8 @@ export default function ForgotPassword() {
       className="min-h-screen flex flex-col items-center justify-center px-4 py-12"
       style={{ background: BG }}
     >
-      {/* Logo above card */}
       <div className="flex items-center gap-2.5 mb-8">
-        {logoUrl ? (
-          <img src={logoUrl} alt="SentConnect" style={{ height: 40, maxHeight: 40, width: "auto", maxWidth: 220, objectFit: "contain" }} />
-        ) : (
-          <>
-            <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.18)" }}>
-              <Shuffle className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-[18px] font-extrabold tracking-tight text-white">SentConnect</span>
-          </>
-        )}
+        <span className="text-[18px] font-extrabold tracking-tight text-white">SentConnect</span>
       </div>
 
       <div
@@ -64,7 +52,7 @@ export default function ForgotPassword() {
           <div className="text-center">
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ background: "#EFF6FF", border: "2px solid #93C5FD" }}
+              style={{ background: "#F3E8FF", border: "2px solid #D8B4FE" }}
             >
               <CheckCircle2 className="h-7 w-7" style={{ color: BLUE }} />
             </div>
@@ -106,7 +94,7 @@ export default function ForgotPassword() {
                   required
                   className="w-full h-11 px-4 text-[14px] rounded-xl border outline-none transition-all"
                   style={{ borderColor: "#E5E7EB" }}
-                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(0,107,213,0.1)`; }}
+                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(135,5,250,0.1)`; }}
                   onBlur={e => { e.target.style.borderColor = "#E5E7EB"; e.target.style.boxShadow = "none"; }}
                 />
               </div>

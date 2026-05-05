@@ -2,7 +2,6 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Shuffle } from "lucide-react";
-import { LOGO_WHITE, LOGO_BLUE } from "@/hooks/use-platform-logo";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/components/auth-provider";
@@ -126,8 +125,8 @@ function LandingPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const BLUE      = "#8A05FF";
-  const BLUE_DARK = "#6E04CC";
+  const BLUE      = "#8705FA";
+  const BLUE_DARK = "#6B04C8";
   const CHARCOAL  = "#1F2937";
   const TEXT      = "#0F172A";
   const TEXT2     = "#64748B";
@@ -137,14 +136,10 @@ function LandingPage() {
     <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* landing-page.css is imported statically at module level — no inline style needed */}
       {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(30,136,255,0.28)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            {(content.headerLogoUrl || content.logoUrl || LOGO_WHITE) ? (
-              <img src={content.headerLogoUrl || content.logoUrl || LOGO_WHITE} alt={content.headerBrandName} fetchPriority="high" decoding="async" style={{ height: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
-            ) : (
-              <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{content.headerBrandName}</span>
-            )}
+            <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{content.headerBrandName}</span>
           </a>
           <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
             <a
@@ -166,7 +161,7 @@ function LandingPage() {
             </a>
             <a
               href={content.headerPrimaryCtaHref}
-              style={{ fontSize: 14, fontWeight: 700, color: "#8A05FF", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
+              style={{ fontSize: 14, fontWeight: 700, color: "#8705FA", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F3E8FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
             >{content.headerPrimaryCtaLabel}</a>
@@ -184,7 +179,7 @@ function LandingPage() {
             {/* Left */}
             <div>
               <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "#F3E8FF", borderRadius: 999, padding: "5px 16px", boxShadow: "0 2px 10px rgba(138,5,255,0.18)" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#8A05FF", letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#8705FA", letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
               </div>
 
               <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px", whiteSpace: "pre-line" }}>
@@ -198,9 +193,9 @@ function LandingPage() {
               <div className="lp-animate lp-delay-4">
                 <a
                   href={content.primaryCtaHref}
-                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(30,136,255,0.32)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(30,136,255,0.4)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(30,136,255,0.32)"; }}
+                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(135,5,250,0.32)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(135,5,250,0.4)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(135,5,250,0.32)"; }}
                 >{content.primaryCtaLabel}</a>
               </div>
             </div>
@@ -208,7 +203,7 @@ function LandingPage() {
             {/* Right — Mission Moments card */}
             <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 24, boxShadow: "0 12px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.04)", padding: "24px", position: "relative" }}>
               {/* accent dot */}
-              <div style={{ position: "absolute", top: -12, right: 32, width: 24, height: 24, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(30,136,255,0.45)" }} />
+              <div style={{ position: "absolute", top: -12, right: 32, width: 24, height: 24, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(135,5,250,0.45)" }} />
 
               {/* card header */}
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #F1F5F9" }}>
@@ -260,7 +255,7 @@ function LandingPage() {
                 { title: content.step3Title, desc: content.step3Description, n: "03" },
               ].map(({ title, desc, n }) => (
                 <div key={n} style={{ background: "#fff", borderRadius: 20, padding: "32px 28px", boxShadow: "0 12px 40px rgba(15,23,42,0.08)", border: "1px solid #F1F5F9" }}>
-                  <div style={{ width: 48, height: 48, borderRadius: "50%", background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, boxShadow: "0 4px 14px rgba(30,136,255,0.3)" }}>
+                  <div style={{ width: 48, height: 48, borderRadius: "50%", background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, boxShadow: "0 4px 14px rgba(135,5,250,0.3)" }}>
                     <span style={{ fontSize: 13, fontWeight: 900, color: "#fff", letterSpacing: "0.02em" }}>{n}</span>
                   </div>
                   <h3 style={{ fontSize: 18, fontWeight: 800, color: TEXT, margin: "0 0 12px", letterSpacing: "-0.025em" }}>{title}</h3>
@@ -282,7 +277,7 @@ function LandingPage() {
             </p>
             <a
               href={content.primaryCtaHref}
-              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: "#FFFFFF", color: "#5C0099", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,0,0,0.18)", transition: "transform .15s, box-shadow .15s, background .15s" }}
+              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: "#FFFFFF", color: "#5A0097", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,0,0,0.18)", transition: "transform .15s, box-shadow .15s, background .15s" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F3E8FF"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.24)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(0,0,0,0.18)"; }}
             >{content.primaryCtaLabel}</a>
@@ -297,11 +292,7 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              {(content.footerLogoUrl || content.logoUrl || LOGO_WHITE) ? (
-                <img src={content.footerLogoUrl || content.logoUrl || LOGO_WHITE} alt={content.footerBrandName} loading="lazy" decoding="async" style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", marginBottom: 14, display: "block" }} />
-              ) : (
-                <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 14 }}>{content.footerBrandName}</span>
-              )}
+              <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 14 }}>{content.footerBrandName}</span>
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -316,7 +307,7 @@ function LandingPage() {
               <a
                 href="mailto:support@sentconnect.org"
                 style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-block" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#8A05FF")}
+                onMouseEnter={e => (e.currentTarget.style.color = "#8705FA")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
               >
                 support@sentconnect.org
@@ -362,26 +353,21 @@ function AboutPage() {
       .catch(() => setAbout(DEFAULT_ABOUT_PAGE_CONTENT));
   }, []);
 
-  const BLUE      = "#1E88FF";
-  const BLUE_DARK = "#0A6CFF";
-  const YELLOW    = "#FFEB00";
+  const BLUE      = "#8705FA";
+  const BLUE_DARK = "#6B04C8";
   const TEXT      = "#0F172A";
   const TEXT2     = "#374151";
-  const BG        = "#F8FBFF";
+  const BG        = "#FFFFFF";
 
   const paragraphs = about.aboutBody.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
 
   return (
     <div style={{ minHeight: "100vh", fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(30,136,255,0.28)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            {(lpContent.headerLogoUrl || lpContent.logoUrl || LOGO_WHITE) ? (
-              <img src={lpContent.headerLogoUrl || lpContent.logoUrl || LOGO_WHITE} alt={lpContent.headerBrandName} fetchPriority="high" decoding="async" style={{ height: 36, width: "auto", maxWidth: 180, objectFit: "contain" }} />
-            ) : (
-              <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{lpContent.headerBrandName}</span>
-            )}
+            <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{lpContent.headerBrandName}</span>
           </a>
           <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
             <a
@@ -390,9 +376,9 @@ function AboutPage() {
             >About</a>
             <a
               href={lpContent.headerPrimaryCtaHref}
-              style={{ fontSize: 14, fontWeight: 700, color: TEXT, background: YELLOW, padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0DE00"; el.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = YELLOW; el.style.transform = "translateY(0)"; }}
+              style={{ fontSize: 14, fontWeight: 700, color: "#8705FA", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F3E8FF"; el.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; }}
             >{lpContent.headerPrimaryCtaLabel}</a>
           </nav>
         </div>
@@ -404,7 +390,7 @@ function AboutPage() {
           {/* Back link */}
           <a
             href="/"
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: BLUE, textDecoration: "none", marginBottom: 40 }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "#8705FA", textDecoration: "none", marginBottom: 40 }}
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.75"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
           >
@@ -412,8 +398,8 @@ function AboutPage() {
           </a>
 
           {/* Eyebrow */}
-          <div style={{ display: "inline-flex", alignItems: "center", marginBottom: 20, background: YELLOW, borderRadius: 999, padding: "4px 14px" }}>
-            <span style={{ fontSize: 11, fontWeight: 800, color: TEXT, letterSpacing: "0.1em", textTransform: "uppercase" }}>Our Story</span>
+          <div style={{ display: "inline-flex", alignItems: "center", marginBottom: 20, background: "#F3E8FF", borderRadius: 999, padding: "4px 14px" }}>
+            <span style={{ fontSize: 11, fontWeight: 800, color: "#8705FA", letterSpacing: "0.1em", textTransform: "uppercase" }}>Our Story</span>
           </div>
 
           {/* Title */}
@@ -450,7 +436,7 @@ function AboutPage() {
             <p style={{ fontSize: 17, fontWeight: 700, color: TEXT, marginBottom: 20 }}>Ready to connect your church and field teams?</p>
             <a
               href={lpContent.primaryCtaHref}
-              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(30,136,255,0.32)", transition: "background .15s, transform .15s" }}
+              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(135,5,250,0.32)", transition: "background .15s, transform .15s" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; }}
             >{lpContent.primaryCtaLabel}</a>
@@ -463,9 +449,7 @@ function AboutPage() {
         <div className="mx-auto max-w-6xl px-6">
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 24, paddingBottom: 32 }}>
             <div>
-              {(lpContent.footerLogoUrl || lpContent.logoUrl || LOGO_WHITE) && (
-                <img src={lpContent.footerLogoUrl || lpContent.logoUrl || LOGO_WHITE} alt={lpContent.footerBrandName || "SentConnect"} loading="lazy" decoding="async" style={{ height: 30, width: "auto", objectFit: "contain", marginBottom: 12 }} />
-              )}
+              <span style={{ fontSize: 15, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 12 }}>{lpContent.footerBrandName || "SentConnect"}</span>
               <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0, lineHeight: 1.6 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -494,7 +478,7 @@ function AdminAccessMoved() {
         <p className="mt-3 text-sm leading-6 text-slate-600">
           The main platform admin is no longer available from sentconnect.org/admin.
         </p>
-        <a href="/" className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#1898F3] text-sm font-bold text-white hover:bg-[#1280D0]">
+        <a href="/" className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#8705FA] text-sm font-bold text-white hover:bg-[#6B04C8]">
           Return to SentConnect
         </a>
       </div>
@@ -516,7 +500,7 @@ function AuthLoading() {
 
 function OrgUnavailable({ orgSlug, reason }: { orgSlug: string; reason?: string }) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ background: "#1898F3" }}>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ background: "#8705FA" }}>
       <div className="w-full max-w-[440px] bg-white rounded-2xl px-8 py-10 text-center" style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}>
         <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 bg-red-50 border-2 border-red-100">
           <span className="text-red-600 text-2xl font-bold">!</span>
@@ -526,7 +510,7 @@ function OrgUnavailable({ orgSlug, reason }: { orgSlug: string; reason?: string 
           No SentConnect organization is registered for <span className="font-semibold text-gray-700">{orgSlug}</span>.
           {reason ? ` ${reason}` : ""}
         </p>
-        <a href="/" className="inline-flex w-full h-11 items-center justify-center rounded-xl text-[15px] font-bold text-white bg-[#1898F3] hover:bg-[#1280D0] transition-colors">
+        <a href="/" className="inline-flex w-full h-11 items-center justify-center rounded-xl text-[15px] font-bold text-white bg-[#8705FA] hover:bg-[#6B04C8] transition-colors">
           Go to SentConnect
         </a>
       </div>

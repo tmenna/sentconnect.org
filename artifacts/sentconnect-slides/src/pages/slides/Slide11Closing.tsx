@@ -3,7 +3,7 @@ export default function Slide11Closing() {
     <div
       className="w-screen h-screen overflow-hidden"
       style={{
-        background: "linear-gradient(145deg, #003A8C 0%, #0268CE 55%, #1A80E0 100%)",
+        background: "linear-gradient(145deg, #3D0066 0%, #8705FA 55%, #A020F0 100%)",
         fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         display: "flex",
         flexDirection: "column",
@@ -13,7 +13,6 @@ export default function Slide11Closing() {
     >
       <div style={{ position: "absolute", top: "-10vh", left: "-8vw", width: "40vw", height: "40vw", borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
 
-      {/* Top bar */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "3vh 5vw 0", zIndex: 1 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.8vw" }}>
           <div style={{ width: "2.6vw", height: "2.6vw", borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -24,7 +23,6 @@ export default function Slide11Closing() {
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw", fontWeight: 500 }}>11 of 11</span>
       </div>
 
-      {/* Main content */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "0 8vw 4vh", zIndex: 1, textAlign: "center" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6vw", background: "rgba(255,255,255,0.15)", borderRadius: 50, padding: "0.5vh 1.4vw", marginBottom: "3.5vh" }}>
           <span style={{ color: "rgba(255,255,255,0.9)", fontSize: "0.95vw", fontWeight: 600, letterSpacing: "0.06em" }}>RESOURCES</span>
@@ -49,7 +47,6 @@ export default function Slide11Closing() {
         </div>
       </div>
 
-      {/* Bottom bar */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2vh 5vw", background: "rgba(0,0,0,0.2)", zIndex: 1 }}>
         <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "1vw", fontWeight: 500 }}>24/7 Platform Contact: Teki Menna: 951-551-4528</span>
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw" }}>www.sentconnect.org</span>

@@ -77,7 +77,7 @@ export default function MissionaryProfile() {
       <div className="flex items-start gap-5 py-2">
         <Avatar className="h-16 w-16 flex-shrink-0 rounded-xl" style={{ border: "1.5px solid #E8EEF8" }}>
           <AvatarImage src={user.avatarUrl || undefined} alt={user.name} className="rounded-xl" />
-          <AvatarFallback className="text-2xl font-bold rounded-xl" style={{ background: "#EFF6FF", color: "#0268CE" }}>
+          <AvatarFallback className="text-2xl font-bold rounded-xl" style={{ background: "#F3E8FF", color: "#8705FA" }}>
             {user.name.charAt(0)}
           </AvatarFallback>
         </Avatar>
@@ -105,11 +105,11 @@ export default function MissionaryProfile() {
         </div>
 
         <div className="hidden sm:flex items-center gap-2 flex-shrink-0 mt-1">
-          <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "4px 12px" }}>
+          <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#8705FA", background: "#F3E8FF", border: "1px solid #D8B4FE", borderRadius: 999, padding: "4px 12px" }}>
             {posts.length} <span style={{ fontWeight: 400, color: "#475569" }}>posts</span>
           </span>
           {missionMoments.length > 0 && (
-            <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "4px 12px" }}>
+            <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#8705FA", background: "#F3E8FF", border: "1px solid #D8B4FE", borderRadius: 999, padding: "4px 12px" }}>
               {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>moments</span>
             </span>
           )}
@@ -117,7 +117,7 @@ export default function MissionaryProfile() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center" style={{ borderBottom: "1px solid #BFDBFE" }}>
+      <div className="flex items-center" style={{ borderBottom: "1px solid #D8B4FE" }}>
         {([
           { id: "all" as ProfileTab, label: "All Posts", count: posts.length },
           { id: "moments" as ProfileTab, label: "Mission Moments", count: missionMoments.length },
@@ -135,9 +135,9 @@ export default function MissionaryProfile() {
                 marginBottom: -1,
                 fontSize: 14,
                 fontWeight: active ? 700 : 400,
-                color: active ? "#0268CE" : "#94A3B8",
+                color: active ? "#8705FA" : "#94A3B8",
                 border: "none",
-                borderBottom: active ? "2px solid #0268CE" : "2px solid transparent",
+                borderBottom: active ? "2px solid #8705FA" : "2px solid transparent",
                 background: "transparent",
                 cursor: "pointer",
                 letterSpacing: active ? "-0.01em" : "normal",
@@ -150,8 +150,8 @@ export default function MissionaryProfile() {
                     marginLeft: 6,
                     fontSize: 11,
                     fontWeight: 600,
-                    background: active ? "#EFF6FF" : "transparent",
-                    color: active ? "#0268CE" : "#94A3B8",
+                    background: active ? "#F3E8FF" : "transparent",
+                    color: active ? "#8705FA" : "#94A3B8",
                     borderRadius: 999,
                     padding: "1px 7px",
                   }}

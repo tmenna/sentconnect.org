@@ -112,8 +112,8 @@ function AdminProfile() {
   return (
     <div className="max-w-lg mx-auto py-6">
       <div className="flex items-start gap-4 mb-7">
-        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#EFF6FF" }}>
-          <Building2 className="h-5 w-5" style={{ color: "#0268CE" }} />
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#F3E8FF" }}>
+          <Building2 className="h-5 w-5" style={{ color: "#8705FA" }} />
         </div>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>Organization Settings</h1>
@@ -283,8 +283,8 @@ function FieldUserProfile() {
   return (
     <div className="max-w-lg mx-auto py-6">
       <div className="flex items-start gap-4 mb-7">
-        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#EFF6FF" }}>
-          <User className="h-5 w-5" style={{ color: "#0268CE" }} />
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#F3E8FF" }}>
+          <User className="h-5 w-5" style={{ color: "#8705FA" }} />
         </div>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>Profile Settings</h1>

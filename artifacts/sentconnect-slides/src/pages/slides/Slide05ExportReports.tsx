@@ -10,7 +10,7 @@ export default function Slide05ExportReports() {
     <div
       className="w-screen h-screen overflow-hidden"
       style={{
-        background: "linear-gradient(145deg, #0F2A5E 0%, #0047A8 60%, #0268CE 100%)",
+        background: "linear-gradient(145deg, #3D0066 0%, #5A0097 60%, #8705FA 100%)",
         fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         display: "flex",
         flexDirection: "column",

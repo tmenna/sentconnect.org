@@ -200,7 +200,7 @@ const THUMB_HIGHLIGHT = {
   icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
 };
 const THUMB_DEFAULT = {
-  bg: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 60%, #BFDBFE 100%)",
+  bg: "linear-gradient(135deg, #F3E8FF 0%, #DBEAFE 60%, #D8B4FE 100%)",
   iconBg: "rgba(255,255,255,0.55)",
   icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
 };
@@ -357,7 +357,7 @@ export function FeedGridCard({
         <div className="flex items-center gap-2 mt-auto pt-3" style={{ borderTop: "1px solid #F3F4F6" }}>
           <Avatar className="h-6 w-6 flex-shrink-0">
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="text-[9px] font-bold" style={{ background: "#EFF6FF", color: "#0268CE" }}>
+            <AvatarFallback className="text-[9px] font-bold" style={{ background: "#F3E8FF", color: "#8705FA" }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -373,7 +373,7 @@ export function FeedGridCard({
           )}
           <span
             className="ml-auto flex items-center gap-0.5 text-[12px] font-semibold flex-shrink-0 transition-colors"
-            style={{ color: hovered ? "#0155a5" : "#0268CE" }}
+            style={{ color: hovered ? "#6B04C8" : "#8705FA" }}
           >
             Read more <ArrowRight className="h-3 w-3" />
           </span>

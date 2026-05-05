@@ -30,19 +30,19 @@ export default function Slide09CreatePost() {
     <div
       className="w-screen h-screen overflow-hidden"
       style={{
-        background: "#F4F7FF",
+        background: "#F9F5FF",
         fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         display: "flex",
         flexDirection: "column",
         boxSizing: "border-box",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2.5vh 5vw", background: "#FFFFFF", borderBottom: "1px solid #E8EEF8" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2.5vh 5vw", background: "#FFFFFF", borderBottom: "1px solid #EDE9FE" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.8vw" }}>
-          <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#0268CE" }} />
+          <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "#F3E8FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#8705FA" }} />
           </div>
-          <span style={{ color: "#0047A8", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
+          <span style={{ color: "#5A0097", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
         </div>
         <span style={{ color: "#1E293B", fontSize: "1.3vw", fontWeight: 600 }}>Creating a Post</span>
         <span style={{ color: "#94A3B8", fontSize: "1vw", fontWeight: 500 }}>9 of 11</span>
@@ -50,8 +50,8 @@ export default function Slide09CreatePost() {
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "3.5vh 5vw 3vh" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.8vw", marginBottom: "2vh" }}>
-          <div style={{ width: "0.3vw", height: "3vh", background: "#0268CE", borderRadius: 2 }} />
-          <span style={{ color: "#0268CE", fontSize: "1vw", fontWeight: 700, letterSpacing: "0.08em" }}>GUIDE STEP 02 · POSTING</span>
+          <div style={{ width: "0.3vw", height: "3vh", background: "#8705FA", borderRadius: 2 }} />
+          <span style={{ color: "#8705FA", fontSize: "1vw", fontWeight: 700, letterSpacing: "0.08em" }}>GUIDE STEP 02 · POSTING</span>
         </div>
         <h2 style={{ color: "#0F172A", fontSize: "3.4vw", fontWeight: 800, margin: "0 0 3.5vh 0", letterSpacing: "-0.03em", lineHeight: 1.1 }}>
           How to Create a Post
@@ -61,11 +61,11 @@ export default function Slide09CreatePost() {
           {steps.map((step, idx) => (
             <div key={step.num} style={{ position: "relative" }}>
               {idx < steps.length - 1 && (
-                <div style={{ position: "absolute", top: "3.5vh", left: "calc(100% + 0.2vw)", width: "1.6vw", height: "2px", background: "#BFDBFE", zIndex: 0, pointerEvents: "none" }} />
+                <div style={{ position: "absolute", top: "3.5vh", left: "calc(100% + 0.2vw)", width: "1.6vw", height: "2px", background: "#D8B4FE", zIndex: 0, pointerEvents: "none" }} />
               )}
-              <div style={{ background: "#FFFFFF", borderRadius: 16, padding: "3vh 2vw", border: "1px solid #E8EEF8", height: "100%", boxSizing: "border-box", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", display: "flex", flexDirection: "column", gap: "1.5vh", position: "relative", zIndex: 1 }}>
+              <div style={{ background: "#FFFFFF", borderRadius: 16, padding: "3vh 2vw", border: "1px solid #EDE9FE", height: "100%", boxSizing: "border-box", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", display: "flex", flexDirection: "column", gap: "1.5vh", position: "relative", zIndex: 1 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "1.2vw" }}>
-                  <div style={{ width: "4.5vh", height: "4.5vh", minWidth: "4.5vh", borderRadius: "50%", background: "#0268CE", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.4vw", fontWeight: 800 }}>
+                  <div style={{ width: "4.5vh", height: "4.5vh", minWidth: "4.5vh", borderRadius: "50%", background: "#8705FA", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.4vw", fontWeight: 800 }}>
                     {step.num}
                   </div>
                   <span style={{ fontSize: "2.8vh" }}>{step.icon}</span>
@@ -78,7 +78,7 @@ export default function Slide09CreatePost() {
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "#0047A8" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "#5A0097" }}>
         <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95vw", fontWeight: 500 }}>24/7 Platform Contact: Teki Menna: 951-551-4528</span>
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.95vw" }}>www.sentconnect.org</span>
       </div>

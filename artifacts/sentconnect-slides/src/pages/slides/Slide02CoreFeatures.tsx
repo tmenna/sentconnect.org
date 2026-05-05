@@ -4,8 +4,8 @@ export default function Slide02CoreFeatures() {
       label: "MISSION FEED",
       title: "Private Social Feed",
       desc: "Org-scoped timeline where missionaries post updates, photos, and prayer requests — visible only to invited members.",
-      accent: "#0268CE",
-      bg: "#EFF6FF",
+      accent: "#8705FA",
+      bg: "#F3E8FF",
       icon: "📡",
     },
     {
@@ -30,30 +30,28 @@ export default function Slide02CoreFeatures() {
     <div
       className="w-screen h-screen overflow-hidden"
       style={{
-        background: "#F4F7FF",
+        background: "#F9F5FF",
         fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         display: "flex",
         flexDirection: "column",
         boxSizing: "border-box",
       }}
     >
-      {/* Top bar */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2.5vh 5vw", background: "#FFFFFF", borderBottom: "1px solid #E8EEF8" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2.5vh 5vw", background: "#FFFFFF", borderBottom: "1px solid #EDE9FE" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.8vw" }}>
-          <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#0268CE" }} />
+          <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "#F3E8FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#8705FA" }} />
           </div>
-          <span style={{ color: "#0047A8", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
+          <span style={{ color: "#5A0097", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
         </div>
         <span style={{ color: "#1E293B", fontSize: "1.3vw", fontWeight: 600 }}>Platform Overview</span>
         <span style={{ color: "#94A3B8", fontSize: "1vw", fontWeight: 500 }}>2 of 11</span>
       </div>
 
-      {/* Content */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "4vh 5vw 3vh" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6vw", marginBottom: "2.5vh" }}>
-          <div style={{ width: "0.3vw", height: "3vh", background: "#0268CE", borderRadius: 2 }} />
-          <span style={{ color: "#0268CE", fontSize: "1vw", fontWeight: 700, letterSpacing: "0.08em" }}>SECTION 01 · CORE FEATURES</span>
+          <div style={{ width: "0.3vw", height: "3vh", background: "#8705FA", borderRadius: 2 }} />
+          <span style={{ color: "#8705FA", fontSize: "1vw", fontWeight: 700, letterSpacing: "0.08em" }}>SECTION 01 · CORE FEATURES</span>
         </div>
 
         <h2 style={{ color: "#0F172A", fontSize: "3.8vw", fontWeight: 800, margin: "0 0 5vh 0", letterSpacing: "-0.03em", lineHeight: 1.1 }}>
@@ -62,7 +60,7 @@ export default function Slide02CoreFeatures() {
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2.5vw" }}>
           {features.map(f => (
-            <div key={f.label} style={{ background: "#FFFFFF", borderRadius: 16, padding: "3.5vh 2.5vw", boxShadow: "0 2px 12px rgba(0,0,0,0.06)", border: "1px solid #E8EEF8", display: "flex", flexDirection: "column" }}>
+            <div key={f.label} style={{ background: "#FFFFFF", borderRadius: 16, padding: "3.5vh 2.5vw", boxShadow: "0 2px 12px rgba(0,0,0,0.06)", border: "1px solid #EDE9FE", display: "flex", flexDirection: "column" }}>
               <div style={{ width: "5vh", height: "5vh", borderRadius: 12, background: f.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "2.2vh", marginBottom: "2.5vh" }}>
                 {f.icon}
               </div>
@@ -74,8 +72,7 @@ export default function Slide02CoreFeatures() {
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "#0047A8" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "#5A0097" }}>
         <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95vw", fontWeight: 500 }}>24/7 Platform Contact: Teki Menna: 951-551-4528</span>
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.95vw" }}>www.sentconnect.org</span>
       </div>

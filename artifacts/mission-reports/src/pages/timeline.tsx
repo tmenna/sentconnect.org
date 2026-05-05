@@ -87,7 +87,7 @@ export default function Feed() {
 
   const missionMoments = accumulatedPosts.filter(p => p.isMissionMoment);
   const displayedPosts = activeTab === "moments" ? missionMoments : accumulatedPosts;
-  const EMERALD = "#0268CE";
+  const EMERALD = "#8705FA";
 
   return (
     <div className="max-w-[720px] mx-auto" style={{ display: "flex", flexDirection: "column", gap: 0 }}>

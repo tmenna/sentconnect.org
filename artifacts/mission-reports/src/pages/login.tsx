@@ -19,8 +19,8 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const BLUE = "#8A05FF";
-const BLUE_DARK = "#6E04CC";
+const BLUE = "#8705FA";
+const BLUE_DARK = "#6B04C8";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();

@@ -3,7 +3,7 @@ import { AlertCircle } from "lucide-react";
 import { Shuffle } from "lucide-react";
 
 const BG   = "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)";
-const BLUE = "#0268CE";
+const BLUE = "#8705FA";
 
 export default function NotFound() {
   return (
@@ -36,7 +36,7 @@ export default function NotFound() {
           <button
             className="w-full h-11 text-white font-bold rounded-xl text-[15px] transition-all"
             style={{ background: BLUE }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#0155a5"; }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#6B04C8"; }}
             onMouseLeave={e => { e.currentTarget.style.background = BLUE; }}
           >
             Back to Home

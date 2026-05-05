@@ -76,19 +76,19 @@ export function SlideNav() {
                 gap: 12,
                 width: "100%",
                 padding: "10px 14px",
-                background: idx === currentIndex ? "#EFF6FF" : "transparent",
+                background: idx === currentIndex ? "#F3E8FF" : "transparent",
                 border: "none",
                 borderRadius: 10,
                 cursor: "pointer",
                 textAlign: "left",
                 transition: "background 0.15s",
               }}
-              onMouseEnter={e => { if (idx !== currentIndex) (e.currentTarget as HTMLButtonElement).style.background = "#F8FAFF"; }}
+              onMouseEnter={e => { if (idx !== currentIndex) (e.currentTarget as HTMLButtonElement).style.background = "#F5F0FF"; }}
               onMouseLeave={e => { if (idx !== currentIndex) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
             >
               <span style={{
                 minWidth: 26, height: 26, borderRadius: 6,
-                background: idx === currentIndex ? "#0268CE" : "#F1F5F9",
+                background: idx === currentIndex ? "#8705FA" : "#F1F5F9",
                 color: idx === currentIndex ? "#FFFFFF" : "#64748B",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 11, fontWeight: 700, fontFamily: "system-ui, sans-serif", flexShrink: 0,
@@ -97,7 +97,7 @@ export function SlideNav() {
               </span>
               <span style={{
                 fontSize: 13.5, fontWeight: idx === currentIndex ? 600 : 500,
-                color: idx === currentIndex ? "#0047A8" : "#1E293B",
+                color: idx === currentIndex ? "#5A0097" : "#1E293B",
                 fontFamily: "system-ui, sans-serif", lineHeight: 1.35,
               }}>
                 {slide.title}

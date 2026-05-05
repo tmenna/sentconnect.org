@@ -194,7 +194,7 @@ function EditRolePermissionsModal({
                   onClick={() => handleRoleChange(r)}
                   className="flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={role === r
-                    ? { background: "#0268CE", color: "#fff", borderColor: "#0268CE", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }
+                    ? { background: "#8705FA", color: "#fff", borderColor: "#8705FA", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }
                     : { background: "#fff", color: undefined, borderColor: undefined }
                   }
                 >
@@ -298,12 +298,12 @@ function StatCard({ label, value, icon, accent, onClick }: {
 
 function RoleBadge({ role }: { role: string }) {
   if (role === "admin") return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#EEF2FF", color: "#4338CA", border: "1px solid #C7D2FE" }}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F3E8FF", color: "#6B04C8", border: "1px solid #C7D2FE" }}>
       <ShieldCheck className="h-3 w-3" /> Admin
     </span>
   );
   return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#EFF6FF", color: "#1D4ED8", border: "1px solid #BFDBFE" }}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F3E8FF", color: "#8705FA", border: "1px solid #D8B4FE" }}>
       <Globe className="h-3 w-3" /> Field User
     </span>
   );
@@ -656,7 +656,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 flex-shrink-0 rounded-xl">
               <AvatarImage src={u.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-bold text-[14px] rounded-xl" style={u.role === "admin" ? { background: "#EEF2FF", color: "#4338CA" } : { background: "#EFF6FF", color: "#1D4ED8" }}>
+              <AvatarFallback className="font-bold text-[14px] rounded-xl" style={u.role === "admin" ? { background: "#F3E8FF", color: "#6B04C8" } : { background: "#F3E8FF", color: "#8705FA" }}>
                 {u.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -891,8 +891,8 @@ export default function AdminDashboard() {
 
         {/* ── Page header ── */}
         <div className="flex items-start gap-4 mb-7">
-          <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#EEF2FF" }}>
-            <Users className="h-5 w-5" style={{ color: "#4338CA" }} />
+          <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#F3E8FF" }}>
+            <Users className="h-5 w-5" style={{ color: "#6B04C8" }} />
           </div>
           <div className="flex-1 min-w-0">
             <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>
@@ -905,21 +905,21 @@ export default function AdminDashboard() {
               <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#059669", background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 999, padding: "4px 12px" }}>
                 {usersLoading ? "—" : allUsers.length} <span style={{ fontWeight: 400, color: "#475569" }}>Members</span>
               </span>
-              <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "4px 12px" }}>
+              <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#8705FA", background: "#F3E8FF", border: "1px solid #D8B4FE", borderRadius: 999, padding: "4px 12px" }}>
                 {usersLoading ? "—" : countriesCount} <span style={{ fontWeight: 400, color: "#475569" }}>Countries</span>
               </span>
             </div>
           </div>
           <Avatar className="h-9 w-9 flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
             <AvatarImage src={user.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#EFF6FF", color: "#0268CE", fontWeight: 700, fontSize: 13 }}>
+            <AvatarFallback style={{ background: "#F3E8FF", color: "#8705FA", fontWeight: 700, fontSize: 13 }}>
               {user.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex items-center" style={{ borderBottom: "1px solid #BFDBFE" }}>
+        <div className="flex items-center" style={{ borderBottom: "1px solid #D8B4FE" }}>
           {[
             { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
             { id: "feed", label: "Updates", badge: null },
@@ -938,9 +938,9 @@ export default function AdminDashboard() {
                   marginBottom: -1,
                   fontSize: 14,
                   fontWeight: active ? 700 : 400,
-                  color: active ? "#0268CE" : "#94A3B8",
+                  color: active ? "#8705FA" : "#94A3B8",
                   border: "none",
-                  borderBottom: active ? "2px solid #0268CE" : "2px solid transparent",
+                  borderBottom: active ? "2px solid #8705FA" : "2px solid transparent",
                   background: "transparent",
                   cursor: "pointer",
                   letterSpacing: active ? "-0.01em" : "normal",
@@ -953,8 +953,8 @@ export default function AdminDashboard() {
                       marginLeft: 6,
                       fontSize: 11,
                       fontWeight: 600,
-                      background: active ? "#EFF6FF" : "transparent",
-                      color: active ? "#0268CE" : "#94A3B8",
+                      background: active ? "#F3E8FF" : "transparent",
+                      color: active ? "#8705FA" : "#94A3B8",
                       borderRadius: 999,
                       padding: "1px 7px",
                     }}
@@ -1062,7 +1062,7 @@ export default function AdminDashboard() {
           <div className="space-y-4">
 
             {/* Feed sub-tabs */}
-            <div className="flex items-center" style={{ borderBottom: "1px solid #BFDBFE" }}>
+            <div className="flex items-center" style={{ borderBottom: "1px solid #D8B4FE" }}>
               {[
                 { id: "all", label: "All Posts", count: !feedLoading ? allFeedPosts.length : null },
                 { id: "moments", label: "Mission Moments", count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null },
@@ -1080,9 +1080,9 @@ export default function AdminDashboard() {
                       marginBottom: -1,
                       fontSize: 14,
                       fontWeight: active ? 700 : 400,
-                      color: active ? "#0268CE" : "#94A3B8",
+                      color: active ? "#8705FA" : "#94A3B8",
                       border: "none",
-                      borderBottom: active ? "2px solid #0268CE" : "2px solid transparent",
+                      borderBottom: active ? "2px solid #8705FA" : "2px solid transparent",
                       background: "transparent",
                       cursor: "pointer",
                       letterSpacing: active ? "-0.01em" : "normal",
@@ -1095,8 +1095,8 @@ export default function AdminDashboard() {
                           marginLeft: 6,
                           fontSize: 11,
                           fontWeight: 600,
-                          background: active ? "#EFF6FF" : "transparent",
-                          color: active ? "#0268CE" : "#94A3B8",
+                          background: active ? "#F3E8FF" : "transparent",
+                          color: active ? "#8705FA" : "#94A3B8",
                           borderRadius: 999,
                           padding: "1px 7px",
                         }}
@@ -1245,14 +1245,14 @@ export default function AdminDashboard() {
                   <div key={country} className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden">
                     {/* Country header */}
                     <div className="px-5 py-4 border-b border-border/40 flex items-center gap-3">
-                      <div className="flex items-center justify-center h-8 w-8 rounded-lg flex-shrink-0" style={{ background: "#EFF6FF" }}>
-                        <MapPin className="h-4 w-4" style={{ color: "#0268CE" }} />
+                      <div className="flex items-center justify-center h-8 w-8 rounded-lg flex-shrink-0" style={{ background: "#F3E8FF" }}>
+                        <MapPin className="h-4 w-4" style={{ color: "#8705FA" }} />
                       </div>
                       <div>
                         <p className="font-bold text-[15px] text-foreground">{country}</p>
                         {city && <p className="text-[12px] text-muted-foreground mt-0.5">{city}</p>}
                       </div>
-                      <span className="ml-auto text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ background: "#EFF6FF", color: "#0268CE" }}>
+                      <span className="ml-auto text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ background: "#F3E8FF", color: "#8705FA" }}>
                         {members.length} {members.length === 1 ? "member" : "members"}
                       </span>
                     </div>

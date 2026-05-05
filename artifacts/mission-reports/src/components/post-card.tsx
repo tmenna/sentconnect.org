@@ -12,7 +12,6 @@ import { useAuth } from "@/components/auth-provider";
 import { useOrg } from "@/providers/org-provider";
 import { cn } from "@/lib/utils";
 import { SlideExportModal } from "./slide-export-modal";
-import { LOGO_BLUE } from "@/hooks/use-platform-logo";
 
 export type PostData = {
   id: number;
@@ -656,7 +655,7 @@ export function PostCard({
       <SlideExportModal
         post={post}
         orgName={user?.organization ?? undefined}
-        orgLogoUrl={LOGO_BLUE}
+        orgLogoUrl={undefined}
         onClose={() => setShowSlideExport(false)}
       />
     )}

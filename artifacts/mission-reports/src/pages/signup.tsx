@@ -6,10 +6,9 @@ import {
   Loader2, Eye, EyeOff, ShieldCheck, RefreshCw, Globe, Lock,
   CheckCircle2, Users,
 } from "lucide-react";
-import { usePlatformLogo } from "@/hooks/use-platform-logo";
 
 const NAVY = "#0F172A";
-const BLUE = "#8A05FF";
+const BLUE = "#8705FA";
 
 const FEATURES = [
   "Unlimited users",
@@ -21,8 +20,6 @@ const FEATURES = [
 export default function Signup() {
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
-  const { blue: logoUrl } = usePlatformLogo();
-
   const [orgName, setOrgName]           = useState("");
   const [subdomain, setSubdomain]       = useState("");
   const [name, setName]                 = useState("");
@@ -153,8 +150,8 @@ export default function Signup() {
           flex-direction: column;
           padding: 36px;
           border-radius: 28px;
-          background: linear-gradient(135deg, #8A05FF 0%, #6E04CC 100%);
-          box-shadow: 0 8px 48px rgba(138,5,255,0.35);
+          background: linear-gradient(135deg, #8705FA 0%, #6B04C8 100%);
+          box-shadow: 0 8px 48px rgba(135,5,250,0.35);
         }
 
         /* ── Email + Password row ── */
@@ -208,11 +205,7 @@ export default function Signup() {
 
       {/* Nav */}
       <div className="su-nav">
-        {logoUrl ? (
-          <img src={logoUrl} alt="SentConnect" fetchPriority="high" decoding="async" style={{ height: 26, width: "auto", maxWidth: 160, objectFit: "contain" }} />
-        ) : (
-          <span style={{ fontSize: 15, fontWeight: 900, color: BLUE, letterSpacing: "-0.03em" }}>SentConnect</span>
-        )}
+        <span style={{ fontSize: 15, fontWeight: 900, color: BLUE, letterSpacing: "-0.03em" }}>SentConnect</span>
         <Link href="/" className="su-back-link">← Back to sentconnect.org</Link>
       </div>
 

@@ -10,13 +10,13 @@ export default function HelpLanding() {
       route: "/features",
       icon: "🚀",
       badge: "PLATFORM OVERVIEW",
-      badgeColor: "#8A05FF",
+      badgeColor: "#8705FA",
       badgeBg: "#F3E8FF",
       title: "Features & Sign-Up",
       subtitle: "New to SentConnect?",
       desc: "Get a quick tour of what the platform does — the mission feed, your private portal, PDF reports, and admin tools. Includes sign-up and account setup information.",
       slides: "Slides 1 – 6",
-      slideColor: "#8A05FF",
+      slideColor: "#8705FA",
       slideBg: "#F3E8FF",
       bullets: [
         "What SentConnect does",
@@ -26,7 +26,7 @@ export default function HelpLanding() {
       ],
       gradient: "linear-gradient(135deg, #F3E8FF 0%, #EDE9FE 100%)",
       border: "#D8B4FE",
-      buttonBg: "#8A05FF",
+      buttonBg: "#8705FA",
       sectionLabel: "SECTION 01 · FEATURES & SIGN-UP",
     },
     {
@@ -71,7 +71,7 @@ export default function HelpLanding() {
       {/* ── Hero header ─────────────────────────────────────────────────── */}
       <div
         style={{
-          background: "linear-gradient(145deg, #3D0066 0%, #8A05FF 55%, #A020F0 100%)",
+          background: "linear-gradient(145deg, #3D0066 0%, #8705FA 55%, #A020F0 100%)",
           padding: "clamp(24px, 5vw, 64px) clamp(20px, 6vw, 100px) clamp(28px, 5vw, 64px)",
           position: "relative",
           overflow: "hidden",
@@ -156,7 +156,7 @@ export default function HelpLanding() {
                 width: i === step ? 24 : 8,
                 height: 8,
                 borderRadius: 50,
-                background: i === step ? "#8A05FF" : "#CBD5E1",
+                background: i === step ? "#8705FA" : "#CBD5E1",
                 transition: "all 0.2s ease",
               }}
             />
@@ -275,9 +275,9 @@ export default function HelpLanding() {
               display: "flex",
               alignItems: "center",
               gap: 6,
-              background: step === paths.length - 1 ? "#F1F5F9" : "#8A05FF",
+              background: step === paths.length - 1 ? "#F1F5F9" : "#8705FA",
               border: "1.5px solid",
-              borderColor: step === paths.length - 1 ? "#E2E8F0" : "#8A05FF",
+              borderColor: step === paths.length - 1 ? "#E2E8F0" : "#8705FA",
               borderRadius: 50,
               padding: "8px 18px",
               color: step === paths.length - 1 ? "#CBD5E1" : "#FFFFFF",
@@ -295,7 +295,7 @@ export default function HelpLanding() {
       {/* ── Footer ──────────────────────────────────────────────────────── */}
       <div
         style={{
-          background: "#5C0099",
+          background: "#5A0097",
           padding: "clamp(12px, 2vw, 18px) clamp(16px, 6vw, 100px)",
           display: "flex",
           justifyContent: "space-between",
