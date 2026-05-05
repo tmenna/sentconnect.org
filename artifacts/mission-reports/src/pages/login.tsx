@@ -73,21 +73,21 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   });
 
   if (isLoading) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "#ffffff" }}>
+    <div className="min-h-dvh flex items-center justify-center bg-white">
       <Loader2 className="h-6 w-6 animate-spin" style={{ color: BLUE }} />
     </div>
   );
 
   if (isAuthenticated && user) return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ background: "#ffffff" }}>
-      <div className="w-full max-w-sm bg-white rounded-2xl p-8 text-center" style={{ border: "1px solid #E2E8F0", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" }}>
+    <div className="min-h-dvh flex flex-col items-center justify-center px-4 py-10 bg-white">
+      <div className="w-full max-w-sm bg-white rounded-2xl p-7 sm:p-8 text-center" style={{ border: "1px solid #E2E8F0", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" }}>
         <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#EFF6FF", border: "1.5px solid #BFDBFE" }}>
           <span className="font-bold text-lg" style={{ color: BLUE }}>{user.name.charAt(0).toUpperCase()}</span>
         </div>
         <h2 className="text-[17px] font-semibold mb-1" style={{ color: "#0F172A" }}>You're signed in</h2>
         <p className="text-[13px] mb-6" style={{ color: "#64748B" }}>{user.name} · {user.email}</p>
         <button
-          className="w-full h-11 rounded-xl text-[15px] font-semibold text-white mb-3 transition-all"
+          className="w-full h-12 rounded-xl text-[15px] font-semibold text-white mb-3 transition-all"
           style={{ backgroundColor: BLUE }}
           onMouseEnter={e => (e.currentTarget.style.backgroundColor = BLUE_DARK)}
           onMouseLeave={e => (e.currentTarget.style.backgroundColor = BLUE)}
@@ -97,7 +97,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         </button>
         <Button
           variant="outline"
-          className="w-full h-11 font-semibold text-red-600 border-red-100 hover:bg-red-50 hover:border-red-200 rounded-xl"
+          className="w-full h-12 font-semibold text-red-600 border-red-100 hover:bg-red-50 hover:border-red-200 rounded-xl"
           onClick={() => logout.mutate({ data: undefined })}
           disabled={logout.isPending}
         >
@@ -113,17 +113,17 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#ffffff" }}>
+    <div className="min-h-dvh flex bg-white">
 
-      {/* ── Left brand panel (hidden on mobile) ── */}
+      {/* ── Left brand panel — desktop only ── */}
       <div
-        className="hidden lg:flex lg:w-[44%] flex-col justify-between p-12"
-        style={{ background: "#ffffff", borderRight: "1px solid #E2E8F0" }}
+        className="hidden lg:flex lg:w-[44%] xl:w-[42%] flex-col justify-between p-10 xl:p-12"
+        style={{ borderRight: "1px solid #E2E8F0" }}
       >
         {/* Logo */}
         <div className="flex items-center gap-2.5">
           {logoUrl ? (
-            <img src={logoUrl} alt="SentConnect" style={{ height: 36, width: "auto", objectFit: "contain" }} />
+            <img src={logoUrl} alt="SentConnect" style={{ height: 34, width: "auto", objectFit: "contain" }} />
           ) : (
             <>
               <div className="p-2 rounded-xl" style={{ background: "#EFF6FF" }}>
@@ -140,10 +140,10 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             <Globe className="h-4 w-4" style={{ color: BLUE }} />
             <span className="text-[13px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
-          <h2 style={{ fontSize: 42, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 20 }}>
+          <h2 style={{ fontSize: 40, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 20 }}>
             Stay connected<br />with your field teams.
           </h2>
-          <p style={{ fontSize: 17, color: "#475569", lineHeight: 1.65 }}>
+          <p style={{ fontSize: 16, color: "#475569", lineHeight: 1.65 }}>
             Share updates, celebrate Mission Moments, and keep your church engaged with what God is doing across the world.
           </p>
         </div>
@@ -154,132 +154,147 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         </p>
       </div>
 
-      {/* ── Right form panel ── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-14">
+      {/* ── Right / full form panel ── */}
+      <div className="flex-1 flex flex-col min-h-dvh">
 
-        {/* Mobile logo */}
-        <div className="flex lg:hidden items-center gap-2 mb-10">
+        {/* Mobile brand header */}
+        <div className="lg:hidden flex flex-col items-center px-6 pt-10 pb-8 text-center" style={{ borderBottom: "1px solid #F1F5F9" }}>
           {logoUrl ? (
-            <img src={logoUrl} alt="SentConnect" style={{ height: 36, width: "auto", objectFit: "contain" }} />
+            <img src={logoUrl} alt="SentConnect" style={{ height: 30, width: "auto", objectFit: "contain", marginBottom: 16 }} />
           ) : (
-            <>
+            <div className="flex items-center gap-2 mb-4">
               <div className="p-1.5 rounded-lg" style={{ background: "#EFF6FF" }}>
                 <Shuffle className="h-4 w-4" style={{ color: BLUE }} />
               </div>
               <span className="font-bold text-[18px] tracking-tight" style={{ color: "#0F172A" }}>SentConnect</span>
-            </>
-          )}
-        </div>
-
-        <div className="w-full" style={{ maxWidth: 400 }}>
-          {/* Heading */}
-          <div className="mb-8">
-            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.03em", marginBottom: 6 }}>
-              Welcome back
-            </h1>
-            <p style={{ fontSize: 14, color: "#64748B" }}>Sign in to your SentConnect account.</p>
-          </div>
-
-          {/* Org portal error */}
-          {orgPortalError && (
-            <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
-              <p className="text-[13px] font-semibold text-amber-800 mb-1">Wrong login portal</p>
-              <p className="text-[13px] text-amber-700 leading-relaxed">
-                This account belongs to an organization. Please sign in through your organization's portal.
-              </p>
-              {orgPortalError.subdomain && (
-                <a
-                  href={buildOrgLoginHref(orgPortalError.subdomain)}
-                  className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-amber-800 hover:text-amber-900 underline underline-offset-2"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  Go to {orgPortalError.subdomain}.sentconnect.org/login
-                </a>
-              )}
             </div>
           )}
-
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[13px] font-semibold" style={{ color: "#374151" }}>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="you@mission.org"
-                        autoComplete="email"
-                        className="h-11 text-[14px] rounded-xl bg-white"
-                        style={{ borderColor: "#E2E8F0" }}
-                        {...field}
-                        data-testid="input-login-email"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center justify-between mb-1">
-                      <FormLabel className="text-[13px] font-semibold" style={{ color: "#374151" }}>Password</FormLabel>
-                      <Link
-                        href="/forgot-password"
-                        className="text-[12px] font-semibold transition-colors"
-                        style={{ color: BLUE }}
-                      >
-                        Forgot password?
-                      </Link>
-                    </div>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        autoComplete="current-password"
-                        className="h-11 text-[14px] rounded-xl bg-white"
-                        style={{ borderColor: "#E2E8F0" }}
-                        {...field}
-                        data-testid="input-login-password"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <button
-                type="submit"
-                disabled={login.isPending}
-                className="w-full h-11 rounded-xl text-[15px] font-semibold text-white transition-all duration-200 disabled:opacity-60 flex items-center justify-center gap-2 mt-2"
-                style={{ backgroundColor: BLUE, boxShadow: "0 4px 14px rgba(2,104,206,0.30)" }}
-                onMouseEnter={e => { if (!login.isPending) { e.currentTarget.style.backgroundColor = BLUE_DARK; e.currentTarget.style.transform = "translateY(-1px)"; } }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = BLUE; e.currentTarget.style.transform = ""; }}
-                data-testid="btn-login-submit"
-              >
-                {login.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-                {login.isPending ? "Signing in…" : "Sign In"}
-              </button>
-            </form>
-          </Form>
-
-          <p className="mt-6 text-center text-[14px]" style={{ color: "#64748B" }}>
-            Don't have an account?{" "}
-            <Link href="/signup" className="font-semibold transition-colors" style={{ color: BLUE }}>
-              Sign Up
-            </Link>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ background: "#EFF6FF" }}>
+            <Globe className="h-3 w-3" style={{ color: BLUE }} />
+            <span className="text-[11px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
+          </div>
+          <p style={{ fontSize: 14, color: "#64748B", lineHeight: 1.5, maxWidth: 300 }}>
+            Stay connected with your field teams and church.
           </p>
         </div>
 
-        {/* Mobile verse */}
-        <p className="lg:hidden mt-10 text-[11px] italic text-center" style={{ color: "#94A3B8" }}>
-          "Declare his glory among the nations." — Ps 96:3
-        </p>
+        {/* Form area */}
+        <div className="flex-1 flex flex-col items-center justify-center px-5 sm:px-8 py-8 sm:py-10">
+          <div className="w-full" style={{ maxWidth: 400 }}>
+
+            {/* Heading */}
+            <div className="mb-7">
+              <h1 className="text-2xl sm:text-[26px] font-bold tracking-tight mb-1.5" style={{ color: "#0F172A", letterSpacing: "-0.03em" }}>
+                Welcome back
+              </h1>
+              <p className="text-sm sm:text-[14px]" style={{ color: "#64748B" }}>Sign in to your SentConnect account.</p>
+            </div>
+
+            {/* Org portal error */}
+            {orgPortalError && (
+              <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <p className="text-[13px] font-semibold text-amber-800 mb-1">Wrong login portal</p>
+                <p className="text-[13px] text-amber-700 leading-relaxed">
+                  This account belongs to an organization. Please sign in through your organization's portal.
+                </p>
+                {orgPortalError.subdomain && (
+                  <a
+                    href={buildOrgLoginHref(orgPortalError.subdomain)}
+                    className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-amber-800 hover:text-amber-900 underline underline-offset-2"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    Go to {orgPortalError.subdomain}.sentconnect.org/login
+                  </a>
+                )}
+              </div>
+            )}
+
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[13px] font-semibold" style={{ color: "#374151" }}>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="you@mission.org"
+                          autoComplete="email"
+                          inputMode="email"
+                          className="h-12 text-base rounded-xl bg-white"
+                          style={{ borderColor: "#E2E8F0", fontSize: 16 }}
+                          {...field}
+                          data-testid="input-login-email"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center justify-between mb-1">
+                        <FormLabel className="text-[13px] font-semibold" style={{ color: "#374151" }}>Password</FormLabel>
+                        <Link
+                          href="/forgot-password"
+                          className="text-[12px] font-semibold transition-colors"
+                          style={{ color: BLUE }}
+                        >
+                          Forgot password?
+                        </Link>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          autoComplete="current-password"
+                          className="h-12 text-base rounded-xl bg-white"
+                          style={{ borderColor: "#E2E8F0", fontSize: 16 }}
+                          {...field}
+                          data-testid="input-login-password"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <button
+                  type="submit"
+                  disabled={login.isPending}
+                  className="w-full rounded-xl text-[15px] font-semibold text-white transition-all duration-200 disabled:opacity-60 flex items-center justify-center gap-2 mt-1"
+                  style={{ height: 48, backgroundColor: BLUE, boxShadow: "0 4px 14px rgba(2,104,206,0.25)" }}
+                  onMouseEnter={e => { if (!login.isPending) { e.currentTarget.style.backgroundColor = BLUE_DARK; e.currentTarget.style.transform = "translateY(-1px)"; } }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = BLUE; e.currentTarget.style.transform = ""; }}
+                  data-testid="btn-login-submit"
+                >
+                  {login.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {login.isPending ? "Signing in…" : "Sign In"}
+                </button>
+              </form>
+            </Form>
+
+            <p className="mt-6 text-center text-[14px]" style={{ color: "#64748B" }}>
+              Don't have an account?{" "}
+              <Link href="/signup" className="font-semibold transition-colors" style={{ color: BLUE }}>
+                Sign Up
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        {/* Mobile verse footer */}
+        <div className="lg:hidden text-center px-6 pb-8">
+          <p className="text-[11px] italic" style={{ color: "#CBD5E1" }}>
+            "Declare his glory among the nations." — Psalm 96:3
+          </p>
+        </div>
+
       </div>
     </div>
   );
