@@ -118,38 +118,38 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       {/* ── Left brand panel (hidden on mobile) ── */}
       <div
         className="hidden lg:flex lg:w-[44%] flex-col justify-between p-12"
-        style={{ background: "linear-gradient(150deg, #003D8F 0%, #0268CE 55%, #1A80E0 100%)" }}
+        style={{ background: "#ffffff", borderRight: "1px solid #E2E8F0" }}
       >
         {/* Logo */}
         <div className="flex items-center gap-2.5">
           {logoUrl ? (
-            <img src={logoUrl} alt="SentConnect" style={{ height: 36, width: "auto", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+            <img src={logoUrl} alt="SentConnect" style={{ height: 36, width: "auto", objectFit: "contain" }} />
           ) : (
             <>
-              <div className="p-2 rounded-xl" style={{ background: "rgba(255,255,255,0.15)" }}>
-                <Shuffle className="h-5 w-5 text-white" />
+              <div className="p-2 rounded-xl" style={{ background: "#EFF6FF" }}>
+                <Shuffle className="h-5 w-5" style={{ color: BLUE }} />
               </div>
-              <span className="text-[20px] font-bold text-white tracking-tight">SentConnect</span>
+              <span className="text-[20px] font-bold tracking-tight" style={{ color: "#0F172A" }}>SentConnect</span>
             </>
           )}
         </div>
 
         {/* Center message */}
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "rgba(255,255,255,0.15)" }}>
-            <Globe className="h-3.5 w-3.5 text-white" />
-            <span className="text-[11px] font-semibold text-white/90 tracking-widest uppercase">Private Mission Platform</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#EFF6FF" }}>
+            <Globe className="h-3.5 w-3.5" style={{ color: BLUE }} />
+            <span className="text-[11px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
-          <h2 style={{ fontSize: 34, fontWeight: 700, color: "#ffffff", letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 16 }}>
+          <h2 style={{ fontSize: 34, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 16 }}>
             Stay connected<br />with your field teams.
           </h2>
-          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.72)", lineHeight: 1.6 }}>
+          <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6 }}>
             Share updates, celebrate Mission Moments, and keep your church engaged with what God is doing across the world.
           </p>
         </div>
 
         {/* Bible verse */}
-        <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", fontStyle: "italic", lineHeight: 1.6 }}>
+        <p style={{ fontSize: 12, color: "#94A3B8", fontStyle: "italic", lineHeight: 1.6 }}>
           "Declare his glory among the nations, his marvelous works among all the peoples." — Psalm 96:3
         </p>
       </div>
