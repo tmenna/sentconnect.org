@@ -137,13 +137,13 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         {/* Center message */}
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#EFF6FF" }}>
-            <Globe className="h-3.5 w-3.5" style={{ color: BLUE }} />
-            <span className="text-[11px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
+            <Globe className="h-4 w-4" style={{ color: BLUE }} />
+            <span className="text-[13px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
-          <h2 style={{ fontSize: 34, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 16 }}>
+          <h2 style={{ fontSize: 42, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 20 }}>
             Stay connected<br />with your field teams.
           </h2>
-          <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6 }}>
+          <p style={{ fontSize: 17, color: "#475569", lineHeight: 1.65 }}>
             Share updates, celebrate Mission Moments, and keep your church engaged with what God is doing across the world.
           </p>
         </div>
