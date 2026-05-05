@@ -47,10 +47,10 @@ export default function MissionaryDashboard() {
       <div style={{ paddingBottom: 4 }}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 6 }}>
+            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#9A27FF", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 6 }}>
               Missions Feed
             </h1>
-            <p style={{ fontSize: 14, color: "#64748B", lineHeight: 1.5 }}>
+            <p style={{ fontSize: 14, color: "#000000", lineHeight: 1.5 }}>
               Stay connected. Share what God is doing in the field.
             </p>
           </div>
@@ -59,7 +59,7 @@ export default function MissionaryDashboard() {
               {allPosts.length} <span style={{ fontWeight: 400, color: "#64748B" }}>posts</span>
             </span>
             {missionMoments.length > 0 && (
-              <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#26A0FF", background: "#EBF5FF", border: "1px solid #BAE2FF", borderRadius: 999, padding: "4px 12px" }}>
+              <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#9A27FF", background: "#F3E8FF", border: "1px solid #E9D5FF", borderRadius: 999, padding: "4px 12px" }}>
                 {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>moments</span>
               </span>
             )}
@@ -93,9 +93,9 @@ export default function MissionaryDashboard() {
                 marginBottom: -1,
                 fontSize: 14,
                 fontWeight: active ? 700 : 400,
-                color: active ? "#26A0FF" : "#94A3B8",
+                color: active ? "#9A27FF" : "#94A3B8",
                 border: "none",
-                borderBottom: active ? "2px solid #26A0FF" : "2px solid transparent",
+                borderBottom: active ? "2px solid #9A27FF" : "2px solid transparent",
                 background: "transparent",
                 cursor: "pointer",
                 letterSpacing: active ? "-0.01em" : "normal",
@@ -108,8 +108,8 @@ export default function MissionaryDashboard() {
                     marginLeft: 6,
                     fontSize: 11,
                     fontWeight: 600,
-                    background: active ? "#EBF5FF" : "transparent",
-                    color: active ? "#26A0FF" : "#94A3B8",
+                    background: active ? "#F3E8FF" : "transparent",
+                    color: active ? "#9A27FF" : "#94A3B8",
                     borderRadius: 999,
                     padding: "1px 7px",
                   }}
@@ -153,16 +153,16 @@ export default function MissionaryDashboard() {
               <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EBF5FF" }}>
                 <BookOpen className="h-6 w-6" style={{ color: EMERALD }} />
               </div>
-              <p className="font-semibold text-[16px]" style={{ color: "#374151" }}>No Mission Moments yet</p>
-              <p className="text-[14px] mt-1.5" style={{ color: "#9CA3AF" }}>Mark a post as Mission Moments when you share an update.</p>
+              <p className="font-semibold text-[16px]" style={{ color: "#9A27FF" }}>No Mission Moments yet</p>
+              <p className="text-[14px] mt-1.5" style={{ color: "#000000" }}>Mark a post as Mission Moments when you share an update.</p>
             </>
           ) : (
             <>
               <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
                 <FileText className="h-6 w-6" style={{ color: "#9CA3AF" }} />
               </div>
-              <p className="font-semibold text-[16px]" style={{ color: "#374151" }}>No posts yet</p>
-              <p className="text-[14px] mt-1.5" style={{ color: "#9CA3AF" }}>Share your first update using the composer above.</p>
+              <p className="font-semibold text-[16px]" style={{ color: "#9A27FF" }}>No posts yet</p>
+              <p className="text-[14px] mt-1.5" style={{ color: "#000000" }}>Share your first update using the composer above.</p>
             </>
           )}
         </div>
