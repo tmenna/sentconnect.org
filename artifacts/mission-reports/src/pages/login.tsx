@@ -8,8 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useLoginUser, useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useSearch, useLocation } from "wouter";
-import { Shuffle, ExternalLink, LogOut, Loader2, Globe } from "lucide-react";
-import { usePlatformLogo } from "@/hooks/use-platform-logo";
+import { ExternalLink, LogOut, Loader2, Globe } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { buildOrgLoginHref } from "@/lib/org";
@@ -30,8 +29,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const search = useSearch();
   const [, navigate] = useLocation();
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
-  const { blue: logoUrl } = usePlatformLogo();
-
   const from = (() => {
     if (platformMode) return "/admin";
     const raw = new URLSearchParams(search).get("from") ?? null;
@@ -120,30 +117,19 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         className="hidden lg:flex lg:w-[44%] xl:w-[42%] flex-col justify-between p-10 xl:p-12"
         style={{ borderRight: "1px solid #E2E8F0" }}
       >
-        {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          {logoUrl ? (
-            <img src={logoUrl} alt="SentConnect" style={{ height: 34, width: "auto", objectFit: "contain" }} />
-          ) : (
-            <>
-              <div className="p-2 rounded-xl" style={{ background: "#F3E8FF" }}>
-                <Shuffle className="h-5 w-5" style={{ color: BLUE }} />
-              </div>
-              <span className="text-[20px] font-bold tracking-tight" style={{ color: "#0F172A" }}>SentConnect</span>
-            </>
-          )}
-        </div>
+        {/* Wordmark */}
+        <span className="text-[20px] font-bold tracking-tight" style={{ color: "#0F172A" }}>SentConnect</span>
 
         {/* Center message */}
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#F3E8FF" }}>
             <Globe className="h-4 w-4" style={{ color: BLUE }} />
-            <span className="text-[13px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
+            <span className="text-[15px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
-          <h2 style={{ fontSize: 40, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 20 }}>
+          <h2 style={{ fontSize: 52, fontWeight: 800, color: BLUE, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 22 }}>
             Stay connected<br />with your field teams.
           </h2>
-          <p style={{ fontSize: 16, color: "#475569", lineHeight: 1.65 }}>
+          <p style={{ fontSize: 18, color: "#475569", lineHeight: 1.65 }}>
             Share updates, celebrate Mission Moments, and keep your church engaged with what God is doing across the world.
           </p>
         </div>
@@ -159,24 +145,14 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
         {/* Mobile brand header */}
         <div className="lg:hidden flex flex-col items-center px-6 pt-10 pb-8 text-center" style={{ borderBottom: "1px solid #F1F5F9" }}>
-          {logoUrl ? (
-            <img src={logoUrl} alt="SentConnect" style={{ height: 30, width: "auto", objectFit: "contain", marginBottom: 16 }} />
-          ) : (
-            <div className="flex items-center gap-2 mb-4">
-              <div className="p-1.5 rounded-lg" style={{ background: "#F3E8FF" }}>
-                <Shuffle className="h-4 w-4" style={{ color: BLUE }} />
-              </div>
-              <span className="font-bold text-[18px] tracking-tight" style={{ color: "#0F172A" }}>SentConnect</span>
-            </div>
-          )}
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-4" style={{ background: "#F3E8FF" }}>
-            <Globe className="h-3 w-3" style={{ color: BLUE }} />
-            <span className="text-[11px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-5" style={{ background: "#F3E8FF" }}>
+            <Globe className="h-3.5 w-3.5" style={{ color: BLUE }} />
+            <span className="text-[13px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
-          <h2 style={{ fontSize: 28, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 10 }}>
+          <h2 style={{ fontSize: 36, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 12 }}>
             Stay connected<br />with your field teams.
           </h2>
-          <p style={{ fontSize: 13, color: "#475569", lineHeight: 1.55, maxWidth: 300 }}>
+          <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, maxWidth: 320 }}>
             Share updates, celebrate Mission Moments, and keep your church engaged with what God is doing across the world.
           </p>
         </div>
