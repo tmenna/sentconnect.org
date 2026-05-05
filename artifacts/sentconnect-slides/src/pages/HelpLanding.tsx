@@ -306,7 +306,7 @@ export default function HelpLanding() {
         }}
       >
         <span style={{ color: "rgba(255,255,255,0.8)", fontSize: "clamp(10px, 1vw, 13px)", fontWeight: 500 }}>
-          24/7 Platform Contact: Teki Menna: 951-551-4528
+          Need help? Contact Support at +1-951-551-4528 (Call/WhatsApp)
         </span>
         <span style={{ color: "rgba(255,255,255,0.45)", fontSize: "clamp(10px, 0.9vw, 12px)" }}>
           www.sentconnect.org

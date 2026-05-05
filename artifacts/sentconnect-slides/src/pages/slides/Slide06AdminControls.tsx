@@ -71,7 +71,7 @@ export default function Slide06AdminControls() {
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.8vh 5vw", background: "#5A0097" }}>
-        <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95vw", fontWeight: 500 }}>24/7 Platform Contact: Teki Menna: 951-551-4528</span>
+        <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95vw", fontWeight: 500 }}>Need help? Contact Support at +1-951-551-4528 (Call/WhatsApp)</span>
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.95vw" }}>www.sentconnect.org</span>
       </div>
     </div>

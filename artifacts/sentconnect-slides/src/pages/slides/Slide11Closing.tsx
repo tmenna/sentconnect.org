@@ -36,7 +36,7 @@ export default function Slide11Closing() {
           {[
             { label: "PLATFORM", value: "www.sentconnect.org", icon: "🌐" },
             { label: "YOUR PORTAL", value: "[org].sentconnect.org/login", icon: "🔑" },
-            { label: "NEED HELP?", value: "Contact Teki Menna\n951-551-4528", icon: "💬" },
+            { label: "NEED HELP?", value: "Contact Support\n+1-951-551-4528\n(Call/WhatsApp)", icon: "💬" },
           ].map(item => (
             <div key={item.label} style={{ background: "rgba(255,255,255,0.12)", borderRadius: 16, padding: "3vh 2.5vw", textAlign: "center", minWidth: "18vw", backdropFilter: "blur(8px)" }}>
               <div style={{ fontSize: "2.8vh", marginBottom: "1.5vh" }}>{item.icon}</div>
@@ -48,7 +48,7 @@ export default function Slide11Closing() {
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "2vh 5vw", background: "rgba(0,0,0,0.2)", zIndex: 1 }}>
-        <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "1vw", fontWeight: 500 }}>24/7 Platform Contact: Teki Menna: 951-551-4528</span>
+        <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "1vw", fontWeight: 500 }}>Need help? Contact Support at +1-951-551-4528 (Call/WhatsApp)</span>
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw" }}>www.sentconnect.org</span>
       </div>
     </div>
