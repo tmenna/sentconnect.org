@@ -59,7 +59,7 @@ export default function MissionaryDashboard() {
               {allPosts.length} <span style={{ fontWeight: 400, color: "#64748B" }}>posts</span>
             </span>
             {missionMoments.length > 0 && (
-              <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#7C3AED", background: "#F5F3FF", border: "1px solid #DDD6FE", borderRadius: 999, padding: "4px 12px" }}>
+              <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#26A0FF", background: "#EBF5FF", border: "1px solid #BAE2FF", borderRadius: 999, padding: "4px 12px" }}>
                 {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>moments</span>
               </span>
             )}
@@ -93,9 +93,9 @@ export default function MissionaryDashboard() {
                 marginBottom: -1,
                 fontSize: 14,
                 fontWeight: active ? 700 : 400,
-                color: active ? "#7C3AED" : "#94A3B8",
+                color: active ? "#26A0FF" : "#94A3B8",
                 border: "none",
-                borderBottom: active ? "2px solid #7C3AED" : "2px solid transparent",
+                borderBottom: active ? "2px solid #26A0FF" : "2px solid transparent",
                 background: "transparent",
                 cursor: "pointer",
                 letterSpacing: active ? "-0.01em" : "normal",
@@ -108,8 +108,8 @@ export default function MissionaryDashboard() {
                     marginLeft: 6,
                     fontSize: 11,
                     fontWeight: 600,
-                    background: active ? "#F5F3FF" : "transparent",
-                    color: active ? "#7C3AED" : "#94A3B8",
+                    background: active ? "#EBF5FF" : "transparent",
+                    color: active ? "#26A0FF" : "#94A3B8",
                     borderRadius: 999,
                     padding: "1px 7px",
                   }}
@@ -150,7 +150,7 @@ export default function MissionaryDashboard() {
         <div className="bg-white rounded-2xl py-20 text-center" style={{ border: "1.5px dashed #CBD5E1" }}>
           {activeTab === "moments" ? (
             <>
-              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F5F3FF" }}>
+              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EBF5FF" }}>
                 <BookOpen className="h-6 w-6" style={{ color: EMERALD }} />
               </div>
               <p className="font-semibold text-[16px]" style={{ color: "#374151" }}>No Mission Moments yet</p>
