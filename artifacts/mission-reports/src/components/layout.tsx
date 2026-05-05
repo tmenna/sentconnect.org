@@ -3,11 +3,9 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
 import { Button } from "./ui/button";
-import { Shuffle, LogOut, Rss, ShieldCheck, HelpCircle } from "lucide-react";
+import { LogOut, Rss, ShieldCheck, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { usePlatformLogo } from "@/hooks/use-platform-logo";
-
 /* Brand tokens */
 const EMERALD   = "#0268CE";
 const CHARCOAL  = "#374151";
@@ -17,8 +15,6 @@ export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [currentPath] = useLocation();
   const { toast } = useToast();
-  const { blue: logoUrl } = usePlatformLogo();
-
   const logout = useLogoutUser({
     mutation: {
       onSuccess: () => {
@@ -52,22 +48,9 @@ export function Layout({ children }: { children: ReactNode }) {
         style={{ background: "#fff", borderBottom: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
       >
         <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
-          {/* Logo */}
+          {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt="SentConnect"
-                style={{ height: 36, maxHeight: 36, width: "auto", maxWidth: 180, objectFit: "contain" }}
-              />
-            ) : (
-              <>
-                <div className="p-1.5 rounded-lg" style={{ background: "#EFF6FF", border: `1px solid #BFDBFE` }}>
-                  <Shuffle className="h-4 w-4" style={{ color: EMERALD }} />
-                </div>
-                <span className="font-semibold text-[15px] tracking-tight" style={{ color: CHARCOAL }}>SentConnect</span>
-              </>
-            )}
+            <span className="font-bold text-[16px] tracking-tight" style={{ color: CHARCOAL }}>SentConnect</span>
           </Link>
 
           {/* Right nav */}
@@ -142,20 +125,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <footer className="mt-12 py-5 bg-white" style={{ borderTop: `1px solid ${BORDER}` }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt="SentConnect"
-                style={{ height: 32, maxHeight: 32, width: "auto", maxWidth: 140, objectFit: "contain" }}
-              />
-            ) : (
-              <>
-                <div className="p-1 rounded-md" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
-                  <Shuffle className="h-3 w-3" style={{ color: EMERALD }} />
-                </div>
-                <span className="text-xs font-semibold text-gray-400">SentConnect</span>
-              </>
-            )}
+            <span className="text-xs font-bold text-gray-400 tracking-tight">SentConnect</span>
           </div>
           <p className="text-xs text-gray-400 italic">"Declare his glory among the nations." — Ps 96:3</p>
         </div>

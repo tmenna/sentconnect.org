@@ -197,7 +197,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
       <div className="flex gap-3.5">
         <Avatar className="h-11 w-11 flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
           <AvatarImage src={user.avatarUrl ?? undefined} />
-          <AvatarFallback style={{ background: "#EBF5FF", color: "#26A0FF", fontWeight: 700, fontSize: 15 }}>
+          <AvatarFallback style={{ background: "#F5F3FF", color: "#7C3AED", fontWeight: 700, fontSize: 15 }}>
             {user.name.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
@@ -359,9 +359,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={handlePost}
               disabled={!canPost}
               className="px-6 font-bold text-[14px] text-white rounded-xl transition-all duration-200 disabled:opacity-40"
-              style={{ background: "#26A0FF", height: "44px", boxShadow: canPost ? "0 4px 14px rgba(38,160,255,0.30)" : "none", letterSpacing: "-0.02em" }}
-              onMouseEnter={e => { if (canPost) { e.currentTarget.style.background = "#0B8EF0"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#26A0FF"; e.currentTarget.style.transform = ""; }}
+              style={{ background: "#7C3AED", height: "44px", boxShadow: canPost ? "0 4px 14px rgba(124,58,237,0.28)" : "none", letterSpacing: "-0.02em" }}
+              onMouseEnter={e => { if (canPost) { e.currentTarget.style.background = "#6D28D9"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#7C3AED"; e.currentTarget.style.transform = ""; }}
             >
               Post Update
             </button>
