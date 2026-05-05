@@ -267,11 +267,11 @@ function EditForm({
         className={cn(
           "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors",
           isMissionMoment
-            ? "text-[#0268CE] bg-blue-50 hover:bg-blue-100 border border-blue-200"
+            ? "text-[#0F172A] bg-[#F1F5F9] hover:bg-[#E2E8F0] border border-[#E2E8F0]"
             : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
         )}
       >
-        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#0268CE]")} />
+        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#0F172A]")} />
         {isMissionMoment ? "Mission Moments" : "Mark as Mission Moments"}
       </button>
 
@@ -284,7 +284,7 @@ function EditForm({
           size="sm"
           onClick={handleSave}
           disabled={saving}
-          className="h-8 px-4 text-[13px] bg-[#0268CE] hover:bg-[#0155a5] text-white"
+          className="h-8 px-4 text-[13px] bg-[#0F172A] hover:bg-[#1E293B] text-white"
         >
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <><Check className="h-3.5 w-3.5 mr-1" />Save</>}
         </Button>
@@ -426,12 +426,12 @@ export function PostCard({
     >
       {/* Mission Moment banner */}
       {post.isMissionMoment && (
-        <div className="flex items-center gap-2.5 px-5 py-3" style={{ background: "linear-gradient(135deg, #003D8F 0%, #0268CE 70%, #1A80E0 100%)" }}>
+        <div className="flex items-center gap-2.5 px-5 py-3" style={{ background: "linear-gradient(135deg, #0F172A 0%, #1E293B 70%, #334155 100%)" }}>
           <BookOpen className="h-3.5 w-3.5 flex-shrink-0 text-white" />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.95)", letterSpacing: "0.09em", textTransform: "uppercase", flexGrow: 1 }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.92)", letterSpacing: "0.09em", textTransform: "uppercase", flexGrow: 1 }}>
             Mission Moment
           </span>
-          <Sparkles className="h-3.5 w-3.5" style={{ color: "rgba(255,255,255,0.55)" }} />
+          <Sparkles className="h-3.5 w-3.5" style={{ color: "rgba(255,255,255,0.45)" }} />
         </div>
       )}
 
@@ -448,7 +448,7 @@ export function PostCard({
         <Link href={`/missionaries/${post.author.id}`}>
           <Avatar className="h-12 w-12 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#EFF6FF", color: "#0268CE", fontWeight: 700, fontSize: 15 }}>
+            <AvatarFallback style={{ background: "#F1F5F9", color: "#475569", fontWeight: 700, fontSize: 15 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -545,18 +545,18 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 post.likedByMe
-                  ? "text-[#0268CE] bg-[#EFF6FF]"
-                  : "text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#0268CE]"
+                  ? "text-[#0F172A] bg-[#F1F5F9]"
+                  : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
               )}
             >
-              <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-[#0268CE] text-[#0268CE]")} />
+              <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-[#0F172A] text-[#0F172A]")} />
               <span>Like{post.likeCount > 0 ? ` · ${post.likeCount}` : ""}</span>
             </button>
 
             {/* Comment */}
             <button
               onClick={toggleComments}
-              className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#0268CE] transition-all duration-150 rounded-xl my-1"
+              className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A] transition-all duration-150 rounded-xl my-1"
             >
               <MessageCircle className="h-4 w-4" />
               <span>Comment{post.commentCount > 0 ? ` · ${post.commentCount}` : ""}</span>
@@ -568,8 +568,8 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 copied
-                  ? "text-[#0268CE] bg-[#EFF6FF]"
-                  : "text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#0268CE]"
+                  ? "text-[#0F172A] bg-[#F1F5F9]"
+                  : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
               )}
             >
               {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
@@ -580,7 +580,7 @@ export function PostCard({
             {canManage && (
               <button
                 onClick={() => setShowSlideExport(true)}
-                className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#0268CE] transition-all duration-150 rounded-xl my-1"
+                className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A] transition-all duration-150 rounded-xl my-1"
               >
                 <ImageDown className="h-4 w-4" />
                 <span>Export</span>
