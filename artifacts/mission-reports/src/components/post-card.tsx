@@ -448,7 +448,7 @@ export function PostCard({
         <Link href={`/missionaries/${post.author.id}`}>
           <Avatar className="h-12 w-12 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#F1F5F9", color: "#475569", fontWeight: 700, fontSize: 15 }}>
+            <AvatarFallback style={{ background: "#F5F3FF", color: "#7C3AED", fontWeight: 700, fontSize: 15 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -545,18 +545,18 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 post.likedByMe
-                  ? "text-[#0F172A] bg-[#F1F5F9]"
-                  : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
+                  ? "text-[#7C3AED] bg-[#F5F3FF]"
+                  : "text-[#64748B] hover:bg-[#F5F3FF] hover:text-[#7C3AED]"
               )}
             >
-              <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-[#0F172A] text-[#0F172A]")} />
+              <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-[#7C3AED] text-[#7C3AED]")} />
               <span>Like{post.likeCount > 0 ? ` · ${post.likeCount}` : ""}</span>
             </button>
 
             {/* Comment */}
             <button
               onClick={toggleComments}
-              className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A] transition-all duration-150 rounded-xl my-1"
+              className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#F5F3FF] hover:text-[#7C3AED] transition-all duration-150 rounded-xl my-1"
             >
               <MessageCircle className="h-4 w-4" />
               <span>Comment{post.commentCount > 0 ? ` · ${post.commentCount}` : ""}</span>
@@ -568,8 +568,8 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 copied
-                  ? "text-[#0F172A] bg-[#F1F5F9]"
-                  : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
+                  ? "text-[#7C3AED] bg-[#F5F3FF]"
+                  : "text-[#64748B] hover:bg-[#F5F3FF] hover:text-[#7C3AED]"
               )}
             >
               {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
@@ -580,7 +580,7 @@ export function PostCard({
             {canManage && (
               <button
                 onClick={() => setShowSlideExport(true)}
-                className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A] transition-all duration-150 rounded-xl my-1"
+                className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#F5F3FF] hover:text-[#7C3AED] transition-all duration-150 rounded-xl my-1"
               >
                 <ImageDown className="h-4 w-4" />
                 <span>Export</span>
