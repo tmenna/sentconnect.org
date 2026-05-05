@@ -1,0 +1,72 @@
+Redesign this app's UI to match the look and feel of a professional internal portal. Use the following design system exactly:
+
+Stack: React + TypeScript + Vite, Tailwind CSS, shadcn/ui components, lucide-react icons.
+
+Fonts: Load Inter (body) and IBM Plex Mono (code/monospace) from Google Fonts. Set font-family: Inter, sans-serif on the body with -0.011em letter spacing and -webkit-font-smoothing: antialiased. Headings use -0.02em letter spacing and font-weight: 600.
+
+Color tokens — paste these into index.css as CSS variables in :root:
+
+    Background: 0 0% 99% (near-white, not pure white)
+    Foreground: 220 14% 10%
+    Card: 0 0% 100%
+    Border: 220 13% 91%
+    Primary (blue): 217 72% 53% — used for nav active states, focus rings, links, section accent bars
+    Muted: 220 10% 96% / muted-foreground: 220 9% 46%
+    Sidebar: 220 14% 97.5%
+    Radius: 0.75rem (12px)
+
+Include a .dark variant with deep navy-toned backgrounds (222 12% 7% background).
+
+Input focus style — globally in CSS:
+
+input:focus, textarea:focus {
+  border-color: hsl(217 72% 53%) !important;
+  box-shadow: 0 0 0 3px hsl(217 72% 53% / 10%) !important;
+  outline: none;
+}
+
+Layout rules:
+
+    Page padding: p-5 sm:p-8, max content width max-w-4xl mx-auto
+    Cards: border border-border/50 rounded-xl hover:shadow-sm transition-all duration-150 — never flat/borderless
+    Inputs: h-11 rounded-lg border-border/60
+    Action buttons in toolbars: h-9 rounded-lg
+    Form submit buttons: h-11 rounded-lg
+    Section spacing: space-y-3 between list items, space-y-5 between form fields
+
+Color meaning — use these consistently:
+
+    Create / add / save actions: bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm — never use blue for these
+    Primary/blue: navigation highlights, focus rings, accent bars only
+    Status badges use tinted backgrounds: emerald for active/success, amber for warning/pending, red for error/deleted, violet for admin roles, blue for staff, pink for sponsors
+    Delete buttons: ghost style with hover:bg-destructive/10 hover:text-destructive
+    Edit buttons: ghost style, natural color
+
+Page header pattern:
+
+    Left side: a colored rounded-xl icon box (40×40px) + title + subtitle underneath
+    Right side: action button (emerald)
+    Separated by mb-7
+
+List item / card pattern:
+
+    White card with soft border and hover shadow
+    Inside: avatar initials box (40×40, rounded-xl, tinted background matching role color) + name + badge + subtitle + meta tags in a row
+    Action buttons (Edit, Delete) pinned to the right, ghost style, h-9 w-9 rounded-lg
+    Badges use variant="outline" with tinted bg/text/border matching their semantic color
+
+Section accent bar — use before any section title inside cards or pages:
+
+<div className="flex items-center gap-2">
+  <div className="w-1 h-5 rounded-full bg-primary" />
+  <span className="text-sm font-semibold">Section Title</span>
+</div>
+
+Dialogs:
+
+    sm:max-w-[520px], flex flex-col max-h-[90vh] — scrollable body, sticky footer
+    Footer separated with border-t pt-4 mt-2, Cancel (outline) + Confirm (emerald) buttons
+    Title includes a small colored icon to the left of the text
+
+Overall feel: Spacious, soft, rounded, minimalist. No harsh shadows, no pure black/white. Everything has gentle borders and generous padding. The UI feels calm and professional, not bold or loud.
+

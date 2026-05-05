@@ -87,11 +87,11 @@ function OrgPermissionsEditor({
           key={key}
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors ${
             perms[key]
-              ? "bg-gray-50 border-gray-200"
-              : "bg-muted/30 border-border/40 hover:bg-muted/50"
+              ? "bg-blue-50/50 border-blue-200"
+              : "bg-muted/20 border-border/40 hover:bg-muted/40"
           } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
         >
-          <div className={`flex-shrink-0 ${perms[key] ? "text-gray-800" : "text-muted-foreground"}`}>
+          <div className={`flex-shrink-0 ${perms[key] ? "text-primary" : "text-muted-foreground"}`}>
             {icon}
           </div>
           <div className="flex-1 min-w-0">
@@ -103,7 +103,7 @@ function OrgPermissionsEditor({
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            className="h-4 w-4 rounded accent-gray-800 cursor-pointer"
+            className="h-4 w-4 rounded accent-blue-600 cursor-pointer"
           />
         </label>
       ))}
@@ -223,21 +223,21 @@ function EditRolePermissionsModal({
             <OrgPermissionsEditor perms={perms} onChange={setPerms} disabled={isAdmin} />
           </div>
 
-          <div className="flex gap-3 pt-1">
+          <div className="flex gap-3 border-t border-border/40 pt-4 mt-2">
             <button
               onClick={onClose}
               disabled={saving}
-              className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-xl hover:bg-muted transition-colors disabled:opacity-50"
+              className="flex-1 h-11 px-4 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               onClick={save}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold rounded-xl transition-colors disabled:opacity-50"
-              style={{ background: "#0268CE", color: "#fff" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#0155a5"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#0268CE"; }}
+              className="flex-1 h-11 flex items-center justify-center gap-2 px-4 text-[13px] font-semibold text-white rounded-lg transition-colors disabled:opacity-50"
+              style={{ background: "#059669" }}
+              onMouseEnter={e => { if (!saving) e.currentTarget.style.background = "#047857"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#059669"; }}
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -298,12 +298,12 @@ function StatCard({ label, value, icon, accent, onClick }: {
 
 function RoleBadge({ role }: { role: string }) {
   if (role === "admin") return (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#EEF2FF", color: "#4338CA" }}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#EEF2FF", color: "#4338CA", border: "1px solid #C7D2FE" }}>
       <ShieldCheck className="h-3 w-3" /> Admin
     </span>
   );
   return (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#F3F4F6", color: "#374151" }}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#EFF6FF", color: "#1D4ED8", border: "1px solid #BFDBFE" }}>
       <Globe className="h-3 w-3" /> Field User
     </span>
   );
@@ -311,12 +311,12 @@ function RoleBadge({ role }: { role: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   return status === "active" ? (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#EFF6FF", color: "#1D4ED8" }}>
-      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" /> Active
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#ECFDF5", color: "#059669", border: "1px solid #A7F3D0" }}>
+      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" /> Active
     </span>
   ) : (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1 rounded-full" style={{ background: "#F9FAFB", color: "#6B7280" }}>
-      <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block" /> Inactive
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F8FAFC", color: "#64748B", border: "1px solid #E2E8F0" }}>
+      <span className="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block" /> Inactive
     </span>
   );
 }
@@ -449,18 +449,21 @@ function AddUserModal({ onClose, onAdded }: { onClose: () => void; onAdded: () =
             </div>
           </div>
 
-          <div className="flex gap-3 pt-1">
+          <div className="flex gap-3 pt-1 border-t border-border/40 mt-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-sm font-semibold border border-border/60 rounded-xl hover:bg-muted transition-colors"
+              className="flex-1 px-4 h-11 text-sm font-semibold border border-border/60 rounded-lg hover:bg-muted transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-xl hover:opacity-90 disabled:opacity-60 transition"
+              className="flex-1 h-11 px-4 text-sm font-semibold text-white rounded-lg disabled:opacity-60 transition-colors"
+              style={{ background: "#059669" }}
+              onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#047857"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#059669"; }}
             >
               {loading ? "Creating…" : "Create Member"}
             </button>
@@ -490,11 +493,14 @@ function ResetLinkModal({ link, onClose }: { link: string; onClose: () => void }
         </div>
         <p className="text-[13px] text-muted-foreground">Share this link with the team member. It expires in 24 hours.</p>
         <div className="bg-muted/60 rounded-xl px-3 py-2 text-[12px] font-mono break-all border border-border/40">{fullLink}</div>
-        <div className="flex gap-3">
-          <button onClick={onClose} className="flex-1 px-4 py-2 text-sm font-semibold border border-border/60 rounded-xl hover:bg-muted transition-colors">Close</button>
+        <div className="flex gap-3 border-t border-border/40 pt-4 mt-2">
+          <button onClick={onClose} className="flex-1 h-11 px-4 text-sm font-semibold border border-border/60 rounded-lg hover:bg-muted transition-colors">Close</button>
           <button
             onClick={copy}
-            className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-semibold bg-primary text-white rounded-xl hover:opacity-90 transition"
+            className="flex-1 h-11 flex items-center justify-center gap-1.5 px-4 text-sm font-semibold text-white rounded-lg transition-colors"
+            style={{ background: "#059669" }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#047857"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "#059669"; }}
           >
             {copied ? <><Check className="h-4 w-4" /> Copied!</> : <><Copy className="h-4 w-4" /> Copy link</>}
           </button>
@@ -648,9 +654,9 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
         {/* User */}
         <td className="px-5 py-4">
           <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10 flex-shrink-0">
+            <Avatar className="h-10 w-10 flex-shrink-0 rounded-xl">
               <AvatarImage src={u.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-semibold text-[14px]" style={{ background: "#F3F4F6", color: "#374151" }}>
+              <AvatarFallback className="font-bold text-[14px] rounded-xl" style={u.role === "admin" ? { background: "#EEF2FF", color: "#4338CA" } : { background: "#EFF6FF", color: "#1D4ED8" }}>
                 {u.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -884,41 +890,36 @@ export default function AdminDashboard() {
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* ── Page header ── */}
-        <div style={{ marginBottom: 8 }}>
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h1 className="font-bold tracking-tight" style={{ fontSize: 26, color: "#111827", marginBottom: 4 }}>
-                Global Partners
-              </h1>
-              <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 16 }}>
-                Manage your team and track mission activity.
-              </p>
-              <div className="flex items-center gap-2">
-                <span
-                  className="inline-flex items-center gap-1.5"
-                  style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
-                >
-                  <strong style={{ color: "#111827", fontWeight: 600 }}>{usersLoading ? "—" : allUsers.length}</strong> Team Members
-                </span>
-                <span
-                  className="inline-flex items-center gap-1.5"
-                  style={{ fontSize: 12, color: "#6b7280", background: "#fff", border: "1px solid #e5e7eb", borderRadius: 999, padding: "3px 12px" }}
-                >
-                  <strong style={{ color: "#111827", fontWeight: 600 }}>{usersLoading ? "—" : countriesCount}</strong> Countries
-                </span>
-              </div>
-            </div>
-            <Avatar className="h-9 w-9 flex-shrink-0 mt-1" style={{ border: "1.5px solid #e5e7eb" }}>
-              <AvatarImage src={user.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-bold text-[13px]" style={{ background: "#eff6ff", color: "#0268CE" }}>
-                {user.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+        <div className="flex items-start gap-4 mb-7">
+          <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#EEF2FF" }}>
+            <Users className="h-5 w-5" style={{ color: "#4338CA" }} />
           </div>
+          <div className="flex-1 min-w-0">
+            <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>
+              Global Partners
+            </h1>
+            <p style={{ fontSize: 14, color: "#64748B", marginBottom: 14 }}>
+              Manage your team and track mission activity.
+            </p>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#059669", background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 999, padding: "4px 12px" }}>
+                {usersLoading ? "—" : allUsers.length} <span style={{ fontWeight: 400, color: "#475569" }}>Members</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#0268CE", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "4px 12px" }}>
+                {usersLoading ? "—" : countriesCount} <span style={{ fontWeight: 400, color: "#475569" }}>Countries</span>
+              </span>
+            </div>
+          </div>
+          <Avatar className="h-9 w-9 flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
+            <AvatarImage src={user.avatarUrl ?? undefined} />
+            <AvatarFallback style={{ background: "#EFF6FF", color: "#0268CE", fontWeight: 700, fontSize: 13 }}>
+              {user.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex items-center" style={{ borderBottom: "1px solid #e5e7eb" }}>
+        <div className="flex items-center" style={{ borderBottom: "1px solid #BFDBFE" }}>
           {[
             { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
             { id: "feed", label: "Updates", badge: null },
@@ -935,13 +936,14 @@ export default function AdminDashboard() {
                   paddingTop: 4,
                   marginRight: 24,
                   marginBottom: -1,
-                  fontSize: 13,
-                  fontWeight: active ? 600 : 400,
-                  color: active ? "#111827" : "#6b7280",
+                  fontSize: 14,
+                  fontWeight: active ? 700 : 400,
+                  color: active ? "#0268CE" : "#94A3B8",
                   border: "none",
-                  borderBottom: active ? "2px solid #111827" : "2px solid transparent",
+                  borderBottom: active ? "2px solid #0268CE" : "2px solid transparent",
                   background: "transparent",
                   cursor: "pointer",
+                  letterSpacing: active ? "-0.01em" : "normal",
                 }}
               >
                 {tab.label}
@@ -950,9 +952,9 @@ export default function AdminDashboard() {
                     style={{
                       marginLeft: 6,
                       fontSize: 11,
-                      fontWeight: 500,
-                      background: active ? "#f3f4f6" : "transparent",
-                      color: active ? "#374151" : "#9ca3af",
+                      fontWeight: 600,
+                      background: active ? "#EFF6FF" : "transparent",
+                      color: active ? "#0268CE" : "#94A3B8",
                       borderRadius: 999,
                       padding: "1px 7px",
                     }}
@@ -983,9 +985,9 @@ export default function AdminDashboard() {
               <button
                 onClick={() => setShowAddModal(true)}
                 className="flex items-center gap-2 px-5 text-[14px] font-semibold text-white rounded-xl whitespace-nowrap transition-all duration-200 hover:-translate-y-px"
-                style={{ backgroundColor: "#0268CE", height: "48px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#0155a5"; e.currentTarget.style.boxShadow = "0 6px 12px rgba(0,0,0,0.08)"; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#0268CE"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; }}
+                style={{ backgroundColor: "#059669", height: "44px", boxShadow: "0 2px 8px rgba(5,150,105,0.20)" }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#047857"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(5,150,105,0.25)"; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#059669"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(5,150,105,0.20)"; }}
               >
                 <Plus className="h-4 w-4" />
                 Add Team Member
@@ -1060,7 +1062,7 @@ export default function AdminDashboard() {
           <div className="space-y-4">
 
             {/* Feed sub-tabs */}
-            <div className="flex items-center" style={{ borderBottom: "1px solid #e5e7eb" }}>
+            <div className="flex items-center" style={{ borderBottom: "1px solid #BFDBFE" }}>
               {[
                 { id: "all", label: "All Posts", count: !feedLoading ? allFeedPosts.length : null },
                 { id: "moments", label: "Mission Moments", count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null },
@@ -1076,13 +1078,14 @@ export default function AdminDashboard() {
                       paddingTop: 4,
                       marginRight: 24,
                       marginBottom: -1,
-                      fontSize: 13,
-                      fontWeight: active ? 600 : 400,
-                      color: active ? "#111827" : "#6b7280",
+                      fontSize: 14,
+                      fontWeight: active ? 700 : 400,
+                      color: active ? "#0268CE" : "#94A3B8",
                       border: "none",
-                      borderBottom: active ? "2px solid #111827" : "2px solid transparent",
+                      borderBottom: active ? "2px solid #0268CE" : "2px solid transparent",
                       background: "transparent",
                       cursor: "pointer",
+                      letterSpacing: active ? "-0.01em" : "normal",
                     }}
                   >
                     {tab.label}
@@ -1091,9 +1094,9 @@ export default function AdminDashboard() {
                         style={{
                           marginLeft: 6,
                           fontSize: 11,
-                          fontWeight: 500,
-                          background: active ? "#f3f4f6" : "transparent",
-                          color: active ? "#374151" : "#9ca3af",
+                          fontWeight: 600,
+                          background: active ? "#EFF6FF" : "transparent",
+                          color: active ? "#0268CE" : "#94A3B8",
                           borderRadius: 999,
                           padding: "1px 7px",
                         }}

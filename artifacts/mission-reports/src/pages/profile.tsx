@@ -111,14 +111,22 @@ function AdminProfile() {
 
   return (
     <div className="max-w-lg mx-auto py-6">
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-foreground tracking-tight">Organization Settings</h1>
-        <p className="text-sm text-muted-foreground mt-1">Manage your organization's profile and admin details.</p>
+      <div className="flex items-start gap-4 mb-7">
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#EFF6FF" }}>
+          <Building2 className="h-5 w-5" style={{ color: "#0268CE" }} />
+        </div>
+        <div>
+          <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>Organization Settings</h1>
+          <p style={{ fontSize: 14, color: "#64748B" }}>Manage your organization's profile and admin details.</p>
+        </div>
       </div>
 
       {/* Logo upload card */}
       <div className="bg-white rounded-xl border border-border shadow-sm p-6 mb-4">
-        <p className="text-sm font-semibold text-foreground mb-4">Organization Logo</p>
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-1 h-5 rounded-full bg-primary" />
+          <span className="text-sm font-semibold text-foreground">Organization Logo</span>
+        </div>
         <div className="flex items-center gap-5">
           <div className="relative flex-shrink-0">
             <Avatar className="h-20 w-20 ring-2 ring-border">
@@ -150,7 +158,10 @@ function AdminProfile() {
 
             {/* Organization Info */}
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">Organization Info</p>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-1 h-5 rounded-full bg-primary" />
+                <span className="text-sm font-semibold text-foreground">Organization Info</span>
+              </div>
               <div className="space-y-4">
                 <FormField
                   control={form.control}
@@ -189,7 +200,10 @@ function AdminProfile() {
 
             {/* Admin Info */}
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">Admin Info</p>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-1 h-5 rounded-full bg-primary" />
+                <span className="text-sm font-semibold text-foreground">Admin Info</span>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -225,7 +239,7 @@ function AdminProfile() {
             </div>
 
             <div className="pt-1 flex justify-end">
-              <Button type="submit" disabled={updateUser.isPending} className="h-9 px-5 text-sm font-medium" data-testid="btn-profile-submit">
+              <Button type="submit" disabled={updateUser.isPending} className="h-10 px-6 text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg" data-testid="btn-profile-submit">
                 {updateUser.isPending ? "Saving…" : "Save Changes"}
               </Button>
             </div>
@@ -268,14 +282,22 @@ function FieldUserProfile() {
 
   return (
     <div className="max-w-lg mx-auto py-6">
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-foreground tracking-tight">Profile Settings</h1>
-        <p className="text-sm text-muted-foreground mt-1">Your profile is visible to church admins and on your reports.</p>
+      <div className="flex items-start gap-4 mb-7">
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#EFF6FF" }}>
+          <User className="h-5 w-5" style={{ color: "#0268CE" }} />
+        </div>
+        <div>
+          <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>Profile Settings</h1>
+          <p style={{ fontSize: 14, color: "#64748B" }}>Your profile is visible to church admins and on your reports.</p>
+        </div>
       </div>
 
       {/* Photo upload card */}
       <div className="bg-white rounded-xl border border-border shadow-sm p-6 mb-4">
-        <p className="text-sm font-semibold text-foreground mb-4">Profile Photo</p>
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-1 h-5 rounded-full bg-primary" />
+          <span className="text-sm font-semibold text-foreground">Profile Photo</span>
+        </div>
         <div className="flex items-center gap-5">
           <div className="relative flex-shrink-0">
             <Avatar className="h-20 w-20 ring-2 ring-border">
@@ -376,7 +398,7 @@ function FieldUserProfile() {
               )}
             />
             <div className="pt-1 flex justify-end">
-              <Button type="submit" disabled={updateUser.isPending} className="h-9 px-5 text-sm font-medium" data-testid="btn-profile-submit">
+              <Button type="submit" disabled={updateUser.isPending} className="h-10 px-6 text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg" data-testid="btn-profile-submit">
                 {updateUser.isPending ? "Saving…" : "Save Changes"}
               </Button>
             </div>
