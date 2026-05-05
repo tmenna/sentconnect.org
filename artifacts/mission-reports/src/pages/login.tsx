@@ -20,8 +20,8 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const BLUE = "#0268CE";
-const BLUE_DARK = "#0155a5";
+const BLUE = "#8A05FF";
+const BLUE_DARK = "#6E04CC";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -81,7 +81,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   if (isAuthenticated && user) return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-4 py-10 bg-white">
       <div className="w-full max-w-sm bg-white rounded-2xl p-7 sm:p-8 text-center" style={{ border: "1px solid #E2E8F0", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" }}>
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#EFF6FF", border: "1.5px solid #BFDBFE" }}>
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#F3E8FF", border: "1.5px solid #D8B4FE" }}>
           <span className="font-bold text-lg" style={{ color: BLUE }}>{user.name.charAt(0).toUpperCase()}</span>
         </div>
         <h2 className="text-[17px] font-semibold mb-1" style={{ color: "#0F172A" }}>You're signed in</h2>
@@ -126,7 +126,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             <img src={logoUrl} alt="SentConnect" style={{ height: 34, width: "auto", objectFit: "contain" }} />
           ) : (
             <>
-              <div className="p-2 rounded-xl" style={{ background: "#EFF6FF" }}>
+              <div className="p-2 rounded-xl" style={{ background: "#F3E8FF" }}>
                 <Shuffle className="h-5 w-5" style={{ color: BLUE }} />
               </div>
               <span className="text-[20px] font-bold tracking-tight" style={{ color: "#0F172A" }}>SentConnect</span>
@@ -136,7 +136,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
         {/* Center message */}
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#EFF6FF" }}>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#F3E8FF" }}>
             <Globe className="h-4 w-4" style={{ color: BLUE }} />
             <span className="text-[13px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
@@ -163,13 +163,13 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             <img src={logoUrl} alt="SentConnect" style={{ height: 30, width: "auto", objectFit: "contain", marginBottom: 16 }} />
           ) : (
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-1.5 rounded-lg" style={{ background: "#EFF6FF" }}>
+              <div className="p-1.5 rounded-lg" style={{ background: "#F3E8FF" }}>
                 <Shuffle className="h-4 w-4" style={{ color: BLUE }} />
               </div>
               <span className="font-bold text-[18px] tracking-tight" style={{ color: "#0F172A" }}>SentConnect</span>
             </div>
           )}
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-4" style={{ background: "#EFF6FF" }}>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-4" style={{ background: "#F3E8FF" }}>
             <Globe className="h-3 w-3" style={{ color: BLUE }} />
             <span className="text-[11px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
@@ -271,7 +271,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   type="submit"
                   disabled={login.isPending}
                   className="w-full rounded-xl text-[15px] font-semibold text-white transition-all duration-200 disabled:opacity-60 flex items-center justify-center gap-2 mt-1"
-                  style={{ height: 48, backgroundColor: BLUE, boxShadow: "0 4px 14px rgba(2,104,206,0.25)" }}
+                  style={{ height: 48, backgroundColor: BLUE, boxShadow: "0 4px 14px rgba(138,5,255,0.28)" }}
                   onMouseEnter={e => { if (!login.isPending) { e.currentTarget.style.backgroundColor = BLUE_DARK; e.currentTarget.style.transform = "translateY(-1px)"; } }}
                   onMouseLeave={e => { e.currentTarget.style.backgroundColor = BLUE; e.currentTarget.style.transform = ""; }}
                   data-testid="btn-login-submit"
