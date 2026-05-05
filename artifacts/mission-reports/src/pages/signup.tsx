@@ -9,7 +9,7 @@ import {
 import { usePlatformLogo } from "@/hooks/use-platform-logo";
 
 const NAVY = "#0F172A";
-const BLUE = "#1E88FF";
+const BLUE = "#8A05FF";
 
 const FEATURES = [
   "Unlimited users",
@@ -95,7 +95,7 @@ export default function Signup() {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
-          background: linear-gradient(160deg, #F5F8FC 0%, #EDF2F9 100%);
+          background: #FFFFFF;
           font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
@@ -153,8 +153,8 @@ export default function Signup() {
           flex-direction: column;
           padding: 36px;
           border-radius: 28px;
-          background: linear-gradient(135deg, #1E88FF 0%, #0A6CFF 100%);
-          box-shadow: 0 8px 48px rgba(10,108,255,0.35);
+          background: linear-gradient(135deg, #8A05FF 0%, #6E04CC 100%);
+          box-shadow: 0 8px 48px rgba(138,5,255,0.35);
         }
 
         /* ── Email + Password row ── */
@@ -222,7 +222,7 @@ export default function Signup() {
 
           {/* LEFT — Plan card (hidden on mobile/tablet) */}
           <div className="su-plan">
-            <div style={{ width: 44, height: 44, borderRadius: 16, background: "#EEF6FE", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+            <div style={{ width: 44, height: 44, borderRadius: 16, background: "#F3E8FF", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
               <Users style={{ width: 20, height: 20, color: BLUE }} />
             </div>
 
