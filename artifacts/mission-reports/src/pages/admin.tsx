@@ -85,25 +85,32 @@ function OrgPermissionsEditor({
       {ORG_PERM_META.map(({ key, label, desc, icon }) => (
         <label
           key={key}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors ${
-            perms[key]
-              ? "bg-blue-50/50 border-blue-200"
-              : "bg-muted/20 border-border/40 hover:bg-muted/40"
-          } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            padding: "10px 14px",
+            borderRadius: 10,
+            border: perms[key] ? "1.5px solid #C4B5FD" : "1.5px solid #E9E9E9",
+            background: perms[key] ? "#FEFBFF" : "#F9FAFB",
+            cursor: disabled ? "not-allowed" : "pointer",
+            opacity: disabled ? 0.6 : 1,
+            transition: "all 0.15s",
+          }}
         >
-          <div className={`flex-shrink-0 ${perms[key] ? "text-primary" : "text-muted-foreground"}`}>
+          <div style={{ flexShrink: 0, color: perms[key] ? "#8705FA" : "#94A3B8" }}>
             {icon}
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[12px] font-semibold text-foreground">{label}</p>
-            <p className="text-[11px] text-muted-foreground">{desc}</p>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: "#0F172A", margin: 0 }}>{label}</p>
+            <p style={{ fontSize: 12, color: "#64748B", margin: 0 }}>{desc}</p>
           </div>
           <input
             type="checkbox"
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            className="h-4 w-4 rounded accent-blue-600 cursor-pointer"
+            style={{ width: 16, height: 16, cursor: disabled ? "not-allowed" : "pointer", accentColor: "#8705FA" }}
           />
         </label>
       ))}
@@ -890,36 +897,39 @@ export default function AdminDashboard() {
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* ── Page header ── */}
-        <div className="flex items-start gap-4 mb-7">
-          <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#F3E8FF" }}>
-            <Users className="h-5 w-5" style={{ color: "#6B04C8" }} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>
-              Global Partners
-            </h1>
-            <p style={{ fontSize: 14, color: "#64748B", marginBottom: 14 }}>
-              Manage your team and track mission activity.
-            </p>
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#059669", background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 999, padding: "4px 12px" }}>
-                {usersLoading ? "—" : allUsers.length} <span style={{ fontWeight: 400, color: "#475569" }}>Members</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#8705FA", background: "#F3E8FF", border: "1px solid #D8B4FE", borderRadius: 999, padding: "4px 12px" }}>
-                {usersLoading ? "—" : countriesCount} <span style={{ fontWeight: 400, color: "#475569" }}>Countries</span>
-              </span>
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F3E8FF", borderRadius: 999, padding: "5px 14px", marginBottom: 14 }}>
+                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#8705FA" }} />
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#8705FA", letterSpacing: "0.06em" }}>ADMIN DASHBOARD</span>
+              </div>
+              <h1 style={{ fontSize: 30, fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 8px" }}>
+                Global Partners
+              </h1>
+              <p style={{ fontSize: 16, color: "#64748B", margin: "0 0 20px", lineHeight: 1.6 }}>
+                Manage your team and track mission activity.
+              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#059669", background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 999, padding: "6px 14px" }}>
+                  {usersLoading ? "—" : allUsers.length} <span style={{ fontWeight: 500, color: "#475569" }}>Members</span>
+                </span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#8705FA", background: "#F3E8FF", border: "1px solid #D8B4FE", borderRadius: 999, padding: "6px 14px" }}>
+                  {usersLoading ? "—" : countriesCount} <span style={{ fontWeight: 500, color: "#475569" }}>Countries</span>
+                </span>
+              </div>
             </div>
+            <Avatar className="h-11 w-11 flex-shrink-0" style={{ border: "2px solid #E8EEF8" }}>
+              <AvatarImage src={user.avatarUrl ?? undefined} />
+              <AvatarFallback style={{ background: "#F3E8FF", color: "#8705FA", fontWeight: 800, fontSize: 15 }}>
+                {user.name.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
           </div>
-          <Avatar className="h-9 w-9 flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
-            <AvatarImage src={user.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#F3E8FF", color: "#8705FA", fontWeight: 700, fontSize: 13 }}>
-              {user.name.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex items-center" style={{ borderBottom: "1px solid #D8B4FE" }}>
+        <div className="flex items-center" style={{ borderBottom: "2px solid #E9D5FF" }}>
           {[
             { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
             { id: "feed", label: "Updates", badge: null },
@@ -932,31 +942,31 @@ export default function AdminDashboard() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className="transition-all duration-150"
                 style={{
-                  paddingBottom: 12,
+                  paddingBottom: 14,
                   paddingTop: 4,
-                  marginRight: 24,
-                  marginBottom: -1,
-                  fontSize: 14,
-                  fontWeight: active ? 700 : 400,
+                  marginRight: 28,
+                  marginBottom: -2,
+                  fontSize: 15,
+                  fontWeight: active ? 800 : 500,
                   color: active ? "#8705FA" : "#94A3B8",
                   border: "none",
-                  borderBottom: active ? "2px solid #8705FA" : "2px solid transparent",
+                  borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
                   background: "transparent",
                   cursor: "pointer",
-                  letterSpacing: active ? "-0.01em" : "normal",
+                  letterSpacing: active ? "-0.02em" : "normal",
                 }}
               >
                 {tab.label}
                 {tab.badge != null && (
                   <span
                     style={{
-                      marginLeft: 6,
-                      fontSize: 11,
-                      fontWeight: 600,
-                      background: active ? "#F3E8FF" : "transparent",
+                      marginLeft: 7,
+                      fontSize: 12,
+                      fontWeight: 700,
+                      background: active ? "#F3E8FF" : "#F1F5F9",
                       color: active ? "#8705FA" : "#94A3B8",
                       borderRadius: 999,
-                      padding: "1px 7px",
+                      padding: "2px 8px",
                     }}
                   >
                     {tab.badge}
@@ -1025,11 +1035,11 @@ export default function AdminDashboard() {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b" style={{ borderColor: "#F1F5F9" }}>
-                        <th className="px-5 py-3.5 text-left text-[13px] font-medium tracking-wide" style={{ color: "#9CA3AF" }}>Member</th>
-                        <th className="px-5 py-3.5 text-left text-[13px] font-medium tracking-wide hidden sm:table-cell" style={{ color: "#9CA3AF" }}>Role</th>
-                        <th className="px-5 py-3.5 text-left text-[13px] font-medium tracking-wide hidden md:table-cell" style={{ color: "#9CA3AF" }}>Status</th>
-                        <th className="px-5 py-3.5 text-left text-[13px] font-medium tracking-wide hidden lg:table-cell" style={{ color: "#9CA3AF" }}>Joined</th>
-                        <th className="px-5 py-3.5 text-right text-[13px] font-medium tracking-wide" style={{ color: "#9CA3AF" }}>Actions</th>
+                        <th className="px-5 py-4 text-left text-[13px] font-700 tracking-wide uppercase" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11 }}>Member</th>
+                        <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
+                        <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
+                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
+                        <th className="px-5 py-4 text-right" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
