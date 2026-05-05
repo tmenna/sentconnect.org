@@ -426,12 +426,12 @@ export function PostCard({
     >
       {/* Mission Moment banner */}
       {post.isMissionMoment && (
-        <div className="flex items-center gap-2.5 px-5 py-3" style={{ background: "linear-gradient(135deg, #0F172A 0%, #1E293B 70%, #334155 100%)" }}>
-          <BookOpen className="h-3.5 w-3.5 flex-shrink-0 text-white" />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.92)", letterSpacing: "0.09em", textTransform: "uppercase", flexGrow: 1 }}>
+        <div className="flex items-center gap-2.5 px-5 py-3" style={{ background: "#ffffff", borderBottom: "1px solid #E2E8F0" }}>
+          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#0F172A" }} />
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#0F172A", letterSpacing: "0.09em", textTransform: "uppercase", flexGrow: 1 }}>
             Mission Moment
           </span>
-          <Sparkles className="h-3.5 w-3.5" style={{ color: "rgba(255,255,255,0.45)" }} />
+          <Sparkles className="h-3.5 w-3.5" style={{ color: "#94A3B8" }} />
         </div>
       )}
 
