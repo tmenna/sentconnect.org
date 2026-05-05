@@ -126,13 +126,13 @@ function LandingPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const BLUE      = "#1E88FF";
-  const BLUE_DARK = "#0A6CFF";
+  const BLUE      = "#8A05FF";
+  const BLUE_DARK = "#6E04CC";
   const YELLOW    = "#FFEB00";
   const CHARCOAL  = "#1F2937";
   const TEXT      = "#0F172A";
   const TEXT2     = "#64748B";
-  const BG        = "#F8FBFF";
+  const BG        = "#F9F5FF";
 
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
@@ -179,7 +179,7 @@ function LandingPage() {
         {/* ── HERO ── */}
         <section style={{ padding: "112px 0 96px", background: BG, position: "relative", overflow: "hidden" }}>
           {/* subtle radial glow */}
-          <div style={{ position: "absolute", top: -200, right: -200, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(30,136,255,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", top: -200, right: -200, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(138,5,255,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
 
           <div className="lp-hero-grid mx-auto max-w-6xl px-6">
             {/* Left */}
@@ -225,17 +225,17 @@ function LandingPage() {
 
               {/* feed rows */}
               {[
-                { title: content.previewTitle1, ago: "2h ago", w: "80%", color: "rgba(30,136,255,0.18)" },
-                { title: content.previewTitle2, ago: "3h ago", w: "65%", color: "rgba(30,136,255,0.12)" },
-                { title: content.previewTitle3, ago: "5h ago", w: "52%", color: "rgba(30,136,255,0.08)" },
+                { title: content.previewTitle1, ago: "2h ago", w: "80%", color: "rgba(138,5,255,0.18)" },
+                { title: content.previewTitle2, ago: "3h ago", w: "65%", color: "rgba(138,5,255,0.12)" },
+                { title: content.previewTitle3, ago: "5h ago", w: "52%", color: "rgba(138,5,255,0.08)" },
               ].map(({ title, ago, w, color }, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid #F8FAFC" : "none" }}>
                   <div style={{ width: 36, height: 36, borderRadius: "50%", background: color, flexShrink: 0 }} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
                     <p style={{ fontSize: 11, color: "#94A3B8", margin: "0 0 8px" }}>{ago}</p>
-                    <div style={{ height: 5, background: "rgba(30,136,255,0.08)", borderRadius: 999, width: "100%" }} />
-                    <div style={{ height: 5, background: "rgba(30,136,255,0.06)", borderRadius: 999, width: w, marginTop: 4 }} />
+                    <div style={{ height: 5, background: "rgba(138,5,255,0.08)", borderRadius: 999, width: "100%" }} />
+                    <div style={{ height: 5, background: "rgba(138,5,255,0.06)", borderRadius: 999, width: w, marginTop: 4 }} />
                   </div>
                 </div>
               ))}
@@ -253,7 +253,7 @@ function LandingPage() {
 
             <div className="lp-steps-grid">
               {/* connector line */}
-              <div className="lp-connector" style={{ position: "absolute", top: 36, left: "calc(16.66% + 16px)", right: "calc(16.66% + 16px)", height: 1, background: "linear-gradient(90deg, transparent, rgba(30,136,255,0.2), transparent)", pointerEvents: "none" }} />
+              <div className="lp-connector" style={{ position: "absolute", top: 36, left: "calc(16.66% + 16px)", right: "calc(16.66% + 16px)", height: 1, background: "linear-gradient(90deg, transparent, rgba(138,5,255,0.2), transparent)", pointerEvents: "none" }} />
 
               {[
                 { title: content.step1Title, desc: content.step1Description, n: "01" },
@@ -317,7 +317,7 @@ function LandingPage() {
               <a
                 href="mailto:support@sentconnect.org"
                 style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-block" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#1E88FF")}
+                onMouseEnter={e => (e.currentTarget.style.color = "#8A05FF")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
               >
                 support@sentconnect.org
