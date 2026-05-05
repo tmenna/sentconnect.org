@@ -45,7 +45,7 @@ export function Layout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="min-h-[100dvh] flex flex-col text-foreground" style={{ background: "#F4F7FF", fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
+    <div className="min-h-[100dvh] flex flex-col text-foreground" style={{ background: "#ffffff", fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
       {/* ── Nav ── */}
       <header
         className="sticky top-0 z-50 w-full"
