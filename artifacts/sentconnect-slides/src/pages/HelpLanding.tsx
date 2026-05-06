@@ -1,4 +1,5 @@
 import { useLocation } from "wouter";
+import logoWhite from "../assets/logo-white.png";
 
 export default function HelpLanding() {
   const [, navigate] = useLocation();
@@ -75,10 +76,7 @@ export default function HelpLanding() {
         {/* Logo row */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "clamp(20px, 4vw, 40px)", position: "relative", flexWrap: "wrap" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-            <div style={{ width: 32, height: 32, minWidth: 32, borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#FFFFFF" }} />
-            </div>
-            <span style={{ color: "#FFFFFF", fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700 }}>SentConnect</span>
+            <img src={logoWhite} alt="SentConnect" style={{ height: "clamp(18px, 2vw, 28px)", display: "block", flexShrink: 0 }} />
             <span style={{ color: "rgba(255,255,255,0.35)" }}>·</span>
             <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "clamp(12px, 1.3vw, 15px)", fontWeight: 500 }}>Help Center</span>
           </div>

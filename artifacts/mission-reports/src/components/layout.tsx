@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { LogOut, Rss, ShieldCheck, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import logoWhite from "@/assets/logo-white.png";
 /* Brand tokens */
 const EMERALD   = "#8705FA";
 const CHARCOAL  = "#374151";
@@ -50,7 +51,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
           {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <span className="font-bold text-[16px] tracking-tight" style={{ color: CHARCOAL }}>SentConnect</span>
+            <img src={logoWhite} alt="SentConnect" style={{ height: 22, filter: "brightness(0)", display: "block" }} />
           </Link>
 
           {/* Right nav */}
@@ -125,7 +126,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <footer className="mt-12 py-5 bg-white" style={{ borderTop: `1px solid ${BORDER}` }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-gray-400 tracking-tight">SentConnect</span>
+            <img src={logoWhite} alt="SentConnect" style={{ height: 14, filter: "brightness(0)", opacity: 0.35, display: "block" }} />
           </div>
           <p className="text-xs text-gray-400 italic">"Declare his glory among the nations." — Ps 96:3</p>
         </div>

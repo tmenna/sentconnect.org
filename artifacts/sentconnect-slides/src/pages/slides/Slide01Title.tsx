@@ -1,3 +1,5 @@
+import logoWhite from "../../assets/logo-white.png";
+
 export default function Slide01Title() {
   return (
     <div
@@ -15,12 +17,7 @@ export default function Slide01Title() {
       <div style={{ position: "absolute", bottom: "8vh", left: "-8vw", width: "32vw", height: "32vw", borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "3vh 5vw 0", zIndex: 1 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.8vw" }}>
-          <div style={{ width: "2.6vw", height: "2.6vw", borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: "1.1vw", height: "1.1vw", borderRadius: "50%", background: "#FFFFFF" }} />
-          </div>
-          <span style={{ color: "#FFFFFF", fontSize: "1.4vw", fontWeight: 700, letterSpacing: "-0.01em" }}>SentConnect</span>
-        </div>
+        <img src={logoWhite} alt="SentConnect" style={{ height: "3.5vh", display: "block" }} />
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw", fontWeight: 500 }}>Platform Guide · 2026</span>
       </div>
 
@@ -30,9 +27,7 @@ export default function Slide01Title() {
           <span style={{ color: "rgba(255,255,255,0.9)", fontSize: "0.95vw", fontWeight: 600, letterSpacing: "0.06em" }}>HELP GUIDE</span>
         </div>
 
-        <h1 style={{ color: "#FFFFFF", fontSize: "7.5vw", fontWeight: 800, lineHeight: 1.0, letterSpacing: "-0.04em", margin: "0 0 4vh 0" }}>
-          SentConnect
-        </h1>
+        <img src={logoWhite} alt="SentConnect" style={{ height: "12vh", display: "block", margin: "0 0 4vh 0" }} />
 
         <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1.9vw", fontWeight: 400, lineHeight: 1.6, margin: "0 0 1.5vh 0", maxWidth: "48vw" }}>
           Bring your church and field teams closer together.
