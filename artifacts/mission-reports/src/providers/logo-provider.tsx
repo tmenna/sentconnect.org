@@ -10,6 +10,8 @@ export interface LogoContextValue {
   logo: string;
   /** Footer-specific logo */
   footerLogo: string;
+  /** Signup-page-specific logo (falls back to effectivePlatformLogo → static fallback) */
+  signupLogo: string;
   /** The raw org-level logo URL (null if org has no custom logo) */
   orgLogo: string | null;
   /** The raw platform logo URL from landing page content */
@@ -18,6 +20,8 @@ export interface LogoContextValue {
   isCustomLogo: boolean;
   /** True when the footer logo is an uploaded one */
   isCustomFooterLogo: boolean;
+  /** True when the signup logo is an uploaded one */
+  isCustomSignupLogo: boolean;
   /** Call after uploading a new logo to refresh all pages */
   refresh: () => void;
 }
@@ -25,10 +29,12 @@ export interface LogoContextValue {
 const LogoContext = createContext<LogoContextValue>({
   logo: logoWhiteStatic,
   footerLogo: logoWhiteStatic,
+  signupLogo: logoWhiteStatic,
   orgLogo: null,
   platformLogo: null,
   isCustomLogo: false,
   isCustomFooterLogo: false,
+  isCustomSignupLogo: false,
   refresh: () => {},
 });
 
@@ -39,6 +45,7 @@ export function useLogo() {
 export function LogoProvider({ children }: { children: ReactNode }) {
   const [platformHeaderLogo, setPlatformHeaderLogo] = useState<string | null>(null);
   const [platformFooterLogo, setPlatformFooterLogo] = useState<string | null>(null);
+  const [platformSignupLogo, setPlatformSignupLogo] = useState<string | null>(null);
   const [platformLogo, setPlatformLogo] = useState<string | null>(null);
   const [orgLogo, setOrgLogo] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
@@ -57,12 +64,14 @@ export function LogoProvider({ children }: { children: ReactNode }) {
         if (cancelled) return;
         const headerUrl = (d.headerLogoUrl as string) || null;
         const footerUrl = (d.footerLogoUrl as string) || null;
+        const signupUrl = (d.signupLogoUrl as string) || null;
         const logoUrl   = (d.logoUrl as string)       || null;
 
         const apply = () => {
           if (!cancelled) {
             setPlatformHeaderLogo(headerUrl);
             setPlatformFooterLogo(footerUrl);
+            setPlatformSignupLogo(signupUrl);
             setPlatformLogo(logoUrl);
           }
         };
@@ -107,18 +116,22 @@ export function LogoProvider({ children }: { children: ReactNode }) {
   const effectivePlatformLogo = platformHeaderLogo || platformLogo || null;
   const logo = orgLogo || effectivePlatformLogo || logoWhiteStatic;
   const footerLogo = orgLogo || platformFooterLogo || effectivePlatformLogo || logoWhiteStatic;
+  const signupLogo = platformSignupLogo || effectivePlatformLogo || logoWhiteStatic;
 
   const isCustomLogo = logo !== logoWhiteStatic;
   const isCustomFooterLogo = footerLogo !== logoWhiteStatic;
+  const isCustomSignupLogo = signupLogo !== logoWhiteStatic;
 
   return (
     <LogoContext.Provider value={{
       logo,
       footerLogo,
+      signupLogo,
       orgLogo,
       platformLogo: effectivePlatformLogo,
       isCustomLogo,
       isCustomFooterLogo,
+      isCustomSignupLogo,
       refresh,
     }}>
       {children}

@@ -4,6 +4,7 @@ export const DEFAULT_LANDING_PAGE_CONTENT = {
   logoUrl: "",
   headerLogoUrl: "",
   footerLogoUrl: "",
+  signupLogoUrl: "",
   headerBrandName: "SentConnect",
   headerPrimaryCtaLabel: "Sign up",
   headerPrimaryCtaHref: "/signup",
@@ -33,12 +34,13 @@ export const DEFAULT_LANDING_PAGE_CONTENT = {
 
 type LandingPageContentInput = typeof DEFAULT_LANDING_PAGE_CONTENT;
 
-const OPTIONAL_KEYS = new Set<keyof LandingPageContentInput>(["logoUrl", "headerLogoUrl", "footerLogoUrl", "headerBrandName", "footerBrandName"]);
+const OPTIONAL_KEYS = new Set<keyof LandingPageContentInput>(["logoUrl", "headerLogoUrl", "footerLogoUrl", "signupLogoUrl", "headerBrandName", "footerBrandName"]);
 
 const columnMap = {
   logoUrl: "logo_url",
   headerLogoUrl: "header_logo_url",
   footerLogoUrl: "footer_logo_url",
+  signupLogoUrl: "signup_logo_url",
   headerBrandName: "header_brand_name",
   headerPrimaryCtaLabel: "header_primary_cta_label",
   headerPrimaryCtaHref: "header_primary_cta_href",
@@ -128,6 +130,7 @@ async function ensureLandingPageTable(): Promise<void> {
         ADD COLUMN IF NOT EXISTS logo_url text NOT NULL DEFAULT '',
         ADD COLUMN IF NOT EXISTS header_logo_url text NOT NULL DEFAULT '',
         ADD COLUMN IF NOT EXISTS footer_logo_url text NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS signup_logo_url text NOT NULL DEFAULT '',
         ADD COLUMN IF NOT EXISTS header_brand_name text NOT NULL DEFAULT 'SentConnect',
         ADD COLUMN IF NOT EXISTS header_primary_cta_label text NOT NULL DEFAULT 'Sign up',
         ADD COLUMN IF NOT EXISTS header_primary_cta_href text NOT NULL DEFAULT '/signup',

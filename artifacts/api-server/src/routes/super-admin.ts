@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { eq, sql, and, inArray } from "drizzle-orm";
+import { eq, sql, and, inArray, ne } from "drizzle-orm";
 import crypto from "crypto";
 import { db, organizationsTable, usersTable, reportsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
@@ -118,7 +118,7 @@ router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): 
 router.patch("/super-admin/orgs/:id", requirePermission("canManageOrganizations"), async (req, res): Promise<void> => {
   const orgId = Number(req.params.id);
   if (isNaN(orgId)) { res.status(400).json({ error: "Invalid org id" }); return; }
-  const { status, logoUrl } = req.body ?? {};
+  const { status, logoUrl, name, subdomain } = req.body ?? {};
 
   const updates: Record<string, unknown> = {};
 
@@ -134,6 +134,26 @@ router.patch("/super-admin/orgs/:id", requirePermission("canManageOrganizations"
       res.status(400).json({ error: "logoUrl must be a string or null" }); return;
     }
     updates.logoUrl = logoUrl || null;
+  }
+
+  if (name !== undefined) {
+    if (!name || typeof name !== "string" || name.trim().length < 2) {
+      res.status(400).json({ error: "name must be at least 2 characters" }); return;
+    }
+    updates.name = name.trim();
+  }
+
+  if (subdomain !== undefined) {
+    if (!subdomain || typeof subdomain !== "string" || !/^[a-z0-9-]{2,30}$/.test(subdomain)) {
+      res.status(400).json({ error: "subdomain must be 2-30 lowercase letters, numbers, or hyphens" }); return;
+    }
+    const existing = await db.select({ id: organizationsTable.id })
+      .from(organizationsTable)
+      .where(and(eq(organizationsTable.subdomain, subdomain), ne(organizationsTable.id, orgId)));
+    if (existing.length > 0) {
+      res.status(409).json({ error: "That subdomain is already taken — choose a different one" }); return;
+    }
+    updates.subdomain = subdomain;
   }
 
   if (Object.keys(updates).length === 0) {

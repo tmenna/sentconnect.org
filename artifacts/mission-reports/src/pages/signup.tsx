@@ -20,7 +20,7 @@ const FEATURES = [
 
 export default function Signup() {
   const { isAuthenticated, isLoading } = useAuth();
-  const { logo, isCustomLogo } = useLogo();
+  const { signupLogo, isCustomSignupLogo } = useLogo();
   const { toast } = useToast();
   const [orgName, setOrgName]           = useState("");
   const [subdomain, setSubdomain]       = useState("");
@@ -229,7 +229,7 @@ export default function Signup() {
 
       {/* Nav */}
       <div className="su-nav">
-        <img src={logo} alt="SentConnect" style={{ maxHeight: 24, width: "auto", maxWidth: 160, display: "block", filter: isCustomLogo ? undefined : "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(5000%) hue-rotate(270deg) brightness(90%)" }} />
+        <img src={signupLogo} alt="SentConnect" style={{ maxHeight: 24, width: "auto", maxWidth: 160, display: "block", filter: isCustomSignupLogo ? undefined : "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(5000%) hue-rotate(270deg) brightness(90%)" }} />
         <Link href="/" className="su-back-link">← Back to sentconnect.org</Link>
       </div>
 

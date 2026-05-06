@@ -40,6 +40,7 @@ type LandingPageContent = {
   logoUrl: string;
   headerLogoUrl: string;
   footerLogoUrl: string;
+  signupLogoUrl: string;
   headerBrandName: string;
   headerPrimaryCtaLabel: string;
   headerPrimaryCtaHref: string;
@@ -2192,6 +2193,7 @@ function PlatformLogosPanel() {
   const [logoUrl, setLogoUrl] = useState("");
   const [headerLogoUrl, setHeaderLogoUrl] = useState("");
   const [footerLogoUrl, setFooterLogoUrl] = useState("");
+  const [signupLogoUrl, setSignupLogoUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -2205,6 +2207,7 @@ function PlatformLogosPanel() {
         setLogoUrl(d.logoUrl ?? "");
         setHeaderLogoUrl(d.headerLogoUrl ?? "");
         setFooterLogoUrl(d.footerLogoUrl ?? "");
+        setSignupLogoUrl(d.signupLogoUrl ?? "");
         setLoading(false);
       })
       .catch(() => { if (!cancelled) setLoading(false); });
@@ -2219,7 +2222,7 @@ function PlatformLogosPanel() {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...fullContent, logoUrl, headerLogoUrl, footerLogoUrl }),
+        body: JSON.stringify({ ...fullContent, logoUrl, headerLogoUrl, footerLogoUrl, signupLogoUrl }),
       });
       if (!res.ok) throw new Error("Failed to save");
       const updated: LandingPageContent = await res.json();
@@ -2227,6 +2230,7 @@ function PlatformLogosPanel() {
       setLogoUrl(updated.logoUrl ?? "");
       setHeaderLogoUrl(updated.headerLogoUrl ?? "");
       setFooterLogoUrl(updated.footerLogoUrl ?? "");
+      setSignupLogoUrl(updated.signupLogoUrl ?? "");
       refreshLogo();
       toast({ title: "Platform logos saved" });
     } catch (err: any) {
@@ -2257,7 +2261,7 @@ function PlatformLogosPanel() {
           Save Platform Logos
         </button>
       </div>
-      <div className="p-5 grid gap-6 md:grid-cols-3">
+      <div className="p-5 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
         <div>
           <p className="text-[13px] font-bold text-foreground mb-0.5">Header Logo</p>
           <p className="text-[11px] text-muted-foreground mb-3">Top nav bar on landing &amp; about pages. Shown on purple background — use a white or light-colored logo.</p>
@@ -2269,8 +2273,13 @@ function PlatformLogosPanel() {
           <LogoUploader logoUrl={footerLogoUrl} onChange={setFooterLogoUrl} />
         </div>
         <div>
+          <p className="text-[13px] font-bold text-foreground mb-0.5">Signup Page Logo</p>
+          <p className="text-[11px] text-muted-foreground mb-3">Shown in the top nav of the sign-up page at sentconnect.org/signup.</p>
+          <LogoUploader logoUrl={signupLogoUrl} onChange={setSignupLogoUrl} />
+        </div>
+        <div>
           <p className="text-[13px] font-bold text-foreground mb-0.5">Shared / Fallback Logo</p>
-          <p className="text-[11px] text-muted-foreground mb-3">Fallback when header or footer logos are not set. Also used in org login pages if the org has no custom logo.</p>
+          <p className="text-[11px] text-muted-foreground mb-3">Fallback when the above logos are not set. Also used in org login pages if the org has no custom logo.</p>
           <LogoUploader logoUrl={logoUrl} onChange={setLogoUrl} />
         </div>
       </div>
@@ -2437,6 +2446,127 @@ function LogosTab({ orgs }: { orgs: OrgWithStats[] }) {
   );
 }
 
+// ─── Edit Org Modal ───────────────────────────────────────────────────────────
+
+function EditOrgModal({ org, onClose, onSaved }: {
+  org: OrgWithStats;
+  onClose: () => void;
+  onSaved: (updated: OrgWithStats) => void;
+}) {
+  const { toast } = useToast();
+  const [name, setName] = useState(org.name);
+  const [subdomain, setSubdomain] = useState(org.subdomain);
+  const [saving, setSaving] = useState(false);
+  const [subdomainError, setSubdomainError] = useState("");
+
+  function handleSubdomainChange(val: string) {
+    const cleaned = val.toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 30);
+    setSubdomain(cleaned);
+    setSubdomainError("");
+  }
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    if (!name.trim()) return;
+    if (!/^[a-z0-9-]{2,30}$/.test(subdomain)) {
+      setSubdomainError("Use 2–30 lowercase letters, numbers, or hyphens");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/super-admin/orgs/${org.id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim(), subdomain }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        if (typeof err.error === "string" && err.error.toLowerCase().includes("subdomain")) {
+          setSubdomainError(err.error);
+        } else {
+          throw new Error(err.error ?? "Failed to save");
+        }
+        return;
+      }
+      const updated = await res.json();
+      toast({ title: "Organization updated" });
+      onSaved({ ...org, ...updated });
+      onClose();
+    } catch (err: any) {
+      toast({ title: err.message ?? "Failed to save", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
+        <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between">
+          <div>
+            <h2 className="text-[15px] font-bold text-foreground">Edit Organization</h2>
+            <p className="text-[12px] text-muted-foreground mt-0.5">Update the org name and subdomain</p>
+          </div>
+          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60">
+            <X className="h-4 w-4 text-muted-foreground" />
+          </button>
+        </div>
+        <form onSubmit={save} className="p-6 space-y-4">
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Organization Name</label>
+            <input
+              required
+              value={name}
+              onChange={e => setName(e.target.value)}
+              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+              placeholder="Calvary Church"
+            />
+          </div>
+          <div>
+            <label className="block text-[12px] font-semibold text-foreground mb-1">Subdomain</label>
+            <div className="flex items-center border border-border/60 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary/20">
+              <input
+                required
+                value={subdomain}
+                onChange={e => handleSubdomainChange(e.target.value)}
+                className="flex-1 px-3 py-2.5 text-[13px] bg-white outline-none font-mono"
+                placeholder="calvary"
+                minLength={2}
+                maxLength={30}
+              />
+              <span className="px-3 py-2.5 bg-gray-50 text-[12px] text-muted-foreground border-l border-border/60 font-mono flex-shrink-0">.sentconnect.org</span>
+            </div>
+            {subdomainError && <p className="text-[11px] text-red-600 mt-1">{subdomainError}</p>}
+            <p className="text-[11px] text-amber-600 mt-1 flex items-start gap-1">
+              <AlertTriangle className="h-3 w-3 flex-shrink-0 mt-0.5" />
+              Changing the subdomain changes this org's login URL. Notify all users before doing this.
+            </p>
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────────────────────────
 
 export default function SuperAdminPanel() {
@@ -2457,6 +2587,7 @@ export default function SuperAdminPanel() {
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState<number | null>(null);
   const [actionPending, setActionPending] = useState<number | null>(null);
+  const [editingOrg, setEditingOrg] = useState<OrgWithStats | null>(null);
   const [userSearch, setUserSearch] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showCreateOrg, setShowCreateOrg] = useState(false);
@@ -3058,6 +3189,12 @@ export default function SuperAdminPanel() {
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <button
+                      onClick={() => setEditingOrg(org)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 transition-colors"
+                    >
+                      <Edit3 className="h-3.5 w-3.5" /> Edit
+                    </button>
+                    <button
                       onClick={() => setAddingUserToOrg(org)}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-blue-50 text-[#8705FA] hover:bg-blue-100 border border-blue-200 transition-colors"
                     >
@@ -3184,6 +3321,17 @@ export default function SuperAdminPanel() {
             </p>
           )}
         </div>
+      )}
+
+      {editingOrg && (
+        <EditOrgModal
+          org={editingOrg}
+          onClose={() => setEditingOrg(null)}
+          onSaved={updated => {
+            setOrgs(prev => prev ? prev.map(o => o.id === updated.id ? updated : o) : prev);
+            setEditingOrg(null);
+          }}
+        />
       )}
     </div>
   );
