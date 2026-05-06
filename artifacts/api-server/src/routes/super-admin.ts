@@ -118,11 +118,29 @@ router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): 
 router.patch("/super-admin/orgs/:id", requirePermission("canManageOrganizations"), async (req, res): Promise<void> => {
   const orgId = Number(req.params.id);
   if (isNaN(orgId)) { res.status(400).json({ error: "Invalid org id" }); return; }
-  const { status } = req.body ?? {};
-  if (status !== "active" && status !== "inactive") {
-    res.status(400).json({ error: "status must be 'active' or 'inactive'" }); return;
+  const { status, logoUrl } = req.body ?? {};
+
+  const updates: Record<string, unknown> = {};
+
+  if (status !== undefined) {
+    if (status !== "active" && status !== "inactive") {
+      res.status(400).json({ error: "status must be 'active' or 'inactive'" }); return;
+    }
+    updates.status = status;
   }
-  const [org] = await db.update(organizationsTable).set({ status })
+
+  if (logoUrl !== undefined) {
+    if (logoUrl !== null && typeof logoUrl !== "string") {
+      res.status(400).json({ error: "logoUrl must be a string or null" }); return;
+    }
+    updates.logoUrl = logoUrl || null;
+  }
+
+  if (Object.keys(updates).length === 0) {
+    res.status(400).json({ error: "No valid fields to update" }); return;
+  }
+
+  const [org] = await db.update(organizationsTable).set(updates as any)
     .where(eq(organizationsTable.id, orgId)).returning();
   if (!org) { res.status(404).json({ error: "Organization not found" }); return; }
   res.json(org);

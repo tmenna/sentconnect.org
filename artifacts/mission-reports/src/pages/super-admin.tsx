@@ -6,7 +6,7 @@ import {
   Plus, Lock, Unlock, Ban, UserCheck, KeyRound, ChevronDown,
   ShieldAlert, Shield, Edit3, X, Save, Eye, EyeOff,
   Trash2, AlertTriangle, Settings2, BookOpen, Star, BarChart3,
-  LogOut, Upload, ImageOff, ChevronRight,
+  LogOut, Upload, ImageOff, ChevronRight, Image,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { buildOrgHomeHref, buildOrgLoginHref } from "@/lib/org";
+import { useLogo } from "@/providers/logo-provider";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -26,6 +27,7 @@ type OrgWithStats = {
   createdAt: string;
   userCount: number;
   postCount: number;
+  logoUrl: string | null;
 };
 
 type PlatformStats = {
@@ -2181,6 +2183,260 @@ function EditProfileModal({ currentUser, onClose, onUpdated }: {
   );
 }
 
+// ─── Logos & Branding Tab ─────────────────────────────────────────────────────
+
+function PlatformLogosPanel() {
+  const { toast } = useToast();
+  const { refresh: refreshLogo } = useLogo();
+  const [fullContent, setFullContent] = useState<LandingPageContent | null>(null);
+  const [logoUrl, setLogoUrl] = useState("");
+  const [headerLogoUrl, setHeaderLogoUrl] = useState("");
+  const [footerLogoUrl, setFooterLogoUrl] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/super-admin/landing-page", { credentials: "include" })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then((d: LandingPageContent) => {
+        if (cancelled) return;
+        setFullContent(d);
+        setLogoUrl(d.logoUrl ?? "");
+        setHeaderLogoUrl(d.headerLogoUrl ?? "");
+        setFooterLogoUrl(d.footerLogoUrl ?? "");
+        setLoading(false);
+      })
+      .catch(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  async function save() {
+    if (!fullContent) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/super-admin/landing-page", {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...fullContent, logoUrl, headerLogoUrl, footerLogoUrl }),
+      });
+      if (!res.ok) throw new Error("Failed to save");
+      const updated: LandingPageContent = await res.json();
+      setFullContent(updated);
+      setLogoUrl(updated.logoUrl ?? "");
+      setHeaderLogoUrl(updated.headerLogoUrl ?? "");
+      setFooterLogoUrl(updated.footerLogoUrl ?? "");
+      refreshLogo();
+      toast({ title: "Platform logos saved" });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Failed to save logos", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) return <div className="h-48 bg-white rounded-xl border border-border/60 animate-pulse" />;
+
+  return (
+    <div className="bg-white rounded-xl border border-border/60 overflow-hidden">
+      <div className="px-5 py-4 border-b border-border/60 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-[15px] font-bold text-foreground">Platform Logos</p>
+          <p className="text-[13px] text-muted-foreground mt-0.5">
+            These logos appear on the public landing page, about page, and all login pages. Upload PNG or SVG with transparent background for best results.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={save}
+          disabled={saving}
+          className="flex-shrink-0 flex items-center gap-2 px-4 py-2 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
+        >
+          {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+          Save Platform Logos
+        </button>
+      </div>
+      <div className="p-5 grid gap-6 md:grid-cols-3">
+        <div>
+          <p className="text-[13px] font-bold text-foreground mb-0.5">Header Logo</p>
+          <p className="text-[11px] text-muted-foreground mb-3">Top nav bar on landing &amp; about pages. Shown on purple background — use a white or light-colored logo.</p>
+          <LogoUploader logoUrl={headerLogoUrl} onChange={setHeaderLogoUrl} />
+        </div>
+        <div>
+          <p className="text-[13px] font-bold text-foreground mb-0.5">Footer Logo</p>
+          <p className="text-[11px] text-muted-foreground mb-3">Bottom of landing &amp; about pages. Shown on dark background — use a white or light-colored logo.</p>
+          <LogoUploader logoUrl={footerLogoUrl} onChange={setFooterLogoUrl} />
+        </div>
+        <div>
+          <p className="text-[13px] font-bold text-foreground mb-0.5">Shared / Fallback Logo</p>
+          <p className="text-[11px] text-muted-foreground mb-3">Fallback when header or footer logos are not set. Also used in org login pages if the org has no custom logo.</p>
+          <LogoUploader logoUrl={logoUrl} onChange={setLogoUrl} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OrgLogoRow({ org, onSaved }: { org: OrgWithStats; onSaved?: (id: number, url: string | null) => void }) {
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [logoUrl, setLogoUrl] = useState<string>(org.logoUrl ?? "");
+  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [dirty, setDirty] = useState(false);
+
+  async function handleFile(file: File) {
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Please choose an image file (PNG, SVG, JPG, WebP)", variant: "destructive" }); return;
+    }
+    if (file.size > 6 * 1024 * 1024) {
+      toast({ title: "Image must be smaller than 6 MB", variant: "destructive" }); return;
+    }
+    setUploading(true);
+    try {
+      const urlRes = await fetch("/api/storage/upload-url", {
+        method: "POST", credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fileName: file.name, contentType: file.type, fileSize: file.size }),
+      });
+      if (!urlRes.ok) { const e = await urlRes.json().catch(() => ({})); throw new Error(e.error ?? "Could not get upload URL"); }
+      const { uploadUrl, objectPath } = await urlRes.json();
+      const putRes = await fetch(uploadUrl, { method: "PUT", headers: { "Content-Type": file.type }, body: file });
+      if (!putRes.ok) throw new Error("Upload to storage failed");
+      const entityId = objectPath.replace(/^\/objects\//, "");
+      const newUrl = `/api/storage/objects/${entityId}`;
+      setLogoUrl(newUrl);
+      setDirty(true);
+      toast({ title: "Logo uploaded — click Save to apply" });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Upload failed", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function save(url: string) {
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/super-admin/orgs/${org.id}`, {
+        method: "PATCH", credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logoUrl: url || null }),
+      });
+      if (!res.ok) throw new Error("Failed to save");
+      toast({ title: `${org.name} logo ${url ? "updated" : "removed"}` });
+      setDirty(false);
+      onSaved?.(org.id, url || null);
+    } catch (err: any) {
+      toast({ title: err.message ?? "Failed to save", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function remove() {
+    setLogoUrl("");
+    setDirty(false);
+    save("");
+  }
+
+  return (
+    <div className="flex items-center gap-4 px-5 py-4 border-b border-border/40 last:border-0 bg-white">
+      {/* Logo preview box */}
+      <div className="w-16 h-12 rounded-lg border border-border/60 bg-slate-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+        {uploading ? (
+          <Loader2 className="h-4 w-4 text-[#8705FA] animate-spin" />
+        ) : logoUrl ? (
+          <img src={logoUrl} alt={org.name} className="max-w-full max-h-full object-contain p-1.5" />
+        ) : (
+          <Building2 className="h-5 w-5 text-muted-foreground/25" />
+        )}
+      </div>
+
+      {/* Org info */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <p className="font-bold text-[14px] text-foreground truncate">{org.name}</p>
+          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0 ${org.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}>
+            {org.status}
+          </span>
+        </div>
+        <p className="text-[12px] text-muted-foreground truncate">{org.subdomain}.sentconnect.org</p>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
+        <input
+          ref={fileInputRef} type="file" accept="image/*" className="hidden"
+          onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }}
+        />
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading || saving}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold border border-border/60 bg-white hover:border-[#8705FA]/60 hover:text-[#8705FA] transition-colors disabled:opacity-50"
+        >
+          <Upload className="h-3.5 w-3.5" />
+          {logoUrl ? "Replace" : "Upload"}
+        </button>
+        {logoUrl && !dirty && (
+          <button
+            type="button"
+            onClick={remove}
+            disabled={saving}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold border border-red-200 text-red-600 bg-white hover:bg-red-50 transition-colors disabled:opacity-50"
+          >
+            <ImageOff className="h-3.5 w-3.5" />
+            Remove
+          </button>
+        )}
+        {dirty && (
+          <button
+            type="button"
+            onClick={() => save(logoUrl)}
+            disabled={saving}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-[#8705FA] text-white hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
+          >
+            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+            Save
+          </button>
+        )}
+        {!dirty && !logoUrl && (
+          <span className="text-[11px] text-muted-foreground italic">No logo set</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function LogosTab({ orgs }: { orgs: OrgWithStats[] }) {
+  return (
+    <div className="space-y-6">
+      <PlatformLogosPanel />
+
+      <div className="bg-white rounded-xl border border-border/60 overflow-hidden">
+        <div className="px-5 py-4 border-b border-border/60">
+          <p className="text-[15px] font-bold text-foreground">Organization Logos</p>
+          <p className="text-[13px] text-muted-foreground mt-0.5">
+            Upload a custom logo for each org. It overrides the platform logo in that org's login page and portal header.
+          </p>
+        </div>
+        {orgs.length === 0 ? (
+          <div className="py-14 text-center">
+            <Building2 className="h-8 w-8 mx-auto text-muted-foreground/20 mb-2" />
+            <p className="text-[13px] text-muted-foreground">No organizations yet</p>
+          </div>
+        ) : (
+          <div>
+            {orgs.map(org => <OrgLogoRow key={org.id} org={org} />)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────────────────────────
 
 export default function SuperAdminPanel() {
@@ -2194,7 +2450,7 @@ export default function SuperAdminPanel() {
       },
     },
   });
-  const [activeTab, setActiveTab] = useState<"platform-users" | "orgs" | "users" | "landing" | "about">("platform-users");
+  const [activeTab, setActiveTab] = useState<"platform-users" | "orgs" | "users" | "landing" | "about" | "logos">("platform-users");
   const [orgs, setOrgs] = useState<OrgWithStats[] | null>(null);
   const [allUsers, setAllUsers] = useState<PlatformUser[] | null>(null);
   const [stats, setStats] = useState<PlatformStats | null>(null);
@@ -2617,10 +2873,14 @@ export default function SuperAdminPanel() {
         <TabButton active={activeTab === "about"} onClick={() => setActiveTab("about")}>
           <span className="flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> About Page</span>
         </TabButton>
+        <TabButton active={activeTab === "logos"} onClick={() => setActiveTab("logos")}>
+          <span className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" /> Logos &amp; Branding</span>
+        </TabButton>
       </div>
 
       {activeTab === "landing" && <LandingPageEditor />}
       {activeTab === "about" && <AboutPageEditor />}
+      {activeTab === "logos" && <LogosTab orgs={orgs ?? []} />}
 
       {/* ─── Tab: Platform Users ──────────────────────────────────────────────── */}
       {activeTab === "platform-users" && (
