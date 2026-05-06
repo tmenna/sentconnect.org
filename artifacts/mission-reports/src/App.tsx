@@ -2,6 +2,7 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Shuffle } from "lucide-react";
+import logoWhite from "@/assets/logo-white.png";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/components/auth-provider";
@@ -139,7 +140,7 @@ function LandingPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{content.headerBrandName}</span>
+            <img src={logoWhite} alt="SentConnect" style={{ height: 30, display: "block" }} />
           </a>
           <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
             <a
@@ -292,7 +293,7 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 14 }}>{content.footerBrandName}</span>
+              <img src={logoWhite} alt="SentConnect" style={{ height: 28, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -367,7 +368,7 @@ function AboutPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <span style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: "-0.04em" }}>{lpContent.headerBrandName}</span>
+            <img src={logoWhite} alt="SentConnect" style={{ height: 30, display: "block" }} />
           </a>
           <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
             <a
@@ -462,7 +463,7 @@ function AboutPage() {
         <div className="mx-auto max-w-6xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
-              <span style={{ fontSize: 17, fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", display: "block", marginBottom: 14 }}>{lpContent.footerBrandName || "SentConnect"}</span>
+              <img src={logoWhite} alt="SentConnect" style={{ height: 28, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>

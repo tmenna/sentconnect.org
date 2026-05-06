@@ -6,6 +6,7 @@ import {
   Loader2, Eye, EyeOff, ShieldCheck, RefreshCw, Globe, Lock,
   CheckCircle2, Users,
 } from "lucide-react";
+import logoWhite from "@/assets/logo-white.png";
 
 const NAVY = "#0F172A";
 const BLUE = "#8705FA";
@@ -205,7 +206,7 @@ export default function Signup() {
 
       {/* Nav */}
       <div className="su-nav">
-        <span style={{ fontSize: 15, fontWeight: 900, color: BLUE, letterSpacing: "-0.03em" }}>SentConnect</span>
+        <img src={logoWhite} alt="SentConnect" style={{ height: 24, display: "block", filter: "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(5000%) hue-rotate(270deg) brightness(90%)" }} />
         <Link href="/" className="su-back-link">← Back to sentconnect.org</Link>
       </div>
 
