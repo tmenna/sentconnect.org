@@ -54,10 +54,29 @@ export function LogoProvider({ children }: { children: ReactNode }) {
     fetch("/api/landing-page")
       .then(r => r.ok ? r.json() : {})
       .then((d: any) => {
-        if (!cancelled) {
-          setPlatformHeaderLogo(d.headerLogoUrl || null);
-          setPlatformFooterLogo(d.footerLogoUrl || null);
-          setPlatformLogo(d.logoUrl || null);
+        if (cancelled) return;
+        const headerUrl = (d.headerLogoUrl as string) || null;
+        const footerUrl = (d.footerLogoUrl as string) || null;
+        const logoUrl   = (d.logoUrl as string)       || null;
+
+        const apply = () => {
+          if (!cancelled) {
+            setPlatformHeaderLogo(headerUrl);
+            setPlatformFooterLogo(footerUrl);
+            setPlatformLogo(logoUrl);
+          }
+        };
+
+        // Pre-load the visible logo before updating state so the swap is
+        // instantaneous (no blank gap while the browser fetches the new URL).
+        const preload = headerUrl || logoUrl;
+        if (preload) {
+          const img = new window.Image();
+          img.onload  = apply;
+          img.onerror = apply;   // still update even if image fails
+          img.src = preload;
+        } else {
+          apply();
         }
       })
       .catch(() => {});
@@ -66,7 +85,16 @@ export function LogoProvider({ children }: { children: ReactNode }) {
       fetch(`/api/orgs/resolve?subdomain=${encodeURIComponent(orgSlug)}`)
         .then(r => r.ok ? r.json() : {})
         .then((d: any) => {
-          if (!cancelled) setOrgLogo(d.logoUrl || null);
+          if (cancelled) return;
+          const url = (d.logoUrl as string) || null;
+          if (url) {
+            const img = new window.Image();
+            img.onload  = () => { if (!cancelled) setOrgLogo(url); };
+            img.onerror = () => { if (!cancelled) setOrgLogo(url); };
+            img.src = url;
+          } else {
+            setOrgLogo(null);
+          }
         })
         .catch(() => {});
     } else {
