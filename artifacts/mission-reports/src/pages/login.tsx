@@ -25,7 +25,7 @@ const BLUE_DARK = "#6B04C8";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
-  const { logo } = useLogo();
+  const { logo, isCustomLogo } = useLogo();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const search = useSearch();
@@ -120,7 +120,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         style={{ borderRight: "1px solid #E2E8F0" }}
       >
         {/* Wordmark */}
-        <img src={logo} alt="SentConnect" style={{ height: 28, filter: "brightness(0)", display: "block" }} />
+        <img src={logo} alt="SentConnect" style={{ height: 28, filter: isCustomLogo ? undefined : "brightness(0)", display: "block" }} />
 
         {/* Center message */}
         <div>

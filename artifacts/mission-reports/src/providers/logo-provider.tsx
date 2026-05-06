@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useEffect, useState, useCallback, useRef, ReactNode,
+  createContext, useContext, useEffect, useState, useCallback, ReactNode,
 } from "react";
 import { useLocation } from "wouter";
 import { getOrgRoutingContext } from "@/lib/org";
@@ -14,6 +14,10 @@ export interface LogoContextValue {
   orgLogo: string | null;
   /** The raw platform logo URL from landing page content */
   platformLogo: string | null;
+  /** True when an uploaded logo is active (not the static built-in fallback) */
+  isCustomLogo: boolean;
+  /** True when the footer logo is an uploaded one */
+  isCustomFooterLogo: boolean;
   /** Call after uploading a new logo to refresh all pages */
   refresh: () => void;
 }
@@ -23,6 +27,8 @@ const LogoContext = createContext<LogoContextValue>({
   footerLogo: logoWhiteStatic,
   orgLogo: null,
   platformLogo: null,
+  isCustomLogo: false,
+  isCustomFooterLogo: false,
   refresh: () => {},
 });
 
@@ -41,7 +47,6 @@ export function LogoProvider({ children }: { children: ReactNode }) {
 
   const [location] = useLocation();
   const { orgSlug } = getOrgRoutingContext(location);
-  const prevSlugRef = useRef<string | null | undefined>(undefined);
 
   useEffect(() => {
     let cancelled = false;
@@ -57,15 +62,14 @@ export function LogoProvider({ children }: { children: ReactNode }) {
       })
       .catch(() => {});
 
-    if (orgSlug && orgSlug !== prevSlugRef.current) {
-      prevSlugRef.current = orgSlug;
+    if (orgSlug) {
       fetch(`/api/orgs/resolve?subdomain=${encodeURIComponent(orgSlug)}`)
         .then(r => r.ok ? r.json() : {})
         .then((d: any) => {
           if (!cancelled) setOrgLogo(d.logoUrl || null);
         })
         .catch(() => {});
-    } else if (!orgSlug) {
+    } else {
       setOrgLogo(null);
     }
 
@@ -76,12 +80,17 @@ export function LogoProvider({ children }: { children: ReactNode }) {
   const logo = orgLogo || effectivePlatformLogo || logoWhiteStatic;
   const footerLogo = orgLogo || platformFooterLogo || effectivePlatformLogo || logoWhiteStatic;
 
+  const isCustomLogo = logo !== logoWhiteStatic;
+  const isCustomFooterLogo = footerLogo !== logoWhiteStatic;
+
   return (
     <LogoContext.Provider value={{
       logo,
       footerLogo,
       orgLogo,
       platformLogo: effectivePlatformLogo,
+      isCustomLogo,
+      isCustomFooterLogo,
       refresh,
     }}>
       {children}
