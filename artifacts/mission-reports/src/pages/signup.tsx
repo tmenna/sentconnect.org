@@ -202,6 +202,28 @@ export default function Signup() {
           .su-form-panel { padding: 20px 16px 24px; border-radius: 16px; }
           .su-nav { padding: 12px 14px; }
         }
+
+        /* ── Subdomain suffix ── */
+        .su-subdomain-suffix {
+          padding: 0 12px;
+          font-size: 12.5px;
+          font-weight: 500;
+          color: #6B7280;
+          background: #F9FAFB;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          border-left: 1px solid #E5E7EB;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        @media (max-width: 480px) {
+          .su-subdomain-suffix {
+            font-size: 11px;
+            padding: 0 8px;
+            letter-spacing: -0.02em;
+          }
+        }
       `}</style>
 
       {/* Nav */}
@@ -338,7 +360,7 @@ export default function Signup() {
                         required
                         style={{ flex: 1, height: "100%", padding: "0 14px", fontSize: 14, background: "transparent", border: "none", color: "#111827", outline: "none", minWidth: 0 }}
                       />
-                      <span style={{ padding: "0 12px", fontSize: 12.5, fontWeight: 500, color: "#6B7280", background: "#F9FAFB", height: "100%", display: "flex", alignItems: "center", borderLeft: "1px solid #E5E7EB", whiteSpace: "nowrap", flexShrink: 0 }}>
+                      <span className="su-subdomain-suffix">
                         .sentconnect.org
                       </span>
                     </div>

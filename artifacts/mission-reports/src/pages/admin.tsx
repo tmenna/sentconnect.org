@@ -897,17 +897,17 @@ export default function AdminDashboard() {
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* ── Page header ── */}
-        <div style={{ marginBottom: 32 }}>
+        <div style={{ marginBottom: 24 }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F3E8FF", borderRadius: 999, padding: "5px 14px", marginBottom: 14 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F3E8FF", borderRadius: 999, padding: "5px 14px", marginBottom: 12 }}>
                 <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#8705FA" }} />
                 <span style={{ fontSize: 12, fontWeight: 700, color: "#8705FA", letterSpacing: "0.06em" }}>ADMIN DASHBOARD</span>
               </div>
-              <h1 style={{ fontSize: 30, fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 8px" }}>
+              <h1 style={{ fontSize: "clamp(22px, 5vw, 30px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 8px" }}>
                 Global Partners
               </h1>
-              <p style={{ fontSize: 16, color: "#64748B", margin: "0 0 20px", lineHeight: 1.6 }}>
+              <p style={{ fontSize: 15, color: "#64748B", margin: "0 0 16px", lineHeight: 1.6 }}>
                 Manage your team and track mission activity.
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
@@ -929,7 +929,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex items-center" style={{ borderBottom: "2px solid #E9D5FF" }}>
+        <div className="flex items-center overflow-x-auto scrollbar-none" style={{ borderBottom: "2px solid #E9D5FF" }}>
           {[
             { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
             { id: "feed", label: "Updates", badge: null },
@@ -940,13 +940,13 @@ export default function AdminDashboard() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className="transition-all duration-150"
+                className="transition-all duration-150 flex-shrink-0"
                 style={{
                   paddingBottom: 14,
                   paddingTop: 4,
-                  marginRight: 28,
+                  marginRight: 20,
                   marginBottom: -2,
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: active ? 800 : 500,
                   color: active ? "#8705FA" : "#94A3B8",
                   border: "none",
@@ -954,6 +954,7 @@ export default function AdminDashboard() {
                   background: "transparent",
                   cursor: "pointer",
                   letterSpacing: active ? "-0.02em" : "normal",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {tab.label}

@@ -443,7 +443,7 @@ export function PostCard({
       )}
 
       {/* Header */}
-      <div className="flex items-start gap-3.5 px-6 pt-5 pb-3">
+      <div className="flex items-start gap-3.5 px-4 sm:px-6 pt-5 pb-3">
         <Link href={`/missionaries/${post.author.id}`}>
           <Avatar className="h-12 w-12 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
@@ -524,7 +524,7 @@ export function PostCard({
         <>
           {/* Text */}
           {post.description && (
-            <div className="px-6 pb-5">
+            <div className="px-4 sm:px-6 pb-5">
               <p style={{ fontSize: 16, color: "#000000", lineHeight: 1.7, letterSpacing: "-0.01em", whiteSpace: "pre-wrap" }}>{post.description}</p>
             </div>
           )}
@@ -537,52 +537,56 @@ export function PostCard({
           )}
 
           {/* Action bar */}
-          <div className="flex items-center mx-2" style={{ borderTop: "1px solid #F1F5F9" }}>
+          <div className="flex items-center mx-1 sm:mx-2" style={{ borderTop: "1px solid #F1F5F9" }}>
             {/* Like */}
             <button
               onClick={toggleLike}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
+                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 post.likedByMe
                   ? "text-[#9A27FF] bg-[#F3E8FF]"
                   : "text-[#64748B] hover:bg-[#F3E8FF] hover:text-[#9A27FF]"
               )}
             >
               <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-[#9A27FF] text-[#9A27FF]")} />
-              <span>Like{post.likeCount > 0 ? ` · ${post.likeCount}` : ""}</span>
+              <span className="hidden sm:inline">Like</span>
+              {post.likeCount > 0 && <span className="hidden sm:inline">· {post.likeCount}</span>}
+              {post.likeCount > 0 && <span className="sm:hidden text-[11px]">{post.likeCount}</span>}
             </button>
 
             {/* Comment */}
             <button
               onClick={toggleComments}
-              className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#F3E8FF] hover:text-[#9A27FF] transition-all duration-150 rounded-xl my-1"
+              className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#F3E8FF] hover:text-[#9A27FF] transition-all duration-150 rounded-xl my-1"
             >
               <MessageCircle className="h-4 w-4" />
-              <span>Comment{post.commentCount > 0 ? ` · ${post.commentCount}` : ""}</span>
+              <span className="hidden sm:inline">Comment</span>
+              {post.commentCount > 0 && <span className="hidden sm:inline">· {post.commentCount}</span>}
+              {post.commentCount > 0 && <span className="sm:hidden text-[11px]">{post.commentCount}</span>}
             </button>
 
             {/* Share */}
             <button
               onClick={copyShareLink}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
+                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 copied
                   ? "text-[#9A27FF] bg-[#F3E8FF]"
                   : "text-[#64748B] hover:bg-[#F3E8FF] hover:text-[#9A27FF]"
               )}
             >
               {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
-              <span>{copied ? "Copied!" : "Share"}</span>
+              <span className="hidden sm:inline">{copied ? "Copied!" : "Share"}</span>
             </button>
 
             {/* Export as Report — visible to admins/owners */}
             {canManage && (
               <button
                 onClick={() => setShowSlideExport(true)}
-                className="flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-semibold text-[#64748B] hover:bg-[#F3E8FF] hover:text-[#9A27FF] transition-all duration-150 rounded-xl my-1"
+                className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#F3E8FF] hover:text-[#9A27FF] transition-all duration-150 rounded-xl my-1"
               >
                 <ImageDown className="h-4 w-4" />
-                <span>Export</span>
+                <span className="hidden sm:inline">Export</span>
               </button>
             )}
           </div>

@@ -1,21 +1,23 @@
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
 import { Button } from "./ui/button";
-import { LogOut, Rss, ShieldCheck, HelpCircle } from "lucide-react";
+import { LogOut, Rss, ShieldCheck, HelpCircle, Menu, X, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import logoWhite from "@/assets/logo-white.png";
-/* Brand tokens */
-const EMERALD   = "#8705FA";
-const CHARCOAL  = "#374151";
-const BORDER    = "#E5E7EB";
+
+const EMERALD  = "#8705FA";
+const BORDER   = "#E5E7EB";
 
 export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [currentPath] = useLocation();
   const { toast } = useToast();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
   const logout = useLogoutUser({
     mutation: {
       onSuccess: () => {
@@ -24,6 +26,21 @@ export function Layout({ children }: { children: ReactNode }) {
       }
     }
   });
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [currentPath]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    function handler(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMobileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [mobileOpen]);
 
   if (currentPath === "/login") return <>{children}</>;
 
@@ -34,6 +51,20 @@ export function Layout({ children }: { children: ReactNode }) {
         currentPath === href
           ? "bg-gray-100 text-gray-900"
           : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+      )}>
+        {icon}
+        {label}
+      </span>
+    </Link>
+  );
+
+  const mobileNavLink = (href: string, label: string, icon?: ReactNode) => (
+    <Link href={href}>
+      <span className={cn(
+        "flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-colors",
+        currentPath === href
+          ? "bg-gray-100 text-gray-900"
+          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
       )}>
         {icon}
         {label}
@@ -54,9 +85,8 @@ export function Layout({ children }: { children: ReactNode }) {
             <img src={logoWhite} alt="SentConnect" style={{ height: 22, filter: "brightness(0)", display: "block" }} />
           </Link>
 
-          {/* Right nav */}
-          <nav className="flex items-center gap-0.5">
-            {/* Help — always visible, opens in new tab */}
+          {/* Desktop nav */}
+          <nav className="hidden sm:flex items-center gap-0.5">
             <a
               href="/help"
               target="_blank"
@@ -77,7 +107,6 @@ export function Layout({ children }: { children: ReactNode }) {
                     {user.role === "admin" && navLink("/admin", "Updates", <Rss className="h-3.5 w-3.5" />)}
                     {user.role === "super_admin" && navLink("/admin", "Platform Admin", <ShieldCheck className="h-3.5 w-3.5" />)}
 
-                    {/* Avatar */}
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
                         className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-semibold text-[13px] cursor-pointer transition-colors"
@@ -87,7 +116,6 @@ export function Layout({ children }: { children: ReactNode }) {
                       </div>
                     </Link>
 
-                    {/* Logout */}
                     <Button
                       variant="ghost"
                       size="icon"
@@ -114,21 +142,100 @@ export function Layout({ children }: { children: ReactNode }) {
               </>
             )}
           </nav>
+
+          {/* Mobile: avatar + hamburger */}
+          <div className="flex sm:hidden items-center gap-2">
+            {!isLoading && isAuthenticated && user && (
+              <Link href="/profile">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-[13px] cursor-pointer"
+                  style={{ background: "#f3f4f6", border: "1.5px solid #e5e7eb", color: "#374151" }}
+                >
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+              </Link>
+            )}
+            <button
+              onClick={() => setMobileOpen(o => !o)}
+              className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
+              aria-label="Menu"
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile dropdown */}
+        {mobileOpen && (
+          <div ref={menuRef} className="sm:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1 shadow-lg">
+            {!isLoading && (
+              <>
+                {isAuthenticated && user ? (
+                  <>
+                    <div className="px-3 py-2 mb-1">
+                      <p className="text-[13px] font-semibold text-gray-900">{user.name}</p>
+                      <p className="text-[12px] text-gray-400 mt-0.5">{user.email}</p>
+                    </div>
+                    <div className="h-px bg-gray-100 mb-2" />
+                    {mobileNavLink("/", "Feed", <Rss className="h-4 w-4" />)}
+                    {(user.role === "admin" || user.role === "super_admin") &&
+                      mobileNavLink("/admin", user.role === "super_admin" ? "Platform Admin" : "Updates", <ShieldCheck className="h-4 w-4" />)}
+                    {mobileNavLink("/profile", "Profile", <User className="h-4 w-4" />)}
+                    <a
+                      href="/help"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    >
+                      <HelpCircle className="h-4 w-4" />
+                      Help
+                    </a>
+                    <div className="h-px bg-gray-100 my-1" />
+                    <button
+                      onClick={() => logout.mutate({ data: undefined })}
+                      className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium text-red-500 hover:bg-red-50 transition-colors"
+                      data-testid="btn-logout"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <a
+                      href="/help"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                      <HelpCircle className="h-4 w-4" />
+                      Help
+                    </a>
+                    <Link href="/login">
+                      <span className="flex items-center justify-center h-11 rounded-xl text-[15px] font-semibold text-white transition-colors" style={{ backgroundColor: EMERALD }}>
+                        Sign In
+                      </span>
+                    </Link>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        )}
       </header>
 
       {/* ── Page content ── */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-8 py-8">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
         {children}
       </main>
 
       {/* ── Footer ── */}
-      <footer className="mt-12 py-5 bg-white" style={{ borderTop: `1px solid ${BORDER}` }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 flex items-center justify-between">
+      <footer className="mt-8 sm:mt-12 py-5 bg-white" style={{ borderTop: `1px solid ${BORDER}` }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <img src={logoWhite} alt="SentConnect" style={{ height: 14, filter: "brightness(0)", opacity: 0.35, display: "block" }} />
           </div>
-          <p className="text-xs text-gray-400 italic">"Declare his glory among the nations." — Ps 96:3</p>
+          <p className="text-xs text-gray-400 italic text-center">"Declare his glory among the nations." — Ps 96:3</p>
         </div>
       </footer>
     </div>

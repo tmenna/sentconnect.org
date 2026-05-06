@@ -20,7 +20,7 @@ export default function NotFound() {
       </div>
 
       <div
-        className="w-full max-w-[420px] bg-white rounded-2xl px-8 py-10 text-center"
+        className="w-full max-w-[420px] bg-white rounded-2xl px-5 sm:px-8 py-8 sm:py-10 text-center"
         style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}
       >
         <div
