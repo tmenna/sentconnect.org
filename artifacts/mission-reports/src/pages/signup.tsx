@@ -229,7 +229,7 @@ export default function Signup() {
 
       {/* Nav */}
       <div className="su-nav">
-        <img src={logo} alt="SentConnect" style={{ height: 24, display: "block", filter: isCustomLogo ? undefined : "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(5000%) hue-rotate(270deg) brightness(90%)" }} />
+        <img src={logo} alt="SentConnect" style={{ maxHeight: 24, width: "auto", maxWidth: 160, display: "block", filter: isCustomLogo ? undefined : "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(5000%) hue-rotate(270deg) brightness(90%)" }} />
         <Link href="/" className="su-back-link">← Back to sentconnect.org</Link>
       </div>
 

@@ -120,7 +120,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         style={{ borderRight: "1px solid #E2E8F0" }}
       >
         {/* Wordmark */}
-        <img src={logo} alt="SentConnect" style={{ height: 28, filter: isCustomLogo ? undefined : "brightness(0)", display: "block" }} />
+        <img src={logo} alt="SentConnect" style={{ maxHeight: 28, width: "auto", maxWidth: 180, filter: isCustomLogo ? undefined : "brightness(0)", display: "block" }} />
 
         {/* Center message */}
         <div>

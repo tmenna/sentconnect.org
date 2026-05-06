@@ -83,7 +83,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
           {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <img src={logo} alt="SentConnect" style={{ height: 22, filter: isCustomLogo ? undefined : "brightness(0)", display: "block" }} />
+            <img src={logo} alt="SentConnect" style={{ maxHeight: 22, width: "auto", maxWidth: 160, filter: isCustomLogo ? undefined : "brightness(0)", display: "block" }} />
           </Link>
 
           {/* Desktop nav */}
@@ -234,7 +234,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <footer className="mt-8 sm:mt-12 py-5 bg-white" style={{ borderTop: `1px solid ${BORDER}` }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="SentConnect" style={{ height: 14, filter: isCustomLogo ? undefined : "brightness(0)", opacity: 0.35, display: "block" }} />
+            <img src={logo} alt="SentConnect" style={{ maxHeight: 14, width: "auto", maxWidth: 120, filter: isCustomLogo ? undefined : "brightness(0)", opacity: 0.35, display: "block" }} />
           </div>
           <p className="text-xs text-gray-400 italic text-center">"Declare his glory among the nations." — Ps 96:3</p>
         </div>
