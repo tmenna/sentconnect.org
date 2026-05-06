@@ -107,10 +107,11 @@ router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): 
     org = inserted;
   } catch (dbErr: unknown) {
     const msg = (dbErr as { message?: string })?.message ?? "";
+    req.log.error({ err: dbErr }, `POST /super-admin/orgs DB error: ${msg}`);
     if (msg.includes("unique") || msg.includes("duplicate")) {
       res.status(409).json({ error: "Subdomain already in use" }); return;
     }
-    res.status(500).json({ error: "Failed to create organization. Please try again." }); return;
+    res.status(500).json({ error: `Failed to create organization: ${msg || "unknown error"}` }); return;
   }
   res.status(201).json(org);
 });
