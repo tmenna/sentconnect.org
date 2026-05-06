@@ -90,7 +90,7 @@ export default function Feed() {
   const EMERALD = "#8705FA";
 
   return (
-    <div className="max-w-[720px] mx-auto" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+    <div className="max-w-[720px] mx-auto px-4 sm:px-6 lg:px-0" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
 
       {/* ── Page title + stats ── */}
       <div style={{ marginBottom: 32 }}>

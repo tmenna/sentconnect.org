@@ -10,7 +10,7 @@ import { useAuth } from "@/components/auth-provider";
 import { Layout } from "@/components/layout";
 import NotFound from "@/pages/not-found";
 import { OrgProvider, useOrg } from "@/providers/org-provider";
-import { LogoProvider } from "@/providers/logo-provider";
+import { LogoProvider, useLogo } from "@/providers/logo-provider";
 import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
 import "./landing-page.css";
 
@@ -114,6 +114,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
 function LandingPage() {
   const [content, setContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const { logo: lpLogo, footerLogo: lpFooterLogo } = useLogo();
 
   useEffect(() => {
     let cancelled = false;
@@ -142,7 +143,7 @@ function LandingPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={content.headerLogoUrl || content.logoUrl || logoWhite} alt="SentConnect" style={{ height: 26, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" style={{ maxHeight: 26, width: "auto", maxWidth: 160, display: "block" }} />
           </a>
 
           {/* Desktop nav */}
@@ -215,7 +216,7 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section style={{ padding: "112px 0 96px", background: BG, position: "relative", overflow: "hidden" }}>
+        <section className="lp-hero-section" style={{ background: BG, position: "relative", overflow: "hidden" }}>
           {/* subtle radial glow */}
           <div style={{ position: "absolute", top: -200, right: -200, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(138,5,255,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
 
@@ -336,7 +337,7 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              <img src={content.footerLogoUrl || content.logoUrl || logoWhite} alt="SentConnect" style={{ height: 28, display: "block", marginBottom: 14 }} />
+              <img src={lpFooterLogo} alt="SentConnect" style={{ maxHeight: 28, width: "auto", maxWidth: 160, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -384,6 +385,8 @@ const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
 function AboutPage() {
   const [lpContent, setLpContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [about, setAbout] = useState<AboutPageContent>(DEFAULT_ABOUT_PAGE_CONTENT);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const { logo: lpLogo } = useLogo();
 
   useEffect(() => {
     fetch("/api/landing-page")
@@ -409,11 +412,13 @@ function AboutPage() {
     <div style={{ minHeight: "100vh", fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpContent.headerLogoUrl || lpContent.logoUrl || logoWhite} alt="SentConnect" style={{ height: 30, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" style={{ maxHeight: 26, width: "auto", maxWidth: 160, display: "block" }} />
           </a>
-          <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
+
+          {/* Desktop nav */}
+          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 28 }}>
             <a
               href="/about"
               style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s" }}
@@ -438,7 +443,46 @@ function AboutPage() {
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
             >{lpContent.headerPrimaryCtaLabel}</a>
           </nav>
+
+          {/* Mobile: Sign up pill + hamburger */}
+          <div className="flex sm:hidden items-center gap-3">
+            <a
+              href={lpContent.headerPrimaryCtaHref}
+              style={{ fontSize: 13, fontWeight: 700, color: "#8705FA", background: "#FFFFFF", padding: "7px 16px", borderRadius: 999, textDecoration: "none" }}
+            >{lpContent.headerPrimaryCtaLabel}</a>
+            <button
+              onClick={() => setMobileNavOpen(o => !o)}
+              style={{ background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, padding: "7px 8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              aria-label="Menu"
+            >
+              {mobileNavOpen
+                ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+              }
+            </button>
+          </div>
         </div>
+
+        {/* Mobile dropdown */}
+        {mobileNavOpen && (
+          <div className="sm:hidden" style={{ background: "#6B04C8", borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
+            <a
+              href="/about"
+              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+              onClick={() => setMobileNavOpen(false)}
+            >About</a>
+            <a
+              href="/help"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none" }}
+              onClick={() => setMobileNavOpen(false)}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Help
+            </a>
+          </div>
+        )}
       </header>
 
       {/* ── CONTENT ── */}
@@ -506,7 +550,7 @@ function AboutPage() {
         <div className="mx-auto max-w-6xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
-              <img src={lpContent.footerLogoUrl || lpContent.logoUrl || logoWhite} alt="SentConnect" style={{ height: 28, display: "block", marginBottom: 14 }} />
+              <img src={lpLogo} alt="SentConnect" style={{ maxHeight: 28, width: "auto", maxWidth: 160, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>

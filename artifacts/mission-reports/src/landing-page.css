@@ -63,9 +63,16 @@
   .lp-steps-grid  { grid-template-columns: 1fr; }
   .lp-connector   { display: none; }
 }
+/* Hero section responsive padding */
+.lp-hero-section { padding: 112px 0 96px; }
+
 @media (max-width: 767px) {
   .lp-hero-grid   { grid-template-columns: 1fr; gap: 40px; }
   .lp-footer-cols { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .lp-hero-section { padding: 64px 0 56px; }
+}
+@media (max-width: 480px) {
+  .lp-hero-section { padding: 48px 0 40px; }
 }
 @media (max-width: 480px) {
   .lp-footer-cols { grid-template-columns: 1fr; }
