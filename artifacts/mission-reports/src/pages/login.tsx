@@ -12,7 +12,7 @@ import { ExternalLink, LogOut, Loader2, Globe } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { buildOrgLoginHref } from "@/lib/org";
-import logoWhite from "@/assets/logo-white.png";
+import { useLogo } from "@/providers/logo-provider";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -25,6 +25,7 @@ const BLUE_DARK = "#6B04C8";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
+  const { logo } = useLogo();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const search = useSearch();
@@ -119,7 +120,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         style={{ borderRight: "1px solid #E2E8F0" }}
       >
         {/* Wordmark */}
-        <img src={logoWhite} alt="SentConnect" style={{ height: 28, filter: "brightness(0)", display: "block" }} />
+        <img src={logo} alt="SentConnect" style={{ height: 28, filter: "brightness(0)", display: "block" }} />
 
         {/* Center message */}
         <div>

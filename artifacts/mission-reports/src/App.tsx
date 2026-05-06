@@ -10,6 +10,7 @@ import { useAuth } from "@/components/auth-provider";
 import { Layout } from "@/components/layout";
 import NotFound from "@/pages/not-found";
 import { OrgProvider, useOrg } from "@/providers/org-provider";
+import { LogoProvider } from "@/providers/logo-provider";
 import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
 import "./landing-page.css";
 
@@ -141,7 +142,7 @@ function LandingPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={logoWhite} alt="SentConnect" style={{ height: 26, display: "block" }} />
+            <img src={content.headerLogoUrl || content.logoUrl || logoWhite} alt="SentConnect" style={{ height: 26, display: "block" }} />
           </a>
 
           {/* Desktop nav */}
@@ -335,7 +336,7 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              <img src={logoWhite} alt="SentConnect" style={{ height: 28, display: "block", marginBottom: 14 }} />
+              <img src={content.footerLogoUrl || content.logoUrl || logoWhite} alt="SentConnect" style={{ height: 28, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -410,7 +411,7 @@ function AboutPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6" style={{ height: 72 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={logoWhite} alt="SentConnect" style={{ height: 30, display: "block" }} />
+            <img src={lpContent.headerLogoUrl || lpContent.logoUrl || logoWhite} alt="SentConnect" style={{ height: 30, display: "block" }} />
           </a>
           <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
             <a
@@ -505,7 +506,7 @@ function AboutPage() {
         <div className="mx-auto max-w-6xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
-              <img src={logoWhite} alt="SentConnect" style={{ height: 28, display: "block", marginBottom: 14 }} />
+              <img src={lpContent.footerLogoUrl || lpContent.logoUrl || logoWhite} alt="SentConnect" style={{ height: 28, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -775,19 +776,21 @@ function OrgAwareApp() {
 
   return (
     <OrgProvider orgSlug={orgSlug} usesPathPrefix={usesPathPrefix}>
-      <OrgGate orgSlug={orgSlug}>
-        <AuthProvider>
-          <TooltipProvider>
-            {orgSlug && usesPathPrefix ? (
-              <WouterRouter base={`/${orgSlug}`}>
+      <LogoProvider>
+        <OrgGate orgSlug={orgSlug}>
+          <AuthProvider>
+            <TooltipProvider>
+              {orgSlug && usesPathPrefix ? (
+                <WouterRouter base={`/${orgSlug}`}>
+                  <AppRoutes />
+                </WouterRouter>
+              ) : (
                 <AppRoutes />
-              </WouterRouter>
-            ) : (
-              <AppRoutes />
-            )}
-          </TooltipProvider>
-        </AuthProvider>
-      </OrgGate>
+              )}
+            </TooltipProvider>
+          </AuthProvider>
+        </OrgGate>
+      </LogoProvider>
     </OrgProvider>
   );
 }

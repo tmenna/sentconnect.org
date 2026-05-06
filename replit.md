@@ -95,15 +95,21 @@ Path-based routing simulates subdomain multi-tenancy during development. The fir
 - `/signup` — Create a new organization + first admin account
 - `/forgot-password` — Request a password reset link
 - `/reset-password` — Set a new password via token
-- `/admin` — Admin dashboard: Team tab (add/manage users) + Activity Feed tab with filters
+- `/admin` — Admin dashboard: Team tab + Activity Feed tab + Branding tab (logo upload)
 - `/super-admin` — Platform-wide admin (super_admin role only)
 - `/profile` — Current user profile
+
+## Logo Management
+
+- **Platform-wide logos** — managed from `teki.sentconnect.org` (super admin panel) → Landing Page section. Three slots: shared logo, header logo, footer logo. Stored in `landing_page_content`. Upload via drag-and-drop or URL paste. No Replit access needed.
+- **Org-level logos** — managed from `/admin` → Branding tab. Upload sets `organizations.logoUrl` via `PATCH /api/admin/branding`. Overrides platform logo for that org's portal.
+- **Logo propagation** — `LogoProvider` (`src/providers/logo-provider.tsx`) fetches `/api/landing-page` (platform) and `/api/orgs/resolve` (org logo) on app init. Priority: org logo → platform header logo → platform logo → static fallback. All pages (navbar, login, signup, not-found, landing page, about page) use dynamic logos.
 
 ## DB Schema
 
 Tables: `organizations`, `users`, `reports`, `photos`
 
-- `organizations`: id, name, subdomain, plan, status, createdAt
+- `organizations`: id, name, subdomain, email, plan, status, **logoUrl**, createdAt
 - `users`: id, name, email, passwordHash, role (admin|field_user|super_admin), status (active|inactive), bio, location, avatarUrl, organization, organizationId, resetToken, resetTokenExpiry, createdAt, updatedAt
 - `reports`: id, content, location, peopleReached, authorId, organizationId, createdAt, updatedAt
 - `landing_page_content`: app-managed table for editable public `sentconnect.org` landing page copy, created automatically when first read/saved
@@ -140,6 +146,8 @@ Tables: `organizations`, `users`, `reports`, `photos`
 - `PATCH /api/admin/users/:id` — Update role or status (active/inactive)
 - `DELETE /api/admin/users/:id` — Delete user
 - `POST /api/admin/users/:id/reset-password` — Generate 24-hour reset link
+- `GET /api/admin/branding` — Get org logo URL
+- `PATCH /api/admin/branding` — Set org logo URL (upload first via `/api/storage/upload-url`)
 
 **Reports**
 - `GET/POST /api/reports` — List/create reports (org-scoped)

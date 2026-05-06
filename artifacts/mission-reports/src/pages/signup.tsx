@@ -6,7 +6,7 @@ import {
   Loader2, Eye, EyeOff, ShieldCheck, RefreshCw, Globe, Lock,
   CheckCircle2, Users,
 } from "lucide-react";
-import logoWhite from "@/assets/logo-white.png";
+import { useLogo } from "@/providers/logo-provider";
 
 const NAVY = "#0F172A";
 const BLUE = "#8705FA";
@@ -20,6 +20,7 @@ const FEATURES = [
 
 export default function Signup() {
   const { isAuthenticated, isLoading } = useAuth();
+  const { logo } = useLogo();
   const { toast } = useToast();
   const [orgName, setOrgName]           = useState("");
   const [subdomain, setSubdomain]       = useState("");
@@ -228,7 +229,7 @@ export default function Signup() {
 
       {/* Nav */}
       <div className="su-nav">
-        <img src={logoWhite} alt="SentConnect" style={{ height: 24, display: "block", filter: "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(5000%) hue-rotate(270deg) brightness(90%)" }} />
+        <img src={logo} alt="SentConnect" style={{ height: 24, display: "block", filter: "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(5000%) hue-rotate(270deg) brightness(90%)" }} />
         <Link href="/" className="su-back-link">← Back to sentconnect.org</Link>
       </div>
 

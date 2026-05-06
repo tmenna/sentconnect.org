@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { Redirect, Link } from "wouter";
 import {
@@ -13,7 +13,9 @@ import {
   ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
   BarChart3, Star, UserCog, BookOpen, MapPin,
+  Upload, ImageOff, Palette,
 } from "lucide-react";
+import { useLogo } from "@/providers/logo-provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type PostData } from "@/components/post-card";
@@ -807,7 +809,7 @@ function parseLocation(loc: string): { city: string; country: string } {
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<"team" | "feed" | "countries">("feed");
+  const [activeTab, setActiveTab] = useState<"team" | "feed" | "countries" | "branding">("feed");
   const [feedMomentFilter, setFeedMomentFilter] = useState<"all" | "moments">("all");
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
@@ -934,6 +936,7 @@ export default function AdminDashboard() {
             { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
             { id: "feed", label: "Updates", badge: null },
             { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
+            { id: "branding", label: "Branding", badge: null },
           ].map(tab => {
             const active = activeTab === tab.id;
             return (
@@ -1297,8 +1300,249 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        {/* ── Tab: Branding ── */}
+        {activeTab === "branding" && (
+          <BrandingTab />
+        )}
+
       </div>
 
     </>
+  );
+}
+
+// ─── BrandingTab ────────────────────────────────────────────────────────────
+
+function BrandingTab() {
+  const { toast } = useToast();
+  const { refresh: refreshLogo } = useLogo();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [pending, setPending] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [urlInput, setUrlInput] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/branding", { credentials: "include" })
+      .then(r => r.ok ? r.json() : { logoUrl: null })
+      .then((d: any) => { setLogoUrl(d.logoUrl ?? null); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  async function handleFile(file: File) {
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Please choose an image file (PNG, SVG, JPG, WebP)", variant: "destructive" }); return;
+    }
+    if (file.size > 6 * 1024 * 1024) {
+      toast({ title: "Image must be smaller than 6 MB", variant: "destructive" }); return;
+    }
+    setUploading(true);
+    try {
+      const urlRes = await fetch("/api/storage/upload-url", {
+        method: "POST", credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fileName: file.name, contentType: file.type, fileSize: file.size }),
+      });
+      if (!urlRes.ok) { const e = await urlRes.json().catch(() => ({})); throw new Error(e.error ?? "Could not get upload URL"); }
+      const { uploadUrl, objectPath } = await urlRes.json();
+      const putRes = await fetch(uploadUrl, { method: "PUT", headers: { "Content-Type": file.type }, body: file });
+      if (!putRes.ok) throw new Error("Upload to storage failed");
+      const entityId = objectPath.replace(/^\/objects\//, "");
+      setPending(`/api/storage/objects/${entityId}`);
+      toast({ title: "Image uploaded — click Save to apply" });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Upload failed", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function handleSave() {
+    const newUrl = pending !== undefined ? pending : logoUrl;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/branding", {
+        method: "PATCH", credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logoUrl: newUrl }),
+      });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error ?? "Save failed"); }
+      const d = await res.json();
+      setLogoUrl(d.logoUrl ?? null);
+      setPending(null);
+      refreshLogo();
+      toast({ title: "Logo saved! It will now appear across all pages." });
+    } catch (err: any) {
+      toast({ title: err.message ?? "Save failed", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const preview = pending !== undefined ? pending : logoUrl;
+  const hasChanges = pending !== undefined;
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-2xl border border-border/60 shadow-sm p-8 space-y-4">
+        <Skeleton className="h-5 w-48" />
+        <Skeleton className="h-40 w-full rounded-xl" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 max-w-2xl">
+      <div className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden">
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-border/40 flex items-center gap-3">
+          <div className="flex items-center justify-center h-9 w-9 rounded-xl flex-shrink-0" style={{ background: "#F3E8FF" }}>
+            <Palette className="h-4 w-4" style={{ color: "#8705FA" }} />
+          </div>
+          <div>
+            <p className="font-bold text-[15px] text-foreground">Organization Logo</p>
+            <p className="text-[12px] text-muted-foreground mt-0.5">
+              This logo appears in the nav bar, login page, and across your team's portal.
+            </p>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-5">
+          {/* Drop zone */}
+          <div
+            className="rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-8 cursor-pointer transition-colors min-h-[160px]"
+            style={{ borderColor: "#E5E7EB" }}
+            onClick={() => fileInputRef.current?.click()}
+            onDragOver={e => e.preventDefault()}
+            onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#8705FA50"; (e.currentTarget as HTMLElement).style.background = "#F3E8FF20"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLElement).style.background = ""; }}
+          >
+            {uploading ? (
+              <Loader2 className="h-8 w-8 animate-spin" style={{ color: "#8705FA" }} />
+            ) : preview ? (
+              <>
+                <img src={preview} alt="Logo preview" style={{ height: 48, maxWidth: "100%", objectFit: "contain" }} />
+                <p className="text-[12px]" style={{ color: "#8705FA" }}>Click to replace</p>
+              </>
+            ) : (
+              <>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "#F3E8FF" }}>
+                  <Upload className="h-5 w-5" style={{ color: "#8705FA" }} />
+                </div>
+                <p className="text-[13px] text-muted-foreground text-center">
+                  Drop an image here or <span style={{ color: "#8705FA", fontWeight: 600 }}>click to browse</span>
+                </p>
+                <p className="text-[11px] text-muted-foreground/60">PNG, SVG, JPG, WebP — max 6 MB</p>
+              </>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="flex items-center gap-2 px-3 py-2 text-[13px] font-semibold border border-border/60 rounded-lg bg-white transition-colors disabled:opacity-50"
+              style={{ color: "#374151" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#8705FA80"; (e.currentTarget as HTMLElement).style.color = "#8705FA"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = ""; (e.currentTarget as HTMLElement).style.color = "#374151"; }}
+            >
+              <Upload className="h-3.5 w-3.5" />
+              {preview ? "Replace logo" : "Upload logo"}
+            </button>
+            {preview && (
+              <button
+                type="button"
+                onClick={() => { setPending(null); setLogoUrl(null); }}
+                className="flex items-center gap-2 px-3 py-2 text-[13px] font-semibold border border-red-200 text-red-600 rounded-lg bg-white hover:bg-red-50 transition-colors"
+              >
+                <ImageOff className="h-3.5 w-3.5" />
+                Remove logo
+              </button>
+            )}
+          </div>
+
+          {/* URL paste */}
+          <div>
+            <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Or paste a logo URL</p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={urlInput}
+                onChange={e => setUrlInput(e.target.value)}
+                placeholder="https://example.com/logo.png"
+                className="flex-1 h-9 px-3 text-[13px] border border-border/60 rounded-lg outline-none bg-white"
+                onFocus={e => { e.target.style.borderColor = "#8705FA"; }}
+                onBlur={e => { e.target.style.borderColor = ""; }}
+              />
+              <button
+                type="button"
+                disabled={!urlInput.trim()}
+                onClick={() => { const u = urlInput.trim(); if (!u) return; setPending(u); setUrlInput(""); toast({ title: "Logo URL set — click Save to apply" }); }}
+                className="px-3 py-2 text-[13px] font-semibold text-white rounded-lg transition-colors disabled:opacity-40"
+                style={{ backgroundColor: "#8705FA" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#6B04C8"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#8705FA"; }}
+              >
+                Use URL
+              </button>
+            </div>
+          </div>
+
+          {/* Save button */}
+          <div className="pt-2 border-t border-border/40 flex items-center justify-between">
+            <p className="text-[12px] text-muted-foreground">
+              {hasChanges
+                ? "You have unsaved changes."
+                : preview
+                ? "Logo is live on all pages."
+                : "No logo set — using the platform default."}
+            </p>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={saving || (!hasChanges && logoUrl === null)}
+              className="flex items-center gap-2 px-5 py-2 text-[13px] font-semibold text-white rounded-xl transition-all disabled:opacity-40"
+              style={{ backgroundColor: "#059669", boxShadow: "0 2px 8px rgba(5,150,105,0.20)" }}
+              onMouseEnter={e => { if (!(e.currentTarget as HTMLButtonElement).disabled) (e.currentTarget as HTMLElement).style.backgroundColor = "#047857"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#059669"; }}
+            >
+              {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+              {saving ? "Saving…" : "Save Logo"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }}
+      />
+
+      <div className="bg-white rounded-2xl border border-border/60 shadow-sm p-5">
+        <p className="text-[13px] font-bold text-foreground mb-1">Platform-wide logo</p>
+        <p className="text-[12px] text-muted-foreground leading-relaxed">
+          The platform administrator at{" "}
+          <a
+            href="https://teki.sentconnect.org/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold"
+            style={{ color: "#8705FA" }}
+          >
+            teki.sentconnect.org
+          </a>{" "}
+          can also set a platform-wide logo that applies to all organizations as a default.
+          Your organization logo above takes priority over the platform default.
+        </p>
+      </div>
+    </div>
   );
 }

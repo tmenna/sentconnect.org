@@ -39,6 +39,7 @@ router.get("/orgs/resolve", async (req, res): Promise<void> => {
       name: organizationsTable.name,
       subdomain: organizationsTable.subdomain,
       status: organizationsTable.status,
+      logoUrl: organizationsTable.logoUrl,
     })
     .from(organizationsTable)
     .where(eq(organizationsTable.subdomain, subdomain));

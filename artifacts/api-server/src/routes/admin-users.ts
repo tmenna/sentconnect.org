@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
 import { eq, and } from "drizzle-orm";
 import crypto from "crypto";
-import { db, usersTable, reportsTable } from "@workspace/db";
+import { db, usersTable, reportsTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
 
@@ -164,6 +164,36 @@ router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> =
     resetLink,
     expiresIn: "24 hours",
   });
+});
+
+// GET /admin/branding — return the current org's logo URL
+router.get("/admin/branding", async (req, res): Promise<void> => {
+  const caller = await requireOrgAdmin(req, res);
+  if (!caller) return;
+  if (!caller.organizationId) {
+    res.status(400).json({ error: "No organization associated with your account" }); return;
+  }
+  const [org] = await db.select({ logoUrl: organizationsTable.logoUrl }).from(organizationsTable).where(eq(organizationsTable.id, caller.organizationId));
+  res.json({ logoUrl: org?.logoUrl ?? null });
+});
+
+// PATCH /admin/branding — update the current org's logo URL
+router.patch("/admin/branding", async (req, res): Promise<void> => {
+  const caller = await requireOrgAdmin(req, res);
+  if (!caller) return;
+  if (!caller.organizationId) {
+    res.status(400).json({ error: "No organization associated with your account" }); return;
+  }
+  const { logoUrl } = req.body ?? {};
+  if (logoUrl !== null && logoUrl !== undefined && typeof logoUrl !== "string") {
+    res.status(400).json({ error: "logoUrl must be a string or null" }); return;
+  }
+  const [updated] = await db
+    .update(organizationsTable)
+    .set({ logoUrl: logoUrl || null })
+    .where(eq(organizationsTable.id, caller.organizationId))
+    .returning({ logoUrl: organizationsTable.logoUrl });
+  res.json({ logoUrl: updated?.logoUrl ?? null });
 });
 
 export default router;
