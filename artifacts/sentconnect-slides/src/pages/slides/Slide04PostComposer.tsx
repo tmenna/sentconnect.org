@@ -1,3 +1,5 @@
+import logoWhite from "../../assets/logo-white.png";
+
 export default function Slide04PostComposer() {
   const fields = [
     { icon: "📝", label: "Post Text", desc: "Write your update, story, or reflection — no character limit.", color: "#F3E8FF", accent: "#8705FA" },
@@ -22,7 +24,7 @@ export default function Slide04PostComposer() {
           <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "#F3E8FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#8705FA" }} />
           </div>
-          <span style={{ color: "#5A0097", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
+          <img src={logoWhite} alt="SentConnect" style={{ height: "3.5vh", display: "block", filter: "brightness(0)" }} />
         </div>
         <span style={{ color: "#1E293B", fontSize: "1.3vw", fontWeight: 600 }}>Creating Posts</span>
         <span style={{ color: "#94A3B8", fontSize: "1vw", fontWeight: 500 }}>4 of 11</span>

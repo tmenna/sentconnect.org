@@ -14,6 +14,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
+import logoWhite from "@/assets/logo-white.png";
 
 import { slides } from "@/slideLoader";
 import { SlideNav } from "@/components/SlideNav";
@@ -216,7 +217,7 @@ function SlideViewer({ startPosition, maxPosition }: { startPosition?: number; m
           >
             <span style={{ fontSize: 16 }}>←</span> Help Home
           </button>
-          <span style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, fontWeight: 500 }}>SentConnect Help</span>
+          <img src={logoWhite} alt="SentConnect" style={{ height: 14, display: "block", opacity: 0.65 }} />
         </div>
 
         {/* Slide iframe — full width, aspect-ratio height */}

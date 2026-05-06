@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { AlertCircle } from "lucide-react";
 import { Shuffle } from "lucide-react";
+import logoWhite from "@/assets/logo-white.png";
 
 const BG   = "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)";
 const BLUE = "#8705FA";
@@ -15,7 +16,7 @@ export default function NotFound() {
         <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.18)" }}>
           <Shuffle className="h-5 w-5 text-white" />
         </div>
-        <span className="text-[18px] font-extrabold tracking-tight text-white">SentConnect</span>
+        <img src={logoWhite} alt="SentConnect" style={{ height: 28, display: "block" }} />
       </div>
 
       <div

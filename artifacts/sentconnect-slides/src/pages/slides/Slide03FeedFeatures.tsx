@@ -1,3 +1,5 @@
+import logoWhite from "../../assets/logo-white.png";
+
 export default function Slide03FeedFeatures() {
   const features = [
     { icon: "📝", title: "Rich Text Posts", desc: "Write updates with formatting, share what God is doing in the field." },
@@ -23,7 +25,7 @@ export default function Slide03FeedFeatures() {
           <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "#F3E8FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#8705FA" }} />
           </div>
-          <span style={{ color: "#5A0097", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
+          <img src={logoWhite} alt="SentConnect" style={{ height: "3.5vh", display: "block", filter: "brightness(0)" }} />
         </div>
         <span style={{ color: "#1E293B", fontSize: "1.3vw", fontWeight: 600 }}>Private Social Feed</span>
         <span style={{ color: "#94A3B8", fontSize: "1vw", fontWeight: 500 }}>3 of 11</span>

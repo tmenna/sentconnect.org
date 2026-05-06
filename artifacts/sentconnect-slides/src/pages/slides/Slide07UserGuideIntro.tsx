@@ -1,3 +1,5 @@
+import logoWhite from "../../assets/logo-white.png";
+
 export default function Slide07UserGuideIntro() {
   return (
     <div
@@ -18,7 +20,7 @@ export default function Slide07UserGuideIntro() {
           <div style={{ width: "2.6vw", height: "2.6vw", borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div style={{ width: "1.1vw", height: "1.1vw", borderRadius: "50%", background: "#FFFFFF" }} />
           </div>
-          <span style={{ color: "#FFFFFF", fontSize: "1.4vw", fontWeight: 700 }}>SentConnect</span>
+          <img src={logoWhite} alt="SentConnect" style={{ height: "3.5vh", display: "block" }} />
         </div>
         <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "1vw", fontWeight: 500 }}>7 of 11</span>
       </div>

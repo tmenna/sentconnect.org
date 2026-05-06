@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import logoWhite from "@/assets/logo-white.png";
 
 const BG    = "linear-gradient(150deg, #3D0066 0%, #8705FA 55%, #A020F0 100%)";
 const BLUE  = "#8705FA";
@@ -41,7 +42,7 @@ export default function ForgotPassword() {
       style={{ background: BG }}
     >
       <div className="flex items-center gap-2.5 mb-8">
-        <span className="text-[18px] font-extrabold tracking-tight text-white">SentConnect</span>
+        <img src={logoWhite} alt="SentConnect" style={{ height: 28, display: "block" }} />
       </div>
 
       <div

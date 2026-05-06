@@ -1,3 +1,5 @@
+import logoWhite from "../../assets/logo-white.png";
+
 export default function Slide05ExportReports() {
   const items = [
     { icon: "🖼️", label: "Photos included", desc: "All post images appear full-width in the PDF." },
@@ -25,7 +27,7 @@ export default function Slide05ExportReports() {
           <div style={{ width: "2.2vw", height: "2.2vw", borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div style={{ width: "0.9vw", height: "0.9vw", borderRadius: "50%", background: "#FFFFFF" }} />
           </div>
-          <span style={{ color: "#FFFFFF", fontSize: "1.3vw", fontWeight: 700 }}>SentConnect</span>
+          <img src={logoWhite} alt="SentConnect" style={{ height: "3.5vh", display: "block" }} />
         </div>
         <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.3vw", fontWeight: 600 }}>Export as Report</span>
         <span style={{ color: "rgba(255,255,255,0.45)", fontSize: "1vw", fontWeight: 500 }}>5 of 11</span>

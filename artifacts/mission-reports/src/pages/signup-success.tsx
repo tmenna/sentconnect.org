@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearch } from "wouter";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { buildOrgHref } from "@/lib/org";
+import logoWhite from "@/assets/logo-white.png";
 
 const BLUE = "#8705FA";
 const BLUE_DK = "#6B04C8";
@@ -53,7 +54,7 @@ export default function SignupSuccess() {
         style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}>
 
         <div className="flex items-center justify-center gap-2 mb-6">
-          <span className="text-lg font-extrabold tracking-tight" style={{ color: BLUE }}>SentConnect</span>
+          <img src={logoWhite} alt="SentConnect" style={{ height: 26, display: "block", filter: "brightness(0)" }} />
         </div>
 
         {status === "loading" && (
