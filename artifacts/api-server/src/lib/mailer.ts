@@ -22,6 +22,18 @@ function buildFromAddress(raw: string | undefined): string {
 
 const FROM_ADDRESS = buildFromAddress(process.env["EMAIL_FROM"]);
 
+// Warn at startup so misconfigured email is obvious in logs.
+if (!process.env["EMAIL_FROM"]) {
+  logger.warn(
+    { from: FROM_ADDRESS },
+    "[email] EMAIL_FROM is not set — falling back to onboarding@resend.dev. " +
+    "Resend only delivers from this address to the Resend account owner's email. " +
+    "Set EMAIL_FROM to a verified-domain address (e.g. noreply@yourdomain.com) to reach all recipients."
+  );
+} else {
+  logger.info({ from: FROM_ADDRESS }, "[email] mailer ready");
+}
+
 // The root domain used for org-specific deep-link URLs (e.g. sentconnect.org).
 // Take the first entry from TENANT_ROOT_DOMAINS, or fall back to a sane default.
 const CANONICAL_DOMAIN = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org")
@@ -122,13 +134,13 @@ async function sendEmail(to: string, subject: string, html: string, text: string
   try {
     const { error } = await resend.emails.send({ from: FROM_ADDRESS, to, subject, html, text });
     if (error) {
-      logger.error({ to, subject, error }, "[email] send failed");
+      logger.error({ to, from: FROM_ADDRESS, subject, resendError: error }, "[email] send failed — Resend rejected the request");
       return { sent: false, error: error.message };
     }
-    logger.info({ to, subject }, "[email] sent");
+    logger.info({ to, from: FROM_ADDRESS, subject }, "[email] sent");
     return { sent: true };
   } catch (err: any) {
-    logger.error({ to, subject, err }, "[email] exception");
+    logger.error({ to, from: FROM_ADDRESS, subject, err }, "[email] exception during send");
     return { sent: false, error: err?.message ?? "Unknown error" };
   }
 }

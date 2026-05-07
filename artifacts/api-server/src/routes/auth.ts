@@ -153,16 +153,32 @@ router.post("/auth/forgot-password", async (req, res): Promise<void> => {
     .set({ resetToken: token, resetTokenExpiry: expiry })
     .where(eq(usersTable.id, user.id));
 
+  // Build the reset URL.
+  // Priority: APP_BASE_URL → first REPLIT_DOMAINS entry → TENANT_ROOT_DOMAINS → fallback.
   const canonicalDomain = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org").split(",")[0].trim();
-  const baseUrl = process.env["APP_BASE_URL"] ?? `https://${canonicalDomain}`;
+  const replitDomain = process.env["REPLIT_DOMAINS"]?.split(",")[0]?.trim();
+  const baseUrl = process.env["APP_BASE_URL"]
+    ?? (replitDomain ? `https://${replitDomain}` : `https://${canonicalDomain}`);
   const resetLink = `/reset-password?token=${token}`;
   const resetUrl = `${baseUrl}${resetLink}`;
 
+  const isDev = process.env["NODE_ENV"] !== "production";
+
   if (emailConfigured) {
-    await sendPasswordResetEmail(user.email, resetUrl);
-    res.json({ message: "If an account exists, a reset link has been sent." });
+    const sent = await sendPasswordResetEmail(user.email, resetUrl);
+    if (!sent) {
+      req.log.error(
+        { to: user.email, from: process.env["EMAIL_FROM"] ?? "onboarding@resend.dev" },
+        "[forgot-password] email send failed — check EMAIL_FROM domain verification in Resend"
+      );
+    }
+    // In dev, always expose the link so testers can use it even if Resend isn't fully configured.
+    res.json({
+      message: "If an account exists, a reset link has been sent.",
+      ...(isDev ? { devResetLink: resetLink, devToken: token } : {}),
+    });
   } else {
-    logger.info({ email: user.email, resetUrl }, "SMTP not configured — reset link logged");
+    req.log.warn({ email: user.email, resetUrl }, "[forgot-password] RESEND_API_KEY not set — reset link logged only");
     res.json({
       message: "If an account exists, a reset link has been sent.",
       devResetLink: resetLink,
