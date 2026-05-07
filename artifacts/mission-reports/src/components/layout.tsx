@@ -83,7 +83,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
           {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <img src={logo} alt="SentConnect" style={{ maxHeight: 22, width: "auto", maxWidth: 160, filter: isCustomLogo ? undefined : "brightness(0)", display: "block" }} />
+            <img src={logo} alt="SentConnect" style={{ maxHeight: 22, width: "auto", maxWidth: 160, filter: isCustomLogo ? undefined : "brightness(0)", display: "block", transition: "opacity 0.15s ease" }} />
           </Link>
 
           {/* Desktop nav */}

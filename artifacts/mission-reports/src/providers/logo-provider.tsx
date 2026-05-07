@@ -33,6 +33,20 @@ export function useLogo() {
   return useContext(LogoContext);
 }
 
+// ─── Image preloader ──────────────────────────────────────────────────────────
+// Preloads a logo URL into the browser cache before we update React state.
+// This ensures the swap from static → custom logo is instant with no blank flash.
+
+function preloadImage(url: string | null): Promise<string | null> {
+  if (!url) return Promise.resolve(null);
+  return new Promise(resolve => {
+    const img = new window.Image();
+    img.onload  = () => resolve(url);
+    img.onerror = () => resolve(null); // treat load failures as "no logo" → fallback to static
+    img.src = url;
+  });
+}
+
 // ─── Module-level cache ────────────────────────────────────────────────────────
 // Avoids redundant API calls when navigating between pages within the same org.
 // The API response has Cache-Control: max-age=300, so we mirror a similar TTL
@@ -96,22 +110,28 @@ export function LogoProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     fetch("/api/landing-page")
       .then(r => r.ok ? r.json() : {})
-      .then((d: any) => {
+      .then(async (d: any) => {
         if (cancelled) return;
         const headerUrl  = (d.headerLogoUrl as string) || null;
         const footerUrl  = (d.footerLogoUrl as string) || null;
         const signupUrl  = (d.signupLogoUrl as string) || null;
         const logoUrl    = (d.logoUrl as string)       || null;
 
-        platformCache = { headerLogoUrl: headerUrl, footerLogoUrl: footerUrl, signupLogoUrl: signupUrl, logoUrl, fetchedAt: Date.now() };
+        // Preload all images before touching state so the swap is instant.
+        // Returns null for any URL that fails to load (e.g. 401) → falls back to static.
+        const [loadedHeader, loadedFooter, loadedSignup, loadedLogo] = await Promise.all([
+          preloadImage(headerUrl),
+          preloadImage(footerUrl),
+          preloadImage(signupUrl),
+          preloadImage(logoUrl),
+        ]);
+        if (cancelled) return;
 
-        // Update state immediately — no blocking image preload.
-        // The browser will swap from the static fallback to the custom logo
-        // as soon as the image arrives, with no blank gap.
-        setPlatformHeaderLogo(headerUrl);
-        setPlatformFooterLogo(footerUrl);
-        setPlatformSignupLogo(signupUrl);
-        setPlatformLogo(logoUrl);
+        platformCache = { headerLogoUrl: loadedHeader, footerLogoUrl: loadedFooter, signupLogoUrl: loadedSignup, logoUrl: loadedLogo, fetchedAt: Date.now() };
+        setPlatformHeaderLogo(loadedHeader);
+        setPlatformFooterLogo(loadedFooter);
+        setPlatformSignupLogo(loadedSignup);
+        setPlatformLogo(loadedLogo);
       })
       .catch(() => {});
     return () => { cancelled = true; };
@@ -132,11 +152,13 @@ export function LogoProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     fetch(`/api/orgs/resolve?subdomain=${encodeURIComponent(orgSlug)}`)
       .then(r => r.ok ? r.json() : {})
-      .then((d: any) => {
+      .then(async (d: any) => {
         if (cancelled) return;
         const url = (d.logoUrl as string) || null;
-        orgCacheMap.set(orgSlug, { logoUrl: url, fetchedAt: Date.now() });
-        setOrgLogo(url);
+        const loadedUrl = await preloadImage(url);
+        if (cancelled) return;
+        orgCacheMap.set(orgSlug, { logoUrl: loadedUrl, fetchedAt: Date.now() });
+        setOrgLogo(loadedUrl);
       })
       .catch(() => {});
     return () => { cancelled = true; };
