@@ -9,29 +9,30 @@ export const emailConfigured = !!process.env["RESEND_API_KEY"];
 
 const DISPLAY_NAME = "SentConnect Notification";
 
-// Always apply the display name so Gmail shows "SentConnect Notification" in the inbox.
-// If EMAIL_FROM is already formatted as "Name <addr>" we keep it as-is;
-// if it's a bare address like "notifications@sentconnect.org" we wrap it.
+// Support both FROM_EMAIL (Render convention) and EMAIL_FROM, preferring FROM_EMAIL.
+const RAW_FROM = process.env["FROM_EMAIL"] ?? process.env["EMAIL_FROM"];
+
+// Always apply the display name so Gmail shows it correctly in the inbox.
+// If the value is already formatted as "Name <addr>" we keep it as-is;
+// if it's a bare address like "noreply@sentconnect.org" we wrap it.
 function buildFromAddress(raw: string | undefined): string {
   if (!raw) return `${DISPLAY_NAME} <onboarding@resend.dev>`;
-  // Already has a display name (contains "<")
   if (raw.includes("<")) return raw;
-  // Bare email address — prepend the display name
   return `${DISPLAY_NAME} <${raw.trim()}>`;
 }
 
-const FROM_ADDRESS = buildFromAddress(process.env["EMAIL_FROM"]);
+const FROM_ADDRESS = buildFromAddress(RAW_FROM);
 
 // Warn at startup so misconfigured email is obvious in logs.
-if (!process.env["EMAIL_FROM"]) {
+if (!RAW_FROM) {
   logger.warn(
     { from: FROM_ADDRESS },
-    "[email] EMAIL_FROM is not set — falling back to onboarding@resend.dev. " +
-    "Resend only delivers from this address to the Resend account owner's email. " +
-    "Set EMAIL_FROM to a verified-domain address (e.g. noreply@yourdomain.com) to reach all recipients."
+    "[email] Neither FROM_EMAIL nor EMAIL_FROM is set — falling back to onboarding@resend.dev. " +
+    "Resend only delivers from this address to the Resend account owner. " +
+    "Set FROM_EMAIL in your environment to a verified-domain address (e.g. noreply@sentconnect.org)."
   );
 } else {
-  logger.info({ from: FROM_ADDRESS }, "[email] mailer ready");
+  logger.info({ from: FROM_ADDRESS, resolvedFrom: RAW_FROM.includes("FROM_EMAIL") ? "FROM_EMAIL" : "env" }, "[email] mailer ready");
 }
 
 // The root domain used for org-specific deep-link URLs (e.g. sentconnect.org).
