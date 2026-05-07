@@ -102,7 +102,7 @@ function baseTemplate(content: string, orgName?: string): string {
     <table width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
 
       <!-- Header -->
-      <tr><td style="background:linear-gradient(135deg,#0047A8 0%,#0268CE 60%,#1A80E0 100%);border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
+      <tr><td style="background:linear-gradient(135deg,#5C03AC 0%,#8705FA 60%,#A020F0 100%);border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
         <img src="${LOGO_URL}" alt="SentConnect" width="180" style="height:auto;max-width:180px;display:block;margin:0 auto;" />
         <div style="font-size:12px;color:rgba(255,255,255,0.65);margin-top:8px;letter-spacing:0.03em;">Stay connected with your field teams</div>
       </td></tr>
@@ -116,8 +116,8 @@ function baseTemplate(content: string, orgName?: string): string {
       <tr><td style="background:#F8FAFD;border:1px solid #E5E9F2;border-top:none;border-radius:0 0 16px 16px;padding:20px 40px;text-align:center;">
         <p style="margin:0;font-size:12px;color:#94A3B8;line-height:1.6;">
           You are receiving this because you are part of <strong>${orgName ?? "your organization"}</strong> on SentConnect.<br />
-          <a href="${APP_URL}" style="color:#0268CE;text-decoration:none;">Manage notification preferences</a> &nbsp;·&nbsp;
-          <a href="mailto:support@sentconnect.org" style="color:#0268CE;text-decoration:none;">Contact support</a>
+          <a href="${APP_URL}" style="color:#8705FA;text-decoration:none;">Manage notification preferences</a> &nbsp;·&nbsp;
+          <a href="mailto:support@sentconnect.org" style="color:#8705FA;text-decoration:none;">Contact support</a>
         </p>
       </td></tr>
 
@@ -128,7 +128,7 @@ function baseTemplate(content: string, orgName?: string): string {
 </html>`;
 }
 
-function ctaButton(href: string, label: string, color = "#0268CE"): string {
+function ctaButton(href: string, label: string, color = "#8705FA"): string {
   return `<table cellpadding="0" cellspacing="0" style="margin:24px 0 0;">
     <tr><td style="background:${color};border-radius:10px;">
       <a href="${href}" style="display:inline-block;padding:13px 28px;color:#fff;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:0.01em;">${label}</a>
@@ -144,7 +144,7 @@ function avatar(name: string, avatarUrl?: string | null): string {
   // Use a table for centering — flexbox is stripped by Gmail and many email clients.
   return `<table cellpadding="0" cellspacing="0" style="display:inline-table;vertical-align:middle;">
     <tr><td width="44" height="44" align="center" valign="middle"
-      style="width:44px;height:44px;border-radius:50%;background:#0268CE;color:#fff;font-size:17px;font-weight:700;line-height:44px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+      style="width:44px;height:44px;border-radius:50%;background:#8705FA;color:#fff;font-size:17px;font-weight:700;line-height:44px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
       ${initials}
     </td></tr>
   </table>`;
@@ -284,7 +284,7 @@ export async function sendNewCommentEmail(params: NewCommentEmailParams): Promis
     <h2 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#0F172A;">Someone commented on your post</h2>
 
     <!-- Post snippet -->
-    <div style="background:#F8FAFD;border-left:3px solid #0268CE;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
+    <div style="background:#F8FAFD;border-left:3px solid #8705FA;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
       <p style="margin:0;font-size:13px;color:#64748B;line-height:1.6;font-style:italic;">"${postSnippet}"</p>
     </div>
 
@@ -344,7 +344,7 @@ export async function sendAdminCommentAlertEmail(params: AdminCommentAlertParams
     </p>
 
     <!-- Post snippet -->
-    <div style="background:#F8FAFD;border-left:3px solid #0268CE;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
+    <div style="background:#F8FAFD;border-left:3px solid #8705FA;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
       <p style="margin:0 0 4px;font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em;">Post by ${postAuthorName}</p>
       <p style="margin:0;font-size:13px;color:#64748B;line-height:1.6;font-style:italic;">"${postSnippet}"</p>
     </div>
