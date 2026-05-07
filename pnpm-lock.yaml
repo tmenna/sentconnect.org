@@ -159,10 +159,6 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      stripe:
-        specifier: ^22.0.2
-        version: 22.0.2(@types/node@25.3.5)
     devDependencies:
       prettier:
         specifier: ^3.8.1
