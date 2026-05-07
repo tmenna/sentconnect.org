@@ -7,12 +7,28 @@ import { logger } from "../lib/logger";
 import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
 import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
 import { DEFAULT_ABOUT_PAGE_CONTENT, getAboutPageContent } from "../lib/about-page-content";
+import { resolveObjectUrl } from "../lib/r2Storage";
 
 const router: IRouter = Router();
 
+async function resolveLogoUrl(url: string): Promise<string> {
+  if (!url) return url;
+  const resolved = await resolveObjectUrl(url);
+  return resolved || url;
+}
+
 router.get("/landing-page", async (_req, res): Promise<void> => {
   try {
-    res.json(await getLandingPageContent());
+    const content = await getLandingPageContent();
+    const [logoUrl, headerLogoUrl, footerLogoUrl, signupLogoUrl] = await Promise.all([
+      resolveLogoUrl(content.logoUrl),
+      resolveLogoUrl(content.headerLogoUrl),
+      resolveLogoUrl(content.footerLogoUrl),
+      resolveLogoUrl(content.signupLogoUrl),
+    ]);
+    res
+      .set("Cache-Control", "public, max-age=300, stale-while-revalidate=60")
+      .json({ ...content, logoUrl, headerLogoUrl, footerLogoUrl, signupLogoUrl });
   } catch {
     res.json(DEFAULT_LANDING_PAGE_CONTENT);
   }
@@ -49,7 +65,10 @@ router.get("/orgs/resolve", async (req, res): Promise<void> => {
     return;
   }
 
-  res.json(org);
+  const resolvedLogoUrl = org.logoUrl ? await resolveLogoUrl(org.logoUrl) : null;
+  res
+    .set("Cache-Control", "public, max-age=60, stale-while-revalidate=30")
+    .json({ ...org, logoUrl: resolvedLogoUrl || org.logoUrl });
 });
 
 function toUserResponse(user: typeof usersTable.$inferSelect) {
