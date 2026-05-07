@@ -1319,7 +1319,7 @@ function BrandingTab() {
   const { refresh: refreshLogo } = useLogo();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
-  const [pending, setPending] = useState<string | null>(null);
+  const [pending, setPending] = useState<string | null | undefined>(undefined);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [urlInput, setUrlInput] = useState("");
@@ -1372,7 +1372,7 @@ function BrandingTab() {
       if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error ?? "Save failed"); }
       const d = await res.json();
       setLogoUrl(d.logoUrl ?? null);
-      setPending(null);
+      setPending(undefined);
       refreshLogo();
       toast({ title: "Logo saved! It will now appear across all pages." });
     } catch (err: any) {
@@ -1458,7 +1458,7 @@ function BrandingTab() {
             {preview && (
               <button
                 type="button"
-                onClick={() => { setPending(null); setLogoUrl(null); }}
+                onClick={() => { setPending(null); }}
                 className="flex items-center gap-2 px-3 py-2 text-[13px] font-semibold border border-red-200 text-red-600 rounded-lg bg-white hover:bg-red-50 transition-colors"
               >
                 <ImageOff className="h-3.5 w-3.5" />
