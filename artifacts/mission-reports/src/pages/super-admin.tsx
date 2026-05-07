@@ -6,7 +6,7 @@ import {
   Plus, Lock, Unlock, Ban, UserCheck, KeyRound, ChevronDown,
   ShieldAlert, Shield, Edit3, X, Save, Eye, EyeOff,
   Trash2, AlertTriangle, Settings2, BookOpen, Star, BarChart3,
-  LogOut, Upload, ImageOff, ChevronRight, Image,
+  LogOut, Upload, ImageOff, ChevronRight, Image, Mail,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
@@ -978,6 +978,7 @@ function CreateOrgModal({
 }) {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", subdomain: "", email: "" });
+  const [admin, setAdmin] = useState({ firstName: "", lastName: "", email: "" });
   const [saving, setSaving] = useState(false);
   const [slugError, setSlugError] = useState<string | null>(null);
 
@@ -998,25 +999,45 @@ function CreateOrgModal({
     setForm(f => ({ ...f, subdomain: cleaned }));
   }
 
+  const adminName = [admin.firstName.trim(), admin.lastName.trim()].filter(Boolean).join(" ");
+  const adminProvided = adminName.length > 0 || admin.email.trim().length > 0;
+  const adminValid = !adminProvided || (adminName.length > 0 && admin.email.trim().length > 0);
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const err = validateSlug(form.subdomain);
     if (err) { setSlugError(err); return; }
+    if (adminProvided && !adminValid) {
+      toast({ title: "Please fill in both admin name and email, or leave both empty", variant: "destructive" });
+      return;
+    }
     setSaving(true);
     try {
       const res = await fetch("/api/super-admin/orgs", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          ...(adminProvided && adminValid ? { adminName, adminEmail: admin.email.trim() } : {}),
+        }),
       });
       if (!res.ok) {
         const d = await res.json();
         throw new Error(d.error ?? "Failed to create organization");
       }
-      const org = await res.json();
-      toast({ title: `Organization "${org.name}" created` });
-      onCreated({ ...org, userCount: 0, postCount: 0 });
+      const data = await res.json();
+      const org = data.org ?? data;
+      if (data.adminUser) {
+        if (data.emailSent) {
+          toast({ title: `Organization "${org.name}" created`, description: `Password setup email sent to ${data.adminUser.email}` });
+        } else {
+          toast({ title: `Organization "${org.name}" created`, description: `Admin account created — email delivery not configured, share credentials manually.`, variant: "destructive" });
+        }
+      } else {
+        toast({ title: `Organization "${org.name}" created` });
+      }
+      onCreated({ ...org, userCount: data.adminUser ? 1 : 0, postCount: 0 });
     } catch (err: any) {
       toast({ title: err.message ?? "Failed to create organization", variant: "destructive" });
     } finally {
@@ -1027,8 +1048,8 @@ function CreateOrgModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
-        <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between">
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[92vh] overflow-y-auto">
+        <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between sticky top-0 bg-white rounded-t-2xl z-10">
           <div>
             <h2 className="text-[15px] font-bold text-foreground">New Organization</h2>
             <p className="text-[12px] text-muted-foreground mt-0.5">Creates a new tenant with its own subdomain</p>
@@ -1036,6 +1057,7 @@ function CreateOrgModal({
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60"><X className="h-4 w-4 text-muted-foreground" /></button>
         </div>
         <form onSubmit={submit} className="p-6 space-y-4">
+          {/* Org fields */}
           <div>
             <label className="block text-[12px] font-semibold text-foreground mb-1">Organization Name</label>
             <input
@@ -1073,13 +1095,56 @@ function CreateOrgModal({
               placeholder="contact@organization.org"
             />
           </div>
+
+          {/* Admin account section */}
+          <div className="border-t border-border/60 pt-4">
+            <div className="flex items-center gap-2 mb-1">
+              <UserCog className="h-3.5 w-3.5 text-muted-foreground" />
+              <p className="text-[12px] font-bold text-foreground">First Admin Account <span className="text-muted-foreground font-normal">(optional)</span></p>
+            </div>
+            <p className="text-[11px] text-muted-foreground mb-3">If provided, an admin user will be created and sent a password setup email (expires in 24 hours).</p>
+            <div className="flex gap-2 mb-2">
+              <div className="flex-1">
+                <label className="block text-[11px] font-semibold text-foreground mb-1">First Name</label>
+                <input
+                  value={admin.firstName}
+                  onChange={e => setAdmin(a => ({ ...a, firstName: e.target.value }))}
+                  className="w-full px-3 py-2 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+                  placeholder="Jane"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-[11px] font-semibold text-foreground mb-1">Last Name</label>
+                <input
+                  value={admin.lastName}
+                  onChange={e => setAdmin(a => ({ ...a, lastName: e.target.value }))}
+                  className="w-full px-3 py-2 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+                  placeholder="Smith"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-[11px] font-semibold text-foreground mb-1">Admin Email</label>
+              <input
+                type="email"
+                value={admin.email}
+                onChange={e => setAdmin(a => ({ ...a, email: e.target.value }))}
+                className="w-full px-3 py-2 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+                placeholder="admin@organization.org"
+              />
+            </div>
+            {adminProvided && !adminValid && (
+              <p className="text-[11px] text-red-600 mt-1">Both name and email are required to create an admin account.</p>
+            )}
+          </div>
+
           <div className="flex gap-3 pt-1">
             <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors">
               Cancel
             </button>
             <button
               type="submit"
-              disabled={saving || !!slugError}
+              disabled={saving || !!slugError || (adminProvided && !adminValid)}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
@@ -2460,6 +2525,7 @@ function UserEditRow({
   const [showPw, setShowPw] = useState(false);
   const [password, setPassword] = useState("");
   const [saving, setSaving] = useState(false);
+  const [sendingReset, setSendingReset] = useState(false);
 
   const hasNameChange = name.trim().length > 0 && name.trim() !== user.name;
   const hasPasswordChange = showPw && password.length >= 8;
@@ -2494,6 +2560,31 @@ function UserEditRow({
     }
   }
 
+  async function sendReset() {
+    setSendingReset(true);
+    try {
+      const res = await fetch(`/api/super-admin/users/${user.id}/reset-password`, {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to send reset email");
+      if (data.emailSent) {
+        toast({ title: `Password reset email sent to ${user.email}`, description: "Link expires in 24 hours." });
+      } else {
+        toast({
+          title: "Reset link generated — email not delivered",
+          description: "Email delivery is not configured. Check RESEND_API_KEY.",
+          variant: "destructive",
+        });
+      }
+    } catch (err: any) {
+      toast({ title: err.message ?? "Failed to send reset email", variant: "destructive" });
+    } finally {
+      setSendingReset(false);
+    }
+  }
+
   const badge = roleBadge(user.role);
 
   return (
@@ -2517,10 +2608,19 @@ function UserEditRow({
         <button
           type="button"
           onClick={() => { setShowPw(p => !p); setPassword(""); }}
-          title={showPw ? "Cancel password change" : "Set new password"}
+          title={showPw ? "Cancel password change" : "Set new password directly"}
           className={`p-1.5 rounded-lg border transition-colors flex-shrink-0 ${showPw ? "bg-amber-50 border-amber-300 text-amber-700" : "border-border/60 hover:bg-muted/60 text-muted-foreground"}`}
         >
           <KeyRound className="h-3.5 w-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={sendReset}
+          disabled={sendingReset}
+          title="Send password reset email (24-hour link)"
+          className="p-1.5 rounded-lg border border-border/60 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 text-muted-foreground disabled:opacity-40 transition-colors flex-shrink-0"
+        >
+          {sendingReset ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Mail className="h-3.5 w-3.5" />}
         </button>
         <button
           type="button"
@@ -2878,7 +2978,11 @@ export default function SuperAdminPanel() {
       const data = await res.json();
 
       if (action === "reset-password") {
-        setResetLink(data.resetUrl);
+        if (data.emailSent) {
+          toast({ title: `Password reset email sent to ${targetUser.email}`, description: "Link expires in 24 hours." });
+        } else {
+          toast({ title: "Reset link generated — email not delivered", description: "Check RESEND_API_KEY and EMAIL_FROM configuration.", variant: "destructive" });
+        }
       } else {
         const updatedUser: PlatformUser = data.user;
         setAllUsers(prev => prev ? prev.map(u => u.id === updatedUser.id ? { ...u, ...updatedUser } : u) : prev);

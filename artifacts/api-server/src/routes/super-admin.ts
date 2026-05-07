@@ -3,6 +3,7 @@ import { eq, sql, and, inArray, ne } from "drizzle-orm";
 import crypto from "crypto";
 import { db, organizationsTable, usersTable, reportsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
+import { sendPasswordResetEmail } from "../lib/mailer";
 import { cleanLandingPageContent, getLandingPageContent, saveLandingPageContent } from "../lib/landing-page-content";
 import { cleanAboutPageContent, getAboutPageContent, saveAboutPageContent } from "../lib/about-page-content";
 import {
@@ -12,6 +13,13 @@ import {
   parsePermissions,
   type PlatformPermissions,
 } from "../middleware/platform-access";
+
+function buildResetUrl(token: string): string {
+  const canonicalDomain = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org").split(",")[0].trim();
+  const replitDomain = process.env["REPLIT_DOMAINS"]?.split(",")[0]?.trim();
+  const base = process.env["APP_BASE_URL"] ?? (replitDomain ? `https://${replitDomain}` : `https://${canonicalDomain}`);
+  return `${base}/reset-password?token=${token}`;
+}
 
 const router: IRouter = Router();
 
@@ -83,7 +91,7 @@ router.get("/super-admin/orgs", requirePermission("canViewOrganizations"), async
 
 // POST /super-admin/orgs — create a new organization
 router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
-  const { name, subdomain, email } = req.body ?? {};
+  const { name, subdomain, email, adminName, adminEmail } = req.body ?? {};
   if (!name || !subdomain) {
     res.status(400).json({ error: "name and subdomain are required" }); return;
   }
@@ -107,7 +115,6 @@ router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): 
     org = inserted;
   } catch (dbErr: unknown) {
     const e = dbErr as any;
-    // Drizzle wraps the real PG error in .cause — prefer that for the user-facing message
     const pgMsg: string = e?.cause?.message ?? e?.message ?? "";
     const pgCode: string = e?.cause?.code ?? "";
     req.log.error({ err: dbErr, pgCode }, `POST /super-admin/orgs DB error: ${pgMsg}`);
@@ -117,7 +124,41 @@ router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): 
     const userMsg = pgMsg && !pgMsg.startsWith("Failed query:") ? pgMsg : "Database error — please try again";
     res.status(500).json({ error: `Failed to create organization: ${userMsg}` }); return;
   }
-  res.status(201).json(org);
+
+  // Optionally create the first admin user for this org and email them a setup link.
+  let adminUser: ReturnType<typeof toSafeUser> | null = null;
+  let emailSent = false;
+
+  if (adminName && typeof adminName === "string" && adminName.trim() &&
+      adminEmail && typeof adminEmail === "string" && adminEmail.trim()) {
+    const normalizedAdminEmail = adminEmail.trim().toLowerCase();
+    const [existingUser] = await db.select({ id: usersTable.id })
+      .from(usersTable).where(eq(usersTable.email, normalizedAdminEmail));
+    if (!existingUser) {
+      const tempPassword = crypto.randomBytes(16).toString("hex");
+      const token = crypto.randomBytes(32).toString("hex");
+      const expiry = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24 hours
+      const [created] = await db.insert(usersTable).values({
+        name: adminName.trim(),
+        email: normalizedAdminEmail,
+        passwordHash: hashPassword(tempPassword),
+        role: "admin",
+        organizationId: org.id,
+        organization: org.name,
+        resetToken: token,
+        resetTokenExpiry: expiry,
+      }).returning();
+      adminUser = toSafeUser(created);
+      const resetUrl = buildResetUrl(token);
+      emailSent = await sendPasswordResetEmail(normalizedAdminEmail, resetUrl, org.name);
+      req.log.info(
+        { orgId: org.id, adminEmail: normalizedAdminEmail, emailSent },
+        "[create-org] admin user created"
+      );
+    }
+  }
+
+  res.status(201).json({ org, adminUser, emailSent });
 });
 
 router.patch("/super-admin/orgs/:id", requirePermission("canManageOrganizations"), async (req, res): Promise<void> => {
@@ -341,7 +382,7 @@ router.patch("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req, 
 
 // ─── User Actions ─────────────────────────────────────────────────────────────
 
-// POST /super-admin/users/:id/reset-password
+// POST /super-admin/users/:id/reset-password — send a 24-hour reset email
 router.post("/super-admin/users/:id/reset-password", requirePermission("canResetPasswords"), async (req, res): Promise<void> => {
   const userId = Number(req.params.id);
   if (isNaN(userId)) { res.status(400).json({ error: "Invalid user id" }); return; }
@@ -349,13 +390,19 @@ router.post("/super-admin/users/:id/reset-password", requirePermission("canReset
   if (!user) { res.status(404).json({ error: "User not found" }); return; }
 
   const token = crypto.randomBytes(32).toString("hex");
-  const expiry = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
+  const expiry = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24 hours
 
   await db.update(usersTable).set({ resetToken: token, resetTokenExpiry: expiry })
     .where(eq(usersTable.id, userId));
 
-  const resetUrl = `${process.env["FRONTEND_URL"] ?? "https://sentconnect.org"}/reset-password?token=${token}`;
-  res.json({ message: "Password reset link generated", resetUrl, expiresAt: expiry });
+  const resetUrl = buildResetUrl(token);
+  const emailSent = await sendPasswordResetEmail(user.email, resetUrl, user.organization ?? undefined);
+
+  if (!emailSent) {
+    req.log.warn({ userId, to: user.email }, "[reset-password] email send failed or not configured");
+  }
+
+  res.json({ message: "Password reset email sent", emailSent, expiresAt: expiry });
 });
 
 // POST /super-admin/users/:id/lock
