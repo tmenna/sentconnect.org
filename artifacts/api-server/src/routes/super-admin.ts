@@ -280,8 +280,22 @@ router.patch("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req, 
     res.status(403).json({ error: "Cannot modify your own account" }); return;
   }
 
-  const { role, permissions, status, organizationId } = req.body ?? {};
+  const { role, permissions, status, organizationId, name, newPassword } = req.body ?? {};
   const updates: Partial<typeof usersTable.$inferInsert> = {};
+
+  if (name !== undefined) {
+    if (typeof name !== "string" || !name.trim()) {
+      res.status(400).json({ error: "name must be a non-empty string" }); return;
+    }
+    updates.name = name.trim();
+  }
+
+  if (newPassword !== undefined) {
+    if (typeof newPassword !== "string" || newPassword.length < 8) {
+      res.status(400).json({ error: "Password must be at least 8 characters" }); return;
+    }
+    updates.passwordHash = hashPassword(newPassword);
+  }
 
   if (role !== undefined) {
     if (!["platform_admin", "platform_manager", "super_admin", "admin", "field_user"].includes(role)) {

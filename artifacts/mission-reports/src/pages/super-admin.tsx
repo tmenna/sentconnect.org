@@ -2446,12 +2446,120 @@ function LogosTab({ orgs }: { orgs: OrgWithStats[] }) {
   );
 }
 
-// ─── Edit Org Modal ───────────────────────────────────────────────────────────
+// ─── User Edit Row (inside Edit Org Modal) ────────────────────────────────────
 
-function EditOrgModal({ org, onClose, onSaved }: {
+function UserEditRow({
+  user,
+  onUpdated,
+}: {
+  user: PlatformUser;
+  onUpdated?: (u: PlatformUser) => void;
+}) {
+  const { toast } = useToast();
+  const [name, setName] = useState(user.name);
+  const [showPw, setShowPw] = useState(false);
+  const [password, setPassword] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const hasNameChange = name.trim().length > 0 && name.trim() !== user.name;
+  const hasPasswordChange = showPw && password.length >= 8;
+  const hasChanges = hasNameChange || hasPasswordChange;
+
+  async function save() {
+    const body: Record<string, string> = {};
+    if (hasNameChange) body.name = name.trim();
+    if (hasPasswordChange) body.newPassword = password;
+    if (Object.keys(body).length === 0) return;
+
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/super-admin/users/${user.id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error ?? "Update failed");
+      }
+      const updated = await res.json();
+      toast({ title: `${updated.name} updated` });
+      onUpdated?.(updated);
+      if (hasPasswordChange) { setShowPw(false); setPassword(""); }
+    } catch (err: any) {
+      toast({ title: err.message ?? "Update failed", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const badge = roleBadge(user.role);
+
+  return (
+    <div className="bg-gray-50 rounded-xl p-3 border border-border/40">
+      <div className="flex items-center gap-2">
+        <Avatar className="h-7 w-7 flex-shrink-0">
+          <AvatarImage src={user.avatarUrl ?? undefined} />
+          <AvatarFallback className="text-[10px] font-bold bg-gray-200 text-gray-600">
+            {initials(user.name)}
+          </AvatarFallback>
+        </Avatar>
+        <input
+          value={name}
+          onChange={e => setName(e.target.value)}
+          className="flex-1 min-w-0 px-2.5 py-1.5 text-[13px] font-medium bg-white border border-border/60 rounded-lg outline-none focus:ring-2 focus:ring-primary/20"
+          placeholder="Full name"
+        />
+        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0 ${badge.bg}`}>
+          {badge.label}
+        </span>
+        <button
+          type="button"
+          onClick={() => { setShowPw(p => !p); setPassword(""); }}
+          title={showPw ? "Cancel password change" : "Set new password"}
+          className={`p-1.5 rounded-lg border transition-colors flex-shrink-0 ${showPw ? "bg-amber-50 border-amber-300 text-amber-700" : "border-border/60 hover:bg-muted/60 text-muted-foreground"}`}
+        >
+          <KeyRound className="h-3.5 w-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={save}
+          disabled={saving || !hasChanges}
+          title="Save changes"
+          className="p-1.5 rounded-lg bg-[#8705FA] text-white hover:bg-[#6B04C8] disabled:opacity-40 transition-colors flex-shrink-0"
+        >
+          {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+        </button>
+      </div>
+      <p className="text-[11px] text-muted-foreground mt-1 ml-9 truncate">{user.email}</p>
+      {showPw && (
+        <div className="mt-2 ml-9">
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="New password (min. 8 characters)"
+            autoComplete="new-password"
+            className="w-full px-2.5 py-1.5 text-[12px] border border-amber-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-amber-200"
+          />
+          {password.length > 0 && password.length < 8 && (
+            <p className="text-[10px] text-red-500 mt-0.5">Must be at least 8 characters</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Edit Org Modal ────────────────────────────────────────────────────────────
+
+function EditOrgModal({ org, orgUsers, onClose, onSaved, onUserUpdated }: {
   org: OrgWithStats;
+  orgUsers: PlatformUser[];
   onClose: () => void;
   onSaved: (updated: OrgWithStats) => void;
+  onUserUpdated?: (updated: PlatformUser) => void;
 }) {
   const { toast } = useToast();
   const [name, setName] = useState(org.name);
@@ -2503,65 +2611,91 @@ function EditOrgModal({ org, onClose, onSaved }: {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
-        <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between">
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[90vh]">
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-border/60 flex items-center justify-between flex-shrink-0">
           <div>
             <h2 className="text-[15px] font-bold text-foreground">Edit Organization</h2>
-            <p className="text-[12px] text-muted-foreground mt-0.5">Update the org name and subdomain</p>
+            <p className="text-[12px] text-muted-foreground mt-0.5">{org.name}</p>
           </div>
           <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted/60">
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
         </div>
-        <form onSubmit={save} className="p-6 space-y-4">
-          <div>
-            <label className="block text-[12px] font-semibold text-foreground mb-1">Organization Name</label>
-            <input
-              required
-              value={name}
-              onChange={e => setName(e.target.value)}
-              className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
-              placeholder="Calvary Church"
-            />
-          </div>
-          <div>
-            <label className="block text-[12px] font-semibold text-foreground mb-1">Subdomain</label>
-            <div className="flex items-center border border-border/60 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary/20">
+
+        <div className="flex-1 overflow-y-auto">
+          {/* Org Details */}
+          <form onSubmit={save} className="p-6 space-y-4">
+            <div>
+              <label className="block text-[12px] font-semibold text-foreground mb-1">Organization Name</label>
               <input
                 required
-                value={subdomain}
-                onChange={e => handleSubdomainChange(e.target.value)}
-                className="flex-1 px-3 py-2.5 text-[13px] bg-white outline-none font-mono"
-                placeholder="calvary"
-                minLength={2}
-                maxLength={30}
+                value={name}
+                onChange={e => setName(e.target.value)}
+                className="w-full px-3 py-2.5 text-[13px] border border-border/60 rounded-lg bg-white outline-none focus:ring-2 focus:ring-primary/20"
+                placeholder="Calvary Church"
               />
-              <span className="px-3 py-2.5 bg-gray-50 text-[12px] text-muted-foreground border-l border-border/60 font-mono flex-shrink-0">.sentconnect.org</span>
             </div>
-            {subdomainError && <p className="text-[11px] text-red-600 mt-1">{subdomainError}</p>}
-            <p className="text-[11px] text-amber-600 mt-1 flex items-start gap-1">
-              <AlertTriangle className="h-3 w-3 flex-shrink-0 mt-0.5" />
-              Changing the subdomain changes this org's login URL. Notify all users before doing this.
-            </p>
-          </div>
-          <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
-            >
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              Save Changes
-            </button>
-          </div>
-        </form>
+            <div>
+              <label className="block text-[12px] font-semibold text-foreground mb-1">Subdomain</label>
+              <div className="flex items-center border border-border/60 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary/20">
+                <input
+                  required
+                  value={subdomain}
+                  onChange={e => handleSubdomainChange(e.target.value)}
+                  className="flex-1 px-3 py-2.5 text-[13px] bg-white outline-none font-mono"
+                  placeholder="calvary"
+                  minLength={2}
+                  maxLength={30}
+                />
+                <span className="px-3 py-2.5 bg-gray-50 text-[12px] text-muted-foreground border-l border-border/60 font-mono flex-shrink-0">.sentconnect.org</span>
+              </div>
+              {subdomainError && <p className="text-[11px] text-red-600 mt-1">{subdomainError}</p>}
+              <p className="text-[11px] text-amber-600 mt-1 flex items-start gap-1">
+                <AlertTriangle className="h-3 w-3 flex-shrink-0 mt-0.5" />
+                Changing the subdomain changes this org's login URL. Notify all users before doing this.
+              </p>
+            </div>
+            <div className="flex gap-3 pt-1">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-4 py-2.5 text-[13px] font-semibold border border-border/60 rounded-lg hover:bg-muted/40 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[13px] font-semibold bg-[#8705FA] text-white rounded-lg hover:bg-[#6B04C8] transition-colors disabled:opacity-50"
+              >
+                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                Save Organization
+              </button>
+            </div>
+          </form>
+
+          {/* Team Members */}
+          {orgUsers.length > 0 && (
+            <div className="px-6 pb-6">
+              <div className="border-t border-border/60 pt-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                  <p className="text-[13px] font-bold text-foreground">Team Members</p>
+                  <span className="text-[11px] text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded-full">{orgUsers.length}</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground mb-3">
+                  Edit a member's name or set a new password. Click <KeyRound className="h-2.5 w-2.5 inline-block" /> to enter a new password, then save.
+                </p>
+                <div className="space-y-2">
+                  {orgUsers.map(u => (
+                    <UserEditRow key={u.id} user={u} onUpdated={onUserUpdated} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -3326,10 +3460,14 @@ export default function SuperAdminPanel() {
       {editingOrg && (
         <EditOrgModal
           org={editingOrg}
+          orgUsers={(allUsers ?? []).filter(u => u.organizationId === editingOrg.id)}
           onClose={() => setEditingOrg(null)}
           onSaved={updated => {
             setOrgs(prev => prev ? prev.map(o => o.id === updated.id ? updated : o) : prev);
             setEditingOrg(null);
+          }}
+          onUserUpdated={updated => {
+            setAllUsers(prev => prev ? prev.map(u => u.id === updated.id ? { ...u, ...updated } : u) : prev);
           }}
         />
       )}
