@@ -1,12 +1,6 @@
 import { Resend } from "resend";
 import { logger } from "./logger";
 
-const resend = process.env["RESEND_API_KEY"]
-  ? new Resend(process.env["RESEND_API_KEY"])
-  : null;
-
-export const emailConfigured = !!process.env["RESEND_API_KEY"];
-
 const DISPLAY_NAME = "SentConnect Notification";
 
 // Support both FROM_EMAIL (Render convention) and EMAIL_FROM, preferring FROM_EMAIL.
@@ -23,6 +17,40 @@ function buildFromAddress(raw: string | undefined): string {
 
 const FROM_ADDRESS = buildFromAddress(RAW_FROM);
 
+// ─── Replit Connectors credential proxy ──────────────────────────────────────
+// When running in Replit dev the API key is served by the connectors proxy
+// (the Resend integration), not a plain env var. In production (Render) the
+// key is a real env var — we fall back to that so nothing breaks on deploy.
+
+async function getResendApiKey(): Promise<string | null> {
+  // 1. Try Replit Connectors proxy first (dev environment)
+  const hostname = process.env["REPLIT_CONNECTORS_HOSTNAME"];
+  const xReplitToken = process.env["REPL_IDENTITY"]
+    ? "repl " + process.env["REPL_IDENTITY"]
+    : process.env["WEB_REPL_RENEWAL"]
+    ? "depl " + process.env["WEB_REPL_RENEWAL"]
+    : null;
+
+  if (hostname && xReplitToken) {
+    try {
+      const resp = await fetch(
+        `https://${hostname}/api/v2/connection?include_secrets=true&connector_names=resend`,
+        { headers: { Accept: "application/json", "X-Replit-Token": xReplitToken } }
+      );
+      const data = await resp.json() as { items?: Array<{ settings?: { api_key?: string } }> };
+      const apiKey = data.items?.[0]?.settings?.api_key;
+      if (apiKey) return apiKey;
+    } catch {
+      // fall through to env var
+    }
+  }
+
+  // 2. Fall back to plain env var (production / Render)
+  return process.env["RESEND_API_KEY"] ?? null;
+}
+
+export const emailConfigured = true; // always attempt; getResendApiKey() determines at send time
+
 // Warn at startup so misconfigured email is obvious in logs.
 if (!RAW_FROM) {
   logger.warn(
@@ -32,7 +60,7 @@ if (!RAW_FROM) {
     "Set FROM_EMAIL in your environment to a verified-domain address (e.g. noreply@sentconnect.org)."
   );
 } else {
-  logger.info({ from: FROM_ADDRESS, resolvedFrom: RAW_FROM.includes("FROM_EMAIL") ? "FROM_EMAIL" : "env" }, "[email] mailer ready");
+  logger.info({ from: FROM_ADDRESS, resolvedFrom: "env" }, "[email] mailer ready");
 }
 
 // The root domain used for org-specific deep-link URLs (e.g. sentconnect.org).
@@ -127,13 +155,15 @@ function avatar(name: string, avatarUrl?: string | null): string {
 interface SendResult { sent: boolean; error?: string }
 
 async function sendEmail(to: string, subject: string, html: string, text: string): Promise<SendResult> {
-  if (!resend) {
-    logger.info({ to, subject }, "[email] RESEND_API_KEY not configured — email logged only");
+  const apiKey = await getResendApiKey();
+  if (!apiKey) {
+    logger.info({ to, subject }, "[email] no API key available — email logged only");
     logger.info({ text }, "[email] body");
-    return { sent: false, error: "RESEND_API_KEY not configured" };
+    return { sent: false, error: "Resend API key not configured" };
   }
+  const client = new Resend(apiKey);
   try {
-    const { error } = await resend.emails.send({ from: FROM_ADDRESS, to, subject, html, text });
+    const { error } = await client.emails.send({ from: FROM_ADDRESS, to, subject, html, text });
     if (error) {
       logger.error({ to, from: FROM_ADDRESS, subject, resendError: error }, "[email] send failed — Resend rejected the request");
       return { sent: false, error: error.message };
