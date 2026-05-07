@@ -14,6 +14,10 @@ export async function runMigrations(): Promise<void> {
       sql: `ALTER TABLE organizations ADD COLUMN IF NOT EXISTS email TEXT`,
     },
     {
+      name: "organizations.logo_url column",
+      sql: `ALTER TABLE organizations ADD COLUMN IF NOT EXISTS logo_url TEXT`,
+    },
+    {
       name: "notification_logs table",
       sql: `CREATE TABLE IF NOT EXISTS notification_logs (
         id          SERIAL PRIMARY KEY,
