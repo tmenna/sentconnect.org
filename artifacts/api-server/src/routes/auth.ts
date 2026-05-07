@@ -165,11 +165,11 @@ router.post("/auth/forgot-password", async (req, res): Promise<void> => {
   const isDev = process.env["NODE_ENV"] !== "production";
 
   if (emailConfigured) {
-    const sent = await sendPasswordResetEmail(user.email, resetUrl);
+    const { sent, error: emailError } = await sendPasswordResetEmail(user.email, resetUrl);
     if (!sent) {
       req.log.error(
-        { to: user.email, from: process.env["EMAIL_FROM"] ?? "onboarding@resend.dev" },
-        "[forgot-password] email send failed — check EMAIL_FROM domain verification in Resend"
+        { to: user.email, from: process.env["FROM_EMAIL"] ?? process.env["EMAIL_FROM"] ?? "onboarding@resend.dev", emailError },
+        "[forgot-password] email send failed — check FROM_EMAIL/RESEND_API_KEY"
       );
     }
     // In dev, always expose the link so testers can use it even if Resend isn't fully configured.

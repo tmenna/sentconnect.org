@@ -148,12 +148,12 @@ async function sendEmail(to: string, subject: string, html: string, text: string
 
 // ─── 1. Password reset ───────────────────────────────────────────────────────
 
-export async function sendPasswordResetEmail(to: string, resetUrl: string, orgName?: string): Promise<boolean> {
+export async function sendPasswordResetEmail(to: string, resetUrl: string, orgName?: string): Promise<SendResult> {
   const html = baseTemplate(`
     <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#0F172A;">Reset your password</h2>
     <p style="margin:0 0 20px;font-size:15px;color:#475569;line-height:1.6;">
       We received a request to reset your <strong>SentConnect</strong> password. Click the button below to set a new one.
-      This link expires in <strong>1 hour</strong>.
+      This link expires in <strong>24 hours</strong>.
     </p>
     ${ctaButton(resetUrl, "Reset Password")}
     <p style="margin:28px 0 0;font-size:13px;color:#94A3B8;line-height:1.6;">
@@ -164,7 +164,7 @@ export async function sendPasswordResetEmail(to: string, resetUrl: string, orgNa
   const text = [
     "Reset your SentConnect password",
     "",
-    "We received a request to reset your password. Click the link below (expires in 1 hour):",
+    "We received a request to reset your password. Click the link below (expires in 24 hours):",
     "",
     resetUrl,
     "",
@@ -173,8 +173,7 @@ export async function sendPasswordResetEmail(to: string, resetUrl: string, orgNa
     "— The SentConnect Team",
   ].join("\n");
 
-  const { sent } = await sendEmail(to, "Reset your SentConnect password", html, text);
-  return sent;
+  return sendEmail(to, "Reset your SentConnect password", html, text);
 }
 
 // ─── 2. New post notification ────────────────────────────────────────────────

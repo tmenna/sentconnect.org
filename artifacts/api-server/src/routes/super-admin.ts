@@ -150,7 +150,8 @@ router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): 
       }).returning();
       adminUser = toSafeUser(created);
       const resetUrl = buildResetUrl(token);
-      emailSent = await sendPasswordResetEmail(normalizedAdminEmail, resetUrl, org.name);
+      const result = await sendPasswordResetEmail(normalizedAdminEmail, resetUrl, org.name);
+      emailSent = result.sent;
       req.log.info(
         { orgId: org.id, adminEmail: normalizedAdminEmail, emailSent },
         "[create-org] admin user created"
@@ -396,13 +397,13 @@ router.post("/super-admin/users/:id/reset-password", requirePermission("canReset
     .where(eq(usersTable.id, userId));
 
   const resetUrl = buildResetUrl(token);
-  const emailSent = await sendPasswordResetEmail(user.email, resetUrl, user.organization ?? undefined);
+  const { sent: emailSent, error: emailError } = await sendPasswordResetEmail(user.email, resetUrl, user.organization ?? undefined);
 
   if (!emailSent) {
-    req.log.warn({ userId, to: user.email }, "[reset-password] email send failed or not configured");
+    req.log.warn({ userId, to: user.email, emailError }, "[reset-password] email send failed or not configured");
   }
 
-  res.json({ message: "Password reset email sent", emailSent, expiresAt: expiry });
+  res.json({ message: "Password reset email sent", emailSent, emailError: emailError ?? null, expiresAt: expiry });
 });
 
 // POST /super-admin/users/:id/lock

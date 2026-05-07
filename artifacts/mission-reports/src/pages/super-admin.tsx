@@ -2572,9 +2572,10 @@ function UserEditRow({
       if (data.emailSent) {
         toast({ title: `Password reset email sent to ${user.email}`, description: "Link expires in 24 hours." });
       } else {
+        const reason = data.emailError ?? "Check RESEND_API_KEY and FROM_EMAIL.";
         toast({
           title: "Reset link generated — email not delivered",
-          description: "Email delivery is not configured. Check RESEND_API_KEY.",
+          description: reason,
           variant: "destructive",
         });
       }
@@ -2981,7 +2982,8 @@ export default function SuperAdminPanel() {
         if (data.emailSent) {
           toast({ title: `Password reset email sent to ${targetUser.email}`, description: "Link expires in 24 hours." });
         } else {
-          toast({ title: "Reset link generated — email not delivered", description: "Check RESEND_API_KEY and EMAIL_FROM configuration.", variant: "destructive" });
+          const reason = data.emailError ?? "Check RESEND_API_KEY and FROM_EMAIL.";
+          toast({ title: "Reset link generated — email not delivered", description: reason, variant: "destructive" });
         }
       } else {
         const updatedUser: PlatformUser = data.user;
