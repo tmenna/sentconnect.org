@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, Redirect } from "wouter";
 import { useAuth } from "@/components/auth-provider";
 import { useToast } from "@/hooks/use-toast";
@@ -7,6 +7,7 @@ import {
   CheckCircle2, Users,
 } from "lucide-react";
 import { useLogo } from "@/providers/logo-provider";
+import { extractHostnameOrgSlug, getOrgRoutingContext } from "@/lib/org";
 
 const NAVY = "#0F172A";
 const BLUE = "#8705FA";
@@ -32,6 +33,29 @@ export default function Signup() {
   const [error, setError]                 = useState("");
   const [subdomainError, setSubdomainError] = useState("");
   const [emailError, setEmailError]       = useState("");
+
+  // Signup is a platform-level action. If the visitor arrives via an org
+  // subdomain (e.g. rc.sentconnect.org/signup) or a dev path-based org prefix
+  // (e.g. /rc/signup), redirect them to www.sentconnect.org/signup so they
+  // don't accidentally create an org while scoped to another org's portal.
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    const orgSlug = extractHostnameOrgSlug(hostname);
+
+    if (orgSlug) {
+      // Production hostname routing: strip the org subdomain to get root domain.
+      // e.g. "rc.sentconnect.org" → orgSlug="rc" → rootDomain="sentconnect.org"
+      const rootDomain = hostname.slice(orgSlug.length + 1);
+      window.location.replace(`${window.location.protocol}//www.${rootDomain}/signup`);
+      return;
+    }
+
+    // Development path-based routing: /rc/signup → redirect to /signup
+    const { orgSlug: pathSlug, usesPathPrefix } = getOrgRoutingContext(window.location.pathname);
+    if (usesPathPrefix && pathSlug) {
+      window.location.replace("/signup");
+    }
+  }, []);
 
   if (isLoading) return null;
   if (isAuthenticated) return <Redirect href="/" />;
