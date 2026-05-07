@@ -15,6 +15,7 @@ import {
   BarChart3, Star, UserCog, BookOpen, MapPin,
   Upload, ImageOff, Palette,
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { useLogo } from "@/providers/logo-provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
