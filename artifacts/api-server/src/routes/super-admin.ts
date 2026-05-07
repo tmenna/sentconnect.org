@@ -106,12 +106,16 @@ router.post("/super-admin/orgs", requireSuperOrPlatformAdmin, async (req, res): 
       .returning();
     org = inserted;
   } catch (dbErr: unknown) {
-    const msg = (dbErr as { message?: string })?.message ?? "";
-    req.log.error({ err: dbErr }, `POST /super-admin/orgs DB error: ${msg}`);
-    if (msg.includes("unique") || msg.includes("duplicate")) {
+    const e = dbErr as any;
+    // Drizzle wraps the real PG error in .cause — prefer that for the user-facing message
+    const pgMsg: string = e?.cause?.message ?? e?.message ?? "";
+    const pgCode: string = e?.cause?.code ?? "";
+    req.log.error({ err: dbErr, pgCode }, `POST /super-admin/orgs DB error: ${pgMsg}`);
+    if (pgCode === "23505" || pgMsg.includes("unique") || pgMsg.includes("duplicate")) {
       res.status(409).json({ error: "Subdomain already in use" }); return;
     }
-    res.status(500).json({ error: `Failed to create organization: ${msg || "unknown error"}` }); return;
+    const userMsg = pgMsg && !pgMsg.startsWith("Failed query:") ? pgMsg : "Database error — please try again";
+    res.status(500).json({ error: `Failed to create organization: ${userMsg}` }); return;
   }
   res.status(201).json(org);
 });
