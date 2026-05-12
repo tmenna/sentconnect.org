@@ -7,7 +7,6 @@ import { useAuth } from "@/components/auth-provider";
 import { BookOpen, MessageCircle, Loader2 } from "lucide-react";
 
 const PAGE_SIZE = 20;
-const EMERALD = "#059669";
 type TimelineTab = "all" | "moments";
 
 export default function Feed() {
