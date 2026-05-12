@@ -183,7 +183,11 @@ router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> =
   const replitDomain = process.env["REPLIT_DOMAINS"]?.split(",")[0]?.trim();
   const baseUrl = process.env["APP_BASE_URL"]
     ?? (replitDomain ? `https://${replitDomain}` : `https://${canonicalDomain}`);
-  const loginUrl = orgSubdomain ? `${baseUrl}/${orgSubdomain}/login` : `${baseUrl}/login`;
+  // Emails always use canonical subdomain routing (e.g. https://rc.sentconnect.org/login)
+  // so the link works correctly in production regardless of where the API is running.
+  const loginUrl = orgSubdomain
+    ? `https://${orgSubdomain}.${canonicalDomain}/login`
+    : `${baseUrl}/login`;
 
   if (emailConfigured) {
     const { sent, error: emailError } = await sendTemporaryPasswordEmail(
