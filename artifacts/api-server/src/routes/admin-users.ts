@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { db, usersTable, reportsTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
-import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
+import { sendTemporaryPasswordEmail, emailConfigured } from "../lib/mailer";
 
 const router: IRouter = Router();
 
@@ -135,7 +135,7 @@ router.delete("/admin/users/:id", async (req, res): Promise<void> => {
   res.sendStatus(204);
 });
 
-// POST /admin/users/:id/reset-password — send a password reset email directly to the user
+// POST /admin/users/:id/reset-password — generate a temporary password and email it to the user
 router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> => {
   const caller = await requireOrgAdmin(req, res);
   if (!caller) return;
@@ -150,41 +150,55 @@ router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> =
   const [target] = await db.select().from(usersTable).where(and(...conditions));
   if (!target) { res.status(404).json({ error: "User not found" }); return; }
 
-  const token = crypto.randomBytes(32).toString("hex");
-  const expiry = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24 hours
+  // Generate a readable temporary password: e.g. "Kp7#rmxQ4!sv"
+  const upper  = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const lower  = "abcdefghjkmnpqrstuvwxyz";
+  const digits = "23456789";
+  const special = "!@#$";
+  const rand = (set: string) => set[crypto.randomInt(set.length)];
+  const tempPassword = [
+    rand(upper), rand(lower), rand(lower), rand(lower),
+    rand(digits), rand(special),
+    rand(lower), rand(lower), rand(digits),
+    rand(lower), rand(upper), rand(digits),
+  ].sort(() => crypto.randomInt(3) - 1).join("");
 
+  // Save the hashed temp password and clear any pending reset token
   await db.update(usersTable)
-    .set({ resetToken: token, resetTokenExpiry: expiry })
+    .set({ passwordHash: hashPassword(tempPassword), resetToken: null, resetTokenExpiry: null })
     .where(eq(usersTable.id, userId));
 
-  // Build the full reset URL the same way auth.ts does
+  // Resolve org and build login URL
+  let orgName: string | undefined;
+  let orgSubdomain: string | null = null;
+  if (target.organizationId) {
+    const [org] = await db.select({ name: organizationsTable.name, subdomain: organizationsTable.subdomain })
+      .from(organizationsTable)
+      .where(eq(organizationsTable.id, target.organizationId));
+    orgName = org?.name;
+    orgSubdomain = org?.subdomain ?? null;
+  }
+
   const canonicalDomain = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org").split(",")[0].trim();
   const replitDomain = process.env["REPLIT_DOMAINS"]?.split(",")[0]?.trim();
   const baseUrl = process.env["APP_BASE_URL"]
     ?? (replitDomain ? `https://${replitDomain}` : `https://${canonicalDomain}`);
-  const resetUrl = `${baseUrl}/reset-password?token=${token}`;
-
-  // Resolve org name for the email template
-  let orgName: string | undefined;
-  if (target.organizationId) {
-    const [org] = await db.select({ name: organizationsTable.name })
-      .from(organizationsTable)
-      .where(eq(organizationsTable.id, target.organizationId));
-    orgName = org?.name;
-  }
+  const loginUrl = orgSubdomain ? `${baseUrl}/${orgSubdomain}/login` : `${baseUrl}/login`;
 
   if (emailConfigured) {
-    const { sent, error: emailError } = await sendPasswordResetEmail(target.email, resetUrl, orgName);
+    const { sent, error: emailError } = await sendTemporaryPasswordEmail(
+      target.email, tempPassword, target.name, loginUrl, orgName,
+    );
     if (!sent) {
       req.log.warn({ userId, email: target.email, emailError }, "Admin reset-password: email send failed");
     } else {
-      req.log.info({ userId, email: target.email }, "Admin reset-password: email sent");
+      req.log.info({ userId, email: target.email }, "Admin reset-password: temporary password emailed");
     }
   } else {
-    req.log.warn({ userId, email: target.email, resetUrl }, "Admin reset-password: email not configured — reset URL logged only");
+    req.log.warn({ userId, email: target.email, tempPassword }, "Admin reset-password: email not configured — temp password logged only");
   }
 
-  res.json({ message: "Password reset email sent", expiresIn: "24 hours" });
+  res.json({ message: "Temporary password sent to user's email" });
 });
 
 // GET /admin/branding — return the current org's logo URL

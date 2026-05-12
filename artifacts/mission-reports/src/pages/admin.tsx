@@ -723,7 +723,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
             </button>
             {/* Send reset email */}
             <button
-              title={resetSent ? "Email sent!" : "Send password reset email"}
+              title={resetSent ? "Temporary password sent!" : "Generate & email temporary password"}
               onClick={sendResetEmail}
               disabled={busy || resetSent}
               className="p-2 rounded-lg transition-colors"

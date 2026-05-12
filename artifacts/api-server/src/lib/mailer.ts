@@ -176,7 +176,53 @@ async function sendEmail(to: string, subject: string, html: string, text: string
   }
 }
 
-// ─── 1. Password reset ───────────────────────────────────────────────────────
+// ─── 1. Temporary password (admin-generated) ─────────────────────────────────
+
+export async function sendTemporaryPasswordEmail(
+  to: string,
+  tempPassword: string,
+  userName: string,
+  loginUrl: string,
+  orgName?: string,
+): Promise<SendResult> {
+  const html = baseTemplate(`
+    <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#0F172A;">Your temporary password</h2>
+    <p style="margin:0 0 20px;font-size:15px;color:#475569;line-height:1.6;">
+      Hi <strong>${userName}</strong>, your administrator has reset your <strong>SentConnect</strong> password.
+      Use the temporary password below to sign in, then update it from your profile.
+    </p>
+    <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;width:100%;">
+      <tr><td style="background:#F8FAFD;border:1.5px solid #E2E8F0;border-radius:10px;padding:16px 24px;text-align:center;">
+        <p style="margin:0 0 4px;font-size:11px;font-weight:600;color:#94A3B8;letter-spacing:0.08em;text-transform:uppercase;">Temporary Password</p>
+        <p style="margin:0;font-size:22px;font-weight:700;color:#0F172A;letter-spacing:0.12em;font-family:monospace;">${tempPassword}</p>
+      </td></tr>
+    </table>
+    ${ctaButton(loginUrl, "Sign In Now")}
+    <p style="margin:28px 0 0;font-size:13px;color:#94A3B8;line-height:1.6;">
+      For your security, please change your password immediately after signing in.<br/>
+      If you didn't expect this email, contact your administrator.
+    </p>
+  `, orgName);
+
+  const text = [
+    `Hi ${userName},`,
+    "",
+    "Your administrator has reset your SentConnect password.",
+    "Use the temporary password below to sign in:",
+    "",
+    `  Temporary password: ${tempPassword}`,
+    "",
+    `Sign in here: ${loginUrl}`,
+    "",
+    "Please change your password immediately after signing in.",
+    "",
+    "— The SentConnect Team",
+  ].join("\n");
+
+  return sendEmail(to, "Your temporary SentConnect password", html, text);
+}
+
+// ─── 2. Password reset link ───────────────────────────────────────────────────
 
 export async function sendPasswordResetEmail(to: string, resetUrl: string, orgName?: string): Promise<SendResult> {
   const html = baseTemplate(`
