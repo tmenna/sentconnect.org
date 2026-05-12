@@ -9,8 +9,8 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import {
   Users, FileText, ThumbsUp, MessageCircle,
-  Globe, Plus, X, RefreshCw, Trash2,
-  ChevronDown, Eye, EyeOff, Check, Copy, UserPlus,
+  Globe, Plus, X, Trash2,
+  ChevronDown, Eye, EyeOff, Check, UserPlus, Mail,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
   BarChart3, Star, UserCog, BookOpen, MapPin,
 } from "lucide-react";
@@ -481,42 +481,6 @@ function AddUserModal({ onClose, onAdded }: { onClose: () => void; onAdded: () =
   );
 }
 
-// ─── Reset Link Modal ──────────────────────────────────────────────────────
-
-function ResetLinkModal({ link, onClose }: { link: string; onClose: () => void }) {
-  const [copied, setCopied] = useState(false);
-  const fullLink = `${window.location.origin}${link}`;
-  function copy() {
-    navigator.clipboard.writeText(fullLink);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-border/60 p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="font-bold text-[15px]">Password Reset Link</h2>
-          <button onClick={onClose} className="p-1.5 hover:bg-muted rounded-lg"><X className="h-4 w-4 text-muted-foreground" /></button>
-        </div>
-        <p className="text-[13px] text-muted-foreground">Share this link with the team member. It expires in 24 hours.</p>
-        <div className="bg-muted/60 rounded-xl px-3 py-2 text-[12px] font-mono break-all border border-border/40">{fullLink}</div>
-        <div className="flex gap-3 border-t border-border/40 pt-4 mt-2">
-          <button onClick={onClose} className="flex-1 h-11 px-4 text-sm font-semibold border border-border/60 rounded-lg hover:bg-muted transition-colors">Close</button>
-          <button
-            onClick={copy}
-            className="flex-1 h-11 flex items-center justify-center gap-1.5 px-4 text-sm font-semibold text-white rounded-lg transition-colors"
-            style={{ background: "#059669" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#047857"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#059669"; }}
-          >
-            {copied ? <><Check className="h-4 w-4" /> Copied!</> : <><Copy className="h-4 w-4" /> Copy link</>}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── Delete Confirm Modal ──────────────────────────────────────────────────
 
 function DeleteConfirmModal({ userName, role, onConfirm, onClose, loading, error }: {
@@ -567,7 +531,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [showEditPerms, setShowEditPerms] = useState(false);
-  const [resetLink, setResetLink] = useState<string | null>(null);
+  const [resetSent, setResetSent] = useState(false);
   const [editingBio, setEditingBio] = useState(false);
   const [bioText, setBioText] = useState(u.bio ?? "");
   const isSelf = u.id === currentUserId;
@@ -587,11 +551,12 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
     }
   }
 
-  async function generateResetLink() {
+  async function sendResetEmail() {
     setBusy(true);
     try {
-      const data = await apiFetch(`/admin/users/${u.id}/reset-password`, { method: "POST" });
-      setResetLink(data.resetLink);
+      await apiFetch(`/admin/users/${u.id}/reset-password`, { method: "POST" });
+      setResetSent(true);
+      setTimeout(() => setResetSent(false), 3000);
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -645,9 +610,6 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           loading={busy}
           error={deleteError}
         />
-      )}
-      {resetLink && (
-        <ResetLinkModal link={resetLink} onClose={() => setResetLink(null)} />
       )}
       {showEditPerms && (
         <EditRolePermissionsModal
@@ -759,17 +721,17 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
             >
               {u.status === "active" ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
-            {/* Reset password */}
+            {/* Send reset email */}
             <button
-              title="Generate reset link"
-              onClick={generateResetLink}
-              disabled={busy}
+              title={resetSent ? "Email sent!" : "Send password reset email"}
+              onClick={sendResetEmail}
+              disabled={busy || resetSent}
               className="p-2 rounded-lg transition-colors"
-              style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#111827"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
+              style={{ color: resetSent ? "#059669" : "#6B7280" }}
+              onMouseEnter={e => { if (!resetSent) { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#111827"; } }}
+              onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = resetSent ? "#059669" : "#6B7280"; }}
             >
-              <RefreshCw className="h-4 w-4" />
+              {resetSent ? <Check className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
             </button>
             {/* Delete */}
             {!isSelf && (

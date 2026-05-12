@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { db, usersTable, reportsTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
+import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
 
 const router: IRouter = Router();
 
@@ -134,7 +135,7 @@ router.delete("/admin/users/:id", async (req, res): Promise<void> => {
   res.sendStatus(204);
 });
 
-// POST /admin/users/:id/reset-password — generate reset link for a user
+// POST /admin/users/:id/reset-password — send a password reset email directly to the user
 router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> => {
   const caller = await requireOrgAdmin(req, res);
   if (!caller) return;
@@ -150,20 +151,40 @@ router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> =
   if (!target) { res.status(404).json({ error: "User not found" }); return; }
 
   const token = crypto.randomBytes(32).toString("hex");
-  const expiry = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24 hours for admin-generated links
+  const expiry = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24 hours
 
   await db.update(usersTable)
     .set({ resetToken: token, resetTokenExpiry: expiry })
     .where(eq(usersTable.id, userId));
 
-  const resetLink = `/reset-password?token=${token}`;
-  logger.info({ userId, email: target.email, resetLink }, "Admin-generated password reset link");
+  // Build the full reset URL the same way auth.ts does
+  const canonicalDomain = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org").split(",")[0].trim();
+  const replitDomain = process.env["REPLIT_DOMAINS"]?.split(",")[0]?.trim();
+  const baseUrl = process.env["APP_BASE_URL"]
+    ?? (replitDomain ? `https://${replitDomain}` : `https://${canonicalDomain}`);
+  const resetUrl = `${baseUrl}/reset-password?token=${token}`;
 
-  res.json({
-    message: "Reset link generated",
-    resetLink,
-    expiresIn: "24 hours",
-  });
+  // Resolve org name for the email template
+  let orgName: string | undefined;
+  if (target.organizationId) {
+    const [org] = await db.select({ name: organizationsTable.name })
+      .from(organizationsTable)
+      .where(eq(organizationsTable.id, target.organizationId));
+    orgName = org?.name;
+  }
+
+  if (emailConfigured) {
+    const { sent, error: emailError } = await sendPasswordResetEmail(target.email, resetUrl, orgName);
+    if (!sent) {
+      req.log.warn({ userId, email: target.email, emailError }, "Admin reset-password: email send failed");
+    } else {
+      req.log.info({ userId, email: target.email }, "Admin reset-password: email sent");
+    }
+  } else {
+    req.log.warn({ userId, email: target.email, resetUrl }, "Admin reset-password: email not configured — reset URL logged only");
+  }
+
+  res.json({ message: "Password reset email sent", expiresIn: "24 hours" });
 });
 
 // GET /admin/branding — return the current org's logo URL
