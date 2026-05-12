@@ -9,6 +9,8 @@ import { FileText, BookOpen } from "lucide-react";
 
 type FeedTab = "all" | "moments";
 
+const EMERALD = "#059669";
+
 
 export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
