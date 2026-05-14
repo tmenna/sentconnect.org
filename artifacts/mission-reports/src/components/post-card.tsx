@@ -46,7 +46,7 @@ function isVideoItem(p: PostData["photos"][number]) {
   return /\.(mp4|webm|ogg|mov)$/i.test(p.url);
 }
 
-function MediaItem({ p, controls = false, className = "" }: { p: PostData["photos"][number]; controls?: boolean; className?: string }) {
+function MediaItem({ p, controls = false, className = "", contain = false }: { p: PostData["photos"][number]; controls?: boolean; className?: string; contain?: boolean }) {
   const [loaded, setLoaded] = useState(false);
 
   if (isVideoItem(p)) {
@@ -66,6 +66,25 @@ function MediaItem({ p, controls = false, className = "" }: { p: PostData["photo
             </div>
           </div>
         )}
+      </div>
+    );
+  }
+
+  if (contain) {
+    return (
+      <div className={cn("w-full bg-black/5 flex items-center justify-center", className)}>
+        {!loaded && <div className="w-full h-48 bg-gray-100 animate-pulse absolute" />}
+        <img
+          src={p.url}
+          alt={p.caption || ""}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+          className={cn(
+            "w-full h-auto block max-h-[420px] object-contain transition-opacity duration-300",
+            loaded ? "opacity-100" : "opacity-0"
+          )}
+        />
       </div>
     );
   }
@@ -94,11 +113,14 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
 
   if (count === 1) {
     const p = photos[0];
-    return (
-      <div className={cn("w-full overflow-hidden bg-black/5 max-h-[260px]", isVideoItem(p) ? "aspect-video" : "aspect-[16/10]")}>
-        <MediaItem p={p} controls={isVideoItem(p)} className="w-full h-full" />
-      </div>
-    );
+    if (isVideoItem(p)) {
+      return (
+        <div className="w-full overflow-hidden bg-black aspect-video">
+          <MediaItem p={p} controls className="w-full h-full" />
+        </div>
+      );
+    }
+    return <MediaItem p={p} contain />;
   }
   if (count === 2) {
     return (
