@@ -95,14 +95,14 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
   if (count === 1) {
     const p = photos[0];
     return (
-      <div className={cn("w-full overflow-hidden bg-black/5", isVideoItem(p) ? "aspect-video" : "aspect-[16/10]")}>
+      <div className={cn("w-full overflow-hidden bg-black/5 max-h-[260px]", isVideoItem(p) ? "aspect-video" : "aspect-[16/10]")}>
         <MediaItem p={p} controls={isVideoItem(p)} className="w-full h-full" />
       </div>
     );
   }
   if (count === 2) {
     return (
-      <div className="grid grid-cols-2 gap-[2px] overflow-hidden">
+      <div className="grid grid-cols-2 gap-[2px] overflow-hidden max-h-[200px]">
         {photos.map(p => (
           <div key={p.id} className="aspect-square bg-black/5 relative overflow-hidden">
             <MediaItem p={p} controls={false} />
@@ -112,7 +112,7 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
     );
   }
   return (
-    <div className="grid grid-cols-2 gap-[2px] overflow-hidden">
+    <div className="grid grid-cols-2 gap-[2px] overflow-hidden max-h-[200px]">
       <div className="aspect-square bg-black/5 row-span-2 relative overflow-hidden">
         <MediaItem p={photos[0]} controls={false} />
       </div>
