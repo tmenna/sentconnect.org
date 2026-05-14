@@ -11,6 +11,11 @@ export default function ResetPassword() {
   const search = useSearch();
   const params = new URLSearchParams(search);
   const token = params.get("token") ?? "";
+  // org= is embedded in the reset URL so we can route back to the correct org after reset
+  const org = params.get("org") ?? "";
+
+  const loginHref = org ? `/${org}/login` : "/login";
+  const forgotHref = org ? `/${org}/forgot-password` : "/forgot-password";
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -68,7 +73,7 @@ export default function ResetPassword() {
         {!token ? (
           <div className="text-center">
             <p className="text-[14px] text-gray-500 mb-4">Invalid or missing reset token.</p>
-            <Link href="/forgot-password" className="text-[13px] font-semibold hover:underline" style={{ color: BLUE }}>
+            <Link href={forgotHref} className="text-[13px] font-semibold hover:underline" style={{ color: BLUE }}>
               Request a new link
             </Link>
           </div>
@@ -82,7 +87,7 @@ export default function ResetPassword() {
             </div>
             <h2 className="text-[18px] font-bold text-gray-900 mb-2">Password reset!</h2>
             <p className="text-[14px] text-gray-500 mb-5">You can now sign in with your new password.</p>
-            <Link href="/login">
+            <Link href={loginHref}>
               <button
                 className="w-full h-11 text-white font-bold rounded-xl text-[15px] transition-all"
                 style={{ background: BLUE }}

@@ -153,14 +153,30 @@ router.post("/auth/forgot-password", async (req, res): Promise<void> => {
     .set({ resetToken: token, resetTokenExpiry: expiry })
     .where(eq(usersTable.id, user.id));
 
+  // Look up the user's org subdomain so the reset link lands on their org's domain.
+  let orgSubdomain: string | null = null;
+  if (user.organizationId) {
+    const [org] = await db.select({ subdomain: organizationsTable.subdomain })
+      .from(organizationsTable)
+      .where(eq(organizationsTable.id, user.organizationId));
+    orgSubdomain = org?.subdomain ?? null;
+  }
+
   // Build the reset URL.
   // Priority: APP_BASE_URL → first REPLIT_DOMAINS entry → TENANT_ROOT_DOMAINS → fallback.
   const canonicalDomain = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org").split(",")[0].trim();
   const replitDomain = process.env["REPLIT_DOMAINS"]?.split(",")[0]?.trim();
   const baseUrl = process.env["APP_BASE_URL"]
     ?? (replitDomain ? `https://${replitDomain}` : `https://${canonicalDomain}`);
-  const resetLink = `/reset-password?token=${token}`;
-  const resetUrl = `${baseUrl}${resetLink}`;
+
+  // For the email link, use the org's canonical subdomain URL (production routing).
+  // Embed org= so the reset page can redirect back to the right org login after success.
+  const emailBase = orgSubdomain
+    ? `https://${orgSubdomain}.${canonicalDomain}`
+    : baseUrl;
+  const orgParam = orgSubdomain ? `&org=${orgSubdomain}` : "";
+  const resetLink = `/reset-password?token=${token}${orgParam}`;
+  const resetUrl = `${emailBase}${resetLink}`;
 
   const isDev = process.env["NODE_ENV"] !== "production";
 

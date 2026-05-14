@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import { useOrg } from "@/providers/org-provider";
 import logoWhite from "@/assets/logo-white.png";
 
 const BG    = "linear-gradient(150deg, #3D0066 0%, #8705FA 55%, #A020F0 100%)";
@@ -8,6 +9,7 @@ const BLUE  = "#8705FA";
 const BLUE_DK = "#6B04C8";
 
 export default function ForgotPassword() {
+  const { orgSlug, prefix } = useOrg();
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -20,9 +22,11 @@ export default function ForgotPassword() {
     setError("");
     setSubmitting(true);
     try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (orgSlug) headers["X-Org-Subdomain"] = orgSlug;
       const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ email }),
       });
       const data = await res.json();
@@ -67,7 +71,7 @@ export default function ForgotPassword() {
                 <Link href={devLink} className="text-[12px] text-amber-800 break-all hover:underline">{window.location.origin}{devLink}</Link>
               </div>
             )}
-            <Link href="/login" className="text-[13px] font-semibold hover:underline" style={{ color: BLUE }}>
+            <Link href={prefix("/login")} className="text-[13px] font-semibold hover:underline" style={{ color: BLUE }}>
               ← Back to sign in
             </Link>
           </div>
@@ -112,7 +116,7 @@ export default function ForgotPassword() {
             </form>
 
             <div className="mt-5 text-center">
-              <Link href="/login" className="text-[13px] font-medium hover:underline" style={{ color: "#6B7280" }}>
+              <Link href={prefix("/login")} className="text-[13px] font-medium hover:underline" style={{ color: "#6B7280" }}>
                 ← Back to sign in
               </Link>
             </div>
