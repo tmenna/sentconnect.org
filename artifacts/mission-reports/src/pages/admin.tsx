@@ -10,7 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   Users, FileText, ThumbsUp, MessageCircle,
   Globe, Plus, X, Trash2,
-  ChevronDown, Eye, EyeOff, Check, UserPlus, Mail,
+  ChevronDown, Eye, EyeOff, Check, UserPlus, Mail, KeyRound, Copy, RefreshCw,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
   BarChart3, Star, UserCog, BookOpen, MapPin,
 } from "lucide-react";
@@ -481,6 +481,177 @@ function AddUserModal({ onClose, onAdded }: { onClose: () => void; onAdded: () =
   );
 }
 
+// ─── Manage Password Modal ─────────────────────────────────────────────────
+
+function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void }) {
+  const [newPw, setNewPw] = useState("");
+  const [showPw, setShowPw] = useState(false);
+  const [setPwBusy, setSetPwBusy] = useState(false);
+  const [setPwDone, setSetPwDone] = useState(false);
+  const [setPwError, setSetPwError] = useState<string | null>(null);
+
+  const [genBusy, setGenBusy] = useState(false);
+  const [genResult, setGenResult] = useState<{ tempPassword: string; via: "email" | "shown" } | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  async function setPassword() {
+    if (newPw.length < 8) { setSetPwError("Password must be at least 8 characters."); return; }
+    setSetPwBusy(true); setSetPwError(null);
+    try {
+      await apiFetch(`/admin/users/${user.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ newPassword: newPw }),
+      });
+      setSetPwDone(true);
+      setNewPw("");
+      setTimeout(() => setSetPwDone(false), 3000);
+    } catch (err: any) {
+      setSetPwError(err.message ?? "Failed to set password.");
+    } finally {
+      setSetPwBusy(false);
+    }
+  }
+
+  async function generatePassword(action: "email" | "generate") {
+    setGenBusy(true); setGenResult(null);
+    try {
+      const data = await apiFetch(`/admin/users/${user.id}/reset-password`, {
+        method: "POST",
+        body: JSON.stringify({ action }),
+      });
+      setGenResult({ tempPassword: data.tempPassword ?? "", via: action });
+    } catch (err: any) {
+      alert(err.message ?? "Failed to generate password.");
+    } finally {
+      setGenBusy(false);
+    }
+  }
+
+  function copyPassword() {
+    if (!genResult) return;
+    navigator.clipboard.writeText(genResult.tempPassword);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-border/60 overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border/50">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 rounded-lg" style={{ background: "#F3E8FF" }}>
+              <KeyRound className="h-4 w-4" style={{ color: "#8705FA" }} />
+            </div>
+            <div>
+              <p className="font-bold text-[14px]" style={{ color: "#111827" }}>Manage Password</p>
+              <p className="text-[12px]" style={{ color: "#9CA3AF" }}>{user.name} · {user.email}</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-1.5 hover:bg-muted rounded-lg transition-colors">
+            <X className="h-4 w-4 text-muted-foreground" />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-5">
+          {/* Section 1 — Set specific password */}
+          <div className="space-y-3">
+            <p className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#6B7280" }}>Set a specific password</p>
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <input
+                  type={showPw ? "text" : "password"}
+                  value={newPw}
+                  onChange={e => { setNewPw(e.target.value); setSetPwError(null); }}
+                  placeholder="New password (min 8 chars)"
+                  className="w-full h-10 px-3 pr-10 text-[13px] border border-border/60 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 bg-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPw(s => !s)}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPw ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                </button>
+              </div>
+              <button
+                onClick={setPassword}
+                disabled={setPwBusy || newPw.length < 1}
+                className="h-10 px-4 text-[13px] font-semibold text-white rounded-xl disabled:opacity-50 transition-colors flex items-center gap-1.5"
+                style={{ background: setPwDone ? "#059669" : "#8705FA" }}
+              >
+                {setPwBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : setPwDone ? <><Check className="h-3.5 w-3.5" /> Saved</> : "Set Password"}
+              </button>
+            </div>
+            {setPwError && <p className="text-[12px] text-red-600">{setPwError}</p>}
+          </div>
+
+          <div className="border-t border-border/40" />
+
+          {/* Section 2 — Generate temp password */}
+          <div className="space-y-3">
+            <p className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#6B7280" }}>Generate temporary password</p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => generatePassword("email")}
+                disabled={genBusy}
+                className="flex-1 h-10 flex items-center justify-center gap-1.5 text-[13px] font-semibold border border-border/60 rounded-xl hover:bg-muted transition-colors disabled:opacity-50"
+                style={{ color: "#374151" }}
+              >
+                {genBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Mail className="h-3.5 w-3.5" />}
+                Generate &amp; Email
+              </button>
+              <button
+                onClick={() => generatePassword("generate")}
+                disabled={genBusy}
+                className="flex-1 h-10 flex items-center justify-center gap-1.5 text-[13px] font-semibold border border-border/60 rounded-xl hover:bg-muted transition-colors disabled:opacity-50"
+                style={{ color: "#374151" }}
+              >
+                {genBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+                Generate &amp; Show
+              </button>
+            </div>
+
+            {genResult && (
+              <div className="rounded-xl border border-border/50 overflow-hidden">
+                {genResult.via === "email" ? (
+                  <div className="flex items-center gap-2 px-4 py-3 bg-emerald-50">
+                    <Check className="h-4 w-4 text-emerald-600 flex-shrink-0" />
+                    <p className="text-[13px] text-emerald-800 font-medium">Temporary password sent to <strong>{user.email}</strong></p>
+                  </div>
+                ) : (
+                  <div className="px-4 py-3" style={{ background: "#F8FAFD" }}>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide mb-2" style={{ color: "#9CA3AF" }}>Temporary Password — share with user</p>
+                    <div className="flex items-center gap-2">
+                      <code className="flex-1 text-[18px] font-bold tracking-widest" style={{ color: "#111827", fontFamily: "monospace" }}>
+                        {genResult.tempPassword}
+                      </code>
+                      <button
+                        onClick={copyPassword}
+                        className="flex items-center gap-1 px-3 py-1.5 text-[12px] font-semibold rounded-lg border border-border/60 hover:bg-muted transition-colors"
+                        style={{ color: copied ? "#059669" : "#374151" }}
+                      >
+                        {copied ? <><Check className="h-3 w-3" /> Copied</> : <><Copy className="h-3 w-3" /> Copy</>}
+                      </button>
+                    </div>
+                    <p className="text-[11px] mt-2" style={{ color: "#9CA3AF" }}>This is now the user's active password. Ask them to change it after signing in.</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="px-6 py-4 border-t border-border/40 flex justify-end">
+          <button onClick={onClose} className="px-5 py-2 text-[13px] font-semibold border border-border/60 rounded-xl hover:bg-muted transition-colors">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Delete Confirm Modal ──────────────────────────────────────────────────
 
 function DeleteConfirmModal({ userName, role, onConfirm, onClose, loading, error }: {
@@ -531,7 +702,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [showEditPerms, setShowEditPerms] = useState(false);
-  const [resetSent, setResetSent] = useState(false);
+  const [showManagePassword, setShowManagePassword] = useState(false);
   const [editingBio, setEditingBio] = useState(false);
   const [bioText, setBioText] = useState(u.bio ?? "");
   const isSelf = u.id === currentUserId;
@@ -544,19 +715,6 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
         body: JSON.stringify({ status: u.status === "active" ? "inactive" : "active" }),
       });
       onUpdated();
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function sendResetEmail() {
-    setBusy(true);
-    try {
-      await apiFetch(`/admin/users/${u.id}/reset-password`, { method: "POST" });
-      setResetSent(true);
-      setTimeout(() => setResetSent(false), 3000);
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -618,6 +776,9 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           onClose={() => setShowEditPerms(false)}
           onUpdated={() => { setShowEditPerms(false); onUpdated(); }}
         />
+      )}
+      {showManagePassword && (
+        <ManagePasswordModal user={u} onClose={() => setShowManagePassword(false)} />
       )}
       <tr className="border-b transition-colors" style={{ borderColor: "#F1F5F9" }} onMouseEnter={e => e.currentTarget.style.backgroundColor = "#FAFBFD"} onMouseLeave={e => e.currentTarget.style.backgroundColor = ""}>
         {/* User */}
@@ -721,17 +882,17 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
             >
               {u.status === "active" ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
-            {/* Send reset email */}
+            {/* Manage password */}
             <button
-              title={resetSent ? "Temporary password sent!" : "Generate & email temporary password"}
-              onClick={sendResetEmail}
-              disabled={busy || resetSent}
+              title="Manage password"
+              onClick={() => setShowManagePassword(true)}
+              disabled={busy}
               className="p-2 rounded-lg transition-colors"
-              style={{ color: resetSent ? "#059669" : "#6B7280" }}
-              onMouseEnter={e => { if (!resetSent) { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#111827"; } }}
-              onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = resetSent ? "#059669" : "#6B7280"; }}
+              style={{ color: "#6B7280" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F3E8FF"; e.currentTarget.style.color = "#8705FA"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
-              {resetSent ? <Check className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
+              <KeyRound className="h-4 w-4" />
             </button>
             {/* Delete */}
             {!isSelf && (

@@ -83,11 +83,17 @@ router.patch("/admin/users/:id", async (req, res): Promise<void> => {
   }
 
   const updates: Record<string, unknown> = {};
-  const { role, status, permissions } = req.body ?? {};
+  const { role, status, permissions, newPassword } = req.body ?? {};
   if (role === "admin" || role === "field_user") updates.role = role;
   if (status === "active" || status === "inactive") updates.status = status;
-  if (permissions !== undefined) {
-    updates.permissions = JSON.stringify(permissions);
+  if (permissions !== undefined) updates.permissions = JSON.stringify(permissions);
+  if (newPassword !== undefined) {
+    if (typeof newPassword !== "string" || newPassword.length < 8) {
+      res.status(400).json({ error: "Password must be at least 8 characters" }); return;
+    }
+    updates.passwordHash = hashPassword(newPassword);
+    updates.resetToken = null;
+    updates.resetTokenExpiry = null;
   }
 
   if (Object.keys(updates).length === 0) {
@@ -135,13 +141,18 @@ router.delete("/admin/users/:id", async (req, res): Promise<void> => {
   res.sendStatus(204);
 });
 
-// POST /admin/users/:id/reset-password — generate a temporary password and email it to the user
+// POST /admin/users/:id/reset-password
+// Body: { action?: "email" | "generate" }
+//   "email"    (default) — generate temp password, set it, send to user's email
+//   "generate"           — generate temp password, set it, return it to admin (no email sent)
 router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> => {
   const caller = await requireOrgAdmin(req, res);
   if (!caller) return;
 
   const userId = Number(req.params.id);
   if (isNaN(userId)) { res.status(400).json({ error: "Invalid user id" }); return; }
+
+  const action: "email" | "generate" = req.body?.action === "generate" ? "generate" : "email";
 
   const conditions = [eq(usersTable.id, userId)];
   if (caller.role !== "super_admin" && caller.organizationId) {
@@ -151,9 +162,9 @@ router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> =
   if (!target) { res.status(404).json({ error: "User not found" }); return; }
 
   // Generate a readable temporary password: e.g. "Kp7#rmxQ4!sv"
-  const upper  = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-  const lower  = "abcdefghjkmnpqrstuvwxyz";
-  const digits = "23456789";
+  const upper   = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const lower   = "abcdefghjkmnpqrstuvwxyz";
+  const digits  = "23456789";
   const special = "!@#$";
   const rand = (set: string) => set[crypto.randomInt(set.length)];
   const tempPassword = [
@@ -168,7 +179,13 @@ router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> =
     .set({ passwordHash: hashPassword(tempPassword), resetToken: null, resetTokenExpiry: null })
     .where(eq(usersTable.id, userId));
 
-  // Resolve org and build login URL
+  if (action === "generate") {
+    req.log.info({ userId, email: target.email }, "Admin reset-password: temp password generated (shown to admin)");
+    res.json({ message: "Temporary password generated", tempPassword });
+    return;
+  }
+
+  // action === "email" — resolve org and send the email
   let orgName: string | undefined;
   let orgSubdomain: string | null = null;
   if (target.organizationId) {
@@ -183,8 +200,6 @@ router.post("/admin/users/:id/reset-password", async (req, res): Promise<void> =
   const replitDomain = process.env["REPLIT_DOMAINS"]?.split(",")[0]?.trim();
   const baseUrl = process.env["APP_BASE_URL"]
     ?? (replitDomain ? `https://${replitDomain}` : `https://${canonicalDomain}`);
-  // Emails always use canonical subdomain routing (e.g. https://rc.sentconnect.org/login)
-  // so the link works correctly in production regardless of where the API is running.
   const loginUrl = orgSubdomain
     ? `https://${orgSubdomain}.${canonicalDomain}/login`
     : `${baseUrl}/login`;
