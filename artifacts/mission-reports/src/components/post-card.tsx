@@ -126,35 +126,23 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
     }
     return <MediaItem p={p} contain />;
   }
-  if (count === 2) {
-    return (
-      <div className="grid grid-cols-2 gap-[2px] overflow-hidden">
-        {photos.map(p => (
-          <div key={p.id} className="aspect-[4/3] bg-black/5 relative overflow-hidden">
-            <MediaItem p={p} controls={false} />
-          </div>
-        ))}
-      </div>
-    );
-  }
-  // 3+ photos: big photo left, two smaller stacked right
+  // 2+ photos: show ALL in a 2-column responsive grid.
+  // Odd count → first photo spans both columns so the grid closes evenly.
+  const isOdd = count % 2 !== 0;
   return (
-    <div className="grid grid-cols-2 gap-[2px] overflow-hidden">
-      <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
-        <MediaItem p={photos[0]} controls={false} />
-      </div>
-      <div className="grid grid-rows-2 gap-[2px]">
-        {photos.slice(1, 3).map((p, i) => (
-          <div key={p.id} className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
+    <div className="grid grid-cols-2 gap-[2px]">
+      {photos.map((p, i) => {
+        const spanFull = isOdd && i === 0;
+        return (
+          <div
+            key={p.id}
+            className={cn("relative overflow-hidden bg-black/5", spanFull && "col-span-2")}
+            style={{ aspectRatio: spanFull ? "16/9" : "4/3" }}
+          >
             <MediaItem p={p} controls={false} />
-            {i === 1 && count > 3 && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                <span className="text-white text-xl font-bold">+{count - 3}</span>
-              </div>
-            )}
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
