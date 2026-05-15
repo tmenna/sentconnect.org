@@ -139,11 +139,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             <Globe className="h-4 w-4" style={{ color: BLUE }} />
             <span className="text-[15px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
-          {orgName && (
-            <p style={{ fontSize: 13, fontWeight: 700, color: BLUE, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 6, opacity: 0.7 }}>
-              {orgName}
-            </p>
-          )}
           <h2 style={{ fontSize: 52, fontWeight: 800, color: BLUE, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 22 }}>
             Stay connected<br />with your field teams.
           </h2>
