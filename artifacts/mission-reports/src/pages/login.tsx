@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +13,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
+import { useOrg } from "@/providers/org-provider";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -31,6 +32,16 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const search = useSearch();
   const [, navigate] = useLocation();
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
+  const { orgSlug } = useOrg();
+  const [orgName, setOrgName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!orgSlug) { setOrgName(null); return; }
+    fetch(`/api/orgs/resolve?subdomain=${encodeURIComponent(orgSlug)}`)
+      .then(r => r.ok ? r.json() : null)
+      .then((d: any) => { if (d?.name) setOrgName(d.name); })
+      .catch(() => {});
+  }, [orgSlug]);
   const from = (() => {
     if (platformMode) return "/admin";
     const raw = new URLSearchParams(search).get("from") ?? null;
@@ -128,6 +139,11 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             <Globe className="h-4 w-4" style={{ color: BLUE }} />
             <span className="text-[15px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
+          {orgName && (
+            <p style={{ fontSize: 13, fontWeight: 700, color: BLUE, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 6, opacity: 0.7 }}>
+              {orgName}
+            </p>
+          )}
           <h2 style={{ fontSize: 52, fontWeight: 800, color: BLUE, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 22 }}>
             Stay connected<br />with your field teams.
           </h2>
@@ -165,10 +181,18 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
             {/* Heading */}
             <div className="mb-7">
+              {orgName && (
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: "#F3E8FF", border: "1px solid #D8B4FE" }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: BLUE, flexShrink: 0 }} />
+                  <span className="text-[12px] font-bold tracking-widest uppercase" style={{ color: BLUE }}>{orgName}</span>
+                </div>
+              )}
               <h1 className="text-2xl sm:text-[26px] font-bold tracking-tight mb-1.5" style={{ color: "#0F172A", letterSpacing: "-0.03em" }}>
                 Welcome back
               </h1>
-              <p className="text-sm sm:text-[14px]" style={{ color: "#64748B" }}>Sign in to your SentConnect account.</p>
+              <p className="text-sm sm:text-[14px]" style={{ color: "#64748B" }}>
+                Sign in to your {orgName ?? "SentConnect"} account.
+              </p>
             </div>
 
             {/* Org portal error */}

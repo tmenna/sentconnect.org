@@ -1027,6 +1027,11 @@ export default function AdminDashboard() {
                 <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#8705FA" }} />
                 <span style={{ fontSize: 12, fontWeight: 700, color: "#8705FA", letterSpacing: "0.06em" }}>ADMIN DASHBOARD</span>
               </div>
+              {user.organization && (
+                <p style={{ fontSize: 13, fontWeight: 700, color: "#8705FA", letterSpacing: "0.04em", textTransform: "uppercase", margin: "0 0 4px" }}>
+                  {user.organization}
+                </p>
+              )}
               <h1 style={{ fontSize: "clamp(22px, 5vw, 30px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 8px" }}>
                 Global Partners
               </h1>
