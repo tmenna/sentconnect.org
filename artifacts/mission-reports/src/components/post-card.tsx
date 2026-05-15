@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
   ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
   Send, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
-  Link2, Share2, ImageDown
+  Link2, Share2, ImageDown, ChevronLeft, ChevronRight, ZoomIn
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,115 @@ type Comment = {
 function isVideoItem(p: PostData["photos"][number]) {
   if (p.mimeType) return p.mimeType.startsWith("video/");
   return /\.(mp4|webm|ogg|mov)$/i.test(p.url);
+}
+
+function PhotoLightbox({
+  photos,
+  initialIndex,
+  onClose,
+}: {
+  photos: PostData["photos"];
+  initialIndex: number;
+  onClose: () => void;
+}) {
+  const [index, setIndex] = useState(initialIndex);
+  const current = photos[index];
+  const hasPrev = index > 0;
+  const hasNext = index < photos.length - 1;
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft" && hasPrev) setIndex(i => i - 1);
+      if (e.key === "ArrowRight" && hasNext) setIndex(i => i + 1);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [hasPrev, hasNext, onClose]);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/92"
+      onClick={onClose}
+    >
+      {/* Counter */}
+      {photos.length > 1 && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 text-white/70 text-[13px] font-medium z-10 pointer-events-none select-none">
+          {index + 1} / {photos.length}
+        </div>
+      )}
+
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors z-10"
+        aria-label="Close"
+      >
+        <X className="h-5 w-5" />
+      </button>
+
+      {/* Prev arrow */}
+      {hasPrev && (
+        <button
+          onClick={e => { e.stopPropagation(); setIndex(i => i - 1); }}
+          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors z-10"
+          aria-label="Previous photo"
+        >
+          <ChevronLeft className="h-7 w-7" />
+        </button>
+      )}
+
+      {/* Media */}
+      <div
+        className="flex items-center justify-center px-16 sm:px-20 max-w-[100vw] max-h-[100vh] w-full h-full"
+        onClick={e => e.stopPropagation()}
+      >
+        {isVideoItem(current) ? (
+          <video
+            key={current.url}
+            src={current.url}
+            controls
+            autoPlay
+            playsInline
+            className="max-w-full max-h-[90vh] rounded-lg shadow-2xl"
+          />
+        ) : (
+          <img
+            key={current.url}
+            src={current.url}
+            alt={current.caption || ""}
+            className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl select-none"
+            draggable={false}
+          />
+        )}
+      </div>
+
+      {/* Caption */}
+      {current.caption && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-[13px] text-center bg-black/40 px-4 py-1.5 rounded-full pointer-events-none max-w-[80vw] truncate">
+          {current.caption}
+        </div>
+      )}
+
+      {/* Next arrow */}
+      {hasNext && (
+        <button
+          onClick={e => { e.stopPropagation(); setIndex(i => i + 1); }}
+          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors z-10"
+          aria-label="Next photo"
+        >
+          <ChevronRight className="h-7 w-7" />
+        </button>
+      )}
+    </div>,
+    document.body,
+  );
 }
 
 function MediaItem({ p, controls = false, className = "", contain = false }: { p: PostData["photos"][number]; controls?: boolean; className?: string; contain?: boolean }) {
@@ -112,8 +222,11 @@ function MediaItem({ p, controls = false, className = "", contain = false }: { p
 }
 
 function MediaGrid({ photos }: { photos: PostData["photos"] }) {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const count = photos.length;
   if (count === 0) return null;
+
+  const openAt = (i: number) => { if (!isVideoItem(photos[i])) setLightboxIndex(i); };
 
   if (count === 1) {
     const p = photos[0];
@@ -124,26 +237,66 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
         </div>
       );
     }
-    return <MediaItem p={p} contain />;
+    return (
+      <>
+        {lightboxIndex !== null && (
+          <PhotoLightbox photos={photos} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />
+        )}
+        <div
+          className="cursor-zoom-in group relative"
+          onClick={() => openAt(0)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={e => { if (e.key === "Enter") openAt(0); }}
+          aria-label="View full photo"
+        >
+          <MediaItem p={p} contain />
+          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 rounded-full p-1.5 pointer-events-none">
+            <ZoomIn className="h-4 w-4 text-white" />
+          </div>
+        </div>
+      </>
+    );
   }
+
   // 2+ photos: show ALL in a 2-column responsive grid.
   // Odd count → first photo spans both columns so the grid closes evenly.
   const isOdd = count % 2 !== 0;
   return (
-    <div className="grid grid-cols-2 gap-[2px]">
-      {photos.map((p, i) => {
-        const spanFull = isOdd && i === 0;
-        return (
-          <div
-            key={p.id}
-            className={cn("relative overflow-hidden bg-black/5", spanFull && "col-span-2")}
-            style={{ aspectRatio: spanFull ? "16/9" : "4/3" }}
-          >
-            <MediaItem p={p} controls={false} />
-          </div>
-        );
-      })}
-    </div>
+    <>
+      {lightboxIndex !== null && (
+        <PhotoLightbox photos={photos} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />
+      )}
+      <div className="grid grid-cols-2 gap-[2px]">
+        {photos.map((p, i) => {
+          const spanFull = isOdd && i === 0;
+          const isVideo = isVideoItem(p);
+          return (
+            <div
+              key={p.id}
+              className={cn(
+                "relative overflow-hidden bg-black/5 group",
+                spanFull && "col-span-2",
+                !isVideo && "cursor-zoom-in",
+              )}
+              style={{ aspectRatio: spanFull ? "16/9" : "4/3" }}
+              onClick={() => !isVideo && openAt(i)}
+              role={isVideo ? undefined : "button"}
+              tabIndex={isVideo ? undefined : 0}
+              onKeyDown={e => { if (e.key === "Enter" && !isVideo) openAt(i); }}
+              aria-label={isVideo ? undefined : "View full photo"}
+            >
+              <MediaItem p={p} controls={false} />
+              {!isVideo && (
+                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 rounded-full p-1.5 pointer-events-none">
+                  <ZoomIn className="h-3.5 w-3.5 text-white" />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 }
 
