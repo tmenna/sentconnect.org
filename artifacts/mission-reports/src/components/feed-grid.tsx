@@ -215,7 +215,8 @@ export function FeedGridCard({
   onClick: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
-  const coverPhoto = post.photos[0];
+  const [coverImgError, setCoverImgError] = useState(false);
+  const coverPhoto = post.photos.find(p => p.url);
   const extraPhotos = post.photos.length - 1;
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
 
@@ -257,7 +258,7 @@ export function FeedGridCard({
 
         return (
           <div className="relative overflow-hidden flex-shrink-0" style={{ aspectRatio: "16/9" }}>
-            {coverPhoto ? (
+            {(coverPhoto && !coverImgError) ? (
               <>
                 <img
                   src={coverPhoto.url}
@@ -268,6 +269,7 @@ export function FeedGridCard({
                     transition: "transform 320ms ease-out",
                   }}
                   loading="lazy"
+                  onError={() => setCoverImgError(true)}
                 />
                 {/* Solid blue date pill */}
                 <div

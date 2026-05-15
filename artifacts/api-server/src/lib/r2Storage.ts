@@ -298,7 +298,9 @@ export async function resolveObjectUrl(
   try {
     return await createPresignedGetUrl(key, ttlSeconds);
   } catch {
-    return url; // graceful fallback — browser will hit the /api/storage redirect
+    // Fallback: serve through the API storage proxy so the browser can still load the file.
+    // /objects/<key> is not a browser-accessible path; /api/storage/objects/<key> is.
+    return `/api/storage/objects/${key}`;
   }
 }
 
