@@ -71,9 +71,12 @@ function MediaItem({ p, controls = false, className = "", contain = false }: { p
   }
 
   if (contain) {
+    // Facebook-style: show full image at natural proportions, centred, capped at max-height.
+    // Using a flex wrapper + max-w-full/max-h lets landscape images span full width while
+    // portrait images stay narrow and centred — no cropping, no letterboxing.
     return (
-      <div className={cn("w-full bg-black/5 flex items-center justify-center", className)}>
-        {!loaded && <div className="w-full h-48 bg-gray-100 animate-pulse absolute" />}
+      <div className={cn("w-full bg-black/5 flex justify-center items-start relative", !loaded && "min-h-[180px]", className)}>
+        {!loaded && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
         <img
           src={p.url}
           alt={p.caption || ""}
@@ -81,7 +84,7 @@ function MediaItem({ p, controls = false, className = "", contain = false }: { p
           decoding="async"
           onLoad={() => setLoaded(true)}
           className={cn(
-            "w-full h-auto block max-h-[420px] object-contain transition-opacity duration-300",
+            "block max-w-full w-auto h-auto max-h-[420px] transition-opacity duration-300",
             loaded ? "opacity-100" : "opacity-0"
           )}
         />
@@ -89,8 +92,9 @@ function MediaItem({ p, controls = false, className = "", contain = false }: { p
     );
   }
 
+  // Cover mode: fills the container (used in grid thumbnails — parent must be positioned)
   return (
-    <div className={cn("relative overflow-hidden", className)}>
+    <div className={cn("absolute inset-0 overflow-hidden", className)}>
       {!loaded && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
       <img
         src={p.url}
