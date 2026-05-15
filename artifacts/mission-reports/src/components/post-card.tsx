@@ -158,6 +158,7 @@ function PhotoLightbox({
 
 function MediaItem({ p, controls = false, className = "", contain = false }: { p: PostData["photos"][number]; controls?: boolean; className?: string; contain?: boolean }) {
   const [loaded, setLoaded] = useState(false);
+  const [errored, setErrored] = useState(false);
 
   if (isVideoItem(p)) {
     return (
@@ -180,24 +181,34 @@ function MediaItem({ p, controls = false, className = "", contain = false }: { p
     );
   }
 
+  // Shared error fallback — shown when the image URL fails to load
+  const errorFallback = (
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-gray-100">
+      <svg className="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 18h16.5M21 12V6.75A2.25 2.25 0 0 0 18.75 4.5H5.25A2.25 2.25 0 0 0 3 6.75V12" />
+      </svg>
+      <span className="text-[11px] text-gray-400">Image unavailable</span>
+    </div>
+  );
+
   if (contain) {
-    // Facebook-style: show full image at natural proportions, centred, capped at max-height.
-    // Using a flex wrapper + max-w-full/max-h lets landscape images span full width while
-    // portrait images stay narrow and centred — no cropping, no letterboxing.
     return (
-      <div className={cn("w-full bg-black/5 flex justify-center items-start relative", !loaded && "min-h-[180px]", className)}>
-        {!loaded && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
-        <img
-          src={p.url}
-          alt={p.caption || ""}
-          loading="lazy"
-          decoding="async"
-          onLoad={() => setLoaded(true)}
-          className={cn(
-            "block max-w-full w-auto h-auto max-h-[420px] transition-opacity duration-300",
-            loaded ? "opacity-100" : "opacity-0"
-          )}
-        />
+      <div className={cn("w-full bg-black/5 flex justify-center items-start relative", (!loaded || errored) && "min-h-[180px]", className)}>
+        {!loaded && !errored && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
+        {errored ? errorFallback : (
+          <img
+            src={p.url}
+            alt={p.caption || ""}
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setLoaded(true)}
+            onError={() => setErrored(true)}
+            className={cn(
+              "block max-w-full w-auto h-auto max-h-[420px] transition-opacity duration-300",
+              loaded ? "opacity-100" : "opacity-0"
+            )}
+          />
+        )}
       </div>
     );
   }
@@ -205,18 +216,21 @@ function MediaItem({ p, controls = false, className = "", contain = false }: { p
   // Cover mode: fills the container (used in grid thumbnails — parent must be positioned)
   return (
     <div className={cn("absolute inset-0 overflow-hidden", className)}>
-      {!loaded && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
-      <img
-        src={p.url}
-        alt={p.caption || ""}
-        loading="lazy"
-        decoding="async"
-        onLoad={() => setLoaded(true)}
-        className={cn(
-          "w-full h-full object-cover transition-opacity duration-300",
-          loaded ? "opacity-100" : "opacity-0"
-        )}
-      />
+      {!loaded && !errored && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
+      {errored ? errorFallback : (
+        <img
+          src={p.url}
+          alt={p.caption || ""}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+          onError={() => setErrored(true)}
+          className={cn(
+            "w-full h-full object-cover transition-opacity duration-300",
+            loaded ? "opacity-100" : "opacity-0"
+          )}
+        />
+      )}
     </div>
   );
 }
