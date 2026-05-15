@@ -128,30 +128,33 @@ function MediaGrid({ photos }: { photos: PostData["photos"] }) {
   }
   if (count === 2) {
     return (
-      <div className="grid grid-cols-2 gap-[2px] overflow-hidden max-h-[200px]">
+      <div className="grid grid-cols-2 gap-[2px] overflow-hidden">
         {photos.map(p => (
-          <div key={p.id} className="aspect-square bg-black/5 relative overflow-hidden">
+          <div key={p.id} className="aspect-[4/3] bg-black/5 relative overflow-hidden">
             <MediaItem p={p} controls={false} />
           </div>
         ))}
       </div>
     );
   }
+  // 3+ photos: big photo left, two smaller stacked right
   return (
-    <div className="grid grid-cols-2 gap-[2px] overflow-hidden max-h-[200px]">
-      <div className="aspect-square bg-black/5 row-span-2 relative overflow-hidden">
+    <div className="grid grid-cols-2 gap-[2px] overflow-hidden">
+      <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
         <MediaItem p={photos[0]} controls={false} />
       </div>
-      {photos.slice(1, 3).map((p, i) => (
-        <div key={p.id} className={cn("bg-black/5 aspect-square relative overflow-hidden")}>
-          <MediaItem p={p} controls={false} />
-          {i === 1 && count > 3 && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <span className="text-white text-xl font-bold">+{count - 3}</span>
-            </div>
-          )}
-        </div>
-      ))}
+      <div className="grid grid-rows-2 gap-[2px]">
+        {photos.slice(1, 3).map((p, i) => (
+          <div key={p.id} className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
+            <MediaItem p={p} controls={false} />
+            {i === 1 && count > 3 && (
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                <span className="text-white text-xl font-bold">+{count - 3}</span>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
