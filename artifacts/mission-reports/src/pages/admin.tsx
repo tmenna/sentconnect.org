@@ -1008,18 +1008,20 @@ export default function AdminDashboard() {
         />
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-7">
 
-        {/* ── Header: breadcrumb top row ── */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F3E8FF", borderRadius: 999, padding: "4px 12px" }}>
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#8705FA" }} />
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#8705FA", letterSpacing: "0.07em" }}>ADMIN DASHBOARD</span>
-          </div>
+        {/* ── Header: breadcrumb — left-border accent style (like help page) ── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, borderLeft: "3px solid #8705FA", paddingLeft: 10 }}>
+          <span style={{ fontSize: 11, fontWeight: 800, color: "#8705FA", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            ADMIN DASHBOARD
+          </span>
           {user.organization && (
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#64748B", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-              {user.organization}
-            </span>
+            <>
+              <span style={{ fontSize: 11, color: "#CBD5E1" }}>·</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: "#64748B", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                {user.organization}
+              </span>
+            </>
           )}
         </div>
 
@@ -1032,10 +1034,10 @@ export default function AdminDashboard() {
           <div className="flex items-end gap-8 flex-wrap min-w-0">
             {/* Title block */}
             <div style={{ paddingBottom: 14, flexShrink: 0 }}>
-              <h1 style={{ fontSize: "clamp(20px, 3.5vw, 26px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 3px" }}>
+              <h1 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.04em", lineHeight: 1.1, margin: "0 0 5px" }}>
                 Global Partners
               </h1>
-              <p style={{ fontSize: 13, color: "#64748B", margin: 0, lineHeight: 1.3 }}>
+              <p style={{ fontSize: 14, color: "#374151", margin: 0, lineHeight: 1.4 }}>
                 Manage your team and track mission activity
               </p>
             </div>
