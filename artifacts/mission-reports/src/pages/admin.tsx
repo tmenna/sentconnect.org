@@ -1231,26 +1231,26 @@ export default function AdminDashboard() {
                       onClick={() => setFeedMomentFilter(tab.id as any)}
                       className="transition-all duration-150 flex-shrink-0"
                       style={{
-                        paddingBottom: 12,
-                        paddingTop: 6,
-                        paddingLeft: 4,
-                        paddingRight: 4,
-                        marginRight: 24,
-                        marginBottom: -1,
-                        fontSize: 14,
-                        fontWeight: active ? 700 : 500,
+                        paddingBottom: 16,
+                        paddingTop: 16,
+                        paddingLeft: 6,
+                        paddingRight: 6,
+                        marginRight: 28,
+                        marginBottom: -2,
+                        fontSize: 16,
+                        fontWeight: active ? 800 : 500,
                         color: active ? "#8705FA" : "#94A3B8",
                         border: "none",
-                        borderBottom: active ? "2px solid #8705FA" : "2px solid transparent",
+                        borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
                         background: "transparent",
                         cursor: "pointer",
-                        letterSpacing: active ? "-0.01em" : "normal",
+                        letterSpacing: active ? "-0.02em" : "normal",
                         whiteSpace: "nowrap",
                       }}
                     >
                       {tab.label}
                       {tab.count != null && (
-                        <span style={{ marginLeft: 6, fontSize: 11, fontWeight: 600, background: active ? "#F3E8FF" : "#F1F5F9", color: active ? "#8705FA" : "#94A3B8", borderRadius: 999, padding: "1px 7px" }}>
+                        <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F3E8FF" : "#F8FAFC", color: active ? "#8705FA" : "#94A3B8", borderRadius: 999, padding: "2px 10px" }}>
                           {tab.count}
                         </span>
                       )}
@@ -1264,8 +1264,8 @@ export default function AdminDashboard() {
                 <select
                   value={filterUserId}
                   onChange={e => setFilterUserId(e.target.value)}
-                  className="text-[12px] border rounded-lg px-2.5 h-8 bg-white outline-none transition-all"
-                  style={{ borderColor: filterUserId ? "#8705FA" : "#E5E7EB", color: filterUserId ? "#7C3AED" : "#6B7280", fontWeight: filterUserId ? 600 : 400, minWidth: 140 }}
+                  className="border rounded-xl px-3 bg-white outline-none transition-all"
+                  style={{ fontSize: 16, fontWeight: filterUserId ? 700 : 500, height: 44, borderColor: filterUserId ? "#8705FA" : "#E5E7EB", color: filterUserId ? "#8705FA" : "#94A3B8", minWidth: 160 }}
                 >
                   <option value="">All members</option>
                   {nonAdmins.map((u: any) => (
