@@ -270,7 +270,7 @@ export function FeedGridCard({
             />
             {/* Date + photo count inside gradient */}
             <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between px-3 pb-2.5">
-              <span style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.88)", letterSpacing: "0.02em" }}>
+              <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", background: "#A646FB", borderRadius: 999, padding: "2px 9px", letterSpacing: "0.02em" }}>
                 {dateLabel}
               </span>
               {extraPhotos > 0 && (
