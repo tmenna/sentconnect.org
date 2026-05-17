@@ -1046,7 +1046,6 @@ export default function AdminDashboard() {
             <div className="flex items-end overflow-x-auto scrollbar-none" style={{ marginBottom: -2 }}>
               {[
                 { id: "feed", label: "Updates", badge: null },
-                { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
                 { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
               ].map(tab => {
                 const active = activeTab === tab.id;
