@@ -22,6 +22,18 @@ function extractTitleAndExcerpt(description: string | null | undefined) {
 }
 
 
+// Colour palette for date pills — cycles by post.id for visual variety
+const DATE_PILL_PALETTE = [
+  { bg: "#CFFAFE", color: "#0E7490" },  // cyan
+  { bg: "#FEF3C7", color: "#B45309" },  // amber
+  { bg: "#D1FAE5", color: "#065F46" },  // emerald
+  { bg: "#EDE9FE", color: "#5B21B6" },  // violet
+  { bg: "#FEE2E2", color: "#991B1B" },  // red
+  { bg: "#DBEAFE", color: "#1D4ED8" },  // blue
+  { bg: "#FCE7F3", color: "#9D174D" },  // pink
+  { bg: "#FFF7ED", color: "#C2410C" },  // orange
+];
+
 // Placeholder gradients when no image
 const THUMB_MOMENT = {
   bg: "linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 60%, #6EE7B7 100%)",
@@ -100,6 +112,7 @@ export function MasonryCard({
   const dateLabel = format(new Date(post.createdAt), "MMM d, yyyy");
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
   const thumb = post.isMissionMoment ? THUMB_MOMENT : post.isHighlight ? THUMB_HIGHLIGHT : THUMB_DEFAULT;
+  const datePill = DATE_PILL_PALETTE[post.id % DATE_PILL_PALETTE.length];
 
   return (
     <div
@@ -165,14 +178,14 @@ export function MasonryCard({
           }}
         />
 
-        {/* Top: purple date pill (top-left) */}
+        {/* Top: colour-coded date pill (top-left) */}
         <div className="absolute top-3 left-3">
           <span
             style={{
               fontSize: 11,
               fontWeight: 700,
-              background: "#8705FA",
-              color: "#ffffff",
+              background: datePill.bg,
+              color: datePill.color,
               borderRadius: 999,
               padding: "3px 11px",
               lineHeight: 1.6,
