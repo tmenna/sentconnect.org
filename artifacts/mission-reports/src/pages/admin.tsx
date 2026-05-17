@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { Redirect, Link } from "wouter";
 import {
@@ -12,10 +12,12 @@ import {
   Globe, Plus, X, Trash2,
   ChevronDown, Eye, EyeOff, Check, UserPlus, Mail, KeyRound, Copy, RefreshCw,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
-  BarChart3, Star, UserCog, BookOpen, MapPin,
+  BarChart3, Star, UserCog, BookOpen, MapPin, ImageIcon, Upload,
 } from "lucide-react";
+import { useUpload } from "@workspace/object-storage-web";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
 import { type PostData } from "@/components/post-card";
 import { FeedGridCard, MasonryCard, PostDetailModal } from "@/components/feed-grid";
 import { format } from "date-fns";
@@ -930,13 +932,54 @@ function parseLocation(loc: string): { city: string; country: string } {
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<"team" | "feed" | "countries">("feed");
+  const [activeTab, setActiveTab] = useState<"team" | "feed" | "countries" | "branding">("feed");
   const [feedMomentFilter, setFeedMomentFilter] = useState<"all" | "moments">("all");
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
   const [filterUserId, setFilterUserId] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
+
+  // ── Branding state ──
+  const [brandingLogoUrl, setBrandingLogoUrl] = useState<string | null>(null);
+  const [brandingInput, setBrandingInput] = useState("");
+  const [brandingLoading, setBrandingLoading] = useState(false);
+  const [brandingSaving, setBrandingSaving] = useState(false);
+  const brandingFileRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  const { uploadFile: uploadLogo, isUploading: logoUploading } = useUpload({
+    onSuccess: async (response) => {
+      const url = `/api/storage${response.objectPath}`;
+      await saveBrandingLogo(url);
+    },
+    onError: () => toast({ title: "Upload failed", variant: "destructive" }),
+  });
+
+  async function fetchBranding() {
+    setBrandingLoading(true);
+    try {
+      const data = await apiFetch("/admin/branding");
+      setBrandingLogoUrl(data.logoUrl ?? null);
+      setBrandingInput(data.logoUrl ?? "");
+    } catch { /* ignore */ } finally { setBrandingLoading(false); }
+  }
+
+  async function saveBrandingLogo(url: string | null) {
+    setBrandingSaving(true);
+    try {
+      const data = await apiFetch("/admin/branding", { method: "PATCH", body: JSON.stringify({ logoUrl: url }) });
+      setBrandingLogoUrl(data.logoUrl ?? null);
+      setBrandingInput(data.logoUrl ?? "");
+      toast({ title: url ? "Logo saved" : "Logo removed" });
+    } catch (e: any) {
+      toast({ title: e.message ?? "Failed to save logo", variant: "destructive" });
+    } finally { setBrandingSaving(false); }
+  }
+
+  useEffect(() => {
+    if (activeTab === "branding") fetchBranding();
+  }, [activeTab]);
 
   const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey(), staleTime: 5 * 60 * 1000 } });
   const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}), staleTime: 2 * 60 * 1000 } });
@@ -1047,6 +1090,7 @@ export default function AdminDashboard() {
               {[
                 { id: "feed", label: "Updates", badge: null },
                 { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
+                { id: "branding", label: "Branding", badge: null },
               ].map(tab => {
                 const active = activeTab === tab.id;
                 return (
@@ -1425,6 +1469,124 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── Tab: Branding ── */}
+        {activeTab === "branding" && (
+          <div className="space-y-6 max-w-xl">
+
+            {/* Section header */}
+            <div style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 16 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#0F172A", letterSpacing: "-0.02em", margin: "0 0 4px" }}>
+                Organization Logo
+              </h2>
+              <p style={{ fontSize: 14, color: "#374151", margin: 0 }}>
+                Shown in the navigation bar and login page for your organization.
+              </p>
+            </div>
+
+            {brandingLoading ? (
+              <div className="space-y-3">
+                <Skeleton className="h-28 w-full rounded-2xl" />
+                <Skeleton className="h-10 w-40 rounded-xl" />
+              </div>
+            ) : (
+              <div className="space-y-5">
+
+                {/* Current logo preview */}
+                <div
+                  className="flex items-center justify-center rounded-2xl border"
+                  style={{ height: 120, background: "#F8FAFC", borderColor: brandingLogoUrl ? "#E2E8F0" : "#E2E8F0", borderStyle: "dashed" }}
+                >
+                  {brandingLogoUrl ? (
+                    <img
+                      src={brandingLogoUrl}
+                      alt="Organization logo"
+                      style={{ maxHeight: 72, maxWidth: "80%", objectFit: "contain" }}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center gap-2">
+                      <ImageIcon className="h-8 w-8" style={{ color: "#CBD5E1" }} />
+                      <span style={{ fontSize: 12, color: "#94A3B8" }}>No logo set</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Upload + Remove buttons */}
+                <div className="flex items-center gap-3 flex-wrap">
+                  <input
+                    ref={brandingFileRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      if (!file.type.startsWith("image/")) {
+                        toast({ title: "Please select an image file", variant: "destructive" }); return;
+                      }
+                      if (file.size > 10 * 1024 * 1024) {
+                        toast({ title: "Image must be under 10 MB", variant: "destructive" }); return;
+                      }
+                      await uploadLogo(file);
+                    }}
+                  />
+                  <button
+                    onClick={() => brandingFileRef.current?.click()}
+                    disabled={logoUploading || brandingSaving}
+                    className="flex items-center gap-2 rounded-xl transition-all duration-150 disabled:opacity-50"
+                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#8705FA", border: "none", padding: "10px 20px", cursor: "pointer" }}
+                  >
+                    {logoUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                    {brandingLogoUrl ? "Replace logo" : "Upload logo"}
+                  </button>
+
+                  {brandingLogoUrl && (
+                    <button
+                      onClick={() => saveBrandingLogo(null)}
+                      disabled={brandingSaving}
+                      className="flex items-center gap-2 rounded-xl transition-all duration-150 disabled:opacity-50"
+                      style={{ fontSize: 14, fontWeight: 600, color: "#EF4444", background: "#FEF2F2", border: "1px solid #FECACA", padding: "10px 20px", cursor: "pointer" }}
+                    >
+                      {brandingSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                      Remove logo
+                    </button>
+                  )}
+                </div>
+
+                {/* Divider */}
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ flex: 1, height: 1, background: "#F1F5F9" }} />
+                  <span style={{ fontSize: 11, fontWeight: 600, color: "#94A3B8", letterSpacing: "0.06em", textTransform: "uppercase" }}>or paste a URL</span>
+                  <div style={{ flex: 1, height: 1, background: "#F1F5F9" }} />
+                </div>
+
+                {/* URL input + save */}
+                <div className="flex items-center gap-2">
+                  <input
+                    type="url"
+                    value={brandingInput}
+                    onChange={e => setBrandingInput(e.target.value)}
+                    placeholder="https://example.com/logo.png"
+                    className="flex-1 rounded-xl border px-4 outline-none transition-all"
+                    style={{ fontSize: 14, height: 44, borderColor: "#E2E8F0", color: "#0F172A" }}
+                    onFocus={e => { e.currentTarget.style.borderColor = "#8705FA"; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = "#E2E8F0"; }}
+                  />
+                  <button
+                    onClick={() => saveBrandingLogo(brandingInput.trim() || null)}
+                    disabled={brandingSaving || brandingInput.trim() === (brandingLogoUrl ?? "")}
+                    className="flex items-center gap-1.5 rounded-xl transition-all duration-150 disabled:opacity-40"
+                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#8705FA", border: "none", padding: "0 20px", height: 44, cursor: "pointer", whiteSpace: "nowrap" }}
+                  >
+                    {brandingSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                    Save
+                  </button>
+                </div>
+
               </div>
             )}
           </div>
