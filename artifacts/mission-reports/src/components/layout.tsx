@@ -92,10 +92,8 @@ export function Layout({ children }: { children: ReactNode }) {
               href="/help"
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(
-                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
-                "text-gray-500 hover:text-purple-700 hover:bg-purple-50"
-              )}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all duration-150"
+              style={{ background: "#AD55FB", color: "#ffffff" }}
             >
               <HelpCircle className="h-3.5 w-3.5" />
               Help
@@ -109,24 +107,22 @@ export function Layout({ children }: { children: ReactNode }) {
 
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
-                        className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-semibold text-[13px] cursor-pointer transition-colors"
-                        style={{ background: "#f3f4f6", border: `1.5px solid #e5e7eb`, color: "#374151" }}
+                        className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[13px] cursor-pointer transition-all duration-150"
+                        style={{ background: "#AD55FB", color: "#ffffff" }}
                       >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                     </Link>
 
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 ml-0.5 hover:bg-gray-100"
-                      style={{ color: "#9CA3AF" }}
+                    <button
+                      className="ml-0.5 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150"
+                      style={{ background: "#AD55FB", color: "#ffffff", border: "none", cursor: "pointer" }}
                       onClick={() => logout.mutate({ data: undefined })}
                       title="Sign out"
                       data-testid="btn-logout"
                     >
                       <LogOut className="h-3.5 w-3.5" />
-                    </Button>
+                    </button>
                   </>
                 ) : (
                   <Link href="/login" data-testid="link-nav-login">
