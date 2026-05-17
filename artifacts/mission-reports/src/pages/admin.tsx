@@ -940,14 +940,15 @@ export default function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
 
-  const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey() } });
-  const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}) } });
+  const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey(), staleTime: 5 * 60 * 1000 } });
+  const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}), staleTime: 2 * 60 * 1000 } });
   const { data: timelineData, isLoading: feedLoading } = useGetTimeline(
     { limit: 50 },
     {
       query: {
         enabled: activeTab === "feed",
         queryKey: getGetTimelineQueryKey({ limit: 50 }),
+        staleTime: 3 * 60 * 1000,
       },
     }
   );
@@ -1248,47 +1249,47 @@ export default function AdminDashboard() {
               })}
             </div>
 
-            {/* Filters */}
-            <div className="bg-white border border-border/60 rounded-xl px-4 py-3 shadow-sm">
-              <div className="flex flex-wrap items-end gap-3">
-                <div className="flex-1 min-w-[160px]">
-                  <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Team member</label>
-                  <select
-                    value={filterUserId}
-                    onChange={e => setFilterUserId(e.target.value)}
-                    className="w-full text-[13px] border border-border/60 rounded-lg px-3 py-1.5 bg-background outline-none focus:ring-2 focus:ring-primary/20"
-                  >
-                    <option value="">All members</option>
-                    {nonAdmins.map((u: any) => (
-                      <option key={u.id} value={String(u.id)}>{u.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex-1 min-w-[140px]">
-                  <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">From</label>
-                  <input type="date" value={filterDateFrom} onChange={e => setFilterDateFrom(e.target.value)}
-                    className="w-full text-[13px] border border-border/60 rounded-lg px-3 py-1.5 bg-background outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-                <div className="flex-1 min-w-[140px]">
-                  <label className="block text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">To</label>
-                  <input type="date" value={filterDateTo} onChange={e => setFilterDateTo(e.target.value)}
-                    className="w-full text-[13px] border border-border/60 rounded-lg px-3 py-1.5 bg-background outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-                {hasFilters && (
+            {/* Filters — compact inline row */}
+            <div className="flex flex-wrap items-center gap-2">
+              <select
+                value={filterUserId}
+                onChange={e => setFilterUserId(e.target.value)}
+                className="text-[13px] border rounded-lg px-3 h-9 bg-white outline-none transition-all"
+                style={{ borderColor: filterUserId ? "#8705FA" : "#E5E7EB", color: filterUserId ? "#7C3AED" : "#374151", fontWeight: filterUserId ? 600 : 400, minWidth: 140 }}
+              >
+                <option value="">All members</option>
+                {nonAdmins.map((u: any) => (
+                  <option key={u.id} value={String(u.id)}>{u.name}</option>
+                ))}
+              </select>
+              <input
+                type="date"
+                value={filterDateFrom}
+                onChange={e => setFilterDateFrom(e.target.value)}
+                className="text-[13px] border rounded-lg px-3 h-9 bg-white outline-none transition-all"
+                style={{ borderColor: filterDateFrom ? "#8705FA" : "#E5E7EB", minWidth: 130 }}
+                title="From date"
+              />
+              <input
+                type="date"
+                value={filterDateTo}
+                onChange={e => setFilterDateTo(e.target.value)}
+                className="text-[13px] border rounded-lg px-3 h-9 bg-white outline-none transition-all"
+                style={{ borderColor: filterDateTo ? "#8705FA" : "#E5E7EB", minWidth: 130 }}
+                title="To date"
+              />
+              {hasFilters && (
+                <>
+                  <span className="text-[12px] text-muted-foreground">
+                    {displayedFeedPosts.length} of {rawFeedPosts.length} posts
+                  </span>
                   <button
                     onClick={() => { setFilterUserId(""); setFilterDateFrom(""); setFilterDateTo(""); }}
-                    className="text-[12px] font-semibold text-muted-foreground hover:text-foreground underline underline-offset-2 whitespace-nowrap pb-1.5"
+                    className="text-[12px] font-semibold text-violet-600 hover:text-violet-800 transition-colors"
                   >
-                    Clear filters
+                    Clear
                   </button>
-                )}
-              </div>
-              {hasFilters && (
-                <p className="text-[12px] text-muted-foreground mt-2">
-                  Showing {displayedFeedPosts.length} of {rawFeedPosts.length} posts
-                </p>
+                </>
               )}
             </div>
 

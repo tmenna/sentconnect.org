@@ -220,13 +220,6 @@ export function FeedGridCard({
   const extraPhotos = post.photos.length - 1;
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
 
-  // Category label
-  const category = post.isMissionMoment
-    ? { label: "Mission Moments", color: "#059669", bg: "#ECFDF5", border: "#A7F3D0" }
-    : post.isHighlight
-    ? { label: "Highlight", color: "#B45309", bg: "#FFFBEB", border: "#FDE68A" }
-    : { label: "Update", color: "#6B7280", bg: "#F9FAFB", border: "#E5E7EB" };
-
   // Thumbnail palette when no photo
   const thumb = post.isMissionMoment ? THUMB_MOMENT : post.isHighlight ? THUMB_HIGHLIGHT : THUMB_DEFAULT;
 
@@ -234,6 +227,8 @@ export function FeedGridCard({
   const lines = (post.description ?? "").split("\n").map(l => l.trim()).filter(Boolean);
   const title = lines[0] ? (lines[0].length > 90 ? lines[0].slice(0, 88) + "…" : lines[0]) : "";
   const excerpt = lines.slice(1).join(" ").trim();
+
+  const dateLabel = format(new Date(post.createdAt), "MMM d, yyyy");
 
   return (
     <div
@@ -244,160 +239,137 @@ export function FeedGridCard({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        transform: hovered ? "translateY(-4px)" : "translateY(0px)",
-        boxShadow: hovered ? "0 12px 32px rgba(0,0,0,0.10)" : "0 2px 8px rgba(0,0,0,0.06)",
-        transition: "transform 160ms ease-out, box-shadow 160ms ease-out",
+        transform: hovered ? "translateY(-3px)" : "translateY(0px)",
+        boxShadow: hovered
+          ? "0 16px 40px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.06)"
+          : "0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)",
+        transition: "transform 180ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 180ms ease-out",
         cursor: "pointer",
-        border: "1px solid #E9E9E9",
       }}
-      className="bg-white rounded-2xl overflow-hidden flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/40"
+      className="bg-white rounded-2xl overflow-hidden flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/40"
     >
       {/* ── Thumbnail ── */}
-      {(() => {
-        const dateLabel = `Update ${format(new Date(post.createdAt), "MM-dd-yyyy")}`;
-
-        return (
-          <div className="relative overflow-hidden flex-shrink-0" style={{ aspectRatio: "16/9" }}>
-            {(coverPhoto && !coverImgError) ? (
-              <>
-                <img
-                  src={coverPhoto.url}
-                  alt={coverPhoto.caption || ""}
-                  className="w-full h-full object-cover"
-                  style={{
-                    transform: hovered ? "scale(1.04)" : "scale(1)",
-                    transition: "transform 320ms ease-out",
-                  }}
-                  loading="lazy"
-                  onError={() => setCoverImgError(true)}
-                />
-                {/* Solid blue date pill */}
-                <div
-                  className="absolute top-3 left-3"
-                  style={{
-                    background: "#2563EB",
-                    color: "#fff",
-                    fontSize: 14,
-                    fontWeight: 600,
-                    padding: "6px 12px",
-                    borderRadius: 9999,
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {dateLabel}
-                </div>
-              </>
-            ) : (
-              <div
-                className="w-full h-full flex flex-col items-center justify-center gap-3"
-                style={{ background: thumb.bg }}
-              >
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                  style={{ background: thumb.iconBg, backdropFilter: "blur(4px)" }}
-                >
-                  {thumb.icon}
-                </div>
-                {/* Solid pill — green for Mission Moments, blue for everything else */}
-                <span
-                  style={{
-                    background: post.isMissionMoment ? "#16A34A" : "#2563EB",
-                    color: "#fff",
-                    fontSize: 14,
-                    fontWeight: 600,
-                    padding: "6px 12px",
-                    borderRadius: 9999,
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {dateLabel}
+      <div className="relative overflow-hidden flex-shrink-0" style={{ aspectRatio: "3/2" }}>
+        {(coverPhoto && !coverImgError) ? (
+          <>
+            <img
+              src={coverPhoto.url}
+              alt={coverPhoto.caption || ""}
+              className="w-full h-full object-cover"
+              style={{
+                transform: hovered ? "scale(1.05)" : "scale(1)",
+                transition: "transform 400ms cubic-bezier(0.25,0.46,0.45,0.94)",
+              }}
+              loading="lazy"
+              onError={() => setCoverImgError(true)}
+            />
+            {/* Bottom gradient overlay */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: "linear-gradient(to top, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.18) 38%, transparent 62%)" }}
+            />
+            {/* Date + photo count inside gradient */}
+            <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between px-3 pb-2.5">
+              <span style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.88)", letterSpacing: "0.02em" }}>
+                {dateLabel}
+              </span>
+              {extraPhotos > 0 && (
+                <span className="flex items-center gap-1 text-white/80" style={{ fontSize: 11, fontWeight: 600 }}>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                  +{extraPhotos}
                 </span>
-              </div>
-            )}
-
-            {/* Extra photo chip */}
-            {extraPhotos > 0 && (
-              <div className="absolute bottom-2.5 right-2.5 bg-black/50 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full">
-                +{extraPhotos} more
-              </div>
-            )}
-
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-3" style={{ background: thumb.bg }}>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: thumb.iconBg, backdropFilter: "blur(6px)" }}>
+              {thumb.icon}
+            </div>
+            <span style={{ fontSize: 12, fontWeight: 600, color: post.isMissionMoment ? "#065F46" : "#3730A3", letterSpacing: "0.03em", opacity: 0.75 }}>
+              {dateLabel}
+            </span>
           </div>
-        );
-      })()}
+        )}
+
+        {/* Category badge — top-left, on image */}
+        {post.isMissionMoment && (
+          <div className="absolute top-2.5 left-2.5">
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-full" style={{ background: "rgba(5,150,105,0.92)", color: "#fff", backdropFilter: "blur(4px)" }}>
+              ★ Mission Moment
+            </span>
+          </div>
+        )}
+        {post.isHighlight && !post.isMissionMoment && (
+          <div className="absolute top-2.5 left-2.5">
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-full" style={{ background: "rgba(180,83,9,0.88)", color: "#fff", backdropFilter: "blur(4px)" }}>
+              ★ Highlight
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* ── Card body ── */}
-      <div className="flex flex-col flex-1 px-4 pt-3.5 pb-4">
-
-        {/* Category label */}
-        <div className="mb-2">
-          <span
-            className="inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full"
-            style={{ color: category.color, background: category.bg, border: `1px solid ${category.border}` }}
-          >
-            {category.label}
-          </span>
-        </div>
+      <div className="flex flex-col flex-1 px-3.5 pt-3 pb-3.5">
 
         {/* Title */}
-        {title ? (
-          <p className="font-bold text-[15px] leading-snug mb-1.5" style={{ color: "#1F2937" }}>
-            {title}
-          </p>
-        ) : null}
+        <p className="font-semibold leading-snug mb-1" style={{ fontSize: 14, color: "#111827", lineHeight: 1.45 }}>
+          {title || post.description?.slice(0, 90) || "Untitled update"}
+        </p>
 
         {/* Excerpt */}
-        {(excerpt || (!title && post.description)) && (
-          <p className="text-[13px] leading-relaxed line-clamp-3 flex-1 mb-3" style={{ color: "#6B7280" }}>
+        {(title && (excerpt || post.description)) && (
+          <p className="line-clamp-2 flex-1 mb-2.5" style={{ fontSize: 12.5, color: "#6B7280", lineHeight: 1.55 }}>
             {excerpt || post.description}
           </p>
         )}
+        {!title && <div className="flex-1" />}
 
         {/* ── Footer ── */}
-        <div className="flex items-center gap-2 mt-auto pt-3" style={{ borderTop: "1px solid #F3F4F6" }}>
-          <Avatar className="h-6 w-6 flex-shrink-0">
+        <div className="flex items-center gap-2 pt-2.5" style={{ borderTop: "1px solid #F3F4F6" }}>
+          <Avatar className="h-6 w-6 flex-shrink-0 ring-1 ring-white shadow-sm">
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="text-[9px] font-bold" style={{ background: "#F3E8FF", color: "#8705FA" }}>
+            <AvatarFallback className="text-[9px] font-bold" style={{ background: "#EDE9FE", color: "#7C3AED" }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-[11px] font-semibold leading-none truncate" style={{ color: "#374151" }}>{post.author.name}</p>
-            <p className="text-[10px] leading-tight mt-0.5" style={{ color: "#9CA3AF" }}>{timeAgo}</p>
-          </div>
-          {post.location && (
-            <div className="hidden sm:flex items-center gap-0.5 flex-shrink-0 max-w-[72px]" style={{ color: "#9CA3AF" }}>
-              <MapPin className="h-2.5 w-2.5 flex-shrink-0" />
-              <span className="text-[10px] truncate">{post.location}</span>
+            <p className="truncate" style={{ fontSize: 11, fontWeight: 600, color: "#374151", lineHeight: 1.2 }}>{post.author.name}</p>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span style={{ fontSize: 10, color: "#9CA3AF" }}>{timeAgo}</span>
+              {post.location && (
+                <span className="hidden sm:flex items-center gap-0.5" style={{ color: "#9CA3AF" }}>
+                  <span style={{ fontSize: 9 }}>·</span>
+                  <MapPin className="h-2 w-2 flex-shrink-0" />
+                  <span className="truncate max-w-[60px]" style={{ fontSize: 10 }}>{post.location}</span>
+                </span>
+              )}
+              {(post.likeCount > 0 || post.commentCount > 0) && (
+                <span className="flex items-center gap-1.5" style={{ color: "#9CA3AF" }}>
+                  <span style={{ fontSize: 9 }}>·</span>
+                  {post.likeCount > 0 && (
+                    <span className="flex items-center gap-0.5" style={{ fontSize: 10 }}>
+                      <ThumbsUp className={cn("h-2.5 w-2.5", post.likedByMe && "fill-violet-500 text-violet-500")} />
+                      {post.likeCount}
+                    </span>
+                  )}
+                  {post.commentCount > 0 && (
+                    <span className="flex items-center gap-0.5" style={{ fontSize: 10 }}>
+                      <MessageCircle className="h-2.5 w-2.5" />
+                      {post.commentCount}
+                    </span>
+                  )}
+                </span>
+              )}
             </div>
-          )}
+          </div>
           <span
-            className="ml-auto flex items-center gap-0.5 text-[12px] font-semibold flex-shrink-0 transition-colors"
-            style={{ color: hovered ? "#6B04C8" : "#8705FA" }}
+            className="flex items-center gap-0.5 flex-shrink-0 font-semibold transition-all duration-150"
+            style={{ fontSize: 11, color: hovered ? "#7C3AED" : "#8705FA", opacity: hovered ? 1 : 0.7 }}
           >
-            Read more <ArrowRight className="h-3 w-3" />
+            Open <ArrowRight className="h-2.5 w-2.5" />
           </span>
         </div>
-
-        {/* Engagement micro-stats */}
-        {(post.likeCount > 0 || post.commentCount > 0) && (
-          <div className="flex items-center gap-3 mt-2">
-            {post.likeCount > 0 && (
-              <div className="flex items-center gap-1 text-[11px]" style={{ color: "#9CA3AF" }}>
-                <ThumbsUp className={cn("h-3 w-3", post.likedByMe && "fill-blue-500 text-blue-500")} />
-                {post.likeCount}
-              </div>
-            )}
-            {post.commentCount > 0 && (
-              <div className="flex items-center gap-1 text-[11px]" style={{ color: "#9CA3AF" }}>
-                <MessageCircle className="h-3 w-3" />
-                {post.commentCount}
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
