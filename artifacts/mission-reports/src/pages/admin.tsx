@@ -1018,7 +1018,7 @@ export default function AdminDashboard() {
         />
       )}
 
-      <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 lg:px-10 xl:px-12">
+      <div className="space-y-6">
 
         {/* ── Page header ── */}
         <div style={{ marginBottom: 24 }}>
