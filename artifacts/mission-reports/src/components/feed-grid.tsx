@@ -217,9 +217,8 @@ export function MasonryCard({
           </div>
         )}
 
-        {/* Bottom overlay content */}
+        {/* Bottom overlay content — title only */}
         <div className="absolute bottom-0 left-0 right-0 px-3.5 pb-3 pt-10">
-          {/* Title */}
           {displayTitle && (
             <p
               style={{
@@ -228,7 +227,7 @@ export function MasonryCard({
                 color: "#ffffff",
                 lineHeight: 1.35,
                 letterSpacing: "-0.01em",
-                marginBottom: 8,
+                marginBottom: 0,
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
@@ -238,51 +237,51 @@ export function MasonryCard({
               {displayTitle}
             </p>
           )}
-
-          {/* Reaction / meta row — heart is interactive */}
-          <div className="flex items-center gap-3" style={{ fontSize: 12, color: "rgba(255,255,255,0.82)" }}>
-            {/* ❤️ Like — clickable, stops propagation */}
-            <button
-              onClick={handleLike}
-              disabled={liking}
-              className="flex items-center gap-1 transition-transform duration-150 hover:scale-110 active:scale-95 disabled:opacity-60"
-              style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "rgba(255,255,255,0.82)" }}
-              aria-label={liked ? "Unlike" : "Like"}
-            >
-              <Heart
-                className="h-3.5 w-3.5 transition-colors duration-150"
-                style={{
-                  fill: liked ? "#F87171" : "none",
-                  color: liked ? "#F87171" : "rgba(255,255,255,0.82)",
-                }}
-              />
-              <span style={{ fontSize: 12, fontWeight: liked ? 700 : 500, color: liked ? "#FCA5A5" : "rgba(255,255,255,0.82)" }}>
-                {likeCount}
-              </span>
-            </button>
-
-            {/* 💬 Comment count */}
-            <span className="flex items-center gap-1">
-              <MessageCircle className="h-3.5 w-3.5" />
-              {post.commentCount}
-            </span>
-
-            {/* 📍 Location */}
-            {post.location && (
-              <span className="flex items-center gap-1 min-w-0">
-                <MapPin className="h-3 w-3 flex-shrink-0" />
-                <span className="truncate" style={{ maxWidth: 80 }}>{post.location}</span>
-              </span>
-            )}
-
-            {/* Time ago — pushed to right */}
-            <span className="ml-auto flex-shrink-0" style={{ fontSize: 11 }}>{timeAgo}</span>
-          </div>
         </div>
       </div>
 
       {/* ── Content below image ── */}
       <div className="flex flex-col flex-1 px-3.5 pt-3 pb-3">
+        {/* Reaction row — always visible, dark-on-white */}
+        <div className="flex items-center gap-3 mb-2.5" style={{ fontSize: 12, color: "#94A3B8" }}>
+          {/* ❤️ Like — clickable */}
+          <button
+            onClick={handleLike}
+            disabled={liking}
+            className="flex items-center gap-1 transition-transform duration-150 hover:scale-110 active:scale-95 disabled:opacity-60"
+            style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+            aria-label={liked ? "Unlike" : "Like"}
+          >
+            <Heart
+              className="h-3.5 w-3.5 transition-colors duration-150"
+              style={{
+                fill: liked ? "#F87171" : "none",
+                color: liked ? "#F87171" : "#94A3B8",
+              }}
+            />
+            <span style={{ fontSize: 12, fontWeight: liked ? 700 : 500, color: liked ? "#EF4444" : "#94A3B8" }}>
+              {likeCount}
+            </span>
+          </button>
+
+          {/* 💬 Comment count */}
+          <span className="flex items-center gap-1">
+            <MessageCircle className="h-3.5 w-3.5" />
+            {post.commentCount}
+          </span>
+
+          {/* 📍 Location */}
+          {post.location && (
+            <span className="flex items-center gap-1 min-w-0">
+              <MapPin className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate" style={{ maxWidth: 80 }}>{post.location}</span>
+            </span>
+          )}
+
+          {/* Time ago — pushed right */}
+          <span className="ml-auto flex-shrink-0" style={{ fontSize: 11 }}>{timeAgo}</span>
+        </div>
+
         {/* Excerpt */}
         {displayExcerpt ? (
           <p className="line-clamp-2 mb-3" style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.55, flexGrow: 1 }}>

@@ -1010,30 +1010,20 @@ export default function AdminDashboard() {
 
       <div className="space-y-6">
 
-        {/* ── Page header — compact two-column ── */}
-        <div className="flex items-start justify-between gap-4 flex-wrap pb-1">
-          {/* Left: badge + title */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap mb-2">
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F3E8FF", borderRadius: 999, padding: "4px 12px" }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#8705FA" }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#8705FA", letterSpacing: "0.07em" }}>ADMIN DASHBOARD</span>
-              </div>
-              {user.organization && (
-                <span style={{ fontSize: 12, fontWeight: 700, color: "#94A3B8", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                  {user.organization}
-                </span>
-              )}
+        {/* ── Page header row 1: badge + stats + avatar ── */}
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F3E8FF", borderRadius: 999, padding: "4px 12px" }}>
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#8705FA" }} />
+              <span style={{ fontSize: 11, fontWeight: 700, color: "#8705FA", letterSpacing: "0.07em" }}>ADMIN DASHBOARD</span>
             </div>
-            <h1 style={{ fontSize: "clamp(20px, 4vw, 26px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 5px" }}>
-              Global Partners
-            </h1>
-            <p style={{ fontSize: 14, color: "#94A3B8", margin: 0, lineHeight: 1.5 }}>
-              Manage your team and track mission activity
-            </p>
+            {user.organization && (
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#94A3B8", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                {user.organization}
+              </span>
+            )}
           </div>
-          {/* Right: stats + avatar */}
-          <div className="flex items-center gap-2.5 flex-shrink-0 mt-1">
+          <div className="flex items-center gap-2.5 flex-shrink-0">
             <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 700, color: "#059669", background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 999, padding: "5px 12px" }}>
               {usersLoading ? "—" : allUsers.length} <span style={{ fontWeight: 500, color: "#475569" }}>Members</span>
             </span>
@@ -1049,65 +1039,69 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* ── Tabs ── */}
-        <div
-          className="flex items-center overflow-x-auto scrollbar-none"
-          style={{
-            background: "white",
-            borderRadius: 14,
-            border: "1px solid #F1F5F9",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
-            padding: "0 8px",
-          }}
-        >
-          {[
-            { id: "feed", label: "Updates", badge: null },
-            { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
-            { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
-          ].map(tab => {
-            const active = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className="transition-all duration-150 flex-shrink-0"
-                style={{
-                  paddingBottom: 16,
-                  paddingTop: 16,
-                  paddingLeft: 6,
-                  paddingRight: 6,
-                  marginRight: 28,
-                  marginBottom: -2,
-                  fontSize: 16,
-                  fontWeight: active ? 800 : 500,
-                  color: active ? "#8705FA" : "#94A3B8",
-                  border: "none",
-                  borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
-                  background: "transparent",
-                  cursor: "pointer",
-                  letterSpacing: active ? "-0.02em" : "normal",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {tab.label}
-                {tab.badge != null && (
-                  <span
-                    style={{
-                      marginLeft: 8,
-                      fontSize: 13,
-                      fontWeight: 700,
-                      background: active ? "#F3E8FF" : "#F8FAFC",
-                      color: active ? "#8705FA" : "#94A3B8",
-                      borderRadius: 999,
-                      padding: "2px 10px",
-                    }}
-                  >
-                    {tab.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+        {/* ── Page header row 2: title left + tabs right (side-by-side) ── */}
+        <div className="flex items-center justify-between gap-6 flex-wrap pb-1">
+          {/* Left: title + subtitle */}
+          <div className="flex-shrink-0">
+            <h1 style={{ fontSize: "clamp(20px, 4vw, 26px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 4px" }}>
+              Global Partners
+            </h1>
+            <p style={{ fontSize: 14, color: "#94A3B8", margin: 0, lineHeight: 1.4 }}>
+              Manage your team and track mission activity
+            </p>
+          </div>
+
+          {/* Right: tabs inline */}
+          <div className="flex items-center overflow-x-auto scrollbar-none flex-shrink-0" style={{ borderBottom: "2px solid #F1F5F9" }}>
+            {[
+              { id: "feed", label: "Updates", badge: null },
+              { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
+              { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
+            ].map(tab => {
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className="transition-all duration-150 flex-shrink-0"
+                  style={{
+                    paddingBottom: 14,
+                    paddingTop: 14,
+                    paddingLeft: 6,
+                    paddingRight: 6,
+                    marginRight: 28,
+                    marginBottom: -2,
+                    fontSize: 16,
+                    fontWeight: active ? 800 : 500,
+                    color: active ? "#8705FA" : "#94A3B8",
+                    border: "none",
+                    borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
+                    background: "transparent",
+                    cursor: "pointer",
+                    letterSpacing: active ? "-0.02em" : "normal",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {tab.label}
+                  {tab.badge != null && (
+                    <span
+                      style={{
+                        marginLeft: 8,
+                        fontSize: 13,
+                        fontWeight: 700,
+                        background: active ? "#F3E8FF" : "#F8FAFC",
+                        color: active ? "#8705FA" : "#94A3B8",
+                        borderRadius: 999,
+                        padding: "2px 10px",
+                      }}
+                    >
+                      {tab.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* ── Tab: Team ── */}
