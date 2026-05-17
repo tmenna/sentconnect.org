@@ -166,19 +166,36 @@ export default function Feed() {
 
       {/* ── Posts ── */}
       {isLoading && accumulatedPosts.length === 0 ? (
-        <div style={{ paddingTop: 16 }}>
+        <div style={{ paddingTop: 8 }}>
           {[1, 2, 3].map(i => (
-            <div key={i} style={{ paddingTop: 24, paddingBottom: 24, borderBottom: "1px solid #f0f0f0" }}>
-              <div className="flex items-center gap-3" style={{ marginBottom: 12 }}>
-                <Skeleton className="h-9 w-9 rounded-full flex-shrink-0" />
-                <div className="space-y-1.5 flex-1">
-                  <Skeleton className="h-3 w-28" />
-                  <Skeleton className="h-2.5 w-20" />
+            <div
+              key={i}
+              className="bg-white rounded-2xl overflow-hidden mb-4"
+              style={{ border: "1px solid #E2E8F0", boxShadow: "0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.05)" }}
+            >
+              {/* Header */}
+              <div className="flex items-center gap-3.5 px-6 pt-5 pb-3">
+                <Skeleton className="h-12 w-12 rounded-full flex-shrink-0" />
+                <div className="space-y-2 flex-1">
+                  <Skeleton className="h-3.5 w-32" />
+                  <Skeleton className="h-2.5 w-24" />
                 </div>
               </div>
-              <Skeleton className="h-3.5 w-full" style={{ marginBottom: 6 }} />
-              <Skeleton className="h-3.5 w-4/5" />
-              {i === 1 && <Skeleton className="h-44 w-full rounded-lg" style={{ marginTop: 12 }} />}
+              {/* Text lines */}
+              <div className="px-6 pb-4 space-y-2">
+                <Skeleton className="h-3.5 w-full" />
+                <Skeleton className="h-3.5 w-5/6" />
+                <Skeleton className="h-3.5 w-4/5" />
+                {i % 2 === 0 && <Skeleton className="h-3.5 w-2/3" />}
+              </div>
+              {/* Image placeholder on alternating cards */}
+              {i === 1 && <Skeleton className="w-full" style={{ aspectRatio: "16/9" }} />}
+              {/* Action bar */}
+              <div className="flex items-center gap-1 px-4 py-2 border-t border-slate-100">
+                <Skeleton className="flex-1 h-8 rounded-xl" />
+                <Skeleton className="flex-1 h-8 rounded-xl" />
+                <Skeleton className="flex-1 h-8 rounded-xl" />
+              </div>
             </div>
           ))}
         </div>

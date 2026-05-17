@@ -1296,18 +1296,22 @@ export default function AdminDashboard() {
             {feedLoading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[1, 2, 3, 4, 5, 6].map(i => (
-                  <div key={i} className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden">
-                    <Skeleton className="w-full aspect-[4/3]" />
-                    <div className="p-3.5 space-y-2.5">
-                      <div className="flex items-center gap-2">
-                        <Skeleton className="h-7 w-7 rounded-full" />
-                        <div className="space-y-1 flex-1">
-                          <Skeleton className="h-2.5 w-24" />
-                          <Skeleton className="h-2 w-16" />
+                  <div key={i} className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)" }}>
+                    {/* Thumbnail skeleton — matches 3/2 ratio */}
+                    <Skeleton className="w-full" style={{ aspectRatio: "3/2" }} />
+                    <div className="px-3.5 pt-3 pb-3.5 space-y-2">
+                      {/* Title */}
+                      <Skeleton className="h-3.5 w-full rounded" />
+                      <Skeleton className="h-3.5 w-4/5 rounded" />
+                      {/* Footer divider + author row */}
+                      <div className="pt-2 border-t border-gray-100 flex items-center gap-2">
+                        <Skeleton className="h-6 w-6 rounded-full flex-shrink-0" />
+                        <div className="flex-1 space-y-1">
+                          <Skeleton className="h-2.5 w-20 rounded" />
+                          <Skeleton className="h-2 w-12 rounded" />
                         </div>
+                        <Skeleton className="h-2.5 w-10 rounded" />
                       </div>
-                      <Skeleton className="h-3 w-full" />
-                      <Skeleton className="h-3 w-3/4" />
                     </div>
                   </div>
                 ))}

@@ -508,6 +508,10 @@ export function PostCard({
   const isAdmin = user?.role === "admin" || user?.role === "super_admin";
   const canManage = isOwner || isAdmin;
 
+  const COLLAPSE_THRESHOLD = 300;
+  const isLongPost = (post.description?.length ?? 0) > COLLAPSE_THRESHOLD;
+  const [textCollapsed, setTextCollapsed] = useState(isLongPost);
+
   // Close menu on outside click
   useEffect(() => {
     if (!showMenu) return;
@@ -709,7 +713,28 @@ export function PostCard({
           {/* Text */}
           {post.description && (
             <div className="px-4 sm:px-6 pb-5">
-              <p style={{ fontSize: 16, color: "#000000", lineHeight: 1.7, letterSpacing: "-0.01em", whiteSpace: "pre-wrap" }}>{post.description}</p>
+              <p style={{
+                fontSize: 16,
+                color: "#000000",
+                lineHeight: 1.7,
+                letterSpacing: "-0.01em",
+                whiteSpace: "pre-wrap",
+                overflow: textCollapsed ? "hidden" : undefined,
+                display: textCollapsed ? "-webkit-box" : undefined,
+                WebkitLineClamp: textCollapsed ? 5 : undefined,
+                WebkitBoxOrient: textCollapsed ? "vertical" : undefined,
+              } as React.CSSProperties}>
+                {post.description}
+              </p>
+              {isLongPost && (
+                <button
+                  onClick={() => setTextCollapsed(c => !c)}
+                  className="mt-1.5 text-[13px] font-semibold transition-colors"
+                  style={{ color: "#8705FA" }}
+                >
+                  {textCollapsed ? "Read more →" : "Show less ↑"}
+                </button>
+              )}
             </div>
           )}
 
