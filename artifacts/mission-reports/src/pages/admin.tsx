@@ -1010,20 +1010,80 @@ export default function AdminDashboard() {
 
       <div className="space-y-6">
 
-        {/* ── Header row 1: context breadcrumb (left) + stats + avatar (right) ── */}
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center gap-2 flex-wrap">
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F3E8FF", borderRadius: 999, padding: "4px 12px" }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#8705FA" }} />
-              <span style={{ fontSize: 11, fontWeight: 700, color: "#8705FA", letterSpacing: "0.07em" }}>ADMIN DASHBOARD</span>
-            </div>
-            {user.organization && (
-              <span style={{ fontSize: 12, fontWeight: 700, color: "#64748B", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                {user.organization}
-              </span>
-            )}
+        {/* ── Header: breadcrumb top row ── */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F3E8FF", borderRadius: 999, padding: "4px 12px" }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#8705FA" }} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#8705FA", letterSpacing: "0.07em" }}>ADMIN DASHBOARD</span>
           </div>
-          <div className="flex items-center gap-2.5 flex-shrink-0">
+          {user.organization && (
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#64748B", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+              {user.organization}
+            </span>
+          )}
+        </div>
+
+        {/* ── Header: title + tabs (left) | stats + avatar (right) — all one row ── */}
+        <div
+          className="flex items-end justify-between gap-4 flex-wrap"
+          style={{ borderBottom: "2px solid #F1F5F9", paddingBottom: 0 }}
+        >
+          {/* Left: title then tabs inline */}
+          <div className="flex items-end gap-8 flex-wrap min-w-0">
+            {/* Title block */}
+            <div style={{ paddingBottom: 14, flexShrink: 0 }}>
+              <h1 style={{ fontSize: "clamp(20px, 3.5vw, 26px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 3px" }}>
+                Global Partners
+              </h1>
+              <p style={{ fontSize: 13, color: "#64748B", margin: 0, lineHeight: 1.3 }}>
+                Manage your team and track mission activity
+              </p>
+            </div>
+
+            {/* Tabs — vertically aligned to bottom edge */}
+            <div className="flex items-end overflow-x-auto scrollbar-none" style={{ marginBottom: -2 }}>
+              {[
+                { id: "feed", label: "Updates", badge: null },
+                { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
+                { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
+              ].map(tab => {
+                const active = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className="transition-all duration-150 flex-shrink-0"
+                    style={{
+                      paddingBottom: 14,
+                      paddingTop: 10,
+                      paddingLeft: 4,
+                      paddingRight: 4,
+                      marginRight: 28,
+                      fontSize: 16,
+                      fontWeight: active ? 800 : 500,
+                      color: active ? "#8705FA" : "#64748B",
+                      border: "none",
+                      borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
+                      background: "transparent",
+                      cursor: "pointer",
+                      letterSpacing: active ? "-0.02em" : "normal",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {tab.label}
+                    {tab.badge != null && (
+                      <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F3E8FF" : "#F8FAFC", color: active ? "#8705FA" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
+                        {tab.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right: stats + avatar — aligned to bottom */}
+          <div className="flex items-center gap-2.5 flex-shrink-0" style={{ paddingBottom: 12 }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 700, color: "#059669", background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 999, padding: "5px 12px" }}>
               {usersLoading ? "—" : allUsers.length} <span style={{ fontWeight: 500, color: "#475569" }}>Members</span>
             </span>
@@ -1037,61 +1097,6 @@ export default function AdminDashboard() {
               </AvatarFallback>
             </Avatar>
           </div>
-        </div>
-
-        {/* ── Header row 2: title + subtitle ── */}
-        <div style={{ paddingBottom: 2 }}>
-          <h1 style={{ fontSize: "clamp(22px, 4vw, 28px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 5px" }}>
-            Global Partners
-          </h1>
-          <p style={{ fontSize: 14, color: "#64748B", margin: 0, lineHeight: 1.4 }}>
-            Manage your team and track mission activity
-          </p>
-        </div>
-
-        {/* ── Header row 3: full-width underline tab bar ── */}
-        <div
-          className="flex items-center overflow-x-auto scrollbar-none"
-          style={{ borderBottom: "2px solid #F1F5F9", marginTop: -8 }}
-        >
-          {[
-            { id: "feed", label: "Updates", badge: null },
-            { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
-            { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
-          ].map(tab => {
-            const active = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className="transition-all duration-150 flex-shrink-0"
-                style={{
-                  paddingBottom: 14,
-                  paddingTop: 14,
-                  paddingLeft: 4,
-                  paddingRight: 4,
-                  marginRight: 32,
-                  marginBottom: -2,
-                  fontSize: 16,
-                  fontWeight: active ? 800 : 500,
-                  color: active ? "#8705FA" : "#64748B",
-                  border: "none",
-                  borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
-                  background: "transparent",
-                  cursor: "pointer",
-                  letterSpacing: active ? "-0.02em" : "normal",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {tab.label}
-                {tab.badge != null && (
-                  <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F3E8FF" : "#F8FAFC", color: active ? "#8705FA" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
-                    {tab.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
         </div>
 
         {/* ── Tab: Team ── */}
