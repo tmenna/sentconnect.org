@@ -1064,9 +1064,9 @@ export default function AdminDashboard() {
         {/* ── Tabs ── */}
         <div className="flex items-center overflow-x-auto scrollbar-none" style={{ borderBottom: "2px solid #E9D5FF" }}>
           {[
-            { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
             { id: "feed", label: "Updates", badge: null },
             { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
+            { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
           ].map(tab => {
             const active = activeTab === tab.id;
             return (
@@ -1077,9 +1077,9 @@ export default function AdminDashboard() {
                 style={{
                   paddingBottom: 14,
                   paddingTop: 4,
-                  marginRight: 20,
+                  marginRight: 24,
                   marginBottom: -2,
-                  fontSize: 14,
+                  fontSize: 16,
                   fontWeight: active ? 800 : 500,
                   color: active ? "#8705FA" : "#94A3B8",
                   border: "none",
@@ -1095,12 +1095,12 @@ export default function AdminDashboard() {
                   <span
                     style={{
                       marginLeft: 7,
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: 700,
                       background: active ? "#F3E8FF" : "#F1F5F9",
                       color: active ? "#8705FA" : "#94A3B8",
                       borderRadius: 999,
-                      padding: "2px 8px",
+                      padding: "2px 9px",
                     }}
                   >
                     {tab.badge}
@@ -1114,28 +1114,40 @@ export default function AdminDashboard() {
         {/* ── Tab: Team ── */}
         {activeTab === "team" && (
           <div className="space-y-4">
-            {/* Toolbar */}
-            <div className="flex flex-wrap items-center gap-3">
-              <input
-                type="text"
-                placeholder="Search by name or email…"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="flex-1 min-w-[180px] text-[15px] border rounded-xl px-4 py-3 outline-none bg-white transition-all duration-200"
-                style={{ borderColor: "#E5E7EB", height: "48px" }}
-                onFocus={e => { e.target.style.borderColor = "#6B7280"; e.target.style.boxShadow = "0 0 0 2px rgba(107,114,128,0.12)"; }}
-                onBlur={e => { e.target.style.borderColor = "#E5E7EB"; e.target.style.boxShadow = "none"; }}
-              />
-              <button
-                onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-2 px-5 text-[14px] font-semibold text-white rounded-xl whitespace-nowrap transition-all duration-200 hover:-translate-y-px"
-                style={{ backgroundColor: "#059669", height: "44px", boxShadow: "0 2px 8px rgba(5,150,105,0.20)" }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#047857"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(5,150,105,0.25)"; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#059669"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(5,150,105,0.20)"; }}
-              >
-                <Plus className="h-4 w-4" />
-                Add Team Member
-              </button>
+            {/* Toolbar — label left, controls right */}
+            <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #E9D5FF", paddingBottom: 0 }}>
+              <div className="flex items-center" style={{ paddingBottom: 12, paddingTop: 6 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#0F172A" }}>
+                  Team Members
+                </span>
+                {!usersLoading && (
+                  <span style={{ marginLeft: 8, fontSize: 12, fontWeight: 600, background: "#F1F5F9", color: "#64748B", borderRadius: 999, padding: "1px 8px" }}>
+                    {allUsers.length}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2 pb-2 flex-wrap">
+                <input
+                  type="text"
+                  placeholder="Search by name or email…"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className="text-[13px] border rounded-lg px-3 h-8 bg-white outline-none transition-all"
+                  style={{ borderColor: searchQuery ? "#8705FA" : "#E5E7EB", minWidth: 200 }}
+                  onFocus={e => { e.target.style.borderColor = "#8705FA"; e.target.style.boxShadow = "0 0 0 2px rgba(135,5,250,0.08)"; }}
+                  onBlur={e => { e.target.style.borderColor = searchQuery ? "#8705FA" : "#E5E7EB"; e.target.style.boxShadow = "none"; }}
+                />
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="flex items-center gap-1.5 px-4 text-[13px] font-semibold text-white rounded-lg whitespace-nowrap transition-all duration-200 hover:-translate-y-px"
+                  style={{ backgroundColor: "#059669", height: "32px", boxShadow: "0 2px 8px rgba(5,150,105,0.20)" }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#047857"; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#059669"; }}
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  Add Member
+                </button>
+              </div>
             </div>
 
             {/* Table */}
@@ -1226,7 +1238,7 @@ export default function AdminDashboard() {
                         paddingRight: 4,
                         marginRight: 24,
                         marginBottom: -1,
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: active ? 700 : 500,
                         color: active ? "#8705FA" : "#94A3B8",
                         border: "none",
@@ -1364,6 +1376,27 @@ export default function AdminDashboard() {
         {/* ── Tab: Countries ── */}
         {activeTab === "countries" && (
           <div className="space-y-4">
+            {/* Toolbar — label left, count right */}
+            <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #E9D5FF", paddingBottom: 0 }}>
+              <div className="flex items-center" style={{ paddingBottom: 12, paddingTop: 6 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#0F172A" }}>
+                  Team Locations
+                </span>
+                {!usersLoading && countriesCount > 0 && (
+                  <span style={{ marginLeft: 8, fontSize: 12, fontWeight: 600, background: "#F1F5F9", color: "#64748B", borderRadius: 999, padding: "1px 8px" }}>
+                    {countriesCount} {countriesCount === 1 ? "country" : "countries"}
+                  </span>
+                )}
+              </div>
+              {!usersLoading && countriesList.length > 0 && (
+                <div className="pb-2">
+                  <span style={{ fontSize: 12, color: "#94A3B8" }}>
+                    {countriesList.reduce((n: number, c: any) => n + c.members.length, 0)} missionaries deployed
+                  </span>
+                </div>
+              )}
+            </div>
+
             {usersLoading ? (
               <div className="space-y-4">
                 {[1, 2].map(i => (
