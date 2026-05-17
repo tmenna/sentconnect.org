@@ -1127,21 +1127,6 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Right: stats + avatar — aligned to bottom */}
-          <div className="flex items-center gap-2.5 flex-shrink-0" style={{ paddingBottom: 12 }}>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 700, color: "#059669", background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 999, padding: "5px 12px" }}>
-              {usersLoading ? "—" : allUsers.length} <span style={{ fontWeight: 500, color: "#475569" }}>Members</span>
-            </span>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 700, color: "#8705FA", background: "#F3E8FF", border: "1px solid #D8B4FE", borderRadius: 999, padding: "5px 12px" }}>
-              {usersLoading ? "—" : countriesCount} <span style={{ fontWeight: 500, color: "#475569" }}>Countries</span>
-            </span>
-            <Avatar className="h-9 w-9 flex-shrink-0" style={{ border: "2px solid #E8EEF8" }}>
-              <AvatarImage src={user.avatarUrl ?? undefined} />
-              <AvatarFallback style={{ background: "#F3E8FF", color: "#8705FA", fontWeight: 800, fontSize: 13 }}>
-                {user.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </div>
         </div>
 
         {/* ── Tab: Team ── */}
