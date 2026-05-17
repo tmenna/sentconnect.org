@@ -317,13 +317,14 @@ export function FeedGridCard({
           {title || post.description?.slice(0, 90) || "Untitled update"}
         </p>
 
-        {/* Excerpt */}
-        {(title && (excerpt || post.description)) && (
+        {/* Excerpt — only show if there's genuinely more text after the title */}
+        {excerpt ? (
           <p className="line-clamp-2 flex-1 mb-2.5" style={{ fontSize: 12.5, color: "#6B7280", lineHeight: 1.55 }}>
-            {excerpt || post.description}
+            {excerpt}
           </p>
+        ) : (
+          <div className="flex-1" />
         )}
-        {!title && <div className="flex-1" />}
 
         {/* ── Footer ── */}
         <div className="flex items-center gap-2 pt-2.5" style={{ borderTop: "1px solid #F3F4F6" }}>
