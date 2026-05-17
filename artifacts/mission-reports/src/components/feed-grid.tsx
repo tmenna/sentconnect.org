@@ -178,14 +178,14 @@ export function MasonryCard({
           }}
         />
 
-        {/* Top: colour-coded date pill (top-left) */}
+        {/* Top: date pill (top-left) */}
         <div className="absolute top-3 left-3">
           <span
             style={{
               fontSize: 11,
               fontWeight: 700,
-              background: datePill.bg,
-              color: datePill.color,
+              background: "#9523FA",
+              color: "#ffffff",
               borderRadius: 999,
               padding: "3px 11px",
               lineHeight: 1.6,
