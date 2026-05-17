@@ -17,7 +17,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type PostData } from "@/components/post-card";
-import { FeedGridCard, PostDetailModal } from "@/components/feed-grid";
+import { FeedGridCard, MasonryCard, PostDetailModal } from "@/components/feed-grid";
 import { format } from "date-fns";
 // ─── helpers ───────────────────────────────────────────────────────────────
 
@@ -1025,14 +1025,12 @@ export default function AdminDashboard() {
                 </span>
               )}
             </div>
-            <div className="flex items-baseline gap-3 flex-wrap">
-              <h1 style={{ fontSize: "clamp(20px, 4vw, 26px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: 0 }}>
-                Global Partners
-              </h1>
-              <p style={{ fontSize: 14, color: "#94A3B8", margin: 0, lineHeight: 1 }}>
-                Manage your team and track mission activity
-              </p>
-            </div>
+            <h1 style={{ fontSize: "clamp(20px, 4vw, 26px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 5px" }}>
+              Global Partners
+            </h1>
+            <p style={{ fontSize: 14, color: "#94A3B8", margin: 0, lineHeight: 1.5 }}>
+              Manage your team and track mission activity
+            </p>
           </div>
           {/* Right: stats + avatar */}
           <div className="flex items-center gap-2.5 flex-shrink-0 mt-1">
@@ -1052,7 +1050,16 @@ export default function AdminDashboard() {
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex items-center overflow-x-auto scrollbar-none" style={{ borderBottom: "1.5px solid #F1F5F9" }}>
+        <div
+          className="flex items-center overflow-x-auto scrollbar-none"
+          style={{
+            background: "white",
+            borderRadius: 14,
+            border: "1px solid #F1F5F9",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+            padding: "0 8px",
+          }}
+        >
           {[
             { id: "feed", label: "Updates", badge: null },
             { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
@@ -1065,9 +1072,11 @@ export default function AdminDashboard() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className="transition-all duration-150 flex-shrink-0"
                 style={{
-                  paddingBottom: 14,
-                  paddingTop: 4,
-                  marginRight: 24,
+                  paddingBottom: 16,
+                  paddingTop: 16,
+                  paddingLeft: 6,
+                  paddingRight: 6,
+                  marginRight: 28,
                   marginBottom: -2,
                   fontSize: 16,
                   fontWeight: active ? 800 : 500,
@@ -1084,13 +1093,13 @@ export default function AdminDashboard() {
                 {tab.badge != null && (
                   <span
                     style={{
-                      marginLeft: 7,
+                      marginLeft: 8,
                       fontSize: 13,
                       fontWeight: 700,
-                      background: active ? "#F3E8FF" : "#F1F5F9",
+                      background: active ? "#F3E8FF" : "#F8FAFC",
                       color: active ? "#8705FA" : "#94A3B8",
                       borderRadius: 999,
-                      padding: "2px 9px",
+                      padding: "2px 10px",
                     }}
                   >
                     {tab.badge}
@@ -1275,23 +1284,21 @@ export default function AdminDashboard() {
             </div>
 
             {feedLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+              <div style={{ columns: "3 280px", columnGap: 20 }}>
                 {[1, 2, 3, 4, 5, 6].map(i => (
-                  <div key={i} className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)" }}>
-                    {/* Thumbnail skeleton — matches 3/2 ratio */}
-                    <Skeleton className="w-full" style={{ aspectRatio: "3/2" }} />
-                    <div className="px-3.5 pt-3 pb-3.5 space-y-2">
-                      {/* Title */}
-                      <Skeleton className="h-3.5 w-full rounded" />
-                      <Skeleton className="h-3.5 w-4/5 rounded" />
-                      {/* Footer divider + author row */}
-                      <div className="pt-2 border-t border-gray-100 flex items-center gap-2">
-                        <Skeleton className="h-6 w-6 rounded-full flex-shrink-0" />
-                        <div className="flex-1 space-y-1">
-                          <Skeleton className="h-2.5 w-20 rounded" />
-                          <Skeleton className="h-2 w-12 rounded" />
+                  <div key={i} style={{ breakInside: "avoid", display: "inline-block", width: "100%", marginBottom: 20 }}>
+                    <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)" }}>
+                      <Skeleton className="w-full" style={{ height: i % 3 === 0 ? 220 : i % 3 === 1 ? 160 : 190 }} />
+                      <div className="px-3.5 pt-3 pb-3.5 space-y-2">
+                        <Skeleton className="h-3.5 w-full rounded" />
+                        <Skeleton className="h-3.5 w-4/5 rounded" />
+                        <div className="pt-2 border-t border-gray-100 flex items-center gap-2">
+                          <Skeleton className="h-6 w-6 rounded-full flex-shrink-0" />
+                          <div className="flex-1 space-y-1">
+                            <Skeleton className="h-2.5 w-20 rounded" />
+                            <Skeleton className="h-2 w-12 rounded" />
+                          </div>
                         </div>
-                        <Skeleton className="h-2.5 w-10 rounded" />
                       </div>
                     </div>
                   </div>
@@ -1314,13 +1321,14 @@ export default function AdminDashboard() {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+              <div style={{ columns: "3 280px", columnGap: 20 }}>
                 {displayedFeedPosts.map((post, i) => (
-                  <FeedGridCard
-                    key={post.id}
-                    post={post}
-                    onClick={() => setSelectedPostIndex(i)}
-                  />
+                  <div key={post.id} style={{ breakInside: "avoid", display: "inline-block", width: "100%", marginBottom: 20 }}>
+                    <MasonryCard
+                      post={post}
+                      onClick={() => setSelectedPostIndex(i)}
+                    />
+                  </div>
                 ))}
               </div>
             )}
