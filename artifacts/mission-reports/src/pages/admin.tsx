@@ -1010,7 +1010,7 @@ export default function AdminDashboard() {
 
       <div className="space-y-6">
 
-        {/* ── Page header row 1: badge + stats + avatar ── */}
+        {/* ── Header row 1: context breadcrumb (left) + stats + avatar (right) ── */}
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-2 flex-wrap">
             <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F3E8FF", borderRadius: 999, padding: "4px 12px" }}>
@@ -1039,69 +1039,59 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* ── Page header row 2: title left + tabs right (side-by-side) ── */}
-        <div className="flex items-center justify-between gap-6 flex-wrap pb-1">
-          {/* Left: title + subtitle */}
-          <div className="flex-shrink-0">
-            <h1 style={{ fontSize: "clamp(20px, 4vw, 26px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 4px" }}>
-              Global Partners
-            </h1>
-            <p style={{ fontSize: 14, color: "#94A3B8", margin: 0, lineHeight: 1.4 }}>
-              Manage your team and track mission activity
-            </p>
-          </div>
+        {/* ── Header row 2: title + subtitle ── */}
+        <div style={{ paddingBottom: 2 }}>
+          <h1 style={{ fontSize: "clamp(22px, 4vw, 28px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 5px" }}>
+            Global Partners
+          </h1>
+          <p style={{ fontSize: 14, color: "#94A3B8", margin: 0, lineHeight: 1.4 }}>
+            Manage your team and track mission activity
+          </p>
+        </div>
 
-          {/* Right: tabs inline */}
-          <div className="flex items-center overflow-x-auto scrollbar-none flex-shrink-0" style={{ borderBottom: "2px solid #F1F5F9" }}>
-            {[
-              { id: "feed", label: "Updates", badge: null },
-              { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
-              { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
-            ].map(tab => {
-              const active = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className="transition-all duration-150 flex-shrink-0"
-                  style={{
-                    paddingBottom: 14,
-                    paddingTop: 14,
-                    paddingLeft: 6,
-                    paddingRight: 6,
-                    marginRight: 28,
-                    marginBottom: -2,
-                    fontSize: 16,
-                    fontWeight: active ? 800 : 500,
-                    color: active ? "#8705FA" : "#94A3B8",
-                    border: "none",
-                    borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
-                    background: "transparent",
-                    cursor: "pointer",
-                    letterSpacing: active ? "-0.02em" : "normal",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {tab.label}
-                  {tab.badge != null && (
-                    <span
-                      style={{
-                        marginLeft: 8,
-                        fontSize: 13,
-                        fontWeight: 700,
-                        background: active ? "#F3E8FF" : "#F8FAFC",
-                        color: active ? "#8705FA" : "#94A3B8",
-                        borderRadius: 999,
-                        padding: "2px 10px",
-                      }}
-                    >
-                      {tab.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+        {/* ── Header row 3: full-width underline tab bar ── */}
+        <div
+          className="flex items-center overflow-x-auto scrollbar-none"
+          style={{ borderBottom: "2px solid #F1F5F9", marginTop: -8 }}
+        >
+          {[
+            { id: "feed", label: "Updates", badge: null },
+            { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
+            { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
+          ].map(tab => {
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className="transition-all duration-150 flex-shrink-0"
+                style={{
+                  paddingBottom: 14,
+                  paddingTop: 14,
+                  paddingLeft: 4,
+                  paddingRight: 4,
+                  marginRight: 32,
+                  marginBottom: -2,
+                  fontSize: 16,
+                  fontWeight: active ? 800 : 500,
+                  color: active ? "#8705FA" : "#94A3B8",
+                  border: "none",
+                  borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
+                  background: "transparent",
+                  cursor: "pointer",
+                  letterSpacing: active ? "-0.02em" : "normal",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {tab.label}
+                {tab.badge != null && (
+                  <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F3E8FF" : "#F8FAFC", color: active ? "#8705FA" : "#94A3B8", borderRadius: 999, padding: "2px 10px" }}>
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* ── Tab: Team ── */}
