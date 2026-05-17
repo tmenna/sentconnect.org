@@ -1018,7 +1018,7 @@ export default function AdminDashboard() {
         />
       )}
 
-      <div className="max-w-6xl mx-auto space-y-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 lg:px-10 xl:px-12">
 
         {/* ── Page header ── */}
         <div style={{ marginBottom: 24 }}>
@@ -1294,7 +1294,7 @@ export default function AdminDashboard() {
             </div>
 
             {feedLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                 {[1, 2, 3, 4, 5, 6].map(i => (
                   <div key={i} className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)" }}>
                     {/* Thumbnail skeleton — matches 3/2 ratio */}
@@ -1333,7 +1333,7 @@ export default function AdminDashboard() {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                 {displayedFeedPosts.map((post, i) => (
                   <FeedGridCard
                     key={post.id}
