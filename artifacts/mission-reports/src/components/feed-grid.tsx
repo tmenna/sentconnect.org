@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow, format } from "date-fns";
 import {
-  MessageCircle, MapPin, Star, X, ChevronLeft, ChevronRight,
+  MessageCircle, MapPin, X, ChevronLeft, ChevronRight,
   FileText, Heart,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,31 +21,6 @@ function extractTitleAndExcerpt(description: string | null | undefined) {
   return { title, excerpt };
 }
 
-// Derive a category label + pill colors from post content
-function getCategoryInfo(post: PostData): { label: string; bg: string; color: string } {
-  if (post.isMissionMoment) return { label: "Mission Moment", bg: "#D1FAE5", color: "#065F46" };
-  if (post.isHighlight) return { label: "Highlight", bg: "#FEF3C7", color: "#92400E" };
-  const text = (post.description ?? "").toLowerCase();
-  if (/graduat/.test(text)) return { label: "Graduation", bg: "#CFFAFE", color: "#0E7490" };
-  if (/church|worship|service/.test(text)) return { label: "Church Visit", bg: "#D1FAE5", color: "#065F46" };
-  if (/outreach/.test(text)) return { label: "Outreach", bg: "#FEF3C7", color: "#B45309" };
-  if (/discipl/.test(text)) return { label: "Discipleship", bg: "#EDE9FE", color: "#5B21B6" };
-  if (/persecut/.test(text)) return { label: "Persecution", bg: "#FEE2E2", color: "#991B1B" };
-  if (/train/.test(text)) return { label: "Training", bg: "#DBEAFE", color: "#1D4ED8" };
-  if (/pray|prayer/.test(text)) return { label: "Prayer", bg: "#FCE7F3", color: "#9D174D" };
-  if (/bapti/.test(text)) return { label: "Baptism", bg: "#E0F2FE", color: "#0369A1" };
-  if (/evangel/.test(text)) return { label: "Evangelism", bg: "#D1FAE5", color: "#065F46" };
-  if (/visit/.test(text)) return { label: "Field Visit", bg: "#FEF3C7", color: "#B45309" };
-  const palettes = [
-    { label: "Team Update", bg: "#DBEAFE", color: "#1D4ED8" },
-    { label: "Field Report", bg: "#D1FAE5", color: "#065F46" },
-    { label: "Community", bg: "#EDE9FE", color: "#5B21B6" },
-    { label: "Outreach", bg: "#FEF3C7", color: "#B45309" },
-    { label: "Ministry", bg: "#FCE7F3", color: "#9D174D" },
-    { label: "Update", bg: "#CFFAFE", color: "#0E7490" },
-  ];
-  return palettes[post.id % palettes.length];
-}
 
 // Placeholder gradients when no image
 const THUMB_MOMENT = {
@@ -67,7 +42,7 @@ const THUMB_DEFAULT = {
 // ─── MasonryCard — Instagram/LinkedIn style ───────────────────────────────────
 
 export function MasonryCard({
-  post,
+  post: initialPost,
   onClick,
 }: {
   post: PostData;
@@ -75,6 +50,42 @@ export function MasonryCard({
 }) {
   const [hovered, setHovered] = useState(false);
   const [coverImgError, setCoverImgError] = useState(false);
+
+  // Optimistic like state — lives on the card itself
+  const [liked, setLiked] = useState(initialPost.likedByMe);
+  const [likeCount, setLikeCount] = useState(initialPost.likeCount);
+  const [liking, setLiking] = useState(false);
+
+  const post = initialPost; // alias for readability
+
+  async function handleLike(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (liking) return;
+    const prev = { liked, likeCount };
+    setLiked(l => !l);
+    setLikeCount(c => liked ? c - 1 : c + 1);
+    setLiking(true);
+    try {
+      const base = (import.meta as any).env?.BASE_URL?.replace(/\/$/, "") ?? "";
+      const res = await fetch(`${base}/api/reports/${post.id}/likes`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setLiked(data.liked);
+        setLikeCount(data.likeCount);
+      } else {
+        setLiked(prev.liked);
+        setLikeCount(prev.likeCount);
+      }
+    } catch {
+      setLiked(prev.liked);
+      setLikeCount(prev.likeCount);
+    } finally {
+      setLiking(false);
+    }
+  }
 
   const coverPhoto = post.photos.find(p => p.url) || null;
   const isVideo = coverPhoto ? isVideoUrl(coverPhoto.url) : false;
@@ -88,7 +99,6 @@ export function MasonryCard({
 
   const dateLabel = format(new Date(post.createdAt), "MMM d, yyyy");
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
-  const category = getCategoryInfo(post);
   const thumb = post.isMissionMoment ? THUMB_MOMENT : post.isHighlight ? THUMB_HIGHLIGHT : THUMB_DEFAULT;
 
   return (
@@ -155,44 +165,47 @@ export function MasonryCard({
           }}
         />
 
-        {/* Top pills row */}
-        <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
+        {/* Top: purple date pill (top-left) */}
+        <div className="absolute top-3 left-3">
           <span
             style={{
               fontSize: 11,
               fontWeight: 700,
-              background: category.bg,
-              color: category.color,
+              background: "#8705FA",
+              color: "#ffffff",
               borderRadius: 999,
-              padding: "3px 10px",
-              maxWidth: "58%",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
+              padding: "3px 11px",
               lineHeight: 1.6,
-            }}
-          >
-            {category.label}
-          </span>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              background: "rgba(0,0,0,0.48)",
-              color: "rgba(255,255,255,0.95)",
-              borderRadius: 999,
-              padding: "3px 10px",
-              backdropFilter: "blur(6px)",
-              flexShrink: 0,
-              lineHeight: 1.6,
+              display: "inline-block",
             }}
           >
             {dateLabel}
           </span>
         </div>
 
+        {/* Extra photo count badge — top right */}
+        {extraPhotos > 0 && (
+          <div className="absolute top-3 right-3">
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                background: "rgba(0,0,0,0.48)",
+                color: "rgba(255,255,255,0.92)",
+                borderRadius: 999,
+                padding: "3px 10px",
+                backdropFilter: "blur(6px)",
+                lineHeight: 1.6,
+                display: "inline-block",
+              }}
+            >
+              +{extraPhotos} photos
+            </span>
+          </div>
+        )}
+
         {/* Bottom overlay content */}
-        <div className="absolute bottom-0 left-0 right-0 px-3.5 pb-3.5 pt-10">
+        <div className="absolute bottom-0 left-0 right-0 px-3.5 pb-3 pt-10">
           {/* Title */}
           {displayTitle && (
             <p
@@ -202,7 +215,7 @@ export function MasonryCard({
                 color: "#ffffff",
                 lineHeight: 1.35,
                 letterSpacing: "-0.01em",
-                marginBottom: 7,
+                marginBottom: 8,
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
@@ -213,41 +226,43 @@ export function MasonryCard({
             </p>
           )}
 
-          {/* Reaction / meta row */}
-          <div
-            className="flex items-center gap-3"
-            style={{ fontSize: 12, color: "rgba(255,255,255,0.78)", flexWrap: "wrap" }}
-          >
-            <span className="flex items-center gap-1">
+          {/* Reaction / meta row — heart is interactive */}
+          <div className="flex items-center gap-3" style={{ fontSize: 12, color: "rgba(255,255,255,0.82)" }}>
+            {/* ❤️ Like — clickable, stops propagation */}
+            <button
+              onClick={handleLike}
+              disabled={liking}
+              className="flex items-center gap-1 transition-transform duration-150 hover:scale-110 active:scale-95 disabled:opacity-60"
+              style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "rgba(255,255,255,0.82)" }}
+              aria-label={liked ? "Unlike" : "Like"}
+            >
               <Heart
-                className="h-3 w-3"
+                className="h-3.5 w-3.5 transition-colors duration-150"
                 style={{
-                  fill: post.likedByMe ? "#FCA5A5" : "none",
-                  color: post.likedByMe ? "#FCA5A5" : "rgba(255,255,255,0.78)",
+                  fill: liked ? "#F87171" : "none",
+                  color: liked ? "#F87171" : "rgba(255,255,255,0.82)",
                 }}
               />
-              {post.likeCount}
-            </span>
+              <span style={{ fontSize: 12, fontWeight: liked ? 700 : 500, color: liked ? "#FCA5A5" : "rgba(255,255,255,0.82)" }}>
+                {likeCount}
+              </span>
+            </button>
+
+            {/* 💬 Comment count */}
             <span className="flex items-center gap-1">
-              <MessageCircle className="h-3 w-3" />
+              <MessageCircle className="h-3.5 w-3.5" />
               {post.commentCount}
             </span>
+
+            {/* 📍 Location */}
             {post.location && (
               <span className="flex items-center gap-1 min-w-0">
                 <MapPin className="h-3 w-3 flex-shrink-0" />
-                <span
-                  className="truncate"
-                  style={{ maxWidth: 80 }}
-                >
-                  {post.location}
-                </span>
+                <span className="truncate" style={{ maxWidth: 80 }}>{post.location}</span>
               </span>
             )}
-            {extraPhotos > 0 && (
-              <span style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.7)" }}>
-                +{extraPhotos} photos
-              </span>
-            )}
+
+            {/* Time ago — pushed to right */}
             <span className="ml-auto flex-shrink-0" style={{ fontSize: 11 }}>{timeAgo}</span>
           </div>
         </div>
@@ -257,10 +272,7 @@ export function MasonryCard({
       <div className="flex flex-col flex-1 px-3.5 pt-3 pb-3">
         {/* Excerpt */}
         {displayExcerpt ? (
-          <p
-            className="line-clamp-2 mb-3"
-            style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.55, flexGrow: 1 }}
-          >
+          <p className="line-clamp-2 mb-3" style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.55, flexGrow: 1 }}>
             {displayExcerpt}
           </p>
         ) : (
@@ -268,16 +280,10 @@ export function MasonryCard({
         )}
 
         {/* Author + Open button row */}
-        <div
-          className="flex items-center gap-2 pt-2.5"
-          style={{ borderTop: "1px solid #F3F4F6" }}
-        >
+        <div className="flex items-center gap-2 pt-2.5" style={{ borderTop: "1px solid #F3F4F6" }}>
           <Avatar className="h-7 w-7 flex-shrink-0 ring-1 ring-white shadow-sm">
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback
-              className="text-[10px] font-bold"
-              style={{ background: "#F3E8FF", color: "#9A27FF" }}
-            >
+            <AvatarFallback className="text-[10px] font-bold" style={{ background: "#F3E8FF", color: "#9A27FF" }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
