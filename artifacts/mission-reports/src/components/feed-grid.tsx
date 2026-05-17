@@ -164,9 +164,11 @@ export function MasonryFeed({
 
   return (
     <>
-      <div style={{ columns: "4 200px", columnGap: "16px" }}>
+      <div style={{ columns: "4 220px", columnGap: "20px" }}>
         {sorted.map((post, i) => (
-          <MasonryCard key={post.id} post={post} onClick={() => setSelectedIndex(i)} />
+          <div key={post.id} style={{ breakInside: "avoid", display: "inline-block", width: "100%", marginBottom: 20 }}>
+            <MasonryCard post={post} onClick={() => setSelectedIndex(i)} />
+          </div>
         ))}
       </div>
 
@@ -249,14 +251,16 @@ export function FeedGridCard({
       className="bg-white rounded-2xl overflow-hidden flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/40"
     >
       {/* ── Thumbnail ── */}
-      <div className="relative overflow-hidden flex-shrink-0" style={{ aspectRatio: "3/2" }}>
+      <div className="relative overflow-hidden flex-shrink-0">
         {(coverPhoto && !coverImgError) ? (
           <>
             <img
               src={coverPhoto.url}
               alt={coverPhoto.caption || ""}
-              className="w-full h-full object-cover"
+              className="w-full block object-cover"
               style={{
+                maxHeight: 340,
+                minHeight: 140,
                 transform: hovered ? "scale(1.05)" : "scale(1)",
                 transition: "transform 400ms cubic-bezier(0.25,0.46,0.45,0.94)",
               }}
@@ -282,11 +286,11 @@ export function FeedGridCard({
             </div>
           </>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-3" style={{ background: thumb.bg }}>
+          <div className="w-full flex flex-col items-center justify-center gap-3" style={{ background: thumb.bg, height: 180 }}>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: thumb.iconBg, backdropFilter: "blur(6px)" }}>
               {thumb.icon}
             </div>
-            <span style={{ fontSize: 12, fontWeight: 600, color: post.isMissionMoment ? "#065F46" : "#3730A3", letterSpacing: "0.03em", opacity: 0.75 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", background: "#A646FB", borderRadius: 999, padding: "2px 9px", letterSpacing: "0.02em" }}>
               {dateLabel}
             </span>
           </div>
