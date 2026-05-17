@@ -217,31 +217,30 @@ export function MasonryCard({
           </div>
         )}
 
-        {/* Bottom overlay content — title only */}
-        <div className="absolute bottom-0 left-0 right-0 px-3.5 pb-3 pt-10">
-          {displayTitle && (
-            <p
-              style={{
-                fontSize: 15,
-                fontWeight: 700,
-                color: "#ffffff",
-                lineHeight: 1.35,
-                letterSpacing: "-0.01em",
-                marginBottom: 0,
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden",
-              } as React.CSSProperties}
-            >
-              {displayTitle}
-            </p>
-          )}
-        </div>
       </div>
 
       {/* ── Content below image ── */}
       <div className="flex flex-col flex-1 px-3.5 pt-3 pb-3">
+        {/* Title — bold, below the image */}
+        {displayTitle && (
+          <p
+            style={{
+              fontSize: 15,
+              fontWeight: 800,
+              color: "#0F172A",
+              lineHeight: 1.3,
+              letterSpacing: "-0.02em",
+              marginBottom: 8,
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            } as React.CSSProperties}
+          >
+            {displayTitle}
+          </p>
+        )}
+
         {/* Reaction row — always visible, dark-on-white */}
         <div className="flex items-center gap-3 mb-2.5" style={{ fontSize: 12, color: "#64748B" }}>
           {/* ❤️ Like — clickable */}
