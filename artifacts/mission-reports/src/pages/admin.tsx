@@ -98,7 +98,7 @@ function OrgPermissionsEditor({
             transition: "all 0.15s",
           }}
         >
-          <div style={{ flexShrink: 0, color: perms[key] ? "#8705FA" : "#94A3B8" }}>
+          <div style={{ flexShrink: 0, color: perms[key] ? "#8705FA" : "#64748B" }}>
             {icon}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -1018,7 +1018,7 @@ export default function AdminDashboard() {
               <span style={{ fontSize: 11, fontWeight: 700, color: "#8705FA", letterSpacing: "0.07em" }}>ADMIN DASHBOARD</span>
             </div>
             {user.organization && (
-              <span style={{ fontSize: 12, fontWeight: 700, color: "#94A3B8", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#64748B", letterSpacing: "0.05em", textTransform: "uppercase" }}>
                 {user.organization}
               </span>
             )}
@@ -1044,7 +1044,7 @@ export default function AdminDashboard() {
           <h1 style={{ fontSize: "clamp(22px, 4vw, 28px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 5px" }}>
             Global Partners
           </h1>
-          <p style={{ fontSize: 14, color: "#94A3B8", margin: 0, lineHeight: 1.4 }}>
+          <p style={{ fontSize: 14, color: "#64748B", margin: 0, lineHeight: 1.4 }}>
             Manage your team and track mission activity
           </p>
         </div>
@@ -1074,7 +1074,7 @@ export default function AdminDashboard() {
                   marginBottom: -2,
                   fontSize: 16,
                   fontWeight: active ? 800 : 500,
-                  color: active ? "#8705FA" : "#94A3B8",
+                  color: active ? "#8705FA" : "#64748B",
                   border: "none",
                   borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
                   background: "transparent",
@@ -1085,7 +1085,7 @@ export default function AdminDashboard() {
               >
                 {tab.label}
                 {tab.badge != null && (
-                  <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F3E8FF" : "#F8FAFC", color: active ? "#8705FA" : "#94A3B8", borderRadius: 999, padding: "2px 10px" }}>
+                  <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F3E8FF" : "#F8FAFC", color: active ? "#8705FA" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
                     {tab.badge}
                   </span>
                 )}
@@ -1164,11 +1164,11 @@ export default function AdminDashboard() {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b" style={{ borderColor: "#F1F5F9" }}>
-                        <th className="px-5 py-4 text-left text-[13px] font-700 tracking-wide uppercase" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11 }}>Member</th>
-                        <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
-                        <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
-                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
-                        <th className="px-5 py-4 text-right" style={{ color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
+                        <th className="px-5 py-4 text-left text-[13px] font-700 tracking-wide uppercase" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11 }}>Member</th>
+                        <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
+                        <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
+                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
+                        <th className="px-5 py-4 text-right" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1223,7 +1223,7 @@ export default function AdminDashboard() {
                         marginBottom: -2,
                         fontSize: 16,
                         fontWeight: active ? 800 : 500,
-                        color: active ? "#8705FA" : "#94A3B8",
+                        color: active ? "#8705FA" : "#64748B",
                         border: "none",
                         borderBottom: active ? "2.5px solid #8705FA" : "2.5px solid transparent",
                         background: "transparent",
@@ -1234,7 +1234,7 @@ export default function AdminDashboard() {
                     >
                       {tab.label}
                       {tab.count != null && (
-                        <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F3E8FF" : "#F8FAFC", color: active ? "#8705FA" : "#94A3B8", borderRadius: 999, padding: "2px 10px" }}>
+                        <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F3E8FF" : "#F8FAFC", color: active ? "#8705FA" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
                           {tab.count}
                         </span>
                       )}
@@ -1249,7 +1249,7 @@ export default function AdminDashboard() {
                   value={filterUserId}
                   onChange={e => setFilterUserId(e.target.value)}
                   className="border rounded-xl px-3 bg-white outline-none transition-all"
-                  style={{ fontSize: 16, fontWeight: filterUserId ? 700 : 500, height: 44, borderColor: filterUserId ? "#8705FA" : "#E5E7EB", color: filterUserId ? "#8705FA" : "#94A3B8", minWidth: 160 }}
+                  style={{ fontSize: 16, fontWeight: filterUserId ? 700 : 500, height: 44, borderColor: filterUserId ? "#8705FA" : "#E5E7EB", color: filterUserId ? "#8705FA" : "#64748B", minWidth: 160 }}
                 >
                   <option value="">All members</option>
                   {nonAdmins.map((u: any) => (
@@ -1351,7 +1351,7 @@ export default function AdminDashboard() {
               </div>
               {!usersLoading && countriesList.length > 0 && (
                 <div className="pb-2">
-                  <span style={{ fontSize: 12, color: "#94A3B8" }}>
+                  <span style={{ fontSize: 12, color: "#64748B" }}>
                     {countriesList.reduce((n: number, c: any) => n + c.members.length, 0)} missionaries deployed
                   </span>
                 </div>

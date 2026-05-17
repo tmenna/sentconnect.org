@@ -243,7 +243,7 @@ export function MasonryCard({
       {/* ── Content below image ── */}
       <div className="flex flex-col flex-1 px-3.5 pt-3 pb-3">
         {/* Reaction row — always visible, dark-on-white */}
-        <div className="flex items-center gap-3 mb-2.5" style={{ fontSize: 12, color: "#94A3B8" }}>
+        <div className="flex items-center gap-3 mb-2.5" style={{ fontSize: 12, color: "#64748B" }}>
           {/* ❤️ Like — clickable */}
           <button
             onClick={handleLike}
@@ -256,10 +256,10 @@ export function MasonryCard({
               className="h-3.5 w-3.5 transition-colors duration-150"
               style={{
                 fill: liked ? "#F87171" : "none",
-                color: liked ? "#F87171" : "#94A3B8",
+                color: liked ? "#F87171" : "#64748B",
               }}
             />
-            <span style={{ fontSize: 12, fontWeight: liked ? 700 : 500, color: liked ? "#EF4444" : "#94A3B8" }}>
+            <span style={{ fontSize: 12, fontWeight: liked ? 700 : 500, color: liked ? "#EF4444" : "#64748B" }}>
               {likeCount}
             </span>
           </button>
