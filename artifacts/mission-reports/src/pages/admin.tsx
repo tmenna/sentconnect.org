@@ -1020,37 +1020,41 @@ export default function AdminDashboard() {
 
       <div className="space-y-6">
 
-        {/* ── Page header ── */}
-        <div style={{ marginBottom: 24 }}>
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F3E8FF", borderRadius: 999, padding: "5px 14px", marginBottom: 12 }}>
-                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#8705FA" }} />
-                <span style={{ fontSize: 12, fontWeight: 700, color: "#8705FA", letterSpacing: "0.06em" }}>ADMIN DASHBOARD</span>
+        {/* ── Page header — compact two-column ── */}
+        <div className="flex items-start justify-between gap-4 flex-wrap pb-1">
+          {/* Left: badge + title */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap mb-2">
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F3E8FF", borderRadius: 999, padding: "4px 12px" }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#8705FA" }} />
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#8705FA", letterSpacing: "0.07em" }}>ADMIN DASHBOARD</span>
               </div>
               {user.organization && (
-                <p style={{ fontSize: 13, fontWeight: 700, color: "#8705FA", letterSpacing: "0.04em", textTransform: "uppercase", margin: "0 0 4px" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#94A3B8", letterSpacing: "0.05em", textTransform: "uppercase" }}>
                   {user.organization}
-                </p>
+                </span>
               )}
-              <h1 style={{ fontSize: "clamp(22px, 5vw, 30px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 8px" }}>
+            </div>
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <h1 style={{ fontSize: "clamp(20px, 4vw, 26px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: 0 }}>
                 Global Partners
               </h1>
-              <p style={{ fontSize: 15, color: "#64748B", margin: "0 0 16px", lineHeight: 1.6 }}>
-                Manage your team and track mission activity.
+              <p style={{ fontSize: 14, color: "#94A3B8", margin: 0, lineHeight: 1 }}>
+                Manage your team and track mission activity
               </p>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#059669", background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 999, padding: "6px 14px" }}>
-                  {usersLoading ? "—" : allUsers.length} <span style={{ fontWeight: 500, color: "#475569" }}>Members</span>
-                </span>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#8705FA", background: "#F3E8FF", border: "1px solid #D8B4FE", borderRadius: 999, padding: "6px 14px" }}>
-                  {usersLoading ? "—" : countriesCount} <span style={{ fontWeight: 500, color: "#475569" }}>Countries</span>
-                </span>
-              </div>
             </div>
-            <Avatar className="h-11 w-11 flex-shrink-0" style={{ border: "2px solid #E8EEF8" }}>
+          </div>
+          {/* Right: stats + avatar */}
+          <div className="flex items-center gap-2.5 flex-shrink-0 mt-1">
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 700, color: "#059669", background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 999, padding: "5px 12px" }}>
+              {usersLoading ? "—" : allUsers.length} <span style={{ fontWeight: 500, color: "#475569" }}>Members</span>
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 700, color: "#8705FA", background: "#F3E8FF", border: "1px solid #D8B4FE", borderRadius: 999, padding: "5px 12px" }}>
+              {usersLoading ? "—" : countriesCount} <span style={{ fontWeight: 500, color: "#475569" }}>Countries</span>
+            </span>
+            <Avatar className="h-9 w-9 flex-shrink-0" style={{ border: "2px solid #E8EEF8" }}>
               <AvatarImage src={user.avatarUrl ?? undefined} />
-              <AvatarFallback style={{ background: "#F3E8FF", color: "#8705FA", fontWeight: 800, fontSize: 15 }}>
+              <AvatarFallback style={{ background: "#F3E8FF", color: "#8705FA", fontWeight: 800, fontSize: 13 }}>
                 {user.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -1201,96 +1205,92 @@ export default function AdminDashboard() {
         {activeTab === "feed" && (
           <div className="space-y-4">
 
-            {/* Feed sub-tabs */}
-            <div className="flex items-center" style={{ borderBottom: "1px solid #D8B4FE" }}>
-              {[
-                { id: "all", label: "All Posts", count: !feedLoading ? allFeedPosts.length : null },
-                { id: "moments", label: "Mission Moments", count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null },
-              ].map(tab => {
-                const active = feedMomentFilter === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setFeedMomentFilter(tab.id as any)}
-                    className="transition-all duration-150"
-                    style={{
-                      paddingBottom: 12,
-                      paddingTop: 4,
-                      marginRight: 24,
-                      marginBottom: -1,
-                      fontSize: 14,
-                      fontWeight: active ? 700 : 400,
-                      color: active ? "#8705FA" : "#94A3B8",
-                      border: "none",
-                      borderBottom: active ? "2px solid #8705FA" : "2px solid transparent",
-                      background: "transparent",
-                      cursor: "pointer",
-                      letterSpacing: active ? "-0.01em" : "normal",
-                    }}
-                  >
-                    {tab.label}
-                    {tab.count != null && (
-                      <span
-                        style={{
-                          marginLeft: 6,
-                          fontSize: 11,
-                          fontWeight: 600,
-                          background: active ? "#F3E8FF" : "transparent",
-                          color: active ? "#8705FA" : "#94A3B8",
-                          borderRadius: 999,
-                          padding: "1px 7px",
-                        }}
-                      >
-                        {tab.count}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+            {/* ── Sub-tabs + Filters on one row ── */}
+            <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #E9D5FF", paddingBottom: 0 }}>
+              {/* Sub-tabs */}
+              <div className="flex items-center gap-0">
+                {[
+                  { id: "all", label: "All Posts", count: !feedLoading ? allFeedPosts.length : null },
+                  { id: "moments", label: "Mission Moments", count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null },
+                ].map(tab => {
+                  const active = feedMomentFilter === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setFeedMomentFilter(tab.id as any)}
+                      className="transition-all duration-150 flex-shrink-0"
+                      style={{
+                        paddingBottom: 12,
+                        paddingTop: 6,
+                        paddingLeft: 4,
+                        paddingRight: 4,
+                        marginRight: 24,
+                        marginBottom: -1,
+                        fontSize: 13,
+                        fontWeight: active ? 700 : 500,
+                        color: active ? "#8705FA" : "#94A3B8",
+                        border: "none",
+                        borderBottom: active ? "2px solid #8705FA" : "2px solid transparent",
+                        background: "transparent",
+                        cursor: "pointer",
+                        letterSpacing: active ? "-0.01em" : "normal",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {tab.label}
+                      {tab.count != null && (
+                        <span style={{ marginLeft: 6, fontSize: 11, fontWeight: 600, background: active ? "#F3E8FF" : "#F1F5F9", color: active ? "#8705FA" : "#94A3B8", borderRadius: 999, padding: "1px 7px" }}>
+                          {tab.count}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
 
-            {/* Filters — compact inline row */}
-            <div className="flex flex-wrap items-center gap-2">
-              <select
-                value={filterUserId}
-                onChange={e => setFilterUserId(e.target.value)}
-                className="text-[13px] border rounded-lg px-3 h-9 bg-white outline-none transition-all"
-                style={{ borderColor: filterUserId ? "#8705FA" : "#E5E7EB", color: filterUserId ? "#7C3AED" : "#374151", fontWeight: filterUserId ? 600 : 400, minWidth: 140 }}
-              >
-                <option value="">All members</option>
-                {nonAdmins.map((u: any) => (
-                  <option key={u.id} value={String(u.id)}>{u.name}</option>
-                ))}
-              </select>
-              <input
-                type="date"
-                value={filterDateFrom}
-                onChange={e => setFilterDateFrom(e.target.value)}
-                className="text-[13px] border rounded-lg px-3 h-9 bg-white outline-none transition-all"
-                style={{ borderColor: filterDateFrom ? "#8705FA" : "#E5E7EB", minWidth: 130 }}
-                title="From date"
-              />
-              <input
-                type="date"
-                value={filterDateTo}
-                onChange={e => setFilterDateTo(e.target.value)}
-                className="text-[13px] border rounded-lg px-3 h-9 bg-white outline-none transition-all"
-                style={{ borderColor: filterDateTo ? "#8705FA" : "#E5E7EB", minWidth: 130 }}
-                title="To date"
-              />
-              {hasFilters && (
-                <>
-                  <span className="text-[12px] text-muted-foreground">
-                    {displayedFeedPosts.length} of {rawFeedPosts.length} posts
-                  </span>
-                  <button
-                    onClick={() => { setFilterUserId(""); setFilterDateFrom(""); setFilterDateTo(""); }}
-                    className="text-[12px] font-semibold text-violet-600 hover:text-violet-800 transition-colors"
-                  >
-                    Clear
-                  </button>
-                </>
-              )}
+              {/* Filters — right-aligned on same row */}
+              <div className="flex items-center gap-2 pb-2 flex-wrap">
+                <select
+                  value={filterUserId}
+                  onChange={e => setFilterUserId(e.target.value)}
+                  className="text-[12px] border rounded-lg px-2.5 h-8 bg-white outline-none transition-all"
+                  style={{ borderColor: filterUserId ? "#8705FA" : "#E5E7EB", color: filterUserId ? "#7C3AED" : "#6B7280", fontWeight: filterUserId ? 600 : 400, minWidth: 130 }}
+                >
+                  <option value="">All members</option>
+                  {nonAdmins.map((u: any) => (
+                    <option key={u.id} value={String(u.id)}>{u.name}</option>
+                  ))}
+                </select>
+                <input
+                  type="date"
+                  value={filterDateFrom}
+                  onChange={e => setFilterDateFrom(e.target.value)}
+                  className="text-[12px] border rounded-lg px-2.5 h-8 bg-white outline-none transition-all"
+                  style={{ borderColor: filterDateFrom ? "#8705FA" : "#E5E7EB", minWidth: 120, color: "#6B7280" }}
+                  title="From date"
+                />
+                <input
+                  type="date"
+                  value={filterDateTo}
+                  onChange={e => setFilterDateTo(e.target.value)}
+                  className="text-[12px] border rounded-lg px-2.5 h-8 bg-white outline-none transition-all"
+                  style={{ borderColor: filterDateTo ? "#8705FA" : "#E5E7EB", minWidth: 120, color: "#6B7280" }}
+                  title="To date"
+                />
+                {hasFilters && (
+                  <>
+                    <span className="text-[11px] text-muted-foreground whitespace-nowrap">
+                      {displayedFeedPosts.length}/{rawFeedPosts.length}
+                    </span>
+                    <button
+                      onClick={() => { setFilterUserId(""); setFilterDateFrom(""); setFilterDateTo(""); }}
+                      className="text-[12px] font-semibold text-violet-600 hover:text-violet-800 transition-colors whitespace-nowrap"
+                    >
+                      Clear
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
 
             {feedLoading ? (
