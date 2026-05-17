@@ -935,8 +935,6 @@ export default function AdminDashboard() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
   const [filterUserId, setFilterUserId] = useState<string>("");
-  const [filterDateFrom, setFilterDateFrom] = useState<string>("");
-  const [filterDateTo, setFilterDateTo] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
 
@@ -979,17 +977,9 @@ export default function AdminDashboard() {
   const rawFeedPosts: PostData[] = feedPosts ?? (timelineData?.reports ?? []) as PostData[];
   const allFeedPosts = rawFeedPosts.filter(post => {
     if (filterUserId && String(post.author.id) !== filterUserId) return false;
-    if (filterDateFrom) {
-      const from = new Date(filterDateFrom); from.setHours(0, 0, 0, 0);
-      if (new Date(post.createdAt) < from) return false;
-    }
-    if (filterDateTo) {
-      const to = new Date(filterDateTo); to.setHours(23, 59, 59, 999);
-      if (new Date(post.createdAt) > to) return false;
-    }
     return true;
   });
-  const hasFilters = filterUserId || filterDateFrom || filterDateTo;
+  const hasFilters = !!filterUserId;
   const missionMomentsCount = allFeedPosts.filter(p => p.isMissionMoment).length;
 
   // Countries tab data — group field users by country parsed from their location
@@ -1062,7 +1052,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex items-center overflow-x-auto scrollbar-none" style={{ borderBottom: "2px solid #E9D5FF" }}>
+        <div className="flex items-center overflow-x-auto scrollbar-none" style={{ borderBottom: "1.5px solid #F1F5F9" }}>
           {[
             { id: "feed", label: "Updates", badge: null },
             { id: "countries", label: "Countries", badge: !usersLoading && countriesCount > 0 ? countriesCount : null },
@@ -1115,7 +1105,7 @@ export default function AdminDashboard() {
         {activeTab === "team" && (
           <div className="space-y-4">
             {/* Toolbar — label left, controls right */}
-            <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #E9D5FF", paddingBottom: 0 }}>
+            <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 0 }}>
               <div className="flex items-center" style={{ paddingBottom: 12, paddingTop: 6 }}>
                 <span style={{ fontSize: 14, fontWeight: 700, color: "#0F172A" }}>
                   Team Members
@@ -1218,7 +1208,7 @@ export default function AdminDashboard() {
           <div className="space-y-4">
 
             {/* ── Sub-tabs + Filters on one row ── */}
-            <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #E9D5FF", paddingBottom: 0 }}>
+            <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 0 }}>
               {/* Sub-tabs */}
               <div className="flex items-center gap-0">
                 {[
@@ -1260,47 +1250,26 @@ export default function AdminDashboard() {
                 })}
               </div>
 
-              {/* Filters — right-aligned on same row */}
-              <div className="flex items-center gap-2 pb-2 flex-wrap">
+              {/* Filter — member only */}
+              <div className="flex items-center gap-2 pb-2">
                 <select
                   value={filterUserId}
                   onChange={e => setFilterUserId(e.target.value)}
                   className="text-[12px] border rounded-lg px-2.5 h-8 bg-white outline-none transition-all"
-                  style={{ borderColor: filterUserId ? "#8705FA" : "#E5E7EB", color: filterUserId ? "#7C3AED" : "#6B7280", fontWeight: filterUserId ? 600 : 400, minWidth: 130 }}
+                  style={{ borderColor: filterUserId ? "#8705FA" : "#E5E7EB", color: filterUserId ? "#7C3AED" : "#6B7280", fontWeight: filterUserId ? 600 : 400, minWidth: 140 }}
                 >
                   <option value="">All members</option>
                   {nonAdmins.map((u: any) => (
                     <option key={u.id} value={String(u.id)}>{u.name}</option>
                   ))}
                 </select>
-                <input
-                  type="date"
-                  value={filterDateFrom}
-                  onChange={e => setFilterDateFrom(e.target.value)}
-                  className="text-[12px] border rounded-lg px-2.5 h-8 bg-white outline-none transition-all"
-                  style={{ borderColor: filterDateFrom ? "#8705FA" : "#E5E7EB", minWidth: 120, color: "#6B7280" }}
-                  title="From date"
-                />
-                <input
-                  type="date"
-                  value={filterDateTo}
-                  onChange={e => setFilterDateTo(e.target.value)}
-                  className="text-[12px] border rounded-lg px-2.5 h-8 bg-white outline-none transition-all"
-                  style={{ borderColor: filterDateTo ? "#8705FA" : "#E5E7EB", minWidth: 120, color: "#6B7280" }}
-                  title="To date"
-                />
                 {hasFilters && (
-                  <>
-                    <span className="text-[11px] text-muted-foreground whitespace-nowrap">
-                      {displayedFeedPosts.length}/{rawFeedPosts.length}
-                    </span>
-                    <button
-                      onClick={() => { setFilterUserId(""); setFilterDateFrom(""); setFilterDateTo(""); }}
-                      className="text-[12px] font-semibold text-violet-600 hover:text-violet-800 transition-colors whitespace-nowrap"
-                    >
-                      Clear
-                    </button>
-                  </>
+                  <button
+                    onClick={() => setFilterUserId("")}
+                    className="text-[12px] font-semibold text-violet-500 hover:text-violet-700 transition-colors whitespace-nowrap"
+                  >
+                    Clear
+                  </button>
                 )}
               </div>
             </div>
@@ -1377,7 +1346,7 @@ export default function AdminDashboard() {
         {activeTab === "countries" && (
           <div className="space-y-4">
             {/* Toolbar — label left, count right */}
-            <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #E9D5FF", paddingBottom: 0 }}>
+            <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 0 }}>
               <div className="flex items-center" style={{ paddingBottom: 12, paddingTop: 6 }}>
                 <span style={{ fontSize: 14, fontWeight: 700, color: "#0F172A" }}>
                   Team Locations
