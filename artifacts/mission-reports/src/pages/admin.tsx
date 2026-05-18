@@ -1095,8 +1095,8 @@ export default function AdminDashboard() {
                     padding: "10px 14px",
                     borderRadius: 10,
                     border: "none",
-                    background: active ? "#E6FAF6" : "transparent",
-                    color: active ? "#3DC9A8" : "#64748B",
+                    background: active ? "#F3EEFF" : "transparent",
+                    color: active ? "#A785E5" : "#64748B",
                     fontSize: 14,
                     fontWeight: active ? 700 : 500,
                     cursor: "pointer",
@@ -1108,7 +1108,7 @@ export default function AdminDashboard() {
                   <Icon style={{ width: 16, height: 16, flexShrink: 0 }} />
                   {label}
                   {id === "team" && !usersLoading && (
-                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, background: active ? "#3DC9A8" : "#F1F5F9", color: active ? "#fff" : "#64748B", borderRadius: 999, padding: "1px 7px" }}>
+                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, background: active ? "#A785E5" : "#F1F5F9", color: active ? "#fff" : "#64748B", borderRadius: 999, padding: "1px 7px" }}>
                       {allUsers.length}
                     </span>
                   )}
