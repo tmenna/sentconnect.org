@@ -9,9 +9,6 @@ import { FileText, BookOpen, Rss, Star, User } from "lucide-react";
 
 type FeedTab = "all" | "moments";
 
-const EMERALD = "#374151";
-
-
 export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [posts, setPosts] = useState<PostData[] | null>(null);
@@ -41,20 +38,21 @@ export default function MissionaryDashboard() {
   }
 
   const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
-
   const firstName = user.name.split(" ")[0];
 
-  return (
-    <div style={{ display: "flex", gap: 0, margin: "0 -32px", minHeight: 600, background: "#fff" }}>
+  const navItems: { id: FeedTab | "profile"; label: string; Icon: React.ElementType }[] = [
+    { id: "all",     label: "My Posts",       Icon: Rss },
+    { id: "moments", label: "Moments",        Icon: Star },
+    { id: "profile", label: "Profile",        Icon: User },
+  ];
 
-      {/* ── Render-style dark sidebar ── */}
-      <aside style={{
-        width: 240, flexShrink: 0,
-        background: "#fff",
-        display: "flex", flexDirection: "column",
-        padding: "24px 12px 20px",
-        borderRight: "1px solid #F1F5F9",
-      }}>
+  return (
+    <div className="flex bg-white -mx-4 sm:-mx-8 min-h-[600px]">
+
+      {/* ── Sidebar — desktop only ── */}
+      <aside className="hidden sm:flex flex-col flex-shrink-0 border-r border-slate-100"
+        style={{ width: 220, padding: "24px 12px 20px" }}>
+
         {/* Workspace label */}
         <div style={{ marginBottom: 28, padding: "0 8px" }}>
           <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", margin: "0 0 6px" }}>
@@ -76,8 +74,8 @@ export default function MissionaryDashboard() {
         {/* Nav */}
         <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
           {([
-            { id: "all",     label: "My Posts",        Icon: Rss },
-            { id: "moments", label: "Mission Moments",  Icon: Star },
+            { id: "all",     label: "My Posts",       Icon: Rss },
+            { id: "moments", label: "Mission Moments", Icon: Star },
           ] as { id: FeedTab; label: string; Icon: React.ElementType }[]).map(({ id, label, Icon }) => {
             const active = activeTab === id;
             return (
@@ -103,7 +101,6 @@ export default function MissionaryDashboard() {
             );
           })}
 
-          {/* Divider + Profile link */}
           <div style={{ height: 1, background: "#F1F5F9", margin: "8px 0" }} />
           <Link href="/profile">
             <button
@@ -123,9 +120,9 @@ export default function MissionaryDashboard() {
           </Link>
         </nav>
 
-        {/* User info at bottom */}
+        {/* User info */}
         <div style={{ borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
-          <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#F4EEFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#8705FA", flexShrink: 0 }}>
+          <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#F0E0FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#8705FA", flexShrink: 0 }}>
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div style={{ minWidth: 0 }}>
@@ -136,139 +133,154 @@ export default function MissionaryDashboard() {
       </aside>
 
       {/* ── Main content ── */}
-      <div style={{ flex: 1, minWidth: 0, maxWidth: 820, padding: "28px 32px 28px 36px", display: "flex", flexDirection: "column", gap: 28 }}>
+      {/* pb-24 on mobile leaves room for the fixed bottom nav */}
+      <main className="flex-1 min-w-0 flex flex-col gap-6 sm:gap-7 px-4 sm:px-8 py-6 sm:py-7 pb-24 sm:pb-8">
 
-      {/* ── Page header ── */}
-      <div style={{ paddingBottom: 4 }}>
+        {/* Page header */}
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#111827", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 6 }}>
+            <h1 className="text-2xl sm:text-[26px] font-bold tracking-tight leading-tight mb-1.5" style={{ color: "#111827" }}>
               {activeTab === "moments" ? "Mission Moments" : "My Posts"}
             </h1>
-            <p style={{ fontSize: 14, color: "#000000", lineHeight: 1.5 }}>
+            <p className="text-sm" style={{ color: "#6B7280" }}>
               Stay connected. Share what God is doing in the field.
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0 mt-1">
-            <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#0F172A", background: "#F1F5F9", border: "1px solid #E2E8F0", borderRadius: 999, padding: "4px 12px" }}>
-              {allPosts.length} <span style={{ fontWeight: 400, color: "#64748B" }}>posts</span>
+            <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full border"
+              style={{ color: "#0F172A", background: "#F1F5F9", borderColor: "#E2E8F0" }}>
+              {allPosts.length} <span className="font-normal text-slate-400">posts</span>
             </span>
-            {missionMoments.length > 0 && (
-              <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#111827", background: "#F5F5F5", border: "1px solid #F3F4F6", borderRadius: 999, padding: "4px 12px" }}>
-                {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>moments</span>
-              </span>
-            )}
           </div>
         </div>
-      </div>
 
-      {/* ── Composer ── */}
-      <div ref={composerRef}>
-        <PostComposer
-          onPost={(newPost) => setPosts(prev => [newPost, ...(prev ?? (data as PostData[] ?? []))])}
-        />
-      </div>
+        {/* Composer */}
+        <div ref={composerRef}>
+          <PostComposer
+            onPost={(newPost) => setPosts(prev => [newPost, ...(prev ?? (data as PostData[] ?? []))])}
+          />
+        </div>
 
-      {/* ── Filter tabs ── */}
-      <div className="flex items-center" style={{ borderBottom: "2px solid #F1F5F9" }}>
-        {[
-          { id: "all" as FeedTab, label: "All Posts", count: allPosts.length },
-          { id: "moments" as FeedTab, label: "Mission Moments", count: missionMoments.length },
-        ].map(tab => {
-          const active = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className="transition-all duration-150"
-              style={{
-                paddingBottom: 12,
-                paddingTop: 4,
-                marginRight: 24,
-                marginBottom: -1,
-                fontSize: 14,
-                fontWeight: active ? 700 : 400,
-                color: active ? "#111827" : "#94A3B8",
-                border: "none",
-                borderBottom: active ? "2px solid #111827" : "2px solid transparent",
-                background: "transparent",
-                cursor: "pointer",
-                letterSpacing: active ? "-0.01em" : "normal",
-              }}
-            >
-              {tab.label}
-              {tab.count > 0 && (
-                <span
-                  style={{
-                    marginLeft: 6,
-                    fontSize: 11,
-                    fontWeight: 600,
+        {/* Filter tabs */}
+        <div className="flex items-center" style={{ borderBottom: "2px solid #F1F5F9" }}>
+          {[
+            { id: "all" as FeedTab, label: "All Posts", count: allPosts.length },
+            { id: "moments" as FeedTab, label: "Mission Moments", count: missionMoments.length },
+          ].map(tab => {
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className="transition-all duration-150"
+                style={{
+                  paddingBottom: 12, paddingTop: 4,
+                  marginRight: 24, marginBottom: -1,
+                  fontSize: 14, fontWeight: active ? 700 : 400,
+                  color: active ? "#111827" : "#94A3B8",
+                  border: "none",
+                  borderBottom: active ? "2px solid #111827" : "2px solid transparent",
+                  background: "transparent", cursor: "pointer",
+                  letterSpacing: active ? "-0.01em" : "normal",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {tab.label}
+                {tab.count > 0 && (
+                  <span style={{
+                    marginLeft: 6, fontSize: 11, fontWeight: 600,
                     background: active ? "#F5F5F5" : "transparent",
                     color: active ? "#111827" : "#94A3B8",
-                    borderRadius: 999,
-                    padding: "1px 7px",
-                  }}
-                >
-                  {tab.count}
-                </span>
-              )}
+                    borderRadius: 999, padding: "1px 7px",
+                  }}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+          {!postsLoading && (
+            <span className="ml-auto pb-3 text-[12px]" style={{ color: "#94A3B8" }}>
+              {displayedCount} result{displayedCount !== 1 ? "s" : ""}
+            </span>
+          )}
+        </div>
+
+        {/* Posts */}
+        {postsLoading && posts === null ? (
+          <div className="bg-white rounded-2xl border border-border/50 overflow-hidden divide-y divide-border/40">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="p-5 sm:p-6 space-y-3">
+                <div className="flex items-center gap-3">
+                  <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
+                  <div className="space-y-1.5 flex-1">
+                    <Skeleton className="h-3.5 w-28" />
+                    <Skeleton className="h-2.5 w-20" />
+                  </div>
+                </div>
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-4/5" />
+                {i === 1 && <Skeleton className="h-48 w-full rounded-lg" />}
+              </div>
+            ))}
+          </div>
+        ) : myPosts.length === 0 ? (
+          <div className="bg-white rounded-2xl py-16 sm:py-20 text-center" style={{ border: "1.5px dashed #CBD5E1" }}>
+            {activeTab === "moments" ? (
+              <>
+                <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EBF5FF" }}>
+                  <BookOpen className="h-6 w-6 text-slate-500" />
+                </div>
+                <p className="font-semibold text-base" style={{ color: "#111827" }}>No Mission Moments yet</p>
+                <p className="text-sm mt-1.5 text-slate-500">Mark a post as Mission Moments when you share an update.</p>
+              </>
+            ) : (
+              <>
+                <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
+                  <FileText className="h-6 w-6 text-slate-400" />
+                </div>
+                <p className="font-semibold text-base" style={{ color: "#111827" }}>No posts yet</p>
+                <p className="text-sm mt-1.5 text-slate-500">Share your first update using the composer above.</p>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-4 sm:space-y-5">
+            {myPosts.map(post => (
+              <PostCard key={post.id} post={post} hideViewPost onDelete={handleDelete} />
+            ))}
+          </div>
+        )}
+      </main>
+
+      {/* ── Mobile bottom nav — hidden on sm+ ── */}
+      <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100 flex items-stretch"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+        {navItems.map(({ id, label, Icon }) => {
+          const isProfile = id === "profile";
+          const active = isProfile ? false : activeTab === id;
+          return isProfile ? (
+            <Link key={id} href="/profile" className="flex-1">
+              <button className="flex flex-col items-center justify-center gap-1 w-full py-2.5"
+                style={{ border: "none", background: "transparent", cursor: "pointer" }}>
+                <Icon style={{ width: 20, height: 20, color: "#94A3B8" }} />
+                <span style={{ fontSize: 10, fontWeight: 500, color: "#94A3B8" }}>{label}</span>
+              </button>
+            </Link>
+          ) : (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id as FeedTab)}
+              className="flex-1 flex flex-col items-center justify-center gap-1 py-2.5"
+              style={{ border: "none", background: "transparent", cursor: "pointer" }}
+            >
+              <Icon style={{ width: 20, height: 20, color: active ? "#8705FA" : "#94A3B8" }} />
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, color: active ? "#8705FA" : "#94A3B8" }}>{label}</span>
             </button>
           );
         })}
+      </nav>
 
-        {!postsLoading && (
-          <span className="ml-auto pb-3 text-[12px]" style={{ color: "#94A3B8", letterSpacing: "0.02em" }}>
-            {displayedCount} result{displayedCount !== 1 ? "s" : ""}
-          </span>
-        )}
-      </div>
-
-      {/* ── Posts ── */}
-      {postsLoading && posts === null ? (
-        <div className="bg-white rounded-2xl border border-border/50 overflow-hidden divide-y divide-border/40">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="p-6 space-y-3">
-              <div className="flex items-center gap-3">
-                <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
-                <div className="space-y-1.5 flex-1">
-                  <Skeleton className="h-3.5 w-28" />
-                  <Skeleton className="h-2.5 w-20" />
-                </div>
-              </div>
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-4/5" />
-              {i === 1 && <Skeleton className="h-48 w-full rounded-lg" />}
-            </div>
-          ))}
-        </div>
-      ) : myPosts.length === 0 ? (
-        <div className="bg-white rounded-2xl py-20 text-center" style={{ border: "1.5px dashed #CBD5E1" }}>
-          {activeTab === "moments" ? (
-            <>
-              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EBF5FF" }}>
-                <BookOpen className="h-6 w-6" style={{ color: EMERALD }} />
-              </div>
-              <p className="font-semibold text-[16px]" style={{ color: "#111827" }}>No Mission Moments yet</p>
-              <p className="text-[14px] mt-1.5" style={{ color: "#000000" }}>Mark a post as Mission Moments when you share an update.</p>
-            </>
-          ) : (
-            <>
-              <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
-                <FileText className="h-6 w-6" style={{ color: "#9CA3AF" }} />
-              </div>
-              <p className="font-semibold text-[16px]" style={{ color: "#111827" }}>No posts yet</p>
-              <p className="text-[14px] mt-1.5" style={{ color: "#000000" }}>Share your first update using the composer above.</p>
-            </>
-          )}
-        </div>
-      ) : (
-        <div className="space-y-5">
-          {myPosts.map(post => (
-            <PostCard key={post.id} post={post} hideViewPost onDelete={handleDelete} />
-          ))}
-        </div>
-      )}
-      </div>
     </div>
   );
 }
