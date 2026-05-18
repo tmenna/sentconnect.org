@@ -186,7 +186,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
     <div
       className={cn("bg-white rounded-2xl overflow-hidden")}
       style={{
-        border: "1px solid #EDE9FE",
+        border: "1px solid #E6FAF6",
         boxShadow: "0 1px 3px rgba(109,40,217,0.04), 0 4px 16px rgba(109,40,217,0.05)",
         background: "#ffffff",
         padding: "16px 16px 14px",
@@ -197,7 +197,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
       <div className="flex gap-3.5">
         <Avatar className="h-11 w-11 flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
           <AvatarImage src={user.avatarUrl ?? undefined} />
-          <AvatarFallback style={{ background: "#F3E8FF", color: "#9A27FF", fontWeight: 700, fontSize: 15 }}>
+          <AvatarFallback style={{ background: "#E6FAF6", color: "#3DC9A8", fontWeight: 700, fontSize: 15 }}>
             {user.name.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
@@ -290,7 +290,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               disabled={posting || files.length >= 6}
               className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40"
               style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.color = "#9A27FF"; e.currentTarget.style.background = "#F3E8FF"; }}
+              onMouseEnter={e => { e.currentTarget.style.color = "#3DC9A8"; e.currentTarget.style.background = "#E6FAF6"; }}
               onMouseLeave={e => { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; }}
               title="Add photo"
             >
@@ -304,8 +304,8 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={() => videoInputRef.current?.click()}
               disabled={posting || files.length >= 6}
               className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40"
-              style={{ color: files.some(f => isVideo(f)) ? "#9A27FF" : "#6B7280", background: files.some(f => isVideo(f)) ? "#F3E8FF" : "" }}
-              onMouseEnter={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#9A27FF"; e.currentTarget.style.background = "#F3E8FF"; } }}
+              style={{ color: files.some(f => isVideo(f)) ? "#3DC9A8" : "#6B7280", background: files.some(f => isVideo(f)) ? "#E6FAF6" : "" }}
+              onMouseEnter={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#3DC9A8"; e.currentTarget.style.background = "#E6FAF6"; } }}
               onMouseLeave={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add short video"
             >
@@ -319,8 +319,8 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={() => setShowLocation(s => !s)}
               disabled={posting}
               className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150"
-              style={{ color: showLocation ? "#9A27FF" : "#6B7280", background: showLocation ? "#F3E8FF" : "" }}
-              onMouseEnter={e => { if (!showLocation) { e.currentTarget.style.color = "#9A27FF"; e.currentTarget.style.background = "#F3E8FF"; } }}
+              style={{ color: showLocation ? "#3DC9A8" : "#6B7280", background: showLocation ? "#E6FAF6" : "" }}
+              onMouseEnter={e => { if (!showLocation) { e.currentTarget.style.color = "#3DC9A8"; e.currentTarget.style.background = "#E6FAF6"; } }}
               onMouseLeave={e => { if (!showLocation) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
               title="Add location"
             >
@@ -335,14 +335,14 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               title="A Mission Moment is a 3–5 minute story, video, or update that highlights God's work and connects people to the broader mission."
               className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200"
               style={{
-                background: isMissionMoment ? "#F3E8FF" : "transparent",
-                color: isMissionMoment ? "#9A27FF" : "#6B7280",
+                background: isMissionMoment ? "#E6FAF6" : "transparent",
+                color: isMissionMoment ? "#3DC9A8" : "#6B7280",
                 border: isMissionMoment ? "1px solid #E9D5FF" : "1px solid transparent",
               }}
-              onMouseEnter={e => { if (!isMissionMoment) { e.currentTarget.style.color = "#9A27FF"; e.currentTarget.style.background = "#F3E8FF"; } }}
+              onMouseEnter={e => { if (!isMissionMoment) { e.currentTarget.style.color = "#3DC9A8"; e.currentTarget.style.background = "#E6FAF6"; } }}
               onMouseLeave={e => { if (!isMissionMoment) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
             >
-              <Star className={cn("h-4 w-4", isMissionMoment ? "fill-[#9A27FF] text-[#9A27FF]" : "")} />
+              <Star className={cn("h-4 w-4", isMissionMoment ? "fill-[#3DC9A8] text-[#3DC9A8]" : "")} />
               <span className="hidden sm:inline">Mission Moment</span>
             </button>
 
@@ -359,9 +359,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={handlePost}
               disabled={!canPost}
               className="px-3 sm:px-6 font-bold text-[13px] sm:text-[14px] text-white rounded-xl transition-all duration-200 disabled:opacity-40 whitespace-nowrap"
-              style={{ background: "#9A27FF", height: "40px", boxShadow: canPost ? "0 4px 14px rgba(154,39,255,0.28)" : "none", letterSpacing: "-0.02em" }}
+              style={{ background: "#3DC9A8", height: "40px", boxShadow: canPost ? "0 4px 14px rgba(154,39,255,0.28)" : "none", letterSpacing: "-0.02em" }}
               onMouseEnter={e => { if (canPost) { e.currentTarget.style.background = "#7B1FCC"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#9A27FF"; e.currentTarget.style.transform = ""; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#3DC9A8"; e.currentTarget.style.transform = ""; }}
             >
               <span className="hidden sm:inline">Post Update</span>
               <span className="sm:hidden">Post</span>

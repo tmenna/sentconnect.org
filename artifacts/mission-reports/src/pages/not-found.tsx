@@ -4,7 +4,7 @@ import { Shuffle } from "lucide-react";
 import { useLogo } from "@/providers/logo-provider";
 
 const BG   = "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)";
-const BLUE = "#8705FA";
+const BLUE = "#3DC9A8";
 
 export default function NotFound() {
   const { logo } = useLogo();
@@ -38,7 +38,7 @@ export default function NotFound() {
           <button
             className="w-full h-11 text-white font-bold rounded-xl text-[15px] transition-all"
             style={{ background: BLUE }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#6B04C8"; }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#2BB896"; }}
             onMouseLeave={e => { e.currentTarget.style.background = BLUE; }}
           >
             Back to Home

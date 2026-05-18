@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useLogo } from "@/providers/logo-provider";
 
-const EMERALD  = "#8705FA";
+const EMERALD  = "#3DC9A8";
 const BORDER   = "#E5E7EB";
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -93,7 +93,7 @@ export function Layout({ children }: { children: ReactNode }) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all duration-150"
-              style={{ background: "#AD55FB", color: "#ffffff" }}
+              style={{ background: "#3DC9A8", color: "#ffffff" }}
             >
               <HelpCircle className="h-3.5 w-3.5" />
               Help
@@ -108,7 +108,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
                         className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[13px] cursor-pointer transition-all duration-150"
-                        style={{ background: "#AD55FB", color: "#ffffff" }}
+                        style={{ background: "#3DC9A8", color: "#ffffff" }}
                       >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
@@ -116,7 +116,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
                     <button
                       className="ml-0.5 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150"
-                      style={{ background: "#AD55FB", color: "#ffffff", border: "none", cursor: "pointer" }}
+                      style={{ background: "#3DC9A8", color: "#ffffff", border: "none", cursor: "pointer" }}
                       onClick={() => logout.mutate({ data: undefined })}
                       title="Sign out"
                       data-testid="btn-logout"

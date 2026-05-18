@@ -106,9 +106,9 @@ export default function PublicPost() {
           >
             {/* Mission Moment / Highlight banner */}
             {post.isMissionMoment ? (
-              <div className="flex items-center gap-2 px-6 py-2.5" style={{ background: "#F3E8FF", borderBottom: "1px solid #D8B4FE" }}>
+              <div className="flex items-center gap-2 px-6 py-2.5" style={{ background: "#E6FAF6", borderBottom: "1px solid #A7EFE0" }}>
                 <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#5A0097" }} />
-                <span className="text-[12px] font-semibold tracking-wide uppercase" style={{ color: "#8705FA" }}>Mission Moments</span>
+                <span className="text-[12px] font-semibold tracking-wide uppercase" style={{ color: "#3DC9A8" }}>Mission Moments</span>
                 {post.isHighlight && <Star className="h-3 w-3 fill-amber-400 text-amber-400 ml-0.5" />}
                 <div className="flex-1" />
                 <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />
@@ -124,7 +124,7 @@ export default function PublicPost() {
             <div className="flex items-center gap-3.5 px-6 pt-6 pb-4">
               <Avatar className="h-11 w-11 flex-shrink-0" style={{ boxShadow: "0 0 0 2px #fff, 0 0 0 3px #E5E7EB" }}>
                 <AvatarImage src={post.author.avatarUrl ?? undefined} />
-                <AvatarFallback className="font-bold text-[14px]" style={{ background: "#F3E8FF", color: "#5A0097" }}>
+                <AvatarFallback className="font-bold text-[14px]" style={{ background: "#E6FAF6", color: "#5A0097" }}>
                   {post.author.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>

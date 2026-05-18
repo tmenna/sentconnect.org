@@ -21,8 +21,8 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const BLUE = "#8705FA";
-const BLUE_DARK = "#6B04C8";
+const BLUE = "#3DC9A8";
+const BLUE_DARK = "#2BB896";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -91,7 +91,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   if (isAuthenticated && user) return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-4 py-10 bg-white">
       <div className="w-full max-w-sm bg-white rounded-2xl p-7 sm:p-8 text-center" style={{ border: "1px solid #E2E8F0", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" }}>
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#F3E8FF", border: "1.5px solid #D8B4FE" }}>
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#E6FAF6", border: "1.5px solid #A7EFE0" }}>
           <span className="font-bold text-lg" style={{ color: BLUE }}>{user.name.charAt(0).toUpperCase()}</span>
         </div>
         <h2 className="text-[17px] font-semibold mb-1" style={{ color: "#0F172A" }}>You're signed in</h2>
@@ -135,7 +135,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
         {/* Center message */}
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#F3E8FF" }}>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#E6FAF6" }}>
             <Globe className="h-4 w-4" style={{ color: BLUE }} />
             <span className="text-[15px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
@@ -158,7 +158,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
         {/* Mobile brand header */}
         <div className="lg:hidden flex flex-col items-center px-6 pt-10 pb-8 text-center" style={{ borderBottom: "1px solid #F1F5F9" }}>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-5" style={{ background: "#F3E8FF" }}>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-5" style={{ background: "#E6FAF6" }}>
             <Globe className="h-3.5 w-3.5" style={{ color: BLUE }} />
             <span className="text-[13px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
@@ -177,7 +177,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             {/* Heading */}
             <div className="mb-7">
               {orgName && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: "#F3E8FF", border: "1px solid #D8B4FE" }}>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: "#E6FAF6", border: "1px solid #A7EFE0" }}>
                   <div style={{ width: 6, height: 6, borderRadius: "50%", background: BLUE, flexShrink: 0 }} />
                   <span className="text-[12px] font-bold tracking-widest uppercase" style={{ color: BLUE }}>{orgName}</span>
                 </div>
