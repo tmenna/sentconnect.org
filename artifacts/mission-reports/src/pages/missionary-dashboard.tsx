@@ -43,7 +43,7 @@ export default function MissionaryDashboard() {
   const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 28, maxWidth: 960, margin: "0 auto", width: "100%" }}>
 
       {/* ── Page header ── */}
       <div style={{ paddingBottom: 4 }}>

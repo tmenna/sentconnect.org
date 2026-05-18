@@ -301,7 +301,7 @@ export function MasonryFeed({
 
   return (
     <>
-      <div style={{ columns: "3 280px", columnGap: "20px" }}>
+      <div style={{ columns: "2 320px", columnGap: "20px" }}>
         {sorted.map((post, i) => (
           <div
             key={post.id}

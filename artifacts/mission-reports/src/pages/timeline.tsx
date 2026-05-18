@@ -86,7 +86,7 @@ export default function Feed() {
   const displayedPosts = activeTab === "moments" ? missionMoments : accumulatedPosts;
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+    <div className="px-4 sm:px-6 lg:px-8 max-w-[960px] mx-auto" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
 
       {/* ── Page header ── */}
       <div style={{ marginBottom: 28 }}>
