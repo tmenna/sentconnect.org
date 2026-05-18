@@ -132,16 +132,18 @@ export default function Signup() {
           align-items: center;
           justify-content: space-between;
           flex-shrink: 0;
+          background: #6B21A8;
+          box-shadow: 0 2px 16px rgba(107,33,168,0.35);
         }
         .su-back-link {
           font-size: 13px;
           font-weight: 500;
-          color: #94A3B8;
+          color: rgba(255,255,255,0.72);
           text-decoration: none;
           transition: color .15s;
           white-space: nowrap;
         }
-        .su-back-link:hover { color: #64748B; }
+        .su-back-link:hover { color: #fff; }
 
         /* ── Main area ── */
         .su-main {
@@ -255,7 +257,7 @@ export default function Signup() {
 
       {/* Nav */}
       <div className="su-nav">
-        <img src={signupLogo} alt="SentConnect" style={{ maxHeight: 24, width: "auto", maxWidth: 160, display: "block", filter: isCustomSignupLogo ? undefined : "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(5000%) hue-rotate(270deg) brightness(90%)" }} />
+        <img src={signupLogo} alt="SentConnect" style={{ maxHeight: 24, width: "auto", maxWidth: 160, display: "block", filter: isCustomSignupLogo ? undefined : "brightness(0) invert(1)" }} />
         <Link href="/" className="su-back-link">← Back to sentconnect.org</Link>
       </div>
 
