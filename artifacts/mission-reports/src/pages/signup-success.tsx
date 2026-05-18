@@ -4,8 +4,8 @@ import { CheckCircle2, Loader2 } from "lucide-react";
 import { buildOrgHref } from "@/lib/org";
 import logoWhite from "@/assets/logo-white.png";
 
-const BLUE = "#009E7A";
-const BLUE_DK = "#007A5E";
+const BLUE = "#111827";
+const BLUE_DK = "#000000";
 
 export default function SignupSuccess() {
   const search = useSearch();
@@ -49,7 +49,7 @@ export default function SignupSuccess() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: "linear-gradient(150deg, #3D0066 0%, #009E7A 55%, #A020F0 100%)" }}>
+      style={{ background: "linear-gradient(150deg, #3D0066 0%, #111827 55%, #374151 100%)" }}>
       <div className="w-full max-w-md bg-white rounded-2xl px-8 py-10 text-center"
         style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}>
 

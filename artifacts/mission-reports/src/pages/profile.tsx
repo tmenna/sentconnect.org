@@ -119,7 +119,7 @@ function AdminProfile() {
       <Link href="/admin">
         <span className="inline-flex items-center gap-1.5 text-[13px] font-medium mb-5 transition-colors"
           style={{ color: "#64748B" }}
-          onMouseEnter={e => (e.currentTarget.style.color = "#009E7A")}
+          onMouseEnter={e => (e.currentTarget.style.color = "#111827")}
           onMouseLeave={e => (e.currentTarget.style.color = "#64748B")}
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -127,8 +127,8 @@ function AdminProfile() {
         </span>
       </Link>
       <div className="flex items-start gap-4 mb-7">
-        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#E6F7F3" }}>
-          <Building2 className="h-5 w-5" style={{ color: "#009E7A" }} />
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#F5F5F5" }}>
+          <Building2 className="h-5 w-5" style={{ color: "#111827" }} />
         </div>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>Organization Settings</h1>
@@ -170,7 +170,7 @@ function AdminProfile() {
                   size="sm"
                   disabled={isUploading || updateUser.isPending}
                   onClick={removeLogo}
-                  className="h-8 px-3 text-sm gap-1.5 text-red-500 hover:text-red-600 hover:bg-red-50"
+                  className="h-8 px-3 text-sm gap-1.5 text-gray-500 hover:text-gray-600 hover:bg-gray-50"
                 >
                   <Trash2 className="h-3.5 w-3.5" /> Remove Logo
                 </Button>
@@ -268,7 +268,7 @@ function AdminProfile() {
             </div>
 
             <div className="pt-1 flex justify-end">
-              <Button type="submit" disabled={updateUser.isPending} className="h-10 px-6 text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg" data-testid="btn-profile-submit">
+              <Button type="submit" disabled={updateUser.isPending} className="h-10 px-6 text-sm font-semibold bg-gray-600 hover:bg-gray-700 text-white rounded-lg" data-testid="btn-profile-submit">
                 {updateUser.isPending ? "Saving…" : "Save Changes"}
               </Button>
             </div>
@@ -312,8 +312,8 @@ function FieldUserProfile() {
   return (
     <div className="max-w-lg mx-auto py-6">
       <div className="flex items-start gap-4 mb-7">
-        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#E6F7F3" }}>
-          <User className="h-5 w-5" style={{ color: "#009E7A" }} />
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#F5F5F5" }}>
+          <User className="h-5 w-5" style={{ color: "#111827" }} />
         </div>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>Profile Settings</h1>
@@ -419,7 +419,7 @@ function FieldUserProfile() {
                   </FormControl>
                   <div className="flex items-center justify-between">
                     <FormMessage />
-                    <span className={`text-[11px] ml-auto ${(field.value?.length ?? 0) > 230 ? "text-amber-500" : "text-muted-foreground"}`}>
+                    <span className={`text-[11px] ml-auto ${(field.value?.length ?? 0) > 230 ? "text-gray-500" : "text-muted-foreground"}`}>
                       {field.value?.length ?? 0}/250
                     </span>
                   </div>
@@ -427,7 +427,7 @@ function FieldUserProfile() {
               )}
             />
             <div className="pt-1 flex justify-end">
-              <Button type="submit" disabled={updateUser.isPending} className="h-10 px-6 text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg" data-testid="btn-profile-submit">
+              <Button type="submit" disabled={updateUser.isPending} className="h-10 px-6 text-sm font-semibold bg-gray-600 hover:bg-gray-700 text-white rounded-lg" data-testid="btn-profile-submit">
                 {updateUser.isPending ? "Saving…" : "Save Changes"}
               </Button>
             </div>

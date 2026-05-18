@@ -10,7 +10,7 @@ import { useLogo } from "@/providers/logo-provider";
 import { extractHostnameOrgSlug, getOrgRoutingContext } from "@/lib/org";
 
 const NAVY = "#0F172A";
-const BLUE = "#009E7A";
+const BLUE = "#111827";
 
 const FEATURES = [
   "Unlimited users",
@@ -176,7 +176,7 @@ export default function Signup() {
           flex-direction: column;
           padding: 36px;
           border-radius: 28px;
-          background: linear-gradient(135deg, #009E7A 0%, #007A5E 100%);
+          background: linear-gradient(135deg, #111827 0%, #000000 100%);
           box-shadow: 0 8px 48px rgba(135,5,250,0.35);
         }
 
@@ -263,7 +263,7 @@ export default function Signup() {
 
           {/* LEFT — Plan card (hidden on mobile/tablet) */}
           <div className="su-plan">
-            <div style={{ width: 44, height: 44, borderRadius: 16, background: "#E6F7F3", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+            <div style={{ width: 44, height: 44, borderRadius: 16, background: "#F5F5F5", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
               <Users style={{ width: 20, height: 20, color: BLUE }} />
             </div>
 
@@ -376,7 +376,7 @@ export default function Signup() {
                     />
                   </Field>
                   <Field label="Subdomain">
-                    <div style={{ display: "flex", alignItems: "center", background: subdomainError ? "rgba(255,255,255,0.9)" : "#fff", borderRadius: 12, overflow: "hidden", height: 48, outline: subdomainError ? "2px solid #FCA5A5" : "none" }}>
+                    <div style={{ display: "flex", alignItems: "center", background: subdomainError ? "rgba(255,255,255,0.9)" : "#fff", borderRadius: 12, overflow: "hidden", height: 48, outline: subdomainError ? "2px solid #9CA3AF" : "none" }}>
                       <input
                         value={subdomain}
                         onChange={e => { setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "")); setSubdomainError(""); }}
@@ -390,7 +390,7 @@ export default function Signup() {
                       </span>
                     </div>
                     {subdomainError && (
-                      <p style={{ margin: "6px 0 0", fontSize: 12, color: "#FEE2E2", fontWeight: 500 }}>{subdomainError}</p>
+                      <p style={{ margin: "6px 0 0", fontSize: 12, color: "#F3F4F6", fontWeight: 500 }}>{subdomainError}</p>
                     )}
                   </Field>
                 </div>
@@ -423,10 +423,10 @@ export default function Signup() {
                         onBlur={e => checkEmailAvailability(e.target.value)}
                         placeholder="you@example.org"
                         required
-                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box", outlineOffset: 0, boxShadow: emailError ? "0 0 0 2px #FCA5A5" : "none" }}
+                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box", outlineOffset: 0, boxShadow: emailError ? "0 0 0 2px #9CA3AF" : "none" }}
                       />
                       {emailError && (
-                        <p style={{ margin: "6px 0 0", fontSize: 12, color: "#FEE2E2", fontWeight: 500 }}>{emailError}</p>
+                        <p style={{ margin: "6px 0 0", fontSize: 12, color: "#F3F4F6", fontWeight: 500 }}>{emailError}</p>
                       )}
                     </Field>
                     <Field label="Password">

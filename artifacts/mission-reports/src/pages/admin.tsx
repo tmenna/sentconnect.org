@@ -101,7 +101,7 @@ function OrgPermissionsEditor({
             transition: "all 0.15s",
           }}
         >
-          <div style={{ flexShrink: 0, color: perms[key] ? "#009E7A" : "#64748B" }}>
+          <div style={{ flexShrink: 0, color: perms[key] ? "#111827" : "#64748B" }}>
             {icon}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -113,7 +113,7 @@ function OrgPermissionsEditor({
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            style={{ width: 16, height: 16, cursor: disabled ? "not-allowed" : "pointer", accentColor: "#009E7A" }}
+            style={{ width: 16, height: 16, cursor: disabled ? "not-allowed" : "pointer", accentColor: "#111827" }}
           />
         </label>
       ))}
@@ -189,7 +189,7 @@ function EditRolePermissionsModal({
 
         <div className="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-[13px] px-3 py-2 rounded-lg">{error}</div>
+            <div className="bg-gray-50 border border-gray-200 text-gray-700 text-[13px] px-3 py-2 rounded-lg">{error}</div>
           )}
 
           {/* Role switcher */}
@@ -204,7 +204,7 @@ function EditRolePermissionsModal({
                   onClick={() => handleRoleChange(r)}
                   className="flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={role === r
-                    ? { background: "#009E7A", color: "#fff", borderColor: "#009E7A", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }
+                    ? { background: "#111827", color: "#fff", borderColor: "#111827", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }
                     : { background: "#fff", color: undefined, borderColor: undefined }
                   }
                 >
@@ -216,7 +216,7 @@ function EditRolePermissionsModal({
               ))}
             </div>
             {isSelf && (
-              <p className="text-[11px] text-amber-600 mt-1.5">You cannot change your own role.</p>
+              <p className="text-[11px] text-gray-600 mt-1.5">You cannot change your own role.</p>
             )}
           </div>
 
@@ -245,9 +245,9 @@ function EditRolePermissionsModal({
               onClick={save}
               disabled={saving}
               className="flex-1 h-11 flex items-center justify-center gap-2 px-4 text-[13px] font-semibold text-white rounded-lg transition-colors disabled:opacity-50"
-              style={{ background: "#059669" }}
-              onMouseEnter={e => { if (!saving) e.currentTarget.style.background = "#047857"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#059669"; }}
+              style={{ background: "#374151" }}
+              onMouseEnter={e => { if (!saving) e.currentTarget.style.background = "#1F2937"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#374151"; }}
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Changes
@@ -308,12 +308,12 @@ function StatCard({ label, value, icon, accent, onClick }: {
 
 function RoleBadge({ role }: { role: string }) {
   if (role === "admin") return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#E6F7F3", color: "#007A5E", border: "1px solid #C7D2FE" }}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F5F5F5", color: "#000000", border: "1px solid #C7D2FE" }}>
       <ShieldCheck className="h-3 w-3" /> Admin
     </span>
   );
   return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#E6F7F3", color: "#009E7A", border: "1px solid #80D4C0" }}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F5F5F5", color: "#111827", border: "1px solid #D1D5DB" }}>
       <Globe className="h-3 w-3" /> Field User
     </span>
   );
@@ -321,8 +321,8 @@ function RoleBadge({ role }: { role: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   return status === "active" ? (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#ECFDF5", color: "#059669", border: "1px solid #A7F3D0" }}>
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" /> Active
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#ECFDF5", color: "#374151", border: "1px solid #A7F3D0" }}>
+      <span className="w-1.5 h-1.5 rounded-full bg-gray-500 inline-block" /> Active
     </span>
   ) : (
     <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F8FAFC", color: "#64748B", border: "1px solid #E2E8F0" }}>
@@ -385,7 +385,7 @@ function AddUserModal({ onClose, onAdded }: { onClose: () => void; onAdded: () =
         {/* Form */}
         <form onSubmit={submit} className="p-6 space-y-4">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-[13px] px-3 py-2 rounded-lg">
+            <div className="bg-gray-50 border border-gray-200 text-gray-700 text-[13px] px-3 py-2 rounded-lg">
               {error}
             </div>
           )}
@@ -471,9 +471,9 @@ function AddUserModal({ onClose, onAdded }: { onClose: () => void; onAdded: () =
               type="submit"
               disabled={loading}
               className="flex-1 h-11 px-4 text-sm font-semibold text-white rounded-lg disabled:opacity-60 transition-colors"
-              style={{ background: "#059669" }}
-              onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#047857"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#059669"; }}
+              style={{ background: "#374151" }}
+              onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#1F2937"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#374151"; }}
             >
               {loading ? "Creating…" : "Create Member"}
             </button>
@@ -543,8 +543,8 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/50">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg" style={{ background: "#E6F7F3" }}>
-              <KeyRound className="h-4 w-4" style={{ color: "#009E7A" }} />
+            <div className="p-1.5 rounded-lg" style={{ background: "#F5F5F5" }}>
+              <KeyRound className="h-4 w-4" style={{ color: "#111827" }} />
             </div>
             <div>
               <p className="font-bold text-[14px]" style={{ color: "#111827" }}>Manage Password</p>
@@ -581,12 +581,12 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
                 onClick={setPassword}
                 disabled={setPwBusy || newPw.length < 1}
                 className="h-10 px-4 text-[13px] font-semibold text-white rounded-xl disabled:opacity-50 transition-colors flex items-center gap-1.5"
-                style={{ background: setPwDone ? "#059669" : "#009E7A" }}
+                style={{ background: setPwDone ? "#374151" : "#111827" }}
               >
                 {setPwBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : setPwDone ? <><Check className="h-3.5 w-3.5" /> Saved</> : "Set Password"}
               </button>
             </div>
-            {setPwError && <p className="text-[12px] text-red-600">{setPwError}</p>}
+            {setPwError && <p className="text-[12px] text-gray-600">{setPwError}</p>}
           </div>
 
           <div className="border-t border-border/40" />
@@ -618,9 +618,9 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
             {genResult && (
               <div className="rounded-xl border border-border/50 overflow-hidden">
                 {genResult.via === "email" ? (
-                  <div className="flex items-center gap-2 px-4 py-3 bg-emerald-50">
-                    <Check className="h-4 w-4 text-emerald-600 flex-shrink-0" />
-                    <p className="text-[13px] text-emerald-800 font-medium">Temporary password sent to <strong>{user.email}</strong></p>
+                  <div className="flex items-center gap-2 px-4 py-3 bg-gray-50">
+                    <Check className="h-4 w-4 text-gray-600 flex-shrink-0" />
+                    <p className="text-[13px] text-gray-800 font-medium">Temporary password sent to <strong>{user.email}</strong></p>
                   </div>
                 ) : (
                   <div className="px-4 py-3" style={{ background: "#F8FAFD" }}>
@@ -632,7 +632,7 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
                       <button
                         onClick={copyPassword}
                         className="flex items-center gap-1 px-3 py-1.5 text-[12px] font-semibold rounded-lg border border-border/60 hover:bg-muted transition-colors"
-                        style={{ color: copied ? "#059669" : "#374151" }}
+                        style={{ color: copied ? "#374151" : "#374151" }}
                       >
                         {copied ? <><Check className="h-3 w-3" /> Copied</> : <><Copy className="h-3 w-3" /> Copy</>}
                       </button>
@@ -665,21 +665,21 @@ function DeleteConfirmModal({ userName, role, onConfirm, onClose, loading, error
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm border border-border/60 p-6 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-red-50 rounded-xl"><Trash2 className="h-5 w-5 text-red-500" /></div>
+          <div className="p-2 bg-gray-50 rounded-xl"><Trash2 className="h-5 w-5 text-gray-500" /></div>
           <div>
             <h2 className="font-bold text-[15px]">Remove team member?</h2>
             <p className="text-[13px] text-muted-foreground mt-0.5">This will permanently remove <strong>{userName}</strong>.</p>
           </div>
         </div>
         {isAdmin && !error && (
-          <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 text-amber-800 text-[12px] rounded-xl px-3 py-2.5">
-            <ShieldCheck className="h-4 w-4 flex-shrink-0 mt-0.5 text-amber-600" />
+          <div className="flex items-start gap-2 bg-gray-50 border border-gray-200 text-gray-800 text-[12px] rounded-xl px-3 py-2.5">
+            <ShieldCheck className="h-4 w-4 flex-shrink-0 mt-0.5 text-gray-600" />
             <span>This user is an <strong>Admin</strong>. Removal will be blocked if they are the only administrator in this organization.</span>
           </div>
         )}
         {error && (
-          <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 text-[12px] rounded-xl px-3 py-2.5">
-            <Trash2 className="h-4 w-4 flex-shrink-0 mt-0.5 text-red-500" />
+          <div className="flex items-start gap-2 bg-gray-50 border border-gray-200 text-gray-700 text-[12px] rounded-xl px-3 py-2.5">
+            <Trash2 className="h-4 w-4 flex-shrink-0 mt-0.5 text-gray-500" />
             <span>{error}</span>
           </div>
         )}
@@ -688,7 +688,7 @@ function DeleteConfirmModal({ userName, role, onConfirm, onClose, loading, error
           <button
             onClick={onConfirm}
             disabled={loading || !!error}
-            className="flex-1 px-4 py-2 text-sm font-semibold bg-red-500 text-white rounded-xl hover:bg-red-600 disabled:opacity-60 transition"
+            className="flex-1 px-4 py-2 text-sm font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-600 disabled:opacity-60 transition"
           >
             {loading ? "Removing…" : "Remove"}
           </button>
@@ -789,7 +789,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 flex-shrink-0 rounded-xl">
               <AvatarImage src={u.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-bold text-[14px] rounded-xl" style={u.role === "admin" ? { background: "#E6F7F3", color: "#007A5E" } : { background: "#E6F7F3", color: "#009E7A" }}>
+              <AvatarFallback className="font-bold text-[14px] rounded-xl" style={u.role === "admin" ? { background: "#F5F5F5", color: "#000000" } : { background: "#F5F5F5", color: "#111827" }}>
                 {u.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -892,7 +892,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               disabled={busy}
               className="p-2 rounded-lg transition-colors"
               style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#E6F7F3"; e.currentTarget.style.color = "#009E7A"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F5F5F5"; e.currentTarget.style.color = "#111827"; }}
               onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
               <KeyRound className="h-4 w-4" />
@@ -905,7 +905,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
                 disabled={busy}
                 className="p-2 rounded-lg transition-colors"
                 style={{ color: "#6B7280" }}
-                onMouseEnter={e => { e.currentTarget.style.background = "#FEF2F2"; e.currentTarget.style.color = "#EF4444"; }}
+                onMouseEnter={e => { e.currentTarget.style.background = "#F9FAFB"; e.currentTarget.style.color = "#374151"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
               >
                 <Trash2 className="h-4 w-4" />
@@ -1085,8 +1085,8 @@ export default function AdminDashboard() {
                     padding: "10px 14px",
                     borderRadius: 10,
                     border: "none",
-                    background: active ? "#F0E6FF" : "transparent",
-                    color: active ? "#5E1F9A" : "#64748B",
+                    background: active ? "#F5F5F5" : "transparent",
+                    color: active ? "#111827" : "#64748B",
                     fontSize: 14,
                     fontWeight: active ? 700 : 500,
                     cursor: "pointer",
@@ -1098,7 +1098,7 @@ export default function AdminDashboard() {
                   <Icon style={{ width: 16, height: 16, flexShrink: 0 }} />
                   {label}
                   {id === "team" && !usersLoading && (
-                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, background: active ? "#5E1F9A" : "#F1F5F9", color: active ? "#fff" : "#64748B", borderRadius: 999, padding: "1px 7px" }}>
+                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, background: active ? "#111827" : "#F1F5F9", color: active ? "#fff" : "#64748B", borderRadius: 999, padding: "1px 7px" }}>
                       {allUsers.length}
                     </span>
                   )}
@@ -1133,16 +1133,16 @@ export default function AdminDashboard() {
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className="text-[13px] border rounded-lg px-3 h-8 bg-white outline-none transition-all"
-                  style={{ borderColor: searchQuery ? "#009E7A" : "#E5E7EB", minWidth: 200 }}
-                  onFocus={e => { e.target.style.borderColor = "#009E7A"; e.target.style.boxShadow = "0 0 0 2px rgba(135,5,250,0.08)"; }}
-                  onBlur={e => { e.target.style.borderColor = searchQuery ? "#009E7A" : "#E5E7EB"; e.target.style.boxShadow = "none"; }}
+                  style={{ borderColor: searchQuery ? "#111827" : "#E5E7EB", minWidth: 200 }}
+                  onFocus={e => { e.target.style.borderColor = "#111827"; e.target.style.boxShadow = "0 0 0 2px rgba(135,5,250,0.08)"; }}
+                  onBlur={e => { e.target.style.borderColor = searchQuery ? "#111827" : "#E5E7EB"; e.target.style.boxShadow = "none"; }}
                 />
                 <button
                   onClick={() => setShowAddModal(true)}
                   className="flex items-center gap-1.5 px-4 text-[13px] font-semibold text-white rounded-lg whitespace-nowrap transition-all duration-200 hover:-translate-y-px"
-                  style={{ backgroundColor: "#059669", height: "32px", boxShadow: "0 2px 8px rgba(5,150,105,0.20)" }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#047857"; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#059669"; }}
+                  style={{ backgroundColor: "#374151", height: "32px", boxShadow: "0 2px 8px rgba(5,150,105,0.20)" }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#1F2937"; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#374151"; }}
                 >
                   <Plus className="h-3.5 w-3.5" />
                   Add Member
@@ -1240,9 +1240,9 @@ export default function AdminDashboard() {
                         marginBottom: -2,
                         fontSize: 16,
                         fontWeight: active ? 800 : 500,
-                        color: active ? "#009E7A" : "#64748B",
+                        color: active ? "#111827" : "#64748B",
                         border: "none",
-                        borderBottom: active ? "2.5px solid #009E7A" : "2.5px solid transparent",
+                        borderBottom: active ? "2.5px solid #111827" : "2.5px solid transparent",
                         background: "transparent",
                         cursor: "pointer",
                         letterSpacing: active ? "-0.02em" : "normal",
@@ -1251,7 +1251,7 @@ export default function AdminDashboard() {
                     >
                       {tab.label}
                       {tab.count != null && (
-                        <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#E6F7F3" : "#F8FAFC", color: active ? "#009E7A" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
+                        <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F5F5F5" : "#F8FAFC", color: active ? "#111827" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
                           {tab.count}
                         </span>
                       )}
@@ -1266,7 +1266,7 @@ export default function AdminDashboard() {
                   value={filterUserId}
                   onChange={e => setFilterUserId(e.target.value)}
                   className="border rounded-xl px-3 bg-white outline-none transition-all"
-                  style={{ fontSize: 16, fontWeight: filterUserId ? 700 : 500, height: 44, borderColor: filterUserId ? "#009E7A" : "#E5E7EB", color: filterUserId ? "#009E7A" : "#64748B", minWidth: 160 }}
+                  style={{ fontSize: 16, fontWeight: filterUserId ? 700 : 500, height: 44, borderColor: filterUserId ? "#111827" : "#E5E7EB", color: filterUserId ? "#111827" : "#64748B", minWidth: 160 }}
                 >
                   <option value="">All members</option>
                   {nonAdmins.map((u: any) => (
@@ -1309,7 +1309,7 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-2xl border border-dashed border-border py-16 text-center shadow-sm">
                 {feedMomentFilter === "moments" ? (
                   <>
-                    <Star className="h-10 w-10 mx-auto text-amber-300/50 mb-3" />
+                    <Star className="h-10 w-10 mx-auto text-gray-300/50 mb-3" />
                     <p className="font-semibold text-sm text-foreground">No Mission Moments yet</p>
                     <p className="text-muted-foreground text-xs mt-1">Team members can mark posts as Mission Moments when sharing updates.</p>
                   </>
@@ -1400,14 +1400,14 @@ export default function AdminDashboard() {
                   <div key={country} className="bg-white rounded-2xl border border-border/60 shadow-sm overflow-hidden">
                     {/* Country header */}
                     <div className="px-5 py-4 border-b border-border/40 flex items-center gap-3">
-                      <div className="flex items-center justify-center h-8 w-8 rounded-lg flex-shrink-0" style={{ background: "#E6F7F3" }}>
-                        <MapPin className="h-4 w-4" style={{ color: "#009E7A" }} />
+                      <div className="flex items-center justify-center h-8 w-8 rounded-lg flex-shrink-0" style={{ background: "#F5F5F5" }}>
+                        <MapPin className="h-4 w-4" style={{ color: "#111827" }} />
                       </div>
                       <div>
                         <p className="font-bold text-[15px] text-foreground">{country}</p>
                         {city && <p className="text-[12px] text-muted-foreground mt-0.5">{city}</p>}
                       </div>
-                      <span className="ml-auto text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ background: "#E6F7F3", color: "#009E7A" }}>
+                      <span className="ml-auto text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ background: "#F5F5F5", color: "#111827" }}>
                         {members.length} {members.length === 1 ? "member" : "members"}
                       </span>
                     </div>
@@ -1505,7 +1505,7 @@ export default function AdminDashboard() {
                     onClick={() => brandingFileRef.current?.click()}
                     disabled={logoUploading || brandingSaving}
                     className="flex items-center gap-2 rounded-xl transition-all duration-150 disabled:opacity-50"
-                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#009E7A", border: "none", padding: "10px 20px", cursor: "pointer" }}
+                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#111827", border: "none", padding: "10px 20px", cursor: "pointer" }}
                   >
                     {logoUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
                     {brandingLogoUrl ? "Replace logo" : "Upload logo"}
@@ -1516,7 +1516,7 @@ export default function AdminDashboard() {
                       onClick={() => saveBrandingLogo(null)}
                       disabled={brandingSaving}
                       className="flex items-center gap-2 rounded-xl transition-all duration-150 disabled:opacity-50"
-                      style={{ fontSize: 14, fontWeight: 600, color: "#EF4444", background: "#FEF2F2", border: "1px solid #FECACA", padding: "10px 20px", cursor: "pointer" }}
+                      style={{ fontSize: 14, fontWeight: 600, color: "#374151", background: "#F9FAFB", border: "1px solid #E5E7EB", padding: "10px 20px", cursor: "pointer" }}
                     >
                       {brandingSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                       Remove logo
@@ -1540,14 +1540,14 @@ export default function AdminDashboard() {
                     placeholder="https://example.com/logo.png"
                     className="flex-1 rounded-xl border px-4 outline-none transition-all"
                     style={{ fontSize: 14, height: 44, borderColor: "#E2E8F0", color: "#0F172A" }}
-                    onFocus={e => { e.currentTarget.style.borderColor = "#009E7A"; }}
+                    onFocus={e => { e.currentTarget.style.borderColor = "#111827"; }}
                     onBlur={e => { e.currentTarget.style.borderColor = "#E2E8F0"; }}
                   />
                   <button
                     onClick={() => saveBrandingLogo(brandingInput.trim() || null)}
                     disabled={brandingSaving || brandingInput.trim() === (brandingLogoUrl ?? "")}
                     className="flex items-center gap-1.5 rounded-xl transition-all duration-150 disabled:opacity-40"
-                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#009E7A", border: "none", padding: "0 20px", height: 44, cursor: "pointer", whiteSpace: "nowrap" }}
+                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#111827", border: "none", padding: "0 20px", height: 44, cursor: "pointer", whiteSpace: "nowrap" }}
                   >
                     {brandingSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                     Save

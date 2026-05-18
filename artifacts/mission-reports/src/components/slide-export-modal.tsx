@@ -255,8 +255,8 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
         {/* Modal header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 24px", borderBottom: "1px solid #F1F5F9", flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 34, height: 34, background: "#E6F7F3", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <FileText className="h-4 w-4" style={{ color: "#009E7A" }} />
+            <div style={{ width: 34, height: 34, background: "#F5F5F5", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <FileText className="h-4 w-4" style={{ color: "#111827" }} />
             </div>
             <div>
               <h2 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>Export as Report</h2>
@@ -296,7 +296,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
 
                 <div style={{ padding: "16px 20px" }}>
                   {post.isMissionMoment && (
-                    <div style={{ display: "block", background: "#5A0097", color: "#fff", borderRadius: 4, padding: "3px 8px", fontSize: 8, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 10, width: "fit-content" }}>
+                    <div style={{ display: "block", background: "#111827", color: "#fff", borderRadius: 4, padding: "3px 8px", fontSize: 8, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 10, width: "fit-content" }}>
                       Mission Moment
                     </div>
                   )}
@@ -358,7 +358,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
                 "Auto page breaks",
               ].map(item => (
                 <div key={item} style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 6 }}>
-                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#009E7A", flexShrink: 0 }} />
+                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#111827", flexShrink: 0 }} />
                   <span style={{ fontSize: 12, color: "#374151" }}>{item}</span>
                 </div>
               ))}
@@ -381,7 +381,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
                 height: 44, borderRadius: 12, border: "none",
                 cursor: exporting || loading ? "not-allowed" : "pointer",
                 fontWeight: 700, fontSize: 14,
-                background: exporting || loading ? "#80D4C0" : "linear-gradient(135deg, #5A0097, #009E7A)",
+                background: exporting || loading ? "#D1D5DB" : "linear-gradient(135deg, #111827, #111827)",
                 color: "#fff",
                 transition: "all .15s",
               }}

@@ -109,16 +109,16 @@ export default function SubmitReport() {
     letterSpacing: "-0.01em",
   };
 
-  const inputClass = "h-12 text-base border-gray-200 focus:border-[#009E7A] focus:ring-[#009E7A]/20 rounded-xl";
+  const inputClass = "h-12 text-base border-gray-200 focus:border-[#111827] focus:ring-[#111827]/20 rounded-xl";
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "32px 0 48px" }}>
 
       {/* ── Page header ── */}
       <div style={{ marginBottom: 32 }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#E6F7F3", borderRadius: 999, padding: "5px 14px", marginBottom: 14 }}>
-          <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#009E7A" }} />
-          <span style={{ fontSize: 12, fontWeight: 700, color: "#009E7A", letterSpacing: "0.06em" }}>MISSION REPORT</span>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F5F5F5", borderRadius: 999, padding: "5px 14px", marginBottom: 14 }}>
+          <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#111827" }} />
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#111827", letterSpacing: "0.06em" }}>MISSION REPORT</span>
         </div>
         <h1 style={{ fontSize: 30, fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 8px" }}>
           File a Report
@@ -132,7 +132,7 @@ export default function SubmitReport() {
         <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
           {/* ── Core fields ── */}
-          <div style={{ background: "#FFFFFF", borderRadius: 16, border: "1.5px solid #E9D5FF", padding: "28px 28px 24px", display: "flex", flexDirection: "column", gap: 22 }}>
+          <div style={{ background: "#FFFFFF", borderRadius: 16, border: "1.5px solid #F3F4F6", padding: "28px 28px 24px", display: "flex", flexDirection: "column", gap: 22 }}>
 
             <FormField
               control={form.control}
@@ -218,7 +218,7 @@ export default function SubmitReport() {
                   <FormControl>
                     <Textarea
                       placeholder="Write your report here..."
-                      className="min-h-[240px] text-base leading-relaxed border-gray-200 focus:border-[#009E7A] focus:ring-[#009E7A]/20 rounded-xl"
+                      className="min-h-[240px] text-base leading-relaxed border-gray-200 focus:border-[#111827] focus:ring-[#111827]/20 rounded-xl"
                       {...field}
                       data-testid="input-report-desc"
                     />
@@ -250,7 +250,7 @@ export default function SubmitReport() {
                     padding: 10,
                     borderRadius: 12,
                     flexShrink: 0,
-                    background: field.value ? "#009E7A" : "#F1F5F9",
+                    background: field.value ? "#111827" : "#F1F5F9",
                     color: field.value ? "#FFFFFF" : "#94A3B8",
                     transition: "all 0.15s",
                   }}>
@@ -272,7 +272,7 @@ export default function SubmitReport() {
                       width: 44,
                       height: 24,
                       borderRadius: 999,
-                      background: field.value ? "#009E7A" : "#E2E8F0",
+                      background: field.value ? "#111827" : "#E2E8F0",
                       position: "relative",
                       transition: "background 0.2s",
                     }}>
@@ -298,7 +298,7 @@ export default function SubmitReport() {
           <div style={{ background: "#FFFFFF", borderRadius: 16, border: "1.5px solid #E9E9E9", padding: "24px 28px", display: "flex", flexDirection: "column", gap: 16 }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                <ImageIcon style={{ width: 18, height: 18, color: "#009E7A" }} />
+                <ImageIcon style={{ width: 18, height: 18, color: "#111827" }} />
                 <h3 style={{ fontSize: 16, fontWeight: 700, color: "#0F172A", margin: 0 }}>Photos & Videos</h3>
               </div>
               <p style={{ fontSize: 13, color: "#64748B", margin: 0 }}>Paste image or video URLs (jpg, png, mp4, webm) to enrich your report.</p>
@@ -339,8 +339,8 @@ export default function SubmitReport() {
                     <button
                       type="button"
                       onClick={() => remove(index)}
-                      style={{ marginTop: 28, padding: 8, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", color: "#EF4444", flexShrink: 0 }}
-                      onMouseEnter={e => { e.currentTarget.style.background = "#FEF2F2"; }}
+                      style={{ marginTop: 28, padding: 8, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", color: "#374151", flexShrink: 0 }}
+                      onMouseEnter={e => { e.currentTarget.style.background = "#F9FAFB"; }}
                       onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
                     >
                       <Trash2 style={{ width: 16, height: 16 }} />
@@ -357,9 +357,9 @@ export default function SubmitReport() {
                 width: "100%",
                 height: 44,
                 borderRadius: 10,
-                border: "1.5px dashed #80D4C0",
+                border: "1.5px dashed #D1D5DB",
                 background: "transparent",
-                color: "#009E7A",
+                color: "#111827",
                 fontSize: 14,
                 fontWeight: 600,
                 cursor: "pointer",
@@ -369,7 +369,7 @@ export default function SubmitReport() {
                 gap: 6,
                 transition: "background 0.15s",
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#E6F7F3"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F5F5F5"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
             >
               <Plus style={{ width: 16, height: 16 }} /> Add Photo
@@ -397,7 +397,7 @@ export default function SubmitReport() {
                 fontSize: 15,
                 fontWeight: 700,
                 borderRadius: 12,
-                background: "#009E7A",
+                background: "#111827",
                 display: "flex",
                 alignItems: "center",
                 gap: 8,

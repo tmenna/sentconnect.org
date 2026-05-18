@@ -434,11 +434,11 @@ function EditForm({
         className={cn(
           "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors",
           isHighlight
-            ? "text-amber-700 bg-amber-100 hover:bg-amber-200"
+            ? "text-gray-700 bg-gray-100 hover:bg-gray-200"
             : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
         )}
       >
-        <Star className={cn("h-3.5 w-3.5", isHighlight && "fill-amber-500 text-amber-500")} />
+        <Star className={cn("h-3.5 w-3.5", isHighlight && "fill-amber-500 text-gray-500")} />
         {isHighlight ? "Highlighted" : "Mark as highlight"}
       </button>
 
@@ -624,8 +624,8 @@ export function PostCard({
 
       {/* Highlight banner (only when not mission moment) */}
       {!post.isMissionMoment && post.isHighlight && (
-        <div className="flex items-center gap-1.5 px-6 py-2 bg-amber-50 border-b border-amber-100 text-[12px] font-medium text-amber-700">
-          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+        <div className="flex items-center gap-1.5 px-6 py-2 bg-gray-50 border-b border-gray-100 text-[12px] font-medium text-gray-700">
+          <Star className="h-3.5 w-3.5 fill-amber-400 text-gray-400" />
           Highlight
         </div>
       )}
@@ -633,9 +633,9 @@ export function PostCard({
       {/* Header */}
       <div className="flex items-start gap-3.5 px-4 sm:px-6 pt-5 pb-3">
         <Link href={`/missionaries/${post.author.id}`}>
-          <Avatar className="h-12 w-12 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
+          <Avatar className="h-12 w-12 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #F3F4F6" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#E6F7F3", color: "#009E7A", fontWeight: 700, fontSize: 15 }}>
+            <AvatarFallback style={{ background: "#F5F5F5", color: "#111827", fontWeight: 700, fontSize: 15 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -643,7 +643,7 @@ export function PostCard({
         <div className="flex-1 min-w-0">
           <Link
             href={`/missionaries/${post.author.id}`}
-            className="transition-colors leading-tight block" style={{ fontSize: 16, fontWeight: 700, color: "#009E7A", letterSpacing: "-0.02em" }}
+            className="transition-colors leading-tight block" style={{ fontSize: 16, fontWeight: 700, color: "#111827", letterSpacing: "-0.02em" }}
           >
             {post.author.name}
           </Link>
@@ -681,7 +681,7 @@ export function PostCard({
                 )}
                 <button
                   onClick={() => { setShowMenu(false); deletePost(); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-gray-600 hover:bg-gray-50 transition-colors"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                   Delete
@@ -730,7 +730,7 @@ export function PostCard({
                 <button
                   onClick={() => setTextCollapsed(c => !c)}
                   className="mt-1.5 text-[13px] font-semibold transition-colors"
-                  style={{ color: "#009E7A" }}
+                  style={{ color: "#111827" }}
                 >
                   {textCollapsed ? "Read more →" : "Show less ↑"}
                 </button>
@@ -753,11 +753,11 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 post.likedByMe
-                  ? "text-[#F87171] bg-[#FEF2F2]"
-                  : "text-[#64748B] hover:bg-[#FEF2F2] hover:text-[#F87171]"
+                  ? "text-[#6B7280] bg-[#F9FAFB]"
+                  : "text-[#64748B] hover:bg-[#F9FAFB] hover:text-[#6B7280]"
               )}
             >
-              <Heart className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#F87171] text-[#F87171]" : "")} />
+              <Heart className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#6B7280] text-[#6B7280]" : "")} />
               <span className="hidden sm:inline">Love</span>
               {post.likeCount > 0 && <span className="hidden sm:inline">· {post.likeCount}</span>}
               {post.likeCount > 0 && <span className="sm:hidden text-[11px]">{post.likeCount}</span>}
@@ -769,11 +769,11 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 post.likedByMe
-                  ? "text-[#009E7A] bg-[#E6F7F3]"
-                  : "text-[#64748B] hover:bg-[#E6F7F3] hover:text-[#009E7A]"
+                  ? "text-[#111827] bg-[#F5F5F5]"
+                  : "text-[#64748B] hover:bg-[#F5F5F5] hover:text-[#111827]"
               )}
             >
-              <ThumbsUp className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#009E7A] text-[#009E7A]" : "")} />
+              <ThumbsUp className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#111827] text-[#111827]" : "")} />
               <span className="hidden sm:inline">Like</span>
             </button>
 
@@ -783,8 +783,8 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 copied
-                  ? "text-[#009E7A] bg-[#E6F7F3]"
-                  : "text-[#64748B] hover:bg-[#E6F7F3] hover:text-[#009E7A]"
+                  ? "text-[#111827] bg-[#F5F5F5]"
+                  : "text-[#64748B] hover:bg-[#F5F5F5] hover:text-[#111827]"
               )}
             >
               {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
@@ -795,7 +795,7 @@ export function PostCard({
             {canManage && (
               <button
                 onClick={() => setShowSlideExport(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#E6F7F3] hover:text-[#009E7A] transition-all duration-150 rounded-xl my-1"
+                className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#F5F5F5] hover:text-[#111827] transition-all duration-150 rounded-xl my-1"
               >
                 <ImageDown className="h-4 w-4" />
                 <span className="hidden sm:inline">Export</span>

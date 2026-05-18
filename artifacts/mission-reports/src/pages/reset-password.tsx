@@ -3,9 +3,9 @@ import { Link, useSearch } from "wouter";
 import { Loader2, CheckCircle2 } from "lucide-react";
 import logoWhite from "@/assets/logo-white.png";
 
-const BG    = "linear-gradient(150deg, #3D0066 0%, #009E7A 55%, #A020F0 100%)";
-const BLUE  = "#009E7A";
-const BLUE_DK = "#007A5E";
+const BG    = "linear-gradient(150deg, #3D0066 0%, #111827 55%, #374151 100%)";
+const BLUE  = "#111827";
+const BLUE_DK = "#000000";
 
 export default function ResetPassword() {
   const search = useSearch();
@@ -81,7 +81,7 @@ export default function ResetPassword() {
           <div className="text-center">
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ background: "#E6F7F3", border: "2px solid #80D4C0" }}
+              style={{ background: "#F5F5F5", border: "2px solid #D1D5DB" }}
             >
               <CheckCircle2 className="h-7 w-7" style={{ color: BLUE }} />
             </div>
@@ -104,7 +104,7 @@ export default function ResetPassword() {
             <p className="text-[14px] text-gray-500 mb-6">Choose a strong password for your account.</p>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 text-[13px] px-3 py-2 rounded-lg mb-4">
+              <div className="bg-gray-50 border border-gray-200 text-gray-700 text-[13px] px-3 py-2 rounded-lg mb-4">
                 {error}
               </div>
             )}

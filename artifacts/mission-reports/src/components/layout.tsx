@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useLogo } from "@/providers/logo-provider";
 
-const EMERALD  = "#009E7A";
+const EMERALD  = "#111827";
 const BORDER   = "#E5E7EB";
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -93,7 +93,7 @@ export function Layout({ children }: { children: ReactNode }) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all duration-150"
-              style={{ background: "#B8FFD7", color: "#005C46" }}
+              style={{ background: "#E5E7EB", color: "#111827" }}
             >
               <HelpCircle className="h-3.5 w-3.5" />
               Help
@@ -108,7 +108,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
                         className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[13px] cursor-pointer transition-all duration-150"
-                        style={{ background: "#B8FFD7", color: "#005C46" }}
+                        style={{ background: "#E5E7EB", color: "#111827" }}
                       >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
@@ -116,7 +116,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
                     <button
                       className="ml-0.5 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150"
-                      style={{ background: "#B8FFD7", color: "#005C46", border: "none", cursor: "pointer" }}
+                      style={{ background: "#E5E7EB", color: "#111827", border: "none", cursor: "pointer" }}
                       onClick={() => logout.mutate({ data: undefined })}
                       title="Sign out"
                       data-testid="btn-logout"
@@ -189,7 +189,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <div className="h-px bg-gray-100 my-1" />
                     <button
                       onClick={() => logout.mutate({ data: undefined })}
-                      className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium text-red-500 hover:bg-red-50 transition-colors"
+                      className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium text-gray-500 hover:bg-gray-50 transition-colors"
                       data-testid="btn-logout"
                     >
                       <LogOut className="h-4 w-4" />

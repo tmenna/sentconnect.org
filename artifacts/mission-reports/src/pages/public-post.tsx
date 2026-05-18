@@ -106,16 +106,16 @@ export default function PublicPost() {
           >
             {/* Mission Moment / Highlight banner */}
             {post.isMissionMoment ? (
-              <div className="flex items-center gap-2 px-6 py-2.5" style={{ background: "#E6F7F3", borderBottom: "1px solid #80D4C0" }}>
-                <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#5A0097" }} />
-                <span className="text-[12px] font-semibold tracking-wide uppercase" style={{ color: "#009E7A" }}>Mission Moments</span>
-                {post.isHighlight && <Star className="h-3 w-3 fill-amber-400 text-amber-400 ml-0.5" />}
+              <div className="flex items-center gap-2 px-6 py-2.5" style={{ background: "#F5F5F5", borderBottom: "1px solid #D1D5DB" }}>
+                <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#111827" }} />
+                <span className="text-[12px] font-semibold tracking-wide uppercase" style={{ color: "#111827" }}>Mission Moments</span>
+                {post.isHighlight && <Star className="h-3 w-3 fill-amber-400 text-gray-400 ml-0.5" />}
                 <div className="flex-1" />
                 <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />
               </div>
             ) : post.isHighlight ? (
-              <div className="flex items-center gap-1.5 px-6 py-2 bg-amber-50 text-[12px] font-semibold text-amber-700 uppercase tracking-wide" style={{ borderBottom: "1px solid #FDE68A" }}>
-                <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+              <div className="flex items-center gap-1.5 px-6 py-2 bg-gray-50 text-[12px] font-semibold text-gray-700 uppercase tracking-wide" style={{ borderBottom: "1px solid #FDE68A" }}>
+                <Star className="h-3.5 w-3.5 fill-amber-400 text-gray-400" />
                 Highlight
               </div>
             ) : null}
@@ -124,7 +124,7 @@ export default function PublicPost() {
             <div className="flex items-center gap-3.5 px-6 pt-6 pb-4">
               <Avatar className="h-11 w-11 flex-shrink-0" style={{ boxShadow: "0 0 0 2px #fff, 0 0 0 3px #E5E7EB" }}>
                 <AvatarImage src={post.author.avatarUrl ?? undefined} />
-                <AvatarFallback className="font-bold text-[14px]" style={{ background: "#E6F7F3", color: "#5A0097" }}>
+                <AvatarFallback className="font-bold text-[14px]" style={{ background: "#F5F5F5", color: "#111827" }}>
                   {post.author.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>

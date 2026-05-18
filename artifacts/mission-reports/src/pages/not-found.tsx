@@ -4,7 +4,7 @@ import { Shuffle } from "lucide-react";
 import { useLogo } from "@/providers/logo-provider";
 
 const BG   = "linear-gradient(150deg, #004EA8 0%, #0066CC 55%, #1A80E0 100%)";
-const BLUE = "#009E7A";
+const BLUE = "#111827";
 
 export default function NotFound() {
   const { logo } = useLogo();
@@ -26,9 +26,9 @@ export default function NotFound() {
       >
         <div
           className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-          style={{ background: "#FEF2F2", border: "2px solid #FECACA" }}
+          style={{ background: "#F9FAFB", border: "2px solid #E5E7EB" }}
         >
-          <AlertCircle className="h-7 w-7 text-red-500" />
+          <AlertCircle className="h-7 w-7 text-gray-500" />
         </div>
         <h1 className="text-[22px] font-bold text-gray-900 mb-2">Page not found</h1>
         <p className="text-[14px] text-gray-500 mb-6">
@@ -38,7 +38,7 @@ export default function NotFound() {
           <button
             className="w-full h-11 text-white font-bold rounded-xl text-[15px] transition-all"
             style={{ background: BLUE }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#007A5E"; }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#000000"; }}
             onMouseLeave={e => { e.currentTarget.style.background = BLUE; }}
           >
             Back to Home

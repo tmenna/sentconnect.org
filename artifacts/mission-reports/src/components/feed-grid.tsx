@@ -27,8 +27,8 @@ const DATE_PILL_PALETTE = [
   { bg: "#CFFAFE", color: "#0E7490" },  // cyan
   { bg: "#FEF3C7", color: "#B45309" },  // amber
   { bg: "#D1FAE5", color: "#065F46" },  // emerald
-  { bg: "#E6F7F3", color: "#006B55" },  // violet
-  { bg: "#FEE2E2", color: "#991B1B" },  // red
+  { bg: "#F5F5F5", color: "#006B55" },  // violet
+  { bg: "#F3F4F6", color: "#991B1B" },  // red
   { bg: "#DBEAFE", color: "#1D4ED8" },  // blue
   { bg: "#FCE7F3", color: "#9D174D" },  // pink
   { bg: "#FFF7ED", color: "#C2410C" },  // orange
@@ -38,7 +38,7 @@ const DATE_PILL_PALETTE = [
 const THUMB_MOMENT = {
   bg: "linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 60%, #6EE7B7 100%)",
   iconBg: "rgba(255,255,255,0.55)",
-  icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
+  icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
 };
 const THUMB_HIGHLIGHT = {
   bg: "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 60%, #FCD34D 100%)",
@@ -46,7 +46,7 @@ const THUMB_HIGHLIGHT = {
   icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
 };
 const THUMB_DEFAULT = {
-  bg: "linear-gradient(135deg, #E6F7F3 0%, #DBEAFE 60%, #80D4C0 100%)",
+  bg: "linear-gradient(135deg, #F5F5F5 0%, #DBEAFE 60%, #D1D5DB 100%)",
   iconBg: "rgba(255,255,255,0.55)",
   icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
 };
@@ -150,7 +150,7 @@ export function MasonryCard({
             style={{
               fontSize: 11,
               fontWeight: 700,
-              background: "#009E7A",
+              background: "#111827",
               color: "#ffffff",
               borderRadius: 999,
               padding: "3px 11px",
@@ -240,7 +240,7 @@ export function MasonryCard({
         <div className="flex items-center gap-2 pt-2.5" style={{ borderTop: "1px solid #F3F4F6" }}>
           <Avatar className="h-7 w-7 flex-shrink-0 ring-1 ring-white shadow-sm">
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="text-[10px] font-bold" style={{ background: "#E6F7F3", color: "#009E7A" }}>
+            <AvatarFallback className="text-[10px] font-bold" style={{ background: "#F5F5F5", color: "#111827" }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -254,8 +254,8 @@ export function MasonryCard({
             style={{
               fontSize: 12,
               fontWeight: 600,
-              color: "#009E7A",
-              border: "1px solid #E9D5FF",
+              color: "#111827",
+              border: "1px solid #F3F4F6",
               borderRadius: 999,
               padding: "4px 13px",
               background: hovered ? "#F9F0FF" : "white",

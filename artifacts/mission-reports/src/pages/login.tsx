@@ -21,8 +21,8 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const BLUE = "#009E7A";
-const BLUE_DARK = "#007A5E";
+const BLUE = "#111827";
+const BLUE_DARK = "#000000";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -91,7 +91,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   if (isAuthenticated && user) return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-4 py-10 bg-white">
       <div className="w-full max-w-sm bg-white rounded-2xl p-7 sm:p-8 text-center" style={{ border: "1px solid #E2E8F0", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" }}>
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#E6F7F3", border: "1.5px solid #80D4C0" }}>
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#F5F5F5", border: "1.5px solid #D1D5DB" }}>
           <span className="font-bold text-lg" style={{ color: BLUE }}>{user.name.charAt(0).toUpperCase()}</span>
         </div>
         <h2 className="text-[17px] font-semibold mb-1" style={{ color: "#0F172A" }}>You're signed in</h2>
@@ -107,7 +107,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         </button>
         <Button
           variant="outline"
-          className="w-full h-12 font-semibold text-red-600 border-red-100 hover:bg-red-50 hover:border-red-200 rounded-xl"
+          className="w-full h-12 font-semibold text-gray-600 border-gray-100 hover:bg-gray-50 hover:border-gray-200 rounded-xl"
           onClick={() => logout.mutate({ data: undefined })}
           disabled={logout.isPending}
         >
@@ -135,7 +135,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
         {/* Center message */}
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#E6F7F3" }}>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#F5F5F5" }}>
             <Globe className="h-4 w-4" style={{ color: BLUE }} />
             <span className="text-[15px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
@@ -158,7 +158,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
         {/* Mobile brand header */}
         <div className="lg:hidden flex flex-col items-center px-6 pt-10 pb-8 text-center" style={{ borderBottom: "1px solid #F1F5F9" }}>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-5" style={{ background: "#E6F7F3" }}>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-5" style={{ background: "#F5F5F5" }}>
             <Globe className="h-3.5 w-3.5" style={{ color: BLUE }} />
             <span className="text-[13px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
           </div>
@@ -177,7 +177,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             {/* Heading */}
             <div className="mb-7">
               {orgName && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: "#E6F7F3", border: "1px solid #80D4C0" }}>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: "#F5F5F5", border: "1px solid #D1D5DB" }}>
                   <div style={{ width: 6, height: 6, borderRadius: "50%", background: BLUE, flexShrink: 0 }} />
                   <span className="text-[12px] font-bold tracking-widest uppercase" style={{ color: BLUE }}>{orgName}</span>
                 </div>
@@ -192,15 +192,15 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
             {/* Org portal error */}
             {orgPortalError && (
-              <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
-                <p className="text-[13px] font-semibold text-amber-800 mb-1">Wrong login portal</p>
-                <p className="text-[13px] text-amber-700 leading-relaxed">
+              <div className="mb-5 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+                <p className="text-[13px] font-semibold text-gray-800 mb-1">Wrong login portal</p>
+                <p className="text-[13px] text-gray-700 leading-relaxed">
                   This account belongs to an organization. Please sign in through your organization's portal.
                 </p>
                 {orgPortalError.subdomain && (
                   <a
                     href={buildOrgLoginHref(orgPortalError.subdomain)}
-                    className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-amber-800 hover:text-amber-900 underline underline-offset-2"
+                    className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-gray-800 hover:text-gray-900 underline underline-offset-2"
                   >
                     <ExternalLink className="h-3 w-3" />
                     Go to {orgPortalError.subdomain}.sentconnect.org/login

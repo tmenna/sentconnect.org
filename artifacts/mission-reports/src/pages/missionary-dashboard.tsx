@@ -9,7 +9,7 @@ import { FileText, BookOpen } from "lucide-react";
 
 type FeedTab = "all" | "moments";
 
-const EMERALD = "#059669";
+const EMERALD = "#374151";
 
 
 export default function MissionaryDashboard() {
@@ -49,7 +49,7 @@ export default function MissionaryDashboard() {
       <div style={{ paddingBottom: 4 }}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#009E7A", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 6 }}>
+            <h1 style={{ fontSize: 26, fontWeight: 700, color: "#111827", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 6 }}>
               Missions Feed
             </h1>
             <p style={{ fontSize: 14, color: "#000000", lineHeight: 1.5 }}>
@@ -61,7 +61,7 @@ export default function MissionaryDashboard() {
               {allPosts.length} <span style={{ fontWeight: 400, color: "#64748B" }}>posts</span>
             </span>
             {missionMoments.length > 0 && (
-              <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#009E7A", background: "#E6F7F3", border: "1px solid #E9D5FF", borderRadius: 999, padding: "4px 12px" }}>
+              <span className="inline-flex items-center gap-1" style={{ fontSize: 12, fontWeight: 700, color: "#111827", background: "#F5F5F5", border: "1px solid #F3F4F6", borderRadius: 999, padding: "4px 12px" }}>
                 {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>moments</span>
               </span>
             )}
@@ -95,9 +95,9 @@ export default function MissionaryDashboard() {
                 marginBottom: -1,
                 fontSize: 14,
                 fontWeight: active ? 700 : 400,
-                color: active ? "#009E7A" : "#94A3B8",
+                color: active ? "#111827" : "#94A3B8",
                 border: "none",
-                borderBottom: active ? "2px solid #009E7A" : "2px solid transparent",
+                borderBottom: active ? "2px solid #111827" : "2px solid transparent",
                 background: "transparent",
                 cursor: "pointer",
                 letterSpacing: active ? "-0.01em" : "normal",
@@ -110,8 +110,8 @@ export default function MissionaryDashboard() {
                     marginLeft: 6,
                     fontSize: 11,
                     fontWeight: 600,
-                    background: active ? "#E6F7F3" : "transparent",
-                    color: active ? "#009E7A" : "#94A3B8",
+                    background: active ? "#F5F5F5" : "transparent",
+                    color: active ? "#111827" : "#94A3B8",
                     borderRadius: 999,
                     padding: "1px 7px",
                   }}
@@ -155,7 +155,7 @@ export default function MissionaryDashboard() {
               <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EBF5FF" }}>
                 <BookOpen className="h-6 w-6" style={{ color: EMERALD }} />
               </div>
-              <p className="font-semibold text-[16px]" style={{ color: "#009E7A" }}>No Mission Moments yet</p>
+              <p className="font-semibold text-[16px]" style={{ color: "#111827" }}>No Mission Moments yet</p>
               <p className="text-[14px] mt-1.5" style={{ color: "#000000" }}>Mark a post as Mission Moments when you share an update.</p>
             </>
           ) : (
@@ -163,7 +163,7 @@ export default function MissionaryDashboard() {
               <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
                 <FileText className="h-6 w-6" style={{ color: "#9CA3AF" }} />
               </div>
-              <p className="font-semibold text-[16px]" style={{ color: "#009E7A" }}>No posts yet</p>
+              <p className="font-semibold text-[16px]" style={{ color: "#111827" }}>No posts yet</p>
               <p className="text-[14px] mt-1.5" style={{ color: "#000000" }}>Share your first update using the composer above.</p>
             </>
           )}
