@@ -1068,7 +1068,7 @@ export default function AdminDashboard() {
             <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", marginBottom: 6 }}>
               Workspace
             </p>
-            <p style={{ fontSize: 14, fontWeight: 700, color: "#0f0f13", margin: 0, lineHeight: 1.3 }}>
+            <p style={{ fontSize: 22, fontWeight: 800, color: "#0f0f13", margin: 0, lineHeight: 1.2, letterSpacing: "-0.02em" }}>
               Global Partners
             </p>
             <p style={{ fontSize: 12, color: "#94A3B8", margin: "2px 0 0" }}>
@@ -1099,8 +1099,8 @@ export default function AdminDashboard() {
                     padding: "9px 10px",
                     borderRadius: 8,
                     border: "none",
-                    background: active ? "#F4EEFF" : "transparent",
-                    color: active ? "#4F0A90" : "#64748B",
+                    background: active ? "#4F0A90" : "transparent",
+                    color: active ? "#ffffff" : "#64748B",
                     fontSize: 13.5,
                     fontWeight: active ? 600 : 400,
                     cursor: "pointer",

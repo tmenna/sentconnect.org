@@ -89,8 +89,8 @@ export default function MissionaryDashboard() {
                   width: "100%", textAlign: "left",
                   padding: "9px 10px",
                   borderRadius: 8, border: "none",
-                  background: active ? "#F4EEFF" : "transparent",
-                  color: active ? "#4F0A90" : "#64748B",
+                  background: active ? "#4F0A90" : "transparent",
+                  color: active ? "#ffffff" : "#64748B",
                   fontSize: 13.5, fontWeight: active ? 600 : 400,
                   cursor: "pointer", transition: "all 0.12s",
                 }}
