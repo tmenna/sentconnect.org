@@ -13,6 +13,7 @@ import {
   ChevronDown, Eye, EyeOff, Check, UserPlus, Mail, KeyRound, Copy, RefreshCw,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
   BarChart3, Star, UserCog, BookOpen, MapPin, ImageIcon, Upload,
+  Rss, Palette,
 } from "lucide-react";
 import { useUpload } from "@workspace/object-storage-web";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -1051,83 +1052,74 @@ export default function AdminDashboard() {
         />
       )}
 
-      <div className="space-y-7">
+      <div className="flex gap-0 min-h-[600px]">
 
-        {/* ── Header: breadcrumb — left-border accent style (like help page) ── */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, borderLeft: "3px solid #3DC9A8", paddingLeft: 10 }}>
-          <span style={{ fontSize: 11, fontWeight: 800, color: "#3DC9A8", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-            ADMIN DASHBOARD
-          </span>
+        {/* ── Sidebar ── */}
+        <aside style={{ width: 220, flexShrink: 0, borderRight: "1px solid #F1F5F9", paddingRight: 20, paddingTop: 4 }}>
+
+          {/* Org badge */}
           {user.organization && (
-            <>
-              <span style={{ fontSize: 11, color: "#CBD5E1" }}>·</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: "#64748B", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#E6FAF6", borderRadius: 999, padding: "3px 10px", marginBottom: 16 }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#3DC9A8", display: "inline-block" }} />
+              <span style={{ fontSize: 11, fontWeight: 700, color: "#3DC9A8", letterSpacing: "0.05em", textTransform: "uppercase" }}>
                 {user.organization}
               </span>
-            </>
+            </div>
           )}
-        </div>
 
-        {/* ── Header: title + tabs (left) | stats + avatar (right) — all one row ── */}
-        <div
-          className="flex items-end justify-between gap-4 flex-wrap"
-          style={{ borderBottom: "2px solid #F1F5F9", paddingBottom: 0 }}
-        >
-          {/* Left: title then tabs inline */}
-          <div className="flex items-end gap-8 flex-wrap min-w-0">
-            {/* Title block */}
-            <div style={{ paddingBottom: 14, flexShrink: 0 }}>
-              <h1 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 900, color: "#0F172A", letterSpacing: "-0.04em", lineHeight: 1.1, margin: "0 0 5px" }}>
-                Global Partners
-              </h1>
-              <p style={{ fontSize: 14, color: "#374151", margin: 0, lineHeight: 1.4 }}>
-                Manage your team and track mission activity
-              </p>
-            </div>
-
-            {/* Tabs — vertically aligned to bottom edge */}
-            <div className="flex items-end overflow-x-auto scrollbar-none" style={{ marginBottom: -2 }}>
-              {[
-                { id: "feed", label: "Updates", badge: null },
-                { id: "team", label: "Manage Team", badge: !usersLoading ? allUsers.length : null },
-                { id: "branding", label: "Branding", badge: null },
-              ].map(tab => {
-                const active = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
-                    className="transition-all duration-150 flex-shrink-0"
-                    style={{
-                      paddingBottom: 14,
-                      paddingTop: 10,
-                      paddingLeft: 4,
-                      paddingRight: 4,
-                      marginRight: 28,
-                      fontSize: 16,
-                      fontWeight: active ? 800 : 500,
-                      color: active ? "#3DC9A8" : "#64748B",
-                      border: "none",
-                      borderBottom: active ? "2.5px solid #3DC9A8" : "2.5px solid transparent",
-                      background: "transparent",
-                      cursor: "pointer",
-                      letterSpacing: active ? "-0.02em" : "normal",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {tab.label}
-                    {tab.badge != null && (
-                      <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#E6FAF6" : "#F8FAFC", color: active ? "#3DC9A8" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
-                        {tab.badge}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+          {/* Title */}
+          <div style={{ marginBottom: 28 }}>
+            <h1 style={{ fontSize: 22, fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 4px" }}>
+              Admin Panel
+            </h1>
+            <p style={{ fontSize: 12, color: "#94A3B8", margin: 0 }}>
+              Manage your organisation
+            </p>
           </div>
 
-        </div>
+          {/* Nav items */}
+          <nav style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {([
+              { id: "team",     label: "User Management", Icon: Users },
+              { id: "feed",     label: "Updates",         Icon: Rss },
+              { id: "branding", label: "Branding",        Icon: Palette },
+            ] as const).map(({ id, label, Icon }) => {
+              const active = activeTab === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 10,
+                    width: "100%", textAlign: "left",
+                    padding: "10px 14px",
+                    borderRadius: 10,
+                    border: "none",
+                    background: active ? "#E6FAF6" : "transparent",
+                    color: active ? "#3DC9A8" : "#64748B",
+                    fontSize: 14,
+                    fontWeight: active ? 700 : 500,
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                  }}
+                  onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#F8FAFC"; }}
+                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = "transparent"; }}
+                >
+                  <Icon style={{ width: 16, height: 16, flexShrink: 0 }} />
+                  {label}
+                  {id === "team" && !usersLoading && (
+                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, background: active ? "#3DC9A8" : "#F1F5F9", color: active ? "#fff" : "#64748B", borderRadius: 999, padding: "1px 7px" }}>
+                      {allUsers.length}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </aside>
+
+        {/* ── Main content ── */}
+        <div style={{ flex: 1, minWidth: 0, paddingLeft: 28, paddingTop: 4 }} className="space-y-4">
 
         {/* ── Tab: Team ── */}
         {activeTab === "team" && (
@@ -1577,6 +1569,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        </div>
       </div>
 
     </>
