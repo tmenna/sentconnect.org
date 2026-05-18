@@ -854,7 +854,18 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
         </td>
         {/* Joined */}
         <td className="px-5 py-4 hidden lg:table-cell">
-          <span className="text-[13px]" style={{ color: "#9CA3AF" }}>
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              background: "#4F0A90",
+              color: "#ffffff",
+              borderRadius: 999,
+              padding: "3px 10px",
+              display: "inline-block",
+              lineHeight: 1.6,
+            }}
+          >
             {format(new Date(u.createdAt), "MMM d, yyyy")}
           </span>
         </td>
@@ -1209,7 +1220,7 @@ export default function AdminDashboard() {
                         <th className="px-5 py-4 text-left text-[13px] font-700 tracking-wide uppercase" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11 }}>Member</th>
                         <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
                         <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
-                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
+                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#4F0A90", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
                         <th className="px-5 py-4 text-right" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
                       </tr>
                     </thead>

@@ -150,7 +150,7 @@ export function MasonryCard({
             style={{
               fontSize: 11,
               fontWeight: 700,
-              background: "#111827",
+              background: "#4F0A90",
               color: "#ffffff",
               borderRadius: 999,
               padding: "3px 11px",
