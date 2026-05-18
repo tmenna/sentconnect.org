@@ -109,6 +109,7 @@ export function LogoProvider({ children }: { children: ReactNode }) {
       setPlatformFooterLogo(platformCache!.footerLogoUrl);
       setPlatformSignupLogo(platformCache!.signupLogoUrl);
       setPlatformLogo(platformCache!.logoUrl);
+      setIsLogoReady(true);
       return;
     }
 
