@@ -95,7 +95,7 @@ export function Layout({ children }: { children: ReactNode }) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all duration-150"
-              style={{ background: "#F0E0FF", color: "#8705FA" }}
+              style={{ background: "#8705FA", color: "#fff" }}
             >
               <HelpCircle className="h-3.5 w-3.5" />
               Help
