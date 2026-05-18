@@ -55,13 +55,13 @@ export default function MissionaryDashboard() {
 
         {/* Workspace label */}
         <div style={{ marginBottom: 28, padding: "0 8px" }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", margin: "0 0 7px" }}>
+          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", margin: "0 0 8px" }}>
             Workspace
           </p>
-          <p style={{ fontSize: 17, fontWeight: 700, color: "#0f0f13", margin: 0, lineHeight: 1.3 }}>
+          <p style={{ fontSize: 20, fontWeight: 700, color: "#0f0f13", margin: 0, lineHeight: 1.25 }}>
             Missions Feed
           </p>
-          <p style={{ fontSize: 13, color: "#94A3B8", margin: "3px 0 0" }}>
+          <p style={{ fontSize: 14, color: "#94A3B8", margin: "4px 0 0" }}>
             {user.organization ?? "Field Team"}
           </p>
         </div>

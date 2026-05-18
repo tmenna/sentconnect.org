@@ -359,9 +359,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={handlePost}
               disabled={!canPost}
               className="px-3 sm:px-6 font-bold text-[13px] sm:text-[14px] text-white rounded-xl transition-all duration-200 disabled:opacity-40 whitespace-nowrap"
-              style={{ background: "#111827", height: "40px", boxShadow: canPost ? "0 4px 14px rgba(154,39,255,0.28)" : "none", letterSpacing: "-0.02em" }}
-              onMouseEnter={e => { if (canPost) { e.currentTarget.style.background = "#7B1FCC"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#111827"; e.currentTarget.style.transform = ""; }}
+              style={{ background: "#8705FA", height: "40px", boxShadow: canPost ? "0 4px 14px rgba(135,5,250,0.35)" : "none", letterSpacing: "-0.02em" }}
+              onMouseEnter={e => { if (canPost) { e.currentTarget.style.background = "#7004d4"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#8705FA"; e.currentTarget.style.transform = ""; }}
             >
               <span className="hidden sm:inline">Post Update</span>
               <span className="sm:hidden">Post</span>
