@@ -1,11 +1,11 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
-import { Redirect } from "wouter";
+import { Redirect, Link } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
-import { FileText, BookOpen } from "lucide-react";
+import { FileText, BookOpen, Rss, Star, User } from "lucide-react";
 
 type FeedTab = "all" | "moments";
 
@@ -42,15 +42,108 @@ export default function MissionaryDashboard() {
 
   const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
 
+  const firstName = user.name.split(" ")[0];
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28, maxWidth: 960, margin: "0 auto", width: "100%" }}>
+    <div style={{ display: "flex", gap: 0, margin: "0 -32px", minHeight: 600, background: "#fff" }}>
+
+      {/* ── Render-style dark sidebar ── */}
+      <aside style={{
+        width: 240, flexShrink: 0,
+        background: "#0f0f13",
+        display: "flex", flexDirection: "column",
+        padding: "24px 12px 20px",
+        borderRadius: "16px 0 0 16px",
+      }}>
+        {/* Workspace label */}
+        <div style={{ marginBottom: 28, padding: "0 8px" }}>
+          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", marginBottom: 6, margin: "0 0 6px" }}>
+            Workspace
+          </p>
+          <p style={{ fontSize: 14, fontWeight: 700, color: "#fff", margin: 0, lineHeight: 1.3 }}>
+            Missions Feed
+          </p>
+          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", margin: "2px 0 0" }}>
+            {user.organization ?? "Field Team"}
+          </p>
+        </div>
+
+        {/* Section label */}
+        <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", padding: "0 8px", margin: "0 0 4px" }}>
+          Activity
+        </p>
+
+        {/* Nav */}
+        <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
+          {([
+            { id: "all",     label: "My Posts",        Icon: Rss },
+            { id: "moments", label: "Mission Moments",  Icon: Star },
+          ] as { id: FeedTab; label: string; Icon: React.ElementType }[]).map(({ id, label, Icon }) => {
+            const active = activeTab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  width: "100%", textAlign: "left",
+                  padding: "9px 10px",
+                  borderRadius: 8, border: "none",
+                  background: active ? "rgba(255,255,255,0.12)" : "transparent",
+                  color: active ? "#fff" : "rgba(255,255,255,0.55)",
+                  fontSize: 13.5, fontWeight: active ? 600 : 400,
+                  cursor: "pointer", transition: "all 0.12s",
+                }}
+                onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.color = "rgba(255,255,255,0.85)"; } }}
+                onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.55)"; } }}
+              >
+                <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
+                {label}
+              </button>
+            );
+          })}
+
+          {/* Divider + Profile link */}
+          <div style={{ height: 1, background: "rgba(255,255,255,0.08)", margin: "8px 0" }} />
+          <Link href="/profile">
+            <button
+              style={{
+                display: "flex", alignItems: "center", gap: 10,
+                width: "100%", textAlign: "left",
+                padding: "9px 10px", borderRadius: 8, border: "none",
+                background: "transparent", color: "rgba(255,255,255,0.55)",
+                fontSize: 13.5, fontWeight: 400, cursor: "pointer", transition: "all 0.12s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.color = "rgba(255,255,255,0.85)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.55)"; }}
+            >
+              <User style={{ width: 15, height: 15, flexShrink: 0 }} />
+              Profile
+            </button>
+          </Link>
+        </nav>
+
+        {/* User info at bottom */}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 14, display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
+          <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#fff", flexShrink: 0 }}>
+            {user.name.charAt(0).toUpperCase()}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <p style={{ fontSize: 12.5, fontWeight: 600, color: "#fff", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", margin: 0 }}>Field User</p>
+          </div>
+        </div>
+      </aside>
+
+      {/* ── Main content ── */}
+      <div style={{ flex: 1, minWidth: 0, padding: "28px 28px 28px 32px", display: "flex", flexDirection: "column", gap: 28 }}>
 
       {/* ── Page header ── */}
       <div style={{ paddingBottom: 4 }}>
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 style={{ fontSize: 26, fontWeight: 700, color: "#111827", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 6 }}>
-              Missions Feed
+              {activeTab === "moments" ? "Mission Moments" : "My Posts"}
             </h1>
             <p style={{ fontSize: 14, color: "#000000", lineHeight: 1.5 }}>
               Stay connected. Share what God is doing in the field.
@@ -175,6 +268,7 @@ export default function MissionaryDashboard() {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }
