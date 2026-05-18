@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
 import { Redirect } from "wouter";
-import { User, MapPin, Building, Camera, Loader2, Building2 } from "lucide-react";
+import { User, MapPin, Building, Camera, Loader2, Building2, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUpload } from "@workspace/object-storage-web";
 
@@ -75,13 +75,18 @@ function useProfileUpload(userId: number) {
     await uploadFile(file);
   }
 
-  return { fileInputRef, previewUrl, isUploading, updateUser, handleFileChange };
+  function removeLogo() {
+    setPreviewUrl(null);
+    updateUser.mutate({ id: userId, data: { avatarUrl: null } });
+  }
+
+  return { fileInputRef, previewUrl, isUploading, updateUser, handleFileChange, removeLogo };
 }
 
 /* ── Admin / Org view ── */
 function AdminProfile() {
   const { user } = useAuth();
-  const { fileInputRef, previewUrl, isUploading, updateUser, handleFileChange } = useProfileUpload(user!.id);
+  const { fileInputRef, previewUrl, isUploading, updateUser, handleFileChange, removeLogo } = useProfileUpload(user!.id);
 
   const nameParts = (user!.name || "").split(" ");
   const form = useForm<AdminFormValues>({
@@ -144,9 +149,23 @@ function AdminProfile() {
               Upload your organization's logo. This will appear across the platform.
             </p>
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} data-testid="input-avatar-file" />
-            <Button type="button" variant="outline" size="sm" disabled={isUploading} onClick={() => fileInputRef.current?.click()} className="h-8 px-3 text-sm gap-1.5" data-testid="btn-avatar-upload">
-              {isUploading ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Uploading…</> : <><Camera className="h-3.5 w-3.5" /> Upload Logo</>}
-            </Button>
+            <div className="flex items-center gap-2 flex-wrap">
+              <Button type="button" variant="outline" size="sm" disabled={isUploading} onClick={() => fileInputRef.current?.click()} className="h-8 px-3 text-sm gap-1.5" data-testid="btn-avatar-upload">
+                {isUploading ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Uploading…</> : <><Camera className="h-3.5 w-3.5" /> Upload Logo</>}
+              </Button>
+              {displayAvatar && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  disabled={isUploading || updateUser.isPending}
+                  onClick={removeLogo}
+                  className="h-8 px-3 text-sm gap-1.5 text-red-500 hover:text-red-600 hover:bg-red-50"
+                >
+                  <Trash2 className="h-3.5 w-3.5" /> Remove Logo
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -253,7 +272,7 @@ function AdminProfile() {
 /* ── Field user view (unchanged) ── */
 function FieldUserProfile() {
   const { user } = useAuth();
-  const { fileInputRef, previewUrl, isUploading, updateUser, handleFileChange } = useProfileUpload(user!.id);
+  const { fileInputRef, previewUrl, isUploading, updateUser, handleFileChange, removeLogo } = useProfileUpload(user!.id);
 
   const form = useForm<FieldUserFormValues>({
     resolver: zodResolver(fieldUserSchema),
