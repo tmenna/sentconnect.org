@@ -129,8 +129,10 @@ function LandingPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const BLUE      = "#111827";
-  const BLUE_DARK = "#000000";
+  const BLUE      = "#6B21A8";
+  const BLUE_DARK = "#4A00E0";
+  const TEAL      = "#10B981";
+  const TEAL_DARK = "#059669";
   const CHARCOAL  = "#1F2937";
   const TEXT      = "#0F172A";
   const TEXT2     = "#64748B";
@@ -194,7 +196,7 @@ function LandingPage() {
 
         {/* Mobile dropdown */}
         {mobileNavOpen && (
-          <div className="sm:hidden" style={{ background: "#000000", borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
+          <div className="sm:hidden" style={{ background: BLUE_DARK, borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
             <a
               href="/about"
               style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
@@ -216,31 +218,32 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="lp-hero-section" style={{ background: BG, position: "relative", overflow: "hidden" }}>
-          {/* subtle radial glow */}
-          <div style={{ position: "absolute", top: -200, right: -200, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(138,5,255,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <section className="lp-hero-section" style={{ background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_DARK} 100%)`, position: "relative", overflow: "hidden" }}>
+          {/* subtle inner glow */}
+          <div style={{ position: "absolute", top: -180, right: -180, width: 560, height: 560, borderRadius: "50%", background: "radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: -120, left: -120, width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
 
           <div className="lp-hero-grid mx-auto max-w-6xl px-6">
             {/* Left */}
             <div>
-              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "#F5F5F5", borderRadius: 999, padding: "5px 16px", boxShadow: "0 2px 10px rgba(138,5,255,0.18)" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#111827", letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "rgba(255,255,255,0.15)", borderRadius: 999, padding: "5px 16px", border: "1px solid rgba(255,255,255,0.25)" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.95)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
               </div>
 
-              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px", whiteSpace: "pre-line" }}>
+              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: "#ffffff", margin: "0 0 24px", whiteSpace: "pre-line" }}>
                 {content.heroTitle}
               </h1>
 
-              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.8, color: TEXT2, maxWidth: 460, margin: "0 0 44px" }}>
+              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.8, color: "rgba(255,255,255,0.78)", maxWidth: 460, margin: "0 0 44px" }}>
                 {content.heroDescription}
               </p>
 
               <div className="lp-animate lp-delay-4">
                 <a
                   href={content.primaryCtaHref}
-                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(135,5,250,0.32)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(135,5,250,0.4)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(135,5,250,0.32)"; }}
+                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,185,129,0.4)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,185,129,0.5)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,185,129,0.4)"; }}
                 >{content.primaryCtaLabel}</a>
               </div>
             </div>
@@ -322,9 +325,9 @@ function LandingPage() {
             </p>
             <a
               href={content.primaryCtaHref}
-              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: "#FFFFFF", color: "#111827", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,0,0,0.18)", transition: "transform .15s, box-shadow .15s, background .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F5F5F5"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.24)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(0,0,0,0.18)"; }}
+              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(16,185,129,0.45)", transition: "transform .15s, box-shadow .15s, background .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(16,185,129,0.55)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(16,185,129,0.45)"; }}
             >{content.primaryCtaLabel}</a>
           </div>
         </section>
@@ -400,8 +403,8 @@ function AboutPage() {
       .catch(() => setAbout(DEFAULT_ABOUT_PAGE_CONTENT));
   }, []);
 
-  const BLUE      = "#111827";
-  const BLUE_DARK = "#000000";
+  const BLUE      = "#6B21A8";
+  const BLUE_DARK = "#4A00E0";
   const TEXT      = "#0F172A";
   const TEXT2     = "#374151";
   const BG        = "#FFFFFF";
@@ -465,7 +468,7 @@ function AboutPage() {
 
         {/* Mobile dropdown */}
         {mobileNavOpen && (
-          <div className="sm:hidden" style={{ background: "#000000", borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
+          <div className="sm:hidden" style={{ background: BLUE_DARK, borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
             <a
               href="/about"
               style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
