@@ -1069,8 +1069,8 @@ export default function AdminDashboard() {
 
           {/* Title */}
           <div style={{ marginBottom: 28 }}>
-            <h1 style={{ fontSize: 22, fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 4px" }}>
-              Admin Panel
+            <h1 style={{ fontSize: 26, fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 4px" }}>
+              Global Partners Dashboard
             </h1>
             <p style={{ fontSize: 12, color: "#94A3B8", margin: 0 }}>
               Manage your organisation
@@ -1080,9 +1080,9 @@ export default function AdminDashboard() {
           {/* Nav items */}
           <nav style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             {([
-              { id: "team",     label: "User Management", Icon: Users },
               { id: "feed",     label: "Updates",         Icon: Rss },
               { id: "branding", label: "Branding",        Icon: Palette },
+              { id: "team",     label: "User Management", Icon: Users },
             ] as const).map(({ id, label, Icon }) => {
               const active = activeTab === id;
               return (
