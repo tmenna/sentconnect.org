@@ -14,6 +14,7 @@ export interface LogoContextValue {
   isCustomLogo: boolean;
   isCustomFooterLogo: boolean;
   isCustomSignupLogo: boolean;
+  isLogoReady: boolean;
   refresh: () => void;
 }
 
@@ -26,6 +27,7 @@ const LogoContext = createContext<LogoContextValue>({
   isCustomLogo: false,
   isCustomFooterLogo: false,
   isCustomSignupLogo: false,
+  isLogoReady: false,
   refresh: () => {},
 });
 
@@ -86,6 +88,9 @@ export function LogoProvider({ children }: { children: ReactNode }) {
   const [platformLogo, setPlatformLogo] = useState<string | null>(() => platformCache?.logoUrl ?? null);
   const [orgLogo, setOrgLogo] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
+  // isLogoReady: true once the first platform fetch (+ any preloading) has settled,
+  // so consumers can fade-in the logo instead of showing a jarring swap.
+  const [isLogoReady, setIsLogoReady] = useState<boolean>(() => !!platformCache);
 
   const refresh = useCallback(() => {
     // Bust both module caches and trigger re-fetch
@@ -132,8 +137,9 @@ export function LogoProvider({ children }: { children: ReactNode }) {
         setPlatformFooterLogo(loadedFooter);
         setPlatformSignupLogo(loadedSignup);
         setPlatformLogo(loadedLogo);
+        setIsLogoReady(true);
       })
-      .catch(() => {});
+      .catch(() => { setIsLogoReady(true); }); // even on failure, stop blocking
     return () => { cancelled = true; };
   }, [tick]);
 
@@ -183,6 +189,7 @@ export function LogoProvider({ children }: { children: ReactNode }) {
       isCustomLogo,
       isCustomFooterLogo,
       isCustomSignupLogo,
+      isLogoReady,
       refresh,
     }}>
       {children}

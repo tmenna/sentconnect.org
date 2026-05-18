@@ -27,7 +27,7 @@ const DARK   = "#0f0f13";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
-  const { logo, isCustomLogo } = useLogo();
+  const { logo, isCustomLogo, isLogoReady } = useLogo();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const search = useSearch();
@@ -130,7 +130,15 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
         <img
           src={logo}
           alt="SentConnect"
-          style={{ maxHeight: 22, width: "auto", maxWidth: 160, filter: isCustomLogo ? undefined : "brightness(0)", display: "block" }}
+          style={{
+            maxHeight: 28,
+            width: "auto",
+            maxWidth: 180,
+            display: "block",
+            filter: isCustomLogo ? undefined : "brightness(0)",
+            opacity: isLogoReady ? 1 : 0,
+            transition: "opacity 0.2s ease",
+          }}
         />
       </header>
 
