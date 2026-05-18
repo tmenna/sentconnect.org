@@ -342,6 +342,8 @@ router.get("/reports/:id/public", async (req, res): Promise<void> => {
 });
 
 // GET /reports/:id
+// Visibility: super_admin sees any post; org members (any role) see posts that
+// belong to the same organization; own-posts are always accessible.
 router.get("/reports/:id", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
@@ -351,9 +353,18 @@ router.get("/reports/:id", async (req, res): Promise<void> => {
   if (!details) { res.status(404).json({ error: "Post not found" }); return; }
 
   const currentUser = await getCurrentUser(currentUserId);
-  const isAdmin = currentUser?.role === "admin" || currentUser?.role === "super_admin";
-  if (!isAdmin && details.missionaryId !== currentUserId) {
-    res.status(403).json({ error: "You can only view your own posts" }); return;
+  if (!currentUser) { res.status(403).json({ error: "Forbidden" }); return; }
+
+  const isSuperAdmin = currentUser.role === "super_admin";
+  const isOwnPost = details.missionaryId === currentUserId;
+  // Org members can view any post in their org (mirrors timeline visibility)
+  const isSameOrg =
+    currentUser.organizationId != null &&
+    details.organizationId != null &&
+    currentUser.organizationId === details.organizationId;
+
+  if (!isSuperAdmin && !isOwnPost && !isSameOrg) {
+    res.status(403).json({ error: "You can only view posts in your organization" }); return;
   }
 
   res.json(details);
@@ -413,12 +424,45 @@ router.delete("/photos/:id", async (req, res): Promise<void> => {
   res.sendStatus(204);
 });
 
+// Shared helper: resolve the post and verify the caller can interact with it.
+// Returns the post row on success, or sends the error response and returns null.
+async function resolvePostForInteraction(
+  req: Parameters<Parameters<typeof router.post>[1]>[0],
+  res: Parameters<Parameters<typeof router.post>[1]>[1],
+  postId: number,
+): Promise<typeof reportsTable.$inferSelect | null> {
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return null; }
+
+  const [post] = await db.select().from(reportsTable).where(eq(reportsTable.id, postId));
+  if (!post) { res.status(404).json({ error: "Post not found" }); return null; }
+
+  const currentUser = await getCurrentUser(currentUserId);
+  if (!currentUser) { res.status(403).json({ error: "Forbidden" }); return null; }
+
+  const isSuperAdmin = currentUser.role === "super_admin";
+  const isOwnPost = post.missionaryId === currentUserId;
+  const isSameOrg =
+    currentUser.organizationId != null &&
+    post.organizationId != null &&
+    currentUser.organizationId === post.organizationId;
+
+  if (!isSuperAdmin && !isOwnPost && !isSameOrg) {
+    res.status(403).json({ error: "You can only interact with posts in your organization" }); return null;
+  }
+
+  return post;
+}
+
 // POST /reports/:id/likes — toggle like
 router.post("/reports/:id/likes", async (req, res): Promise<void> => {
   const postId = Number(req.params.id);
+  if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
-  if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
+
+  const post = await resolvePostForInteraction(req, res, postId);
+  if (!post) return;
 
   const [existing] = await db.select().from(likesTable).where(and(eq(likesTable.postId, postId), eq(likesTable.userId, currentUserId)));
   if (existing) {
@@ -436,6 +480,9 @@ router.post("/reports/:id/likes", async (req, res): Promise<void> => {
 router.get("/reports/:id/comments", async (req, res): Promise<void> => {
   const postId = Number(req.params.id);
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
+
+  const post = await resolvePostForInteraction(req, res, postId);
+  if (!post) return;
 
   // Single JOIN query — no N+1
   const commentsList = await db.select().from(commentsTable)
@@ -463,6 +510,10 @@ router.post("/reports/:id/comments", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
+
+  const post = await resolvePostForInteraction(req, res, postId);
+  if (!post) return;
+
   const { text } = req.body ?? {};
   if (!text || typeof text !== "string" || text.trim().length === 0) {
     res.status(400).json({ error: "text is required" }); return;

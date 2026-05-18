@@ -16,6 +16,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import { PostCard } from "@/components/PostCard";
 import { useColors } from "@/hooks/useColors";
 
@@ -24,6 +25,7 @@ const PAGE_SIZE = 15;
 export default function FeedScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   const [allPosts, setAllPosts] = useState<ReportWithDetails[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -133,7 +135,12 @@ export default function FeedScreen() {
       <FlatList
         data={allPosts}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <PostCard post={item} />}
+        renderItem={({ item }) => (
+          <PostCard
+            post={item}
+            onPress={() => router.push(`/post/${item.id}` as never)}
+          />
+        )}
         ListHeaderComponent={
           <View>
             <Header />

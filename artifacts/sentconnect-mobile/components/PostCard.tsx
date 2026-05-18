@@ -1,3 +1,5 @@
+import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import React from "react";
 import {
   Image,
@@ -8,6 +10,7 @@ import {
 } from "react-native";
 import { useColors } from "@/hooks/useColors";
 import { Avatar } from "./Avatar";
+import { useLike } from "@/hooks/usePostActions";
 
 interface Photo {
   id: number;
@@ -38,6 +41,9 @@ interface Post {
   photos: Photo[];
   peopleReached?: number | null;
   location?: string | null;
+  likeCount?: number;
+  commentCount?: number;
+  likedByMe?: boolean;
 }
 
 interface PostCardProps {
@@ -79,6 +85,18 @@ export function PostCard({ post, onPress }: PostCardProps) {
   const firstPhoto = post.photos?.[0];
   // API sends `author`; OpenAPI spec names the field `missionary`. Accept both.
   const authorInfo = post.author ?? post.missionary ?? { id: 0, name: "Unknown", avatarUrl: null };
+
+  const { liked, likeCount, toggle: toggleLike } = useLike(
+    post.id,
+    post.likedByMe ?? false,
+    post.likeCount ?? 0,
+  );
+
+  const handleLike = async (e: { stopPropagation?: () => void }) => {
+    e?.stopPropagation?.();
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    toggleLike();
+  };
 
   return (
     <Pressable
@@ -156,9 +174,9 @@ export function PostCard({ post, onPress }: PostCardProps) {
         </Text>
       </View>
 
-      {/* Footer */}
-      {post.peopleReached ? (
-        <View style={styles.footer}>
+      {/* Footer: impact badge + action bar */}
+      <View style={[styles.footer, { borderTopColor: colors.border }]}>
+        {post.peopleReached ? (
           <View
             style={[
               styles.impactBadge,
@@ -169,8 +187,48 @@ export function PostCard({ post, onPress }: PostCardProps) {
               {post.peopleReached.toLocaleString()} reached
             </Text>
           </View>
+        ) : (
+          <View />
+        )}
+
+        {/* Action buttons */}
+        <View style={styles.actions}>
+          <Pressable
+            onPress={handleLike}
+            style={styles.actionBtn}
+            hitSlop={6}
+          >
+            <Ionicons
+              name={liked ? "heart" : "heart-outline"}
+              size={18}
+              color={liked ? "#EF4444" : colors.mutedForeground}
+            />
+            {likeCount > 0 ? (
+              <Text
+                style={[
+                  styles.actionCount,
+                  { color: liked ? "#EF4444" : colors.mutedForeground },
+                ]}
+              >
+                {likeCount}
+              </Text>
+            ) : null}
+          </Pressable>
+
+          <View style={styles.actionBtn}>
+            <Ionicons
+              name="chatbubble-outline"
+              size={16}
+              color={colors.mutedForeground}
+            />
+            {(post.commentCount ?? 0) > 0 ? (
+              <Text style={[styles.actionCount, { color: colors.mutedForeground }]}>
+                {post.commentCount}
+              </Text>
+            ) : null}
+          </View>
         </View>
-      ) : null}
+      </View>
     </Pressable>
   );
 }
@@ -237,8 +295,12 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: 14,
+    paddingTop: 8,
     paddingBottom: 12,
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderTopWidth: 1,
   },
   impactBadge: {
     paddingHorizontal: 10,
@@ -246,6 +308,20 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   impactText: {
+    fontFamily: "Inter_600SemiBold",
+    fontSize: 12,
+  },
+  actions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+  },
+  actionBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  actionCount: {
     fontFamily: "Inter_600SemiBold",
     fontSize: 12,
   },
