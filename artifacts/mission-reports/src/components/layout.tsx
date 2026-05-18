@@ -93,7 +93,7 @@ export function Layout({ children }: { children: ReactNode }) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all duration-150"
-              style={{ background: "#009E7A", color: "#ffffff" }}
+              style={{ background: "#B8FFD7", color: "#005C46" }}
             >
               <HelpCircle className="h-3.5 w-3.5" />
               Help
@@ -108,7 +108,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
                         className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[13px] cursor-pointer transition-all duration-150"
-                        style={{ background: "#009E7A", color: "#ffffff" }}
+                        style={{ background: "#B8FFD7", color: "#005C46" }}
                       >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
@@ -116,7 +116,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
                     <button
                       className="ml-0.5 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150"
-                      style={{ background: "#009E7A", color: "#ffffff", border: "none", cursor: "pointer" }}
+                      style={{ background: "#B8FFD7", color: "#005C46", border: "none", cursor: "pointer" }}
                       onClick={() => logout.mutate({ data: undefined })}
                       title="Sign out"
                       data-testid="btn-logout"
