@@ -127,23 +127,26 @@ function invalidateUserCache(userId: number) {
   _userCache.delete(userId);
 }
 
-// GET /timeline — admin only: shows all posts in same org
+// GET /timeline — all authenticated org members: shows all posts in same org
 router.get("/timeline", async (req, res): Promise<void> => {
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
   const currentUser = await getCurrentUser(currentUserId);
-  if (!currentUser || (currentUser.role !== "admin" && currentUser.role !== "super_admin")) {
-    res.status(403).json({ error: "Admin access required" }); return;
+  if (!currentUser) { res.status(403).json({ error: "Forbidden" }); return; }
+
+  // Non-super-admins must belong to an org to access the timeline
+  if (currentUser.role !== "super_admin" && !currentUser.organizationId) {
+    res.status(403).json({ error: "No organization context" }); return;
   }
 
   const limit = Math.min(Number(req.query.limit) || 20, 50);
   const offset = Number(req.query.offset) || 0;
 
   const conditions = [];
-  // Super admin sees all; org admin sees own org
-  if (currentUser.role !== "super_admin" && currentUser.organizationId) {
-    conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
+  // Super admin sees all; everyone else is strictly scoped to their org
+  if (currentUser.role !== "super_admin") {
+    conditions.push(eq(reportsTable.organizationId, currentUser.organizationId!));
   }
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;

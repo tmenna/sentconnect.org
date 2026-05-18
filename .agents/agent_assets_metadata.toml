@@ -6,6 +6,12 @@ uri = "file://attached_assets/about-family.png"
 type = "image"
 title = "missionary family Ethiopia portrait"
 
+[[generated]]
+id = "VQF7NPEWFWuE-AXtSdF14"
+uri = "file://artifacts/sentconnect-mobile/assets/images/icon.png"
+type = "image"
+title = "sentconnect-app-icon"
+
 [[outputs]]
 id = "_0I-1E3uUCbe2RQXcqpSN"
 uri = "file://attached_assets/about-family.png"
