@@ -9,8 +9,10 @@ import {
 import { useLogo } from "@/providers/logo-provider";
 import { extractHostnameOrgSlug, getOrgRoutingContext } from "@/lib/org";
 
-const NAVY = "#0F172A";
-const BLUE = "#111827";
+const PURPLE    = "#6B21A8";
+const PURPLE_MID = "#4A00E0";
+const TEAL      = "#10B981";
+const TEAL_DARK = "#059669";
 
 const FEATURES = [
   "Unlimited users",
@@ -169,15 +171,15 @@ export default function Signup() {
           flex-direction: column;
         }
 
-        /* ── Right blue panel ── */
+        /* ── Right purple panel ── */
         .su-form-panel {
           flex: 1;
           display: flex;
           flex-direction: column;
           padding: 36px;
           border-radius: 28px;
-          background: linear-gradient(135deg, #111827 0%, #000000 100%);
-          box-shadow: 0 8px 48px rgba(135,5,250,0.35);
+          background: linear-gradient(135deg, #6B21A8 0%, #4A00E0 100%);
+          box-shadow: 0 8px 48px rgba(107,33,168,0.45);
         }
 
         /* ── Email + Password row ── */
@@ -264,13 +266,13 @@ export default function Signup() {
           {/* LEFT — Plan card (hidden on mobile/tablet) */}
           <div className="su-plan">
             <div style={{ width: 44, height: 44, borderRadius: 16, background: "#F5F5F5", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-              <Users style={{ width: 20, height: 20, color: BLUE }} />
+              <Users style={{ width: 20, height: 20, color: PURPLE }} />
             </div>
 
             <p style={{ fontSize: 15, fontWeight: 700, color: "#111827", marginBottom: 14 }}>Organization Plan</p>
 
             <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
-              <span style={{ fontSize: "2.4rem", fontWeight: 900, lineHeight: 1, color: BLUE }}>$30</span>
+              <span style={{ fontSize: "2.4rem", fontWeight: 900, lineHeight: 1, color: PURPLE }}>$30</span>
               <span style={{ fontSize: 13, color: "#9CA3AF", fontWeight: 500 }}>/ month</span>
             </div>
 
@@ -279,7 +281,7 @@ export default function Signup() {
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {FEATURES.map(f => (
                 <div key={f} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <CheckCircle2 style={{ width: 16, height: 16, flexShrink: 0, color: BLUE }} />
+                  <CheckCircle2 style={{ width: 16, height: 16, flexShrink: 0, color: PURPLE }} />
                   <span style={{ fontSize: 13.5, color: "#4B5563" }}>{f}</span>
                 </div>
               ))}
@@ -461,24 +463,24 @@ export default function Signup() {
                   style={{
                     width: "100%",
                     height: 50,
-                    background: submitting ? "#1E293B" : NAVY,
+                    background: submitting ? TEAL_DARK : TEAL,
                     color: "#fff",
-                    fontWeight: 600,
+                    fontWeight: 700,
                     fontSize: 15,
                     border: "none",
-                    borderRadius: 12,
+                    borderRadius: 999,
                     cursor: submitting ? "not-allowed" : "pointer",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     gap: 8,
                     opacity: submitting ? 0.75 : 1,
-                    boxShadow: "0 4px 18px rgba(0,0,0,0.3)",
+                    boxShadow: "0 4px 18px rgba(16,185,129,0.45)",
                     letterSpacing: "0.01em",
                     transition: "background .15s",
                   }}
-                  onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = "#1E293B"; }}
-                  onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = NAVY; }}
+                  onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = TEAL_DARK; }}
+                  onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = TEAL; }}
                 >
                   {submitting
                     ? <><Loader2 style={{ width: 16, height: 16 }} className="animate-spin" /> Redirecting to payment…</>
@@ -499,7 +501,7 @@ export default function Signup() {
       {/* Bottom stripe note */}
       <div className="su-stripe-note">
         <Lock style={{ width: 12, height: 12 }} />
-        Secure checkout powered by <span style={{ fontWeight: 600, color: BLUE }}>Stripe</span>
+        Secure checkout powered by <span style={{ fontWeight: 600, color: PURPLE }}>Stripe</span>
       </div>
     </div>
   );
