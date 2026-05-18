@@ -1059,10 +1059,10 @@ export default function AdminDashboard() {
 
           {/* Title */}
           <div style={{ marginBottom: 28 }}>
-            <h1 style={{ fontSize: 26, fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 4px" }}>
+            <h1 style={{ fontSize: 34, fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 6px" }}>
               Global Partners Dashboard
             </h1>
-            <p style={{ fontSize: 12, color: "#94A3B8", margin: 0 }}>
+            <p style={{ fontSize: 15, color: "#94A3B8", margin: 0 }}>
               Manage your organisation
             </p>
           </div>
