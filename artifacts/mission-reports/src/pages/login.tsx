@@ -137,7 +137,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               maxWidth: 180,
               display: "block",
               opacity: isLogoReady ? 1 : 0,
-              transition: "opacity 0.2s ease",
+              transition: "opacity 0.25s ease",
             }}
           />
         ) : (
@@ -147,8 +147,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             letterSpacing: "0.07em",
             color: "#8705FA",
             textTransform: "uppercase",
-            opacity: isLogoReady ? 1 : 0,
-            transition: "opacity 0.2s ease",
           }}>
             SentConnect
           </span>
