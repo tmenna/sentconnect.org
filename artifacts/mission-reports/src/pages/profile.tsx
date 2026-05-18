@@ -311,6 +311,16 @@ function FieldUserProfile() {
 
   return (
     <div className="max-w-lg mx-auto py-6">
+      <Link href="/feed">
+        <span className="inline-flex items-center gap-1.5 text-[13px] font-medium mb-5 transition-colors"
+          style={{ color: "#64748B" }}
+          onMouseEnter={e => (e.currentTarget.style.color = "#111827")}
+          onMouseLeave={e => (e.currentTarget.style.color = "#64748B")}
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to Dashboard
+        </span>
+      </Link>
       <div className="flex items-start gap-4 mb-7">
         <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#F5F5F5" }}>
           <User className="h-5 w-5" style={{ color: "#111827" }} />
