@@ -229,7 +229,7 @@ export function MasonryCard({
 
         {/* Excerpt */}
         {displayExcerpt ? (
-          <p className="line-clamp-2 mb-3" style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.55, flexGrow: 1 }}>
+          <p className="line-clamp-2 mb-3" style={{ fontSize: 15, color: "#6B7280", lineHeight: 1.6, flexGrow: 1 }}>
             {displayExcerpt}
           </p>
         ) : (
