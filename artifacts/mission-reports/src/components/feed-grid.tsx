@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow, format } from "date-fns";
 import {
   MessageCircle, MapPin, X, ChevronLeft, ChevronRight,
-  FileText, Heart,
+  FileText,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PostCard, type PostData } from "@/components/post-card";
@@ -63,41 +63,7 @@ export function MasonryCard({
   const [hovered, setHovered] = useState(false);
   const [coverImgError, setCoverImgError] = useState(false);
 
-  // Optimistic like state — lives on the card itself
-  const [liked, setLiked] = useState(initialPost.likedByMe);
-  const [likeCount, setLikeCount] = useState(initialPost.likeCount);
-  const [liking, setLiking] = useState(false);
-
   const post = initialPost; // alias for readability
-
-  async function handleLike(e: React.MouseEvent) {
-    e.stopPropagation();
-    if (liking) return;
-    const prev = { liked, likeCount };
-    setLiked(l => !l);
-    setLikeCount(c => liked ? c - 1 : c + 1);
-    setLiking(true);
-    try {
-      const base = (import.meta as any).env?.BASE_URL?.replace(/\/$/, "") ?? "";
-      const res = await fetch(`${base}/api/reports/${post.id}/likes`, {
-        method: "POST",
-        credentials: "include",
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setLiked(data.liked);
-        setLikeCount(data.likeCount);
-      } else {
-        setLiked(prev.liked);
-        setLikeCount(prev.likeCount);
-      }
-    } catch {
-      setLiked(prev.liked);
-      setLikeCount(prev.likeCount);
-    } finally {
-      setLiking(false);
-    }
-  }
 
   const coverPhoto = post.photos.find(p => p.url) || null;
   const isVideo = coverPhoto ? isVideoUrl(coverPhoto.url) : false;
@@ -243,26 +209,6 @@ export function MasonryCard({
 
         {/* Reaction row — always visible, dark-on-white */}
         <div className="flex items-center gap-3 mb-2.5" style={{ fontSize: 12, color: "#64748B" }}>
-          {/* ❤️ Like — clickable */}
-          <button
-            onClick={handleLike}
-            disabled={liking}
-            className="flex items-center gap-1 transition-transform duration-150 hover:scale-110 active:scale-95 disabled:opacity-60"
-            style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
-            aria-label={liked ? "Unlike" : "Like"}
-          >
-            <Heart
-              className="h-3.5 w-3.5 transition-colors duration-150"
-              style={{
-                fill: liked ? "#F87171" : "none",
-                color: liked ? "#F87171" : "#64748B",
-              }}
-            />
-            <span style={{ fontSize: 12, fontWeight: liked ? 700 : 500, color: liked ? "#EF4444" : "#64748B" }}>
-              {likeCount}
-            </span>
-          </button>
-
           {/* 💬 Comment count */}
           <span className="flex items-center gap-1">
             <MessageCircle className="h-3.5 w-3.5" />

@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
-  ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
+  Heart, ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
   Send, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
   Link2, Share2, ImageDown, ChevronLeft, ChevronRight, ZoomIn
 } from "lucide-react";
@@ -757,7 +757,7 @@ export function PostCard({
                   : "text-[#64748B] hover:bg-[#E6FAF6] hover:text-[#3DC9A8]"
               )}
             >
-              <ThumbsUp className={cn("h-4 w-4", post.likedByMe && "fill-[#3DC9A8] text-[#3DC9A8]")} />
+              <Heart className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#F87171] text-[#F87171]" : "")} />
               <span className="hidden sm:inline">Like</span>
               {post.likeCount > 0 && <span className="hidden sm:inline">· {post.likeCount}</span>}
               {post.likeCount > 0 && <span className="sm:hidden text-[11px]">{post.likeCount}</span>}
