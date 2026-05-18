@@ -136,7 +136,7 @@ export default function MissionaryDashboard() {
       </aside>
 
       {/* ── Main content ── */}
-      <div style={{ flex: 1, minWidth: 0, maxWidth: 680, padding: "28px 28px 28px 32px", display: "flex", flexDirection: "column", gap: 28 }}>
+      <div style={{ flex: 1, minWidth: 0, maxWidth: 820, padding: "28px 32px 28px 36px", display: "flex", flexDirection: "column", gap: 28 }}>
 
       {/* ── Page header ── */}
       <div style={{ paddingBottom: 4 }}>
