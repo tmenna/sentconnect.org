@@ -218,23 +218,23 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="lp-hero-section" style={{ background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_DARK} 100%)`, position: "relative", overflow: "hidden" }}>
-          {/* subtle inner glow */}
-          <div style={{ position: "absolute", top: -180, right: -180, width: 560, height: 560, borderRadius: "50%", background: "radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: -120, left: -120, width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <section className="lp-hero-section" style={{ background: "#FFFFFF", position: "relative", overflow: "hidden", borderBottom: "1px solid #F1F5F9" }}>
+          {/* subtle purple glow top-right */}
+          <div style={{ position: "absolute", top: -160, right: -160, width: 520, height: 520, borderRadius: "50%", background: "radial-gradient(circle, rgba(107,33,168,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: -100, left: -100, width: 380, height: 380, borderRadius: "50%", background: "radial-gradient(circle, rgba(107,33,168,0.04) 0%, transparent 70%)", pointerEvents: "none" }} />
 
           <div className="lp-hero-grid mx-auto max-w-6xl px-6">
             {/* Left */}
             <div>
-              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "rgba(255,255,255,0.15)", borderRadius: 999, padding: "5px 16px", border: "1px solid rgba(255,255,255,0.25)" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.95)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "#F3EEFF", borderRadius: 999, padding: "5px 16px", border: "1px solid rgba(107,33,168,0.18)" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
               </div>
 
-              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: "#ffffff", margin: "0 0 24px", whiteSpace: "pre-line" }}>
+              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px", whiteSpace: "pre-line" }}>
                 {content.heroTitle}
               </h1>
 
-              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.8, color: "rgba(255,255,255,0.78)", maxWidth: 460, margin: "0 0 44px" }}>
+              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.8, color: TEXT2, maxWidth: 460, margin: "0 0 44px" }}>
                 {content.heroDescription}
               </p>
 
