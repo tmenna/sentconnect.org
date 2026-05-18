@@ -55,13 +55,13 @@ export default function MissionaryDashboard() {
 
         {/* Workspace label */}
         <div style={{ marginBottom: 28, padding: "0 8px" }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", margin: "0 0 8px" }}>
+          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", margin: "0 0 6px" }}>
             Workspace
           </p>
-          <p style={{ fontSize: 18, fontWeight: 800, color: "#0f0f13", margin: 0, lineHeight: 1.3, letterSpacing: "-0.02em" }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: "#0f0f13", margin: 0, lineHeight: 1.3 }}>
             Missions Feed
           </p>
-          <p style={{ fontSize: 14, color: "#94A3B8", margin: "4px 0 0" }}>
+          <p style={{ fontSize: 12, color: "#94A3B8", margin: "2px 0 0" }}>
             {user.organization ?? "Field Team"}
           </p>
         </div>
@@ -134,7 +134,8 @@ export default function MissionaryDashboard() {
 
       {/* ── Main content ── */}
       {/* pb-24 on mobile leaves room for the fixed bottom nav */}
-      <main className="flex-1 min-w-0 flex flex-col gap-6 sm:gap-7 px-4 sm:px-8 py-6 sm:py-7 pb-24 sm:pb-8">
+      <main className="flex-1 min-w-0 flex flex-col items-center px-4 sm:px-8 py-6 sm:py-7 pb-24 sm:pb-8">
+      <div className="w-full max-w-xl flex flex-col gap-6 sm:gap-7">
 
         {/* Page header */}
         <div className="flex items-start justify-between gap-4">
@@ -251,6 +252,7 @@ export default function MissionaryDashboard() {
             ))}
           </div>
         )}
+      </div>
       </main>
 
       {/* ── Mobile bottom nav — hidden on sm+ ── */}
