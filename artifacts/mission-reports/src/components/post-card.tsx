@@ -648,7 +648,7 @@ export function PostCard({
             {post.author.name}
           </Link>
           <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-1">
-            <span style={{ fontSize: 13, color: "#94A3B8" }}>{timeAgo}</span>
+            <span style={{ fontSize: 14, color: "#94A3B8" }}>{timeAgo}</span>
             {post.location && (
               <>
                 <span style={{ color: "#CBD5E1", fontSize: 10 }}>•</span>

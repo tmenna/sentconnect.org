@@ -148,12 +148,12 @@ export function MasonryCard({
         <div className="absolute top-3 left-3">
           <span
             style={{
-              fontSize: 11,
+              fontSize: 13,
               fontWeight: 700,
               background: "#8705FA",
               color: "#ffffff",
               borderRadius: 999,
-              padding: "3px 11px",
+              padding: "4px 12px",
               lineHeight: 1.6,
               display: "inline-block",
             }}
