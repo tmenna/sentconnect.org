@@ -129,8 +129,8 @@ function LandingPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const BLUE      = "#6B21A8";
-  const BLUE_DARK = "#4A00E0";
+  const BLUE      = "#8705FA";
+  const BLUE_DARK = "#8705FA";
   const TEAL      = "#10B981";
   const TEAL_DARK = "#059669";
   const CHARCOAL  = "#1F2937";
@@ -403,8 +403,8 @@ function AboutPage() {
       .catch(() => setAbout(DEFAULT_ABOUT_PAGE_CONTENT));
   }, []);
 
-  const BLUE      = "#6B21A8";
-  const BLUE_DARK = "#4A00E0";
+  const BLUE      = "#8705FA";
+  const BLUE_DARK = "#8705FA";
   const TEXT      = "#0F172A";
   const TEXT2     = "#374151";
   const BG        = "#FFFFFF";

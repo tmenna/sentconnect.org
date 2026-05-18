@@ -858,7 +858,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
             style={{
               fontSize: 11,
               fontWeight: 700,
-              background: "#4F0A90",
+              background: "#8705FA",
               color: "#ffffff",
               borderRadius: 999,
               padding: "3px 10px",
@@ -1110,7 +1110,7 @@ export default function AdminDashboard() {
                     padding: "9px 10px",
                     borderRadius: 8,
                     border: "none",
-                    background: active ? "#4F0A90" : "transparent",
+                    background: active ? "#8705FA" : "transparent",
                     color: active ? "#ffffff" : "#64748B",
                     fontSize: 13.5,
                     fontWeight: active ? 600 : 400,
@@ -1123,7 +1123,7 @@ export default function AdminDashboard() {
                   <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
                   {label}
                   {id === "team" && !usersLoading && (
-                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600, background: active ? "#E9D8FF" : "#F1F5F9", color: active ? "#4F0A90" : "#64748B", borderRadius: 999, padding: "1px 7px" }}>
+                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600, background: active ? "#E9D8FF" : "#F1F5F9", color: active ? "#8705FA" : "#64748B", borderRadius: 999, padding: "1px 7px" }}>
                       {allUsers.length}
                     </span>
                   )}
@@ -1134,7 +1134,7 @@ export default function AdminDashboard() {
 
           {/* User info at bottom */}
           <div style={{ borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
-            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#F4EEFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#4F0A90", flexShrink: 0 }}>
+            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#F4EEFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#8705FA", flexShrink: 0 }}>
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div style={{ minWidth: 0 }}>
@@ -1220,7 +1220,7 @@ export default function AdminDashboard() {
                         <th className="px-5 py-4 text-left text-[13px] font-700 tracking-wide uppercase" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11 }}>Member</th>
                         <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
                         <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
-                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#4F0A90", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
+                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#8705FA", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
                         <th className="px-5 py-4 text-right" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
                       </tr>
                     </thead>

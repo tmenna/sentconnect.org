@@ -89,8 +89,8 @@
   --popover-foreground: 230 35% 14%;
   --popover-border: 220 18% 91%;
 
-  /* SentConnect accent: #4F0A90 purple */
-  --primary: 274 87% 30%;
+  /* SentConnect accent: #8705FA purple */
+  --primary: 272 96% 50%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 220 18% 95%;
@@ -99,8 +99,8 @@
   --muted: 220 18% 93%;
   --muted-foreground: 220 14% 46%;
 
-  --accent: 274 60% 96%;
-  --accent-foreground: 274 87% 30%;
+  --accent: 272 96% 96%;
+  --accent-foreground: 272 96% 50%;
 
   --destructive: 0 0% 30%;
   --destructive-foreground: 0 0% 100%;

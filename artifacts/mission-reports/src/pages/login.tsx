@@ -22,7 +22,7 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const PURPLE = "#4F0A90";
+const PURPLE = "#8705FA";
 const DARK   = "#0f0f13";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {

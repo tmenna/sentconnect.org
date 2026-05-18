@@ -89,7 +89,7 @@ export default function MissionaryDashboard() {
                   width: "100%", textAlign: "left",
                   padding: "9px 10px",
                   borderRadius: 8, border: "none",
-                  background: active ? "#4F0A90" : "transparent",
+                  background: active ? "#8705FA" : "transparent",
                   color: active ? "#ffffff" : "#64748B",
                   fontSize: 13.5, fontWeight: active ? 600 : 400,
                   cursor: "pointer", transition: "all 0.12s",
@@ -125,7 +125,7 @@ export default function MissionaryDashboard() {
 
         {/* User info at bottom */}
         <div style={{ borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
-          <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#F4EEFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#4F0A90", flexShrink: 0 }}>
+          <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#F4EEFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#8705FA", flexShrink: 0 }}>
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div style={{ minWidth: 0 }}>

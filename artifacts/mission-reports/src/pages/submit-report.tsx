@@ -122,7 +122,7 @@ export default function SubmitReport() {
               <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
                 <Avatar style={{ width: 42, height: 42, flexShrink: 0 }}>
                   <AvatarImage src={user.avatarUrl ?? undefined} />
-                  <AvatarFallback style={{ background: "#4F0A90", color: "#fff", fontSize: 14, fontWeight: 700 }}>{initials}</AvatarFallback>
+                  <AvatarFallback style={{ background: "#8705FA", color: "#fff", fontSize: 14, fontWeight: 700 }}>{initials}</AvatarFallback>
                 </Avatar>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: 14, fontWeight: 700, color: "#0F172A", margin: "0 0 2px" }}>{user.name}</p>
@@ -339,9 +339,9 @@ export default function SubmitReport() {
                       textAlign: "left",
                     }}
                   >
-                    <BookOpen style={{ width: 16, height: 16, color: field.value ? "#4F0A90" : "#94A3B8", flexShrink: 0 }} />
-                    <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: field.value ? "#4F0A90" : "#374151" }}>Mark as Mission Moment</span>
-                    <div style={{ width: 36, height: 20, borderRadius: 999, background: field.value ? "#4F0A90" : "#E2E8F0", position: "relative", flexShrink: 0, transition: "background 0.2s" }}>
+                    <BookOpen style={{ width: 16, height: 16, color: field.value ? "#8705FA" : "#94A3B8", flexShrink: 0 }} />
+                    <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: field.value ? "#8705FA" : "#374151" }}>Mark as Mission Moment</span>
+                    <div style={{ width: 36, height: 20, borderRadius: 999, background: field.value ? "#8705FA" : "#E2E8F0", position: "relative", flexShrink: 0, transition: "background 0.2s" }}>
                       <div style={{ position: "absolute", top: 2, left: field.value ? 18 : 2, width: 16, height: 16, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,0.2)", transition: "left 0.2s" }} />
                     </div>
                   </button>
@@ -362,7 +362,7 @@ export default function SubmitReport() {
                 type="submit"
                 disabled={createReport.isPending}
                 data-testid="btn-submit-report"
-                style={{ flex: 1, height: 40, fontSize: 14, fontWeight: 700, borderRadius: 10, background: "#4F0A90", display: "flex", alignItems: "center", justifyContent: "center", gap: 7, boxShadow: "0 3px 12px rgba(79,10,144,0.3)", letterSpacing: "-0.01em", border: "none" }}
+                style={{ flex: 1, height: 40, fontSize: 14, fontWeight: 700, borderRadius: 10, background: "#8705FA", display: "flex", alignItems: "center", justifyContent: "center", gap: 7, boxShadow: "0 3px 12px rgba(135,5,250,0.3)", letterSpacing: "-0.01em", border: "none" }}
               >
                 <Send style={{ width: 14, height: 14 }} />
                 {createReport.isPending ? "Publishing…" : "Post Update"}

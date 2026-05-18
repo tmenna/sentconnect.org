@@ -9,8 +9,8 @@ import {
 import { useLogo } from "@/providers/logo-provider";
 import { extractHostnameOrgSlug, getOrgRoutingContext } from "@/lib/org";
 
-const PURPLE    = "#6B21A8";
-const PURPLE_MID = "#4A00E0";
+const PURPLE    = "#8705FA";
+const PURPLE_MID = "#8705FA";
 const TEAL      = "#10B981";
 const TEAL_DARK = "#059669";
 
@@ -132,8 +132,8 @@ export default function Signup() {
           align-items: center;
           justify-content: space-between;
           flex-shrink: 0;
-          background: #6B21A8;
-          box-shadow: 0 2px 16px rgba(107,33,168,0.35);
+          background: #8705FA;
+          box-shadow: 0 2px 16px rgba(135,5,250,0.35);
         }
         .su-back-link {
           font-size: 13px;
@@ -180,8 +180,8 @@ export default function Signup() {
           flex-direction: column;
           padding: 36px;
           border-radius: 28px;
-          background: linear-gradient(135deg, #6B21A8 0%, #4A00E0 100%);
-          box-shadow: 0 8px 48px rgba(107,33,168,0.45);
+          background: linear-gradient(135deg, #8705FA 0%, #6200E0 100%);
+          box-shadow: 0 8px 48px rgba(135,5,250,0.45);
         }
 
         /* ── Email + Password row ── */
