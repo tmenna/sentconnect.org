@@ -86,7 +86,7 @@ export default function Feed() {
   const displayedPosts = activeTab === "moments" ? missionMoments : accumulatedPosts;
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 max-w-[960px] mx-auto" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+    <div className="px-4 sm:px-6 lg:px-8 max-w-[700px] mx-auto" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
 
       {/* ── Page header ── */}
       <div style={{ marginBottom: 28 }}>
@@ -187,7 +187,7 @@ export default function Feed() {
       {/* ── Posts grid ── */}
       {isLoading && accumulatedPosts.length === 0 ? (
         // Skeleton loading — matches card grid
-        <div style={{ columns: "3 280px", columnGap: 20 }}>
+        <div style={{ columns: "1", columnGap: 20 }}>
           {[1, 2, 3, 4, 5, 6].map(i => (
             <div
               key={i}
@@ -260,7 +260,7 @@ export default function Feed() {
       ) : (
         <>
           {/* Card grid */}
-          <div style={{ columns: "3 280px", columnGap: 20 }}>
+          <div style={{ columns: "1", columnGap: 20 }}>
             {displayedPosts.map((post, i) => (
               <div
                 key={post.id}

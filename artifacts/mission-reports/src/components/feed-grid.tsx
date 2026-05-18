@@ -301,7 +301,7 @@ export function MasonryFeed({
 
   return (
     <>
-      <div style={{ columns: "2 320px", columnGap: "20px" }}>
+      <div style={{ columns: "1", columnGap: "20px" }}>
         {sorted.map((post, i) => (
           <div
             key={post.id}
@@ -419,7 +419,7 @@ export function PostDetailModal({
         <div
           className="relative z-10 w-full bg-white rounded-2xl shadow-2xl"
           style={{
-            maxWidth: 960,
+            maxWidth: 700,
             opacity: isIn ? 1 : 0,
             transform: isIn ? "translateY(0px) scale(1)" : "translateY(20px) scale(0.97)",
             transition: `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`,

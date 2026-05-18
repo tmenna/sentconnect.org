@@ -1240,7 +1240,7 @@ export default function AdminDashboard() {
 
         {/* ── Tab: Activity Feed ── */}
         {activeTab === "feed" && (
-          <div className="space-y-4">
+          <div className="max-w-[700px] mx-auto space-y-4">
 
             {/* ── Sub-tabs + Filters on one row ── */}
             <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 0 }}>
@@ -1310,7 +1310,7 @@ export default function AdminDashboard() {
             </div>
 
             {feedLoading ? (
-              <div style={{ columns: "3 280px", columnGap: 20 }}>
+              <div style={{ columns: "1", columnGap: 20 }}>
                 {[1, 2, 3, 4, 5, 6].map(i => (
                   <div key={i} style={{ breakInside: "avoid", display: "inline-block", width: "100%", marginBottom: 20 }}>
                     <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)" }}>
@@ -1347,7 +1347,7 @@ export default function AdminDashboard() {
                 )}
               </div>
             ) : (
-              <div style={{ columns: "3 280px", columnGap: 20 }}>
+              <div style={{ columns: "1", columnGap: 20 }}>
                 {displayedFeedPosts.map((post, i) => (
                   <div key={post.id} style={{ breakInside: "avoid", display: "inline-block", width: "100%", marginBottom: 20 }}>
                     <MasonryCard
