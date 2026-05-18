@@ -1057,27 +1057,27 @@ export default function AdminDashboard() {
         {/* ── Sidebar ── */}
         <aside style={{
           width: 240, flexShrink: 0,
-          background: "#0f0f13",
+          background: "#fff",
           display: "flex", flexDirection: "column",
           padding: "24px 12px 20px",
-          borderRadius: "16px 0 0 16px",
+          borderRight: "1px solid #F1F5F9",
         }}>
 
           {/* Workspace label */}
           <div style={{ marginBottom: 28, padding: "0 8px" }}>
-            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", marginBottom: 6 }}>
+            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", marginBottom: 6 }}>
               Workspace
             </p>
-            <p style={{ fontSize: 14, fontWeight: 700, color: "#fff", margin: 0, lineHeight: 1.3 }}>
+            <p style={{ fontSize: 14, fontWeight: 700, color: "#0f0f13", margin: 0, lineHeight: 1.3 }}>
               Global Partners
             </p>
-            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", margin: "2px 0 0" }}>
+            <p style={{ fontSize: 12, color: "#94A3B8", margin: "2px 0 0" }}>
               {user.organization ?? "Admin"}
             </p>
           </div>
 
           {/* Section label */}
-          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", padding: "0 8px", marginBottom: 4 }}>
+          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", padding: "0 8px", marginBottom: 4 }}>
             Manage
           </p>
 
@@ -1099,20 +1099,20 @@ export default function AdminDashboard() {
                     padding: "9px 10px",
                     borderRadius: 8,
                     border: "none",
-                    background: active ? "#4F0A90" : "transparent",
-                    color: active ? "#fff" : "rgba(255,255,255,0.55)",
+                    background: active ? "#F4EEFF" : "transparent",
+                    color: active ? "#4F0A90" : "#64748B",
                     fontSize: 13.5,
                     fontWeight: active ? 600 : 400,
                     cursor: "pointer",
                     transition: "all 0.12s",
                   }}
-                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.color = "rgba(255,255,255,0.85)"; } }}
-                  onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.55)"; } }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#0f0f13"; } }}
+                  onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; } }}
                 >
                   <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
                   {label}
                   {id === "team" && !usersLoading && (
-                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600, background: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.7)", borderRadius: 999, padding: "1px 7px" }}>
+                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600, background: active ? "#E9D8FF" : "#F1F5F9", color: active ? "#4F0A90" : "#64748B", borderRadius: 999, padding: "1px 7px" }}>
                       {allUsers.length}
                     </span>
                   )}
@@ -1122,13 +1122,13 @@ export default function AdminDashboard() {
           </nav>
 
           {/* User info at bottom */}
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 14, marginTop: 8, display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
-            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#fff", flexShrink: 0 }}>
+          <div style={{ borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
+            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#F4EEFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#4F0A90", flexShrink: 0 }}>
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div style={{ minWidth: 0 }}>
-              <p style={{ fontSize: 12.5, fontWeight: 600, color: "#fff", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
-              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", margin: 0 }}>{user.role}</p>
+              <p style={{ fontSize: 12.5, fontWeight: 600, color: "#0f0f13", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
+              <p style={{ fontSize: 11, color: "#94A3B8", margin: 0 }}>{user.role}</p>
             </div>
           </div>
         </aside>
