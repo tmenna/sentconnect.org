@@ -492,7 +492,7 @@ export function PostCard({
   const { user } = useAuth();
   const { orgSlug, prefix } = useOrg();
   const [post, setPost] = useState(initialPost);
-  const [showComments, setShowComments] = useState(defaultShowComments);
+  const [showComments, setShowComments] = useState(true);
   const [copied, setCopied] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loadingComments, setLoadingComments] = useState(false);
@@ -747,6 +747,22 @@ export function PostCard({
 
           {/* Action bar */}
           <div className="flex items-center mx-1 sm:mx-2" style={{ borderTop: "1px solid #F1F5F9" }}>
+            {/* Love */}
+            <button
+              onClick={toggleLike}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
+                post.likedByMe
+                  ? "text-[#F87171] bg-[#FEF2F2]"
+                  : "text-[#64748B] hover:bg-[#FEF2F2] hover:text-[#F87171]"
+              )}
+            >
+              <Heart className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#F87171] text-[#F87171]" : "")} />
+              <span className="hidden sm:inline">Love</span>
+              {post.likeCount > 0 && <span className="hidden sm:inline">· {post.likeCount}</span>}
+              {post.likeCount > 0 && <span className="sm:hidden text-[11px]">{post.likeCount}</span>}
+            </button>
+
             {/* Like */}
             <button
               onClick={toggleLike}
@@ -757,21 +773,8 @@ export function PostCard({
                   : "text-[#64748B] hover:bg-[#E6FAF6] hover:text-[#3DC9A8]"
               )}
             >
-              <Heart className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#F87171] text-[#F87171]" : "")} />
+              <ThumbsUp className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#3DC9A8] text-[#3DC9A8]" : "")} />
               <span className="hidden sm:inline">Like</span>
-              {post.likeCount > 0 && <span className="hidden sm:inline">· {post.likeCount}</span>}
-              {post.likeCount > 0 && <span className="sm:hidden text-[11px]">{post.likeCount}</span>}
-            </button>
-
-            {/* Comment */}
-            <button
-              onClick={toggleComments}
-              className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#E6FAF6] hover:text-[#3DC9A8] transition-all duration-150 rounded-xl my-1"
-            >
-              <MessageCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">Comment</span>
-              {post.commentCount > 0 && <span className="hidden sm:inline">· {post.commentCount}</span>}
-              {post.commentCount > 0 && <span className="sm:hidden text-[11px]">{post.commentCount}</span>}
             </button>
 
             {/* Share */}

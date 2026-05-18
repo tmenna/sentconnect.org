@@ -1057,16 +1057,6 @@ export default function AdminDashboard() {
         {/* ── Sidebar ── */}
         <aside style={{ width: 220, flexShrink: 0, borderRight: "1px solid #F1F5F9", paddingRight: 20, paddingTop: 4 }}>
 
-          {/* Org badge */}
-          {user.organization && (
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#E6FAF6", borderRadius: 999, padding: "3px 10px", marginBottom: 16 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#3DC9A8", display: "inline-block" }} />
-              <span style={{ fontSize: 11, fontWeight: 700, color: "#3DC9A8", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                {user.organization}
-              </span>
-            </div>
-          )}
-
           {/* Title */}
           <div style={{ marginBottom: 28 }}>
             <h1 style={{ fontSize: 26, fontWeight: 900, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 4px" }}>
