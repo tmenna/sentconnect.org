@@ -1099,14 +1099,14 @@ export default function AdminDashboard() {
                     padding: "9px 10px",
                     borderRadius: 8,
                     border: "none",
-                    background: active ? "rgba(255,255,255,0.12)" : "transparent",
+                    background: active ? "#4F0A90" : "transparent",
                     color: active ? "#fff" : "rgba(255,255,255,0.55)",
                     fontSize: 13.5,
                     fontWeight: active ? 600 : 400,
                     cursor: "pointer",
                     transition: "all 0.12s",
                   }}
-                  onMouseEnter={e => { if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.color = "rgba(255,255,255,0.85)"; }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.color = "rgba(255,255,255,0.85)"; } }}
                   onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.55)"; } }}
                 >
                   <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />

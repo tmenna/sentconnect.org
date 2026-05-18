@@ -89,8 +89,8 @@
   --popover-foreground: 230 35% 14%;
   --popover-border: 220 18% 91%;
 
-  /* SentConnect accent: monochrome */
-  --primary: 0 0% 10%;
+  /* SentConnect accent: #4F0A90 purple */
+  --primary: 274 87% 30%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 220 18% 95%;
@@ -99,14 +99,14 @@
   --muted: 220 18% 93%;
   --muted-foreground: 220 14% 46%;
 
-  --accent: 0 0% 94%;
-  --accent-foreground: 0 0% 10%;
+  --accent: 274 60% 96%;
+  --accent-foreground: 274 87% 30%;
 
   --destructive: 0 0% 30%;
   --destructive-foreground: 0 0% 100%;
 
   --input: 220 18% 88%;
-  --ring: 0 0% 10%;
+  --ring: 274 87% 30%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-serif: 'Inter', sans-serif;

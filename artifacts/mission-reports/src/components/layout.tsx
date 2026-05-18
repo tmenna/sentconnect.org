@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useLogo } from "@/providers/logo-provider";
 
-const EMERALD  = "#111827";
+const PURPLE   = "#4F0A90";
 const BORDER   = "#E5E7EB";
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -50,9 +50,11 @@ export function Layout({ children }: { children: ReactNode }) {
       <span className={cn(
         "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
         currentPath === href
-          ? "bg-gray-100 text-gray-900"
+          ? "bg-gray-100"
           : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
-      )}>
+      )}
+        style={currentPath === href ? { color: PURPLE, fontWeight: 600 } : {}}
+      >
         {icon}
         {label}
       </span>
@@ -93,7 +95,7 @@ export function Layout({ children }: { children: ReactNode }) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all duration-150"
-              style={{ background: "#E5E7EB", color: "#111827" }}
+              style={{ background: "#F4EEFF", color: "#4F0A90" }}
             >
               <HelpCircle className="h-3.5 w-3.5" />
               Help
@@ -108,7 +110,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
                         className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[13px] cursor-pointer transition-all duration-150"
-                        style={{ background: "#E5E7EB", color: "#111827" }}
+                        style={{ background: "#F4EEFF", color: "#4F0A90" }}
                       >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
@@ -116,7 +118,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
                     <button
                       className="ml-0.5 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150"
-                      style={{ background: "#E5E7EB", color: "#111827", border: "none", cursor: "pointer" }}
+                      style={{ background: "#F4EEFF", color: "#4F0A90", border: "none", cursor: "pointer" }}
                       onClick={() => logout.mutate({ data: undefined })}
                       title="Sign out"
                       data-testid="btn-logout"
@@ -129,7 +131,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Button
                       size="sm"
                       className="h-8 px-5 text-sm font-semibold rounded-lg text-white transition-colors"
-                      style={{ backgroundColor: EMERALD }}
+                      style={{ backgroundColor: "#0f0f13" }}
                     >
                       Sign In
                     </Button>

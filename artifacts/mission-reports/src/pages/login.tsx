@@ -8,12 +8,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useLoginUser, useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useSearch, useLocation } from "wouter";
-import { ExternalLink, LogOut, Loader2, Globe } from "lucide-react";
+import { LogOut, Loader2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
 import { useOrg } from "@/providers/org-provider";
+import { ExternalLink } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -21,8 +22,8 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const BLUE = "#111827";
-const BLUE_DARK = "#000000";
+const PURPLE = "#4F0A90";
+const DARK   = "#0f0f13";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -42,6 +43,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       .then((d: any) => { if (d?.name) setOrgName(d.name); })
       .catch(() => {});
   }, [orgSlug]);
+
   const from = (() => {
     if (platformMode) return "/admin";
     const raw = new URLSearchParams(search).get("from") ?? null;
@@ -84,34 +86,32 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
   if (isLoading) return (
     <div className="min-h-dvh flex items-center justify-center bg-white">
-      <Loader2 className="h-6 w-6 animate-spin" style={{ color: BLUE }} />
+      <Loader2 className="h-5 w-5 animate-spin" style={{ color: PURPLE }} />
     </div>
   );
 
   if (isAuthenticated && user) return (
-    <div className="min-h-dvh flex flex-col items-center justify-center px-4 py-10 bg-white">
-      <div className="w-full max-w-sm bg-white rounded-2xl p-7 sm:p-8 text-center" style={{ border: "1px solid #E2E8F0", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" }}>
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#F5F5F5", border: "1.5px solid #D1D5DB" }}>
-          <span className="font-bold text-lg" style={{ color: BLUE }}>{user.name.charAt(0).toUpperCase()}</span>
+    <div className="min-h-dvh flex flex-col items-center justify-center px-4 bg-white">
+      <div className="w-full max-w-[400px] text-center">
+        <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "#F4EEFF", border: `1.5px solid #D8B4FE` }}>
+          <span className="font-bold text-[15px]" style={{ color: PURPLE }}>{user.name.charAt(0).toUpperCase()}</span>
         </div>
-        <h2 className="text-[17px] font-semibold mb-1" style={{ color: "#0F172A" }}>You're signed in</h2>
+        <h2 className="text-[17px] font-semibold mb-1" style={{ color: DARK }}>You're signed in</h2>
         <p className="text-[13px] mb-6" style={{ color: "#64748B" }}>{user.name} · {user.email}</p>
         <button
-          className="w-full h-12 rounded-xl text-[15px] font-semibold text-white mb-3 transition-all"
-          style={{ backgroundColor: BLUE }}
-          onMouseEnter={e => (e.currentTarget.style.backgroundColor = BLUE_DARK)}
-          onMouseLeave={e => (e.currentTarget.style.backgroundColor = BLUE)}
+          className="w-full h-11 rounded-lg text-[14px] font-semibold text-white mb-3 transition-all"
+          style={{ backgroundColor: DARK }}
           onClick={() => navigate(from)}
         >
           Continue to app
         </button>
         <Button
           variant="outline"
-          className="w-full h-12 font-semibold text-gray-600 border-gray-100 hover:bg-gray-50 hover:border-gray-200 rounded-xl"
+          className="w-full h-11 font-medium text-[14px] rounded-lg"
           onClick={() => logout.mutate({ data: undefined })}
           disabled={logout.isPending}
         >
-          <LogOut className="h-4 w-4 mr-2" />
+          <LogOut className="h-3.5 w-3.5 mr-2" />
           {logout.isPending ? "Signing out…" : "Sign out"}
         </Button>
       </div>
@@ -123,179 +123,144 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   }
 
   return (
-    <div className="min-h-dvh flex bg-white">
+    <div className="min-h-dvh flex flex-col bg-white">
 
-      {/* ── Left brand panel — desktop only ── */}
-      <div
-        className="hidden lg:flex lg:w-[44%] xl:w-[42%] flex-col justify-between p-10 xl:p-12"
-        style={{ borderRight: "1px solid #E2E8F0" }}
-      >
-        {/* Wordmark */}
-        <img src={logo} alt="SentConnect" style={{ maxHeight: 28, width: "auto", maxWidth: 180, filter: "brightness(0)", display: "block" }} />
+      {/* ── Top bar — logo only, Render style ── */}
+      <header className="flex items-center px-8 py-5">
+        <img
+          src={logo}
+          alt="SentConnect"
+          style={{ maxHeight: 22, width: "auto", maxWidth: 160, filter: isCustomLogo ? undefined : "brightness(0)", display: "block" }}
+        />
+      </header>
 
-        {/* Center message */}
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{ background: "#F5F5F5" }}>
-            <Globe className="h-4 w-4" style={{ color: BLUE }} />
-            <span className="text-[15px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
-          </div>
-          <h2 style={{ fontSize: 52, fontWeight: 800, color: BLUE, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 22 }}>
-            Stay connected<br />with your field teams.
-          </h2>
-          <p style={{ fontSize: 18, color: "#475569", lineHeight: 1.65 }}>
-            Share updates, celebrate Mission Moments, and keep your church engaged with what God is doing across the world.
-          </p>
-        </div>
+      {/* ── Centered form ── */}
+      <div className="flex-1 flex flex-col items-center justify-center px-5 py-10">
+        <div className="w-full" style={{ maxWidth: 420 }}>
 
-        {/* Bible verse */}
-        <p style={{ fontSize: 12, color: "#94A3B8", fontStyle: "italic", lineHeight: 1.6 }}>
-          "Declare his glory among the nations, his marvelous works among all the peoples." — Psalm 96:3
-        </p>
-      </div>
-
-      {/* ── Right / full form panel ── */}
-      <div className="flex-1 flex flex-col min-h-dvh">
-
-        {/* Mobile brand header */}
-        <div className="lg:hidden flex flex-col items-center px-6 pt-10 pb-8 text-center" style={{ borderBottom: "1px solid #F1F5F9" }}>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-5" style={{ background: "#F5F5F5" }}>
-            <Globe className="h-3.5 w-3.5" style={{ color: BLUE }} />
-            <span className="text-[13px] font-semibold tracking-widest uppercase" style={{ color: BLUE }}>Private Mission Platform</span>
-          </div>
-          <h2 style={{ fontSize: 36, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 12 }}>
-            Stay connected<br />with your field teams.
-          </h2>
-          <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, maxWidth: 320 }}>
-            Share updates, celebrate Mission Moments, and keep your church engaged with what God is doing across the world.
-          </p>
-        </div>
-
-        {/* Form area */}
-        <div className="flex-1 flex flex-col items-center justify-center px-5 sm:px-8 py-8 sm:py-10">
-          <div className="w-full" style={{ maxWidth: 400 }}>
-
-            {/* Heading */}
-            <div className="mb-7">
-              {orgName && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: "#F5F5F5", border: "1px solid #D1D5DB" }}>
-                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: BLUE, flexShrink: 0 }} />
-                  <span className="text-[12px] font-bold tracking-widest uppercase" style={{ color: BLUE }}>{orgName}</span>
-                </div>
-              )}
-              <h1 className="text-2xl sm:text-[26px] font-bold tracking-tight mb-1.5" style={{ color: "#0F172A", letterSpacing: "-0.03em" }}>
-                Welcome back
-              </h1>
-              <p className="text-sm sm:text-[14px]" style={{ color: "#64748B" }}>
-                Sign in to your {orgName ?? "SentConnect"} account.
-              </p>
-            </div>
-
-            {/* Org portal error */}
-            {orgPortalError && (
-              <div className="mb-5 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
-                <p className="text-[13px] font-semibold text-gray-800 mb-1">Wrong login portal</p>
-                <p className="text-[13px] text-gray-700 leading-relaxed">
-                  This account belongs to an organization. Please sign in through your organization's portal.
-                </p>
-                {orgPortalError.subdomain && (
-                  <a
-                    href={buildOrgLoginHref(orgPortalError.subdomain)}
-                    className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-gray-800 hover:text-gray-900 underline underline-offset-2"
-                  >
-                    <ExternalLink className="h-3 w-3" />
-                    Go to {orgPortalError.subdomain}.sentconnect.org/login
-                  </a>
-                )}
+          {/* Heading */}
+          <div style={{ marginBottom: 28 }}>
+            <h1 style={{ fontSize: 22, fontWeight: 700, color: DARK, letterSpacing: "-0.02em", marginBottom: 6 }}>
+              Sign in to SentConnect
+            </h1>
+            {orgName && (
+              <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full" style={{ background: "#F4EEFF", border: "1px solid #D8B4FE" }}>
+                <div style={{ width: 5, height: 5, borderRadius: "50%", background: PURPLE, flexShrink: 0 }} />
+                <span style={{ fontSize: 11, fontWeight: 700, color: PURPLE, letterSpacing: "0.06em", textTransform: "uppercase" }}>{orgName}</span>
               </div>
             )}
+          </div>
 
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[13px] font-semibold" style={{ color: "#374151" }}>Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="you@mission.org"
-                          autoComplete="email"
-                          inputMode="email"
-                          className="h-12 text-base rounded-xl bg-white"
-                          style={{ borderColor: "#E2E8F0", fontSize: 16 }}
-                          {...field}
-                          data-testid="input-login-email"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex items-center justify-between mb-1">
-                        <FormLabel className="text-[13px] font-semibold" style={{ color: "#374151" }}>Password</FormLabel>
-                        <Link
-                          href="/forgot-password"
-                          className="text-[12px] font-semibold transition-colors"
-                          style={{ color: BLUE }}
-                        >
-                          Forgot password?
-                        </Link>
-                      </div>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="••••••••"
-                          autoComplete="current-password"
-                          className="h-12 text-base rounded-xl bg-white"
-                          style={{ borderColor: "#E2E8F0", fontSize: 16 }}
-                          {...field}
-                          data-testid="input-login-password"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <button
-                  type="submit"
-                  disabled={login.isPending}
-                  className="w-full rounded-xl text-[15px] font-semibold text-white transition-all duration-200 disabled:opacity-60 flex items-center justify-center gap-2 mt-1"
-                  style={{ height: 48, backgroundColor: BLUE, boxShadow: "0 4px 14px rgba(138,5,255,0.28)" }}
-                  onMouseEnter={e => { if (!login.isPending) { e.currentTarget.style.backgroundColor = BLUE_DARK; e.currentTarget.style.transform = "translateY(-1px)"; } }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = BLUE; e.currentTarget.style.transform = ""; }}
-                  data-testid="btn-login-submit"
+          {/* Org portal error */}
+          {orgPortalError && (
+            <div className="mb-5 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
+              <p style={{ fontSize: 13, fontWeight: 600, color: DARK, marginBottom: 4 }}>Wrong login portal</p>
+              <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.55 }}>
+                This account belongs to an organization. Please sign in through your organization's portal.
+              </p>
+              {orgPortalError.subdomain && (
+                <a
+                  href={buildOrgLoginHref(orgPortalError.subdomain)}
+                  className="mt-2 inline-flex items-center gap-1.5 underline underline-offset-2"
+                  style={{ fontSize: 13, fontWeight: 600, color: PURPLE }}
                 >
-                  {login.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-                  {login.isPending ? "Signing in…" : "Sign In"}
-                </button>
-              </form>
-            </Form>
+                  <ExternalLink className="h-3 w-3" />
+                  Go to {orgPortalError.subdomain}.sentconnect.org/login
+                </a>
+              )}
+            </div>
+          )}
 
-            <p className="mt-6 text-center text-[14px]" style={{ color: "#64748B" }}>
+          {/* Form */}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel style={{ fontSize: 13, fontWeight: 500, color: "#374151" }}>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="you@mission.org"
+                        autoComplete="email"
+                        inputMode="email"
+                        className="h-10 rounded-lg bg-white text-[14px]"
+                        style={{ borderColor: "#E2E8F0" }}
+                        {...field}
+                        data-testid="input-login-email"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center justify-between">
+                      <FormLabel style={{ fontSize: 13, fontWeight: 500, color: "#374151" }}>Password</FormLabel>
+                      <Link
+                        href="/forgot-password"
+                        style={{ fontSize: 13, fontWeight: 500, color: PURPLE, textDecoration: "none" }}
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        autoComplete="current-password"
+                        className="h-10 rounded-lg bg-white text-[14px]"
+                        style={{ borderColor: "#E2E8F0" }}
+                        {...field}
+                        data-testid="input-login-password"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <button
+                type="submit"
+                disabled={login.isPending}
+                className="w-full rounded-lg text-[14px] font-semibold text-white transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                style={{ height: 40, backgroundColor: DARK, marginTop: 8 }}
+                onMouseEnter={e => { if (!login.isPending) e.currentTarget.style.backgroundColor = "#1a1a24"; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = DARK; }}
+                data-testid="btn-login-submit"
+              >
+                {login.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                {login.isPending ? "Signing in…" : "Sign in"}
+              </button>
+            </form>
+          </Form>
+
+          {/* Footer links — Render style */}
+          <div style={{ marginTop: 20 }} className="space-y-1.5">
+            <p style={{ fontSize: 13, color: "#64748B" }}>
               Don't have an account?{" "}
-              <Link href="/signup" className="font-semibold transition-colors" style={{ color: BLUE }}>
-                Sign Up
+              <Link href="/signup" style={{ color: PURPLE, fontWeight: 500, textDecoration: "none" }}>
+                Sign up
               </Link>
             </p>
           </div>
-        </div>
 
-        {/* Mobile verse footer */}
-        <div className="lg:hidden text-center px-6 pb-8">
-          <p className="text-[11px] italic" style={{ color: "#CBD5E1" }}>
-            "Declare his glory among the nations." — Psalm 96:3
-          </p>
         </div>
-
       </div>
+
+      {/* ── Footer verse ── */}
+      <footer className="text-center px-6 py-5">
+        <p style={{ fontSize: 11, color: "#CBD5E1", fontStyle: "italic" }}>
+          "Declare his glory among the nations." — Psalm 96:3
+        </p>
+      </footer>
+
     </div>
   );
 }
