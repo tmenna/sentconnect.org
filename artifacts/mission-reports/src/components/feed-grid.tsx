@@ -192,7 +192,7 @@ export function MasonryCard({
           <p
             style={{
               fontSize: 15,
-              fontWeight: 800,
+              fontWeight: 400,
               color: "#0F172A",
               lineHeight: 1.3,
               letterSpacing: "-0.02em",
@@ -245,7 +245,7 @@ export function MasonryCard({
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="truncate" style={{ fontSize: 12, fontWeight: 700, color: "#111827", lineHeight: 1.2 }}>
+            <p className="truncate" style={{ fontSize: 12, fontWeight: 400, color: "#111827", lineHeight: 1.2 }}>
               {post.author.name}
             </p>
             <p style={{ fontSize: 11, color: "#9CA3AF", lineHeight: 1.2 }}>Team Member</p>
