@@ -255,8 +255,8 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
         {/* Modal header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 24px", borderBottom: "1px solid #F1F5F9", flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 34, height: 34, background: "#E6FAF6", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <FileText className="h-4 w-4" style={{ color: "#3DC9A8" }} />
+            <div style={{ width: 34, height: 34, background: "#E6F7F3", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <FileText className="h-4 w-4" style={{ color: "#009E7A" }} />
             </div>
             <div>
               <h2 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>Export as Report</h2>
@@ -358,7 +358,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
                 "Auto page breaks",
               ].map(item => (
                 <div key={item} style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 6 }}>
-                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#3DC9A8", flexShrink: 0 }} />
+                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#009E7A", flexShrink: 0 }} />
                   <span style={{ fontSize: 12, color: "#374151" }}>{item}</span>
                 </div>
               ))}
@@ -381,7 +381,7 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
                 height: 44, borderRadius: 12, border: "none",
                 cursor: exporting || loading ? "not-allowed" : "pointer",
                 fontWeight: 700, fontSize: 14,
-                background: exporting || loading ? "#A7EFE0" : "linear-gradient(135deg, #5A0097, #3DC9A8)",
+                background: exporting || loading ? "#80D4C0" : "linear-gradient(135deg, #5A0097, #009E7A)",
                 color: "#fff",
                 transition: "all .15s",
               }}

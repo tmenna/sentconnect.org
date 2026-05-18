@@ -154,9 +154,9 @@ export default function Feed() {
                 marginBottom: -2,
                 fontSize: 15,
                 fontWeight: active ? 800 : 500,
-                color: active ? "#3DC9A8" : "#94A3B8",
+                color: active ? "#009E7A" : "#94A3B8",
                 border: "none",
-                borderBottom: active ? "2.5px solid #3DC9A8" : "2.5px solid transparent",
+                borderBottom: active ? "2.5px solid #009E7A" : "2.5px solid transparent",
                 background: "transparent",
                 cursor: "pointer",
                 letterSpacing: active ? "-0.02em" : "normal",
@@ -170,8 +170,8 @@ export default function Feed() {
                     marginLeft: 8,
                     fontSize: 12,
                     fontWeight: 700,
-                    background: active ? "#E6FAF6" : "#F8FAFC",
-                    color: active ? "#3DC9A8" : "#94A3B8",
+                    background: active ? "#E6F7F3" : "#F8FAFC",
+                    color: active ? "#009E7A" : "#94A3B8",
                     borderRadius: 999,
                     padding: "2px 9px",
                   }}
@@ -233,9 +233,9 @@ export default function Feed() {
             <>
               <div
                 className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center"
-                style={{ background: "#E6FAF6" }}
+                style={{ background: "#E6F7F3" }}
               >
-                <BookOpen className="h-5 w-5" style={{ color: "#3DC9A8" }} />
+                <BookOpen className="h-5 w-5" style={{ color: "#009E7A" }} />
               </div>
               <p className="font-semibold text-[15px]" style={{ color: "#374151" }}>No Mission Moments yet</p>
               <p className="text-[13px] mt-1.5" style={{ color: "#9CA3AF" }}>

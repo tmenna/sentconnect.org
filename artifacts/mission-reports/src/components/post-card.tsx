@@ -635,7 +635,7 @@ export function PostCard({
         <Link href={`/missionaries/${post.author.id}`}>
           <Avatar className="h-12 w-12 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #E8EEF8" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#E6FAF6", color: "#3DC9A8", fontWeight: 700, fontSize: 15 }}>
+            <AvatarFallback style={{ background: "#E6F7F3", color: "#009E7A", fontWeight: 700, fontSize: 15 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -643,7 +643,7 @@ export function PostCard({
         <div className="flex-1 min-w-0">
           <Link
             href={`/missionaries/${post.author.id}`}
-            className="transition-colors leading-tight block" style={{ fontSize: 16, fontWeight: 700, color: "#3DC9A8", letterSpacing: "-0.02em" }}
+            className="transition-colors leading-tight block" style={{ fontSize: 16, fontWeight: 700, color: "#009E7A", letterSpacing: "-0.02em" }}
           >
             {post.author.name}
           </Link>
@@ -730,7 +730,7 @@ export function PostCard({
                 <button
                   onClick={() => setTextCollapsed(c => !c)}
                   className="mt-1.5 text-[13px] font-semibold transition-colors"
-                  style={{ color: "#3DC9A8" }}
+                  style={{ color: "#009E7A" }}
                 >
                   {textCollapsed ? "Read more →" : "Show less ↑"}
                 </button>
@@ -769,11 +769,11 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 post.likedByMe
-                  ? "text-[#3DC9A8] bg-[#E6FAF6]"
-                  : "text-[#64748B] hover:bg-[#E6FAF6] hover:text-[#3DC9A8]"
+                  ? "text-[#009E7A] bg-[#E6F7F3]"
+                  : "text-[#64748B] hover:bg-[#E6F7F3] hover:text-[#009E7A]"
               )}
             >
-              <ThumbsUp className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#3DC9A8] text-[#3DC9A8]" : "")} />
+              <ThumbsUp className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#009E7A] text-[#009E7A]" : "")} />
               <span className="hidden sm:inline">Like</span>
             </button>
 
@@ -783,8 +783,8 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 copied
-                  ? "text-[#3DC9A8] bg-[#E6FAF6]"
-                  : "text-[#64748B] hover:bg-[#E6FAF6] hover:text-[#3DC9A8]"
+                  ? "text-[#009E7A] bg-[#E6F7F3]"
+                  : "text-[#64748B] hover:bg-[#E6F7F3] hover:text-[#009E7A]"
               )}
             >
               {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
@@ -795,7 +795,7 @@ export function PostCard({
             {canManage && (
               <button
                 onClick={() => setShowSlideExport(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#E6FAF6] hover:text-[#3DC9A8] transition-all duration-150 rounded-xl my-1"
+                className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#E6F7F3] hover:text-[#009E7A] transition-all duration-150 rounded-xl my-1"
               >
                 <ImageDown className="h-4 w-4" />
                 <span className="hidden sm:inline">Export</span>

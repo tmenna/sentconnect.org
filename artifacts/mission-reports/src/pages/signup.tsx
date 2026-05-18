@@ -10,7 +10,7 @@ import { useLogo } from "@/providers/logo-provider";
 import { extractHostnameOrgSlug, getOrgRoutingContext } from "@/lib/org";
 
 const NAVY = "#0F172A";
-const BLUE = "#3DC9A8";
+const BLUE = "#009E7A";
 
 const FEATURES = [
   "Unlimited users",
@@ -176,7 +176,7 @@ export default function Signup() {
           flex-direction: column;
           padding: 36px;
           border-radius: 28px;
-          background: linear-gradient(135deg, #3DC9A8 0%, #2BB896 100%);
+          background: linear-gradient(135deg, #009E7A 0%, #007A5E 100%);
           box-shadow: 0 8px 48px rgba(135,5,250,0.35);
         }
 
@@ -263,7 +263,7 @@ export default function Signup() {
 
           {/* LEFT — Plan card (hidden on mobile/tablet) */}
           <div className="su-plan">
-            <div style={{ width: 44, height: 44, borderRadius: 16, background: "#E6FAF6", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+            <div style={{ width: 44, height: 44, borderRadius: 16, background: "#E6F7F3", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
               <Users style={{ width: 20, height: 20, color: BLUE }} />
             </div>
 

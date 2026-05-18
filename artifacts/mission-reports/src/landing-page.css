@@ -38,7 +38,7 @@
   margin-bottom: 10px;
   transition: color .15s;
 }
-.lp-footer-link:hover { color: #3DC9A8; }
+.lp-footer-link:hover { color: #009E7A; }
 
 .lp-social-btn {
   width: 36px;
@@ -54,7 +54,7 @@
   transition: border-color .15s, color .15s;
   text-decoration: none;
 }
-.lp-social-btn:hover { border-color: #3DC9A8; color: #3DC9A8; }
+.lp-social-btn:hover { border-color: #009E7A; color: #009E7A; }
 
 @media (max-width: 1024px) {
   .lp-footer-cols { grid-template-columns: 1fr 1fr 1fr; gap: 32px; }

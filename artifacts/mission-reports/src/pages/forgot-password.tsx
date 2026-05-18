@@ -4,9 +4,9 @@ import { Loader2, CheckCircle2 } from "lucide-react";
 import { useOrg } from "@/providers/org-provider";
 import logoWhite from "@/assets/logo-white.png";
 
-const BG    = "linear-gradient(150deg, #3D0066 0%, #3DC9A8 55%, #A020F0 100%)";
-const BLUE  = "#3DC9A8";
-const BLUE_DK = "#2BB896";
+const BG    = "linear-gradient(150deg, #3D0066 0%, #009E7A 55%, #A020F0 100%)";
+const BLUE  = "#009E7A";
+const BLUE_DK = "#007A5E";
 
 export default function ForgotPassword() {
   const { orgSlug, prefix } = useOrg();
@@ -57,7 +57,7 @@ export default function ForgotPassword() {
           <div className="text-center">
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ background: "#E6FAF6", border: "2px solid #A7EFE0" }}
+              style={{ background: "#E6F7F3", border: "2px solid #80D4C0" }}
             >
               <CheckCircle2 className="h-7 w-7" style={{ color: BLUE }} />
             </div>
