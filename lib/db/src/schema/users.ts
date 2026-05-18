@@ -18,6 +18,7 @@ export const usersTable = pgTable("users", {
   permissions: text("permissions"),
   resetToken: text("reset_token"),
   resetTokenExpiry: timestamp("reset_token_expiry", { withTimezone: true }),
+  expoPushToken: text("expo_push_token"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });

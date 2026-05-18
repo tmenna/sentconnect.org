@@ -130,6 +130,29 @@ router.delete("/users/me", async (req, res): Promise<void> => {
   res.sendStatus(204);
 });
 
+router.patch("/users/me/push-token", async (req, res): Promise<void> => {
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) {
+    res.status(401).json({ error: "Not authenticated" });
+    return;
+  }
+  const { token } = req.body ?? {};
+  if (typeof token !== "string" && token !== null) {
+    res.status(400).json({ error: "token must be a string or null" });
+    return;
+  }
+  const [user] = await db
+    .update(usersTable)
+    .set({ expoPushToken: token ?? null })
+    .where(eq(usersTable.id, currentUserId))
+    .returning();
+  if (!user) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+  res.json({ ok: true });
+});
+
 router.get("/users/:id", async (req, res): Promise<void> => {
   const params = GetUserParams.safeParse(req.params);
   if (!params.success) {

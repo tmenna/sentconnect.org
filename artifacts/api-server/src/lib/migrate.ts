@@ -59,6 +59,10 @@ export async function runMigrations(): Promise<void> {
       name: "idx_users_organization_id",
       sql: `CREATE INDEX IF NOT EXISTS idx_users_organization_id ON users(organization_id)`,
     },
+    {
+      name: "users.expo_push_token column",
+      sql: `ALTER TABLE users ADD COLUMN IF NOT EXISTS expo_push_token TEXT`,
+    },
     // ── Landing page copy updates ────────────────────────────────────────────
     {
       name: "landing_page: update how_it_works_heading copy",

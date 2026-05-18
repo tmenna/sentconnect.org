@@ -15,7 +15,8 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { useNotifications } from "@/hooks/useNotifications";
 
 // Set the API base URL — Expo bundles need absolute URLs to reach the API.
 setBaseUrl(`https://${process.env.EXPO_PUBLIC_DOMAIN}`);
@@ -23,6 +24,12 @@ setBaseUrl(`https://${process.env.EXPO_PUBLIC_DOMAIN}`);
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
+
+function NotificationsSetup() {
+  const { user } = useAuth();
+  useNotifications({ isLoggedIn: !!user });
+  return null;
+}
 
 function RootLayoutNav() {
   return (
@@ -58,6 +65,7 @@ export default function RootLayout() {
           <GestureHandlerRootView style={{ flex: 1 }}>
             <KeyboardProvider>
               <AuthProvider>
+                <NotificationsSetup />
                 <RootLayoutNav />
               </AuthProvider>
             </KeyboardProvider>
