@@ -135,6 +135,11 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             <h1 style={{ fontSize: 22, fontWeight: 700, color: DARK, letterSpacing: "-0.02em", marginBottom: 6 }}>
               Sign in to SentConnect
             </h1>
+            {!platformMode && (
+              <p style={{ fontSize: 13, color: "#64748B", lineHeight: 1.55, marginBottom: 8 }}>
+                Stay connected with your field teams through one secure, shared mission feed.
+              </p>
+            )}
             {orgName && (
               <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full" style={{ background: "#F4EEFF", border: "1px solid #D8B4FE" }}>
                 <div style={{ width: 5, height: 5, borderRadius: "50%", background: PURPLE, flexShrink: 0 }} />
