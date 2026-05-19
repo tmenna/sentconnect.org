@@ -1110,8 +1110,8 @@ export default function AdminDashboard() {
                     padding: "9px 10px 9px 14px",
                     borderRadius: 6,
                     border: "none",
-                    background: "transparent",
-                    color: active ? "#8705FA" : "#64748B",
+                    background: active ? "#8705FA" : "transparent",
+                    color: active ? "#fff" : "#64748B",
                     fontSize: 13,
                     fontWeight: active ? 600 : 400,
                     cursor: "pointer",
@@ -1121,7 +1121,6 @@ export default function AdminDashboard() {
                   onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#0f0f13"; } }}
                   onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; } }}
                 >
-                  {active && <div style={{ position: "absolute", left: 0, top: 4, bottom: 4, width: 2, borderRadius: 2, background: "#8705FA" }} />}
                   <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
                   {label}
                   {id === "team" && !usersLoading && (
