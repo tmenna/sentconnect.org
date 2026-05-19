@@ -20,7 +20,9 @@ function OrgBrowseBanner() {
 
   function exitOrgBrowse() {
     fetch("/api/auth/browse-org", { method: "DELETE", credentials: "include" }).finally(() => {
-      window.location.href = "/admin";
+      // Tab was opened by the platform admin window — close it to return there.
+      // If the browser won't close (e.g. user navigated directly), fall through.
+      window.close();
     });
   }
 

@@ -3026,7 +3026,8 @@ export default function SuperAdminPanel() {
       });
       if (!res.ok) throw new Error();
       const { token } = await res.json();
-      window.location.href = buildOrgHref(org.subdomain, `/?ot=${token}`);
+      window.open(buildOrgHref(org.subdomain, `/?ot=${token}`), "_blank");
+      setLogginIntoOrg(null);
     } catch {
       toast({ title: "Could not open org portal", variant: "destructive" });
       setLogginIntoOrg(null);
