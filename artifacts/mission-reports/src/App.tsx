@@ -812,28 +812,38 @@ function AppRoutes() {
  * Detects either production hostname routing (org.sentconnect.org) or
  * development path routing (/org/...) and provides the org context.
  */
+/**
+ * Read the one-time org token from the URL synchronously so we can block the
+ * first render before auth queries fire. Must stay outside the component so
+ * it only runs once per page load, not per render cycle.
+ */
+const _initialOtParams = new URLSearchParams(window.location.search);
+const _initialOt = _initialOtParams.get("ot");
+if (_initialOt) {
+  // Remove token from URL immediately — before any render — so a reload
+  // doesn't attempt to redeem a spent token.
+  _initialOtParams.delete("ot");
+  const _clean = window.location.pathname + (_initialOtParams.toString() ? `?${_initialOtParams.toString()}` : "");
+  window.history.replaceState(null, "", _clean);
+}
+
 function OrgAwareApp() {
   const [location] = useLocation();
-  const [redeemingToken, setRedeemingToken] = useState(false);
+  // Initialise synchronously from the module-level check so the FIRST render
+  // already shows <PageFallback />, blocking AuthProvider before it fires a
+  // /api/users/me request that would redirect to /login.
+  const [redeemingToken, setRedeemingToken] = useState<boolean>(() => !!_initialOt);
 
   // One-time org access token: platform admin clicks "Access Org" → lands here
   // with ?ot=TOKEN, we exchange it for a session then reload cleanly.
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const ot = params.get("ot");
-    if (!ot) return;
-    setRedeemingToken(true);
-    // Remove the token from the URL immediately (before the fetch) so a reload
-    // doesn't try to redeem a spent token.
-    params.delete("ot");
-    const cleanSearch = params.toString();
-    const cleanUrl = window.location.pathname + (cleanSearch ? `?${cleanSearch}` : "");
-    window.history.replaceState(null, "", cleanUrl);
+    if (!_initialOt) return;
+    const cleanUrl = window.location.href; // ot already stripped above
     fetch("/api/auth/redeem-org-token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ token: ot }),
+      body: JSON.stringify({ token: _initialOt }),
     })
       .then((r) => r.json())
       .then((data) => {
