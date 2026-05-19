@@ -132,7 +132,6 @@ router.get("/users/me", async (req, res): Promise<void> => {
   }
   res.json({
     ...toUserResponse(user),
-    browseOrgSubdomain: req.session.browseOrgSubdomain ?? null,
   });
 });
 

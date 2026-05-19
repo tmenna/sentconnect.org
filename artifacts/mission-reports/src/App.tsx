@@ -686,15 +686,8 @@ function isPlatformRole(role: string | undefined) {
 
 function HomeRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
-  const { orgSlug } = useOrg();
   if (isLoading) return <AuthLoading />;
   if (!isAuthenticated) return <Redirect href="/login" />;
-  // Platform admin browsing an org portal — render the admin dashboard directly
-  // (avoids a redirect chain that can silently fall through to the feed)
-  const browseOrg = (user as (typeof user & { browseOrgSubdomain?: string | null }) | null)?.browseOrgSubdomain;
-  if (isPlatformRole(user?.role) && orgSlug && browseOrg === orgSlug) {
-    return <Layout><AdminDashboard /></Layout>;
-  }
   if (isPlatformRole(user?.role) || user?.role === "admin") return <Redirect href="/admin" />;
   return <MissionaryDashboard />;
 }
@@ -813,53 +806,8 @@ function AppRoutes() {
  * Detects either production hostname routing (org.sentconnect.org) or
  * development path routing (/org/...) and provides the org context.
  */
-/**
- * Read the one-time org token from the URL synchronously so we can block the
- * first render before auth queries fire. Must stay outside the component so
- * it only runs once per page load, not per render cycle.
- */
-const _initialOtParams = new URLSearchParams(window.location.search);
-const _initialOt = _initialOtParams.get("ot");
-if (_initialOt) {
-  // Remove token from URL immediately — before any render — so a reload
-  // doesn't attempt to redeem a spent token.
-  _initialOtParams.delete("ot");
-  const _clean = window.location.pathname + (_initialOtParams.toString() ? `?${_initialOtParams.toString()}` : "");
-  window.history.replaceState(null, "", _clean);
-}
-
 function OrgAwareApp() {
   const [location] = useLocation();
-  // Initialise synchronously from the module-level check so the FIRST render
-  // already shows <PageFallback />, blocking AuthProvider before it fires a
-  // /api/users/me request that would redirect to /login.
-  const [redeemingToken, setRedeemingToken] = useState<boolean>(() => !!_initialOt);
-
-  // One-time org access token: platform admin clicks "Access Org" → lands here
-  // with ?ot=TOKEN, we exchange it for a session then reload cleanly.
-  useEffect(() => {
-    if (!_initialOt) return;
-    const cleanUrl = window.location.href; // ot already stripped above
-    fetch("/api/auth/redeem-org-token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ token: _initialOt }),
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.success) {
-          // Reload so AuthProvider re-fetches /api/users/me with the new session
-          window.location.replace(cleanUrl);
-        } else {
-          setRedeemingToken(false);
-        }
-      })
-      .catch(() => setRedeemingToken(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (redeemingToken) return <PageFallback />;
 
   // Share links (/post/:id) render directly — no org validation or auth check.
   // Removing those two serial API calls cuts 400–800 ms off the first paint.

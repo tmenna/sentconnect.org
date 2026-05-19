@@ -6,7 +6,7 @@ import {
   Plus, Lock, Unlock, Ban, UserCheck, KeyRound, ChevronDown,
   ShieldAlert, Shield, Edit3, X, Save, Eye, EyeOff,
   Trash2, AlertTriangle, Settings2, BookOpen, Star, BarChart3,
-  LogOut, Upload, ImageOff, ChevronRight, Image, Mail, LogIn,
+  LogOut, Upload, ImageOff, ChevronRight, Image, Mail,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
@@ -2836,7 +2836,7 @@ export default function SuperAdminPanel() {
   const [editingOrgUser, setEditingOrgUser] = useState<PlatformUser | null>(null);
   const [addingUserToOrg, setAddingUserToOrg] = useState<OrgWithStats | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [logginIntoOrg, setLogginIntoOrg] = useState<number | null>(null);
+
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -3012,25 +3012,6 @@ export default function SuperAdminPanel() {
     } catch {
       toast({ title: "Impersonation failed", variant: "destructive" });
       setActionPending(null);
-    }
-  }
-
-  async function accessOrg(org: OrgWithStats) {
-    setLogginIntoOrg(org.id);
-    try {
-      const res = await fetch("/api/super-admin/org-access-token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ orgSubdomain: org.subdomain }),
-      });
-      if (!res.ok) throw new Error();
-      const { token } = await res.json();
-      window.open(buildOrgHref(org.subdomain, `/?ot=${token}`), "_blank");
-      setLogginIntoOrg(null);
-    } catch {
-      toast({ title: "Could not open org portal", variant: "destructive" });
-      setLogginIntoOrg(null);
     }
   }
 
@@ -3468,18 +3449,6 @@ export default function SuperAdminPanel() {
                     >
                       <Globe className="h-3.5 w-3.5" /> Open
                     </a>
-                    <button
-                      onClick={() => accessOrg(org)}
-                      disabled={logginIntoOrg === org.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors border"
-                      style={{ background: "#8705FA", color: "#fff", borderColor: "#8705FA", opacity: logginIntoOrg === org.id ? 0.7 : 1 }}
-                      title="Open this org's portal as platform admin"
-                    >
-                      {logginIntoOrg === org.id
-                        ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        : <LogIn className="h-3.5 w-3.5" />}
-                      Access Org
-                    </button>
                     <button
                       onClick={() => toggleOrgStatus(org)}
                       disabled={toggling === org.id}
