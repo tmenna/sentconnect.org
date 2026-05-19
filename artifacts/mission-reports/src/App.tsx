@@ -689,10 +689,11 @@ function HomeRoute() {
   const { orgSlug } = useOrg();
   if (isLoading) return <AuthLoading />;
   if (!isAuthenticated) return <Redirect href="/login" />;
-  // Platform admin browsing an org portal — send them to the admin dashboard
+  // Platform admin browsing an org portal — render the admin dashboard directly
+  // (avoids a redirect chain that can silently fall through to the feed)
   const browseOrg = (user as (typeof user & { browseOrgSubdomain?: string | null }) | null)?.browseOrgSubdomain;
   if (isPlatformRole(user?.role) && orgSlug && browseOrg === orgSlug) {
-    return <Redirect href="/admin" />;
+    return <Layout><AdminDashboard /></Layout>;
   }
   if (isPlatformRole(user?.role) || user?.role === "admin") return <Redirect href="/admin" />;
   return <MissionaryDashboard />;
