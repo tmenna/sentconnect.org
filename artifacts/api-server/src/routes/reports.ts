@@ -12,40 +12,45 @@ const router: IRouter = Router();
 // counts) instead of 3 sequential awaits. On a remote DB (Render PG) this
 // saves ~300 ms per call by eliminating two extra round-trips.
 async function getPostWithDetails(postId: number, currentUserId?: number) {
-  const [joined, photos, likeCount, commentCount, likedRow] = await Promise.all([
-    // JOIN post + author in a single round-trip
+  const [joined, photos, likeCounts, commentCount, myReactions] = await Promise.all([
     db
       .select()
       .from(reportsTable)
       .innerJoin(usersTable, eq(usersTable.id, reportsTable.missionaryId))
       .where(eq(reportsTable.id, postId)),
     db.select().from(photosTable).where(eq(photosTable.reportId, postId)),
-    db.select({ count: count() }).from(likesTable).where(eq(likesTable.postId, postId)),
+    db.select({ type: likesTable.type, c: count() }).from(likesTable)
+      .where(eq(likesTable.postId, postId)).groupBy(likesTable.type),
     db.select({ count: count() }).from(commentsTable).where(eq(commentsTable.postId, postId)),
     currentUserId
-      ? db.select().from(likesTable).where(and(eq(likesTable.postId, postId), eq(likesTable.userId, currentUserId)))
-      : Promise.resolve([] as { id: number }[]),
+      ? db.select({ type: likesTable.type }).from(likesTable)
+          .where(and(eq(likesTable.postId, postId), eq(likesTable.userId, currentUserId)))
+      : Promise.resolve([] as { type: string }[]),
   ]);
 
   if (joined.length === 0) return null;
   const post = joined[0].reports;
   const author = joined[0].users;
 
-  // Pre-sign all /objects/... URLs so the browser loads directly from R2 CDN
   const urlMap = await resolveObjectUrls([
     ...photos.map(p => p.url),
     author.avatarUrl,
   ]);
   const ru = (u: string | null | undefined) => (u && urlMap.has(u) ? urlMap.get(u)! : u) ?? null;
 
+  const likeCountMap = new Map(likeCounts.map(r => [r.type, r.c]));
+  const myReactionTypes = new Set(myReactions.map(r => r.type));
+
   const { passwordHash: _pw, resetToken: _rt, resetTokenExpiry: _rte, ...authorData } = author;
   return {
     ...post,
     author: { ...authorData, avatarUrl: ru(authorData.avatarUrl) },
     photos: photos.map(p => ({ ...p, url: ru(p.url) ?? p.url })),
-    likeCount: likeCount[0]?.count ?? 0,
+    likeCount: likeCountMap.get("like") ?? 0,
+    loveCount: likeCountMap.get("love") ?? 0,
     commentCount: commentCount[0]?.count ?? 0,
-    likedByMe: likedRow.length > 0,
+    likedByMe: myReactionTypes.has("like"),
+    lovedByMe: myReactionTypes.has("love"),
   };
 }
 
@@ -60,33 +65,37 @@ async function getPostsWithDetails(
   const postIds = posts.map(p => p.id);
   const authorIds = [...new Set(posts.map(p => p.missionaryId).filter((id): id is number => id != null))];
 
-  const [authors, photos, likeCounts, commentCounts, likedByMeRows] = await Promise.all([
+  const [authors, photos, reactionCounts, commentCounts, myReactionRows] = await Promise.all([
     authorIds.length > 0
       ? db.select().from(usersTable).where(inArray(usersTable.id, authorIds))
       : ([] as typeof usersTable.$inferSelect[]),
     db.select().from(photosTable).where(inArray(photosTable.reportId, postIds)),
-    db.select({ postId: likesTable.postId, c: count() }).from(likesTable)
-      .where(inArray(likesTable.postId, postIds)).groupBy(likesTable.postId),
+    db.select({ postId: likesTable.postId, type: likesTable.type, c: count() }).from(likesTable)
+      .where(inArray(likesTable.postId, postIds)).groupBy(likesTable.postId, likesTable.type),
     db.select({ postId: commentsTable.postId, c: count() }).from(commentsTable)
       .where(inArray(commentsTable.postId, postIds)).groupBy(commentsTable.postId),
     currentUserId
-      ? db.select({ postId: likesTable.postId }).from(likesTable)
+      ? db.select({ postId: likesTable.postId, type: likesTable.type }).from(likesTable)
           .where(and(inArray(likesTable.postId, postIds), eq(likesTable.userId, currentUserId)))
-      : ([] as { postId: number }[]),
+      : ([] as { postId: number; type: string }[]),
   ]);
 
   const authorMap = new Map(authors.map(a => [a.id, a]));
-  const likeCountMap = new Map(likeCounts.map(r => [r.postId, r.c]));
+  const likeCountMap = new Map<number, number>();
+  const loveCountMap = new Map<number, number>();
+  for (const r of reactionCounts) {
+    if (r.type === "like") likeCountMap.set(r.postId, r.c);
+    else if (r.type === "love") loveCountMap.set(r.postId, r.c);
+  }
   const commentCountMap = new Map(commentCounts.map(r => [r.postId, r.c]));
-  const likedByMeSet = new Set(likedByMeRows.map(r => r.postId));
+  const likedByMeSet = new Set(myReactionRows.filter(r => r.type === "like").map(r => r.postId));
+  const lovedByMeSet = new Set(myReactionRows.filter(r => r.type === "love").map(r => r.postId));
   const photosByPost = new Map<number, typeof photos>();
   for (const photo of photos) {
     if (!photosByPost.has(photo.reportId)) photosByPost.set(photo.reportId, []);
     photosByPost.get(photo.reportId)!.push(photo);
   }
 
-  // Pre-sign every /objects/... URL (photos + avatars) in a single parallel batch.
-  // Signing is local HMAC crypto — no network call — so this adds < 5 ms for 100 URLs.
   const urlMap = await resolveObjectUrls([
     ...photos.map(p => p.url),
     ...authors.map(a => a.avatarUrl),
@@ -103,8 +112,10 @@ async function getPostsWithDetails(
         author: { ...authorData, avatarUrl: ru(authorData.avatarUrl) },
         photos: (photosByPost.get(post.id) ?? []).map(p => ({ ...p, url: ru(p.url) ?? p.url })),
         likeCount: likeCountMap.get(post.id) ?? 0,
+        loveCount: loveCountMap.get(post.id) ?? 0,
         commentCount: commentCountMap.get(post.id) ?? 0,
         likedByMe: likedByMeSet.has(post.id),
+        lovedByMe: lovedByMeSet.has(post.id),
       };
     })
     .filter((p): p is NonNullable<typeof p> => p !== null);
@@ -458,26 +469,38 @@ async function resolvePostForInteraction(
   return post;
 }
 
-// POST /reports/:id/likes — toggle like
+// POST /reports/:id/likes — toggle like or love (body: { type: "like"|"love" })
 router.post("/reports/:id/likes", async (req, res): Promise<void> => {
   const postId = Number(req.params.id);
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid id" }); return; }
   const currentUserId = req.session?.userId as number | undefined;
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
+  const reactionType: string = (req.body?.type === "love") ? "love" : "like";
+
   const post = await resolvePostForInteraction(req, res, postId);
   if (!post) return;
 
-  const [existing] = await db.select().from(likesTable).where(and(eq(likesTable.postId, postId), eq(likesTable.userId, currentUserId)));
+  const [existing] = await db.select().from(likesTable).where(
+    and(eq(likesTable.postId, postId), eq(likesTable.userId, currentUserId), eq(likesTable.type, reactionType))
+  );
+
   if (existing) {
     await db.delete(likesTable).where(eq(likesTable.id, existing.id));
-    const [lc] = await db.select({ count: count() }).from(likesTable).where(eq(likesTable.postId, postId));
-    res.json({ liked: false, likeCount: lc?.count ?? 0 });
   } else {
-    await db.insert(likesTable).values({ postId, userId: currentUserId });
-    const [lc] = await db.select({ count: count() }).from(likesTable).where(eq(likesTable.postId, postId));
-    res.json({ liked: true, likeCount: lc?.count ?? 0 });
+    await db.insert(likesTable).values({ postId, userId: currentUserId, type: reactionType });
   }
+
+  const counts = await db.select({ type: likesTable.type, c: count() })
+    .from(likesTable).where(eq(likesTable.postId, postId)).groupBy(likesTable.type);
+  const countMap = new Map(counts.map(r => [r.type, r.c]));
+
+  res.json({
+    liked: !existing && reactionType === "like",
+    loved: !existing && reactionType === "love",
+    likeCount: countMap.get("like") ?? 0,
+    loveCount: countMap.get("love") ?? 0,
+  });
 });
 
 // GET /reports/:id/comments

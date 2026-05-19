@@ -23,8 +23,10 @@ export type PostData = {
   isMissionMoment?: boolean;
   createdAt: string;
   likeCount: number;
+  loveCount: number;
   commentCount: number;
   likedByMe: boolean;
+  lovedByMe: boolean;
   author: {
     id: number;
     name: string;
@@ -529,10 +531,30 @@ export function PostCard({
     const prev = { liked: post.likedByMe, count: post.likeCount };
     setPost(p => ({ ...p, likedByMe: !p.likedByMe, likeCount: p.likedByMe ? p.likeCount - 1 : p.likeCount + 1 }));
     try {
-      const data = await apiFetch(`/api/reports/${post.id}/likes`, { method: "POST" });
+      const data = await apiFetch(`/api/reports/${post.id}/likes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "like" }),
+      });
       if (data) setPost(p => ({ ...p, likedByMe: data.liked, likeCount: data.likeCount }));
     } catch {
       setPost(p => ({ ...p, likedByMe: prev.liked, likeCount: prev.count }));
+    }
+  }
+
+  async function toggleLove() {
+    if (!user) return;
+    const prev = { loved: post.lovedByMe, count: post.loveCount };
+    setPost(p => ({ ...p, lovedByMe: !p.lovedByMe, loveCount: p.lovedByMe ? p.loveCount - 1 : p.loveCount + 1 }));
+    try {
+      const data = await apiFetch(`/api/reports/${post.id}/likes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "love" }),
+      });
+      if (data) setPost(p => ({ ...p, lovedByMe: data.loved, loveCount: data.loveCount }));
+    } catch {
+      setPost(p => ({ ...p, lovedByMe: prev.loved, loveCount: prev.count }));
     }
   }
 
@@ -743,18 +765,18 @@ export function PostCard({
           <div className="flex items-center mx-1 sm:mx-2" style={{ borderTop: "1px solid #F1F5F9" }}>
             {/* Love */}
             <button
-              onClick={toggleLike}
+              onClick={toggleLove}
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
-                post.likedByMe
-                  ? "text-[#6B7280] bg-[#F9FAFB]"
-                  : "text-[#64748B] hover:bg-[#F9FAFB] hover:text-[#6B7280]"
+                post.lovedByMe
+                  ? "text-[#E0245E] bg-[#FFF0F4]"
+                  : "text-[#64748B] hover:bg-[#FFF0F4] hover:text-[#E0245E]"
               )}
             >
-              <Heart className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#6B7280] text-[#6B7280]" : "")} />
+              <Heart className={cn("h-4 w-4 transition-colors duration-150", post.lovedByMe ? "fill-[#E0245E] text-[#E0245E]" : "")} />
               <span className="hidden sm:inline">Love</span>
-              {post.likeCount > 0 && <span className="hidden sm:inline">· {post.likeCount}</span>}
-              {post.likeCount > 0 && <span className="sm:hidden text-[11px]">{post.likeCount}</span>}
+              {post.loveCount > 0 && <span className="hidden sm:inline">· {post.loveCount}</span>}
+              {post.loveCount > 0 && <span className="sm:hidden text-[11px]">{post.loveCount}</span>}
             </button>
 
             {/* Like */}
@@ -763,12 +785,14 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 post.likedByMe
-                  ? "text-[#111827] bg-[#F5F5F5]"
-                  : "text-[#64748B] hover:bg-[#F5F5F5] hover:text-[#111827]"
+                  ? "text-[#1877F2] bg-[#EEF4FF]"
+                  : "text-[#64748B] hover:bg-[#EEF4FF] hover:text-[#1877F2]"
               )}
             >
-              <ThumbsUp className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#111827] text-[#111827]" : "")} />
+              <ThumbsUp className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#1877F2] text-[#1877F2]" : "")} />
               <span className="hidden sm:inline">Like</span>
+              {post.likeCount > 0 && <span className="hidden sm:inline">· {post.likeCount}</span>}
+              {post.likeCount > 0 && <span className="sm:hidden text-[11px]">{post.likeCount}</span>}
             </button>
 
             {/* Share */}
@@ -777,11 +801,11 @@ export function PostCard({
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
                 copied
-                  ? "text-[#111827] bg-[#F5F5F5]"
-                  : "text-[#64748B] hover:bg-[#F5F5F5] hover:text-[#111827]"
+                  ? "text-[#1877F2] bg-[#EEF4FF]"
+                  : "text-[#64748B] hover:bg-[#EEF4FF] hover:text-[#1877F2]"
               )}
             >
-              {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
+              {copied ? <Check className="h-4 w-4 text-[#1877F2]" /> : <Share2 className="h-4 w-4" />}
               <span className="hidden sm:inline">{copied ? "Copied!" : "Share"}</span>
             </button>
 
@@ -789,7 +813,7 @@ export function PostCard({
             {canManage && (
               <button
                 onClick={() => setShowSlideExport(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#F5F5F5] hover:text-[#111827] transition-all duration-150 rounded-xl my-1"
+                className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#EEF4FF] hover:text-[#1877F2] transition-all duration-150 rounded-xl my-1"
               >
                 <ImageDown className="h-4 w-4" />
                 <span className="hidden sm:inline">Export</span>

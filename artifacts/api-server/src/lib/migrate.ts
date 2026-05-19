@@ -60,6 +60,24 @@ export async function runMigrations(): Promise<void> {
       sql: `CREATE INDEX IF NOT EXISTS idx_users_organization_id ON users(organization_id)`,
     },
     {
+      name: "likes.type column",
+      sql: `ALTER TABLE likes ADD COLUMN IF NOT EXISTS type TEXT NOT NULL DEFAULT 'like'`,
+    },
+    {
+      name: "likes: drop old (post_id, user_id) unique constraint",
+      sql: `ALTER TABLE likes DROP CONSTRAINT IF EXISTS likes_post_id_user_id_unique`,
+    },
+    {
+      name: "likes: add (post_id, user_id, type) unique constraint",
+      sql: `DO $$ BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM pg_constraint WHERE conname = 'likes_post_id_user_id_type_unique'
+        ) THEN
+          ALTER TABLE likes ADD CONSTRAINT likes_post_id_user_id_type_unique UNIQUE (post_id, user_id, type);
+        END IF;
+      END $$`,
+    },
+    {
       name: "users.expo_push_token column",
       sql: `ALTER TABLE users ADD COLUMN IF NOT EXISTS expo_push_token TEXT`,
     },

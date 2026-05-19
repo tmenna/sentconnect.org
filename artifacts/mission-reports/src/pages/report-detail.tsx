@@ -53,8 +53,10 @@ export default function ReportDetail() {
     visibility: (report as any).visibility ?? "public",
     createdAt: report.createdAt,
     likeCount: (report as any).likeCount ?? 0,
+    loveCount: (report as any).loveCount ?? 0,
     commentCount: (report as any).commentCount ?? 0,
     likedByMe: (report as any).likedByMe ?? false,
+    lovedByMe: (report as any).lovedByMe ?? false,
     author: (report as any).author ?? (report as any).missionary ?? { id: 0, name: "Unknown", avatarUrl: null },
     photos: (report as any).photos ?? [],
   };
