@@ -242,9 +242,19 @@ router.post("/auth/redeem-org-token", async (req, res): Promise<void> => {
     res.status(400).json({ error: "Invalid or expired token" }); return;
   }
   req.session.userId = entry.userId;
+  req.session.browseOrgSubdomain = entry.orgSubdomain;
   req.session.save((err) => {
     if (err) { res.status(500).json({ error: "Session error" }); return; }
     res.json({ success: true, orgSubdomain: entry.orgSubdomain });
+  });
+});
+
+// DELETE /auth/browse-org — clear org browse mode, return to platform admin
+router.delete("/auth/browse-org", (req, res): void => {
+  req.session.browseOrgSubdomain = undefined;
+  req.session.save((err) => {
+    if (err) { res.status(500).json({ error: "Session error" }); return; }
+    res.sendStatus(204);
   });
 });
 

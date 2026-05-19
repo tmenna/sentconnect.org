@@ -4,6 +4,8 @@ import type { organizationsTable } from "@workspace/db";
 declare module "express-session" {
   interface SessionData {
     userId?: number;
+    /** Set when a platform admin is browsing an org portal without impersonating. */
+    browseOrgSubdomain?: string;
   }
 }
 

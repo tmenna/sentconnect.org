@@ -130,7 +130,10 @@ router.get("/users/me", async (req, res): Promise<void> => {
     res.status(401).json({ error: "Not authenticated" });
     return;
   }
-  res.json(toUserResponse(user));
+  res.json({
+    ...toUserResponse(user),
+    browseOrgSubdomain: req.session.browseOrgSubdomain ?? null,
+  });
 });
 
 router.delete("/users/me", async (req, res): Promise<void> => {

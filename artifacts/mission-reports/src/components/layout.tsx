@@ -14,12 +14,14 @@ const BORDER   = "#E5E7EB";
 
 function OrgBrowseBanner() {
   const { orgSlug } = useOrg();
-  const browsedSlug = sessionStorage.getItem("sc_org_browse");
-  if (!orgSlug || browsedSlug !== orgSlug) return null;
+  const { user } = useAuth();
+  const browseOrgSubdomain = (user as (typeof user & { browseOrgSubdomain?: string | null }) | null)?.browseOrgSubdomain;
+  if (!orgSlug || browseOrgSubdomain !== orgSlug) return null;
 
   function exitOrgBrowse() {
-    sessionStorage.removeItem("sc_org_browse");
-    window.location.href = "/admin";
+    fetch("/api/auth/browse-org", { method: "DELETE", credentials: "include" }).finally(() => {
+      window.location.href = "/admin";
+    });
   }
 
   return (

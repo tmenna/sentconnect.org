@@ -690,7 +690,8 @@ function HomeRoute() {
   if (isLoading) return <AuthLoading />;
   if (!isAuthenticated) return <Redirect href="/login" />;
   // Platform admin browsing an org portal — let them see the feed
-  if (isPlatformRole(user?.role) && orgSlug && sessionStorage.getItem("sc_org_browse") === orgSlug) {
+  const browseOrg = (user as (typeof user & { browseOrgSubdomain?: string | null }) | null)?.browseOrgSubdomain;
+  if (isPlatformRole(user?.role) && orgSlug && browseOrg === orgSlug) {
     return <MissionaryDashboard />;
   }
   if (isPlatformRole(user?.role) || user?.role === "admin") return <Redirect href="/admin" />;
