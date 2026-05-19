@@ -19,12 +19,7 @@ run = "pnpm --filter @workspace/mission-reports run dev"
 
 [services.production]
 build = [ "pnpm", "--filter", "@workspace/mission-reports", "run", "build" ]
-publicDir = "artifacts/mission-reports/dist/public"
-serve = "static"
-
-[[services.production.rewrites]]
-from = "/*"
-to = "/index.html"
+run = [ "node", "artifacts/mission-reports/server.mjs" ]
 
 [services.env]
 PORT = "24327"
