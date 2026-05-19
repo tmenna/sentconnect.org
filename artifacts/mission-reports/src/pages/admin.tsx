@@ -1111,7 +1111,7 @@ export default function AdminDashboard() {
                     borderRadius: 6,
                     border: "none",
                     background: "transparent",
-                    color: active ? "#0f0f13" : "#64748B",
+                    color: active ? "#8705FA" : "#64748B",
                     fontSize: 13,
                     fontWeight: active ? 600 : 400,
                     cursor: "pointer",
