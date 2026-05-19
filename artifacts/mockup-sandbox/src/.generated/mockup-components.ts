@@ -3,5 +3,7 @@ type ModuleMap = Record<string, () => Promise<Record<string, unknown>>>;
 export const modules: ModuleMap = {
   "./components/mockups/dashboard/Feed.tsx": () => import("../components/mockups/dashboard/Feed.tsx"),
   "./components/mockups/dashboard-redesign/RenderStyle.tsx": () => import("../components/mockups/dashboard-redesign/RenderStyle.tsx"),
-  "./components/mockups/dashboard-redesign/TimelineFeed.tsx": () => import("../components/mockups/dashboard-redesign/TimelineFeed.tsx")
+  "./components/mockups/dashboard-redesign/TimelineFeed.tsx": () => import("../components/mockups/dashboard-redesign/TimelineFeed.tsx"),
+  "./components/mockups/sentconnect-ui/AdminDashboard.tsx": () => import("../components/mockups/sentconnect-ui/AdminDashboard.tsx"),
+  "./components/mockups/sentconnect-ui/PostFeed.tsx": () => import("../components/mockups/sentconnect-ui/PostFeed.tsx")
 };
