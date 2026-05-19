@@ -813,6 +813,41 @@ function AppRoutes() {
  */
 function OrgAwareApp() {
   const [location] = useLocation();
+  const [redeemingToken, setRedeemingToken] = useState(false);
+
+  // One-time org access token: platform admin clicks "Access Org" → lands here
+  // with ?ot=TOKEN, we exchange it for a session then reload cleanly.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ot = params.get("ot");
+    if (!ot) return;
+    setRedeemingToken(true);
+    // Remove the token from the URL immediately (before the fetch) so a reload
+    // doesn't try to redeem a spent token.
+    params.delete("ot");
+    const cleanSearch = params.toString();
+    const cleanUrl = window.location.pathname + (cleanSearch ? `?${cleanSearch}` : "");
+    window.history.replaceState(null, "", cleanUrl);
+    fetch("/api/auth/redeem-org-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ token: ot }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success) {
+          // Reload so AuthProvider re-fetches /api/users/me with the new session
+          window.location.replace(cleanUrl);
+        } else {
+          setRedeemingToken(false);
+        }
+      })
+      .catch(() => setRedeemingToken(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (redeemingToken) return <PageFallback />;
 
   // Share links (/post/:id) render directly — no org validation or auth check.
   // Removing those two serial API calls cuts 400–800 ms off the first paint.

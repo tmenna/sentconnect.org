@@ -2,6 +2,7 @@ import { Router, type IRouter } from "express";
 import { eq, sql, and, inArray, ne } from "drizzle-orm";
 import crypto from "crypto";
 import { db, organizationsTable, usersTable, reportsTable } from "@workspace/db";
+import { createOrgAccessToken } from "../lib/org-access-tokens";
 import { hashPassword } from "../lib/password";
 import { sendPasswordResetEmail } from "../lib/mailer";
 import { cleanLandingPageContent, getLandingPageContent, saveLandingPageContent } from "../lib/landing-page-content";
@@ -524,6 +525,19 @@ router.patch("/super-admin/profile", requirePlatformAccess, async (req, res): Pr
   const [updated] = await db.update(usersTable).set(updates)
     .where(eq(usersTable.id, caller.id)).returning();
   res.json(toSafeUser(updated));
+});
+
+// ─── Org Access Token (cross-subdomain login) ─────────────────────────────────
+
+router.post("/super-admin/org-access-token", requireSuperOrPlatformAdmin, async (req, res): Promise<void> => {
+  const userId = req.session?.userId as number | undefined;
+  if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
+  const { orgSubdomain } = req.body ?? {};
+  if (!orgSubdomain || typeof orgSubdomain !== "string") {
+    res.status(400).json({ error: "orgSubdomain is required" }); return;
+  }
+  const token = createOrgAccessToken(userId, orgSubdomain);
+  res.json({ token });
 });
 
 // ─── Impersonation ────────────────────────────────────────────────────────────

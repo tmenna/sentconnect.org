@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { buildOrgHomeHref, buildOrgLoginHref } from "@/lib/org";
+import { buildOrgHomeHref, buildOrgLoginHref, buildOrgHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -2836,6 +2836,7 @@ export default function SuperAdminPanel() {
   const [editingOrgUser, setEditingOrgUser] = useState<PlatformUser | null>(null);
   const [addingUserToOrg, setAddingUserToOrg] = useState<OrgWithStats | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [logginIntoOrg, setLogginIntoOrg] = useState<number | null>(null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -3014,9 +3015,23 @@ export default function SuperAdminPanel() {
     }
   }
 
-  function accessOrg(org: OrgWithStats) {
-    sessionStorage.setItem("sc_org_browse", org.subdomain);
-    window.location.href = buildOrgHomeHref(org.subdomain);
+  async function accessOrg(org: OrgWithStats) {
+    setLogginIntoOrg(org.id);
+    try {
+      const res = await fetch("/api/super-admin/org-access-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ orgSubdomain: org.subdomain }),
+      });
+      if (!res.ok) throw new Error();
+      const { token } = await res.json();
+      sessionStorage.setItem("sc_org_browse", org.subdomain);
+      window.location.href = buildOrgHref(org.subdomain, `/?ot=${token}`);
+    } catch {
+      toast({ title: "Could not open org portal", variant: "destructive" });
+      setLogginIntoOrg(null);
+    }
   }
 
   async function deactivatePlatformUser(targetUser: PlatformUser) {
@@ -3455,11 +3470,14 @@ export default function SuperAdminPanel() {
                     </a>
                     <button
                       onClick={() => accessOrg(org)}
+                      disabled={logginIntoOrg === org.id}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors border"
-                      style={{ background: "#8705FA", color: "#fff", borderColor: "#8705FA" }}
+                      style={{ background: "#8705FA", color: "#fff", borderColor: "#8705FA", opacity: logginIntoOrg === org.id ? 0.7 : 1 }}
                       title="Open this org's portal as platform admin"
                     >
-                      <LogIn className="h-3.5 w-3.5" />
+                      {logginIntoOrg === org.id
+                        ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        : <LogIn className="h-3.5 w-3.5" />}
                       Access Org
                     </button>
                     <button

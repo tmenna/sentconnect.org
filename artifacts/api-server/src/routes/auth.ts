@@ -8,6 +8,7 @@ import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
 import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
 import { DEFAULT_ABOUT_PAGE_CONTENT, getAboutPageContent } from "../lib/about-page-content";
 import { resolveObjectUrl } from "../lib/r2Storage";
+import { redeemOrgAccessToken } from "../lib/org-access-tokens";
 
 const router: IRouter = Router();
 
@@ -227,6 +228,24 @@ router.post("/auth/reset-password", async (req, res): Promise<void> => {
     .where(eq(usersTable.id, user.id));
 
   res.json({ message: "Password reset successfully. You can now log in." });
+});
+
+// POST /auth/redeem-org-token — exchange a one-time org access token for a session
+// Called automatically by the org portal after platform admin clicks "Access Org"
+router.post("/auth/redeem-org-token", async (req, res): Promise<void> => {
+  const { token } = req.body ?? {};
+  if (!token || typeof token !== "string") {
+    res.status(400).json({ error: "Token is required" }); return;
+  }
+  const entry = redeemOrgAccessToken(token);
+  if (!entry) {
+    res.status(400).json({ error: "Invalid or expired token" }); return;
+  }
+  req.session.userId = entry.userId;
+  req.session.save((err) => {
+    if (err) { res.status(500).json({ error: "Session error" }); return; }
+    res.json({ success: true, orgSubdomain: entry.orgSubdomain });
+  });
 });
 
 export default router;
