@@ -125,33 +125,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   return (
     <div className="min-h-dvh flex flex-col bg-white">
 
-      {/* ── Top bar — logo only, Render style ── */}
-      <header className="flex items-center px-8 py-5">
-        {isCustomLogo ? (
-          <img
-            src={logo}
-            alt="SentConnect"
-            style={{
-              maxHeight: 28,
-              width: "auto",
-              maxWidth: 180,
-              display: "block",
-              opacity: isLogoReady ? 1 : 0,
-              transition: "opacity 0.25s ease",
-            }}
-          />
-        ) : (
-          <span style={{
-            fontWeight: 900,
-            fontSize: 17,
-            letterSpacing: "0.07em",
-            color: "#8705FA",
-            textTransform: "uppercase",
-          }}>
-            SentConnect
-          </span>
-        )}
-      </header>
 
       {/* ── Centered form ── */}
       <div className="flex-1 flex flex-col items-center justify-center px-5 py-10">
