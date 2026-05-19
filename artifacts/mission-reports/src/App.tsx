@@ -686,8 +686,13 @@ function isPlatformRole(role: string | undefined) {
 
 function HomeRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
+  const { orgSlug } = useOrg();
   if (isLoading) return <AuthLoading />;
   if (!isAuthenticated) return <Redirect href="/login" />;
+  // Platform admin browsing an org portal — let them see the feed
+  if (isPlatformRole(user?.role) && orgSlug && sessionStorage.getItem("sc_org_browse") === orgSlug) {
+    return <MissionaryDashboard />;
+  }
   if (isPlatformRole(user?.role) || user?.role === "admin") return <Redirect href="/admin" />;
   return <MissionaryDashboard />;
 }

@@ -3,13 +3,45 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
 import { Button } from "./ui/button";
-import { LogOut, Rss, ShieldCheck, HelpCircle, Menu, X, User } from "lucide-react";
+import { LogOut, Rss, ShieldCheck, HelpCircle, Menu, X, User, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useOrg } from "@/providers/org-provider";
 
 
 const PURPLE   = "#8705FA";
 const BORDER   = "#E5E7EB";
+
+function OrgBrowseBanner() {
+  const { orgSlug } = useOrg();
+  const browsedSlug = sessionStorage.getItem("sc_org_browse");
+  if (!orgSlug || browsedSlug !== orgSlug) return null;
+
+  function exitOrgBrowse() {
+    sessionStorage.removeItem("sc_org_browse");
+    window.location.href = "/admin";
+  }
+
+  return (
+    <div
+      className="w-full flex items-center justify-between px-4 sm:px-8 py-2 text-[12px] font-semibold text-white gap-3"
+      style={{ background: "#8705FA" }}
+    >
+      <div className="flex items-center gap-2">
+        <ShieldCheck className="h-3.5 w-3.5 flex-shrink-0" />
+        <span>Platform Admin View — browsing <span className="font-bold">{orgSlug}</span> as yourself</span>
+      </div>
+      <button
+        onClick={exitOrgBrowse}
+        className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors"
+        style={{ background: "rgba(255,255,255,0.2)", color: "#fff" }}
+      >
+        <ArrowLeft className="h-3 w-3" />
+        Exit Org View
+      </button>
+    </div>
+  );
+}
 
 export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -77,6 +109,8 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col text-foreground" style={{ background: "#ffffff", fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
+      {/* ── Platform Admin Org Browse Banner ── */}
+      <OrgBrowseBanner />
       {/* ── Nav ── */}
       <header
         className="sticky top-0 z-50 w-full"

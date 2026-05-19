@@ -39,10 +39,18 @@ router.get("/users", async (req, res): Promise<void> => {
 
   let users;
   if (isSuperAdmin) {
-    // Super admin sees all users
-    users = parsed.data.role
-      ? await db.select().from(usersTable).where(eq(usersTable.role, parsed.data.role))
-      : await db.select().from(usersTable);
+    const browseOrgId = req.resolvedOrg?.id;
+    if (browseOrgId) {
+      // Super admin browsing a specific org portal — scope to that org
+      const conditions: ReturnType<typeof eq>[] = [eq(usersTable.organizationId, browseOrgId)];
+      if (parsed.data.role) conditions.push(eq(usersTable.role, parsed.data.role));
+      users = await db.select().from(usersTable).where(and(...conditions));
+    } else {
+      // Global view — super admin sees all users
+      users = parsed.data.role
+        ? await db.select().from(usersTable).where(eq(usersTable.role, parsed.data.role))
+        : await db.select().from(usersTable);
+    }
   } else if (callerOrgId !== null) {
     // Scoped to org
     const conditions = [eq(usersTable.organizationId, callerOrgId)];

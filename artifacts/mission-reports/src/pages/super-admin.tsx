@@ -2836,7 +2836,6 @@ export default function SuperAdminPanel() {
   const [editingOrgUser, setEditingOrgUser] = useState<PlatformUser | null>(null);
   const [addingUserToOrg, setAddingUserToOrg] = useState<OrgWithStats | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [logginIntoOrg, setLogginIntoOrg] = useState<number | null>(null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -3015,28 +3014,9 @@ export default function SuperAdminPanel() {
     }
   }
 
-  async function impersonateOrgAdmin(org: OrgWithStats) {
-    setLogginIntoOrg(org.id);
-    try {
-      // Find the org's admin from already-loaded users, prefer role=admin then any org user
-      const orgUsers = (allUsers ?? []).filter(u => u.organizationId === org.id);
-      const target = orgUsers.find(u => u.role === "admin") ?? orgUsers[0];
-      if (!target) {
-        toast({ title: "No users in this org yet", variant: "destructive" });
-        setLogginIntoOrg(null);
-        return;
-      }
-      const res = await fetch(`/api/super-admin/impersonate/${target.id}`, {
-        method: "POST",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error();
-      toast({ title: `Accessing ${org.name} as ${target.name}` });
-      window.location.href = buildOrgHomeHref(org.subdomain);
-    } catch {
-      toast({ title: "Access failed", variant: "destructive" });
-      setLogginIntoOrg(null);
-    }
+  function accessOrg(org: OrgWithStats) {
+    sessionStorage.setItem("sc_org_browse", org.subdomain);
+    window.location.href = buildOrgHomeHref(org.subdomain);
   }
 
   async function deactivatePlatformUser(targetUser: PlatformUser) {
@@ -3474,15 +3454,12 @@ export default function SuperAdminPanel() {
                       <Globe className="h-3.5 w-3.5" /> Open
                     </a>
                     <button
-                      onClick={() => impersonateOrgAdmin(org)}
-                      disabled={logginIntoOrg === org.id}
+                      onClick={() => accessOrg(org)}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors border"
-                      style={{ background: "#8705FA", color: "#fff", borderColor: "#8705FA", opacity: logginIntoOrg === org.id ? 0.7 : 1 }}
-                      title="Sign in as this org's admin to access their portal"
+                      style={{ background: "#8705FA", color: "#fff", borderColor: "#8705FA" }}
+                      title="Open this org's portal as platform admin"
                     >
-                      {logginIntoOrg === org.id
-                        ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        : <LogIn className="h-3.5 w-3.5" />}
+                      <LogIn className="h-3.5 w-3.5" />
                       Access Org
                     </button>
                     <button

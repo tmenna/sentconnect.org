@@ -144,9 +144,11 @@ router.get("/timeline", async (req, res): Promise<void> => {
   const offset = Number(req.query.offset) || 0;
 
   const conditions = [];
-  // Super admin sees all; everyone else is strictly scoped to their org
+  // Super admin: scope to resolved org if browsing an org portal, otherwise see all
   if (currentUser.role !== "super_admin") {
     conditions.push(eq(reportsTable.organizationId, currentUser.organizationId!));
+  } else if (req.resolvedOrg?.id) {
+    conditions.push(eq(reportsTable.organizationId, req.resolvedOrg.id));
   }
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;
@@ -175,6 +177,8 @@ router.get("/reports", async (req, res): Promise<void> => {
   if (isAdmin) {
     if (currentUser?.organizationId && currentUser.role !== "super_admin") {
       conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
+    } else if (currentUser?.role === "super_admin" && req.resolvedOrg?.id) {
+      conditions.push(eq(reportsTable.organizationId, req.resolvedOrg.id));
     }
     if (missionaryId) conditions.push(eq(reportsTable.missionaryId, missionaryId));
   } else {
@@ -547,6 +551,8 @@ router.get("/stats", async (req, res): Promise<void> => {
     const [caller] = await db.select().from(usersTable).where(eq(usersTable.id, currentUserId));
     if (caller?.organizationId && caller.role !== "super_admin") {
       orgCondition = eq(reportsTable.organizationId, caller.organizationId);
+    } else if (caller?.role === "super_admin" && req.resolvedOrg?.id) {
+      orgCondition = eq(reportsTable.organizationId, req.resolvedOrg.id);
     }
   }
 
@@ -580,6 +586,8 @@ router.get("/recent-activity", async (req, res): Promise<void> => {
   const conditions = [];
   if (currentUser.organizationId && currentUser.role !== "super_admin") {
     conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
+  } else if (currentUser.role === "super_admin" && req.resolvedOrg?.id) {
+    conditions.push(eq(reportsTable.organizationId, req.resolvedOrg.id));
   }
   const posts = await db.select().from(reportsTable)
     .where(conditions.length > 0 ? and(...conditions) : undefined)
