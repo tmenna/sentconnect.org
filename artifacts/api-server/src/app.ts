@@ -20,6 +20,16 @@ if (!process.env.DATABASE_URL) {
 
 const PgSession = connectPgSimple(session);
 
+// Derive cookie domain from TENANT_ROOT_DOMAINS so the session cookie is shared
+// across all subdomains (teki.sentconnect.org ↔ rc.sentconnect.org) in production.
+const _firstTenantRoot = (process.env.TENANT_ROOT_DOMAINS ?? "sentconnect.org")
+  .split(",")[0]
+  .trim();
+const SESSION_COOKIE_DOMAIN =
+  process.env.NODE_ENV === "production" && _firstTenantRoot
+    ? `.${_firstTenantRoot}`
+    : undefined;
+
 const app: Express = express();
 
 app.set("trust proxy", 1);
@@ -71,6 +81,7 @@ app.use(
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      domain: SESSION_COOKIE_DOMAIN,
     },
   })
 );
