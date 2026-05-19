@@ -604,12 +604,14 @@ export function PostCard({
     <div
       className={flat
         ? "bg-white overflow-hidden"
-        : "bg-white rounded-2xl overflow-hidden transition-shadow duration-200"}
+        : "bg-white rounded-2xl overflow-hidden"}
       style={flat
         ? { borderBottom: "1px solid #E2E8F0" }
-        : { border: "1px solid #E2E8F0", boxShadow: "0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.05)" }}
-      onMouseEnter={e => { if (!flat) (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 12px rgba(15,23,42,0.10), 0 12px 32px rgba(15,23,42,0.07)"; }}
-      onMouseLeave={e => { if (!flat) (e.currentTarget as HTMLDivElement).style.boxShadow = "0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.05)"; }}
+        : {
+            border: "1px solid #E2E8F0",
+            borderLeft: (!post.isMissionMoment && post.isHighlight) ? "2px solid #F59E0B" : "1px solid #E2E8F0",
+            boxShadow: "0 1px 2px rgba(15,23,42,0.05)",
+          }}
     >
       {/* Mission Moment banner */}
       {post.isMissionMoment && (
@@ -619,14 +621,6 @@ export function PostCard({
             Mission Moment
           </span>
           <Sparkles className="h-3.5 w-3.5" style={{ color: "#94A3B8" }} />
-        </div>
-      )}
-
-      {/* Highlight banner (only when not mission moment) */}
-      {!post.isMissionMoment && post.isHighlight && (
-        <div className="flex items-center gap-1.5 px-6 py-2 bg-gray-50 border-b border-gray-100 text-[12px] font-medium text-gray-700">
-          <Star className="h-3.5 w-3.5 fill-amber-400 text-gray-400" />
-          Highlight
         </div>
       )}
 

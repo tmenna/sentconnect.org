@@ -1107,23 +1107,25 @@ export default function AdminDashboard() {
                   style={{
                     display: "flex", alignItems: "center", gap: 10,
                     width: "100%", textAlign: "left",
-                    padding: "9px 10px",
-                    borderRadius: 8,
+                    padding: "9px 10px 9px 14px",
+                    borderRadius: 6,
                     border: "none",
-                    background: active ? "#8705FA" : "transparent",
-                    color: active ? "#ffffff" : "#64748B",
-                    fontSize: 13.5,
+                    background: "transparent",
+                    color: active ? "#0f0f13" : "#64748B",
+                    fontSize: 13,
                     fontWeight: active ? 600 : 400,
                     cursor: "pointer",
                     transition: "all 0.12s",
+                    position: "relative",
                   }}
                   onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#0f0f13"; } }}
                   onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; } }}
                 >
+                  {active && <div style={{ position: "absolute", left: 0, top: 4, bottom: 4, width: 2, borderRadius: 2, background: "#8705FA" }} />}
                   <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
                   {label}
                   {id === "team" && !usersLoading && (
-                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600, background: active ? "#E9D8FF" : "#F1F5F9", color: active ? "#8705FA" : "#64748B", borderRadius: 999, padding: "1px 7px" }}>
+                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600, background: "#F1F5F9", color: "#64748B", borderRadius: 999, padding: "1px 7px" }}>
                       {allUsers.length}
                     </span>
                   )}

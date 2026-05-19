@@ -186,8 +186,8 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
     <div
       className={cn("bg-white rounded-2xl overflow-hidden")}
       style={{
-        border: "1px solid #F5F5F5",
-        boxShadow: "0 1px 3px rgba(109,40,217,0.04), 0 4px 16px rgba(109,40,217,0.05)",
+        border: "1px solid #E5E7EB",
+        boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
         background: "#ffffff",
         padding: "16px 16px 14px",
       }}
@@ -358,10 +358,10 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={handlePost}
               disabled={!canPost}
-              className="px-3 sm:px-6 font-bold text-[13px] sm:text-[14px] text-white rounded-xl transition-all duration-200 disabled:opacity-40 whitespace-nowrap"
-              style={{ background: "#8705FA", height: "40px", boxShadow: canPost ? "0 4px 14px rgba(135,5,250,0.35)" : "none", letterSpacing: "-0.02em" }}
-              onMouseEnter={e => { if (canPost) { e.currentTarget.style.background = "#7004d4"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#8705FA"; e.currentTarget.style.transform = ""; }}
+              className="px-3 sm:px-5 font-semibold text-[13px] sm:text-[14px] text-white rounded-lg transition-all duration-200 disabled:opacity-40 whitespace-nowrap"
+              style={{ background: "#0f0f13", height: "36px", letterSpacing: "-0.01em" }}
+              onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#1a1a22"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#0f0f13"; }}
             >
               <span className="hidden sm:inline">Post Update</span>
               <span className="sm:hidden">Post</span>
