@@ -647,11 +647,11 @@ export function PostCard({
       )}
 
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 sm:px-5 pt-4 pb-2.5">
+      <div className="flex items-center gap-3 px-4 sm:px-5 pt-4 pb-3">
         <Link href={`/missionaries/${post.author.id}`}>
-          <Avatar className="h-9 w-9 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #F3F4F6" }}>
+          <Avatar className="h-8 w-8 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #F3F4F6" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#F5F5F5", color: "#111827", fontWeight: 700, fontSize: 12 }}>
+            <AvatarFallback style={{ background: "#F5F5F5", color: "#111827", fontWeight: 700, fontSize: 11 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -671,54 +671,8 @@ export function PostCard({
               </span>
             )}
           </div>
-          <span style={{ fontSize: 12, color: "#94A3B8" }}>{timeAgo}</span>
         </div>
-        {canManage && !editing && (
-          <div className="relative flex-shrink-0" ref={menuRef}>
-            <button
-              onClick={() => setShowMenu(s => !s)}
-              className="p-1 rounded-full hover:bg-muted/60 transition-colors text-muted-foreground"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </button>
-            {showMenu && (
-              <div className="absolute right-0 top-7 bg-white border border-border shadow-md rounded-lg z-10 min-w-[140px] py-1">
-                {isOwner && (
-                  <button
-                    onClick={() => { setShowMenu(false); setEditing(true); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
-                  >
-                    <Pencil className="h-3.5 w-3.5" />
-                    Edit
-                  </button>
-                )}
-                <button
-                  onClick={() => { setShowMenu(false); copyShareLink(); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
-                >
-                  <Link2 className="h-3.5 w-3.5" />
-                  {copied ? "Copied!" : "Copy link"}
-                </button>
-                {canManage && (
-                  <button
-                    onClick={() => { setShowMenu(false); setShowSlideExport(true); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
-                  >
-                    <ImageDown className="h-3.5 w-3.5" />
-                    Export
-                  </button>
-                )}
-                <button
-                  onClick={() => { setShowMenu(false); deletePost(); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                  Delete
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+        <span style={{ fontSize: 11, color: "#6B7280" }} className="flex-shrink-0">{timeAgo}</span>
         {editing && (
           <button
             onClick={() => setEditing(false)}
@@ -774,39 +728,89 @@ export function PostCard({
           )}
 
           {/* Action bar */}
-          <div className="flex items-center gap-0.5 px-3 sm:px-4 py-1.5" style={{ borderTop: "1px solid #F1F5F9" }}>
-            {/* Love */}
-            <button
-              onClick={toggleLove}
-              className={cn(
-                "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
-                post.lovedByMe ? "text-[#E0245E]" : "text-[#94A3B8] hover:text-[#E0245E] hover:bg-[#FFF0F4]"
-              )}
-            >
-              <Heart className={cn("h-4 w-4", post.lovedByMe ? "fill-[#E0245E] text-[#E0245E]" : "")} />
-              {post.loveCount > 0 && <span>{post.loveCount}</span>}
-            </button>
+          <div className="flex items-center justify-between px-3 sm:px-4 py-1.5" style={{ borderTop: "1px solid #F1F5F9" }}>
+            <div className="flex items-center gap-0.5">
+              {/* Love */}
+              <button
+                onClick={toggleLove}
+                className={cn(
+                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
+                  post.lovedByMe ? "text-[#E0245E]" : "text-[#94A3B8] hover:text-[#E0245E] hover:bg-[#FFF0F4]"
+                )}
+              >
+                <Heart className={cn("h-4 w-4", post.lovedByMe ? "fill-[#E0245E] text-[#E0245E]" : "")} />
+                {post.loveCount > 0 && <span>{post.loveCount}</span>}
+              </button>
 
-            {/* Like */}
-            <button
-              onClick={toggleLike}
-              className={cn(
-                "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
-                post.likedByMe ? "text-[#1877F2]" : "text-[#94A3B8] hover:text-[#1877F2] hover:bg-[#EEF4FF]"
-              )}
-            >
-              <ThumbsUp className={cn("h-4 w-4", post.likedByMe ? "fill-[#1877F2] text-[#1877F2]" : "")} />
-              {post.likeCount > 0 && <span>{post.likeCount}</span>}
-            </button>
+              {/* Like */}
+              <button
+                onClick={toggleLike}
+                className={cn(
+                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
+                  post.likedByMe ? "text-[#1877F2]" : "text-[#94A3B8] hover:text-[#1877F2] hover:bg-[#EEF4FF]"
+                )}
+              >
+                <ThumbsUp className={cn("h-4 w-4", post.likedByMe ? "fill-[#1877F2] text-[#1877F2]" : "")} />
+                {post.likeCount > 0 && <span>{post.likeCount}</span>}
+              </button>
 
-            {/* Comment */}
-            <button
-              onClick={toggleComments}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium text-[#94A3B8] hover:text-[#64748B] hover:bg-[#F8FAFC] transition-colors"
-            >
-              <MessageCircle className="h-4 w-4" />
-              {post.commentCount > 0 && <span>{post.commentCount}</span>}
-            </button>
+              {/* Comment */}
+              <button
+                onClick={toggleComments}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium text-[#94A3B8] hover:text-[#64748B] hover:bg-[#F8FAFC] transition-colors"
+              >
+                <MessageCircle className="h-4 w-4" />
+                {post.commentCount > 0 && <span>{post.commentCount}</span>}
+              </button>
+            </div>
+
+            {/* MoreHorizontal menu — far right */}
+            {canManage && !editing && (
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setShowMenu(s => !s)}
+                  className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-[#94A3B8] hover:text-[#64748B]"
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                </button>
+                {showMenu && (
+                  <div className="absolute right-0 bottom-9 bg-white border border-border shadow-md rounded-lg z-10 min-w-[140px] py-1">
+                    {isOwner && (
+                      <button
+                        onClick={() => { setShowMenu(false); setEditing(true); }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                        Edit
+                      </button>
+                    )}
+                    <button
+                      onClick={() => { setShowMenu(false); copyShareLink(); }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
+                    >
+                      <Link2 className="h-3.5 w-3.5" />
+                      {copied ? "Copied!" : "Copy link"}
+                    </button>
+                    {canManage && (
+                      <button
+                        onClick={() => { setShowMenu(false); setShowSlideExport(true); }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
+                      >
+                        <ImageDown className="h-3.5 w-3.5" />
+                        Export
+                      </button>
+                    )}
+                    <button
+                      onClick={() => { setShowMenu(false); deletePost(); }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Comments */}

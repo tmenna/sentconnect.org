@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useGetTimeline } from "@workspace/api-client-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { type PostData } from "@/components/post-card";
-import { MasonryCard, PostDetailModal } from "@/components/feed-grid";
+import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
 import { useAuth } from "@/components/auth-provider";
 import { BookOpen, MessageCircle, Loader2, LayoutGrid } from "lucide-react";
@@ -16,7 +15,6 @@ export default function Feed() {
   const [accumulatedPosts, setAccumulatedPosts] = useState<PostData[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const initializedRef = useRef(false);
 
@@ -184,38 +182,32 @@ export default function Feed() {
         })}
       </div>
 
-      {/* ── Posts grid ── */}
+      {/* ── Posts ── */}
       {isLoading && accumulatedPosts.length === 0 ? (
-        // Skeleton loading — matches card grid
-        <div style={{ columns: "1", columnGap: 20 }}>
-          {[1, 2, 3, 4, 5, 6].map(i => (
+        // Skeleton loading — matches PostCard
+        <div className="space-y-4">
+          {[1, 2, 3].map(i => (
             <div
               key={i}
-              style={{ breakInside: "avoid", display: "inline-block", width: "100%", marginBottom: 20 }}
+              className="bg-white rounded-xl overflow-hidden"
+              style={{ border: "1px solid #E2E8F0", boxShadow: "0 1px 2px rgba(15,23,42,0.04)" }}
             >
-              <div
-                className="bg-white rounded-2xl overflow-hidden"
-                style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)" }}
-              >
-                {/* Image area */}
-                <Skeleton
-                  className="w-full"
-                  style={{ aspectRatio: "16/9" }}
-                />
-                <div className="px-3.5 pt-3 pb-3.5 space-y-2.5">
-                  {/* Excerpt lines */}
-                  <Skeleton className="h-3 w-full rounded" />
-                  <Skeleton className="h-3 w-4/5 rounded" />
-                  {/* Author row */}
-                  <div className="pt-2 border-t border-gray-100 flex items-center gap-2">
-                    <Skeleton className="h-7 w-7 rounded-full flex-shrink-0" />
-                    <div className="flex-1 space-y-1">
-                      <Skeleton className="h-2.5 w-24 rounded" />
-                      <Skeleton className="h-2 w-16 rounded" />
-                    </div>
-                    <Skeleton className="h-6 w-14 rounded-full" />
-                  </div>
+              <div className="flex items-center gap-3 px-4 pt-4 pb-3">
+                <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <Skeleton className="h-3 w-32 rounded" />
                 </div>
+                <Skeleton className="h-3 w-12 rounded" />
+              </div>
+              <div className="px-4 pb-3 space-y-2">
+                <Skeleton className="h-3 w-full rounded" />
+                <Skeleton className="h-3 w-full rounded" />
+                <Skeleton className="h-3 w-3/5 rounded" />
+              </div>
+              <div className="px-4 py-2 border-t border-gray-100 flex items-center gap-3">
+                <Skeleton className="h-7 w-14 rounded-lg" />
+                <Skeleton className="h-7 w-14 rounded-lg" />
+                <Skeleton className="h-7 w-14 rounded-lg" />
               </div>
             </div>
           ))}
@@ -259,18 +251,14 @@ export default function Feed() {
         </div>
       ) : (
         <>
-          {/* Card grid */}
-          <div style={{ columns: "1", columnGap: 20 }}>
-            {displayedPosts.map((post, i) => (
-              <div
+          {/* Single-column PostCard feed */}
+          <div className="space-y-4">
+            {displayedPosts.map((post) => (
+              <PostCard
                 key={post.id}
-                style={{ breakInside: "avoid", display: "inline-block", width: "100%", marginBottom: 20 }}
-              >
-                <MasonryCard
-                  post={post}
-                  onClick={() => setSelectedPostIndex(i)}
-                />
-              </div>
+                post={post}
+                onDelete={handleDelete}
+              />
             ))}
           </div>
 
@@ -296,21 +284,6 @@ export default function Feed() {
             </div>
           )}
         </>
-      )}
-
-      {/* Post detail modal */}
-      {selectedPostIndex !== null && displayedPosts[selectedPostIndex] && (
-        <PostDetailModal
-          post={displayedPosts[selectedPostIndex]}
-          allPosts={displayedPosts}
-          postIndex={selectedPostIndex}
-          onNavigate={setSelectedPostIndex}
-          onClose={() => setSelectedPostIndex(null)}
-          onDelete={(id) => {
-            handleDelete(id);
-            setSelectedPostIndex(null);
-          }}
-        />
       )}
     </div>
   );
