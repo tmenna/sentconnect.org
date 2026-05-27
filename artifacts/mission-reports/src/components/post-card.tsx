@@ -5,7 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 import {
   Heart, ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
   Send, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
-  Link2, Share2, ImageDown, ChevronLeft, ChevronRight, ZoomIn
+  Link2, ImageDown, ChevronLeft, ChevronRight, ZoomIn
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -626,13 +626,13 @@ export function PostCard({
     <div
       className={flat
         ? "bg-white overflow-hidden"
-        : "bg-white rounded-2xl overflow-hidden"}
+        : "bg-white rounded-xl overflow-hidden"}
       style={flat
         ? { borderBottom: "1px solid #E2E8F0" }
         : {
             border: "1px solid #E2E8F0",
             borderLeft: (!post.isMissionMoment && post.isHighlight) ? "2px solid #F59E0B" : "1px solid #E2E8F0",
-            boxShadow: "0 1px 2px rgba(15,23,42,0.05)",
+            boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
           }}
     >
       {/* Mission Moment banner */}
@@ -647,37 +647,34 @@ export function PostCard({
       )}
 
       {/* Header */}
-      <div className="flex items-start gap-3.5 px-4 sm:px-6 pt-5 pb-3">
+      <div className="flex items-center gap-3 px-4 sm:px-5 pt-4 pb-2.5">
         <Link href={`/missionaries/${post.author.id}`}>
-          <Avatar className="h-12 w-12 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #F3F4F6" }}>
+          <Avatar className="h-9 w-9 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #F3F4F6" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#F5F5F5", color: "#111827", fontWeight: 700, fontSize: 15 }}>
+            <AvatarFallback style={{ background: "#F5F5F5", color: "#111827", fontWeight: 700, fontSize: 12 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </Link>
         <div className="flex-1 min-w-0">
-          <Link
-            href={`/missionaries/${post.author.id}`}
-            className="transition-colors leading-tight block" style={{ fontSize: 16, fontWeight: 700, color: "#111827", letterSpacing: "-0.02em" }}
-          >
-            {post.author.name}
-          </Link>
-          <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-1">
-            <span style={{ fontSize: 14, color: "#94A3B8" }}>{timeAgo}</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link
+              href={`/missionaries/${post.author.id}`}
+              className="transition-colors leading-none" style={{ fontSize: 14, fontWeight: 600, color: "#111827" }}
+            >
+              {post.author.name}
+            </Link>
             {post.location && (
-              <>
-                <span style={{ color: "#CBD5E1", fontSize: 10 }}>•</span>
-                <span className="flex items-center gap-1" style={{ fontSize: 13, color: "#94A3B8" }}>
-                  <MapPin className="h-3 w-3" />
-                  {post.location}
-                </span>
-              </>
+              <span className="flex items-center gap-1" style={{ fontSize: 12, color: "#94A3B8" }}>
+                <MapPin className="h-3 w-3 flex-shrink-0" />
+                {post.location}
+              </span>
             )}
           </div>
+          <span style={{ fontSize: 12, color: "#94A3B8" }}>{timeAgo}</span>
         </div>
         {canManage && !editing && (
-          <div className="relative" ref={menuRef}>
+          <div className="relative flex-shrink-0" ref={menuRef}>
             <button
               onClick={() => setShowMenu(s => !s)}
               className="p-1 rounded-full hover:bg-muted/60 transition-colors text-muted-foreground"
@@ -685,7 +682,7 @@ export function PostCard({
               <MoreHorizontal className="h-4 w-4" />
             </button>
             {showMenu && (
-              <div className="absolute right-0 top-7 bg-white border border-border shadow-md rounded-lg z-10 min-w-[130px] py-1">
+              <div className="absolute right-0 top-7 bg-white border border-border shadow-md rounded-lg z-10 min-w-[140px] py-1">
                 {isOwner && (
                   <button
                     onClick={() => { setShowMenu(false); setEditing(true); }}
@@ -696,8 +693,24 @@ export function PostCard({
                   </button>
                 )}
                 <button
+                  onClick={() => { setShowMenu(false); copyShareLink(); }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
+                >
+                  <Link2 className="h-3.5 w-3.5" />
+                  {copied ? "Copied!" : "Copy link"}
+                </button>
+                {canManage && (
+                  <button
+                    onClick={() => { setShowMenu(false); setShowSlideExport(true); }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
+                  >
+                    <ImageDown className="h-3.5 w-3.5" />
+                    Export
+                  </button>
+                )}
+                <button
                   onClick={() => { setShowMenu(false); deletePost(); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-gray-600 hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                   Delete
@@ -709,7 +722,7 @@ export function PostCard({
         {editing && (
           <button
             onClick={() => setEditing(false)}
-            className="p-1 rounded-full hover:bg-muted/60 transition-colors text-muted-foreground"
+            className="p-1 rounded-full hover:bg-muted/60 transition-colors text-muted-foreground flex-shrink-0"
             title="Cancel edit"
           >
             <X className="h-4 w-4" />
@@ -728,12 +741,11 @@ export function PostCard({
         <>
           {/* Text */}
           {post.description && (
-            <div className="px-4 sm:px-6 pb-5">
+            <div className="px-4 sm:px-5 pb-3">
               <p style={{
-                fontSize: 16,
-                color: "#000000",
-                lineHeight: 1.7,
-                letterSpacing: "-0.01em",
+                fontSize: 14,
+                color: "#374151",
+                lineHeight: 1.65,
                 whiteSpace: "pre-wrap",
                 overflow: textCollapsed ? "hidden" : undefined,
                 display: textCollapsed ? "-webkit-box" : undefined,
@@ -762,63 +774,39 @@ export function PostCard({
           )}
 
           {/* Action bar */}
-          <div className="flex items-center mx-1 sm:mx-2" style={{ borderTop: "1px solid #F1F5F9" }}>
+          <div className="flex items-center gap-0.5 px-3 sm:px-4 py-1.5" style={{ borderTop: "1px solid #F1F5F9" }}>
             {/* Love */}
             <button
               onClick={toggleLove}
               className={cn(
-                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
-                post.lovedByMe
-                  ? "text-[#E0245E] bg-[#FFF0F4]"
-                  : "text-[#64748B] hover:bg-[#FFF0F4] hover:text-[#E0245E]"
+                "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
+                post.lovedByMe ? "text-[#E0245E]" : "text-[#94A3B8] hover:text-[#E0245E] hover:bg-[#FFF0F4]"
               )}
             >
-              <Heart className={cn("h-4 w-4 transition-colors duration-150", post.lovedByMe ? "fill-[#E0245E] text-[#E0245E]" : "")} />
-              <span className="hidden sm:inline">Love</span>
-              {post.loveCount > 0 && <span className="hidden sm:inline">· {post.loveCount}</span>}
-              {post.loveCount > 0 && <span className="sm:hidden text-[11px]">{post.loveCount}</span>}
+              <Heart className={cn("h-4 w-4", post.lovedByMe ? "fill-[#E0245E] text-[#E0245E]" : "")} />
+              {post.loveCount > 0 && <span>{post.loveCount}</span>}
             </button>
 
             {/* Like */}
             <button
               onClick={toggleLike}
               className={cn(
-                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
-                post.likedByMe
-                  ? "text-[#1877F2] bg-[#EEF4FF]"
-                  : "text-[#64748B] hover:bg-[#EEF4FF] hover:text-[#1877F2]"
+                "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
+                post.likedByMe ? "text-[#1877F2]" : "text-[#94A3B8] hover:text-[#1877F2] hover:bg-[#EEF4FF]"
               )}
             >
-              <ThumbsUp className={cn("h-4 w-4 transition-colors duration-150", post.likedByMe ? "fill-[#1877F2] text-[#1877F2]" : "")} />
-              <span className="hidden sm:inline">Like</span>
-              {post.likeCount > 0 && <span className="hidden sm:inline">· {post.likeCount}</span>}
-              {post.likeCount > 0 && <span className="sm:hidden text-[11px]">{post.likeCount}</span>}
+              <ThumbsUp className={cn("h-4 w-4", post.likedByMe ? "fill-[#1877F2] text-[#1877F2]" : "")} />
+              {post.likeCount > 0 && <span>{post.likeCount}</span>}
             </button>
 
-            {/* Share */}
+            {/* Comment */}
             <button
-              onClick={copyShareLink}
-              className={cn(
-                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold transition-all duration-150 rounded-xl my-1",
-                copied
-                  ? "text-[#1877F2] bg-[#EEF4FF]"
-                  : "text-[#64748B] hover:bg-[#EEF4FF] hover:text-[#1877F2]"
-              )}
+              onClick={toggleComments}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium text-[#94A3B8] hover:text-[#64748B] hover:bg-[#F8FAFC] transition-colors"
             >
-              {copied ? <Check className="h-4 w-4 text-[#1877F2]" /> : <Share2 className="h-4 w-4" />}
-              <span className="hidden sm:inline">{copied ? "Copied!" : "Share"}</span>
+              <MessageCircle className="h-4 w-4" />
+              {post.commentCount > 0 && <span>{post.commentCount}</span>}
             </button>
-
-            {/* Export as Report — visible to admins/owners */}
-            {canManage && (
-              <button
-                onClick={() => setShowSlideExport(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 text-[12px] sm:text-[13px] font-semibold text-[#64748B] hover:bg-[#EEF4FF] hover:text-[#1877F2] transition-all duration-150 rounded-xl my-1"
-              >
-                <ImageDown className="h-4 w-4" />
-                <span className="hidden sm:inline">Export</span>
-              </button>
-            )}
           </div>
 
           {/* Comments */}
