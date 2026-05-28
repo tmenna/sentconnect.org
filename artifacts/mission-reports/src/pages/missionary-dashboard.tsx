@@ -47,7 +47,8 @@ export default function MissionaryDashboard() {
   ];
 
   return (
-    <div className="flex bg-white -mx-4 sm:-mx-8 min-h-[600px]">
+    <div className="bg-white -mx-4 sm:-mx-8 min-h-[600px] flex justify-center">
+    <div className="flex w-full" style={{ maxWidth: 900 }}>
 
       {/* ── Sidebar — desktop only ── */}
       <aside className="hidden sm:flex flex-col flex-shrink-0 border-r border-slate-100"
@@ -134,7 +135,7 @@ export default function MissionaryDashboard() {
 
       {/* ── Main content ── */}
       {/* pb-24 on mobile leaves room for the fixed bottom nav */}
-      <main className="flex-1 min-w-0 flex flex-col px-4 sm:pl-4 sm:pr-8 py-6 sm:py-7 pb-24 sm:pb-8">
+      <main className="flex-1 min-w-0 flex flex-col px-4 sm:px-6 py-6 sm:py-7 pb-24 sm:pb-8">
       <div className="w-full max-w-[620px] flex flex-col gap-6 sm:gap-7">
 
         {/* Page header */}
@@ -283,6 +284,7 @@ export default function MissionaryDashboard() {
         })}
       </nav>
 
-    </div>
+    </div>{/* end max-width wrapper */}
+    </div>{/* end full-width bg */}
   );
 }
