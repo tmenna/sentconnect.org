@@ -89,8 +89,8 @@
   --popover-foreground: 230 35% 14%;
   --popover-border: 220 18% 91%;
 
-  /* SentConnect accent: #0085FF Bluesky blue */
-  --primary: 211 100% 50%;
+  /* SentConnect accent: #0059D6 */
+  --primary: 215 100% 42%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 220 18% 95%;
@@ -140,7 +140,7 @@
   --popover-foreground: 210 20% 95%;
   --popover-border: 222 30% 18%;
 
-  --primary: 215 80% 60%;
+  --primary: 215 100% 52%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 222 30% 18%;

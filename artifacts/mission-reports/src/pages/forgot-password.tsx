@@ -99,7 +99,7 @@ export default function ForgotPassword() {
                   required
                   className="w-full h-11 px-4 text-[14px] rounded-xl border outline-none transition-all"
                   style={{ borderColor: "#E5E7EB" }}
-                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(0,133,255,0.1)`; }}
+                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(0,89,214,0.1)`; }}
                   onBlur={e => { e.target.style.borderColor = "#E5E7EB"; e.target.style.boxShadow = "none"; }}
                 />
               </div>

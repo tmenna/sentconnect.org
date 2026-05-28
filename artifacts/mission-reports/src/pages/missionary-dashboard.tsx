@@ -87,7 +87,7 @@ export default function MissionaryDashboard() {
                   width: "100%", textAlign: "left",
                   padding: "9px 10px",
                   borderRadius: 8, border: "none",
-                  background: active ? "#0085FF" : "transparent",
+                  background: active ? "#0059D6" : "transparent",
                   color: active ? "#ffffff" : "#64748B",
                   fontSize: 13.5, fontWeight: active ? 700 : 500,
                   cursor: "pointer", transition: "all 0.12s",
@@ -122,7 +122,7 @@ export default function MissionaryDashboard() {
 
         {/* User info */}
         <div style={{ borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
-          <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#0085FF", flexShrink: 0 }}>
+          <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#0059D6", flexShrink: 0 }}>
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div style={{ minWidth: 0 }}>
@@ -178,9 +178,9 @@ export default function MissionaryDashboard() {
                   paddingBottom: 12, paddingTop: 4,
                   marginRight: 24, marginBottom: -1,
                   fontSize: 14, fontWeight: active ? 800 : 500,
-                  color: active ? "#0085FF" : "#94A3B8",
+                  color: active ? "#0059D6" : "#94A3B8",
                   border: "none",
-                  borderBottom: active ? "2px solid #0085FF" : "2px solid transparent",
+                  borderBottom: active ? "2px solid #0059D6" : "2px solid transparent",
                   background: "transparent", cursor: "pointer",
                   letterSpacing: active ? "-0.01em" : "normal",
                   whiteSpace: "nowrap",
@@ -191,7 +191,7 @@ export default function MissionaryDashboard() {
                   <span style={{
                     marginLeft: 6, fontSize: 11, fontWeight: 600,
                     background: active ? "#EFF6FF" : "transparent",
-                    color: active ? "#0085FF" : "#94A3B8",
+                    color: active ? "#0059D6" : "#94A3B8",
                     borderRadius: 999, padding: "1px 7px",
                   }}>
                     {tab.count}
@@ -276,8 +276,8 @@ export default function MissionaryDashboard() {
               className="flex-1 flex flex-col items-center justify-center gap-1 py-2.5"
               style={{ border: "none", background: "transparent", cursor: "pointer" }}
             >
-              <Icon style={{ width: 20, height: 20, color: active ? "#0085FF" : "#94A3B8" }} />
-              <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, color: active ? "#0085FF" : "#94A3B8" }}>{label}</span>
+              <Icon style={{ width: 20, height: 20, color: active ? "#0059D6" : "#94A3B8" }} />
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, color: active ? "#0059D6" : "#94A3B8" }}>{label}</span>
             </button>
           );
         })}
