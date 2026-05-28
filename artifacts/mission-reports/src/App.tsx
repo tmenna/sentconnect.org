@@ -115,6 +115,13 @@ function LandingPage() {
   const [content, setContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { logo: lpLogo, footerLogo: lpFooterLogo } = useLogo();
+  const [, navigate] = useLocation();
+
+  function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+    if (!href || href.startsWith("http://") || href.startsWith("https://") || href.startsWith("mailto:")) return;
+    e.preventDefault();
+    navigate(href);
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -169,6 +176,7 @@ function LandingPage() {
             </a>
             <a
               href={content.headerPrimaryCtaHref}
+              onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
               style={{ fontSize: 14, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F5F5F5"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
@@ -179,6 +187,7 @@ function LandingPage() {
           <div className="flex sm:hidden items-center gap-3">
             <a
               href={content.headerPrimaryCtaHref}
+              onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
               style={{ fontSize: 13, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "7px 16px", borderRadius: 999, textDecoration: "none" }}
             >{content.headerPrimaryCtaLabel}</a>
             <button
@@ -241,6 +250,7 @@ function LandingPage() {
               <div className="lp-animate lp-delay-4">
                 <a
                   href={content.primaryCtaHref}
+                  onClick={e => handleCtaClick(e, content.primaryCtaHref)}
                   style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,185,129,0.4)", transition: "background .15s, transform .15s, box-shadow .15s" }}
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,185,129,0.5)"; }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,185,129,0.4)"; }}
@@ -325,6 +335,7 @@ function LandingPage() {
             </p>
             <a
               href={content.primaryCtaHref}
+              onClick={e => handleCtaClick(e, content.primaryCtaHref)}
               style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(16,185,129,0.45)", transition: "transform .15s, box-shadow .15s, background .15s" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(16,185,129,0.55)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(16,185,129,0.45)"; }}
@@ -390,6 +401,13 @@ function AboutPage() {
   const [about, setAbout] = useState<AboutPageContent>(DEFAULT_ABOUT_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { logo: lpLogo } = useLogo();
+  const [, navigate] = useLocation();
+
+  function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+    if (!href || href.startsWith("http://") || href.startsWith("https://") || href.startsWith("mailto:")) return;
+    e.preventDefault();
+    navigate(href);
+  }
 
   useEffect(() => {
     fetch("/api/landing-page")
@@ -441,6 +459,7 @@ function AboutPage() {
             </a>
             <a
               href={lpContent.headerPrimaryCtaHref}
+              onClick={e => handleCtaClick(e, lpContent.headerPrimaryCtaHref)}
               style={{ fontSize: 14, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F5F5F5"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
@@ -451,6 +470,7 @@ function AboutPage() {
           <div className="flex sm:hidden items-center gap-3">
             <a
               href={lpContent.headerPrimaryCtaHref}
+              onClick={e => handleCtaClick(e, lpContent.headerPrimaryCtaHref)}
               style={{ fontSize: 13, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "7px 16px", borderRadius: 999, textDecoration: "none" }}
             >{lpContent.headerPrimaryCtaLabel}</a>
             <button
@@ -540,6 +560,7 @@ function AboutPage() {
             <p style={{ fontSize: 17, fontWeight: 700, color: TEXT, marginBottom: 20 }}>Ready to connect your church and field teams?</p>
             <a
               href={lpContent.primaryCtaHref}
+              onClick={e => handleCtaClick(e, lpContent.primaryCtaHref)}
               style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,89,214,0.32)", transition: "background .15s, transform .15s" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; }}
