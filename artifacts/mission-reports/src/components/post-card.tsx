@@ -822,7 +822,7 @@ export function PostCard({
           </div>
 
           {/* Comments — always visible when there are comments or input is open */}
-          {(comments.length > 0 || loadingComments || showComments) && (
+          {(comments.length > 0 || loadingComments || !!user) && (
             <div className="border-t border-border/40 px-4 py-3 bg-muted/20 space-y-3">
               {loadingComments ? (
                 <p className="text-[12px] text-muted-foreground">Loading…</p>
@@ -861,7 +861,7 @@ export function PostCard({
                 </div>
               ) : null}
 
-              {user && showComments && (
+              {user && (
                 <form onSubmit={submitComment} className="flex gap-2 items-center">
                   <Avatar className="h-7 w-7 flex-shrink-0">
                     <AvatarImage src={user.avatarUrl ?? undefined} />
