@@ -105,7 +105,7 @@ function OrgPermissionsEditor({
             {icon}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: "#0F172A", margin: 0 }}>{label}</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: "#000000", margin: 0 }}>{label}</p>
             <p style={{ fontSize: 12, color: "#64748B", margin: 0 }}>{desc}</p>
           </div>
           <input
@@ -246,7 +246,7 @@ function EditRolePermissionsModal({
               disabled={saving}
               className="flex-1 h-11 flex items-center justify-center gap-2 px-4 text-[13px] font-semibold text-white rounded-lg transition-colors disabled:opacity-50"
               style={{ background: "#374151" }}
-              onMouseEnter={e => { if (!saving) e.currentTarget.style.background = "#1F2937"; }}
+              onMouseEnter={e => { if (!saving) e.currentTarget.style.background = "#000000"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "#374151"; }}
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
@@ -299,7 +299,7 @@ function StatCard({ label, value, icon, accent, onClick }: {
     >
       <div className={`p-3 rounded-xl flex-shrink-0 ${accent ?? "bg-primary/10 text-primary"}`}>{icon}</div>
       <div>
-        <p className="text-[28px] font-extrabold leading-none" style={{ color: "#111827" }}>{value}</p>
+        <p className="text-[28px] font-extrabold leading-none" style={{ color: "#000000" }}>{value}</p>
         <p className="text-[13px] mt-1 font-medium" style={{ color: "#9CA3AF" }}>{label}</p>
       </div>
     </div>
@@ -313,7 +313,7 @@ function RoleBadge({ role }: { role: string }) {
     </span>
   );
   return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F5F5F5", color: "#111827", border: "1px solid #D1D5DB" }}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F5F5F5", color: "#000000", border: "1px solid #D1D5DB" }}>
       <Globe className="h-3 w-3" /> Field User
     </span>
   );
@@ -472,7 +472,7 @@ function AddUserModal({ onClose, onAdded }: { onClose: () => void; onAdded: () =
               disabled={loading}
               className="flex-1 h-11 px-4 text-sm font-semibold text-white rounded-lg disabled:opacity-60 transition-colors"
               style={{ background: "#374151" }}
-              onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#1F2937"; }}
+              onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#000000"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "#374151"; }}
             >
               {loading ? "Creating…" : "Create Member"}
@@ -544,10 +544,10 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/50">
           <div className="flex items-center gap-2.5">
             <div className="p-1.5 rounded-lg" style={{ background: "#F5F5F5" }}>
-              <KeyRound className="h-4 w-4" style={{ color: "#111827" }} />
+              <KeyRound className="h-4 w-4" style={{ color: "#000000" }} />
             </div>
             <div>
-              <p className="font-bold text-[14px]" style={{ color: "#111827" }}>Manage Password</p>
+              <p className="font-bold text-[14px]" style={{ color: "#000000" }}>Manage Password</p>
               <p className="text-[12px]" style={{ color: "#9CA3AF" }}>{user.name} · {user.email}</p>
             </div>
           </div>
@@ -626,7 +626,7 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
                   <div className="px-4 py-3" style={{ background: "#F8FAFD" }}>
                     <p className="text-[11px] font-semibold uppercase tracking-wide mb-2" style={{ color: "#9CA3AF" }}>Temporary Password — share with user</p>
                     <div className="flex items-center gap-2">
-                      <code className="flex-1 text-[18px] font-bold tracking-widest" style={{ color: "#111827", fontFamily: "monospace" }}>
+                      <code className="flex-1 text-[18px] font-bold tracking-widest" style={{ color: "#000000", fontFamily: "monospace" }}>
                         {genResult.tempPassword}
                       </code>
                       <button
@@ -789,12 +789,12 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 flex-shrink-0 rounded-xl">
               <AvatarImage src={u.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-bold text-[14px] rounded-xl" style={u.role === "admin" ? { background: "#F5F5F5", color: "#000000" } : { background: "#F5F5F5", color: "#111827" }}>
+              <AvatarFallback className="font-bold text-[14px] rounded-xl" style={u.role === "admin" ? { background: "#F5F5F5", color: "#000000" } : { background: "#F5F5F5", color: "#000000" }}>
                 {u.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <p className="text-[15px] font-bold leading-tight" style={{ color: "#111827" }}>{u.name}</p>
+              <p className="text-[15px] font-bold leading-tight" style={{ color: "#000000" }}>{u.name}</p>
               <p className="text-[13px] mt-0.5" style={{ color: "#9CA3AF" }}>{u.email}</p>
               {editingBio ? (
                 <div className="mt-1.5 space-y-1.5">
@@ -879,7 +879,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               disabled={busy}
               className="p-2 rounded-lg transition-colors"
               style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#111827"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#000000"; }}
               onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
               <Settings2 className="h-3.5 w-3.5" />
@@ -903,7 +903,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               disabled={busy}
               className="p-2 rounded-lg transition-colors"
               style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F5F5F5"; e.currentTarget.style.color = "#111827"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F5F5F5"; e.currentTarget.style.color = "#000000"; }}
               onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
               <KeyRound className="h-4 w-4" />
@@ -1079,7 +1079,7 @@ export default function AdminDashboard() {
             <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", marginBottom: 6 }}>
               Workspace
             </p>
-            <p style={{ fontSize: 22, fontWeight: 800, color: "#0f0f13", margin: 0, lineHeight: 1.2, letterSpacing: "-0.02em" }}>
+            <p style={{ fontSize: 22, fontWeight: 800, color: "#000000", margin: 0, lineHeight: 1.2, letterSpacing: "-0.02em" }}>
               Global Partners
             </p>
             <p style={{ fontSize: 12, color: "#94A3B8", margin: "2px 0 0" }}>
@@ -1118,7 +1118,7 @@ export default function AdminDashboard() {
                     transition: "all 0.12s",
                     position: "relative",
                   }}
-                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#0f0f13"; } }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#000000"; } }}
                   onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; } }}
                 >
                   <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
@@ -1139,7 +1139,7 @@ export default function AdminDashboard() {
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div style={{ minWidth: 0 }}>
-              <p style={{ fontSize: 12.5, fontWeight: 600, color: "#0f0f13", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
+              <p style={{ fontSize: 12.5, fontWeight: 600, color: "#000000", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
               <p style={{ fontSize: 11, color: "#94A3B8", margin: 0 }}>{user.role}</p>
             </div>
           </div>
@@ -1154,7 +1154,7 @@ export default function AdminDashboard() {
             {/* Toolbar — label left, controls right */}
             <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 0 }}>
               <div className="flex items-center" style={{ paddingBottom: 12, paddingTop: 6 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: "#0F172A" }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#000000" }}>
                   Team Members
                 </span>
                 {!usersLoading && (
@@ -1170,15 +1170,15 @@ export default function AdminDashboard() {
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className="text-[13px] border rounded-lg px-3 h-8 bg-white outline-none transition-all"
-                  style={{ borderColor: searchQuery ? "#111827" : "#E5E7EB", minWidth: 200 }}
+                  style={{ borderColor: searchQuery ? "#000000" : "#E5E7EB", minWidth: 200 }}
                   onFocus={e => { e.target.style.borderColor = "#0059D6"; e.target.style.boxShadow = "0 0 0 2px rgba(0,89,214,0.08)"; }}
-                  onBlur={e => { e.target.style.borderColor = searchQuery ? "#111827" : "#E5E7EB"; e.target.style.boxShadow = "none"; }}
+                  onBlur={e => { e.target.style.borderColor = searchQuery ? "#000000" : "#E5E7EB"; e.target.style.boxShadow = "none"; }}
                 />
                 <button
                   onClick={() => setShowAddModal(true)}
                   className="flex items-center gap-1.5 px-4 text-[13px] font-semibold text-white rounded-lg whitespace-nowrap transition-all duration-200 hover:-translate-y-px"
                   style={{ backgroundColor: "#374151", height: "32px", boxShadow: "0 2px 8px rgba(5,150,105,0.20)" }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#1F2937"; }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#000000"; }}
                   onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#374151"; }}
                 >
                   <Plus className="h-3.5 w-3.5" />
@@ -1394,7 +1394,7 @@ export default function AdminDashboard() {
             {/* Toolbar — label left, count right */}
             <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 0 }}>
               <div className="flex items-center" style={{ paddingBottom: 12, paddingTop: 6 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: "#0F172A" }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#000000" }}>
                   Team Locations
                 </span>
                 {!usersLoading && countriesCount > 0 && (
@@ -1438,13 +1438,13 @@ export default function AdminDashboard() {
                     {/* Country header */}
                     <div className="px-5 py-4 border-b border-border/40 flex items-center gap-3">
                       <div className="flex items-center justify-center h-8 w-8 rounded-lg flex-shrink-0" style={{ background: "#F5F5F5" }}>
-                        <MapPin className="h-4 w-4" style={{ color: "#111827" }} />
+                        <MapPin className="h-4 w-4" style={{ color: "#000000" }} />
                       </div>
                       <div>
                         <p className="font-bold text-[15px] text-foreground">{country}</p>
                         {city && <p className="text-[12px] text-muted-foreground mt-0.5">{city}</p>}
                       </div>
-                      <span className="ml-auto text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ background: "#F5F5F5", color: "#111827" }}>
+                      <span className="ml-auto text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ background: "#F5F5F5", color: "#000000" }}>
                         {members.length} {members.length === 1 ? "member" : "members"}
                       </span>
                     </div>
@@ -1484,7 +1484,7 @@ export default function AdminDashboard() {
 
             {/* Section header */}
             <div style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 16 }}>
-              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#0F172A", letterSpacing: "-0.02em", margin: "0 0 4px" }}>
+              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#000000", letterSpacing: "-0.02em", margin: "0 0 4px" }}>
                 Organization Logo
               </h2>
               <p style={{ fontSize: 14, color: "#374151", margin: 0 }}>
@@ -1576,15 +1576,15 @@ export default function AdminDashboard() {
                     onChange={e => setBrandingInput(e.target.value)}
                     placeholder="https://example.com/logo.png"
                     className="flex-1 rounded-xl border px-4 outline-none transition-all"
-                    style={{ fontSize: 14, height: 44, borderColor: "#E2E8F0", color: "#0F172A" }}
-                    onFocus={e => { e.currentTarget.style.borderColor = "#111827"; }}
+                    style={{ fontSize: 14, height: 44, borderColor: "#E2E8F0", color: "#000000" }}
+                    onFocus={e => { e.currentTarget.style.borderColor = "#000000"; }}
                     onBlur={e => { e.currentTarget.style.borderColor = "#E2E8F0"; }}
                   />
                   <button
                     onClick={() => saveBrandingLogo(brandingInput.trim() || null)}
                     disabled={brandingSaving || brandingInput.trim() === (brandingLogoUrl ?? "")}
                     className="flex items-center gap-1.5 rounded-xl transition-all duration-150 disabled:opacity-40"
-                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#111827", border: "none", padding: "0 20px", height: 44, cursor: "pointer", whiteSpace: "nowrap" }}
+                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#000000", border: "none", padding: "0 20px", height: 44, cursor: "pointer", whiteSpace: "nowrap" }}
                   >
                     {brandingSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                     Save

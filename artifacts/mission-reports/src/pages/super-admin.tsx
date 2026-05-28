@@ -3181,7 +3181,7 @@ export default function SuperAdminPanel() {
       {/* ── Page header ── */}
       <div className="flex items-start justify-between gap-4 pb-6" style={{ borderBottom: "1px solid #E9E9E9" }}>
         <div>
-          <h1 className="text-[32px] font-bold leading-tight tracking-tight" style={{ color: "#1F2937" }}>
+          <h1 className="text-[32px] font-bold leading-tight tracking-tight" style={{ color: "#000000" }}>
             Platform Admin
           </h1>
           <p className="text-[15px] mt-1.5" style={{ color: "#6B7280" }}>

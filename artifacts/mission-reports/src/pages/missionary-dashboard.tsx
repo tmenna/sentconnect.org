@@ -58,7 +58,7 @@ export default function MissionaryDashboard() {
           <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", margin: "0 0 8px" }}>
             Workspace
           </p>
-          <p style={{ fontSize: 20, fontWeight: 800, color: "#0f0f13", margin: 0, lineHeight: 1.25, letterSpacing: "-0.03em" }}>
+          <p style={{ fontSize: 20, fontWeight: 800, color: "#000000", margin: 0, lineHeight: 1.25, letterSpacing: "-0.03em" }}>
             Missions Feed
           </p>
           <p style={{ fontSize: 14, color: "#94A3B8", margin: "4px 0 0" }}>
@@ -92,7 +92,7 @@ export default function MissionaryDashboard() {
                   fontSize: 13.5, fontWeight: active ? 700 : 500,
                   cursor: "pointer", transition: "all 0.12s",
                 }}
-                onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#0f0f13"; } }}
+                onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#000000"; } }}
                 onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; } }}
               >
                 <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
@@ -111,7 +111,7 @@ export default function MissionaryDashboard() {
                 background: "transparent", color: "#64748B",
                 fontSize: 13.5, fontWeight: 400, cursor: "pointer", transition: "all 0.12s",
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#0f0f13"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#000000"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; }}
             >
               <User style={{ width: 15, height: 15, flexShrink: 0 }} />
@@ -126,7 +126,7 @@ export default function MissionaryDashboard() {
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div style={{ minWidth: 0 }}>
-            <p style={{ fontSize: 12.5, fontWeight: 600, color: "#0f0f13", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
+            <p style={{ fontSize: 12.5, fontWeight: 600, color: "#000000", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
             <p style={{ fontSize: 11, color: "#94A3B8", margin: 0 }}>Field User</p>
           </div>
         </div>
@@ -140,7 +140,7 @@ export default function MissionaryDashboard() {
         {/* Page header */}
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-[26px] font-bold tracking-tight leading-tight mb-1.5" style={{ color: "#111827" }}>
+            <h1 className="text-2xl sm:text-[26px] font-bold tracking-tight leading-tight mb-1.5" style={{ color: "#000000" }}>
               {activeTab === "moments" ? "Mission Moments" : "My Posts"}
             </h1>
             <p className="text-sm" style={{ color: "#6B7280" }}>
@@ -149,7 +149,7 @@ export default function MissionaryDashboard() {
           </div>
           <div className="flex items-center gap-2 flex-shrink-0 mt-1">
             <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full border"
-              style={{ color: "#0F172A", background: "#F1F5F9", borderColor: "#E2E8F0" }}>
+              style={{ color: "#000000", background: "#F1F5F9", borderColor: "#E2E8F0" }}>
               {allPosts.length} <span className="font-normal text-slate-400">posts</span>
             </span>
           </div>
@@ -232,7 +232,7 @@ export default function MissionaryDashboard() {
                 <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EBF5FF" }}>
                   <BookOpen className="h-6 w-6 text-slate-500" />
                 </div>
-                <p className="font-semibold text-base" style={{ color: "#111827" }}>No Mission Moments yet</p>
+                <p className="font-semibold text-base" style={{ color: "#000000" }}>No Mission Moments yet</p>
                 <p className="text-sm mt-1.5 text-slate-500">Mark a post as Mission Moments when you share an update.</p>
               </>
             ) : (
@@ -240,7 +240,7 @@ export default function MissionaryDashboard() {
                 <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
                   <FileText className="h-6 w-6 text-slate-400" />
                 </div>
-                <p className="font-semibold text-base" style={{ color: "#111827" }}>No posts yet</p>
+                <p className="font-semibold text-base" style={{ color: "#000000" }}>No posts yet</p>
                 <p className="text-sm mt-1.5 text-slate-500">Share your first update using the composer above.</p>
               </>
             )}
