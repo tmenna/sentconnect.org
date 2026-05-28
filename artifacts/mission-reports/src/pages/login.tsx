@@ -141,7 +141,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
     <div style={{ minHeight: "100dvh", display: "flex", fontFamily: "Inter, system-ui, sans-serif" }}>
 
       {/* ── Left panel (hidden on mobile) ── */}
-      <div className="hidden md:flex" style={{ flex: "0 0 36%", background: LEFT_BG, flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 40px" }}>
+      <div className="hidden md:flex" style={{ flex: "0 0 36%", background: LEFT_BG, flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 40px", position: "relative" }}>
         <div style={{ maxWidth: 260 }}>
           <p style={{ fontSize: 42, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 14px", whiteSpace: "pre-line" }}>
             {platformMode ? "Admin\nsign in" : "Sign in"}
@@ -152,7 +152,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               : "Enter your username and password"}
           </p>
         </div>
-        <p style={{ fontSize: 11, color: "#A8B8CC", fontStyle: "italic", marginTop: "auto", paddingTop: 48 }}>
+        <p style={{ position: "absolute", bottom: 32, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "#A8B8CC", fontStyle: "italic", margin: 0 }}>
           "Declare his glory among the nations." — Psalm 96:3
         </p>
       </div>
