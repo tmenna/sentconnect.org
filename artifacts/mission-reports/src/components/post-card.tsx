@@ -494,13 +494,16 @@ export function PostCard({
   const { user } = useAuth();
   const { orgSlug, prefix } = useOrg();
   const [post, setPost] = useState(initialPost);
-  const [showComments, setShowComments] = useState(true);
+  const [showComments, setShowComments] = useState(false);
   const [copied, setCopied] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loadingComments, setLoadingComments] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
+  const [showAllComments, setShowAllComments] = useState(false);
   const commentInputRef = useRef<HTMLInputElement>(null);
+
+  const COMMENT_PREVIEW = 5;
   const [showMenu, setShowMenu] = useState(false);
   const [editing, setEditing] = useState(false);
   const [showSlideExport, setShowSlideExport] = useState(false);
@@ -559,12 +562,13 @@ export function PostCard({
     }
   }
 
-  // Auto-load comments when opened in modal (defaultShowComments=true)
+  // Auto-load comments on mount if post has any, or when opened in modal
   useEffect(() => {
-    if (defaultShowComments) {
+    if (post.commentCount > 0 || defaultShowComments) {
       loadComments().then(() => {
-        // Small delay so the DOM has rendered the input
-        setTimeout(() => commentInputRef.current?.focus({ preventScroll: true }), 80);
+        if (defaultShowComments) {
+          setTimeout(() => commentInputRef.current?.focus({ preventScroll: true }), 80);
+        }
       });
     }
   }, []);
@@ -817,16 +821,14 @@ export function PostCard({
             )}
           </div>
 
-          {/* Comments */}
-          {showComments && (
+          {/* Comments — always visible when there are comments or input is open */}
+          {(comments.length > 0 || loadingComments || showComments) && (
             <div className="border-t border-border/40 px-4 py-3 bg-muted/20 space-y-3">
               {loadingComments ? (
                 <p className="text-[12px] text-muted-foreground">Loading…</p>
-              ) : comments.length === 0 ? (
-                <p className="text-[12px] text-muted-foreground">No comments yet.</p>
-              ) : (
+              ) : comments.length > 0 ? (
                 <div className="space-y-2.5">
-                  {comments.map(c => (
+                  {(showAllComments ? comments : comments.slice(0, COMMENT_PREVIEW)).map(c => (
                     <div key={c.id} className="flex gap-2.5">
                       <Avatar className="h-7 w-7 flex-shrink-0">
                         <AvatarImage src={c.author.avatarUrl ?? undefined} />
@@ -845,10 +847,21 @@ export function PostCard({
                       </div>
                     </div>
                   ))}
+                  {comments.length > COMMENT_PREVIEW && (
+                    <button
+                      onClick={() => setShowAllComments(s => !s)}
+                      className="text-[12px] font-semibold transition-colors"
+                      style={{ color: "#0059D6", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                    >
+                      {showAllComments
+                        ? "Show less"
+                        : `Show ${comments.length - COMMENT_PREVIEW} more comment${comments.length - COMMENT_PREVIEW === 1 ? "" : "s"}`}
+                    </button>
+                  )}
                 </div>
-              )}
+              ) : null}
 
-              {user && (
+              {user && showComments && (
                 <form onSubmit={submitComment} className="flex gap-2 items-center">
                   <Avatar className="h-7 w-7 flex-shrink-0">
                     <AvatarImage src={user.avatarUrl ?? undefined} />
