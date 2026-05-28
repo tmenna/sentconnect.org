@@ -5,7 +5,7 @@ import { Redirect, Link } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
-import { FileText, Star, CircleUser, PenSquare } from "lucide-react";
+import { FileText, Star, CircleUser, PenSquare, BookOpen } from "lucide-react";
 
 type FeedTab = "all" | "moments";
 
@@ -39,6 +39,12 @@ export default function MissionaryDashboard() {
 
   const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
   const firstName = user.name.split(" ")[0];
+
+  const navItems: { id: FeedTab | "profile"; label: string; Icon: React.ElementType }[] = [
+    { id: "all",     label: "My Posts",        Icon: FileText },
+    { id: "moments", label: "Moments",          Icon: Star },
+    { id: "profile", label: "Profile",          Icon: CircleUser },
+  ];
 
   return (
     <div className="flex bg-white min-h-[600px] mx-auto w-full" style={{ maxWidth: 960 }}>
