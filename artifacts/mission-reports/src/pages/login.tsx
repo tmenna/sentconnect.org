@@ -141,12 +141,12 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
     <div style={{ minHeight: "100dvh", display: "flex", fontFamily: "Inter, system-ui, sans-serif" }}>
 
       {/* ── Left panel (hidden on mobile) ── */}
-      <div className="hidden md:flex" style={{ flex: "0 0 30%", background: LEFT_BG, flexDirection: "column", alignItems: "flex-end", justifyContent: "center", padding: "48px 56px 48px 32px", position: "relative" }}>
-        <div style={{ maxWidth: 240 }}>
-          <p style={{ fontSize: 42, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 14px", whiteSpace: "pre-line" }}>
+      <div className="hidden md:flex" style={{ flex: "0 0 34%", background: LEFT_BG, flexDirection: "column", alignItems: "flex-end", justifyContent: "center", padding: "48px 60px 48px 32px", position: "relative" }}>
+        <div style={{ maxWidth: 280 }}>
+          <p style={{ fontSize: 48, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 16px", whiteSpace: "pre-line" }}>
             {platformMode ? "Admin\nsign in" : "Sign in"}
           </p>
-          <p style={{ fontSize: 15, fontWeight: 600, color: "#3A4A5C", margin: 0, lineHeight: 1.5 }}>
+          <p style={{ fontSize: 17, fontWeight: 600, color: "#3A4A5C", margin: 0, lineHeight: 1.5, whiteSpace: "nowrap" }}>
             {platformMode
               ? "SentConnect platform administration."
               : "Enter your username and password"}
