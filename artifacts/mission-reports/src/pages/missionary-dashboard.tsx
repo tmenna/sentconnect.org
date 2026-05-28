@@ -51,7 +51,7 @@ export default function MissionaryDashboard() {
 
       {/* ── Sidebar — desktop only ── */}
       <aside className="hidden sm:flex flex-col flex-shrink-0 border-r border-slate-100"
-        style={{ width: 220, padding: "24px 12px 20px" }}>
+        style={{ width: 210, padding: "24px 8px 20px" }}>
 
         {/* Workspace label */}
         <div style={{ marginBottom: 28, padding: "0 8px" }}>
@@ -88,12 +88,12 @@ export default function MissionaryDashboard() {
                   padding: "9px 10px",
                   borderRadius: 8, border: "none",
                   background: active ? "#0059D6" : "transparent",
-                  color: active ? "#ffffff" : "#64748B",
-                  fontSize: 13.5, fontWeight: active ? 700 : 500,
+                  color: active ? "#ffffff" : "#2B2B2B",
+                  fontSize: 13.5, fontWeight: active ? 700 : 600,
                   cursor: "pointer", transition: "all 0.12s",
                 }}
-                onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#2B2B2B"; } }}
-                onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; } }}
+                onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F0F4FF"; e.currentTarget.style.color = "#0059D6"; } }}
+                onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2B2B2B"; } }}
               >
                 <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
                 {label}
@@ -108,11 +108,11 @@ export default function MissionaryDashboard() {
                 display: "flex", alignItems: "center", gap: 10,
                 width: "100%", textAlign: "left",
                 padding: "9px 10px", borderRadius: 8, border: "none",
-                background: "transparent", color: "#64748B",
-                fontSize: 13.5, fontWeight: 400, cursor: "pointer", transition: "all 0.12s",
+                background: "transparent", color: "#2B2B2B",
+                fontSize: 13.5, fontWeight: 600, cursor: "pointer", transition: "all 0.12s",
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#2B2B2B"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F0F4FF"; e.currentTarget.style.color = "#0059D6"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2B2B2B"; }}
             >
               <User style={{ width: 15, height: 15, flexShrink: 0 }} />
               Profile
@@ -134,7 +134,7 @@ export default function MissionaryDashboard() {
 
       {/* ── Main content ── */}
       {/* pb-24 on mobile leaves room for the fixed bottom nav */}
-      <main className="flex-1 min-w-0 flex flex-col px-4 sm:pl-6 sm:pr-8 py-6 sm:py-7 pb-24 sm:pb-8">
+      <main className="flex-1 min-w-0 flex flex-col px-4 sm:pl-4 sm:pr-8 py-6 sm:py-7 pb-24 sm:pb-8">
       <div className="w-full max-w-[620px] flex flex-col gap-6 sm:gap-7">
 
         {/* Page header */}

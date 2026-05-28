@@ -1065,10 +1065,10 @@ export default function AdminDashboard() {
 
         {/* ── Sidebar ── */}
         <aside style={{
-          width: 240, flexShrink: 0,
+          width: 220, flexShrink: 0,
           background: "#fff",
           display: "flex", flexDirection: "column",
-          padding: "24px 12px 20px",
+          padding: "24px 8px 20px",
           borderRight: "1px solid #F1F5F9",
         }}>
 
@@ -1109,15 +1109,15 @@ export default function AdminDashboard() {
                     borderRadius: 6,
                     border: "none",
                     background: active ? "#0059D6" : "transparent",
-                    color: active ? "#fff" : "#64748B",
+                    color: active ? "#fff" : "#2B2B2B",
                     fontSize: 13,
-                    fontWeight: active ? 700 : 500,
+                    fontWeight: active ? 700 : 600,
                     cursor: "pointer",
                     transition: "all 0.12s",
                     position: "relative",
                   }}
-                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#2B2B2B"; } }}
-                  onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; } }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F0F4FF"; e.currentTarget.style.color = "#0059D6"; } }}
+                  onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2B2B2B"; } }}
                 >
                   <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
                   {label}
@@ -1144,7 +1144,7 @@ export default function AdminDashboard() {
         </aside>
 
         {/* ── Main content ── */}
-        <div style={{ flex: 1, minWidth: 0, padding: "28px 28px 28px 20px", background: "#fff", borderRadius: "0 16px 16px 0" }} className="space-y-4">
+        <div style={{ flex: 1, minWidth: 0, padding: "28px 28px 28px 14px", background: "#fff", borderRadius: "0 16px 16px 0" }} className="space-y-4">
 
         {/* ── Tab: Team ── */}
         {activeTab === "team" && (
