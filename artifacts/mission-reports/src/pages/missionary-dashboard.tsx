@@ -53,11 +53,8 @@ export default function MissionaryDashboard() {
       <aside className="hidden sm:flex flex-col flex-shrink-0 border-r border-slate-100"
         style={{ width: 210, padding: "24px 8px 20px" }}>
 
-        {/* Workspace label */}
+        {/* Header */}
         <div style={{ marginBottom: 28, padding: "0 8px" }}>
-          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", margin: "0 0 8px" }}>
-            Workspace
-          </p>
           <p style={{ fontSize: 20, fontWeight: 800, color: "#2B2B2B", margin: 0, lineHeight: 1.25, letterSpacing: "-0.03em" }}>
             Missions Feed
           </p>
@@ -66,24 +63,19 @@ export default function MissionaryDashboard() {
           </p>
         </div>
 
-        {/* Section label */}
-        <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", padding: "0 8px", margin: "0 0 4px" }}>
-          Activity
-        </p>
-
         {/* Nav */}
         <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
           {([
-            { id: "all",     label: "My Posts",       Icon: Rss },
-            { id: "moments", label: "Mission Moments", Icon: Star },
-          ] as { id: FeedTab; label: string; Icon: React.ElementType }[]).map(({ id, label, Icon }) => {
+            { id: "all",     label: "My Posts" },
+            { id: "moments", label: "Mission Moments" },
+          ] as { id: FeedTab; label: string }[]).map(({ id, label }) => {
             const active = activeTab === id;
             return (
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
                 style={{
-                  display: "flex", alignItems: "center", gap: 10,
+                  display: "flex", alignItems: "center",
                   width: "100%", textAlign: "left",
                   padding: "9px 10px",
                   borderRadius: 8, border: "none",
@@ -95,7 +87,6 @@ export default function MissionaryDashboard() {
                 onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F0F4FF"; e.currentTarget.style.color = "#0059D6"; } }}
                 onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2B2B2B"; } }}
               >
-                <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
                 {label}
               </button>
             );

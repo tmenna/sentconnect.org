@@ -1072,38 +1072,30 @@ export default function AdminDashboard() {
           borderRight: "1px solid #F1F5F9",
         }}>
 
-          {/* Workspace label */}
+          {/* Header */}
           <div style={{ marginBottom: 28, padding: "0 8px" }}>
-            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", marginBottom: 6 }}>
-              Workspace
-            </p>
             <p style={{ fontSize: 22, fontWeight: 800, color: "#2B2B2B", margin: 0, lineHeight: 1.2, letterSpacing: "-0.02em" }}>
-              Global Partners
+              Missions Feed
             </p>
             <p style={{ fontSize: 12, color: "#94A3B8", margin: "2px 0 0" }}>
               {user.organization ?? "Admin"}
             </p>
           </div>
 
-          {/* Section label */}
-          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", padding: "0 8px", marginBottom: 4 }}>
-            Manage
-          </p>
-
           {/* Nav items */}
           <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
             {([
-              { id: "feed",     label: "Updates",         Icon: Rss },
-              { id: "branding", label: "Branding",        Icon: Palette },
-              { id: "team",     label: "User Management", Icon: Users },
-            ] as const).map(({ id, label, Icon }) => {
+              { id: "feed",     label: "Updates" },
+              { id: "branding", label: "Branding" },
+              { id: "team",     label: "User Management" },
+            ] as const).map(({ id, label }) => {
               const active = activeTab === id;
               return (
                 <button
                   key={id}
                   onClick={() => setActiveTab(id)}
                   style={{
-                    display: "flex", alignItems: "center", gap: 10,
+                    display: "flex", alignItems: "center",
                     width: "100%", textAlign: "left",
                     padding: "9px 10px 9px 14px",
                     borderRadius: 6,
@@ -1119,7 +1111,6 @@ export default function AdminDashboard() {
                   onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F0F4FF"; e.currentTarget.style.color = "#0059D6"; } }}
                   onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2B2B2B"; } }}
                 >
-                  <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
                   {label}
                   {id === "team" && !usersLoading && (
                     <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600, background: "#F1F5F9", color: "#64748B", borderRadius: 999, padding: "1px 7px" }}>
