@@ -129,8 +129,8 @@ function LandingPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const BLUE      = "#8705FA";
-  const BLUE_DARK = "#8705FA";
+  const BLUE      = "#0085FF";
+  const BLUE_DARK = "#006FD6";
   const TEAL      = "#10B981";
   const TEAL_DARK = "#059669";
   const CHARCOAL  = "#1F2937";
@@ -142,7 +142,7 @@ function LandingPage() {
     <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* landing-page.css is imported statically at module level — no inline style needed */}
       {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,133,255,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             <img src={logoWhite} alt="SentConnect" style={{ maxHeight: 26, width: "auto", maxWidth: 160, display: "block" }} />
@@ -251,7 +251,7 @@ function LandingPage() {
             {/* Right — Mission Moments card */}
             <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 24, boxShadow: "0 12px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.04)", padding: "24px", position: "relative" }}>
               {/* accent dot */}
-              <div style={{ position: "absolute", top: -12, right: 32, width: 24, height: 24, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(135,5,250,0.45)" }} />
+              <div style={{ position: "absolute", top: -12, right: 32, width: 24, height: 24, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(0,133,255,0.45)" }} />
 
               {/* card header */}
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #F1F5F9" }}>
@@ -303,7 +303,7 @@ function LandingPage() {
                 { title: content.step3Title, desc: content.step3Description, n: "03" },
               ].map(({ title, desc, n }) => (
                 <div key={n} style={{ background: "#fff", borderRadius: 20, padding: "32px 28px", boxShadow: "0 12px 40px rgba(15,23,42,0.08)", border: "1px solid #F1F5F9" }}>
-                  <div style={{ width: 48, height: 48, borderRadius: "50%", background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, boxShadow: "0 4px 14px rgba(135,5,250,0.3)" }}>
+                  <div style={{ width: 48, height: 48, borderRadius: "50%", background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, boxShadow: "0 4px 14px rgba(0,133,255,0.3)" }}>
                     <span style={{ fontSize: 13, fontWeight: 900, color: "#fff", letterSpacing: "0.02em" }}>{n}</span>
                   </div>
                   <h3 style={{ fontSize: 18, fontWeight: 800, color: TEXT, margin: "0 0 12px", letterSpacing: "-0.025em" }}>{title}</h3>
@@ -403,8 +403,8 @@ function AboutPage() {
       .catch(() => setAbout(DEFAULT_ABOUT_PAGE_CONTENT));
   }, []);
 
-  const BLUE      = "#8705FA";
-  const BLUE_DARK = "#8705FA";
+  const BLUE      = "#0085FF";
+  const BLUE_DARK = "#006FD6";
   const TEXT      = "#0F172A";
   const TEXT2     = "#374151";
   const BG        = "#FFFFFF";
@@ -414,7 +414,7 @@ function AboutPage() {
   return (
     <div style={{ minHeight: "100vh", fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(135,5,250,0.28)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,133,255,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             <img src={logoWhite} alt="SentConnect" style={{ maxHeight: 26, width: "auto", maxWidth: 160, display: "block" }} />
@@ -540,7 +540,7 @@ function AboutPage() {
             <p style={{ fontSize: 17, fontWeight: 700, color: TEXT, marginBottom: 20 }}>Ready to connect your church and field teams?</p>
             <a
               href={lpContent.primaryCtaHref}
-              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(135,5,250,0.32)", transition: "background .15s, transform .15s" }}
+              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,133,255,0.32)", transition: "background .15s, transform .15s" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; }}
             >{lpContent.primaryCtaLabel}</a>

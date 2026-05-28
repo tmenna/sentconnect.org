@@ -50,7 +50,7 @@ export default function ResetPassword() {
   const inputStyle = { borderColor: "#E5E7EB" };
   function onFocus(e: React.FocusEvent<HTMLInputElement>) {
     e.target.style.borderColor = BLUE;
-    e.target.style.boxShadow = `0 0 0 3px rgba(135,5,250,0.1)`;
+    e.target.style.boxShadow = `0 0 0 3px rgba(0,133,255,0.1)`;
   }
   function onBlur(e: React.FocusEvent<HTMLInputElement>) {
     e.target.style.borderColor = "#E5E7EB";

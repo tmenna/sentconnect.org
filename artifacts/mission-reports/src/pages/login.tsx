@@ -22,7 +22,7 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const PURPLE = "#8705FA";
+const PURPLE = "#0085FF";
 const DARK   = "#0f0f13";
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
@@ -93,7 +93,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   if (isAuthenticated && user) return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-4 bg-white">
       <div className="w-full max-w-[400px] text-center">
-        <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "#F4EEFF", border: `1.5px solid #D8B4FE` }}>
+        <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "#EFF6FF", border: `1.5px solid #BFDBFE` }}>
           <span className="font-bold text-[15px]" style={{ color: PURPLE }}>{user.name.charAt(0).toUpperCase()}</span>
         </div>
         <h2 className="text-[17px] font-semibold mb-1" style={{ color: DARK }}>You're signed in</h2>
@@ -141,7 +141,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               </p>
             )}
             {orgName && (
-              <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full" style={{ background: "#F4EEFF", border: "1px solid #D8B4FE" }}>
+              <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
                 <div style={{ width: 5, height: 5, borderRadius: "50%", background: PURPLE, flexShrink: 0 }} />
                 <span style={{ fontSize: 11, fontWeight: 700, color: PURPLE, letterSpacing: "0.06em", textTransform: "uppercase" }}>{orgName}</span>
               </div>

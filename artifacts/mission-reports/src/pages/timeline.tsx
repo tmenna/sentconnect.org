@@ -152,9 +152,9 @@ export default function Feed() {
                 marginBottom: -2,
                 fontSize: 15,
                 fontWeight: active ? 800 : 500,
-                color: active ? "#111827" : "#94A3B8",
+                color: active ? "#0085FF" : "#94A3B8",
                 border: "none",
-                borderBottom: active ? "2.5px solid #111827" : "2.5px solid transparent",
+                borderBottom: active ? "2.5px solid #0085FF" : "2.5px solid transparent",
                 background: "transparent",
                 cursor: "pointer",
                 letterSpacing: active ? "-0.02em" : "normal",
@@ -168,8 +168,8 @@ export default function Feed() {
                     marginLeft: 8,
                     fontSize: 12,
                     fontWeight: 700,
-                    background: active ? "#F5F5F5" : "#F8FAFC",
-                    color: active ? "#111827" : "#94A3B8",
+                    background: active ? "#EFF6FF" : "#F8FAFC",
+                    color: active ? "#0085FF" : "#94A3B8",
                     borderRadius: 999,
                     padding: "2px 9px",
                   }}
@@ -251,13 +251,14 @@ export default function Feed() {
         </div>
       ) : (
         <>
-          {/* Single-column PostCard feed */}
-          <div className="space-y-4">
+          {/* Single-column flat feed — Bluesky style */}
+          <div className="bg-white rounded-xl overflow-hidden" style={{ border: "1px solid #E7EAEF" }}>
             {displayedPosts.map((post) => (
               <PostCard
                 key={post.id}
                 post={post}
                 onDelete={handleDelete}
+                flat
               />
             ))}
           </div>

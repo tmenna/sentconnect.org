@@ -858,7 +858,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
             style={{
               fontSize: 11,
               fontWeight: 700,
-              background: "#8705FA",
+              background: "#0085FF",
               color: "#ffffff",
               borderRadius: 999,
               padding: "3px 10px",
@@ -1110,7 +1110,7 @@ export default function AdminDashboard() {
                     padding: "9px 10px 9px 14px",
                     borderRadius: 6,
                     border: "none",
-                    background: active ? "#8705FA" : "transparent",
+                    background: active ? "#0085FF" : "transparent",
                     color: active ? "#fff" : "#64748B",
                     fontSize: 13,
                     fontWeight: active ? 600 : 400,
@@ -1135,7 +1135,7 @@ export default function AdminDashboard() {
 
           {/* User info at bottom */}
           <div style={{ borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
-            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#F4EEFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#8705FA", flexShrink: 0 }}>
+            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#0085FF", flexShrink: 0 }}>
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div style={{ minWidth: 0 }}>
@@ -1171,7 +1171,7 @@ export default function AdminDashboard() {
                   onChange={e => setSearchQuery(e.target.value)}
                   className="text-[13px] border rounded-lg px-3 h-8 bg-white outline-none transition-all"
                   style={{ borderColor: searchQuery ? "#111827" : "#E5E7EB", minWidth: 200 }}
-                  onFocus={e => { e.target.style.borderColor = "#111827"; e.target.style.boxShadow = "0 0 0 2px rgba(135,5,250,0.08)"; }}
+                  onFocus={e => { e.target.style.borderColor = "#0085FF"; e.target.style.boxShadow = "0 0 0 2px rgba(0,133,255,0.08)"; }}
                   onBlur={e => { e.target.style.borderColor = searchQuery ? "#111827" : "#E5E7EB"; e.target.style.boxShadow = "none"; }}
                 />
                 <button
@@ -1221,7 +1221,7 @@ export default function AdminDashboard() {
                         <th className="px-5 py-4 text-left text-[13px] font-700 tracking-wide uppercase" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11 }}>Member</th>
                         <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
                         <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
-                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#8705FA", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
+                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#0085FF", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
                         <th className="px-5 py-4 text-right" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
                       </tr>
                     </thead>
