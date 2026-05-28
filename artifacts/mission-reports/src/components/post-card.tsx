@@ -631,56 +631,54 @@ export function PostCard({
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={flat
-        ? "overflow-hidden transition-colors duration-100"
-        : "rounded-xl overflow-hidden transition-colors duration-100"}
-      style={flat
-        ? { background: hovered ? "#F6F8FA" : "#ffffff", borderBottom: "1px solid #E2E8F0" }
-        : {
-            background: hovered ? "#F6F8FA" : "#ffffff",
-            border: "1px solid #E2E8F0",
-            borderLeft: (!post.isMissionMoment && post.isHighlight) ? "2px solid #F59E0B" : "1px solid #E2E8F0",
-            boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
-          }}
+      className="overflow-hidden transition-colors duration-150"
+      style={{
+        background: hovered ? "rgba(15,20,25,0.02)" : "#ffffff",
+        borderBottom: "1px solid #E5E7EB",
+        borderLeft: (!post.isMissionMoment && post.isHighlight) ? "3px solid #F59E0B" : "none",
+      }}
     >
       {/* Mission Moment banner */}
       {post.isMissionMoment && (
-        <div className="flex items-center gap-2.5 px-5 py-3" style={{ background: "#ffffff", borderBottom: "1px solid #E2E8F0" }}>
-          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#2B2B2B" }} />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#2B2B2B", letterSpacing: "0.09em", textTransform: "uppercase", flexGrow: 1 }}>
+        <div className="flex items-center gap-2 px-4 sm:px-5 py-2" style={{ background: "#FFFBEB", borderBottom: "1px solid #E5E7EB" }}>
+          <BookOpen className="h-3 w-3 flex-shrink-0" style={{ color: "#92400E" }} />
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#92400E", letterSpacing: "0.07em", textTransform: "uppercase", flexGrow: 1 }}>
             Mission Moment
           </span>
-          <Sparkles className="h-3.5 w-3.5" style={{ color: "#94A3B8" }} />
+          <Sparkles className="h-3 w-3" style={{ color: "#D97706" }} />
         </div>
       )}
 
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 sm:px-5 pt-4 pb-3">
-        <Link href={`/missionaries/${post.author.id}`}>
-          <Avatar className="h-8 w-8 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #F3F4F6" }}>
+      <div className="flex items-start gap-3 px-4 sm:px-5 pt-3 pb-2">
+        <Link href={`/missionaries/${post.author.id}`} className="flex-shrink-0 mt-0.5">
+          <Avatar className="h-9 w-9 cursor-pointer" style={{ border: "1px solid #E5E7EB" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#F5F5F5", color: "#2B2B2B", fontWeight: 700, fontSize: 11 }}>
+            <AvatarFallback style={{ background: "#F3F4F6", color: "#0F1419", fontWeight: 700, fontSize: 12 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </Link>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <Link
               href={`/missionaries/${post.author.id}`}
-              className="transition-colors leading-none" style={{ fontSize: 14, fontWeight: 600, color: "#2B2B2B" }}
+              className="transition-colors leading-snug hover:underline"
+              style={{ fontSize: 15, fontWeight: 700, color: "#0F1419" }}
             >
               {post.author.name}
             </Link>
+            <span style={{ fontSize: 13, color: "#536471" }}>·</span>
+            <span style={{ fontSize: 13, color: "#536471", fontWeight: 400 }}>{timeAgo}</span>
             {post.location && (
-              <span className="flex items-center gap-1" style={{ fontSize: 12, color: "#94A3B8" }}>
+              <span className="flex items-center gap-1" style={{ fontSize: 13, color: "#536471" }}>
+                <span>·</span>
                 <MapPin className="h-3 w-3 flex-shrink-0" />
                 {post.location}
               </span>
             )}
           </div>
         </div>
-        <span style={{ fontSize: 11, color: "#6B7280" }} className="flex-shrink-0">{timeAgo}</span>
         {editing && (
           <button
             onClick={() => setEditing(false)}
@@ -703,11 +701,11 @@ export function PostCard({
         <>
           {/* Text */}
           {post.description && (
-            <div className="px-4 sm:px-5 pb-3">
+            <div className="px-4 sm:px-5 pb-2.5">
               <p style={{
-                fontSize: 14,
-                color: "#374151",
-                lineHeight: 1.65,
+                fontSize: 15,
+                color: "#0F1419",
+                lineHeight: 1.5,
                 whiteSpace: "pre-wrap",
                 overflow: textCollapsed ? "hidden" : undefined,
                 display: textCollapsed ? "-webkit-box" : undefined,
@@ -719,10 +717,10 @@ export function PostCard({
               {isLongPost && (
                 <button
                   onClick={() => setTextCollapsed(c => !c)}
-                  className="mt-1.5 text-[13px] font-semibold transition-colors"
-                  style={{ color: "#2B2B2B" }}
+                  className="mt-1 text-[14px] font-semibold transition-colors"
+                  style={{ color: "#0085FF" }}
                 >
-                  {textCollapsed ? "Read more →" : "Show less ↑"}
+                  {textCollapsed ? "Show more" : "Show less"}
                 </button>
               )}
             </div>
@@ -736,17 +734,17 @@ export function PostCard({
           )}
 
           {/* Action bar */}
-          <div className="flex items-center justify-between px-3 sm:px-4 py-1.5" style={{ borderTop: "1px solid #F1F5F9" }}>
-            <div className="flex items-center gap-0.5">
+          <div className="flex items-center justify-between px-4 sm:px-5 py-2" style={{ borderTop: "1px solid #E5E7EB" }}>
+            <div className="flex items-center gap-1">
               {/* Love */}
               <button
                 onClick={toggleLove}
                 className={cn(
-                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
-                  post.lovedByMe ? "text-[#E0245E]" : "text-[#94A3B8] hover:text-[#E0245E] hover:bg-[#FFF0F4]"
+                  "flex items-center gap-1.5 px-2 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150",
+                  post.lovedByMe ? "text-[#E0245E]" : "text-[#536471] hover:text-[#E0245E] hover:bg-[#FFF0F4]"
                 )}
               >
-                <Heart className={cn("h-4 w-4", post.lovedByMe ? "fill-[#E0245E] text-[#E0245E]" : "")} />
+                <Heart className={cn("h-[18px] w-[18px]", post.lovedByMe ? "fill-[#E0245E] text-[#E0245E]" : "")} />
                 {post.loveCount > 0 && <span>{post.loveCount}</span>}
               </button>
 
@@ -754,20 +752,20 @@ export function PostCard({
               <button
                 onClick={toggleLike}
                 className={cn(
-                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
-                  post.likedByMe ? "text-[#1877F2]" : "text-[#94A3B8] hover:text-[#1877F2] hover:bg-[#EEF4FF]"
+                  "flex items-center gap-1.5 px-2 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150",
+                  post.likedByMe ? "text-[#0085FF]" : "text-[#536471] hover:text-[#0085FF] hover:bg-[#E8F4FF]"
                 )}
               >
-                <ThumbsUp className={cn("h-4 w-4", post.likedByMe ? "fill-[#1877F2] text-[#1877F2]" : "")} />
+                <ThumbsUp className={cn("h-[18px] w-[18px]", post.likedByMe ? "fill-[#0085FF] text-[#0085FF]" : "")} />
                 {post.likeCount > 0 && <span>{post.likeCount}</span>}
               </button>
 
               {/* Comment */}
               <button
                 onClick={toggleComments}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-medium text-[#94A3B8] hover:text-[#64748B] hover:bg-[#F8FAFC] transition-colors"
+                className="flex items-center gap-1.5 px-2 py-1.5 rounded-full text-[13px] font-medium text-[#536471] hover:text-[#0085FF] hover:bg-[#E8F4FF] transition-all duration-150"
               >
-                <MessageCircle className="h-4 w-4" />
+                <MessageCircle className="h-[18px] w-[18px]" />
                 {post.commentCount > 0 && <span>{post.commentCount}</span>}
               </button>
             </div>
@@ -821,37 +819,37 @@ export function PostCard({
             )}
           </div>
 
-          {/* Comments — always visible when there are comments or input is open */}
+          {/* Comments */}
           {(comments.length > 0 || loadingComments || !!user) && (
-            <div className="border-t border-border/40 px-4 py-3 bg-muted/20 space-y-3">
+            <div className="px-4 sm:px-5 pb-3 pt-1 space-y-2.5" style={{ borderTop: "1px solid #E5E7EB" }}>
               {loadingComments ? (
-                <p className="text-[12px] text-muted-foreground">Loading…</p>
+                <p className="text-[13px] pt-2" style={{ color: "#536471" }}>Loading…</p>
               ) : comments.length > 0 ? (
-                <div className="space-y-2.5">
+                <div className="space-y-2 pt-2">
                   {(showAllComments ? comments : comments.slice(0, COMMENT_PREVIEW)).map(c => (
                     <div key={c.id} className="flex gap-2.5">
-                      <Avatar className="h-7 w-7 flex-shrink-0">
+                      <Avatar className="h-8 w-8 flex-shrink-0 mt-0.5" style={{ border: "1px solid #E5E7EB" }}>
                         <AvatarImage src={c.author.avatarUrl ?? undefined} />
-                        <AvatarFallback className="text-[10px] font-bold bg-primary/10 text-primary">
+                        <AvatarFallback style={{ background: "#F3F4F6", color: "#0F1419", fontWeight: 700, fontSize: 11 }}>
                           {c.author.name.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="flex-1 bg-white rounded-xl px-3 py-2 border border-border/40">
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="font-semibold text-[12px] text-foreground">{c.author.name}</span>
-                          <span className="text-[11px] text-muted-foreground">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span style={{ fontSize: 14, fontWeight: 700, color: "#0F1419" }}>{c.author.name}</span>
+                          <span style={{ fontSize: 13, color: "#536471" }}>·</span>
+                          <span style={{ fontSize: 13, color: "#536471" }}>
                             {formatDistanceToNow(new Date(c.createdAt), { addSuffix: true })}
                           </span>
                         </div>
-                        <p className="text-[13px] text-foreground mt-0.5">{c.text}</p>
+                        <p style={{ fontSize: 14, color: "#0F1419", lineHeight: 1.45, marginTop: 1 }}>{c.text}</p>
                       </div>
                     </div>
                   ))}
                   {comments.length > COMMENT_PREVIEW && (
                     <button
                       onClick={() => setShowAllComments(s => !s)}
-                      className="text-[12px] font-semibold transition-colors"
-                      style={{ color: "#0059D6", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                      style={{ fontSize: 13, fontWeight: 600, color: "#0085FF", background: "none", border: "none", cursor: "pointer", padding: 0 }}
                     >
                       {showAllComments
                         ? "Show less"
@@ -862,28 +860,30 @@ export function PostCard({
               ) : null}
 
               {user && (
-                <form onSubmit={submitComment} className="flex gap-2 items-center">
-                  <Avatar className="h-7 w-7 flex-shrink-0">
+                <form onSubmit={submitComment} className="flex gap-2.5 items-center pt-1">
+                  <Avatar className="h-8 w-8 flex-shrink-0" style={{ border: "1px solid #E5E7EB" }}>
                     <AvatarImage src={user.avatarUrl ?? undefined} />
-                    <AvatarFallback className="text-[10px] font-bold bg-primary/10 text-primary">
+                    <AvatarFallback style={{ background: "#F3F4F6", color: "#0F1419", fontWeight: 700, fontSize: 11 }}>
                       {user.name.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="flex-1 flex items-center gap-2 bg-white border border-border/60 rounded-full px-3 py-1.5">
+                  <div className="flex-1 flex items-center gap-2 rounded-full px-3.5 py-2" style={{ background: "#F7F9F9", border: "1px solid #E5E7EB" }}>
                     <input
                       ref={commentInputRef}
                       value={commentText}
                       onChange={e => setCommentText(e.target.value)}
                       placeholder="Write a comment…"
-                      className="flex-1 text-[13px] bg-transparent outline-none placeholder:text-muted-foreground"
+                      className="flex-1 bg-transparent outline-none"
+                      style={{ fontSize: 14, color: "#0F1419" }}
                       maxLength={500}
                     />
                     <button
                       type="submit"
                       disabled={!commentText.trim() || submittingComment}
-                      className="text-primary disabled:opacity-40 transition-opacity"
+                      className="transition-opacity disabled:opacity-30"
+                      style={{ color: "#0085FF" }}
                     >
-                      <Send className="h-3.5 w-3.5" />
+                      <Send className="h-4 w-4" />
                     </button>
                   </div>
                 </form>

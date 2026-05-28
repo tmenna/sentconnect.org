@@ -246,7 +246,7 @@ export default function MissionaryDashboard() {
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-xl overflow-hidden" style={{ border: "1px solid #E7EAEF" }}>
+          <div className="overflow-hidden" style={{ borderTop: "1px solid #E5E7EB" }}>
             {myPosts.map(post => (
               <PostCard key={post.id} post={post} hideViewPost onDelete={handleDelete} flat />
             ))}

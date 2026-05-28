@@ -1320,9 +1320,9 @@ export default function AdminDashboard() {
             </div>
 
             {feedLoading ? (
-              <div className="bg-white rounded-xl overflow-hidden" style={{ border: "1px solid #E7EAEF" }}>
+              <div className="overflow-hidden" style={{ borderTop: "1px solid #E5E7EB" }}>
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="p-5 space-y-3" style={{ borderBottom: i < 3 ? "1px solid #E7EAEF" : "none" }}>
+                  <div key={i} className="p-5 space-y-3" style={{ borderBottom: "1px solid #E5E7EB" }}>
                     <div className="flex items-center gap-3">
                       <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
                       <div className="space-y-1.5 flex-1">
@@ -1353,7 +1353,7 @@ export default function AdminDashboard() {
                 )}
               </div>
             ) : (
-              <div className="bg-white rounded-xl overflow-hidden" style={{ border: "1px solid #E7EAEF" }}>
+              <div className="overflow-hidden" style={{ borderTop: "1px solid #E5E7EB" }}>
                 {displayedFeedPosts.map(post => (
                   <PostCard
                     key={post.id}
