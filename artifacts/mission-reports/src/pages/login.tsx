@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { useLoginUser, useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useSearch, useLocation } from "wouter";
-import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock } from "lucide-react";
+import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe, Pencil } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
@@ -143,22 +143,14 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       {/* ── Left panel (hidden on mobile) ── */}
       <div className="hidden md:flex" style={{ flex: "0 0 36%", background: LEFT_BG, flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 40px" }}>
         <div style={{ maxWidth: 260 }}>
-          <p style={{ fontSize: 40, fontWeight: 700, color: BLUE, letterSpacing: "-0.025em", lineHeight: 1.1, margin: "0 0 12px", whiteSpace: "pre-line" }}>
-            {platformMode ? "Admin\nsign in." : "Sign in."}
+          <p style={{ fontSize: 42, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 14px", whiteSpace: "pre-line" }}>
+            {platformMode ? "Admin\nsign in" : "Sign in"}
           </p>
           <p style={{ fontSize: 15, fontWeight: 600, color: "#3A4A5C", margin: 0, lineHeight: 1.5 }}>
             {platformMode
               ? "SentConnect platform administration."
-              : "Enter your email and password."}
+              : "Enter your username and password"}
           </p>
-          {orgName && (
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#fff", border: "1px solid #D1DCF0", borderRadius: 999, padding: "5px 14px", marginTop: 20 }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: BLUE, flexShrink: 0 }} />
-              <span style={{ fontSize: 12, fontWeight: 700, color: BLUE, letterSpacing: "0.07em", textTransform: "uppercase" }}>
-                {orgName}
-              </span>
-            </div>
-          )}
         </div>
         <p style={{ fontSize: 11, color: "#A8B8CC", fontStyle: "italic", marginTop: "auto", paddingTop: 48 }}>
           "Declare his glory among the nations." — Psalm 96:3
@@ -170,16 +162,10 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
         {/* Mobile-only heading */}
         <div className="md:hidden" style={{ textAlign: "center", marginBottom: 32, width: "100%", maxWidth: 360 }}>
-          <p style={{ fontSize: 36, fontWeight: 700, color: BLUE, letterSpacing: "-0.025em", lineHeight: 1.1, margin: "0 0 8px" }}>
-            Sign in.
+          <p style={{ fontSize: 36, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 8px" }}>
+            Sign in
           </p>
-          <p style={{ fontSize: 14, fontWeight: 600, color: "#3A4A5C", margin: 0 }}>Enter your email and password.</p>
-          {orgName && (
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: LEFT_BG, borderRadius: 999, padding: "4px 12px", marginTop: 14 }}>
-              <div style={{ width: 5, height: 5, borderRadius: "50%", background: BLUE }} />
-              <span style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.07em", textTransform: "uppercase" as const }}>{orgName}</span>
-            </div>
-          )}
+          <p style={{ fontSize: 14, fontWeight: 600, color: "#3A4A5C", margin: 0 }}>Enter your username and password.</p>
         </div>
 
         <div style={{ width: "100%", maxWidth: 360 }}>
@@ -202,6 +188,22 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               )}
             </div>
           )}
+
+          {/* Hosting provider row */}
+          <p style={{ fontSize: 12, fontWeight: 600, color: "#8A9BB8", letterSpacing: "0.04em", textTransform: "uppercase", margin: "0 0 8px", paddingLeft: 2 }}>
+            {orgName ? "Organization" : "Hosting provider"}
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, background: INPUT_BG, borderRadius: 10, padding: "0 14px", height: 48, marginBottom: 16 }}>
+            <Globe style={{ width: 15, height: 15, color: "#9BACC4", flexShrink: 0 }} />
+            <span style={{ flex: 1, fontSize: 14, fontWeight: 500, color: "#111827", fontFamily: "inherit" }}>
+              {orgName ?? "SentConnect"}
+            </span>
+            {orgName && (
+              <Link href="/">
+                <Pencil style={{ width: 14, height: 14, color: "#9BACC4", cursor: "pointer", flexShrink: 0 }} />
+              </Link>
+            )}
+          </div>
 
           {/* Account label */}
           <p style={{ fontSize: 12, fontWeight: 600, color: "#8A9BB8", letterSpacing: "0.04em", textTransform: "uppercase", margin: "0 0 8px", paddingLeft: 2 }}>Account</p>
@@ -309,12 +311,11 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               />
 
               {/* Button row */}
-              <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginTop: 20 }}>
                 {!platformMode ? (
                   <Link
                     href="/signup"
                     style={{
-                      flex: "0 0 auto",
                       height: 42,
                       borderRadius: 999,
                       background: INPUT_BG,
@@ -325,7 +326,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                       display: "inline-flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      padding: "0 20px",
+                      padding: "0 22px",
                       whiteSpace: "nowrap",
                     }}
                   >
@@ -335,7 +336,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   <Link
                     href="/"
                     style={{
-                      flex: "0 0 auto",
                       height: 42,
                       borderRadius: 999,
                       background: INPUT_BG,
@@ -346,7 +346,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                       display: "inline-flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      padding: "0 20px",
+                      padding: "0 22px",
                     }}
                   >
                     Back
@@ -358,7 +358,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   disabled={login.isPending}
                   data-testid="btn-login-submit"
                   style={{
-                    flex: 1,
                     height: 42,
                     borderRadius: 999,
                     background: login.isPending ? "#4D8EFF" : BLUE,
@@ -367,10 +366,11 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                     fontWeight: 700,
                     border: "none",
                     cursor: login.isPending ? "not-allowed" : "pointer",
-                    display: "flex",
+                    display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
                     gap: 7,
+                    padding: "0 28px",
                     fontFamily: "inherit",
                     letterSpacing: "-0.01em",
                     transition: "background .15s",
