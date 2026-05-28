@@ -19,8 +19,7 @@ import { useUpload } from "@workspace/object-storage-web";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { type PostData } from "@/components/post-card";
-import { FeedGridCard, MasonryCard, PostDetailModal } from "@/components/feed-grid";
+import { PostCard, type PostData } from "@/components/post-card";
 import { format } from "date-fns";
 // ─── helpers ───────────────────────────────────────────────────────────────
 
@@ -105,7 +104,7 @@ function OrgPermissionsEditor({
             {icon}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: "#000000", margin: 0 }}>{label}</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: "#2B2B2B", margin: 0 }}>{label}</p>
             <p style={{ fontSize: 12, color: "#64748B", margin: 0 }}>{desc}</p>
           </div>
           <input
@@ -299,7 +298,7 @@ function StatCard({ label, value, icon, accent, onClick }: {
     >
       <div className={`p-3 rounded-xl flex-shrink-0 ${accent ?? "bg-primary/10 text-primary"}`}>{icon}</div>
       <div>
-        <p className="text-[28px] font-extrabold leading-none" style={{ color: "#000000" }}>{value}</p>
+        <p className="text-[28px] font-extrabold leading-none" style={{ color: "#2B2B2B" }}>{value}</p>
         <p className="text-[13px] mt-1 font-medium" style={{ color: "#9CA3AF" }}>{label}</p>
       </div>
     </div>
@@ -308,12 +307,12 @@ function StatCard({ label, value, icon, accent, onClick }: {
 
 function RoleBadge({ role }: { role: string }) {
   if (role === "admin") return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F5F5F5", color: "#000000", border: "1px solid #C7D2FE" }}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F5F5F5", color: "#2B2B2B", border: "1px solid #C7D2FE" }}>
       <ShieldCheck className="h-3 w-3" /> Admin
     </span>
   );
   return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F5F5F5", color: "#000000", border: "1px solid #D1D5DB" }}>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: "#F5F5F5", color: "#2B2B2B", border: "1px solid #D1D5DB" }}>
       <Globe className="h-3 w-3" /> Field User
     </span>
   );
@@ -544,10 +543,10 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/50">
           <div className="flex items-center gap-2.5">
             <div className="p-1.5 rounded-lg" style={{ background: "#F5F5F5" }}>
-              <KeyRound className="h-4 w-4" style={{ color: "#000000" }} />
+              <KeyRound className="h-4 w-4" style={{ color: "#2B2B2B" }} />
             </div>
             <div>
-              <p className="font-bold text-[14px]" style={{ color: "#000000" }}>Manage Password</p>
+              <p className="font-bold text-[14px]" style={{ color: "#2B2B2B" }}>Manage Password</p>
               <p className="text-[12px]" style={{ color: "#9CA3AF" }}>{user.name} · {user.email}</p>
             </div>
           </div>
@@ -626,7 +625,7 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
                   <div className="px-4 py-3" style={{ background: "#F8FAFD" }}>
                     <p className="text-[11px] font-semibold uppercase tracking-wide mb-2" style={{ color: "#9CA3AF" }}>Temporary Password — share with user</p>
                     <div className="flex items-center gap-2">
-                      <code className="flex-1 text-[18px] font-bold tracking-widest" style={{ color: "#000000", fontFamily: "monospace" }}>
+                      <code className="flex-1 text-[18px] font-bold tracking-widest" style={{ color: "#2B2B2B", fontFamily: "monospace" }}>
                         {genResult.tempPassword}
                       </code>
                       <button
@@ -789,12 +788,12 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 flex-shrink-0 rounded-xl">
               <AvatarImage src={u.avatarUrl ?? undefined} />
-              <AvatarFallback className="font-bold text-[14px] rounded-xl" style={u.role === "admin" ? { background: "#F5F5F5", color: "#000000" } : { background: "#F5F5F5", color: "#000000" }}>
+              <AvatarFallback className="font-bold text-[14px] rounded-xl" style={u.role === "admin" ? { background: "#F5F5F5", color: "#2B2B2B" } : { background: "#F5F5F5", color: "#2B2B2B" }}>
                 {u.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <p className="text-[15px] font-bold leading-tight" style={{ color: "#000000" }}>{u.name}</p>
+              <p className="text-[15px] font-bold leading-tight" style={{ color: "#2B2B2B" }}>{u.name}</p>
               <p className="text-[13px] mt-0.5" style={{ color: "#9CA3AF" }}>{u.email}</p>
               {editingBio ? (
                 <div className="mt-1.5 space-y-1.5">
@@ -879,7 +878,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               disabled={busy}
               className="p-2 rounded-lg transition-colors"
               style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#000000"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F3F4F6"; e.currentTarget.style.color = "#2B2B2B"; }}
               onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
               <Settings2 className="h-3.5 w-3.5" />
@@ -903,7 +902,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               disabled={busy}
               className="p-2 rounded-lg transition-colors"
               style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F5F5F5"; e.currentTarget.style.color = "#000000"; }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#F5F5F5"; e.currentTarget.style.color = "#2B2B2B"; }}
               onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#6B7280"; }}
             >
               <KeyRound className="h-4 w-4" />
@@ -950,7 +949,6 @@ export default function AdminDashboard() {
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
   const [filterUserId, setFilterUserId] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
 
   // ── Branding state ──
   const [brandingLogoUrl, setBrandingLogoUrl] = useState<string | null>(null);
@@ -1079,7 +1077,7 @@ export default function AdminDashboard() {
             <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", marginBottom: 6 }}>
               Workspace
             </p>
-            <p style={{ fontSize: 22, fontWeight: 800, color: "#000000", margin: 0, lineHeight: 1.2, letterSpacing: "-0.02em" }}>
+            <p style={{ fontSize: 22, fontWeight: 800, color: "#2B2B2B", margin: 0, lineHeight: 1.2, letterSpacing: "-0.02em" }}>
               Global Partners
             </p>
             <p style={{ fontSize: 12, color: "#94A3B8", margin: "2px 0 0" }}>
@@ -1118,7 +1116,7 @@ export default function AdminDashboard() {
                     transition: "all 0.12s",
                     position: "relative",
                   }}
-                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#000000"; } }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#2B2B2B"; } }}
                   onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748B"; } }}
                 >
                   <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
@@ -1139,7 +1137,7 @@ export default function AdminDashboard() {
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div style={{ minWidth: 0 }}>
-              <p style={{ fontSize: 12.5, fontWeight: 600, color: "#000000", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
+              <p style={{ fontSize: 12.5, fontWeight: 600, color: "#2B2B2B", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
               <p style={{ fontSize: 11, color: "#94A3B8", margin: 0 }}>{user.role}</p>
             </div>
           </div>
@@ -1154,7 +1152,7 @@ export default function AdminDashboard() {
             {/* Toolbar — label left, controls right */}
             <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 0 }}>
               <div className="flex items-center" style={{ paddingBottom: 12, paddingTop: 6 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: "#000000" }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#2B2B2B" }}>
                   Team Members
                 </span>
                 {!usersLoading && (
@@ -1322,23 +1320,19 @@ export default function AdminDashboard() {
             </div>
 
             {feedLoading ? (
-              <div style={{ columns: "1", columnGap: 20 }}>
-                {[1, 2, 3, 4, 5, 6].map(i => (
-                  <div key={i} style={{ breakInside: "avoid", display: "inline-block", width: "100%", marginBottom: 20 }}>
-                    <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)" }}>
-                      <Skeleton className="w-full" style={{ height: i % 3 === 0 ? 220 : i % 3 === 1 ? 160 : 190 }} />
-                      <div className="px-3.5 pt-3 pb-3.5 space-y-2">
-                        <Skeleton className="h-3.5 w-full rounded" />
-                        <Skeleton className="h-3.5 w-4/5 rounded" />
-                        <div className="pt-2 border-t border-gray-100 flex items-center gap-2">
-                          <Skeleton className="h-6 w-6 rounded-full flex-shrink-0" />
-                          <div className="flex-1 space-y-1">
-                            <Skeleton className="h-2.5 w-20 rounded" />
-                            <Skeleton className="h-2 w-12 rounded" />
-                          </div>
-                        </div>
+              <div className="bg-white rounded-xl overflow-hidden" style={{ border: "1px solid #E7EAEF" }}>
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="p-5 space-y-3" style={{ borderBottom: i < 3 ? "1px solid #E7EAEF" : "none" }}>
+                    <div className="flex items-center gap-3">
+                      <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
+                      <div className="space-y-1.5 flex-1">
+                        <Skeleton className="h-3.5 w-28" />
+                        <Skeleton className="h-2.5 w-20" />
                       </div>
                     </div>
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-4/5" />
+                    {i === 1 && <Skeleton className="h-48 w-full rounded-lg" />}
                   </div>
                 ))}
               </div>
@@ -1359,31 +1353,17 @@ export default function AdminDashboard() {
                 )}
               </div>
             ) : (
-              <div style={{ columns: "1", columnGap: 20 }}>
-                {displayedFeedPosts.map((post, i) => (
-                  <div key={post.id} style={{ breakInside: "avoid", display: "inline-block", width: "100%", marginBottom: 20 }}>
-                    <MasonryCard
-                      post={post}
-                      onClick={() => setSelectedPostIndex(i)}
-                    />
-                  </div>
+              <div className="bg-white rounded-xl overflow-hidden" style={{ border: "1px solid #E7EAEF" }}>
+                {displayedFeedPosts.map(post => (
+                  <PostCard
+                    key={post.id}
+                    post={post}
+                    hideViewPost
+                    onDelete={(id) => setFeedPosts(prev => prev ? prev.filter(p => p.id !== id) : null)}
+                    flat
+                  />
                 ))}
               </div>
-            )}
-
-            {/* Post detail modal */}
-            {selectedPostIndex !== null && displayedFeedPosts[selectedPostIndex] && (
-              <PostDetailModal
-                post={displayedFeedPosts[selectedPostIndex]}
-                allPosts={displayedFeedPosts}
-                postIndex={selectedPostIndex}
-                onNavigate={setSelectedPostIndex}
-                onClose={() => setSelectedPostIndex(null)}
-                onDelete={(id) => {
-                  setFeedPosts(prev => prev ? prev.filter(p => p.id !== id) : null);
-                  setSelectedPostIndex(null);
-                }}
-              />
             )}
           </div>
         )}
@@ -1394,7 +1374,7 @@ export default function AdminDashboard() {
             {/* Toolbar — label left, count right */}
             <div className="flex items-center justify-between gap-3 flex-wrap" style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 0 }}>
               <div className="flex items-center" style={{ paddingBottom: 12, paddingTop: 6 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: "#000000" }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#2B2B2B" }}>
                   Team Locations
                 </span>
                 {!usersLoading && countriesCount > 0 && (
@@ -1438,13 +1418,13 @@ export default function AdminDashboard() {
                     {/* Country header */}
                     <div className="px-5 py-4 border-b border-border/40 flex items-center gap-3">
                       <div className="flex items-center justify-center h-8 w-8 rounded-lg flex-shrink-0" style={{ background: "#F5F5F5" }}>
-                        <MapPin className="h-4 w-4" style={{ color: "#000000" }} />
+                        <MapPin className="h-4 w-4" style={{ color: "#2B2B2B" }} />
                       </div>
                       <div>
                         <p className="font-bold text-[15px] text-foreground">{country}</p>
                         {city && <p className="text-[12px] text-muted-foreground mt-0.5">{city}</p>}
                       </div>
-                      <span className="ml-auto text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ background: "#F5F5F5", color: "#000000" }}>
+                      <span className="ml-auto text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ background: "#F5F5F5", color: "#2B2B2B" }}>
                         {members.length} {members.length === 1 ? "member" : "members"}
                       </span>
                     </div>
@@ -1484,7 +1464,7 @@ export default function AdminDashboard() {
 
             {/* Section header */}
             <div style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: 16 }}>
-              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#000000", letterSpacing: "-0.02em", margin: "0 0 4px" }}>
+              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#2B2B2B", letterSpacing: "-0.02em", margin: "0 0 4px" }}>
                 Organization Logo
               </h2>
               <p style={{ fontSize: 14, color: "#374151", margin: 0 }}>
@@ -1576,7 +1556,7 @@ export default function AdminDashboard() {
                     onChange={e => setBrandingInput(e.target.value)}
                     placeholder="https://example.com/logo.png"
                     className="flex-1 rounded-xl border px-4 outline-none transition-all"
-                    style={{ fontSize: 14, height: 44, borderColor: "#E2E8F0", color: "#000000" }}
+                    style={{ fontSize: 14, height: 44, borderColor: "#E2E8F0", color: "#2B2B2B" }}
                     onFocus={e => { e.currentTarget.style.borderColor = "#000000"; }}
                     onBlur={e => { e.currentTarget.style.borderColor = "#E2E8F0"; }}
                   />

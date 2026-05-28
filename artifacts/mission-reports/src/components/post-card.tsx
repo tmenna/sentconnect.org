@@ -504,6 +504,7 @@ export function PostCard({
   const [showMenu, setShowMenu] = useState(false);
   const [editing, setEditing] = useState(false);
   const [showSlideExport, setShowSlideExport] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const isOwner = user?.id === post.author.id;
@@ -624,12 +625,15 @@ export function PostCard({
   return (
     <>
     <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       className={flat
-        ? "bg-white overflow-hidden"
-        : "bg-white rounded-xl overflow-hidden"}
+        ? "overflow-hidden transition-colors duration-100"
+        : "rounded-xl overflow-hidden transition-colors duration-100"}
       style={flat
-        ? { borderBottom: "1px solid #E2E8F0" }
+        ? { background: hovered ? "#F6F8FA" : "#ffffff", borderBottom: "1px solid #E2E8F0" }
         : {
+            background: hovered ? "#F6F8FA" : "#ffffff",
             border: "1px solid #E2E8F0",
             borderLeft: (!post.isMissionMoment && post.isHighlight) ? "2px solid #F59E0B" : "1px solid #E2E8F0",
             boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
@@ -638,8 +642,8 @@ export function PostCard({
       {/* Mission Moment banner */}
       {post.isMissionMoment && (
         <div className="flex items-center gap-2.5 px-5 py-3" style={{ background: "#ffffff", borderBottom: "1px solid #E2E8F0" }}>
-          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#0F172A" }} />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#0F172A", letterSpacing: "0.09em", textTransform: "uppercase", flexGrow: 1 }}>
+          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#2B2B2B" }} />
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#2B2B2B", letterSpacing: "0.09em", textTransform: "uppercase", flexGrow: 1 }}>
             Mission Moment
           </span>
           <Sparkles className="h-3.5 w-3.5" style={{ color: "#94A3B8" }} />
@@ -651,7 +655,7 @@ export function PostCard({
         <Link href={`/missionaries/${post.author.id}`}>
           <Avatar className="h-8 w-8 cursor-pointer flex-shrink-0" style={{ border: "1.5px solid #F3F4F6" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#F5F5F5", color: "#111827", fontWeight: 700, fontSize: 11 }}>
+            <AvatarFallback style={{ background: "#F5F5F5", color: "#2B2B2B", fontWeight: 700, fontSize: 11 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -660,7 +664,7 @@ export function PostCard({
           <div className="flex items-center gap-2 flex-wrap">
             <Link
               href={`/missionaries/${post.author.id}`}
-              className="transition-colors leading-none" style={{ fontSize: 14, fontWeight: 600, color: "#111827" }}
+              className="transition-colors leading-none" style={{ fontSize: 14, fontWeight: 600, color: "#2B2B2B" }}
             >
               {post.author.name}
             </Link>
@@ -712,7 +716,7 @@ export function PostCard({
                 <button
                   onClick={() => setTextCollapsed(c => !c)}
                   className="mt-1.5 text-[13px] font-semibold transition-colors"
-                  style={{ color: "#111827" }}
+                  style={{ color: "#2B2B2B" }}
                 >
                   {textCollapsed ? "Read more →" : "Show less ↑"}
                 </button>
