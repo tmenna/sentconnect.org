@@ -2,11 +2,9 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Loader2, CheckCircle2 } from "lucide-react";
 import { useOrg } from "@/providers/org-provider";
-import logoWhite from "@/assets/logo-white.png";
 
-const BG    = "linear-gradient(150deg, #3D0066 0%, #111827 55%, #374151 100%)";
-const BLUE  = "#111827";
-const BLUE_DK = "#000000";
+const BLUE    = "#006AFF";
+const BLUE_DK = "#0053CC";
 
 export default function ForgotPassword() {
   const { orgSlug, prefix } = useOrg();
@@ -43,15 +41,11 @@ export default function ForgotPassword() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-4 py-12"
-      style={{ background: BG }}
+      style={{ background: "#fff" }}
     >
-      <div className="flex items-center gap-2.5 mb-8">
-        <img src={logoWhite} alt="SentConnect" style={{ height: 28, display: "block" }} />
-      </div>
-
       <div
         className="w-full max-w-[420px] bg-white rounded-2xl px-8 py-8"
-        style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}
+        style={{ boxShadow: "0 0 0 1px #E5E7EB, 0 4px 24px rgba(0,0,0,0.07)" }}
       >
         {done ? (
           <div className="text-center">
@@ -99,7 +93,7 @@ export default function ForgotPassword() {
                   required
                   className="w-full h-11 px-4 text-[14px] rounded-xl border outline-none transition-all"
                   style={{ borderColor: "#E5E7EB" }}
-                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(0,89,214,0.1)`; }}
+                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(0,106,255,0.1)`; }}
                   onBlur={e => { e.target.style.borderColor = "#E5E7EB"; e.target.style.boxShadow = "none"; }}
                 />
               </div>
@@ -124,7 +118,7 @@ export default function ForgotPassword() {
         )}
       </div>
 
-      <p className="mt-8 text-white/40 text-[12px]">"Declare his glory among the nations." — Ps 96:3</p>
+      <p className="mt-8 text-[12px]" style={{ color: "#C0CDD8", fontStyle: "italic" }}>"Declare his glory among the nations." — Ps 96:3</p>
     </div>
   );
 }

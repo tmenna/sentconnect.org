@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { useLoginUser, useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useSearch, useLocation } from "wouter";
-import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe, Pencil } from "lucide-react";
+import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
@@ -198,11 +198,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             <span style={{ flex: 1, fontSize: 14, fontWeight: 500, color: "#111827", fontFamily: "inherit" }}>
               {orgName ?? "SentConnect"}
             </span>
-            {orgName && (
-              <Link href="/">
-                <Pencil style={{ width: 14, height: 14, color: "#9BACC4", cursor: "pointer", flexShrink: 0 }} />
-              </Link>
-            )}
           </div>
 
           {/* Account label */}
