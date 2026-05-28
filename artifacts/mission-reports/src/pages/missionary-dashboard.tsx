@@ -55,10 +55,10 @@ export default function MissionaryDashboard() {
 
         {/* Brand header */}
         <div style={{ padding: "0 10px", marginBottom: 32 }}>
-          <p style={{ fontSize: 20, fontWeight: 800, color: "#111", margin: 0, letterSpacing: "-0.03em", lineHeight: 1.25 }}>
+          <p style={{ fontSize: 23, fontWeight: 800, color: "#000000", margin: 0, letterSpacing: "-0.03em", lineHeight: 1.25 }}>
             Missions Feed
           </p>
-          <p style={{ fontSize: 13, color: "#8899A6", margin: "3px 0 0" }}>
+          <p style={{ fontSize: 15, fontWeight: 500, color: "#000000", margin: "4px 0 0" }}>
             {user.organization ?? "Field Team"}
           </p>
         </div>
