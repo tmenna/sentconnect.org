@@ -5,7 +5,7 @@ import { Redirect, Link } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
-import { FileText, BookOpen, Rss, Star, User } from "lucide-react";
+import { FileText, Star, CircleUser, PenSquare } from "lucide-react";
 
 type FeedTab = "all" | "moments";
 
@@ -40,85 +40,110 @@ export default function MissionaryDashboard() {
   const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
   const firstName = user.name.split(" ")[0];
 
-  const navItems: { id: FeedTab | "profile"; label: string; Icon: React.ElementType }[] = [
-    { id: "all",     label: "My Posts",       Icon: Rss },
-    { id: "moments", label: "Moments",        Icon: Star },
-    { id: "profile", label: "Profile",        Icon: User },
-  ];
-
   return (
-    <div className="flex bg-white min-h-[600px] mx-auto w-full" style={{ maxWidth: 900 }}>
+    <div className="flex bg-white min-h-[600px] mx-auto w-full" style={{ maxWidth: 960 }}>
 
       {/* ── Sidebar — desktop only ── */}
-      <aside className="hidden sm:flex flex-col flex-shrink-0 border-r border-slate-100"
-        style={{ width: 210, padding: "24px 8px 20px" }}>
+      <aside className="hidden sm:flex flex-col flex-shrink-0"
+        style={{ width: 240, padding: "28px 12px 20px", borderRight: "1px solid #e8eaed", fontFamily: "Inter, system-ui, sans-serif" }}>
 
-        {/* Header */}
-        <div style={{ marginBottom: 28, padding: "0 8px" }}>
-          <p style={{ fontSize: 20, fontWeight: 800, color: "#2B2B2B", margin: 0, lineHeight: 1.25, letterSpacing: "-0.03em" }}>
+        {/* Brand header */}
+        <div style={{ padding: "0 10px", marginBottom: 32 }}>
+          <p style={{ fontSize: 20, fontWeight: 800, color: "#111", margin: 0, letterSpacing: "-0.03em", lineHeight: 1.25 }}>
             Missions Feed
           </p>
-          <p style={{ fontSize: 14, color: "#94A3B8", margin: "4px 0 0" }}>
+          <p style={{ fontSize: 13, color: "#8899A6", margin: "3px 0 0" }}>
             {user.organization ?? "Field Team"}
           </p>
         </div>
 
-        {/* Nav */}
+        {/* Nav items */}
         <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
           {([
-            { id: "all",     label: "My Posts" },
-            { id: "moments", label: "Mission Moments" },
-          ] as { id: FeedTab; label: string }[]).map(({ id, label }) => {
+            { id: "all"     as FeedTab, label: "My Posts",        Icon: FileText },
+            { id: "moments" as FeedTab, label: "Mission Moments", Icon: Star },
+          ]).map(({ id, label, Icon }) => {
             const active = activeTab === id;
             return (
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
                 style={{
-                  display: "flex", alignItems: "center",
+                  display: "flex", alignItems: "center", gap: 12,
                   width: "100%", textAlign: "left",
-                  padding: "9px 10px",
-                  borderRadius: 8, border: "none",
-                  background: active ? "#0059D6" : "transparent",
-                  color: active ? "#ffffff" : "#2B2B2B",
-                  fontSize: 13.5, fontWeight: active ? 700 : 600,
-                  cursor: "pointer", transition: "all 0.12s",
+                  padding: "10px 14px",
+                  borderRadius: 12, border: "none",
+                  background: active ? "#e8f0fe" : "transparent",
+                  color: "#111",
+                  fontSize: 18, fontWeight: active ? 700 : 500,
+                  cursor: "pointer",
+                  transition: "background 0.15s",
+                  fontFamily: "inherit",
                 }}
-                onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F0F4FF"; e.currentTarget.style.color = "#0059D6"; } }}
-                onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2B2B2B"; } }}
+                onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = "#f1f3f5"; }}
+                onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
               >
+                <Icon strokeWidth={active ? 2.2 : 1.8} style={{ width: 22, height: 22, flexShrink: 0 }} />
                 {label}
               </button>
             );
           })}
 
-          <div style={{ height: 1, background: "#F1F5F9", margin: "8px 0" }} />
-          <Link href="/profile">
-            <button
+          {/* Profile — navigates to profile page */}
+          <Link href="/profile" style={{ textDecoration: "none" }}>
+            <div
+              role="button"
               style={{
-                display: "flex", alignItems: "center", gap: 10,
-                width: "100%", textAlign: "left",
-                padding: "9px 10px", borderRadius: 8, border: "none",
-                background: "transparent", color: "#2B2B2B",
-                fontSize: 13.5, fontWeight: 600, cursor: "pointer", transition: "all 0.12s",
+                display: "flex", alignItems: "center", gap: 12,
+                padding: "10px 14px",
+                borderRadius: 12,
+                color: "#111",
+                fontSize: 18, fontWeight: 500,
+                cursor: "pointer",
+                transition: "background 0.15s",
+                fontFamily: "inherit",
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#F0F4FF"; e.currentTarget.style.color = "#0059D6"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2B2B2B"; }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#f1f3f5"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
             >
-              <User style={{ width: 15, height: 15, flexShrink: 0 }} />
+              <CircleUser strokeWidth={1.8} style={{ width: 22, height: 22, flexShrink: 0 }} />
               Profile
-            </button>
+            </div>
           </Link>
         </nav>
 
-        {/* User info */}
-        <div style={{ borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
-          <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#0059D6", flexShrink: 0 }}>
+        {/* New Post button */}
+        <button
+          onClick={() => composerRef.current?.scrollIntoView({ behavior: "smooth" })}
+          style={{
+            width: "100%", height: 44,
+            borderRadius: 999,
+            background: "#0A84FF",
+            color: "#fff",
+            fontSize: 15, fontWeight: 700,
+            border: "none", cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            fontFamily: "inherit",
+            marginBottom: 20,
+            transition: "background 0.15s, transform 0.1s",
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#0070D8"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#0A84FF"; }}
+          onMouseDown={e => { (e.currentTarget as HTMLElement).style.transform = "scale(0.97)"; }}
+          onMouseUp={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
+        >
+          <PenSquare style={{ width: 16, height: 16 }} />
+          New Post
+        </button>
+
+        {/* User chip */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 6px" }}>
+          <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#e8f0fe", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "#0A84FF", flexShrink: 0 }}>
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div style={{ minWidth: 0 }}>
-            <p style={{ fontSize: 12.5, fontWeight: 600, color: "#2B2B2B", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
-            <p style={{ fontSize: 11, color: "#94A3B8", margin: 0 }}>Field User</p>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "#111", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
+            <p style={{ fontSize: 11.5, color: "#8899A6", margin: 0 }}>Field User</p>
           </div>
         </div>
       </aside>

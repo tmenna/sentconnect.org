@@ -1065,19 +1065,20 @@ export default function AdminDashboard() {
 
         {/* ── Sidebar ── */}
         <aside style={{
-          width: 220, flexShrink: 0,
+          width: 240, flexShrink: 0,
           background: "#fff",
           display: "flex", flexDirection: "column",
-          padding: "24px 8px 20px",
-          borderRight: "1px solid #F1F5F9",
+          padding: "28px 12px 20px",
+          borderRight: "1px solid #e8eaed",
+          fontFamily: "Inter, system-ui, sans-serif",
         }}>
 
-          {/* Header */}
-          <div style={{ marginBottom: 28, padding: "0 8px" }}>
-            <p style={{ fontSize: 22, fontWeight: 800, color: "#2B2B2B", margin: 0, lineHeight: 1.2, letterSpacing: "-0.02em" }}>
+          {/* Brand header */}
+          <div style={{ marginBottom: 32, padding: "0 10px" }}>
+            <p style={{ fontSize: 20, fontWeight: 800, color: "#111", margin: 0, letterSpacing: "-0.03em", lineHeight: 1.25 }}>
               Missions Feed
             </p>
-            <p style={{ fontSize: 12, color: "#94A3B8", margin: "2px 0 0" }}>
+            <p style={{ fontSize: 13, color: "#8899A6", margin: "3px 0 0" }}>
               {user.organization ?? "Admin"}
             </p>
           </div>
@@ -1085,35 +1086,36 @@ export default function AdminDashboard() {
           {/* Nav items */}
           <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
             {([
-              { id: "feed",     label: "Updates" },
-              { id: "branding", label: "Branding" },
-              { id: "team",     label: "User Management" },
-            ] as const).map(({ id, label }) => {
+              { id: "feed"     as const, label: "Updates",         Icon: Rss },
+              { id: "branding" as const, label: "Branding",        Icon: Palette },
+              { id: "team"     as const, label: "User Management", Icon: Users },
+            ]).map(({ id, label, Icon }) => {
               const active = activeTab === id;
               return (
                 <button
                   key={id}
                   onClick={() => setActiveTab(id)}
                   style={{
-                    display: "flex", alignItems: "center",
+                    display: "flex", alignItems: "center", gap: 12,
                     width: "100%", textAlign: "left",
-                    padding: "9px 10px 9px 14px",
-                    borderRadius: 6,
+                    padding: "10px 14px",
+                    borderRadius: 12,
                     border: "none",
-                    background: active ? "#0059D6" : "transparent",
-                    color: active ? "#fff" : "#2B2B2B",
-                    fontSize: 13,
-                    fontWeight: active ? 700 : 600,
+                    background: active ? "#e8f0fe" : "transparent",
+                    color: "#111",
+                    fontSize: 18,
+                    fontWeight: active ? 700 : 500,
                     cursor: "pointer",
-                    transition: "all 0.12s",
-                    position: "relative",
+                    transition: "background 0.15s",
+                    fontFamily: "inherit",
                   }}
-                  onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F0F4FF"; e.currentTarget.style.color = "#0059D6"; } }}
-                  onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2B2B2B"; } }}
+                  onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = "#f1f3f5"; }}
+                  onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
                 >
+                  <Icon strokeWidth={active ? 2.2 : 1.8} style={{ width: 22, height: 22, flexShrink: 0 }} />
                   {label}
                   {id === "team" && !usersLoading && (
-                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600, background: "#F1F5F9", color: "#64748B", borderRadius: 999, padding: "1px 7px" }}>
+                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600, background: "#f1f3f5", color: "#64748B", borderRadius: 999, padding: "1px 7px" }}>
                       {allUsers.length}
                     </span>
                   )}
@@ -1122,14 +1124,38 @@ export default function AdminDashboard() {
             })}
           </nav>
 
-          {/* User info at bottom */}
-          <div style={{ borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10, padding: "14px 8px 0" }}>
-            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#0059D6", flexShrink: 0 }}>
+          {/* New Post button */}
+          <Link href="/submit" style={{ textDecoration: "none", marginBottom: 20 }}>
+            <div
+              role="button"
+              style={{
+                width: "100%", height: 44,
+                borderRadius: 999,
+                background: "#0A84FF",
+                color: "#fff",
+                fontSize: 15, fontWeight: 700,
+                border: "none",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                fontFamily: "inherit",
+                cursor: "pointer",
+                transition: "background 0.15s",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#0070D8"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#0A84FF"; }}
+            >
+              <FileText style={{ width: 16, height: 16 }} />
+              View Reports
+            </div>
+          </Link>
+
+          {/* User chip */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 6px" }}>
+            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#e8f0fe", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "#0A84FF", flexShrink: 0 }}>
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div style={{ minWidth: 0 }}>
-              <p style={{ fontSize: 12.5, fontWeight: 600, color: "#2B2B2B", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
-              <p style={{ fontSize: 11, color: "#94A3B8", margin: 0 }}>{user.role}</p>
+              <p style={{ fontSize: 13, fontWeight: 600, color: "#111", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</p>
+              <p style={{ fontSize: 11.5, color: "#8899A6", margin: 0 }}>{user.role}</p>
             </div>
           </div>
         </aside>
