@@ -3,18 +3,15 @@ import { useAuth } from "@/components/auth-provider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useLoginUser, useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useSearch, useLocation } from "wouter";
-import { LogOut, Loader2 } from "lucide-react";
+import { LogOut, Loader2, Eye, EyeOff, ExternalLink } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
 import { useOrg } from "@/providers/org-provider";
-import { ExternalLink } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -22,12 +19,28 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const PURPLE = "#0059D6";
-const DARK   = "#0f0f13";
+const BLUE      = "#006AFF";
+const BLUE_DARK = "#0053CC";
+const BG        = "#F5F7FA";
+const CARD_BDR  = "#DCE3EC";
+
+const INPUT_BASE: React.CSSProperties = {
+  width: "100%",
+  height: 46,
+  borderRadius: 10,
+  border: `1px solid ${CARD_BDR}`,
+  background: "#F8FAFC",
+  padding: "0 14px",
+  fontSize: 15,
+  color: "#111827",
+  outline: "none",
+  boxSizing: "border-box",
+  fontFamily: "Inter, system-ui, sans-serif",
+  transition: "border-color .15s, background .15s",
+};
 
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
-  const { logo, isCustomLogo, isLogoReady } = useLogo();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const search = useSearch();
@@ -35,6 +48,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
   const { orgSlug } = useOrg();
   const [orgName, setOrgName] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (!orgSlug) { setOrgName(null); return; }
@@ -84,180 +98,267 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
     defaultValues: { email: "", password: "" }
   });
 
-  if (isLoading) return (
-    <div className="min-h-dvh flex items-center justify-center bg-white">
-      <Loader2 className="h-5 w-5 animate-spin" style={{ color: PURPLE }} />
-    </div>
-  );
-
-  if (isAuthenticated && user) return (
-    <div className="min-h-dvh flex flex-col items-center justify-center px-4 bg-white">
-      <div className="w-full max-w-[400px] text-center">
-        <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "#EFF6FF", border: `1.5px solid #BFDBFE` }}>
-          <span className="font-bold text-[15px]" style={{ color: PURPLE }}>{user.name.charAt(0).toUpperCase()}</span>
-        </div>
-        <h2 className="text-[17px] font-semibold mb-1" style={{ color: DARK }}>You're signed in</h2>
-        <p className="text-[13px] mb-6" style={{ color: "#64748B" }}>{user.name} · {user.email}</p>
-        <button
-          className="w-full h-11 rounded-lg text-[14px] font-semibold text-white mb-3 transition-all"
-          style={{ backgroundColor: DARK }}
-          onClick={() => navigate(from)}
-        >
-          Continue to app
-        </button>
-        <Button
-          variant="outline"
-          className="w-full h-11 font-medium text-[14px] rounded-lg"
-          onClick={() => logout.mutate({ data: undefined })}
-          disabled={logout.isPending}
-        >
-          <LogOut className="h-3.5 w-3.5 mr-2" />
-          {logout.isPending ? "Signing out…" : "Sign out"}
-        </Button>
-      </div>
-    </div>
-  );
-
   function onSubmit(data: LoginFormValues) {
     login.mutate({ data });
   }
 
+  if (isLoading) return (
+    <div style={{ minHeight: "100dvh", background: BG, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <Loader2 style={{ width: 22, height: 22, color: BLUE }} className="animate-spin" />
+    </div>
+  );
+
+  if (isAuthenticated && user) return (
+    <div style={{ minHeight: "100dvh", background: BG, display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "Inter, system-ui, sans-serif" }}>
+      <div style={{ background: "#fff", border: `1px solid ${CARD_BDR}`, borderRadius: 18, padding: "36px 32px", width: "100%", maxWidth: 380, textAlign: "center" }}>
+        <div style={{ width: 54, height: 54, borderRadius: "50%", background: "#EEF4FF", border: `1.5px solid #C7D9FF`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+          <span style={{ fontSize: 20, fontWeight: 700, color: BLUE }}>{user.name.charAt(0).toUpperCase()}</span>
+        </div>
+        <p style={{ fontSize: 17, fontWeight: 700, color: "#111827", marginBottom: 4 }}>{user.name}</p>
+        <p style={{ fontSize: 13, color: "#607089", marginBottom: 28 }}>{user.email}</p>
+        <button
+          style={{ width: "100%", height: 46, borderRadius: 999, background: BLUE, color: "#fff", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", marginBottom: 10, fontFamily: "inherit", transition: "background .15s" }}
+          onClick={() => navigate(from)}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = BLUE_DARK; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
+        >
+          Continue to app
+        </button>
+        <button
+          style={{ width: "100%", height: 46, borderRadius: 999, background: BG, color: "#111827", fontSize: 14, fontWeight: 600, border: `1px solid ${CARD_BDR}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "inherit", transition: "background .15s" }}
+          onClick={() => logout.mutate({ data: undefined })}
+          disabled={logout.isPending}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#EEF1F6"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BG; }}
+        >
+          <LogOut style={{ width: 14, height: 14 }} />
+          {logout.isPending ? "Signing out…" : "Sign out"}
+        </button>
+      </div>
+    </div>
+  );
+
+  const headlineText = platformMode ? "Admin\nsign in." : "Sign in.";
+  const subtitleText = platformMode
+    ? "SentConnect platform administration."
+    : "Your private mission feed awaits.";
+
   return (
-    <div className="min-h-dvh flex flex-col bg-white">
+    <div style={{ minHeight: "100dvh", background: BG, fontFamily: "Inter, system-ui, sans-serif", display: "flex", flexDirection: "column" }}>
 
+      {/* ── Main ── */}
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "48px 24px" }}>
+        <div style={{ width: "100%", maxWidth: 920 }}>
 
-      {/* ── Centered form ── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-5 py-10">
-        <div className="w-full" style={{ maxWidth: 420 }}>
-
-          {/* Heading */}
-          <div style={{ marginBottom: 28 }}>
-            <h1 style={{ fontSize: 22, fontWeight: 700, color: DARK, letterSpacing: "-0.02em", marginBottom: 6 }}>
-              Sign in to SentConnect
+          {/* ── Mobile heading ── */}
+          <div className="md:hidden" style={{ textAlign: "center", marginBottom: 28 }}>
+            <h1 style={{ fontSize: 46, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 0.95, margin: "0 0 10px" }}>
+              Sign in.
             </h1>
-            {!platformMode && (
-              <p style={{ fontSize: 13, color: "#64748B", lineHeight: 1.55, marginBottom: 8 }}>
-                Stay connected with your field teams through one secure, shared mission feed.
-              </p>
-            )}
             {orgName && (
-              <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full" style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}>
-                <div style={{ width: 5, height: 5, borderRadius: "50%", background: PURPLE, flexShrink: 0 }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: PURPLE, letterSpacing: "0.06em", textTransform: "uppercase" }}>{orgName}</span>
-              </div>
+              <OrgBadge orgName={orgName} />
             )}
           </div>
 
-          {/* Org portal error */}
-          {orgPortalError && (
-            <div className="mb-5 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-              <p style={{ fontSize: 13, fontWeight: 600, color: DARK, marginBottom: 4 }}>Wrong login portal</p>
-              <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.55 }}>
-                This account belongs to an organization. Please sign in through your organization's portal.
+          {/* ── Two-column (desktop) ── */}
+          <div className="flex flex-col md:flex-row md:items-center md:gap-[80px]">
+
+            {/* Left: Branding */}
+            <div className="hidden md:flex flex-col flex-1" style={{ gap: 24, paddingBottom: 8 }}>
+              <div>
+                <h1 style={{ fontSize: 72, fontWeight: 700, color: BLUE, letterSpacing: "-0.03em", lineHeight: 0.95, margin: "0 0 16px", whiteSpace: "pre-line" }}>
+                  {headlineText}
+                </h1>
+                <p style={{ fontSize: 16, fontWeight: 600, color: "#4B5C7A", margin: 0 }}>
+                  {subtitleText}
+                </p>
+              </div>
+
+              {orgName && <OrgBadge orgName={orgName} />}
+
+              <p style={{ fontSize: 12, color: "#B8C4D0", fontStyle: "italic", marginTop: 32 }}>
+                "Declare his glory among the nations." — Psalm 96:3
               </p>
-              {orgPortalError.subdomain && (
-                <a
-                  href={buildOrgLoginHref(orgPortalError.subdomain)}
-                  className="mt-2 inline-flex items-center gap-1.5 underline underline-offset-2"
-                  style={{ fontSize: 13, fontWeight: 600, color: PURPLE }}
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  Go to {orgPortalError.subdomain}.sentconnect.org/login
-                </a>
-              )}
             </div>
-          )}
 
-          {/* Form */}
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel style={{ fontSize: 13, fontWeight: 500, color: "#374151" }}>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="you@mission.org"
-                        autoComplete="email"
-                        inputMode="email"
-                        className="h-10 rounded-lg bg-white text-[14px]"
-                        style={{ borderColor: "#E2E8F0" }}
-                        {...field}
-                        data-testid="input-login-email"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            {/* Right: Login card */}
+            <div
+              style={{
+                background: "#fff",
+                border: `1px solid ${CARD_BDR}`,
+                borderRadius: 18,
+                padding: "36px 32px",
+              }}
+              className="w-full md:w-[380px] md:flex-shrink-0"
+            >
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center justify-between">
-                      <FormLabel style={{ fontSize: 13, fontWeight: 500, color: "#374151" }}>Password</FormLabel>
-                      <Link
-                        href="/forgot-password"
-                        style={{ fontSize: 13, fontWeight: 500, color: PURPLE, textDecoration: "none" }}
-                      >
-                        Forgot password?
-                      </Link>
-                    </div>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        autoComplete="current-password"
-                        className="h-10 rounded-lg bg-white text-[14px]"
-                        style={{ borderColor: "#E2E8F0" }}
-                        {...field}
-                        data-testid="input-login-password"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Card header — mobile only */}
+              <div className="md:hidden" style={{ marginBottom: 22 }}>
+                <p style={{ fontSize: 17, fontWeight: 700, color: "#111827", margin: 0 }}>Welcome back</p>
+              </div>
 
-              <button
-                type="submit"
-                disabled={login.isPending}
-                className="w-full rounded-lg text-[14px] font-semibold text-white transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
-                style={{ height: 40, backgroundColor: DARK, marginTop: 8 }}
-                onMouseEnter={e => { if (!login.isPending) e.currentTarget.style.backgroundColor = "#1a1a24"; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = DARK; }}
-                data-testid="btn-login-submit"
-              >
-                {login.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                {login.isPending ? "Signing in…" : "Sign in"}
-              </button>
-            </form>
-          </Form>
+              {/* Org portal error */}
+              {orgPortalError && (
+                <div style={{ marginBottom: 20, background: "#FFFBEB", border: "1px solid #FCD34D", borderRadius: 12, padding: "14px 16px" }}>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: "#92400E", marginBottom: 4 }}>Wrong login portal</p>
+                  <p style={{ fontSize: 13, color: "#78350F", lineHeight: 1.55, marginBottom: 0 }}>
+                    This account belongs to an organization. Sign in through your organization's portal.
+                  </p>
+                  {orgPortalError.subdomain && (
+                    <a
+                      href={buildOrgLoginHref(orgPortalError.subdomain)}
+                      style={{ marginTop: 8, display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 600, color: BLUE, textDecoration: "none" }}
+                    >
+                      <ExternalLink style={{ width: 12, height: 12 }} />
+                      Go to {orgPortalError.subdomain}.sentconnect.org/login
+                    </a>
+                  )}
+                </div>
+              )}
 
-          {/* Footer links — Render style */}
-          <div style={{ marginTop: 20 }} className="space-y-1.5">
-            <p style={{ fontSize: 13, color: "#64748B" }}>
-              Don't have an account?{" "}
-              <Link href="/signup" style={{ color: PURPLE, fontWeight: 500, textDecoration: "none" }}>
-                Sign up
-              </Link>
-            </p>
+              {/* Form */}
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 13 }}>
+
+                  {/* Email */}
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <input
+                            type="email"
+                            placeholder="Email address"
+                            autoComplete="email"
+                            inputMode="email"
+                            style={INPUT_BASE}
+                            onFocus={e => { e.currentTarget.style.borderColor = BLUE; e.currentTarget.style.background = "#fff"; }}
+                            onBlur={e => { e.currentTarget.style.borderColor = CARD_BDR; e.currentTarget.style.background = "#F8FAFC"; }}
+                            data-testid="input-login-email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-xs mt-1" />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Password */}
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div style={{ position: "relative" }}>
+                            <input
+                              type={showPassword ? "text" : "password"}
+                              placeholder="Password"
+                              autoComplete="current-password"
+                              style={{ ...INPUT_BASE, paddingRight: 44 }}
+                              onFocus={e => { e.currentTarget.style.borderColor = BLUE; e.currentTarget.style.background = "#fff"; }}
+                              onBlur={e => { e.currentTarget.style.borderColor = CARD_BDR; e.currentTarget.style.background = "#F8FAFC"; }}
+                              data-testid="input-login-password"
+                              {...field}
+                            />
+                            <button
+                              type="button"
+                              tabIndex={-1}
+                              onClick={() => setShowPassword(s => !s)}
+                              style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "#8FA3BE", padding: 0, display: "flex", alignItems: "center" }}
+                            >
+                              {showPassword
+                                ? <EyeOff style={{ width: 16, height: 16 }} />
+                                : <Eye style={{ width: 16, height: 16 }} />
+                              }
+                            </button>
+                          </div>
+                        </FormControl>
+                        <FormMessage className="text-xs mt-1" />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Forgot password */}
+                  <div style={{ textAlign: "right", marginTop: -4 }}>
+                    <Link
+                      href="/forgot-password"
+                      style={{ fontSize: 13, fontWeight: 500, color: BLUE, textDecoration: "none" }}
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+
+                  {/* Submit */}
+                  <button
+                    type="submit"
+                    disabled={login.isPending}
+                    data-testid="btn-login-submit"
+                    style={{
+                      width: "100%",
+                      height: 46,
+                      borderRadius: 999,
+                      background: login.isPending ? "#4D8EFF" : BLUE,
+                      color: "#fff",
+                      fontSize: 15,
+                      fontWeight: 700,
+                      border: "none",
+                      cursor: login.isPending ? "not-allowed" : "pointer",
+                      marginTop: 4,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                      fontFamily: "inherit",
+                      transition: "background .15s",
+                      letterSpacing: "-0.01em",
+                    }}
+                    onMouseEnter={e => { if (!login.isPending) (e.currentTarget as HTMLElement).style.background = BLUE_DARK; }}
+                    onMouseLeave={e => { if (!login.isPending) (e.currentTarget as HTMLElement).style.background = BLUE; }}
+                  >
+                    {login.isPending && <Loader2 style={{ width: 15, height: 15 }} className="animate-spin" />}
+                    {login.isPending ? "Signing in…" : "Sign in"}
+                  </button>
+
+                </form>
+              </Form>
+
+              {/* Sign up link */}
+              {!platformMode && (
+                <div style={{ marginTop: 22, paddingTop: 20, borderTop: `1px solid #F0F4F8`, textAlign: "center" }}>
+                  <p style={{ fontSize: 13, color: "#607089", margin: 0 }}>
+                    New to SentConnect?{" "}
+                    <Link href="/signup" style={{ color: BLUE, fontWeight: 600, textDecoration: "none" }}>
+                      Create an account
+                    </Link>
+                  </p>
+                </div>
+              )}
+
+            </div>
           </div>
-
         </div>
       </div>
 
-      {/* ── Footer verse ── */}
-      <footer className="text-center px-6 py-5">
-        <p style={{ fontSize: 11, color: "#CBD5E1", fontStyle: "italic" }}>
+      {/* ── Footer (mobile) ── */}
+      <footer className="md:hidden text-center px-6 py-4">
+        <p style={{ fontSize: 11, color: "#C8D3DF", fontStyle: "italic", margin: 0 }}>
           "Declare his glory among the nations." — Psalm 96:3
         </p>
       </footer>
 
+    </div>
+  );
+}
+
+function OrgBadge({ orgName }: { orgName: string }) {
+  return (
+    <div style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#EEF4FF", border: "1px solid #C7D9FF", borderRadius: 999, padding: "5px 14px" }}>
+      <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#006AFF", flexShrink: 0 }} />
+      <span style={{ fontSize: 12, fontWeight: 700, color: "#006AFF", letterSpacing: "0.07em", textTransform: "uppercase" }}>
+        {orgName}
+      </span>
     </div>
   );
 }
