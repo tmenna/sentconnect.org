@@ -47,8 +47,7 @@ export default function MissionaryDashboard() {
   ];
 
   return (
-    <div className="bg-white -mx-4 sm:-mx-8 min-h-[600px] flex justify-center">
-    <div className="flex w-full" style={{ maxWidth: 900 }}>
+    <div className="flex bg-white min-h-[600px] mx-auto w-full" style={{ maxWidth: 900 }}>
 
       {/* ── Sidebar — desktop only ── */}
       <aside className="hidden sm:flex flex-col flex-shrink-0 border-r border-slate-100"
@@ -284,7 +283,6 @@ export default function MissionaryDashboard() {
         })}
       </nav>
 
-    </div>{/* end max-width wrapper */}
-    </div>{/* end full-width bg */}
+    </div>
   );
 }

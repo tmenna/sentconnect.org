@@ -1061,8 +1061,7 @@ export default function AdminDashboard() {
         />
       )}
 
-      <div className="flex justify-center min-h-[600px]" style={{ margin: "0 -32px", background: "#fff" }}>
-      <div className="flex w-full" style={{ maxWidth: 1020 }}>
+      <div className="flex min-h-[600px] mx-auto w-full" style={{ maxWidth: 1020, background: "#fff" }}>
 
         {/* ── Sidebar ── */}
         <aside style={{
@@ -1578,8 +1577,7 @@ export default function AdminDashboard() {
         )}
 
         </div>
-      </div>{/* end max-width wrapper */}
-      </div>{/* end full-width bg */}
+      </div>
 
     </>
   );
