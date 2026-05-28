@@ -1144,7 +1144,7 @@ export default function AdminDashboard() {
         </aside>
 
         {/* ── Main content ── */}
-        <div style={{ flex: 1, minWidth: 0, padding: "28px 28px 28px 32px", background: "#fff", borderRadius: "0 16px 16px 0" }} className="space-y-4">
+        <div style={{ flex: 1, minWidth: 0, padding: "28px 28px 28px 20px", background: "#fff", borderRadius: "0 16px 16px 0" }} className="space-y-4">
 
         {/* ── Tab: Team ── */}
         {activeTab === "team" && (

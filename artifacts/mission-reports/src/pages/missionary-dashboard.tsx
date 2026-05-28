@@ -134,8 +134,8 @@ export default function MissionaryDashboard() {
 
       {/* ── Main content ── */}
       {/* pb-24 on mobile leaves room for the fixed bottom nav */}
-      <main className="flex-1 min-w-0 flex flex-col items-center px-4 sm:px-8 py-6 sm:py-7 pb-24 sm:pb-8">
-      <div className="w-full max-w-xl flex flex-col gap-6 sm:gap-7">
+      <main className="flex-1 min-w-0 flex flex-col px-4 sm:pl-6 sm:pr-8 py-6 sm:py-7 pb-24 sm:pb-8">
+      <div className="w-full max-w-[620px] flex flex-col gap-6 sm:gap-7">
 
         {/* Page header */}
         <div className="flex items-start justify-between gap-4">
