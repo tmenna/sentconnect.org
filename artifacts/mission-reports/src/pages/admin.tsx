@@ -101,7 +101,7 @@ function OrgPermissionsEditor({
             transition: "all 0.15s",
           }}
         >
-          <div style={{ flexShrink: 0, color: perms[key] ? "#111827" : "#64748B" }}>
+          <div style={{ flexShrink: 0, color: perms[key] ? "#0085FF" : "#64748B" }}>
             {icon}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -113,7 +113,7 @@ function OrgPermissionsEditor({
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            style={{ width: 16, height: 16, cursor: disabled ? "not-allowed" : "pointer", accentColor: "#111827" }}
+            style={{ width: 16, height: 16, cursor: disabled ? "not-allowed" : "pointer", accentColor: "#0085FF" }}
           />
         </label>
       ))}
@@ -204,7 +204,7 @@ function EditRolePermissionsModal({
                   onClick={() => handleRoleChange(r)}
                   className="flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={role === r
-                    ? { background: "#111827", color: "#fff", borderColor: "#111827", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }
+                    ? { background: "#0085FF", color: "#fff", borderColor: "#0085FF", boxShadow: "0 1px 3px rgba(0,133,255,0.2)" }
                     : { background: "#fff", color: undefined, borderColor: undefined }
                   }
                 >
@@ -581,7 +581,7 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
                 onClick={setPassword}
                 disabled={setPwBusy || newPw.length < 1}
                 className="h-10 px-4 text-[13px] font-semibold text-white rounded-xl disabled:opacity-50 transition-colors flex items-center gap-1.5"
-                style={{ background: setPwDone ? "#374151" : "#111827" }}
+                style={{ background: setPwDone ? "#374151" : "#0085FF" }}
               >
                 {setPwBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : setPwDone ? <><Check className="h-3.5 w-3.5" /> Saved</> : "Set Password"}
               </button>
@@ -794,7 +794,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <p className="text-[15px] font-semibold leading-tight" style={{ color: "#111827" }}>{u.name}</p>
+              <p className="text-[15px] font-bold leading-tight" style={{ color: "#111827" }}>{u.name}</p>
               <p className="text-[13px] mt-0.5" style={{ color: "#9CA3AF" }}>{u.email}</p>
               {editingBio ? (
                 <div className="mt-1.5 space-y-1.5">
@@ -1113,7 +1113,7 @@ export default function AdminDashboard() {
                     background: active ? "#0085FF" : "transparent",
                     color: active ? "#fff" : "#64748B",
                     fontSize: 13,
-                    fontWeight: active ? 600 : 400,
+                    fontWeight: active ? 700 : 500,
                     cursor: "pointer",
                     transition: "all 0.12s",
                     position: "relative",
@@ -1277,9 +1277,9 @@ export default function AdminDashboard() {
                         marginBottom: -2,
                         fontSize: 16,
                         fontWeight: active ? 800 : 500,
-                        color: active ? "#111827" : "#64748B",
+                        color: active ? "#0085FF" : "#64748B",
                         border: "none",
-                        borderBottom: active ? "2.5px solid #111827" : "2.5px solid transparent",
+                        borderBottom: active ? "2.5px solid #0085FF" : "2.5px solid transparent",
                         background: "transparent",
                         cursor: "pointer",
                         letterSpacing: active ? "-0.02em" : "normal",
@@ -1288,7 +1288,7 @@ export default function AdminDashboard() {
                     >
                       {tab.label}
                       {tab.count != null && (
-                        <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#F5F5F5" : "#F8FAFC", color: active ? "#111827" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
+                        <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#EFF6FF" : "#F8FAFC", color: active ? "#0085FF" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
                           {tab.count}
                         </span>
                       )}
@@ -1303,7 +1303,7 @@ export default function AdminDashboard() {
                   value={filterUserId}
                   onChange={e => setFilterUserId(e.target.value)}
                   className="border rounded-xl px-3 bg-white outline-none transition-all"
-                  style={{ fontSize: 16, fontWeight: filterUserId ? 700 : 500, height: 44, borderColor: filterUserId ? "#111827" : "#E5E7EB", color: filterUserId ? "#111827" : "#64748B", minWidth: 160 }}
+                  style={{ fontSize: 16, fontWeight: filterUserId ? 700 : 500, height: 44, borderColor: filterUserId ? "#0085FF" : "#E5E7EB", color: filterUserId ? "#0085FF" : "#64748B", minWidth: 160 }}
                 >
                   <option value="">All members</option>
                   {nonAdmins.map((u: any) => (
@@ -1542,7 +1542,7 @@ export default function AdminDashboard() {
                     onClick={() => brandingFileRef.current?.click()}
                     disabled={logoUploading || brandingSaving}
                     className="flex items-center gap-2 rounded-xl transition-all duration-150 disabled:opacity-50"
-                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#111827", border: "none", padding: "10px 20px", cursor: "pointer" }}
+                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#0085FF", border: "none", padding: "10px 20px", cursor: "pointer" }}
                   >
                     {logoUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
                     {brandingLogoUrl ? "Replace logo" : "Upload logo"}

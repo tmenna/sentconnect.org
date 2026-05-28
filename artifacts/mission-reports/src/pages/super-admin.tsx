@@ -165,7 +165,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
   return (
     <button
       onClick={onClick}
-      className={`px-5 py-2.5 text-[14px] font-semibold rounded-lg transition-colors ${
+      className={`px-5 py-2.5 text-[14px] font-bold rounded-lg transition-colors ${
         active ? "bg-[#0085FF] text-white" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
       }`}
     >
@@ -604,7 +604,7 @@ function LandingPageEditor() {
       <div className="bg-white rounded-xl border border-border/60 overflow-hidden mb-4">
         <div className="px-5 py-4 flex items-center justify-between">
           <div>
-            <p className="text-[17px] font-bold text-foreground">Public Landing Page</p>
+            <p className="text-[17px] font-extrabold text-foreground tracking-tight">Public Landing Page</p>
             <p className="text-[13px] text-muted-foreground mt-0.5">Edit every word, button, and image shown on sentconnect.org.</p>
           </div>
           <a href="/" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#0085FF] hover:underline">
@@ -832,7 +832,7 @@ function AboutPageEditor() {
       <div className="bg-white rounded-xl border border-border/60 overflow-hidden">
         <div className="px-5 py-4 flex items-center justify-between">
           <div>
-            <p className="text-[17px] font-bold text-foreground">About Page</p>
+            <p className="text-[17px] font-extrabold text-foreground tracking-tight">About Page</p>
             <p className="text-[13px] text-muted-foreground mt-0.5">Edit the About page shown at sentconnect.org/about.</p>
           </div>
           <a href="/about" target="_blank" rel="noreferrer" className="text-[13px] font-semibold text-[#0085FF] hover:underline">

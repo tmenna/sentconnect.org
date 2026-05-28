@@ -58,7 +58,7 @@ export default function MissionaryDashboard() {
           <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", color: "#94A3B8", textTransform: "uppercase", margin: "0 0 8px" }}>
             Workspace
           </p>
-          <p style={{ fontSize: 20, fontWeight: 700, color: "#0f0f13", margin: 0, lineHeight: 1.25 }}>
+          <p style={{ fontSize: 20, fontWeight: 800, color: "#0f0f13", margin: 0, lineHeight: 1.25, letterSpacing: "-0.03em" }}>
             Missions Feed
           </p>
           <p style={{ fontSize: 14, color: "#94A3B8", margin: "4px 0 0" }}>
@@ -89,7 +89,7 @@ export default function MissionaryDashboard() {
                   borderRadius: 8, border: "none",
                   background: active ? "#0085FF" : "transparent",
                   color: active ? "#ffffff" : "#64748B",
-                  fontSize: 13.5, fontWeight: active ? 600 : 400,
+                  fontSize: 13.5, fontWeight: active ? 700 : 500,
                   cursor: "pointer", transition: "all 0.12s",
                 }}
                 onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#F8FAFC"; e.currentTarget.style.color = "#0f0f13"; } }}
@@ -177,7 +177,7 @@ export default function MissionaryDashboard() {
                 style={{
                   paddingBottom: 12, paddingTop: 4,
                   marginRight: 24, marginBottom: -1,
-                  fontSize: 14, fontWeight: active ? 700 : 400,
+                  fontSize: 14, fontWeight: active ? 800 : 500,
                   color: active ? "#0085FF" : "#94A3B8",
                   border: "none",
                   borderBottom: active ? "2px solid #0085FF" : "2px solid transparent",
