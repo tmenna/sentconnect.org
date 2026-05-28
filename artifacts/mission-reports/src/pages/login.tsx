@@ -19,8 +19,8 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const BLUE      = "#006AFF";
-const BLUE_DARK = "#0053CC";
+const BLUE      = "#1085FD";
+const BLUE_DARK = "#0059D6";
 const LEFT_BG   = "#EEF2F9";
 const INPUT_BG  = "#EEF2F9";
 

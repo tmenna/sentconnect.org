@@ -73,7 +73,7 @@ export default function MissionaryDashboard() {
                   width: "100%", textAlign: "left",
                   padding: "10px 14px",
                   borderRadius: 12, border: "none",
-                  background: active ? "#e8f0fe" : "transparent",
+                  background: active ? "#EEF4FF" : "transparent",
                   color: "#111",
                   fontSize: 18, fontWeight: active ? 700 : 500,
                   cursor: "pointer",
@@ -118,7 +118,7 @@ export default function MissionaryDashboard() {
           style={{
             width: "100%", height: 44,
             borderRadius: 999,
-            background: "#0A84FF",
+            background: "#1085FD",
             color: "#fff",
             fontSize: 15, fontWeight: 700,
             border: "none", cursor: "pointer",
@@ -127,8 +127,8 @@ export default function MissionaryDashboard() {
             marginBottom: 20,
             transition: "background 0.15s, transform 0.1s",
           }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#0070D8"; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#0A84FF"; }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#1085FD"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1085FD"; }}
           onMouseDown={e => { (e.currentTarget as HTMLElement).style.transform = "scale(0.97)"; }}
           onMouseUp={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
         >
@@ -138,7 +138,7 @@ export default function MissionaryDashboard() {
 
         {/* User chip */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 6px" }}>
-          <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#e8f0fe", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "#0A84FF", flexShrink: 0 }}>
+          <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#EEF4FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "#1085FD", flexShrink: 0 }}>
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div style={{ minWidth: 0 }}>
@@ -194,9 +194,9 @@ export default function MissionaryDashboard() {
                   paddingBottom: 12, paddingTop: 4,
                   marginRight: 24, marginBottom: -1,
                   fontSize: 14, fontWeight: active ? 800 : 500,
-                  color: active ? "#0059D6" : "#94A3B8",
+                  color: active ? "#1085FD" : "#94A3B8",
                   border: "none",
-                  borderBottom: active ? "2px solid #0059D6" : "2px solid transparent",
+                  borderBottom: active ? "2px solid #1085FD" : "2px solid transparent",
                   background: "transparent", cursor: "pointer",
                   letterSpacing: active ? "-0.01em" : "normal",
                   whiteSpace: "nowrap",
@@ -207,7 +207,7 @@ export default function MissionaryDashboard() {
                   <span style={{
                     marginLeft: 6, fontSize: 11, fontWeight: 600,
                     background: active ? "#EFF6FF" : "transparent",
-                    color: active ? "#0059D6" : "#94A3B8",
+                    color: active ? "#1085FD" : "#94A3B8",
                     borderRadius: 999, padding: "1px 7px",
                   }}>
                     {tab.count}
@@ -292,8 +292,8 @@ export default function MissionaryDashboard() {
               className="flex-1 flex flex-col items-center justify-center gap-1 py-2.5"
               style={{ border: "none", background: "transparent", cursor: "pointer" }}
             >
-              <Icon style={{ width: 20, height: 20, color: active ? "#0059D6" : "#94A3B8" }} />
-              <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, color: active ? "#0059D6" : "#94A3B8" }}>{label}</span>
+              <Icon style={{ width: 20, height: 20, color: active ? "#1085FD" : "#94A3B8" }} />
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, color: active ? "#1085FD" : "#94A3B8" }}>{label}</span>
             </button>
           );
         })}

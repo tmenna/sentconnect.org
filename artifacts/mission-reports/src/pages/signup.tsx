@@ -9,8 +9,8 @@ import {
 import { useLogo } from "@/providers/logo-provider";
 import { extractHostnameOrgSlug, getOrgRoutingContext } from "@/lib/org";
 
-const PURPLE    = "#0059D6";
-const PURPLE_MID = "#0059D6";
+const PURPLE    = "#1085FD";
+const PURPLE_MID = "#1085FD";
 const TEAL      = "#10B981";
 const TEAL_DARK = "#059669";
 
@@ -132,7 +132,7 @@ export default function Signup() {
           align-items: center;
           justify-content: space-between;
           flex-shrink: 0;
-          background: #0059D6;
+          background: #1085FD;
           box-shadow: 0 2px 16px rgba(0,89,214,0.35);
         }
         .su-back-link {
@@ -180,7 +180,7 @@ export default function Signup() {
           flex-direction: column;
           padding: 36px;
           border-radius: 28px;
-          background: linear-gradient(135deg, #0059D6 0%, #0047B3 100%);
+          background: linear-gradient(135deg, #1085FD 0%, #1085FD 100%);
           box-shadow: 0 8px 48px rgba(0,89,214,0.45);
         }
 

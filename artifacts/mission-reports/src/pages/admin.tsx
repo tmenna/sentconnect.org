@@ -100,7 +100,7 @@ function OrgPermissionsEditor({
             transition: "all 0.15s",
           }}
         >
-          <div style={{ flexShrink: 0, color: perms[key] ? "#0059D6" : "#64748B" }}>
+          <div style={{ flexShrink: 0, color: perms[key] ? "#1085FD" : "#64748B" }}>
             {icon}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -112,7 +112,7 @@ function OrgPermissionsEditor({
             checked={perms[key]}
             disabled={disabled}
             onChange={e => onChange({ ...perms, [key]: e.target.checked })}
-            style={{ width: 16, height: 16, cursor: disabled ? "not-allowed" : "pointer", accentColor: "#0059D6" }}
+            style={{ width: 16, height: 16, cursor: disabled ? "not-allowed" : "pointer", accentColor: "#1085FD" }}
           />
         </label>
       ))}
@@ -203,7 +203,7 @@ function EditRolePermissionsModal({
                   onClick={() => handleRoleChange(r)}
                   className="flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[13px] font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={role === r
-                    ? { background: "#0059D6", color: "#fff", borderColor: "#0059D6", boxShadow: "0 1px 3px rgba(0,89,214,0.2)" }
+                    ? { background: "#1085FD", color: "#fff", borderColor: "#1085FD", boxShadow: "0 1px 3px rgba(0,89,214,0.2)" }
                     : { background: "#fff", color: undefined, borderColor: undefined }
                   }
                 >
@@ -580,7 +580,7 @@ function ManagePasswordModal({ user, onClose }: { user: any; onClose: () => void
                 onClick={setPassword}
                 disabled={setPwBusy || newPw.length < 1}
                 className="h-10 px-4 text-[13px] font-semibold text-white rounded-xl disabled:opacity-50 transition-colors flex items-center gap-1.5"
-                style={{ background: setPwDone ? "#374151" : "#0059D6" }}
+                style={{ background: setPwDone ? "#374151" : "#1085FD" }}
               >
                 {setPwBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : setPwDone ? <><Check className="h-3.5 w-3.5" /> Saved</> : "Set Password"}
               </button>
@@ -857,7 +857,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
             style={{
               fontSize: 11,
               fontWeight: 700,
-              background: "#0059D6",
+              background: "#1085FD",
               color: "#ffffff",
               borderRadius: 999,
               padding: "3px 10px",
@@ -1101,7 +1101,7 @@ export default function AdminDashboard() {
                     padding: "10px 14px",
                     borderRadius: 12,
                     border: "none",
-                    background: active ? "#e8f0fe" : "transparent",
+                    background: active ? "#EEF4FF" : "transparent",
                     color: "#111",
                     fontSize: 18,
                     fontWeight: active ? 700 : 500,
@@ -1131,7 +1131,7 @@ export default function AdminDashboard() {
               style={{
                 width: "100%", height: 44,
                 borderRadius: 999,
-                background: "#0A84FF",
+                background: "#1085FD",
                 color: "#fff",
                 fontSize: 15, fontWeight: 700,
                 border: "none",
@@ -1140,8 +1140,8 @@ export default function AdminDashboard() {
                 cursor: "pointer",
                 transition: "background 0.15s",
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#0070D8"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#0A84FF"; }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#1085FD"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#1085FD"; }}
             >
               <FileText style={{ width: 16, height: 16 }} />
               View Reports
@@ -1150,7 +1150,7 @@ export default function AdminDashboard() {
 
           {/* User chip */}
           <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 6px" }}>
-            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#e8f0fe", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "#0A84FF", flexShrink: 0 }}>
+            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#EEF4FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "#1085FD", flexShrink: 0 }}>
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div style={{ minWidth: 0 }}>
@@ -1186,7 +1186,7 @@ export default function AdminDashboard() {
                   onChange={e => setSearchQuery(e.target.value)}
                   className="text-[13px] border rounded-lg px-3 h-8 bg-white outline-none transition-all"
                   style={{ borderColor: searchQuery ? "#000000" : "#E5E7EB", minWidth: 200 }}
-                  onFocus={e => { e.target.style.borderColor = "#0059D6"; e.target.style.boxShadow = "0 0 0 2px rgba(0,89,214,0.08)"; }}
+                  onFocus={e => { e.target.style.borderColor = "#1085FD"; e.target.style.boxShadow = "0 0 0 2px rgba(0,89,214,0.08)"; }}
                   onBlur={e => { e.target.style.borderColor = searchQuery ? "#000000" : "#E5E7EB"; e.target.style.boxShadow = "none"; }}
                 />
                 <button
@@ -1236,7 +1236,7 @@ export default function AdminDashboard() {
                         <th className="px-5 py-4 text-left text-[13px] font-700 tracking-wide uppercase" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11 }}>Member</th>
                         <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
                         <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
-                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#0059D6", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
+                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#1085FD", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
                         <th className="px-5 py-4 text-right" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
                       </tr>
                     </thead>
@@ -1292,9 +1292,9 @@ export default function AdminDashboard() {
                         marginBottom: -2,
                         fontSize: 16,
                         fontWeight: active ? 800 : 500,
-                        color: active ? "#0059D6" : "#64748B",
+                        color: active ? "#1085FD" : "#64748B",
                         border: "none",
-                        borderBottom: active ? "2.5px solid #0059D6" : "2.5px solid transparent",
+                        borderBottom: active ? "2.5px solid #1085FD" : "2.5px solid transparent",
                         background: "transparent",
                         cursor: "pointer",
                         letterSpacing: active ? "-0.02em" : "normal",
@@ -1303,7 +1303,7 @@ export default function AdminDashboard() {
                     >
                       {tab.label}
                       {tab.count != null && (
-                        <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#EFF6FF" : "#F8FAFC", color: active ? "#0059D6" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
+                        <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, background: active ? "#EFF6FF" : "#F8FAFC", color: active ? "#1085FD" : "#64748B", borderRadius: 999, padding: "2px 10px" }}>
                           {tab.count}
                         </span>
                       )}
@@ -1318,7 +1318,7 @@ export default function AdminDashboard() {
                   value={filterUserId}
                   onChange={e => setFilterUserId(e.target.value)}
                   className="border rounded-xl px-3 bg-white outline-none transition-all"
-                  style={{ fontSize: 16, fontWeight: filterUserId ? 700 : 500, height: 44, borderColor: filterUserId ? "#0059D6" : "#E5E7EB", color: filterUserId ? "#0059D6" : "#64748B", minWidth: 160 }}
+                  style={{ fontSize: 16, fontWeight: filterUserId ? 700 : 500, height: 44, borderColor: filterUserId ? "#1085FD" : "#E5E7EB", color: filterUserId ? "#1085FD" : "#64748B", minWidth: 160 }}
                 >
                   <option value="">All members</option>
                   {nonAdmins.map((u: any) => (
@@ -1539,7 +1539,7 @@ export default function AdminDashboard() {
                     onClick={() => brandingFileRef.current?.click()}
                     disabled={logoUploading || brandingSaving}
                     className="flex items-center gap-2 rounded-xl transition-all duration-150 disabled:opacity-50"
-                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#0059D6", border: "none", padding: "10px 20px", cursor: "pointer" }}
+                    style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", background: "#1085FD", border: "none", padding: "10px 20px", cursor: "pointer" }}
                   >
                     {logoUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
                     {brandingLogoUrl ? "Replace logo" : "Upload logo"}
