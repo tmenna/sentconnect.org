@@ -661,13 +661,9 @@ export function PostCard({
         </Link>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <Link
-              href={`/missionaries/${post.author.id}`}
-              className="transition-colors leading-snug hover:underline"
-              style={{ fontSize: 15, fontWeight: 700, color: "#0F1419" }}
-            >
+            <span className="leading-snug" style={{ fontSize: 15, fontWeight: 700, color: "#0F1419" }}>
               {post.author.name}
-            </Link>
+            </span>
             <span style={{ fontSize: 13, color: "#536471" }}>·</span>
             <span style={{ fontSize: 13, color: "#536471", fontWeight: 400 }}>{timeAgo}</span>
             {post.location && (
