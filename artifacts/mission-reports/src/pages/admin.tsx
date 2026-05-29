@@ -852,7 +852,7 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
           <StatusBadge status={u.status} />
         </td>
         {/* Joined */}
-        <td className="px-5 py-4 hidden lg:table-cell">
+        <td className="px-5 py-4 hidden sm:table-cell" style={{ whiteSpace: "nowrap" }}>
           <span
             style={{
               fontSize: 11,
@@ -1061,11 +1061,11 @@ export default function AdminDashboard() {
         />
       )}
 
-      <div className="flex min-h-[600px] mx-auto w-full" style={{ maxWidth: 1020, background: "#fff" }}>
+      <div className="flex min-h-[600px] mx-auto w-full" style={{ maxWidth: 1140, background: "#fff" }}>
 
         {/* ── Sidebar ── */}
         <aside style={{
-          width: 240, flexShrink: 0,
+          width: 260, flexShrink: 0,
           background: "#fff",
           display: "flex", flexDirection: "column",
           padding: "28px 12px 20px",
@@ -1103,7 +1103,7 @@ export default function AdminDashboard() {
                     border: "none",
                     background: active ? "#EEF4FF" : "transparent",
                     color: "#111",
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: active ? 700 : 500,
                     cursor: "pointer",
                     transition: "background 0.15s",
@@ -1236,7 +1236,7 @@ export default function AdminDashboard() {
                         <th className="px-5 py-4 text-left text-[13px] font-700 tracking-wide uppercase" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11 }}>Member</th>
                         <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
                         <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
-                        <th className="px-5 py-4 text-left hidden lg:table-cell" style={{ color: "#1085FD", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
+                        <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#1085FD", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
                         <th className="px-5 py-4 text-right" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
                       </tr>
                     </thead>
