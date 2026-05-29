@@ -124,7 +124,7 @@ export default function PublicPost() {
             <div className="flex items-center gap-3.5 px-6 pt-6 pb-4">
               <Avatar className="h-11 w-11 flex-shrink-0" style={{ boxShadow: "0 0 0 2px #fff, 0 0 0 3px #E5E7EB" }}>
                 <AvatarImage src={post.author.avatarUrl ?? undefined} />
-                <AvatarFallback className="font-bold text-[14px]" style={{ background: "#F5F5F5", color: "#111827" }}>
+                <AvatarFallback className="font-bold text-[14px]" style={{ background: "#2B92FD", color: "#fff" }}>
                   {post.author.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>

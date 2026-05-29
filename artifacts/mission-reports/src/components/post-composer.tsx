@@ -197,7 +197,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
       <div className="flex gap-3.5">
         <Avatar className="h-11 w-11 flex-shrink-0" style={{ border: "1.5px solid #F3F4F6" }}>
           <AvatarImage src={user.avatarUrl ?? undefined} />
-          <AvatarFallback style={{ background: "#F5F5F5", color: "#111827", fontWeight: 700, fontSize: 15 }}>
+          <AvatarFallback style={{ background: "#2B92FD", color: "#fff", fontWeight: 700, fontSize: 15 }}>
             {user.name.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>

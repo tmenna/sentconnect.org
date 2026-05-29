@@ -654,7 +654,7 @@ export function PostCard({
         <Link href={`/missionaries/${post.author.id}`} className="flex-shrink-0 mt-0.5">
           <Avatar className="h-9 w-9 cursor-pointer" style={{ border: "1px solid #E5E7EB" }}>
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#F3F4F6", color: "#0F1419", fontWeight: 700, fontSize: 12 }}>
+            <AvatarFallback style={{ background: "#2B92FD", color: "#fff", fontWeight: 700, fontSize: 12 }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -826,7 +826,7 @@ export function PostCard({
                     <div key={c.id} className="flex gap-2.5">
                       <Avatar className="h-8 w-8 flex-shrink-0 mt-0.5" style={{ border: "1px solid #E5E7EB" }}>
                         <AvatarImage src={c.author.avatarUrl ?? undefined} />
-                        <AvatarFallback style={{ background: "#F3F4F6", color: "#0F1419", fontWeight: 700, fontSize: 11 }}>
+                        <AvatarFallback style={{ background: "#2B92FD", color: "#fff", fontWeight: 700, fontSize: 11 }}>
                           {c.author.name.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
@@ -859,7 +859,7 @@ export function PostCard({
                 <form onSubmit={submitComment} className="flex gap-2.5 items-center pt-1">
                   <Avatar className="h-8 w-8 flex-shrink-0" style={{ border: "1px solid #E5E7EB" }}>
                     <AvatarImage src={user.avatarUrl ?? undefined} />
-                    <AvatarFallback style={{ background: "#F3F4F6", color: "#0F1419", fontWeight: 700, fontSize: 11 }}>
+                    <AvatarFallback style={{ background: "#2B92FD", color: "#fff", fontWeight: 700, fontSize: 11 }}>
                       {user.name.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>

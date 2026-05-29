@@ -110,7 +110,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
                         className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[13px] cursor-pointer transition-all duration-150"
-                        style={{ background: "#EFF6FF", color: "#1085FD" }}
+                        style={{ background: "#2B92FD", color: "#fff" }}
                       >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
@@ -147,7 +147,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <Link href="/profile">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-[13px] cursor-pointer"
-                  style={{ background: "#f3f4f6", border: "1.5px solid #e5e7eb", color: "#374151" }}
+                  style={{ background: "#2B92FD", color: "#fff", border: "none" }}
                 >
                   {user.name.charAt(0).toUpperCase()}
                 </div>

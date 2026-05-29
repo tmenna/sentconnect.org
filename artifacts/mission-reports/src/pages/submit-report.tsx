@@ -122,7 +122,7 @@ export default function SubmitReport() {
               <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
                 <Avatar style={{ width: 42, height: 42, flexShrink: 0 }}>
                   <AvatarImage src={user.avatarUrl ?? undefined} />
-                  <AvatarFallback style={{ background: "#1085FD", color: "#fff", fontSize: 14, fontWeight: 700 }}>{initials}</AvatarFallback>
+                  <AvatarFallback style={{ background: "#2B92FD", color: "#fff", fontSize: 14, fontWeight: 700 }}>{initials}</AvatarFallback>
                 </Avatar>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: 14, fontWeight: 700, color: "#0F172A", margin: "0 0 2px" }}>{user.name}</p>

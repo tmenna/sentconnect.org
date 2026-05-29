@@ -240,7 +240,7 @@ export function MasonryCard({
         <div className="flex items-center gap-2 pt-2.5" style={{ borderTop: "1px solid #F3F4F6" }}>
           <Avatar className="h-7 w-7 flex-shrink-0 ring-1 ring-white shadow-sm">
             <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback className="text-[10px] font-bold" style={{ background: "#F5F5F5", color: "#111827" }}>
+            <AvatarFallback className="text-[10px] font-bold" style={{ background: "#2B92FD", color: "#fff" }}>
               {post.author.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
