@@ -928,6 +928,146 @@ function TeamRow({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUs
   );
 }
 
+// ─── Mobile Team Card ──────────────────────────────────────────────────────
+
+function MobileTeamCard({ u, currentUserId, onUpdated, onDeleted }: { u: any; currentUserId: number; onUpdated: () => void; onDeleted: () => void }) {
+  const [busy, setBusy] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [showEditPerms, setShowEditPerms] = useState(false);
+  const [showManagePassword, setShowManagePassword] = useState(false);
+  const isSelf = u.id === currentUserId;
+
+  async function toggleStatus() {
+    setBusy(true);
+    try {
+      await apiFetch(`/admin/users/${u.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: u.status === "active" ? "inactive" : "active" }),
+      });
+      onUpdated();
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function deleteUser() {
+    setBusy(true);
+    setDeleteError(null);
+    try {
+      const res = await fetch(`/api/admin/users/${u.id}`, { method: "DELETE", credentials: "include" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setDeleteError(data?.error ?? `Request failed (${res.status})`);
+        return;
+      }
+      setShowDeleteModal(false);
+      onDeleted();
+    } catch (err: any) {
+      setDeleteError(err.message ?? "An unexpected error occurred");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <>
+      {showDeleteModal && (
+        <DeleteConfirmModal
+          userName={u.name}
+          role={u.role}
+          onConfirm={deleteUser}
+          onClose={() => { setShowDeleteModal(false); setDeleteError(null); }}
+          loading={busy}
+          error={deleteError}
+        />
+      )}
+      {showEditPerms && (
+        <EditRolePermissionsModal
+          user={u}
+          isSelf={isSelf}
+          onClose={() => setShowEditPerms(false)}
+          onUpdated={() => { setShowEditPerms(false); onUpdated(); }}
+        />
+      )}
+      {showManagePassword && (
+        <ManagePasswordModal user={u} onClose={() => setShowManagePassword(false)} />
+      )}
+
+      <div className="px-4 py-4 border-b" style={{ borderColor: "#F1F5F9" }}>
+        {/* Top: avatar + name/email */}
+        <div className="flex items-center gap-3">
+          <Avatar className="h-11 w-11 flex-shrink-0 rounded-xl">
+            <AvatarImage src={u.avatarUrl ?? undefined} />
+            <AvatarFallback className="font-bold text-[14px] rounded-xl" style={{ background: "#F5F5F5", color: "#2B2B2B" }}>
+              {u.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="min-w-0 flex-1">
+            <p className="text-[15px] font-bold leading-tight" style={{ color: "#2B2B2B" }}>{u.name}</p>
+            <p className="text-[13px] mt-0.5 truncate" style={{ color: "#9CA3AF" }}>{u.email}</p>
+          </div>
+        </div>
+
+        {/* Meta: role + status + joined */}
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <RoleBadge role={u.role} />
+          <StatusBadge status={u.status} />
+          <span style={{ fontSize: 11, color: "#9CA3AF" }}>
+            Joined {format(new Date(u.createdAt), "MMM d, yyyy")}
+          </span>
+        </div>
+
+        {/* Bio */}
+        {u.bio && (
+          <p className="mt-2 text-[12px] leading-relaxed" style={{ color: "#6B7280" }}>{u.bio}</p>
+        )}
+
+        {/* Actions */}
+        <div className="mt-3 flex items-center gap-2 flex-wrap">
+          <button
+            onClick={() => setShowEditPerms(true)}
+            disabled={busy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors"
+            style={{ background: "#F3F4F6", color: "#374151" }}
+          >
+            <Settings2 className="h-3.5 w-3.5" /> Edit Role
+          </button>
+          <button
+            onClick={toggleStatus}
+            disabled={busy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors"
+            style={{ background: u.status === "active" ? "#FFFBEB" : "#ECFDF5", color: u.status === "active" ? "#D97706" : "#10B981" }}
+          >
+            {u.status === "active" ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+            {u.status === "active" ? "Deactivate" : "Activate"}
+          </button>
+          <button
+            onClick={() => setShowManagePassword(true)}
+            disabled={busy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors"
+            style={{ background: "#F3F4F6", color: "#374151" }}
+          >
+            <KeyRound className="h-3.5 w-3.5" /> Password
+          </button>
+          {!isSelf && (
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              disabled={busy}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors"
+              style={{ background: "#FEF2F2", color: "#EF4444" }}
+            >
+              <Trash2 className="h-3.5 w-3.5" /> Remove
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
 function parseLocation(loc: string): { city: string; country: string } {
@@ -1229,30 +1369,46 @@ export default function AdminDashboard() {
                   </p>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b" style={{ borderColor: "#F1F5F9" }}>
-                        <th className="px-5 py-4 text-left text-[13px] font-700 tracking-wide uppercase" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11 }}>Member</th>
-                        <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
-                        <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
-                        <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#1085FD", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
-                        <th className="px-5 py-4 text-right" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredTeam.map((u: any) => (
-                        <TeamRow
-                          key={u.id}
-                          u={u}
-                          currentUserId={user.id}
-                          onUpdated={refreshUsers}
-                          onDeleted={refreshUsers}
-                        />
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <>
+                  {/* Mobile card list — visible only below sm */}
+                  <div className="sm:hidden">
+                    {filteredTeam.map((u: any) => (
+                      <MobileTeamCard
+                        key={u.id}
+                        u={u}
+                        currentUserId={user.id}
+                        onUpdated={refreshUsers}
+                        onDeleted={refreshUsers}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Desktop table — hidden below sm */}
+                  <div className="hidden sm:block overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b" style={{ borderColor: "#F1F5F9" }}>
+                          <th className="px-5 py-4 text-left" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Member</th>
+                          <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Role</th>
+                          <th className="px-5 py-4 text-left hidden md:table-cell" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Status</th>
+                          <th className="px-5 py-4 text-left hidden sm:table-cell" style={{ color: "#1085FD", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Joined</th>
+                          <th className="px-5 py-4 text-right" style={{ color: "#64748B", fontWeight: 700, letterSpacing: "0.05em", fontSize: 11, textTransform: "uppercase" }}>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredTeam.map((u: any) => (
+                          <TeamRow
+                            key={u.id}
+                            u={u}
+                            currentUserId={user.id}
+                            onUpdated={refreshUsers}
+                            onDeleted={refreshUsers}
+                          />
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
               )}
             </div>
 
