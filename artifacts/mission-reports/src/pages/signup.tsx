@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, Redirect } from "wouter";
+import { Link } from "wouter";
 import { useAuth } from "@/components/auth-provider";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -22,7 +22,7 @@ const FEATURES = [
 ];
 
 export default function Signup() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isLoading } = useAuth();
   const { signupLogo, isCustomSignupLogo } = useLogo();
   const { toast } = useToast();
   const [orgName, setOrgName]           = useState("");
@@ -60,7 +60,6 @@ export default function Signup() {
   }, []);
 
   if (isLoading) return null;
-  if (isAuthenticated) return <Redirect href="/" />;
 
   function generateSubdomain(org: string) {
     return org.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 30);
