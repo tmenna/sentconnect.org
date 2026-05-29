@@ -3217,11 +3217,11 @@ export default function SuperAdminPanel() {
 
       {/* Platform Stats */}
       {loading ? (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => <div key={i} className="h-24 bg-white rounded-xl border border-border/60 animate-pulse" />)}
         </div>
       ) : stats && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatCard label="Organizations" value={stats.totalOrgs} icon={<Building2 className="h-5 w-5" />} />
           <StatCard label="Total Users" value={stats.totalUsers} icon={<Users className="h-5 w-5" />} />
           <StatCard label="Total Posts" value={stats.totalPosts} icon={<FileText className="h-5 w-5" />} />
@@ -3229,24 +3229,24 @@ export default function SuperAdminPanel() {
       )}
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 bg-muted/40 rounded-xl p-1 w-fit border border-border/40">
+      <div className="flex items-center gap-1 bg-muted/40 rounded-xl p-1 border border-border/40 overflow-x-auto w-full sm:w-fit" style={{ scrollbarWidth: "none" }}>
         <TabButton active={activeTab === "platform-users"} onClick={() => setActiveTab("platform-users")}>
-          <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" /> Platform Users</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><Shield className="h-3.5 w-3.5" /> Platform Users</span>
         </TabButton>
         <TabButton active={activeTab === "orgs"} onClick={() => setActiveTab("orgs")}>
-          <span className="flex items-center gap-1.5"><Building2 className="h-3.5 w-3.5" /> Organizations</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><Building2 className="h-3.5 w-3.5" /> Organizations</span>
         </TabButton>
         <TabButton active={activeTab === "users"} onClick={() => setActiveTab("users")}>
-          <span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" /> All Users</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><Users className="h-3.5 w-3.5" /> All Users</span>
         </TabButton>
         <TabButton active={activeTab === "landing"} onClick={() => setActiveTab("landing")}>
-          <span className="flex items-center gap-1.5"><BookOpen className="h-3.5 w-3.5" /> Landing Page</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><BookOpen className="h-3.5 w-3.5" /> Landing Page</span>
         </TabButton>
         <TabButton active={activeTab === "about"} onClick={() => setActiveTab("about")}>
-          <span className="flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> About Page</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><Globe className="h-3.5 w-3.5" /> About Page</span>
         </TabButton>
         <TabButton active={activeTab === "logos"} onClick={() => setActiveTab("logos")}>
-          <span className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" /> Logos &amp; Branding</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><Image className="h-3.5 w-3.5" /> Logos &amp; Branding</span>
         </TabButton>
       </div>
 
@@ -3257,14 +3257,14 @@ export default function SuperAdminPanel() {
       {/* ─── Tab: Platform Users ──────────────────────────────────────────────── */}
       {activeTab === "platform-users" && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="text-[17px] font-bold text-foreground">Platform Team</p>
               <p className="text-[14px] text-muted-foreground mt-0.5">Manage super admins, platform admins, and platform managers</p>
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold bg-[#1085FD] text-white rounded-lg hover:bg-[#1085FD] transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 text-[14px] font-semibold bg-[#1085FD] text-white rounded-lg hover:bg-[#1085FD] transition-colors whitespace-nowrap"
             >
               <Plus className="h-4 w-4" /> Add Platform User
             </button>
@@ -3368,22 +3368,22 @@ export default function SuperAdminPanel() {
       {/* ─── Tab: Organizations ───────────────────────────────────────────────── */}
       {activeTab === "orgs" && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="text-[14px] font-bold text-foreground">Organizations</p>
               <p className="text-[12px] text-muted-foreground mt-0.5">Manage all tenant organizations and their subdomains</p>
             </div>
             {user?.role === "super_admin" && (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => setShowCreateUser(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold border border-[#1085FD] text-[#1085FD] rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold border border-[#1085FD] text-[#1085FD] rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap"
                 >
                   <Plus className="h-3.5 w-3.5" /> New User
                 </button>
                 <button
                   onClick={() => setShowCreateOrg(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#1085FD] text-white rounded-lg hover:bg-[#1085FD] transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-[12px] font-semibold bg-[#1085FD] text-white rounded-lg hover:bg-[#1085FD] transition-colors whitespace-nowrap"
                 >
                   <Plus className="h-3.5 w-3.5" /> New Organization
                 </button>
@@ -3402,33 +3402,35 @@ export default function SuperAdminPanel() {
           ) : (
             <div className="space-y-3">
               {orgs.map(org => (
-                <div key={org.id} className="bg-white rounded-xl border border-border/60 shadow-sm px-5 py-4 flex items-center gap-4">
-                  <div className="p-2.5 bg-muted/50 rounded-lg flex-shrink-0">
-                    <Building2 className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="font-bold text-[14px] text-foreground truncate">{org.name}</p>
-                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${org.status === "active" ? "bg-gray-100 text-gray-700" : "bg-gray-100 text-gray-700"}`}>
-                        {org.status}
-                      </span>
+                <div key={org.id} className="bg-white rounded-xl border border-border/60 shadow-sm px-5 py-4">
+                  <div className="flex items-start gap-4">
+                    <div className="p-2.5 bg-muted/50 rounded-lg flex-shrink-0 mt-0.5">
+                      <Building2 className="h-5 w-5 text-muted-foreground" />
                     </div>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5 text-[12px] text-muted-foreground">
-                      <a
-                        href={buildOrgHomeHref(org.subdomain)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-1 hover:text-[#1085FD] hover:underline transition-colors"
-                        title={`Open ${org.name} portal`}
-                      >
-                        <Globe className="h-3 w-3" />{buildOrgHomeHref(org.subdomain)}
-                      </a>
-                      <span className="flex items-center gap-1"><Users className="h-3 w-3" />{org.userCount} users</span>
-                      <span className="flex items-center gap-1"><FileText className="h-3 w-3" />{org.postCount} posts</span>
-                      <span>Created {formatDistanceToNow(new Date(org.createdAt), { addSuffix: true })}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="font-bold text-[14px] text-foreground truncate">{org.name}</p>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${org.status === "active" ? "bg-gray-100 text-gray-700" : "bg-gray-100 text-gray-700"}`}>
+                          {org.status}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5 text-[12px] text-muted-foreground">
+                        <a
+                          href={buildOrgHomeHref(org.subdomain)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 hover:text-[#1085FD] hover:underline transition-colors"
+                          title={`Open ${org.name} portal`}
+                        >
+                          <Globe className="h-3 w-3" />{buildOrgHomeHref(org.subdomain)}
+                        </a>
+                        <span className="flex items-center gap-1"><Users className="h-3 w-3" />{org.userCount} users</span>
+                        <span className="flex items-center gap-1"><FileText className="h-3 w-3" />{org.postCount} posts</span>
+                        <span>Created {formatDistanceToNow(new Date(org.createdAt), { addSuffix: true })}</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex flex-wrap items-center gap-2 mt-3 ml-[52px]">
                     <button
                       onClick={() => setEditingOrg(org)}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 transition-colors"

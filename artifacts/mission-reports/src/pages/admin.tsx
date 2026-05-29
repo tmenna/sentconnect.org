@@ -1201,13 +1201,57 @@ export default function AdminDashboard() {
         />
       )}
 
+      {/* ── Mobile top bar — hidden on md+ ── */}
+      <div className="md:hidden" style={{ background: "#fff", borderBottom: "1px solid #e8eaed", fontFamily: "Inter, system-ui, sans-serif" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 10px" }}>
+          <div>
+            <p style={{ fontSize: 17, fontWeight: 800, color: "#111", letterSpacing: "-0.03em", margin: 0 }}>Missions Feed</p>
+            <p style={{ fontSize: 12, color: "#8899A6", margin: "2px 0 0" }}>{user.organization ?? "Admin"}</p>
+          </div>
+          <Link href="/submit" style={{ textDecoration: "none" }}>
+            <div role="button" style={{ background: "#1085FD", color: "#fff", borderRadius: 999, padding: "7px 14px", fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}>
+              <FileText style={{ width: 14, height: 14 }} /> Reports
+            </div>
+          </Link>
+        </div>
+        <div style={{ display: "flex", gap: 2, overflowX: "auto", padding: "0 12px" }}>
+          {([
+            { id: "feed" as const, label: "Updates", Icon: Rss },
+            { id: "branding" as const, label: "Branding", Icon: Palette },
+            { id: "team" as const, label: "Members", Icon: Users },
+          ]).map(({ id, label, Icon }) => {
+            const active = activeTab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap",
+                  padding: "8px 12px", border: "none",
+                  borderBottom: active ? "2px solid #1085FD" : "2px solid transparent",
+                  background: "transparent", color: active ? "#1085FD" : "#6B7280",
+                  fontSize: 14, fontWeight: active ? 700 : 500, cursor: "pointer", fontFamily: "inherit",
+                }}
+              >
+                <Icon strokeWidth={active ? 2.2 : 1.8} style={{ width: 16, height: 16 }} />
+                {label}
+                {id === "team" && !usersLoading && (
+                  <span style={{ fontSize: 10, fontWeight: 600, background: active ? "#EEF4FF" : "#f1f3f5", color: active ? "#1085FD" : "#64748B", borderRadius: 999, padding: "1px 6px" }}>
+                    {allUsers.length}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="flex min-h-[600px] mx-auto w-full" style={{ maxWidth: 1140, background: "#fff" }}>
 
-        {/* ── Sidebar ── */}
-        <aside style={{
+        {/* ── Sidebar — hidden on mobile ── */}
+        <aside className="hidden md:flex flex-col" style={{
           width: 260, flexShrink: 0,
           background: "#fff",
-          display: "flex", flexDirection: "column",
           padding: "28px 12px 20px",
           borderRight: "1px solid #e8eaed",
           fontFamily: "Inter, system-ui, sans-serif",
@@ -1301,7 +1345,7 @@ export default function AdminDashboard() {
         </aside>
 
         {/* ── Main content ── */}
-        <div style={{ flex: 1, minWidth: 0, padding: "28px 28px 28px 14px", background: "#fff", borderRadius: "0 16px 16px 0" }} className="space-y-4">
+        <div style={{ flex: 1, minWidth: 0, background: "#fff" }} className="space-y-4 p-4 md:p-7 md:pl-3.5">
 
         {/* ── Tab: Team ── */}
         {activeTab === "team" && (
