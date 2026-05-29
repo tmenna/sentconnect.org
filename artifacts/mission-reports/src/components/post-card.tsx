@@ -634,7 +634,7 @@ export function PostCard({
       className="overflow-hidden transition-colors duration-150"
       style={{
         background: hovered ? "rgba(15,20,25,0.02)" : "#ffffff",
-        borderBottom: "1px solid #E5E7EB",
+        borderBottom: "1px solid #dfe3e8",
         borderLeft: (!post.isMissionMoment && post.isHighlight) ? "3px solid #F59E0B" : "none",
       }}
     >
