@@ -651,14 +651,12 @@ export function PostCard({
 
       {/* Header */}
       <div className="flex items-start gap-3 px-4 sm:px-5 pt-3 pb-2">
-        <Link href={`/missionaries/${post.author.id}`} className="flex-shrink-0 mt-0.5">
-          <Avatar className="h-9 w-9 cursor-pointer" style={{ border: "1px solid #E5E7EB" }}>
-            <AvatarImage src={post.author.avatarUrl ?? undefined} />
-            <AvatarFallback style={{ background: "#2B92FD", color: "#fff", fontWeight: 700, fontSize: 12 }}>
-              {post.author.name.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
+        <Avatar className="h-9 w-9 flex-shrink-0 mt-0.5" style={{ border: "1px solid #E5E7EB" }}>
+          <AvatarImage src={post.author.avatarUrl ?? undefined} />
+          <AvatarFallback style={{ background: "#2B92FD", color: "#fff", fontWeight: 700, fontSize: 12 }}>
+            {post.author.name.charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="leading-snug" style={{ fontSize: 15, fontWeight: 700, color: "#0F1419" }}>
