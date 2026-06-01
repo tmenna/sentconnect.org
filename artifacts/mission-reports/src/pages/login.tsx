@@ -100,11 +100,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       {/* Left panel */}
       <div className="hidden md:flex" style={{ flex: "0 0 36%", background: LEFT_BG, alignItems: "center", justifyContent: "center", padding: 40 }}>
         <div>
-          <img
-            src="/favicon.svg"
-            alt="SentConnect"
-            style={{ width: 52, height: 52, borderRadius: 14, marginBottom: 24, display: "block" }}
-          />
           <p style={{ fontSize: 38, fontWeight: 700, color: BLUE, letterSpacing: "-0.02em", lineHeight: 1.1, margin: "0 0 8px" }}>
             {platformMode ? "Admin\nsign in." : "Sign in."}
           </p>
@@ -148,19 +143,13 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       {/* ── Left panel (hidden on mobile) ── */}
       <div className="hidden md:flex" style={{ flex: "0 0 34%", background: LEFT_BG, flexDirection: "column", alignItems: "flex-end", justifyContent: "center", padding: "48px 60px 48px 32px", position: "relative" }}>
         <div style={{ maxWidth: 280 }}>
-          {/* Blue SentConnect logo mark */}
-          <img
-            src="/favicon.svg"
-            alt="SentConnect"
-            style={{ width: 52, height: 52, borderRadius: 14, marginBottom: 28, display: "block" }}
-          />
           <p style={{ fontSize: 48, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 16px", whiteSpace: "pre-line" }}>
             {platformMode ? "Admin\nsign in" : "Sign in"}
           </p>
-          <p style={{ fontSize: 17, fontWeight: 600, color: "#3A4A5C", margin: 0, lineHeight: 1.5, whiteSpace: "pre-line" }}>
+          <p style={{ fontSize: 17, fontWeight: 600, color: "#3A4A5C", margin: 0, lineHeight: 1.5, whiteSpace: "nowrap" }}>
             {platformMode
               ? "SentConnect platform administration."
-              : "Enter your username\nand password"}
+              : "Enter your username and password"}
           </p>
         </div>
         <p style={{ position: "absolute", bottom: 32, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "#A8B8CC", fontStyle: "italic", margin: 0 }}>

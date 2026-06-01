@@ -113,7 +113,6 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
 
 function LandingPage() {
   const [content, setContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { logo: lpLogo, footerLogo: lpFooterLogo } = useLogo();
   const [, navigate] = useLocation();
 
@@ -146,154 +145,105 @@ function LandingPage() {
   const BG        = "#FFFFFF";
 
   return (
-    <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
-      {/* landing-page.css is imported statically at module level — no inline style needed */}
-      {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,89,214,0.28)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
-          <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={logoWhite} alt="SentConnect" style={{ maxHeight: 26, width: "auto", maxWidth: 160, display: "block" }} />
-          </a>
+    <div style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", color: TEXT }}>
 
-          {/* Desktop nav */}
-          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 28 }}>
-            <a
-              href="/about"
-              style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
-            >About</a>
-            <a
-              href="/help"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s", display: "inline-flex", alignItems: "center", gap: 5 }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              Help
-            </a>
-            <a
-              href={content.headerPrimaryCtaHref}
-              onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
-              style={{ fontSize: 14, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F5F5F5"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
-            >{content.headerPrimaryCtaLabel}</a>
-          </nav>
+      {/* ── HERO — full-height split panel (matches Sign in aesthetic) ── */}
+      <div style={{ minHeight: "100dvh", display: "flex" }}>
 
-          {/* Mobile: Sign up pill + hamburger */}
-          <div className="flex sm:hidden items-center gap-3">
-            <a
-              href={content.headerPrimaryCtaHref}
-              onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
-              style={{ fontSize: 13, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "7px 16px", borderRadius: 999, textDecoration: "none" }}
-            >{content.headerPrimaryCtaLabel}</a>
-            <button
-              onClick={() => setMobileNavOpen(o => !o)}
-              style={{ background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, padding: "7px 8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-              aria-label="Menu"
-            >
-              {mobileNavOpen
-                ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-              }
-            </button>
+        {/* ── Left panel (hidden on mobile) ── */}
+        <div className="hidden md:flex" style={{ flex: "0 0 38%", background: "#EEF2F9", flexDirection: "column", alignItems: "flex-end", justifyContent: "center", padding: "48px 64px 48px 40px", position: "relative" }}>
+          <div style={{ maxWidth: 300 }}>
+            <img src="/favicon.svg" alt="SentConnect" style={{ width: 56, height: 56, borderRadius: 14, marginBottom: 32, display: "block" }} />
+            <p style={{ fontSize: "clamp(32px, 3.5vw, 46px)", fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.08, margin: "0 0 20px" }}>
+              {content.heroTitle}
+            </p>
+            <p style={{ fontSize: 16, fontWeight: 500, color: "#3A4A5C", margin: "0 0 36px", lineHeight: 1.65 }}>
+              {content.heroDescription}
+            </p>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <a
+                href={content.primaryCtaHref}
+                onClick={e => handleCtaClick(e, content.primaryCtaHref)}
+                style={{ height: 44, borderRadius: 999, background: BLUE, color: "#fff", fontSize: 14, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", padding: "0 24px", whiteSpace: "nowrap", transition: "background .15s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#0053CC"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
+              >{content.primaryCtaLabel}</a>
+            </div>
           </div>
+          <p style={{ position: "absolute", bottom: 32, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "#A8B8CC", fontStyle: "italic", margin: 0 }}>
+            "Declare his glory among the nations." — Psalm 96:3
+          </p>
         </div>
 
-        {/* Mobile dropdown */}
-        {mobileNavOpen && (
-          <div className="sm:hidden" style={{ background: BLUE_DARK, borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
-            <a
-              href="/about"
-              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
-              onClick={() => setMobileNavOpen(false)}
+        {/* ── Right panel ── */}
+        <div style={{ flex: 1, background: "#fff", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", padding: "72px 48px 48px 56px", position: "relative" }}>
+
+          {/* Nav links — top right (desktop) */}
+          <div className="hidden sm:flex" style={{ position: "absolute", top: 28, right: 36, alignItems: "center", gap: 24 }}>
+            <a href="/about" style={{ fontSize: 13, fontWeight: 600, color: "#607089", textDecoration: "none", transition: "color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#111827"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#607089"; }}
             >About</a>
+            <a href="/help" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, fontWeight: 600, color: "#607089", textDecoration: "none", transition: "color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#111827"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#607089"; }}
+            >Help</a>
             <a
-              href="/help"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none" }}
-              onClick={() => setMobileNavOpen(false)}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              Help
-            </a>
+              href={content.headerPrimaryCtaHref}
+              onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
+              style={{ height: 36, borderRadius: 999, background: BLUE, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", padding: "0 18px", transition: "background .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#0053CC"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
+            >{content.headerPrimaryCtaLabel}</a>
           </div>
-        )}
-      </header>
 
-      <main>
-        {/* ── HERO ── */}
-        <section className="lp-hero-section" style={{ background: "#FFFFFF", position: "relative", overflow: "hidden", borderBottom: "1px solid #F1F5F9" }}>
-          {/* subtle purple glow top-right */}
-          <div style={{ position: "absolute", top: -160, right: -160, width: 520, height: 520, borderRadius: "50%", background: "radial-gradient(circle, rgba(107,33,168,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: -100, left: -100, width: 380, height: 380, borderRadius: "50%", background: "radial-gradient(circle, rgba(107,33,168,0.04) 0%, transparent 70%)", pointerEvents: "none" }} />
-
-          <div className="lp-hero-grid mx-auto max-w-6xl px-6">
-            {/* Left */}
-            <div>
-              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "#F3EEFF", borderRadius: 999, padding: "5px 16px", border: "1px solid rgba(107,33,168,0.18)" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
-              </div>
-
-              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px", whiteSpace: "pre-line" }}>
-                {content.heroTitle}
-              </h1>
-
-              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.8, color: TEXT2, maxWidth: 460, margin: "0 0 44px" }}>
-                {content.heroDescription}
-              </p>
-
-              <div className="lp-animate lp-delay-4">
-                <a
-                  href={content.primaryCtaHref}
-                  onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,185,129,0.4)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,185,129,0.5)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,185,129,0.4)"; }}
-                >{content.primaryCtaLabel}</a>
-              </div>
-            </div>
-
-            {/* Right — Mission Moments card */}
-            <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 24, boxShadow: "0 12px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.04)", padding: "24px", position: "relative" }}>
-              {/* accent dot */}
-              <div style={{ position: "absolute", top: -12, right: 32, width: 24, height: 24, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(0,89,214,0.45)" }} />
-
-              {/* card header */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #F1F5F9" }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <Shuffle style={{ width: 16, height: 16, color: "#fff" }} />
-                </div>
-                <div>
-                  <p style={{ fontSize: 14, fontWeight: 800, color: TEXT, margin: 0, letterSpacing: "-0.01em" }}>{content.previewCardTitle}</p>
-                  <p style={{ fontSize: 11, color: "#94A3B8", margin: "2px 0 0" }}>{content.previewLabel}</p>
-                </div>
-                <div style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#22C55E", boxShadow: "0 0 0 3px rgba(34,197,94,0.2)" }} />
-              </div>
-
-              {/* feed rows */}
-              {[
-                { title: content.previewTitle1, ago: "2h ago", w: "80%", color: "rgba(138,5,255,0.18)" },
-                { title: content.previewTitle2, ago: "3h ago", w: "65%", color: "rgba(138,5,255,0.12)" },
-                { title: content.previewTitle3, ago: "5h ago", w: "52%", color: "rgba(138,5,255,0.08)" },
-              ].map(({ title, ago, w, color }, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid #F8FAFC" : "none" }}>
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: color, flexShrink: 0 }} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
-                    <p style={{ fontSize: 11, color: "#94A3B8", margin: "0 0 8px" }}>{ago}</p>
-                    <div style={{ height: 5, background: "rgba(138,5,255,0.08)", borderRadius: 999, width: "100%" }} />
-                    <div style={{ height: 5, background: "rgba(138,5,255,0.06)", borderRadius: 999, width: w, marginTop: 4 }} />
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* Mobile heading */}
+          <div className="md:hidden" style={{ width: "100%", maxWidth: 400, marginBottom: 32 }}>
+            <img src="/favicon.svg" alt="SentConnect" style={{ width: 44, height: 44, borderRadius: 11, marginBottom: 20, display: "block" }} />
+            <p style={{ fontSize: 32, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.1, margin: "0 0 12px" }}>
+              {content.heroTitle}
+            </p>
+            <p style={{ fontSize: 15, color: "#3A4A5C", margin: "0 0 24px", lineHeight: 1.65 }}>
+              {content.heroDescription}
+            </p>
+            <a
+              href={content.primaryCtaHref}
+              onClick={e => handleCtaClick(e, content.primaryCtaHref)}
+              style={{ height: 44, borderRadius: 999, background: BLUE, color: "#fff", fontSize: 14, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", padding: "0 24px" }}
+            >{content.primaryCtaLabel}</a>
           </div>
-        </section>
+
+          {/* Mission Moments preview card */}
+          <div style={{ width: "100%", maxWidth: 420, background: "#fff", borderRadius: 24, boxShadow: "0 12px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.04)", padding: "24px", position: "relative" }}>
+            <div style={{ position: "absolute", top: -12, right: 32, width: 24, height: 24, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(0,89,214,0.45)" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #F1F5F9" }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <Shuffle style={{ width: 16, height: 16, color: "#fff" }} />
+              </div>
+              <div>
+                <p style={{ fontSize: 14, fontWeight: 800, color: TEXT, margin: 0, letterSpacing: "-0.01em" }}>{content.previewCardTitle}</p>
+                <p style={{ fontSize: 11, color: "#94A3B8", margin: "2px 0 0" }}>{content.previewLabel}</p>
+              </div>
+              <div style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#22C55E", boxShadow: "0 0 0 3px rgba(34,197,94,0.2)" }} />
+            </div>
+            {[
+              { title: content.previewTitle1, ago: "2h ago", w: "80%", color: "rgba(16,133,253,0.15)" },
+              { title: content.previewTitle2, ago: "3h ago", w: "65%", color: "rgba(16,133,253,0.10)" },
+              { title: content.previewTitle3, ago: "5h ago", w: "52%", color: "rgba(16,133,253,0.06)" },
+            ].map(({ title, ago, w, color }, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid #F8FAFC" : "none" }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
+                  <p style={{ fontSize: 11, color: "#94A3B8", margin: "0 0 8px" }}>{ago}</p>
+                  <div style={{ height: 5, background: "rgba(16,133,253,0.08)", borderRadius: 999, width: "100%" }} />
+                  <div style={{ height: 5, background: "rgba(16,133,253,0.05)", borderRadius: 999, width: w, marginTop: 4 }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
         {/* ── HOW IT WORKS ── */}
         <section style={{ background: "#fff", padding: "112px 0" }}>
@@ -342,7 +292,6 @@ function LandingPage() {
             >{content.primaryCtaLabel}</a>
           </div>
         </section>
-      </main>
 
       {/* ── FOOTER ── */}
       <footer style={{ background: `linear-gradient(180deg, #263341 0%, ${CHARCOAL} 100%)`, padding: "72px 24px 0" }}>
