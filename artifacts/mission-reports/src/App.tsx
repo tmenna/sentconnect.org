@@ -137,9 +137,9 @@ function LandingPage() {
   }, []);
 
   const BLUE      = "#1085FD";
-  const BLUE_DARK = "#1085FD";
-  const TEAL      = "#10B981";
-  const TEAL_DARK = "#059669";
+  const BLUE_DARK = "#0070E0";
+  const TEAL      = "#1085FD";
+  const TEAL_DARK = "#0070E0";
   const CHARCOAL  = "#1F2937";
   const TEXT      = "#0F172A";
   const TEXT2     = "#64748B";
@@ -250,9 +250,9 @@ function LandingPage() {
                 <a
                   href={content.primaryCtaHref}
                   onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,185,129,0.4)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,185,129,0.5)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,185,129,0.4)"; }}
+                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.4)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.4)"; }}
                 >{content.primaryCtaLabel}</a>
               </div>
             </div>
@@ -335,9 +335,9 @@ function LandingPage() {
             <a
               href={content.primaryCtaHref}
               onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(16,185,129,0.45)", transition: "transform .15s, box-shadow .15s, background .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(16,185,129,0.55)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(16,185,129,0.45)"; }}
+              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(16,133,253,0.45)", transition: "transform .15s, box-shadow .15s, background .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(16,133,253,0.55)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(16,133,253,0.45)"; }}
             >{content.primaryCtaLabel}</a>
           </div>
         </section>
