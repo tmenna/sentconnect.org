@@ -330,13 +330,6 @@ export default function Signup() {
               ))}
             </div>
 
-            <div style={{ marginTop: "auto", paddingTop: 24 }}>
-              <div style={{ background: "#F0F6FF", borderRadius: 12, padding: "12px 14px" }}>
-                <p style={{ fontSize: 11.5, color: "#4B5563", margin: 0, lineHeight: 1.6 }}>
-                  <span style={{ fontWeight: 700, color: BLUE }}>30-day free trial</span> included. No charge until your trial ends.
-                </p>
-              </div>
-            </div>
           </div>
 
           {/* RIGHT — Form panel */}
