@@ -13,7 +13,6 @@ import { OrgProvider, useOrg } from "@/providers/org-provider";
 import { LogoProvider, useLogo } from "@/providers/logo-provider";
 import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
 import "./landing-page.css";
-import AppPreview from "./pages/app-preview";
 
 // Critical path — eagerly bundled (small or needed immediately)
 import Login from "./pages/login";
@@ -147,149 +146,154 @@ function LandingPage() {
   const BG        = "#FFFFFF";
 
   return (
-    <div style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", color: TEXT, display: "flex", flexDirection: "column", minHeight: "100dvh" }}>
-
-      {/* ── HEADER — white bar ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: "#fff", borderBottom: "1px solid #E8ECF0", height: 60, display: "flex", alignItems: "center", padding: "0 36px", flexShrink: 0 }}>
-        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 1400, margin: "0 auto", width: "100%" }}>
-          <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
-            {lpLogo
-              ? <img src={lpLogo} alt="SentConnect" style={{ maxHeight: 26, width: "auto", maxWidth: 160, display: "block" }} />
-              : <><img src="/favicon.svg" alt="" style={{ width: 26, height: 26, borderRadius: 7, display: "block" }} /><span style={{ fontSize: 16, fontWeight: 800, color: TEXT, letterSpacing: "-0.02em" }}>sentconnect</span></>
-            }
+    <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
+      {/* ── HEADER ── */}
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,89,214,0.28)" }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
+          <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+            <img src={logoWhite} alt="SentConnect" style={{ maxHeight: 26, width: "auto", maxWidth: 160, display: "block" }} />
           </a>
-          <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
-            <a href="/about" style={{ fontSize: 14, fontWeight: 600, color: "#607089", textDecoration: "none", transition: "color .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#607089"; }}
+
+          {/* Desktop nav */}
+          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 28 }}>
+            <a
+              href="/about"
+              style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
             >About</a>
-            <a href="/help" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, fontWeight: 600, color: "#607089", textDecoration: "none", transition: "color .15s", display: "inline-flex", alignItems: "center", gap: 5 }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#607089"; }}
+            <a
+              href="/help"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s", display: "inline-flex", alignItems: "center", gap: 5 }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               Help
             </a>
-            <a href="/login" style={{ fontSize: 14, fontWeight: 700, color: "#fff", background: BLUE, padding: "8px 22px", borderRadius: 999, textDecoration: "none", transition: "background .15s", display: "inline-flex", alignItems: "center" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#0053CC"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
-            >Sign in</a>
+            <a
+              href={content.headerPrimaryCtaHref}
+              onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
+              style={{ fontSize: 14, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F5F5F5"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
+            >{content.headerPrimaryCtaLabel}</a>
           </nav>
+
+          {/* Mobile: Sign up pill + hamburger */}
+          <div className="flex sm:hidden items-center gap-3">
+            <a
+              href={content.headerPrimaryCtaHref}
+              onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
+              style={{ fontSize: 13, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "7px 16px", borderRadius: 999, textDecoration: "none" }}
+            >{content.headerPrimaryCtaLabel}</a>
+            <button
+              onClick={() => setMobileNavOpen(o => !o)}
+              style={{ background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, padding: "7px 8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              aria-label="Menu"
+            >
+              {mobileNavOpen
+                ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+              }
+            </button>
+          </div>
         </div>
+
+        {/* Mobile dropdown */}
+        {mobileNavOpen && (
+          <div className="sm:hidden" style={{ background: BLUE_DARK, borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
+            <a
+              href="/about"
+              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+              onClick={() => setMobileNavOpen(false)}
+            >About</a>
+            <a
+              href="/help"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none" }}
+              onClick={() => setMobileNavOpen(false)}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Help
+            </a>
+          </div>
+        )}
       </header>
 
-      {/* ── HERO — split panel ── */}
-      <div style={{ flex: 1, display: "flex", minHeight: 0 }}>
+      <main>
+        {/* ── HERO ── */}
+        <section className="lp-hero-section" style={{ background: "#FFFFFF", position: "relative", overflow: "hidden", borderBottom: "1px solid #F1F5F9" }}>
+          {/* subtle blue glow */}
+          <div style={{ position: "absolute", top: -160, right: -160, width: 520, height: 520, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: -100, left: -100, width: 380, height: 380, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.04) 0%, transparent 70%)", pointerEvents: "none" }} />
 
-        {/* ── LEFT PANEL ── */}
-        <div style={{ flex: "0 0 38%", background: "#EEF2F9", display: "flex", flexDirection: "column", justifyContent: "center", padding: "56px 52px 56px 60px", overflowY: "auto" }}>
+          <div className="lp-hero-grid mx-auto max-w-6xl px-6">
+            {/* Left */}
+            <div>
+              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "#EEF5FF", borderRadius: 999, padding: "5px 16px", border: "1px solid rgba(16,133,253,0.2)" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+              </div>
 
-          {/* Eyebrow badge */}
-          <div style={{ display: "inline-flex", alignItems: "center", marginBottom: 22, background: "rgba(255,255,255,0.75)", borderRadius: 6, padding: "5px 14px", border: "1px solid rgba(16,133,253,0.22)", width: "fit-content" }}>
-            <span style={{ fontSize: 11, fontWeight: 800, color: BLUE, letterSpacing: "0.12em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
-          </div>
+              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px", whiteSpace: "pre-line" }}>
+                {content.heroTitle}
+              </h1>
 
-          {/* Headline */}
-          <h1 style={{ fontSize: "clamp(30px, 3.2vw, 48px)", fontWeight: 900, lineHeight: 1.1, letterSpacing: "-0.03em", color: TEXT, margin: "0 0 18px" }}>
-            {content.heroTitle}
-          </h1>
+              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.8, color: TEXT2, maxWidth: 460, margin: "0 0 44px" }}>
+                {content.heroDescription}
+              </p>
 
-          {/* Description */}
-          <p style={{ fontSize: 15.5, lineHeight: 1.75, color: "#3A4A5C", margin: "0 0 32px", maxWidth: 360 }}>
-            {content.heroDescription}
-          </p>
+              <div className="lp-animate lp-delay-4">
+                <a
+                  href={content.primaryCtaHref}
+                  onClick={e => handleCtaClick(e, content.primaryCtaHref)}
+                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,185,129,0.4)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,185,129,0.5)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,185,129,0.4)"; }}
+                >{content.primaryCtaLabel}</a>
+              </div>
+            </div>
 
-          {/* CTAs */}
-          <div style={{ display: "flex", gap: 12, marginBottom: 40, flexWrap: "wrap" }}>
-            <a href="/calvary/feed"
-              style={{ height: 46, borderRadius: 10, background: BLUE, color: "#fff", fontSize: 14.5, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8, padding: "0 22px", transition: "background .15s, transform .15s", boxShadow: "0 4px 14px rgba(16,133,253,0.35)" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#0053CC"; el.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; }}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
-              Try Demo
-            </a>
-            <a href={content.primaryCtaHref} onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-              style={{ height: 46, borderRadius: 10, background: "#fff", color: TEXT, fontSize: 14.5, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", padding: "0 22px", border: "1.5px solid #C8D4E4", transition: "border-color .15s, transform .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = BLUE; el.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#C8D4E4"; el.style.transform = "translateY(0)"; }}
-            >Sign up</a>
-          </div>
+            {/* Right — Mission Moments card */}
+            <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 24, boxShadow: "0 12px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.04)", padding: "24px", position: "relative" }}>
+              {/* accent dot */}
+              <div style={{ position: "absolute", top: -12, right: 32, width: 24, height: 24, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(0,89,214,0.45)" }} />
 
-          {/* Feature rows */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {([
-              { d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z", label: "Secure & Private", desc: "Your mission data is encrypted and protected." },
-              { d: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75", label: "Built for Ministry", desc: "Designed specifically for churches and missionaries." },
-              { d: "M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zM2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z", label: "Anytime, Anywhere", desc: "Access updates from any device, any time." },
-            ] as const).map(({ d, label, desc }) => (
-              <div key={label} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(16,133,253,0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={d}/></svg>
+              {/* card header */}
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #F1F5F9" }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Shuffle style={{ width: 16, height: 16, color: "#fff" }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: TEXT, margin: "0 0 2px" }}>{label}</p>
-                  <p style={{ fontSize: 12, color: "#607089", margin: 0, lineHeight: 1.5 }}>{desc}</p>
+                  <p style={{ fontSize: 14, fontWeight: 800, color: TEXT, margin: 0, letterSpacing: "-0.01em" }}>{content.previewCardTitle}</p>
+                  <p style={{ fontSize: 11, color: "#94A3B8", margin: "2px 0 0" }}>{content.previewLabel}</p>
                 </div>
+                <div style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#22C55E", boxShadow: "0 0 0 3px rgba(34,197,94,0.2)" }} />
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* ── RIGHT PANEL ── */}
-        <div style={{ flex: 1, background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
-
-          {/* Heading */}
-          <div style={{ padding: "28px 36px 16px 36px", flexShrink: 0 }}>
-            <h2 style={{ fontSize: 19, fontWeight: 800, color: TEXT, margin: "0 0 5px", letterSpacing: "-0.02em" }}>See what it's like inside SentConnect</h2>
-            <p style={{ fontSize: 13.5, color: TEXT2, margin: 0 }}>A unified space for mission updates, prayer requests, and real-time connection.</p>
-          </div>
-
-          {/* App mockup — browser frame */}
-          <div style={{ flex: 1, margin: "0 24px", borderRadius: "12px 12px 0 0", overflow: "hidden", boxShadow: "0 -4px 32px rgba(15,23,42,0.12), 0 -1px 4px rgba(15,23,42,0.06)", display: "flex", flexDirection: "column", minHeight: 0 }}>
-
-            {/* Browser chrome */}
-            <div style={{ background: "#E2E5EA", padding: "9px 16px", display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FC5C65" }} />
-              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FED330" }} />
-              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#26DE81" }} />
-              <div style={{ flex: 1, margin: "0 14px", background: "#fff", borderRadius: 5, padding: "4px 12px", fontSize: 11, color: "#94A3B8" }}>sentconnect.org/calvary/feed</div>
-            </div>
-
-            {/* App screenshot — real UI with fictional missionary data */}
-            <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
-              <img
-                src="/app-preview.jpg"
-                alt="SentConnect app feed preview"
-                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top left", display: "block" }}
-              />
+              {/* feed rows */}
+              {[
+                { title: content.previewTitle1, ago: "2h ago", w: "80%", color: "rgba(16,133,253,0.15)" },
+                { title: content.previewTitle2, ago: "3h ago", w: "65%", color: "rgba(16,133,253,0.10)" },
+                { title: content.previewTitle3, ago: "5h ago", w: "52%", color: "rgba(16,133,253,0.06)" },
+              ].map(({ title, ago, w, color }, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid #F8FAFC" : "none" }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
+                    <p style={{ fontSize: 11, color: "#94A3B8", margin: "0 0 8px" }}>{ago}</p>
+                    <div style={{ height: 5, background: "rgba(16,133,253,0.08)", borderRadius: 999, width: "100%" }} />
+                    <div style={{ height: 5, background: "rgba(16,133,253,0.05)", borderRadius: 999, width: w, marginTop: 4 }} />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+        </section>
 
-          {/* Bottom CTA bar */}
-          <div style={{ margin: "0 24px", padding: "13px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, background: "#F8FAFC", border: "1px solid #E8ECF0", borderTop: "none", borderRadius: "0 0 12px 12px", flexShrink: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ width: 34, height: 34, background: "#EEF5FF", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              </div>
-              <div>
-                <p style={{ fontSize: 12.5, fontWeight: 700, color: TEXT, margin: 0 }}>Ready to strengthen your mission connections?</p>
-                <p style={{ fontSize: 11.5, color: TEXT2, margin: 0 }}>Join churches and mission teams already using SentConnect.</p>
-              </div>
-            </div>
-            <a href="/calvary/feed"
-              style={{ height: 34, borderRadius: 8, background: BLUE, color: "#fff", fontSize: 12.5, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, padding: "0 14px", whiteSpace: "nowrap", transition: "background .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#0053CC"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
-            >
-              Open Demo Workspace
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <main>
         {/* ── HOW IT WORKS ── */}
         <section style={{ background: "#fff", padding: "112px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
@@ -777,7 +781,6 @@ function AppRoutes() {
       {/* Org user login — always /{org}/login */}
       <Route path="/login" component={LoginRoute} />
       <Route path="/sentconnect-home" component={LandingPreviewRoute} />
-      <Route path="/app-preview" component={AppPreview} />
       <Route path="/signup" component={Signup} />
       <Route path="/signup/success" component={SignupSuccess} />
       <Route path="/forgot-password" component={ForgotPassword} />
