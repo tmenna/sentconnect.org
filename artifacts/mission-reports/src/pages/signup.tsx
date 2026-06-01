@@ -9,10 +9,9 @@ import {
 import { useLogo } from "@/providers/logo-provider";
 import { extractHostnameOrgSlug, getOrgRoutingContext } from "@/lib/org";
 
-const PURPLE    = "#1085FD";
-const PURPLE_MID = "#1085FD";
-const TEAL      = "#10B981";
-const TEAL_DARK = "#059669";
+const BLUE      = "#1085FD";
+const BLUE_DEEP = "#0059D6";
+const BLUE_DARK = "#003FA8";
 
 const FEATURES = [
   "Unlimited users",
@@ -36,23 +35,16 @@ export default function Signup() {
   const [subdomainError, setSubdomainError] = useState("");
   const [emailError, setEmailError]       = useState("");
 
-  // Signup is a platform-level action. If the visitor arrives via an org
-  // subdomain (e.g. rc.sentconnect.org/signup) or a dev path-based org prefix
-  // (e.g. /rc/signup), redirect them to www.sentconnect.org/signup so they
-  // don't accidentally create an org while scoped to another org's portal.
   useEffect(() => {
     const hostname = window.location.hostname;
     const orgSlug = extractHostnameOrgSlug(hostname);
 
     if (orgSlug) {
-      // Production hostname routing: strip the org subdomain to get root domain.
-      // e.g. "rc.sentconnect.org" → orgSlug="rc" → rootDomain="sentconnect.org"
       const rootDomain = hostname.slice(orgSlug.length + 1);
       window.location.replace(`${window.location.protocol}//www.${rootDomain}/signup`);
       return;
     }
 
-    // Development path-based routing: /rc/signup → redirect to /signup
     const { orgSlug: pathSlug, usesPathPrefix } = getOrgRoutingContext(window.location.pathname);
     if (usesPathPrefix && pathSlug) {
       window.location.replace("/signup");
@@ -72,7 +64,7 @@ export default function Signup() {
       const data = await res.json();
       if (data.subdomainTaken) setSubdomainError("That subdomain is already taken — choose a different one.");
       else setSubdomainError("");
-    } catch { /* network failure — silent, submit will re-check */ }
+    } catch { /* silent */ }
   }
 
   async function checkEmailAvailability(value: string) {
@@ -82,7 +74,7 @@ export default function Signup() {
       const data = await res.json();
       if (data.emailTaken) setEmailError("An account with that email already exists — try logging in instead.");
       else setEmailError("");
-    } catch { /* network failure — silent, submit will re-check */ }
+    } catch { /* silent */ }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -119,7 +111,7 @@ export default function Signup() {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
-          background: #FFFFFF;
+          background: linear-gradient(160deg, #F0F6FF 0%, #F7FAFF 50%, #FFFFFF 100%);
           font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
@@ -167,20 +159,60 @@ export default function Signup() {
           background: #fff;
           border-radius: 24px;
           padding: 32px;
-          box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+          box-shadow: 0 8px 32px rgba(15,23,42,0.07), 0 1px 4px rgba(15,23,42,0.04);
+          border: 1px solid #EBF3FF;
+          border-top: 3px solid #1085FD;
           display: flex;
           flex-direction: column;
         }
 
-        /* ── Right purple panel ── */
+        /* ── Right form panel ── */
         .su-form-panel {
           flex: 1;
           display: flex;
           flex-direction: column;
           padding: 36px;
           border-radius: 28px;
-          background: linear-gradient(135deg, #1085FD 0%, #1085FD 100%);
-          box-shadow: 0 8px 48px rgba(0,89,214,0.45);
+          background: linear-gradient(145deg, #0059D6 0%, #003FA8 100%);
+          box-shadow: 0 8px 48px rgba(0,63,168,0.4);
+          position: relative;
+          overflow: hidden;
+        }
+        .su-form-panel::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: radial-gradient(ellipse at 70% 0%, rgba(255,255,255,0.08) 0%, transparent 55%);
+          pointer-events: none;
+        }
+
+        /* ── Submit button ── */
+        .su-submit-btn {
+          width: 100%;
+          height: 50px;
+          background: #ffffff;
+          color: #003FA8;
+          font-weight: 800;
+          font-size: 15px;
+          border: none;
+          border-radius: 999px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          letter-spacing: 0.01em;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+          transition: background .15s, transform .15s, box-shadow .15s;
+        }
+        .su-submit-btn:hover:not(:disabled) {
+          background: #EBF3FF;
+          transform: translateY(-1px);
+          box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+        }
+        .su-submit-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
         }
 
         /* ── Email + Password row ── */
@@ -204,6 +236,12 @@ export default function Signup() {
 
         /* ── Inline plan summary (shown when sidebar is hidden) ── */
         .su-plan-inline { display: none; }
+
+        /* ── Input focus ── */
+        .su-input:focus {
+          outline: 2px solid #1085FD;
+          outline-offset: 0;
+        }
 
         /* ── TABLET (≤ 900px): hide sidebar, show inline summary ── */
         @media (max-width: 900px) {
@@ -266,38 +304,50 @@ export default function Signup() {
 
           {/* LEFT — Plan card (hidden on mobile/tablet) */}
           <div className="su-plan">
-            <div style={{ width: 44, height: 44, borderRadius: 16, background: "#F5F5F5", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-              <Users style={{ width: 20, height: 20, color: PURPLE }} />
+            <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_DEEP} 100%)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 22, boxShadow: "0 4px 16px rgba(16,133,253,0.3)" }}>
+              <Users style={{ width: 20, height: 20, color: "#fff" }} />
             </div>
 
             <p style={{ fontSize: 15, fontWeight: 700, color: "#111827", marginBottom: 14 }}>Organization Plan</p>
 
             <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
-              <span style={{ fontSize: "2.4rem", fontWeight: 900, lineHeight: 1, color: PURPLE }}>$30</span>
+              <span style={{ fontSize: "2.4rem", fontWeight: 900, lineHeight: 1, color: BLUE }}>$30</span>
               <span style={{ fontSize: 13, color: "#9CA3AF", fontWeight: 500 }}>/ month</span>
             </div>
 
-            <div style={{ height: 1, background: "#F1F5F9", marginBottom: 20 }} />
+            <p style={{ fontSize: 12, color: "#94A3B8", margin: "0 0 18px" }}>Billed monthly · cancel anytime</p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ height: 1, background: "#EBF3FF", marginBottom: 20 }} />
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
               {FEATURES.map(f => (
                 <div key={f} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <CheckCircle2 style={{ width: 16, height: 16, flexShrink: 0, color: PURPLE }} />
-                  <span style={{ fontSize: 13.5, color: "#4B5563" }}>{f}</span>
+                  <div style={{ width: 20, height: 20, borderRadius: "50%", background: "#EEF5FF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <CheckCircle2 style={{ width: 13, height: 13, color: BLUE }} />
+                  </div>
+                  <span style={{ fontSize: 13.5, color: "#374151", fontWeight: 500 }}>{f}</span>
                 </div>
               ))}
             </div>
+
+            <div style={{ marginTop: "auto", paddingTop: 24 }}>
+              <div style={{ background: "#F0F6FF", borderRadius: 12, padding: "12px 14px" }}>
+                <p style={{ fontSize: 11.5, color: "#4B5563", margin: 0, lineHeight: 1.6 }}>
+                  <span style={{ fontWeight: 700, color: BLUE }}>30-day free trial</span> included. No charge until your trial ends.
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* RIGHT — Blue form panel */}
+          {/* RIGHT — Form panel */}
           <div className="su-form-panel">
 
             {/* Heading */}
-            <div style={{ textAlign: "center", marginBottom: 20 }}>
+            <div style={{ textAlign: "center", marginBottom: 20, position: "relative" }}>
               <h1 style={{ fontSize: "clamp(1.45rem, 4vw, 2rem)", fontWeight: 800, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 6 }}>
                 Set Up Your Organization
               </h1>
-              <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.76)", margin: 0 }}>
+              <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.72)", margin: 0 }}>
                 You'll be the admin. Invite your team after setup.
               </p>
             </div>
@@ -310,18 +360,19 @@ export default function Signup() {
                 justifyContent: "center",
                 gap: 16,
                 marginBottom: 20,
-                background: "rgba(255,255,255,0.15)",
+                background: "rgba(255,255,255,0.12)",
                 borderRadius: 14,
                 padding: "12px 20px",
                 flexWrap: "wrap",
                 rowGap: 8,
+                position: "relative",
               }}
             >
               <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
                 <span style={{ fontSize: "1.65rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>$30</span>
                 <span style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>/month</span>
               </div>
-              <div style={{ width: 1, height: 28, background: "rgba(255,255,255,0.25)", flexShrink: 0 }} />
+              <div style={{ width: 1, height: 28, background: "rgba(255,255,255,0.2)", flexShrink: 0 }} />
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <span style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>Organization Plan</span>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px" }}>
@@ -336,14 +387,14 @@ export default function Signup() {
             </div>
 
             {/* Trust badges */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0, marginBottom: 20, flexWrap: "wrap", rowGap: 6 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0, marginBottom: 20, flexWrap: "wrap", rowGap: 6, position: "relative" }}>
               {[
                 { icon: <ShieldCheck style={{ width: 13, height: 13 }} />, label: "Secure by Stripe" },
                 { icon: <RefreshCw style={{ width: 13, height: 13 }} />, label: "Cancel anytime" },
                 { icon: <Globe style={{ width: 13, height: 13 }} />, label: "Built for mission teams" },
               ].map(({ icon, label }, i) => (
                 <span key={label} style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11.5, fontWeight: 500, color: "rgba(255,255,255,0.82)" }}>
-                  {i > 0 && <span style={{ color: "rgba(255,255,255,0.35)", margin: "0 8px" }}>•</span>}
+                  {i > 0 && <span style={{ color: "rgba(255,255,255,0.3)", margin: "0 8px" }}>•</span>}
                   {icon}
                   {label}
                 </span>
@@ -351,26 +402,27 @@ export default function Signup() {
             </div>
 
             {/* Divider */}
-            <div style={{ height: 1, background: "rgba(255,255,255,0.18)", marginBottom: 20 }} />
+            <div style={{ height: 1, background: "rgba(255,255,255,0.15)", marginBottom: 20, position: "relative" }} />
 
             {/* Error */}
             {error && (
-              <div style={{ background: "rgba(255,255,255,0.2)", color: "#fff", fontSize: 13, padding: "10px 16px", borderRadius: 12, marginBottom: 16, border: "1px solid rgba(255,255,255,0.3)" }}>
+              <div style={{ background: "rgba(255,255,255,0.18)", color: "#fff", fontSize: 13, padding: "10px 16px", borderRadius: 12, marginBottom: 16, border: "1px solid rgba(255,255,255,0.28)", position: "relative" }}>
                 {error}
               </div>
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16, position: "relative" }}>
 
               {/* Org details section */}
               <div>
-                <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.6)", marginBottom: 10 }}>
+                <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.55)", marginBottom: 10 }}>
                   Organization Details
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <Field label="Organization Name">
                     <input
+                      className="su-input"
                       value={orgName}
                       onChange={e => { setOrgName(e.target.value); if (!subdomain) setSubdomain(generateSubdomain(e.target.value)); }}
                       placeholder="e.g. Calvary Community Church"
@@ -379,8 +431,9 @@ export default function Signup() {
                     />
                   </Field>
                   <Field label="Subdomain">
-                    <div style={{ display: "flex", alignItems: "center", background: subdomainError ? "rgba(255,255,255,0.9)" : "#fff", borderRadius: 12, overflow: "hidden", height: 48, outline: subdomainError ? "2px solid #9CA3AF" : "none" }}>
+                    <div style={{ display: "flex", alignItems: "center", background: subdomainError ? "rgba(255,255,255,0.9)" : "#fff", borderRadius: 12, overflow: "hidden", height: 48, outline: subdomainError ? "2px solid rgba(255,255,255,0.6)" : "none" }}>
                       <input
+                        className="su-input"
                         value={subdomain}
                         onChange={e => { setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "")); setSubdomainError(""); }}
                         onBlur={e => checkSubdomainAvailability(e.target.value)}
@@ -393,23 +446,24 @@ export default function Signup() {
                       </span>
                     </div>
                     {subdomainError && (
-                      <p style={{ margin: "6px 0 0", fontSize: 12, color: "#F3F4F6", fontWeight: 500 }}>{subdomainError}</p>
+                      <p style={{ margin: "6px 0 0", fontSize: 12, color: "rgba(255,255,255,0.85)", fontWeight: 500 }}>{subdomainError}</p>
                     )}
                   </Field>
                 </div>
               </div>
 
               {/* Divider */}
-              <div style={{ height: 1, background: "rgba(255,255,255,0.18)" }} />
+              <div style={{ height: 1, background: "rgba(255,255,255,0.15)" }} />
 
               {/* Account section */}
               <div>
-                <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.6)", marginBottom: 10 }}>
+                <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.55)", marginBottom: 10 }}>
                   Your Account
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <Field label="Full Name">
                     <input
+                      className="su-input"
                       value={name}
                       onChange={e => setName(e.target.value)}
                       placeholder="e.g. Sarah Mitchell"
@@ -420,21 +474,23 @@ export default function Signup() {
                   <div className="su-field-row">
                     <Field label="Email">
                       <input
+                        className="su-input"
                         type="email"
                         value={email}
                         onChange={e => { setEmail(e.target.value); setEmailError(""); }}
                         onBlur={e => checkEmailAvailability(e.target.value)}
                         placeholder="you@example.org"
                         required
-                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box", outlineOffset: 0, boxShadow: emailError ? "0 0 0 2px #9CA3AF" : "none" }}
+                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box", boxShadow: emailError ? "0 0 0 2px rgba(255,255,255,0.6)" : "none" }}
                       />
                       {emailError && (
-                        <p style={{ margin: "6px 0 0", fontSize: 12, color: "#F3F4F6", fontWeight: 500 }}>{emailError}</p>
+                        <p style={{ margin: "6px 0 0", fontSize: 12, color: "rgba(255,255,255,0.85)", fontWeight: 500 }}>{emailError}</p>
                       )}
                     </Field>
                     <Field label="Password">
                       <div style={{ position: "relative" }}>
                         <input
+                          className="su-input"
                           type={showPassword ? "text" : "password"}
                           value={password}
                           onChange={e => setPassword(e.target.value)}
@@ -461,34 +517,14 @@ export default function Signup() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  style={{
-                    width: "100%",
-                    height: 50,
-                    background: submitting ? TEAL_DARK : TEAL,
-                    color: "#fff",
-                    fontWeight: 700,
-                    fontSize: 15,
-                    border: "none",
-                    borderRadius: 999,
-                    cursor: submitting ? "not-allowed" : "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 8,
-                    opacity: submitting ? 0.75 : 1,
-                    boxShadow: "0 4px 18px rgba(16,185,129,0.45)",
-                    letterSpacing: "0.01em",
-                    transition: "background .15s",
-                  }}
-                  onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = TEAL_DARK; }}
-                  onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = TEAL; }}
+                  className="su-submit-btn"
                 >
                   {submitting
                     ? <><Loader2 style={{ width: 16, height: 16 }} className="animate-spin" /> Redirecting to payment…</>
                     : "Set Up Your Organization →"
                   }
                 </button>
-                <p style={{ textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.55)", marginTop: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
+                <p style={{ textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 5, position: "relative" }}>
                   <Lock style={{ width: 11, height: 11, flexShrink: 0 }} />
                   You'll be redirected to Stripe to complete your payment securely.
                 </p>
@@ -502,7 +538,7 @@ export default function Signup() {
       {/* Bottom stripe note */}
       <div className="su-stripe-note">
         <Lock style={{ width: 12, height: 12 }} />
-        Secure checkout powered by <span style={{ fontWeight: 600, color: PURPLE }}>Stripe</span>
+        Secure checkout powered by <span style={{ fontWeight: 600, color: BLUE }}>Stripe</span>
       </div>
     </div>
   );
@@ -511,7 +547,7 @@ export default function Signup() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.88)", marginBottom: 6 }}>
+      <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.85)", marginBottom: 6 }}>
         {label}
       </label>
       {children}
