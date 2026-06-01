@@ -13,6 +13,7 @@ import { OrgProvider, useOrg } from "@/providers/org-provider";
 import { LogoProvider, useLogo } from "@/providers/logo-provider";
 import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
 import "./landing-page.css";
+import AppPreview from "./pages/app-preview";
 
 // Critical path — eagerly bundled (small or needed immediately)
 import Login from "./pages/login";
@@ -255,96 +256,13 @@ function LandingPage() {
               <div style={{ flex: 1, margin: "0 14px", background: "#fff", borderRadius: 5, padding: "4px 12px", fontSize: 11, color: "#94A3B8" }}>sentconnect.org/calvary/feed</div>
             </div>
 
-            {/* App UI */}
-            <div style={{ flex: 1, display: "flex", overflow: "hidden", background: "#F8FAFC" }}>
-
-              {/* Sidebar */}
-              <div style={{ width: 196, background: "#fff", borderRight: "1px solid #E8ECF0", flexShrink: 0, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                <div style={{ padding: "12px 14px", borderBottom: "1px solid #E8ECF0", display: "flex", alignItems: "center", gap: 8 }}>
-                  <div style={{ width: 28, height: 28, borderRadius: 7, background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
-                  </div>
-                  <span style={{ fontSize: 11.5, fontWeight: 700, color: TEXT, lineHeight: 1.3 }}>Redeemer Church SCV</span>
-                </div>
-                {[
-                  { label: "Mission Feed", active: true, icon: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" },
-                  { label: "Prayer Requests", active: false, icon: "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" },
-                  { label: "Missionaries", active: false, icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" },
-                  { label: "Media Library", active: false, icon: "M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2l1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" },
-                  { label: "Reports", active: false, icon: "M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z" },
-                  { label: "Settings", active: false, icon: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" },
-                ].map(({ label, active, icon }) => (
-                  <div key={label} style={{ display: "flex", alignItems: "center", gap: 9, padding: "9px 14px", background: active ? "#EEF5FF" : "transparent", borderLeft: `3px solid ${active ? BLUE : "transparent"}` }}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={active ? BLUE : "#94A3B8"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={icon}/></svg>
-                    <span style={{ fontSize: 12.5, fontWeight: active ? 700 : 500, color: active ? BLUE : "#64748B" }}>{label}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Feed content */}
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 16px", borderBottom: "1px solid #E8ECF0", background: "#fff", flexShrink: 0 }}>
-                  <span style={{ fontSize: 14, fontWeight: 800, color: TEXT }}>Mission Feed</span>
-                  <div style={{ background: BLUE, color: "#fff", fontSize: 11, fontWeight: 700, padding: "5px 11px", borderRadius: 6, display: "flex", alignItems: "center", gap: 4 }}>
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    New Update
-                  </div>
-                </div>
-                <div style={{ padding: "10px 12px", display: "flex", flexDirection: "column", gap: 8, overflow: "hidden" }}>
-                  {[
-                    { initials: "DT", title: content.previewTitle1, author: "Dawit Tesfaye", ago: "2h ago", body: "We had a powerful time of prayer with local believers. Please continue to pray for our upcoming outreach.", likes: 24, comments: 6, imgColor: "rgba(16,133,253,0.1)" },
-                    { initials: "SC", title: content.previewTitle2, author: "Sarah Collins", ago: "3h ago", body: "Two families visited and heard the Gospel! Pray for them as they grow in faith.", likes: 18, comments: 3, imgColor: "rgba(16,185,129,0.1)" },
-                    { initials: "MJ", title: content.previewTitle3, author: "Michael John", ago: "5h ago", body: "Great time with the youth group in our school outreach program.", likes: 31, comments: 7, imgColor: "rgba(251,191,36,0.12)" },
-                  ].map((post, i) => (
-                    <div key={i} style={{ background: "#fff", borderRadius: 10, border: "1px solid #E8ECF0", padding: "11px 13px", display: "flex", gap: 10 }}>
-                      <div style={{ width: 30, height: 30, borderRadius: "50%", background: `rgba(16,133,253,${0.15 - i * 0.04})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: BLUE, flexShrink: 0 }}>{post.initials}</div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 3 }}>
-                          <span style={{ fontSize: 12, fontWeight: 700, color: TEXT }}>{post.author}</span>
-                          <span style={{ fontSize: 10.5, color: "#94A3B8" }}>{post.ago}</span>
-                        </div>
-                        <p style={{ fontSize: 12, fontWeight: 600, color: TEXT, margin: "0 0 3px" }}>{post.title}</p>
-                        <p style={{ fontSize: 11, color: TEXT2, margin: "0 0 7px", lineHeight: 1.5, overflow: "hidden", maxHeight: "2.9em" }}>{post.body}</p>
-                        <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 11, color: "#94A3B8" }}>
-                          <span style={{ display: "flex", alignItems: "center", gap: 3 }}>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                            {post.likes}
-                          </span>
-                          <span style={{ display: "flex", alignItems: "center", gap: 3 }}>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                            {post.comments}
-                          </span>
-                          <span style={{ marginLeft: "auto", color: BLUE, fontWeight: 600 }}>View details →</span>
-                        </div>
-                      </div>
-                      <div style={{ width: 46, height: 34, borderRadius: 6, background: post.imgColor, flexShrink: 0, alignSelf: "flex-start" }} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Mobile preview */}
-              <div className="hidden xl:flex" style={{ width: 156, background: "#F1F5F9", borderLeft: "1px solid #E8ECF0", flexDirection: "column", padding: "10px 8px", flexShrink: 0 }}>
-                <div style={{ fontSize: 10, color: "#94A3B8", fontWeight: 600, textAlign: "center", marginBottom: 8 }}>9:41</div>
-                <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #E8ECF0", overflow: "hidden", flex: 1 }}>
-                  <div style={{ background: "#F8FAFC", padding: "7px 9px", borderBottom: "1px solid #E8ECF0" }}>
-                    <span style={{ fontSize: 10.5, fontWeight: 700, color: TEXT }}>Mission Feed</span>
-                  </div>
-                  {[
-                    { initials: "DT", title: content.previewTitle1 },
-                    { initials: "SC", title: content.previewTitle2 },
-                    { initials: "MJ", title: content.previewTitle3 },
-                  ].map((item, i) => (
-                    <div key={i} style={{ padding: "8px 9px", borderBottom: "1px solid #F1F5F9", display: "flex", gap: 6, alignItems: "center" }}>
-                      <div style={{ width: 20, height: 20, borderRadius: "50%", background: `rgba(16,133,253,${0.2 - i * 0.05})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 7, fontWeight: 800, color: BLUE, flexShrink: 0 }}>{item.initials}</div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ height: 6, background: "#E2E8F0", borderRadius: 3, marginBottom: 3, width: "85%" }} />
-                        <div style={{ height: 5, background: "#EEF2F9", borderRadius: 3, width: "60%" }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            {/* App screenshot — real UI with fictional missionary data */}
+            <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
+              <img
+                src="/app-preview.jpg"
+                alt="SentConnect app feed preview"
+                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top left", display: "block" }}
+              />
             </div>
           </div>
 
@@ -859,6 +777,7 @@ function AppRoutes() {
       {/* Org user login — always /{org}/login */}
       <Route path="/login" component={LoginRoute} />
       <Route path="/sentconnect-home" component={LandingPreviewRoute} />
+      <Route path="/app-preview" component={AppPreview} />
       <Route path="/signup" component={Signup} />
       <Route path="/signup/success" component={SignupSuccess} />
       <Route path="/forgot-password" component={ForgotPassword} />
