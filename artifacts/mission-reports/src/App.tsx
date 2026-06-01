@@ -226,10 +226,11 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="lp-hero-section" style={{ background: "#FFFFFF", position: "relative", overflow: "hidden", borderBottom: "1px solid #F1F5F9" }}>
-          {/* subtle blue glow */}
-          <div style={{ position: "absolute", top: -160, right: -160, width: 520, height: 520, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: -100, left: -100, width: 380, height: 380, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.04) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <section className="lp-hero-section" style={{ background: "linear-gradient(160deg, #F0F6FF 0%, #F7FAFF 50%, #FFFFFF 100%)", position: "relative", overflow: "hidden", borderBottom: "1px solid #E8F0FE" }}>
+          {/* blue glow blobs */}
+          <div style={{ position: "absolute", top: -180, right: -120, width: 580, height: 580, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.10) 0%, transparent 65%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: -80, left: -80, width: 420, height: 420, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.06) 0%, transparent 65%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", top: "40%", left: "45%", width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.04) 0%, transparent 70%)", pointerEvents: "none" }} />
 
           <div className="lp-hero-grid mx-auto max-w-6xl px-6">
             {/* Left */}
@@ -276,17 +277,19 @@ function LandingPage() {
 
               {/* feed rows */}
               {[
-                { title: content.previewTitle1, ago: "2h ago", w: "80%", color: "rgba(16,133,253,0.15)" },
-                { title: content.previewTitle2, ago: "3h ago", w: "65%", color: "rgba(16,133,253,0.10)" },
-                { title: content.previewTitle3, ago: "5h ago", w: "52%", color: "rgba(16,133,253,0.06)" },
-              ].map(({ title, ago, w, color }, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid #F8FAFC" : "none" }}>
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                { title: content.previewTitle1, ago: "2h ago", w: "80%", initials: "GN", bg: "rgba(16,133,253,0.15)", fg: "#1085FD" },
+                { title: content.previewTitle2, ago: "3h ago", w: "65%", initials: "EO", bg: "rgba(16,133,253,0.10)", fg: "#1085FD" },
+                { title: content.previewTitle3, ago: "5h ago", w: "52%", initials: "SV", bg: "rgba(16,133,253,0.08)", fg: "#1085FD" },
+              ].map(({ title, ago, w, initials, bg, fg }, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid #F1F5F9" : "none" }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: bg, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: 10, fontWeight: 800, color: fg, letterSpacing: "0.02em" }}>{initials}</span>
+                  </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
                     <p style={{ fontSize: 11, color: "#94A3B8", margin: "0 0 8px" }}>{ago}</p>
-                    <div style={{ height: 5, background: "rgba(16,133,253,0.08)", borderRadius: 999, width: "100%" }} />
-                    <div style={{ height: 5, background: "rgba(16,133,253,0.05)", borderRadius: 999, width: w, marginTop: 4 }} />
+                    <div style={{ height: 4, background: "rgba(16,133,253,0.08)", borderRadius: 999, width: "100%" }} />
+                    <div style={{ height: 4, background: "rgba(16,133,253,0.05)", borderRadius: 999, width: w, marginTop: 4 }} />
                   </div>
                 </div>
               ))}
@@ -304,15 +307,15 @@ function LandingPage() {
 
             <div className="lp-steps-grid">
               {/* connector line */}
-              <div className="lp-connector" style={{ position: "absolute", top: 36, left: "calc(16.66% + 16px)", right: "calc(16.66% + 16px)", height: 1, background: "linear-gradient(90deg, transparent, rgba(138,5,255,0.2), transparent)", pointerEvents: "none" }} />
+              <div className="lp-connector" style={{ position: "absolute", top: 36, left: "calc(16.66% + 16px)", right: "calc(16.66% + 16px)", height: 1, background: "linear-gradient(90deg, transparent, rgba(16,133,253,0.25), transparent)", pointerEvents: "none" }} />
 
               {[
                 { title: content.step1Title, desc: content.step1Description, n: "01" },
                 { title: content.step2Title, desc: content.step2Description, n: "02" },
                 { title: content.step3Title, desc: content.step3Description, n: "03" },
               ].map(({ title, desc, n }) => (
-                <div key={n} style={{ background: "#fff", borderRadius: 20, padding: "32px 28px", boxShadow: "0 12px 40px rgba(15,23,42,0.08)", border: "1px solid #F1F5F9" }}>
-                  <div style={{ width: 48, height: 48, borderRadius: "50%", background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, boxShadow: "0 4px 14px rgba(0,89,214,0.3)" }}>
+                <div key={n} style={{ background: "#fff", borderRadius: 20, padding: "32px 28px", boxShadow: "0 8px 32px rgba(15,23,42,0.07), 0 1px 4px rgba(15,23,42,0.04)", border: "1px solid #EBF3FF", borderTop: `3px solid ${BLUE}`, transition: "box-shadow .2s, transform .2s" }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${BLUE} 0%, #0070E0 100%)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, boxShadow: "0 4px 16px rgba(16,133,253,0.35)" }}>
                     <span style={{ fontSize: 13, fontWeight: 900, color: "#fff", letterSpacing: "0.02em" }}>{n}</span>
                   </div>
                   <h3 style={{ fontSize: 18, fontWeight: 800, color: TEXT, margin: "0 0 12px", letterSpacing: "-0.025em" }}>{title}</h3>
@@ -324,20 +327,22 @@ function LandingPage() {
         </section>
 
         {/* ── CTA BAND ── */}
-        <section style={{ background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_DARK} 100%)`, padding: "100px 24px" }}>
-          <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto" }}>
+        <section style={{ background: `linear-gradient(135deg, #0059D6 0%, #003FA8 100%)`, padding: "100px 24px", position: "relative", overflow: "hidden" }}>
+          {/* subtle shine overlay */}
+          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 60% 0%, rgba(255,255,255,0.07) 0%, transparent 60%)", pointerEvents: "none" }} />
+          <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto", position: "relative" }}>
             <h2 style={{ fontSize: "clamp(28px, 3.5vw, 46px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.035em", lineHeight: 1.2, margin: "0 0 18px" }}>
               {content.ctaBandHeading}
             </h2>
-            <p style={{ fontSize: 18, color: "rgba(255,255,255,0.78)", margin: "0 0 40px", lineHeight: 1.7 }}>
+            <p style={{ fontSize: 18, color: "rgba(255,255,255,0.75)", margin: "0 0 40px", lineHeight: 1.7 }}>
               {content.ctaBandSubtext}
             </p>
             <a
               href={content.primaryCtaHref}
               onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(16,133,253,0.45)", transition: "transform .15s, box-shadow .15s, background .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(16,133,253,0.55)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(16,133,253,0.45)"; }}
+              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: "#fff", color: "#003FA8", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,0,0,0.2)", transition: "transform .15s, box-shadow .15s, background .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#EBF3FF"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.28)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#fff"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(0,0,0,0.2)"; }}
             >{content.primaryCtaLabel}</a>
           </div>
         </section>
@@ -365,7 +370,7 @@ function LandingPage() {
               <a
                 href="mailto:support@sentconnect.org"
                 style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-block" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#111827")}
+                onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
               >
                 support@sentconnect.org
@@ -586,7 +591,7 @@ function AboutPage() {
               <a
                 href="mailto:support@sentconnect.org"
                 style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-block" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#111827")}
+                onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
               >
                 support@sentconnect.org
