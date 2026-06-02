@@ -37,6 +37,7 @@ const DEMO_ORG_SUBDOMAIN = "demo";
 const DEMO_ORG_NAME = "Calvary Community Church";
 const DEMO_ADMIN_EMAIL = "demoadmin@sentconnect.org";
 const DEMO_ADMIN_PASSWORD = "password123";
+const DEMO_ADMIN_EMAIL_LEGACY = "demo@sentconnect.org";
 
 /**
  * Idempotent demo seed — safe to call on any database state, including production.
@@ -60,26 +61,41 @@ export async function seedIfEmpty() {
     }).returning();
   }
 
-  // 2. Find or create demo admin
-  const [existingAdmin] = await db
+  // 2. Find or create demo admin (migrate legacy email if needed)
+  let [existingAdmin] = await db
     .select({ id: usersTable.id })
     .from(usersTable)
     .where(eq(usersTable.email, DEMO_ADMIN_EMAIL))
     .limit(1);
 
   if (!existingAdmin) {
-    await db.insert(usersTable).values({
-      name: "Demo Admin",
-      email: DEMO_ADMIN_EMAIL,
-      passwordHash: hashPassword(DEMO_ADMIN_PASSWORD),
-      role: "admin",
-      bio: "Church administrator at Calvary Community Church, managing missionary outreach since 2015.",
-      location: "Dallas, TX",
-      organization: DEMO_ORG_NAME,
-      organizationId: demoOrg.id,
-      status: "active",
-    });
-    logger.info(`Demo admin created: ${DEMO_ADMIN_EMAIL}`);
+    // Check for legacy email and migrate it to the canonical one
+    const [legacyAdmin] = await db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.email, DEMO_ADMIN_EMAIL_LEGACY))
+      .limit(1);
+
+    if (legacyAdmin) {
+      await db.update(usersTable)
+        .set({ email: DEMO_ADMIN_EMAIL, passwordHash: hashPassword(DEMO_ADMIN_PASSWORD), organizationId: demoOrg.id, organization: DEMO_ORG_NAME })
+        .where(eq(usersTable.id, legacyAdmin.id));
+      existingAdmin = legacyAdmin;
+      logger.info(`Demo admin email migrated: ${DEMO_ADMIN_EMAIL_LEGACY} → ${DEMO_ADMIN_EMAIL}`);
+    } else {
+      await db.insert(usersTable).values({
+        name: "Demo Admin",
+        email: DEMO_ADMIN_EMAIL,
+        passwordHash: hashPassword(DEMO_ADMIN_PASSWORD),
+        role: "admin",
+        bio: "Church administrator at Calvary Community Church, managing missionary outreach since 2015.",
+        location: "Dallas, TX",
+        organization: DEMO_ORG_NAME,
+        organizationId: demoOrg.id,
+        status: "active",
+      });
+      logger.info(`Demo admin created: ${DEMO_ADMIN_EMAIL}`);
+    }
   } else if (existingAdmin.id && demoOrg.id) {
     // Ensure admin is linked to the correct org
     await db.update(usersTable)
@@ -115,14 +131,36 @@ export async function seedIfEmpty() {
     },
   ];
 
+  // Legacy email mapping: old email → new canonical email (for production migrations)
+  const DEMO_FIELD_USER_LEGACY: Record<string, string> = {
+    "demouser@sentconnect.org": "james@mission.org",
+  };
+
   const userIds: Record<string, number> = {};
 
   for (const u of DEMO_FIELD_USERS) {
-    const [existing] = await db
+    let [existing] = await db
       .select({ id: usersTable.id })
       .from(usersTable)
       .where(eq(usersTable.email, u.email))
       .limit(1);
+
+    if (!existing && DEMO_FIELD_USER_LEGACY[u.email]) {
+      // Migrate from legacy email to the new canonical email
+      const legacyEmail = DEMO_FIELD_USER_LEGACY[u.email]!;
+      const [legacy] = await db
+        .select({ id: usersTable.id })
+        .from(usersTable)
+        .where(eq(usersTable.email, legacyEmail))
+        .limit(1);
+      if (legacy) {
+        await db.update(usersTable)
+          .set({ email: u.email, organizationId: demoOrg.id, role: "field_user", organization: u.organization, passwordHash: u.passwordHash })
+          .where(eq(usersTable.id, legacy.id));
+        existing = legacy;
+        logger.info(`Demo field user email migrated: ${legacyEmail} → ${u.email}`);
+      }
+    }
 
     if (existing) {
       await db.update(usersTable)
