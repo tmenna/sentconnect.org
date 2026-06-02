@@ -12,6 +12,63 @@ import { useOrg } from "@/providers/org-provider";
 const PURPLE   = "#1085FD";
 const BORDER   = "#E5E7EB";
 
+const DEMO_ORG = "calvary";
+const DEMO_DISMISSED_KEY = "sc_demo_banner_dismissed";
+
+function DemoBanner() {
+  const { orgSlug } = useOrg();
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem(DEMO_DISMISSED_KEY)) {
+      setVisible(false);
+    }
+  }, []);
+
+  if (orgSlug !== DEMO_ORG || !visible) return null;
+
+  function dismiss() {
+    localStorage.setItem(DEMO_DISMISSED_KEY, "1");
+    setVisible(false);
+  }
+
+  return (
+    <div style={{
+      background: "linear-gradient(90deg, #0059D6 0%, #1085FD 100%)",
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 500,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 10,
+      padding: "9px 16px",
+      position: "relative",
+      flexShrink: 0,
+    }}>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.85, flexShrink: 0 }}>
+        <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>
+      </svg>
+      <span style={{ opacity: 0.95 }}>
+        You're in the <strong>demo workspace</strong> — feel free to explore, post, and invite users.
+      </span>
+      <a
+        href="/signup"
+        style={{ marginLeft: 6, fontWeight: 700, color: "#fff", textDecoration: "underline", textUnderlineOffset: 2, whiteSpace: "nowrap", opacity: 0.95, fontSize: 13 }}
+      >
+        Set up your own →
+      </a>
+      <button
+        onClick={dismiss}
+        aria-label="Dismiss"
+        style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.7)", padding: 4, display: "flex", alignItems: "center" }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  );
+}
+
 export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
 
@@ -221,6 +278,9 @@ export function Layout({ children }: { children: ReactNode }) {
           </div>
         )}
       </header>
+
+      {/* ── Demo banner ── */}
+      <DemoBanner />
 
       {/* ── Page content ── */}
       <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">

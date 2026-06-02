@@ -20,6 +20,7 @@ import ForgotPassword from "./pages/forgot-password";
 import ResetPassword from "./pages/reset-password";
 import PublicPost from "./pages/public-post";
 import SignupSuccess from "./pages/signup-success";
+import Demo from "./pages/demo";
 
 // Heavy pages — code-split so share links and first loads stay fast
 const Timeline = lazy(() => import("./pages/timeline"));
@@ -247,7 +248,7 @@ function LandingPage() {
                 {content.heroDescription}
               </p>
 
-              <div className="lp-animate lp-delay-4">
+              <div className="lp-animate lp-delay-4" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
                 <a
                   href={content.primaryCtaHref}
                   onClick={e => handleCtaClick(e, content.primaryCtaHref)}
@@ -255,6 +256,15 @@ function LandingPage() {
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.4)"; }}
                 >{content.primaryCtaLabel}</a>
+                <a
+                  href="/demo"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, height: 52, padding: "0 26px", borderRadius: 999, background: "transparent", color: "#0F172A", fontSize: 15, fontWeight: 600, textDecoration: "none", border: "1.5px solid #CBD5E1", transition: "border-color .15s, color .15s, background .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#1085FD"; el.style.color = "#1085FD"; el.style.background = "#F0F7FF"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#CBD5E1"; el.style.color = "#0F172A"; el.style.background = "transparent"; }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Try Demo
+                </a>
               </div>
             </div>
 
@@ -788,6 +798,7 @@ function AppRoutes() {
       <Route path="/sentconnect-home" component={LandingPreviewRoute} />
       <Route path="/signup" component={Signup} />
       <Route path="/signup/success" component={SignupSuccess} />
+      <Route path="/demo" component={Demo} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
       {/* Public shareable post view — no auth required */}
