@@ -229,4 +229,47 @@ router.post("/auth/reset-password", async (req, res): Promise<void> => {
   res.json({ message: "Password reset successfully. You can now log in." });
 });
 
+const DEMO_ORG_SUBDOMAIN = "calvary";
+const DEMO_ORG_NAME = "Calvary Community Church";
+const DEMO_USER_EMAIL = "demo@sentconnect.org";
+const DEMO_USER_NAME = "Demo Admin";
+const DEMO_USER_PASSWORD = "demo123";
+
+router.post("/auth/demo-login", async (req, res): Promise<void> => {
+  try {
+    // Find or create demo org
+    let [org] = await db.select().from(organizationsTable).where(eq(organizationsTable.subdomain, DEMO_ORG_SUBDOMAIN));
+    if (!org) {
+      [org] = await db.insert(organizationsTable).values({
+        name: DEMO_ORG_NAME,
+        subdomain: DEMO_ORG_SUBDOMAIN,
+        plan: "starter",
+        status: "active",
+      }).returning();
+    }
+
+    // Find or create demo user
+    let [user] = await db.select().from(usersTable).where(
+      and(eq(usersTable.email, DEMO_USER_EMAIL), eq(usersTable.organizationId, org.id))
+    );
+    if (!user) {
+      [user] = await db.insert(usersTable).values({
+        name: DEMO_USER_NAME,
+        email: DEMO_USER_EMAIL,
+        passwordHash: hashPassword(DEMO_USER_PASSWORD),
+        role: "admin",
+        organizationId: org.id,
+        organization: DEMO_ORG_NAME,
+        status: "active",
+      }).returning();
+    }
+
+    req.session.userId = user.id;
+    res.json({ subdomain: DEMO_ORG_SUBDOMAIN });
+  } catch (err) {
+    logger.error({ err }, "demo-login failed");
+    res.status(500).json({ error: "Demo is temporarily unavailable. Please try again." });
+  }
+});
+
 export default router;
