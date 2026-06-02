@@ -22,10 +22,6 @@ export default function Feed() {
     if (typeof window !== "undefined") window.location.replace("/login");
     return null;
   }
-  if (!authLoading && isAuthenticated && user?.role !== "admin") {
-    if (typeof window !== "undefined") window.location.replace("/");
-    return null;
-  }
 
   const { data, isLoading, isError } = useGetTimeline({ limit: PAGE_SIZE, offset: 0 });
 

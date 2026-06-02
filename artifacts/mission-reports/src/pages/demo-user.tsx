@@ -14,7 +14,7 @@ export default function DemoUser() {
         if (cancelled) return;
         if (res.ok) {
           const { subdomain } = await res.json();
-          window.location.href = `/${subdomain}/feed`;
+          window.location.href = `/${subdomain}/feed`;   // Timeline — accessible to field users
         } else {
           const data = await res.json().catch(() => ({}));
           setErrMsg(data.error ?? "Demo temporarily unavailable — please try again shortly.");

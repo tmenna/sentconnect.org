@@ -733,7 +733,7 @@ function AdminFeedRoute() {
   const [location] = useLocation();
   if (isLoading) return <AuthLoading />;
   if (!isAuthenticated) return <Redirect href={`/login?from=${encodeURIComponent(location)}`} />;
-  if (user?.role !== "admin" && !isPlatformRole(user?.role)) return <Redirect href="/" />;
+  if (user?.role !== "admin" && user?.role !== "field_user" && !isPlatformRole(user?.role)) return <Redirect href="/" />;
   return <Timeline />;
 }
 
