@@ -381,6 +381,53 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             </form>
           </Form>
 
+          {/* Demo quick-access — only shown on the demo org */}
+          {orgSlug === "demo" && (
+            <div style={{ marginTop: 28 }}>
+              <p style={{ fontSize: 11, fontWeight: 600, color: "#8A9BB8", letterSpacing: "0.06em", textTransform: "uppercase", margin: "0 0 10px", paddingLeft: 2 }}>
+                Try a demo account
+              </p>
+              <div style={{ display: "flex", gap: 8 }}>
+                {[
+                  { label: "Admin", sublabel: "Manage team & reports", email: "demoadmin@sentconnect.org" },
+                  { label: "Field User", sublabel: "Post updates & photos", email: "demouser@sentconnect.org" },
+                ].map(({ label, sublabel, email }) => (
+                  <button
+                    key={email}
+                    type="button"
+                    onClick={() => {
+                      form.setValue("email", email);
+                      form.setValue("password", "password123");
+                      form.handleSubmit(onSubmit)();
+                    }}
+                    style={{
+                      flex: 1,
+                      background: INPUT_BG,
+                      border: "1.5px solid #DAE3F0",
+                      borderRadius: 10,
+                      padding: "10px 12px",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      fontFamily: "inherit",
+                      transition: "border-color .15s, background .15s",
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLElement).style.borderColor = BLUE;
+                      (e.currentTarget as HTMLElement).style.background = "#F0F6FF";
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLElement).style.borderColor = "#DAE3F0";
+                      (e.currentTarget as HTMLElement).style.background = INPUT_BG;
+                    }}
+                  >
+                    <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 2px" }}>{label}</p>
+                    <p style={{ fontSize: 11, color: "#8A9BB8", margin: 0 }}>{sublabel}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Footer verse — desktop hidden (in left panel); mobile shown here */}
           <p className="md:hidden" style={{ fontSize: 11, color: "#C0CDD8", fontStyle: "italic", textAlign: "center", marginTop: 40, margin: "40px 0 0" }}>
             "Declare his glory among the nations." — Psalm 96:3
