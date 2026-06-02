@@ -1,4 +1,4 @@
-import { db, usersTable, reportsTable, organizationsTable } from "@workspace/db";
+import { db, usersTable, reportsTable, organizationsTable, photosTable, likesTable, commentsTable } from "@workspace/db";
 import { eq, and, isNull, inArray } from "drizzle-orm";
 import { logger } from "./logger";
 import { hashPassword } from "./password";
@@ -200,6 +200,98 @@ export async function seedIfEmpty() {
   } else {
     logger.info(`Demo org '${DEMO_ORG_SUBDOMAIN}' seeded and verified`);
   }
+}
+
+/**
+ * Wipes all posts (and their photos/likes/comments) from the demo org,
+ * then re-seeds the 4 canonical demo posts.
+ * Called on every demo-login so each visitor starts with a pristine feed.
+ */
+export async function resetDemoOrg() {
+  const [demoOrg] = await db
+    .select({ id: organizationsTable.id })
+    .from(organizationsTable)
+    .where(eq(organizationsTable.subdomain, DEMO_ORG_SUBDOMAIN))
+    .limit(1);
+
+  if (!demoOrg) {
+    logger.warn("resetDemoOrg: demo org not found — skipping");
+    return;
+  }
+
+  // Get all report IDs in the demo org
+  const reports = await db
+    .select({ id: reportsTable.id })
+    .from(reportsTable)
+    .where(eq(reportsTable.organizationId, demoOrg.id));
+
+  if (reports.length > 0) {
+    const reportIds = reports.map(r => r.id);
+    await db.delete(photosTable).where(inArray(photosTable.reportId, reportIds));
+    await db.delete(likesTable).where(inArray(likesTable.postId, reportIds));
+    await db.delete(commentsTable).where(inArray(commentsTable.postId, reportIds));
+    await db.delete(reportsTable).where(inArray(reportsTable.id, reportIds));
+  }
+
+  // Look up field user IDs
+  const fieldEmails = ["james@mission.org", "maria@mission.org", "david@mission.org"] as const;
+  const fieldUsers = await db
+    .select({ id: usersTable.id, email: usersTable.email })
+    .from(usersTable)
+    .where(inArray(usersTable.email, [...fieldEmails]));
+
+  const userIds = Object.fromEntries(fieldUsers.map(u => [u.email, u.id]));
+
+  if (!userIds["james@mission.org"] || !userIds["maria@mission.org"] || !userIds["david@mission.org"]) {
+    logger.warn("resetDemoOrg: field users missing — running full seed instead");
+    await seedIfEmpty();
+    return;
+  }
+
+  await db.insert(reportsTable).values([
+    {
+      missionaryId: userIds["james@mission.org"],
+      organizationId: demoOrg.id,
+      title: "A New Church Planted in Achi Village",
+      description: `Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy. Three local men have expressed a calling to pastoral leadership.`,
+      category: "post",
+      location: "Achi Village, Enugu State, Nigeria",
+      reportDate: new Date("2026-03-15"),
+      peopleReached: 230,
+    },
+    {
+      missionaryId: userIds["james@mission.org"],
+      organizationId: demoOrg.id,
+      title: "Leadership Training Camp: 18 Emerging Pastors Equipped",
+      description: `For two weeks in January, we gathered 18 young leaders from five different villages. These leaders wake before dawn to study. They argued passionately over Scripture. One young woman, Adaeze, is leading a fellowship of 34 women in her village.`,
+      category: "post",
+      location: "Nsukka, Enugu State, Nigeria",
+      reportDate: new Date("2026-02-10"),
+      peopleReached: 450,
+    },
+    {
+      missionaryId: userIds["maria@mission.org"],
+      organizationId: demoOrg.id,
+      title: "Literacy Opens Hearts in San Pedro Village",
+      description: `We launched our first women's literacy program. 28 women gathered every Tuesday and Thursday. By month four, they were reading full sentences. The day Maria Elena — a 52-year-old grandmother — read a verse from John aloud for the first time, the room went silent.`,
+      category: "post",
+      location: "San Pedro Soloma, Huehuetenango, Guatemala",
+      reportDate: new Date("2026-03-20"),
+      peopleReached: 340,
+    },
+    {
+      missionaryId: userIds["david@mission.org"],
+      organizationId: demoOrg.id,
+      title: "Three New House Churches Among the Akha People",
+      description: `Over the past eighteen months, God has been doing something quiet and extraordinary. It began with a young man named Amu. Today, there are three house churches among the Akha villages within our reach — small, fragile, and full of the Spirit.`,
+      category: "post",
+      location: "Chiang Rai Province, Thailand",
+      reportDate: new Date("2026-03-08"),
+      peopleReached: 180,
+    },
+  ]);
+
+  logger.info("resetDemoOrg: demo feed restored to 4 seed posts");
 }
 
 /**

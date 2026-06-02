@@ -3,6 +3,7 @@ import { eq, and, gt } from "drizzle-orm";
 import crypto from "crypto";
 import { db, usersTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
+import { resetDemoOrg } from "../lib/seed";
 import { logger } from "../lib/logger";
 import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
 import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
@@ -267,6 +268,9 @@ router.post("/auth/demo-login", async (req, res): Promise<void> => {
         .where(eq(usersTable.id, user.id))
         .returning();
     }
+
+    // Reset demo feed so every new visitor starts with a clean slate
+    await resetDemoOrg();
 
     req.session.userId = user.id;
     res.json({ subdomain: DEMO_ORG_SUBDOMAIN });
