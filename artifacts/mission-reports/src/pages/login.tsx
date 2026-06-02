@@ -396,9 +396,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                     key={email}
                     type="button"
                     onClick={() => {
-                      form.setValue("email", email);
-                      form.setValue("password", "password123");
-                      form.handleSubmit(onSubmit)();
+                      login.mutate({ data: { email, password: "password123" } });
                     }}
                     style={{
                       flex: 1,
