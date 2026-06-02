@@ -35,8 +35,8 @@ export async function ensureSuperAdmin() {
 
 const DEMO_ORG_SUBDOMAIN = "demo";
 const DEMO_ORG_NAME = "Calvary Community Church";
-const DEMO_ADMIN_EMAIL = "demo@sentconnect.org";
-const DEMO_ADMIN_PASSWORD = "demo123";
+const DEMO_ADMIN_EMAIL = "demoadmin@sentconnect.org";
+const DEMO_ADMIN_PASSWORD = "password123";
 
 /**
  * Idempotent demo seed — safe to call on any database state, including production.
@@ -91,7 +91,7 @@ export async function seedIfEmpty() {
   const DEMO_FIELD_USERS = [
     {
       name: "James Okafor",
-      email: "james@mission.org",
+      email: "demouser@sentconnect.org",
       passwordHash: hashPassword("password123"),
       bio: "Serving the people of rural Nigeria with church planting and leadership training.",
       location: "Enugu, Nigeria",
@@ -156,7 +156,7 @@ export async function seedIfEmpty() {
   if (!sampleReport) {
     await db.insert(reportsTable).values([
       {
-        missionaryId: userIds["james@mission.org"],
+        missionaryId: userIds["demouser@sentconnect.org"],
         organizationId: demoOrg.id,
         title: "A New Church Planted in Achi Village",
         description: `Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy. Three local men have expressed a calling to pastoral leadership.`,
@@ -166,7 +166,7 @@ export async function seedIfEmpty() {
         peopleReached: 230,
       },
       {
-        missionaryId: userIds["james@mission.org"],
+        missionaryId: userIds["demouser@sentconnect.org"],
         organizationId: demoOrg.id,
         title: "Leadership Training Camp: 18 Emerging Pastors Equipped",
         description: `For two weeks in January, we gathered 18 young leaders from five different villages. These leaders wake before dawn to study. They argued passionately over Scripture. One young woman, Adaeze, is leading a fellowship of 34 women in her village.`,
@@ -234,7 +234,7 @@ export async function resetDemoOrg() {
   }
 
   // Look up field user IDs
-  const fieldEmails = ["james@mission.org", "maria@mission.org", "david@mission.org"] as const;
+  const fieldEmails = ["demouser@sentconnect.org", "maria@mission.org", "david@mission.org"] as const;
   const fieldUsers = await db
     .select({ id: usersTable.id, email: usersTable.email })
     .from(usersTable)
@@ -242,7 +242,7 @@ export async function resetDemoOrg() {
 
   const userIds = Object.fromEntries(fieldUsers.map(u => [u.email, u.id]));
 
-  if (!userIds["james@mission.org"] || !userIds["maria@mission.org"] || !userIds["david@mission.org"]) {
+  if (!userIds["demouser@sentconnect.org"] || !userIds["maria@mission.org"] || !userIds["david@mission.org"]) {
     logger.warn("resetDemoOrg: field users missing — running full seed instead");
     await seedIfEmpty();
     return;
@@ -250,7 +250,7 @@ export async function resetDemoOrg() {
 
   await db.insert(reportsTable).values([
     {
-      missionaryId: userIds["james@mission.org"],
+      missionaryId: userIds["demouser@sentconnect.org"],
       organizationId: demoOrg.id,
       title: "A New Church Planted in Achi Village",
       description: `Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy. Three local men have expressed a calling to pastoral leadership.`,
@@ -260,7 +260,7 @@ export async function resetDemoOrg() {
       peopleReached: 230,
     },
     {
-      missionaryId: userIds["james@mission.org"],
+      missionaryId: userIds["demouser@sentconnect.org"],
       organizationId: demoOrg.id,
       title: "Leadership Training Camp: 18 Emerging Pastors Equipped",
       description: `For two weeks in January, we gathered 18 young leaders from five different villages. These leaders wake before dawn to study. They argued passionately over Scripture. One young woman, Adaeze, is leading a fellowship of 34 women in her village.`,

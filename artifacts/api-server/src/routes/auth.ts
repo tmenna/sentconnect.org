@@ -232,9 +232,9 @@ router.post("/auth/reset-password", async (req, res): Promise<void> => {
 
 const DEMO_ORG_SUBDOMAIN = "demo";
 const DEMO_ORG_NAME = "Demo Organization";
-const DEMO_USER_EMAIL = "demo@sentconnect.org";
+const DEMO_USER_EMAIL = "demoadmin@sentconnect.org";
 const DEMO_USER_NAME = "Demo Admin";
-const DEMO_USER_PASSWORD = "demo123";
+const DEMO_USER_PASSWORD = "password123";
 
 router.post("/auth/demo-login", async (req, res): Promise<void> => {
   try {
@@ -280,7 +280,7 @@ router.post("/auth/demo-login", async (req, res): Promise<void> => {
   }
 });
 
-const DEMO_FIELD_USER_EMAIL = "james@mission.org";
+const DEMO_FIELD_USER_EMAIL = "demouser@sentconnect.org";
 
 router.post("/auth/demo-user-login", async (req, res): Promise<void> => {
   try {
