@@ -21,6 +21,7 @@ import ResetPassword from "./pages/reset-password";
 import PublicPost from "./pages/public-post";
 import SignupSuccess from "./pages/signup-success";
 import Demo from "./pages/demo";
+import DemoUser from "./pages/demo-user";
 
 // Heavy pages — code-split so share links and first loads stay fast
 const Timeline = lazy(() => import("./pages/timeline"));
@@ -799,6 +800,7 @@ function AppRoutes() {
       <Route path="/signup" component={Signup} />
       <Route path="/signup/success" component={SignupSuccess} />
       <Route path="/try" component={Demo} />
+      <Route path="/try-user" component={DemoUser} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
       {/* Public shareable post view — no auth required */}
@@ -827,6 +829,7 @@ function AppRoutes() {
               <Route path="/missionaries/:id" component={MissionaryProfile} />
               <Route path="/submit" component={SubmitReport} />
               <Route path="/profile" component={Profile} />
+              <Route path="/user" component={DemoUser} />
               <Route component={NotFound} />
             </Switch>
           </Layout>

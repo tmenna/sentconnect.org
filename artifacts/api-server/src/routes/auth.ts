@@ -280,4 +280,31 @@ router.post("/auth/demo-login", async (req, res): Promise<void> => {
   }
 });
 
+const DEMO_FIELD_USER_EMAIL = "james@mission.org";
+
+router.post("/auth/demo-user-login", async (req, res): Promise<void> => {
+  try {
+    const [user] = await db
+      .select({ id: usersTable.id, status: usersTable.status })
+      .from(usersTable)
+      .where(eq(usersTable.email, DEMO_FIELD_USER_EMAIL))
+      .limit(1);
+
+    if (!user) {
+      res.status(503).json({ error: "Demo is temporarily unavailable. Please try again shortly." });
+      return;
+    }
+
+    if (user.status !== "active") {
+      await db.update(usersTable).set({ status: "active" }).where(eq(usersTable.id, user.id));
+    }
+
+    req.session.userId = user.id;
+    res.json({ subdomain: DEMO_ORG_SUBDOMAIN });
+  } catch (err) {
+    logger.error({ err }, "demo-user-login failed");
+    res.status(500).json({ error: "Demo is temporarily unavailable. Please try again." });
+  }
+});
+
 export default router;

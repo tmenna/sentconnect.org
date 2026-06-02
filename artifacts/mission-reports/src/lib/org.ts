@@ -22,6 +22,7 @@ export const RESERVED_PATHS = new Set([
   "post",
   "sentconnect-home",
   "try",
+  "try-user",
   "super-admin",
   "forgot-password",
   "reset-password",
