@@ -12,7 +12,7 @@ import { useOrg } from "@/providers/org-provider";
 const PURPLE   = "#1085FD";
 const BORDER   = "#E5E7EB";
 
-const DEMO_ORG = "calvary";
+const DEMO_ORG = "demo";
 const DEMO_DISMISSED_KEY = "sc_demo_banner_dismissed";
 
 function DemoBanner() {

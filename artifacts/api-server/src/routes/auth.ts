@@ -229,8 +229,8 @@ router.post("/auth/reset-password", async (req, res): Promise<void> => {
   res.json({ message: "Password reset successfully. You can now log in." });
 });
 
-const DEMO_ORG_SUBDOMAIN = "calvary";
-const DEMO_ORG_NAME = "Calvary Community Church";
+const DEMO_ORG_SUBDOMAIN = "demo";
+const DEMO_ORG_NAME = "Demo Organization";
 const DEMO_USER_EMAIL = "demo@sentconnect.org";
 const DEMO_USER_NAME = "Demo Admin";
 const DEMO_USER_PASSWORD = "demo123";
@@ -248,10 +248,8 @@ router.post("/auth/demo-login", async (req, res): Promise<void> => {
       }).returning();
     }
 
-    // Find or create demo user
-    let [user] = await db.select().from(usersTable).where(
-      and(eq(usersTable.email, DEMO_USER_EMAIL), eq(usersTable.organizationId, org.id))
-    );
+    // Find or create demo user — email is globally unique, so look up without org filter
+    let [user] = await db.select().from(usersTable).where(eq(usersTable.email, DEMO_USER_EMAIL));
     if (!user) {
       [user] = await db.insert(usersTable).values({
         name: DEMO_USER_NAME,
@@ -262,6 +260,12 @@ router.post("/auth/demo-login", async (req, res): Promise<void> => {
         organization: DEMO_ORG_NAME,
         status: "active",
       }).returning();
+    } else if (user.organizationId !== org.id) {
+      // Migrate user to the correct demo org if it changed
+      [user] = await db.update(usersTable)
+        .set({ organizationId: org.id, organization: DEMO_ORG_NAME })
+        .where(eq(usersTable.id, user.id))
+        .returning();
     }
 
     req.session.userId = user.id;

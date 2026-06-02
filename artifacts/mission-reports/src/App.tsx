@@ -257,7 +257,7 @@ function LandingPage() {
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.4)"; }}
                 >{content.primaryCtaLabel}</a>
                 <a
-                  href="/demo"
+                  href="/try"
                   style={{ display: "inline-flex", alignItems: "center", gap: 6, height: 52, padding: "0 26px", borderRadius: 999, background: "transparent", color: "#0F172A", fontSize: 15, fontWeight: 600, textDecoration: "none", border: "1.5px solid #CBD5E1", transition: "border-color .15s, color .15s, background .15s" }}
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#1085FD"; el.style.color = "#1085FD"; el.style.background = "#F0F7FF"; }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#CBD5E1"; el.style.color = "#0F172A"; el.style.background = "transparent"; }}
@@ -798,7 +798,7 @@ function AppRoutes() {
       <Route path="/sentconnect-home" component={LandingPreviewRoute} />
       <Route path="/signup" component={Signup} />
       <Route path="/signup/success" component={SignupSuccess} />
-      <Route path="/demo" component={Demo} />
+      <Route path="/try" component={Demo} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
       {/* Public shareable post view — no auth required */}
