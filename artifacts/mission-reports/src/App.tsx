@@ -536,39 +536,41 @@ function AboutPage() {
           </a>
 
           {/* Desktop nav */}
-          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 28 }}>
+          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 24 }}>
             <a
               href="/about"
-              style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+              style={{ fontSize: 14, fontWeight: 700, color: "#fff", textDecoration: "none", transition: "opacity .15s", letterSpacing: "0.01em" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.8"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
             >About</a>
             <a
-              href="/help"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)", textDecoration: "none", transition: "color .15s", display: "inline-flex", alignItems: "center", gap: 5 }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+              href="https://demo.sentconnect.org/"
+              style={{ fontSize: 14, fontWeight: 700, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 18px", borderRadius: 999, border: "1.5px solid rgba(255,255,255,0.45)", background: "rgba(255,255,255,0.10)", transition: "background .15s, border-color .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.20)"; el.style.borderColor = "rgba(255,255,255,0.7)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.10)"; el.style.borderColor = "rgba(255,255,255,0.45)"; }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              Help
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Try Demo
             </a>
             <a
               href={lpContent.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, lpContent.headerPrimaryCtaHref)}
               style={{ fontSize: 14, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "9px 22px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.14)", transition: "background .15s, transform .15s, box-shadow .15s", display: "inline-flex", alignItems: "center" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F5F5F5"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0F7FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.18)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.14)"; }}
             >{lpContent.headerPrimaryCtaLabel}</a>
           </nav>
 
-          {/* Mobile: Sign up pill + hamburger */}
-          <div className="flex sm:hidden items-center gap-3">
+          {/* Mobile: Try Demo + Sign up + hamburger */}
+          <div className="flex sm:hidden items-center gap-2">
+            <a
+              href="https://demo.sentconnect.org/"
+              style={{ fontSize: 12, fontWeight: 700, color: "#fff", border: "1.5px solid rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.1)", padding: "6px 12px", borderRadius: 999, textDecoration: "none" }}
+            >Demo</a>
             <a
               href={lpContent.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, lpContent.headerPrimaryCtaHref)}
-              style={{ fontSize: 13, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "7px 16px", borderRadius: 999, textDecoration: "none" }}
+              style={{ fontSize: 12, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "6px 14px", borderRadius: 999, textDecoration: "none" }}
             >{lpContent.headerPrimaryCtaLabel}</a>
             <button
               onClick={() => setMobileNavOpen(o => !o)}
@@ -588,18 +590,16 @@ function AboutPage() {
           <div className="sm:hidden" style={{ background: BLUE_DARK, borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
             <a
               href="/about"
-              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 700, color: "#fff", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
               onClick={() => setMobileNavOpen(false)}
             >About</a>
             <a
-              href="/help"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="https://demo.sentconnect.org/"
               style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none" }}
               onClick={() => setMobileNavOpen(false)}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              Help
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Try Demo
             </a>
           </div>
         )}
