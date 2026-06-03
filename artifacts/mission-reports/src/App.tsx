@@ -568,9 +568,9 @@ function AboutPage() {
           {/* Back link */}
           <a
             href="/"
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "#111827", textDecoration: "none", marginBottom: 40 }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.75"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "#1085FD", textDecoration: "none", marginBottom: 40 }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#0059D6"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#1085FD"; }}
           >
             ← Back to home
           </a>

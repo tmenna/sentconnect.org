@@ -66,7 +66,10 @@ export default function MissionaryProfile() {
       {/* Back link */}
       <Link
         href={feedHref}
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+        className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors group"
+        style={{ color: "#1085FD" }}
+        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#0059D6")}
+        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "#1085FD")}
       >
         <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
         Back to Updates

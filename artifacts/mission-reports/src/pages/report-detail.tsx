@@ -39,7 +39,7 @@ export default function ReportDetail() {
     return (
       <div className="max-w-[700px] mx-auto text-center py-20">
         <p className="text-lg font-semibold text-foreground">Post not found</p>
-        <Link href={feedHref} className="mt-3 inline-block text-sm text-primary hover:underline">
+        <Link href={feedHref} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium" style={{ color: "#1085FD" }}>
           Back to Updates
         </Link>
       </div>

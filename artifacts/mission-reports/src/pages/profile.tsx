@@ -118,9 +118,9 @@ function AdminProfile() {
     <div className="max-w-lg mx-auto py-6">
       <Link href="/admin">
         <span className="inline-flex items-center gap-1.5 text-[13px] font-medium mb-5 transition-colors"
-          style={{ color: "#64748B" }}
-          onMouseEnter={e => (e.currentTarget.style.color = "#111827")}
-          onMouseLeave={e => (e.currentTarget.style.color = "#64748B")}
+          style={{ color: "#1085FD" }}
+          onMouseEnter={e => (e.currentTarget.style.color = "#0059D6")}
+          onMouseLeave={e => (e.currentTarget.style.color = "#1085FD")}
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Dashboard
@@ -313,9 +313,9 @@ function FieldUserProfile() {
     <div className="max-w-lg mx-auto py-6">
       <Link href="/feed">
         <span className="inline-flex items-center gap-1.5 text-[13px] font-medium mb-5 transition-colors"
-          style={{ color: "#64748B" }}
-          onMouseEnter={e => (e.currentTarget.style.color = "#111827")}
-          onMouseLeave={e => (e.currentTarget.style.color = "#64748B")}
+          style={{ color: "#1085FD" }}
+          onMouseEnter={e => (e.currentTarget.style.color = "#0059D6")}
+          onMouseLeave={e => (e.currentTarget.style.color = "#1085FD")}
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Dashboard
