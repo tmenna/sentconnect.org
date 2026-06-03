@@ -3,7 +3,7 @@ import { eq, and, gt } from "drizzle-orm";
 import crypto from "crypto";
 import { db, usersTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
-import { resetDemoOrg } from "../lib/seed";
+import { maybeResetDemoOrg } from "../lib/seed";
 import { logger } from "../lib/logger";
 import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
 import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
@@ -269,8 +269,8 @@ router.post("/auth/demo-login", async (req, res): Promise<void> => {
         .returning();
     }
 
-    // Reset demo feed so every new visitor starts with a clean slate
-    await resetDemoOrg();
+    // Reset demo feed only if 1 hour has passed — preserves field-user posts within the window
+    await maybeResetDemoOrg();
 
     req.session.userId = user.id;
     res.json({ subdomain: DEMO_ORG_SUBDOMAIN });
@@ -284,6 +284,9 @@ const DEMO_FIELD_USER_EMAIL = "demouser@sentconnect.org";
 
 router.post("/auth/demo-user-login", async (req, res): Promise<void> => {
   try {
+    // Reset demo feed only if 1 hour has passed
+    await maybeResetDemoOrg();
+
     const [user] = await db
       .select({ id: usersTable.id, status: usersTable.status })
       .from(usersTable)

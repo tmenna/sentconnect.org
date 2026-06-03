@@ -240,10 +240,26 @@ export async function seedIfEmpty() {
   }
 }
 
+const DEMO_RESET_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
+let demoLastResetAt: Date | null = null;
+
+/**
+ * Resets the demo org only if 1 hour has passed since the last reset.
+ * This lets the demo field user's posts remain visible to the admin
+ * within the same session window.
+ */
+export async function maybeResetDemoOrg(): Promise<void> {
+  const now = new Date();
+  if (demoLastResetAt && now.getTime() - demoLastResetAt.getTime() < DEMO_RESET_INTERVAL_MS) {
+    return;
+  }
+  await resetDemoOrg();
+  demoLastResetAt = now;
+}
+
 /**
  * Wipes all posts (and their photos/likes/comments) from the demo org,
  * then re-seeds the 4 canonical demo posts.
- * Called on every demo-login so each visitor starts with a pristine feed.
  */
 export async function resetDemoOrg() {
   const [demoOrg] = await db
