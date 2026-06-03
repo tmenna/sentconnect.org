@@ -230,11 +230,6 @@ function LandingPage() {
         {/* ── HERO ── */}
         <section className="lp-hero-section" style={{ background: "#FFFFFF", borderBottom: "1px solid #DDE9FF", position: "relative", overflow: "hidden" }}>
 
-          {/* Dot-grid texture — fades left to right */}
-          <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(16,133,253,0.13) 1px, transparent 1px)", backgroundSize: "28px 28px", WebkitMaskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, black 100%)", maskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, black 100%)", pointerEvents: "none" }} />
-
-          {/* Soft glow orb behind decoration */}
-          <div style={{ position: "absolute", top: "-10%", right: "-5%", width: 640, height: 640, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.10) 0%, transparent 65%)", pointerEvents: "none" }} />
 
           <div className="lp-hero-split mx-auto max-w-6xl px-6">
 
