@@ -278,10 +278,6 @@ function LandingPage() {
                 </a>
               </div>
 
-              {/* Trust micro-text */}
-              <p className="lp-animate lp-delay-4" style={{ fontSize: 12, color: "#94A3B8", marginTop: 20, letterSpacing: "0.01em" }}>
-                No credit card required · Set up in minutes
-              </p>
             </div>
 
             {/* ── RIGHT: abstract decoration ── */}
