@@ -311,7 +311,7 @@ function FieldUserProfile() {
 
   return (
     <div className="max-w-lg mx-auto py-6">
-      <Link href="/feed">
+      <Link href="/">
         <span className="inline-flex items-center gap-1.5 text-[13px] font-medium mb-5 transition-colors"
           style={{ color: "#1085FD" }}
           onMouseEnter={e => (e.currentTarget.style.color = "#0059D6")}
