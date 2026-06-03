@@ -769,7 +769,7 @@ export function PostCard({
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setShowMenu(s => !s)}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-[#94A3B8] hover:text-[#64748B]"
+                  className="p-1.5 rounded-lg hover:bg-[#E8F4FF] transition-colors text-[#0085FF]"
                 >
                   <MoreHorizontal className="h-4 w-4" />
                 </button>
