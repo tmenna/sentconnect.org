@@ -280,96 +280,131 @@ function LandingPage() {
 
             </div>
 
-            {/* ── RIGHT: abstract decoration ── */}
-            <div className="lp-hero-split-deco lp-animate lp-delay-5" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
-              {/* Abstract SVG composition */}
-              <svg viewBox="0 0 440 440" style={{ width: "90%", maxWidth: 440, height: "auto" }} aria-hidden="true">
-                {/* outer ring */}
-                <circle cx="220" cy="220" r="190" fill="none" stroke="rgba(16,133,253,0.10)" strokeWidth="1.5" />
-                {/* middle ring */}
-                <circle cx="220" cy="220" r="148" fill="none" stroke="rgba(16,133,253,0.12)" strokeWidth="1" strokeDasharray="6 8" />
-                {/* inner filled circle */}
-                <circle cx="220" cy="220" r="104" fill="rgba(16,133,253,0.04)" stroke="rgba(16,133,253,0.10)" strokeWidth="1" />
-                {/* glow core */}
-                <circle cx="220" cy="220" r="64" fill="rgba(16,133,253,0.07)" />
-                {/* central icon — shield / lock shape suggesting security */}
-                <g transform="translate(186,186)">
-                  <rect x="0" y="0" width="68" height="68" rx="18" fill="rgba(16,133,253,0.90)" />
-                  {/* lock body */}
-                  <rect x="20" y="34" width="28" height="20" rx="4" fill="white" />
-                  {/* lock shackle */}
-                  <path d="M24 34 V26 a10 10 0 0 1 20 0 V34" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" />
-                  {/* keyhole */}
-                  <circle cx="34" cy="43" r="3" fill="rgba(16,133,253,0.8)" />
-                  <rect x="32" y="44" width="4" height="5" rx="1" fill="rgba(16,133,253,0.8)" />
-                </g>
-                {/* Orbiting nodes — top */}
-                <circle cx="220" cy="30" r="10" fill="rgba(16,133,253,0.18)" stroke="rgba(16,133,253,0.3)" strokeWidth="1.5" />
-                <circle cx="220" cy="30" r="5" fill={BLUE} />
-                {/* Orbiting nodes — right */}
-                <circle cx="410" cy="220" r="10" fill="rgba(16,133,253,0.18)" stroke="rgba(16,133,253,0.3)" strokeWidth="1.5" />
-                <circle cx="410" cy="220" r="5" fill={BLUE} />
-                {/* Orbiting nodes — bottom-left */}
-                <circle cx="81" cy="327" r="8" fill="rgba(16,133,253,0.18)" stroke="rgba(16,133,253,0.3)" strokeWidth="1.5" />
-                <circle cx="81" cy="327" r="4" fill={BLUE} />
-                {/* Connector lines from nodes to outer ring */}
-                <line x1="220" y1="40" x2="220" y2="70" stroke="rgba(16,133,253,0.25)" strokeWidth="1.5" strokeDasharray="3 4" />
-                <line x1="400" y1="220" x2="372" y2="220" stroke="rgba(16,133,253,0.25)" strokeWidth="1.5" strokeDasharray="3 4" />
-                <line x1="87" y1="320" x2="104" y2="303" stroke="rgba(16,133,253,0.25)" strokeWidth="1.5" strokeDasharray="3 4" />
-                {/* Floating pill badges */}
-                <g transform="translate(295,68)">
-                  <rect width="108" height="32" rx="16" fill="white" stroke="rgba(16,133,253,0.2)" strokeWidth="1" filter="url(#shadow1)" />
-                  <circle cx="16" cy="16" r="6" fill={BLUE} opacity="0.85" />
-                  <rect x="28" y="9" width="52" height="5" rx="2.5" fill="#CBD5E1" />
-                  <rect x="28" y="19" width="36" height="4" rx="2" fill="#E2E8F0" />
-                </g>
-                <g transform="translate(42,130)">
-                  <rect width="96" height="28" rx="14" fill="white" stroke="rgba(16,133,253,0.2)" strokeWidth="1" />
-                  <circle cx="14" cy="14" r="5" fill="#22C55E" opacity="0.85" />
-                  <rect x="24" y="8" width="44" height="4" rx="2" fill="#CBD5E1" />
-                  <rect x="24" y="17" width="30" height="3" rx="1.5" fill="#E2E8F0" />
-                </g>
-                <g transform="translate(298,316)">
-                  <rect width="100" height="28" rx="14" fill="white" stroke="rgba(16,133,253,0.2)" strokeWidth="1" />
-                  <circle cx="14" cy="14" r="5" fill="#F59E0B" opacity="0.85" />
-                  <rect x="24" y="8" width="38" height="4" rx="2" fill="#CBD5E1" />
-                  <rect x="24" y="17" width="52" height="3" rx="1.5" fill="#E2E8F0" />
-                </g>
-                {/* Drop shadow filter */}
-                <defs>
-                  <filter id="shadow1" x="-10%" y="-10%" width="120%" height="140%">
-                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="rgba(15,23,42,0.08)" />
-                  </filter>
-                </defs>
-              </svg>
+            {/* ── RIGHT: floating feed UI mockup ── */}
+            <div className="lp-hero-split-deco lp-animate lp-delay-5" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 0" }}>
+              <div style={{ position: "relative", width: "100%", maxWidth: 380 }}>
+
+                {/* Ghost card — peeking behind with slight rotation */}
+                <div style={{ position: "absolute", top: -14, right: -16, left: 24, background: "#fff", borderRadius: 18, padding: "16px 18px", boxShadow: "0 4px 20px rgba(15,23,42,0.07)", border: "1px solid #E8F0FE", transform: "rotate(2.5deg)", opacity: 0.65, zIndex: 0 }}>
+                  <div style={{ height: 9, borderRadius: 5, background: "#EEF4FF", width: "65%", marginBottom: 8 }} />
+                  <div style={{ height: 7, borderRadius: 4, background: "#F5F7FA", width: "88%", marginBottom: 5 }} />
+                  <div style={{ height: 7, borderRadius: 4, background: "#F5F7FA", width: "52%" }} />
+                </div>
+
+                {/* Main feed card */}
+                <div style={{ background: "#fff", borderRadius: 20, boxShadow: "0 16px 56px rgba(15,23,42,0.13), 0 2px 8px rgba(15,23,42,0.05)", border: "1px solid #E0EBFF", overflow: "hidden", position: "relative", zIndex: 1 }}>
+
+                  {/* Card header */}
+                  <div style={{ padding: "16px 20px", borderBottom: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(135deg, ${BLUE} 0%, #60A5FA 100%)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, color: "#0F172A" }}>{content.previewCardTitle || "Mission Updates"}</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 2 }}>
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22C55E" }} />
+                        <span style={{ fontSize: 11, color: "#64748B" }}>Live feed</span>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: 10, color: "#94A3B8", background: "#F8FAFC", border: "1px solid #E2E8F0", padding: "3px 8px", borderRadius: 999 }}>calvary.sentconnect.org</span>
+                  </div>
+
+                  {/* Feed items */}
+                  {[
+                    { title: content.previewTitle1 || "Prayer gathering in Kigali", color: "#DBEAFE", time: "2h ago" },
+                    { title: content.previewTitle2 || "New family visits this week", color: "#FCE7F3", time: "3h ago" },
+                    { title: content.previewTitle3 || "Youth outreach photos shared", color: "#D1FAE5", time: "5h ago" },
+                  ].map(({ title, color, time }, i) => (
+                    <div key={i} style={{ padding: "13px 20px", borderBottom: i < 2 ? "1px solid #F8FAFC" : "none", display: "flex", alignItems: "flex-start", gap: 11 }}>
+                      <div style={{ width: 30, height: 30, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 12.5, fontWeight: 600, color: "#0F172A", marginBottom: 5, lineHeight: 1.35, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</div>
+                        <div style={{ display: "flex", gap: 6 }}>
+                          <div style={{ height: 7, borderRadius: 3, background: "#F1F5F9", width: "52%" }} />
+                          <div style={{ height: 7, borderRadius: 3, background: "#F1F5F9", width: "22%" }} />
+                        </div>
+                      </div>
+                      <span style={{ fontSize: 10.5, color: "#94A3B8", flexShrink: 0, marginTop: 1 }}>{time}</span>
+                    </div>
+                  ))}
+
+                  {/* Compose bar */}
+                  <div style={{ padding: "11px 20px", background: "#FAFBFF", borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{ width: 26, height: 26, borderRadius: "50%", background: "#E0EBFF", flexShrink: 0 }} />
+                    <div style={{ flex: 1, height: 28, borderRadius: 8, background: "#F1F5F9", display: "flex", alignItems: "center", padding: "0 12px" }}>
+                      <span style={{ fontSize: 11.5, color: "#94A3B8" }}>Share an update…</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Decorative dot cluster */}
+                <div style={{ position: "absolute", bottom: -20, right: -24, display: "flex", flexWrap: "wrap", gap: 6, width: 72, opacity: 0.35, pointerEvents: "none" }}>
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <div key={i} style={{ width: 5, height: 5, borderRadius: "50%", background: BLUE }} />
+                  ))}
+                </div>
+              </div>
             </div>
 
           </div>
         </section>
 
+        {/* ── STATEMENT BAND ── */}
+        <section style={{ background: BLUE, padding: "88px 24px" }}>
+          <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
+            <p style={{ fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 600, color: "#fff", lineHeight: 1.6, margin: 0, letterSpacing: "-0.02em" }}>
+              Ministry updates shouldn't live in email threads and WhatsApp groups.{" "}
+              <em style={{ fontStyle: "italic", color: "rgba(255,255,255,0.80)" }}>
+                SentConnect gives your field teams one private, secure home.
+              </em>
+            </p>
+          </div>
+        </section>
+
         {/* ── HOW IT WORKS ── */}
-        <section style={{ background: "#fff", padding: "112px 0" }}>
+        <section style={{ background: "#F8FAFF", padding: "104px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
             <div style={{ textAlign: "center", marginBottom: 64 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 12 }}>How SentConnect Works</p>
-              <h2 style={{ fontSize: "clamp(30px, 3.5vw, 46px)", fontWeight: 900, letterSpacing: "-0.035em", color: TEXT, margin: 0 }}>{content.howItWorksHeading}</h2>
+              <p style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 14 }}>How SentConnect Works</p>
+              <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 900, letterSpacing: "-0.035em", color: TEXT, margin: 0 }}>{content.howItWorksHeading}</h2>
             </div>
 
             <div className="lp-steps-grid">
               {/* connector line */}
-              <div className="lp-connector" style={{ position: "absolute", top: 36, left: "calc(16.66% + 16px)", right: "calc(16.66% + 16px)", height: 1, background: "linear-gradient(90deg, transparent, rgba(16,133,253,0.25), transparent)", pointerEvents: "none" }} />
+              <div className="lp-connector" style={{ position: "absolute", top: 40, left: "calc(16.66% + 16px)", right: "calc(16.66% + 16px)", height: 1, background: "linear-gradient(90deg, transparent, rgba(16,133,253,0.2), transparent)", pointerEvents: "none" }} />
 
               {[
-                { title: content.step1Title, desc: content.step1Description, n: "01" },
-                { title: content.step2Title, desc: content.step2Description, n: "02" },
-                { title: content.step3Title, desc: content.step3Description, n: "03" },
-              ].map(({ title, desc, n }) => (
-                <div key={n} style={{ background: "#fff", borderRadius: 20, padding: "32px 28px", boxShadow: "0 8px 32px rgba(15,23,42,0.07), 0 1px 4px rgba(15,23,42,0.04)", border: "1px solid #EBF3FF", borderTop: `3px solid ${BLUE}`, transition: "box-shadow .2s, transform .2s" }}>
-                  <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${BLUE} 0%, #0070E0 100%)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, boxShadow: "0 4px 16px rgba(16,133,253,0.35)" }}>
-                    <span style={{ fontSize: 13, fontWeight: 900, color: "#fff", letterSpacing: "0.02em" }}>{n}</span>
+                {
+                  title: content.step1Title, desc: content.step1Description,
+                  accent: BLUE, bg: "#EEF5FF",
+                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M12 8v8"/></svg>
+                },
+                {
+                  title: content.step2Title, desc: content.step2Description,
+                  accent: "#7C3AED", bg: "#F3EEFF",
+                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                },
+                {
+                  title: content.step3Title, desc: content.step3Description,
+                  accent: "#059669", bg: "#ECFDF5",
+                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+                },
+              ].map(({ title, desc, accent, bg, icon }, i) => (
+                <div key={i} style={{ background: "#fff", borderRadius: 20, padding: "36px 28px", boxShadow: "0 4px 24px rgba(15,23,42,0.07), 0 1px 4px rgba(15,23,42,0.03)", border: "1px solid #EBF3FF", transition: "box-shadow .2s, transform .2s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = "0 12px 40px rgba(15,23,42,0.12), 0 2px 8px rgba(15,23,42,0.05)"; el.style.transform = "translateY(-3px)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = "0 4px 24px rgba(15,23,42,0.07), 0 1px 4px rgba(15,23,42,0.03)"; el.style.transform = "translateY(0)"; }}
+                >
+                  {/* Step number badge + icon */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 24 }}>
+                    <div style={{ width: 52, height: 52, borderRadius: 16, background: accent, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: `0 6px 20px ${accent}40` }}>
+                      {icon}
+                    </div>
+                    <div style={{ width: 24, height: 24, borderRadius: "50%", background: bg, border: `2px solid ${accent}30`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <span style={{ fontSize: 10, fontWeight: 800, color: accent }}>0{i + 1}</span>
+                    </div>
                   </div>
-                  <h3 style={{ fontSize: 18, fontWeight: 800, color: TEXT, margin: "0 0 12px", letterSpacing: "-0.025em" }}>{title}</h3>
-                  <p style={{ fontSize: 14.5, lineHeight: 1.75, color: TEXT2, margin: 0 }}>{desc}</p>
+                  <h3 style={{ fontSize: 17, fontWeight: 800, color: TEXT, margin: "0 0 10px", letterSpacing: "-0.02em" }}>{title}</h3>
+                  <p style={{ fontSize: 14.5, lineHeight: 1.8, color: TEXT2, margin: 0 }}>{desc}</p>
                 </div>
               ))}
             </div>
