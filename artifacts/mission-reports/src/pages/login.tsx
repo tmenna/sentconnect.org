@@ -389,14 +389,21 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               </p>
               <div style={{ display: "flex", gap: 8 }}>
                 {[
-                  { label: "Admin", sublabel: "Manage team & reports", email: "demoadmin@sentconnect.org" },
-                  { label: "Field User", sublabel: "Post updates & photos", email: "demouser@sentconnect.org" },
-                ].map(({ label, sublabel, email }) => (
+                  { label: "Admin", sublabel: "Manage team & reports", endpoint: "/api/auth/demo-login" },
+                  { label: "Field User", sublabel: "Post updates & photos", endpoint: "/api/auth/demo-user-login" },
+                ].map(({ label, sublabel, endpoint }) => (
                   <button
-                    key={email}
+                    key={endpoint}
                     type="button"
-                    onClick={() => {
-                      login.mutate({ data: { email, password: "password123" } });
+                    onClick={async () => {
+                      try {
+                        const res = await fetch(endpoint, { method: "POST", credentials: "include" });
+                        if (!res.ok) throw new Error("failed");
+                        await queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
+                        navigate(from);
+                      } catch {
+                        toast({ title: "Demo unavailable", description: "Please try again in a moment.", variant: "destructive" });
+                      }
                     }}
                     style={{
                       flex: 1,
