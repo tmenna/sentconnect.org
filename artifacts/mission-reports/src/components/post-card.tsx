@@ -781,7 +781,7 @@ export function PostCard({
                   <MoreHorizontal className="h-4 w-4" />
                 </button>
                 {showMenu && (
-                  <div className="absolute right-0 bottom-9 bg-white border border-border shadow-md rounded-lg z-10 min-w-[140px] py-1">
+                  <div className="absolute right-0 top-8 bg-white border border-border shadow-md rounded-lg z-50 min-w-[140px] py-1">
                     {isOwner && (
                       <button
                         onClick={() => { setShowMenu(false); setEditing(true); }}
