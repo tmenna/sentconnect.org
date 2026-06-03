@@ -228,7 +228,7 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="lp-hero-section" style={{ background: "linear-gradient(140deg, #EBF3FF 0%, #F2F7FF 35%, #F8FBFF 65%, #FFFFFF 100%)", borderBottom: "1px solid #DDE9FF", position: "relative", overflow: "hidden" }}>
+        <section className="lp-hero-section" style={{ background: "#FFFFFF", borderBottom: "1px solid #DDE9FF", position: "relative", overflow: "hidden" }}>
 
           {/* Dot-grid texture — fades left to right */}
           <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(16,133,253,0.13) 1px, transparent 1px)", backgroundSize: "28px 28px", WebkitMaskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, black 100%)", maskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, black 100%)", pointerEvents: "none" }} />
@@ -245,7 +245,7 @@ function LandingPage() {
                 <span style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
               </div>
 
-              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(38px, 4.8vw, 60px)", fontWeight: 900, lineHeight: 1.07, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px" }}>
+              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(38px, 4.8vw, 60px)", fontWeight: 900, lineHeight: 1.07, letterSpacing: "-0.04em", color: BLUE, margin: "0 0 24px" }}>
                 {content.heroTitle}
               </h1>
 
