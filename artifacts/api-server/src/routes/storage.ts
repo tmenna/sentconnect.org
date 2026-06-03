@@ -26,6 +26,8 @@ import {
   createPresignedGetUrl,
   objectPathToKey,
   ALLOWED_MIME_TYPES,
+  VIDEO_MIME_TYPES,
+  VIDEO_MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_BYTES,
 } from "../lib/r2Storage";
 
@@ -118,8 +120,11 @@ router.post("/storage/upload-url", async (req: Request, res: Response) => {
 
   // Validate file size via optional fileSize body field
   const fileSize = Number(req.body.fileSize ?? 0);
-  if (fileSize > MAX_FILE_SIZE_BYTES) {
-    res.status(400).json({ error: "File too large. Maximum is 200 MB." });
+  const isVideo = VIDEO_MIME_TYPES.has(contentType);
+  const sizeLimit = isVideo ? VIDEO_MAX_FILE_SIZE_BYTES : MAX_FILE_SIZE_BYTES;
+  const sizeLimitLabel = isVideo ? "50 MB" : "200 MB";
+  if (fileSize > sizeLimit) {
+    res.status(400).json({ error: `File too large. Videos must be under ${sizeLimitLabel}.` });
     return;
   }
 

@@ -38,11 +38,21 @@ export const ALLOWED_MIME_TYPES = new Set([
   "video/mp4",
   "video/webm",
   "video/quicktime",
-  "video/x-msvideo",
-  "video/avi",
+  "video/x-m4v",
 ]);
 
-/** 200 MB hard limit — large enough for video, safe for R2 free-tier egress. */
+/** Video MIME types — subject to a tighter size cap than images. */
+export const VIDEO_MIME_TYPES = new Set([
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+  "video/x-m4v",
+]);
+
+/** 50 MB cap for videos — matches Bluesky and common social platforms. */
+export const VIDEO_MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024;
+
+/** 200 MB hard limit for images / other assets. */
 export const MAX_FILE_SIZE_BYTES = 200 * 1024 * 1024;
 
 // ─────────────────────────────────────────────────────────────────────────────

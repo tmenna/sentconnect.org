@@ -1,9 +1,25 @@
 import { useState, useRef } from "react";
-import { Image, MapPin, X, Loader2, Navigation, Star, Video, PlayCircle } from "lucide-react";
+import { Image, MapPin, X, Loader2, Navigation, Video, PlayCircle, AlertCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/auth-provider";
 import { cn } from "@/lib/utils";
 import type { PostData } from "./post-card";
+
+// ── Video constraints (aligned with Bluesky / common social platforms) ──
+const VIDEO_MAX_BYTES = 50 * 1024 * 1024;   // 50 MB
+const VIDEO_MAX_SECONDS = 60;                 // 60 s
+const ACCEPTED_VIDEO_TYPES = "video/mp4,video/quicktime,video/webm,video/x-m4v";
+
+function getVideoDuration(file: File): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const vid = document.createElement("video");
+    vid.preload = "metadata";
+    vid.onloadedmetadata = () => { URL.revokeObjectURL(url); resolve(vid.duration); };
+    vid.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Could not read video")); };
+    vid.src = url;
+  });
+}
 
 interface UploadResult {
   objectKey: string;
@@ -63,6 +79,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
   const [location, setLocation] = useState("");
   const [isMissionMoment, setIsMissionMoment] = useState(false);
   const [files, setFiles] = useState<LocalFile[]>([]);
+  const [mediaError, setMediaError] = useState<string | null>(null);
   const [showLocation, setShowLocation] = useState(false);
   const [posting, setPosting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState("");
@@ -72,13 +89,38 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
 
   if (!user) return null;
 
-  function addFiles(picked: FileList | null) {
+  async function addFiles(picked: FileList | null) {
     if (!picked) return;
-    const newFiles: LocalFile[] = Array.from(picked).slice(0, 6 - files.length).map(f => ({
-      file: f,
-      previewUrl: URL.createObjectURL(f),
-    }));
-    setFiles(prev => [...prev, ...newFiles]);
+    setMediaError(null);
+    const incoming = Array.from(picked).slice(0, 6 - files.length);
+    const accepted: LocalFile[] = [];
+
+    for (const f of incoming) {
+      const isVid = f.type.startsWith("video/");
+
+      if (isVid) {
+        // ── Size check (instant) ──────────────────────────────────────────
+        if (f.size > VIDEO_MAX_BYTES) {
+          setMediaError(`"${f.name}" is too large. Videos must be under 50 MB.`);
+          continue;
+        }
+        // ── Duration check (async — reads metadata from the local file) ───
+        try {
+          const dur = await getVideoDuration(f);
+          if (dur > VIDEO_MAX_SECONDS) {
+            setMediaError(`"${f.name}" is ${Math.round(dur)}s. Videos must be 60 seconds or shorter.`);
+            continue;
+          }
+        } catch {
+          setMediaError(`Could not read "${f.name}". Make sure it's a valid MP4, MOV, WebM, or M4V file.`);
+          continue;
+        }
+      }
+
+      accepted.push({ file: f, previewUrl: URL.createObjectURL(f) });
+    }
+
+    if (accepted.length > 0) setFiles(prev => [...prev, ...accepted]);
   }
 
   function removeFile(index: number) {
@@ -282,6 +324,17 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             </div>
           )}
 
+          {/* Media error */}
+          {mediaError && (
+            <div className="mt-2 flex items-start gap-2 rounded-lg px-3 py-2" style={{ background: "#FFF1F2", border: "1px solid #FECDD3" }}>
+              <AlertCircle className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" style={{ color: "#E11D48" }} />
+              <p className="text-[12px] leading-relaxed" style={{ color: "#9F1239" }}>{mediaError}</p>
+              <button onClick={() => setMediaError(null)} className="ml-auto flex-shrink-0">
+                <X className="h-3 w-3" style={{ color: "#E11D48" }} />
+              </button>
+            </div>
+          )}
+
           {/* Toolbar */}
           <div className="flex items-center gap-0.5 sm:gap-1 mt-3 pt-3 flex-wrap" style={{ borderTop: "1px solid #F1F5F9" }}>
             {/* Photo */}
@@ -307,12 +360,12 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               style={{ color: "#0085FF", background: files.some(f => isVideo(f)) ? "#E8F4FF" : "" }}
               onMouseEnter={e => { e.currentTarget.style.background = "#E8F4FF"; }}
               onMouseLeave={e => { if (!files.some(f => isVideo(f))) e.currentTarget.style.background = ""; }}
-              title="Add short video"
+              title="Add video — MP4, MOV, WebM, M4V · max 50 MB · max 60 s"
             >
               <Video className="h-4 w-4" />
               <span className="hidden sm:inline">Video</span>
             </button>
-            <input ref={videoInputRef} type="file" accept="video/*" className="hidden" onChange={e => addFiles(e.target.files)} />
+            <input ref={videoInputRef} type="file" accept={ACCEPTED_VIDEO_TYPES} className="hidden" onChange={e => addFiles(e.target.files)} />
 
             {/* Location */}
             <button
