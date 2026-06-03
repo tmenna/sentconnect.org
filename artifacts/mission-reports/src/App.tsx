@@ -235,9 +235,9 @@ function LandingPage() {
 
             {/* ── LEFT: text content ── */}
             <div style={{ paddingRight: 48 }}>
-              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 24, background: "rgba(16,133,253,0.08)", borderRadius: 999, padding: "5px 14px", border: "1px solid rgba(16,133,253,0.18)" }}>
-                <svg width="8" height="8" viewBox="0 0 8 8" style={{ marginRight: 7, flexShrink: 0 }}><circle cx="4" cy="4" r="4" fill="#1085FD" /></svg>
-                <span style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: BLUE, borderRadius: 999, padding: "6px 16px", gap: 7 }}>
+                <svg width="7" height="7" viewBox="0 0 8 8" style={{ flexShrink: 0 }}><circle cx="4" cy="4" r="4" fill="rgba(255,255,255,0.7)" /></svg>
+                <span style={{ fontSize: 11.5, fontWeight: 700, color: "#fff", letterSpacing: "0.11em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
               </div>
 
               <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(38px, 4.8vw, 60px)", fontWeight: 900, lineHeight: 1.07, letterSpacing: "-0.04em", color: BLUE, margin: "0 0 24px" }}>
