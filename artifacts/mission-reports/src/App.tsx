@@ -228,38 +228,126 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="lp-hero-section" style={{ background: "#ffffff", borderBottom: "1px solid #E8F0FE" }}>
-          <div className="mx-auto max-w-4xl px-6 text-center">
-            <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "#EEF5FF", borderRadius: 999, padding: "5px 16px", border: "1px solid rgba(16,133,253,0.2)" }}>
-              <span style={{ fontSize: 11, fontWeight: 800, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+        <section className="lp-hero-section" style={{ background: "linear-gradient(140deg, #EBF3FF 0%, #F2F7FF 35%, #F8FBFF 65%, #FFFFFF 100%)", borderBottom: "1px solid #DDE9FF", position: "relative", overflow: "hidden" }}>
+
+          {/* Dot-grid texture — fades left to right */}
+          <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(16,133,253,0.13) 1px, transparent 1px)", backgroundSize: "28px 28px", WebkitMaskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, black 100%)", maskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 40%, black 100%)", pointerEvents: "none" }} />
+
+          {/* Soft glow orb behind decoration */}
+          <div style={{ position: "absolute", top: "-10%", right: "-5%", width: 640, height: 640, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.10) 0%, transparent 65%)", pointerEvents: "none" }} />
+
+          <div className="lp-hero-split mx-auto max-w-6xl px-6">
+
+            {/* ── LEFT: text content ── */}
+            <div style={{ paddingRight: 48 }}>
+              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 24, background: "rgba(16,133,253,0.08)", borderRadius: 999, padding: "5px 14px", border: "1px solid rgba(16,133,253,0.18)" }}>
+                <svg width="8" height="8" viewBox="0 0 8 8" style={{ marginRight: 7, flexShrink: 0 }}><circle cx="4" cy="4" r="4" fill="#1085FD" /></svg>
+                <span style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
+              </div>
+
+              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(38px, 4.8vw, 60px)", fontWeight: 900, lineHeight: 1.07, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px" }}>
+                {content.heroTitle}
+              </h1>
+
+              {/* Accent rule */}
+              <div className="lp-animate lp-delay-3" style={{ width: 48, height: 4, borderRadius: 999, background: `linear-gradient(90deg, ${BLUE} 0%, #60A5FA 100%)`, margin: "0 0 24px" }} />
+
+              <p className="lp-animate lp-delay-3" style={{ fontSize: 17, lineHeight: 1.85, color: TEXT2, maxWidth: 500, margin: "0 0 44px" }}>
+                {content.heroDescription}
+              </p>
+
+              <div className="lp-animate lp-delay-4" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+                <a
+                  href={content.primaryCtaHref}
+                  onClick={e => handleCtaClick(e, content.primaryCtaHref)}
+                  style={{ display: "inline-flex", alignItems: "center", gap: 8, height: 52, padding: "0 28px", borderRadius: 999, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)", transition: "opacity .15s, transform .15s, box-shadow .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "0.92"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "1"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.38)"; }}
+                >
+                  Set Up Your Organization
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a
+                  href="https://demo.sentconnect.org/"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 52, padding: "0 24px", borderRadius: 999, background: "#fff", color: "#1A2B47", fontSize: 15, fontWeight: 600, textDecoration: "none", border: "1.5px solid #C8D9F0", boxShadow: "0 2px 8px rgba(15,23,42,0.06)", transition: "border-color .15s, color .15s, box-shadow .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#1085FD"; el.style.color = "#1085FD"; el.style.boxShadow = "0 4px 16px rgba(16,133,253,0.15)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#C8D9F0"; el.style.color = "#1A2B47"; el.style.boxShadow = "0 2px 8px rgba(15,23,42,0.06)"; }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Try Demo
+                </a>
+              </div>
+
+              {/* Trust micro-text */}
+              <p className="lp-animate lp-delay-4" style={{ fontSize: 12, color: "#94A3B8", marginTop: 20, letterSpacing: "0.01em" }}>
+                No credit card required · Set up in minutes
+              </p>
             </div>
 
-            <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(40px, 6vw, 68px)", fontWeight: 900, lineHeight: 1.06, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 28px" }}>
-              {content.heroTitle}
-            </h1>
-
-            <p className="lp-animate lp-delay-3" style={{ fontSize: 19, lineHeight: 1.8, color: TEXT2, maxWidth: 640, margin: "0 auto 48px" }}>
-              {content.heroDescription}
-            </p>
-
-            <div className="lp-animate lp-delay-4" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 14 }}>
-              <a
-                href={content.primaryCtaHref}
-                onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                style={{ display: "inline-flex", alignItems: "center", height: 54, padding: "0 34px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 16, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.4)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.4)"; }}
-              >Set Up Your Organization</a>
-              <a
-                href="https://demo.sentconnect.org/"
-                style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 54, padding: "0 30px", borderRadius: 999, background: "transparent", color: "#0F172A", fontSize: 16, fontWeight: 600, textDecoration: "none", border: "1.5px solid #CBD5E1", transition: "border-color .15s, color .15s, background .15s" }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#1085FD"; el.style.color = "#1085FD"; el.style.background = "#F0F7FF"; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#CBD5E1"; el.style.color = "#0F172A"; el.style.background = "transparent"; }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                Try Demo
-              </a>
+            {/* ── RIGHT: abstract decoration ── */}
+            <div className="lp-hero-split-deco lp-animate lp-delay-5" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
+              {/* Abstract SVG composition */}
+              <svg viewBox="0 0 440 440" style={{ width: "90%", maxWidth: 440, height: "auto" }} aria-hidden="true">
+                {/* outer ring */}
+                <circle cx="220" cy="220" r="190" fill="none" stroke="rgba(16,133,253,0.10)" strokeWidth="1.5" />
+                {/* middle ring */}
+                <circle cx="220" cy="220" r="148" fill="none" stroke="rgba(16,133,253,0.12)" strokeWidth="1" strokeDasharray="6 8" />
+                {/* inner filled circle */}
+                <circle cx="220" cy="220" r="104" fill="rgba(16,133,253,0.04)" stroke="rgba(16,133,253,0.10)" strokeWidth="1" />
+                {/* glow core */}
+                <circle cx="220" cy="220" r="64" fill="rgba(16,133,253,0.07)" />
+                {/* central icon — shield / lock shape suggesting security */}
+                <g transform="translate(186,186)">
+                  <rect x="0" y="0" width="68" height="68" rx="18" fill="rgba(16,133,253,0.90)" />
+                  {/* lock body */}
+                  <rect x="20" y="34" width="28" height="20" rx="4" fill="white" />
+                  {/* lock shackle */}
+                  <path d="M24 34 V26 a10 10 0 0 1 20 0 V34" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" />
+                  {/* keyhole */}
+                  <circle cx="34" cy="43" r="3" fill="rgba(16,133,253,0.8)" />
+                  <rect x="32" y="44" width="4" height="5" rx="1" fill="rgba(16,133,253,0.8)" />
+                </g>
+                {/* Orbiting nodes — top */}
+                <circle cx="220" cy="30" r="10" fill="rgba(16,133,253,0.18)" stroke="rgba(16,133,253,0.3)" strokeWidth="1.5" />
+                <circle cx="220" cy="30" r="5" fill={BLUE} />
+                {/* Orbiting nodes — right */}
+                <circle cx="410" cy="220" r="10" fill="rgba(16,133,253,0.18)" stroke="rgba(16,133,253,0.3)" strokeWidth="1.5" />
+                <circle cx="410" cy="220" r="5" fill={BLUE} />
+                {/* Orbiting nodes — bottom-left */}
+                <circle cx="81" cy="327" r="8" fill="rgba(16,133,253,0.18)" stroke="rgba(16,133,253,0.3)" strokeWidth="1.5" />
+                <circle cx="81" cy="327" r="4" fill={BLUE} />
+                {/* Connector lines from nodes to outer ring */}
+                <line x1="220" y1="40" x2="220" y2="70" stroke="rgba(16,133,253,0.25)" strokeWidth="1.5" strokeDasharray="3 4" />
+                <line x1="400" y1="220" x2="372" y2="220" stroke="rgba(16,133,253,0.25)" strokeWidth="1.5" strokeDasharray="3 4" />
+                <line x1="87" y1="320" x2="104" y2="303" stroke="rgba(16,133,253,0.25)" strokeWidth="1.5" strokeDasharray="3 4" />
+                {/* Floating pill badges */}
+                <g transform="translate(295,68)">
+                  <rect width="108" height="32" rx="16" fill="white" stroke="rgba(16,133,253,0.2)" strokeWidth="1" filter="url(#shadow1)" />
+                  <circle cx="16" cy="16" r="6" fill={BLUE} opacity="0.85" />
+                  <rect x="28" y="9" width="52" height="5" rx="2.5" fill="#CBD5E1" />
+                  <rect x="28" y="19" width="36" height="4" rx="2" fill="#E2E8F0" />
+                </g>
+                <g transform="translate(42,130)">
+                  <rect width="96" height="28" rx="14" fill="white" stroke="rgba(16,133,253,0.2)" strokeWidth="1" />
+                  <circle cx="14" cy="14" r="5" fill="#22C55E" opacity="0.85" />
+                  <rect x="24" y="8" width="44" height="4" rx="2" fill="#CBD5E1" />
+                  <rect x="24" y="17" width="30" height="3" rx="1.5" fill="#E2E8F0" />
+                </g>
+                <g transform="translate(298,316)">
+                  <rect width="100" height="28" rx="14" fill="white" stroke="rgba(16,133,253,0.2)" strokeWidth="1" />
+                  <circle cx="14" cy="14" r="5" fill="#F59E0B" opacity="0.85" />
+                  <rect x="24" y="8" width="38" height="4" rx="2" fill="#CBD5E1" />
+                  <rect x="24" y="17" width="52" height="3" rx="1.5" fill="#E2E8F0" />
+                </g>
+                {/* Drop shadow filter */}
+                <defs>
+                  <filter id="shadow1" x="-10%" y="-10%" width="120%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="rgba(15,23,42,0.08)" />
+                  </filter>
+                </defs>
+              </svg>
             </div>
+
           </div>
         </section>
 

@@ -17,6 +17,15 @@
   gap: 64px;
   align-items: center;
 }
+
+/* Split hero — text left, decoration right */
+.lp-hero-split {
+  display: grid;
+  grid-template-columns: 52% 1fr;
+  gap: 0;
+  align-items: center;
+  min-height: 560px;
+}
 .lp-steps-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -68,6 +77,8 @@
 
 @media (max-width: 767px) {
   .lp-hero-grid   { grid-template-columns: 1fr; gap: 40px; }
+  .lp-hero-split  { grid-template-columns: 1fr; min-height: unset; }
+  .lp-hero-split-deco { display: none !important; }
   .lp-footer-cols { grid-template-columns: 1fr 1fr; gap: 28px; }
   .lp-hero-section { padding: 64px 0 56px; }
 }
