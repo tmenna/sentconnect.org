@@ -138,7 +138,31 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   );
 
   return (
-    <div style={{ minHeight: "100dvh", display: "flex", fontFamily: "Inter, system-ui, sans-serif" }}>
+    <div style={{ minHeight: "100dvh", display: "flex", flexDirection: "column", fontFamily: "Inter, system-ui, sans-serif" }}>
+
+      {/* ── Top bar ── */}
+      {!platformMode && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8, padding: "10px 24px", borderBottom: "1px solid #E5E7EB", background: "#fff", flexShrink: 0 }}>
+          <a
+            href="/help"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "inline-flex", alignItems: "center", gap: 5, height: 34, padding: "0 14px", borderRadius: 8, background: BLUE, color: "#fff", fontSize: 13, fontWeight: 600, textDecoration: "none" }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+            Help
+          </a>
+          <Link
+            href="/signup"
+            style={{ display: "inline-flex", alignItems: "center", height: 34, padding: "0 16px", borderRadius: 8, background: "#fff", color: BLUE, fontSize: 13, fontWeight: 600, textDecoration: "none", border: `1.5px solid ${BLUE}` }}
+          >
+            Sign Up
+          </Link>
+        </div>
+      )}
+
+      {/* ── Two-panel body ── */}
+      <div style={{ flex: 1, display: "flex" }}>
 
       {/* ── Left panel (hidden on mobile) ── */}
       <div className="hidden md:flex" style={{ flex: "0 0 34%", background: LEFT_BG, flexDirection: "column", alignItems: "flex-end", justifyContent: "center", padding: "48px 60px 48px 32px", position: "relative" }}>
@@ -440,6 +464,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
         </div>
       </div>
+      </div>{/* end two-panel body */}
     </div>
   );
 }

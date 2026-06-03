@@ -184,15 +184,26 @@ export function Layout({ children }: { children: ReactNode }) {
                     </button>
                   </>
                 ) : (
-                  <Link href="/login" data-testid="link-nav-login">
-                    <Button
-                      size="sm"
-                      className="h-8 px-5 text-sm font-semibold rounded-lg text-white transition-colors"
-                      style={{ backgroundColor: "#0f0f13" }}
-                    >
-                      Sign In
-                    </Button>
-                  </Link>
+                  <div className="flex items-center gap-2 ml-1">
+                    <Link href="/signup">
+                      <Button
+                        size="sm"
+                        className="h-8 px-4 text-sm font-semibold rounded-lg transition-colors"
+                        style={{ background: "#fff", color: "#1085FD", border: "1.5px solid #1085FD" }}
+                      >
+                        Sign Up
+                      </Button>
+                    </Link>
+                    <Link href="/login" data-testid="link-nav-login">
+                      <Button
+                        size="sm"
+                        className="h-8 px-5 text-sm font-semibold rounded-lg text-white transition-colors"
+                        style={{ backgroundColor: "#0f0f13" }}
+                      >
+                        Sign In
+                      </Button>
+                    </Link>
+                  </div>
                 )}
               </>
             )}
@@ -266,8 +277,13 @@ export function Layout({ children }: { children: ReactNode }) {
                       <HelpCircle className="h-4 w-4" />
                       Help
                     </a>
+                    <Link href="/signup">
+                      <span className="flex items-center justify-center h-11 rounded-xl text-[15px] font-semibold transition-colors" style={{ color: "#1085FD", border: "1.5px solid #1085FD" }}>
+                        Sign Up
+                      </span>
+                    </Link>
                     <Link href="/login">
-                      <span className="flex items-center justify-center h-11 rounded-xl text-[15px] font-semibold text-white transition-colors" style={{ backgroundColor: EMERALD }}>
+                      <span className="flex items-center justify-center h-11 rounded-xl text-[15px] font-semibold text-white transition-colors" style={{ backgroundColor: "#0f0f13" }}>
                         Sign In
                       </span>
                     </Link>
