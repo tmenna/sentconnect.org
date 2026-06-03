@@ -1133,8 +1133,6 @@ export default function AdminDashboard() {
     return true;
   });
   const hasFilters = !!filterUserId;
-  const missionMomentsCount = allFeedPosts.filter(p => p.isMissionMoment).length;
-
   // Countries tab data — group field users by country parsed from their location
   const fieldUsersWithLocation = allUsers.filter((u: any) => u.role !== "admin" && u.location?.trim());
   const countriesMap = new Map<string, { city: string; members: any[] }>();
@@ -1147,9 +1145,7 @@ export default function AdminDashboard() {
     .map(([country, { city, members }]) => ({ country, city, members }))
     .sort((a, b) => a.country.localeCompare(b.country));
   const countriesCount = countriesList.length;
-  const displayedFeedPosts = feedMomentFilter === "moments"
-    ? allFeedPosts.filter(p => p.isMissionMoment)
-    : allFeedPosts;
+  const displayedFeedPosts = allFeedPosts;
   const firstName = user.name.split(" ")[0];
 
   return (
@@ -1512,19 +1508,9 @@ export default function AdminDashboard() {
               </div>
             ) : displayedFeedPosts.length === 0 ? (
               <div className="bg-white rounded-2xl border border-dashed border-border py-16 text-center shadow-sm">
-                {feedMomentFilter === "moments" ? (
-                  <>
-                    <Star className="h-10 w-10 mx-auto text-gray-300/50 mb-3" />
-                    <p className="font-semibold text-sm text-foreground">No Mission Moments yet</p>
-                    <p className="text-muted-foreground text-xs mt-1">Team members can mark posts as Mission Moments when sharing updates.</p>
-                  </>
-                ) : (
-                  <>
-                    <MessageCircle className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
-                    <p className="font-semibold text-sm text-foreground">{hasFilters ? "No posts match your filters" : "No posts yet"}</p>
-                    <p className="text-muted-foreground text-xs mt-1">{hasFilters ? "Try adjusting your filters above." : "Team updates will appear here once posted."}</p>
-                  </>
-                )}
+                <MessageCircle className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+                <p className="font-semibold text-sm text-foreground">{hasFilters ? "No posts match your filters" : "No posts yet"}</p>
+                <p className="text-muted-foreground text-xs mt-1">{hasFilters ? "Try adjusting your filters above." : "Team updates will appear here once posted."}</p>
               </div>
             ) : (
               <div className="overflow-hidden" style={{ borderTop: "1px solid #E5E7EB" }}>

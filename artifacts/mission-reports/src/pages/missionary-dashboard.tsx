@@ -30,14 +30,13 @@ export default function MissionaryDashboard() {
   if (user?.role === "admin") return <Redirect href="/admin" />;
 
   const allPosts: PostData[] = posts ?? ((data ?? []) as PostData[]);
-  const missionMoments = allPosts.filter(p => p.isMissionMoment);
-  const myPosts = activeTab === "moments" ? missionMoments : allPosts;
+  const myPosts = allPosts;
 
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : (data as PostData[] ?? []).filter(p => p.id !== id));
   }
 
-  const displayedCount = activeTab === "moments" ? missionMoments.length : allPosts.length;
+  const displayedCount = allPosts.length;
   const firstName = user.name.split(" ")[0];
 
   const navItems: { id: FeedTab | "profile"; label: string; Icon: React.ElementType }[] = [
@@ -66,8 +65,7 @@ export default function MissionaryDashboard() {
         {/* Nav items */}
         <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
           {([
-            { id: "all"     as FeedTab, label: "My Posts",        Icon: FileText },
-            { id: "moments" as FeedTab, label: "Mission Moments", Icon: Star },
+            { id: "all" as FeedTab, label: "My Posts", Icon: FileText },
           ]).map(({ id, label, Icon }) => {
             const active = activeTab === id;
             return (
@@ -188,7 +186,6 @@ export default function MissionaryDashboard() {
         <div className="flex items-center" style={{ borderBottom: "2px solid #F1F5F9" }}>
           {[
             { id: "all" as FeedTab, label: "All Posts", count: allPosts.length },
-            { id: "moments" as FeedTab, label: "Mission Moments", count: missionMoments.length },
           ].map(tab => {
             const active = activeTab === tab.id;
             return (
@@ -249,23 +246,11 @@ export default function MissionaryDashboard() {
           </div>
         ) : myPosts.length === 0 ? (
           <div className="bg-white rounded-2xl py-16 sm:py-20 text-center" style={{ border: "1.5px dashed #CBD5E1" }}>
-            {activeTab === "moments" ? (
-              <>
-                <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#EBF5FF" }}>
-                  <BookOpen className="h-6 w-6 text-slate-500" />
-                </div>
-                <p className="font-semibold text-base" style={{ color: "#2B2B2B" }}>No Mission Moments yet</p>
-                <p className="text-sm mt-1.5 text-slate-500">Mark a post as Mission Moments when you share an update.</p>
-              </>
-            ) : (
-              <>
-                <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
-                  <FileText className="h-6 w-6 text-slate-400" />
-                </div>
-                <p className="font-semibold text-base" style={{ color: "#2B2B2B" }}>No posts yet</p>
-                <p className="text-sm mt-1.5 text-slate-500">Share your first update using the composer above.</p>
-              </>
-            )}
+            <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
+              <FileText className="h-6 w-6 text-slate-400" />
+            </div>
+            <p className="font-semibold text-base" style={{ color: "#2B2B2B" }}>No posts yet</p>
+            <p className="text-sm mt-1.5 text-slate-500">Share your first update using the composer above.</p>
           </div>
         ) : (
           <div className="overflow-hidden" style={{ borderTop: "1px solid #E5E7EB" }}>

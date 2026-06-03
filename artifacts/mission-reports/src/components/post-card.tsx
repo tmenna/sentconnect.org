@@ -444,22 +444,6 @@ function EditForm({
         {isHighlight ? "Highlighted" : "Mark as highlight"}
       </button>
 
-      {/* Mission Moment toggle */}
-      <button
-        onClick={() => setIsMissionMoment(m => !m)}
-        disabled={saving}
-        title="A 3–5 minute story or update that celebrates and connects people to God's work in the world."
-        className={cn(
-          "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors",
-          isMissionMoment
-            ? "text-[#0F172A] bg-[#F1F5F9] hover:bg-[#E2E8F0] border border-[#E2E8F0]"
-            : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-        )}
-      >
-        <BookOpen className={cn("h-3.5 w-3.5", isMissionMoment && "text-[#0F172A]")} />
-        {isMissionMoment ? "Mission Moments" : "Mark as Mission Moments"}
-      </button>
-
       {/* Actions */}
       <div className="flex items-center justify-end gap-2 pt-1 border-t border-border/30">
         <Button variant="ghost" size="sm" onClick={onCancel} disabled={saving} className="h-8 text-[13px]">
@@ -635,20 +619,9 @@ export function PostCard({
       style={{
         background: hovered ? "rgba(15,20,25,0.02)" : "#ffffff",
         borderBottom: "1px solid #dfe3e8",
-        borderLeft: (!post.isMissionMoment && post.isHighlight) ? "3px solid #F59E0B" : "none",
+        borderLeft: post.isHighlight ? "3px solid #F59E0B" : "none",
       }}
     >
-      {/* Mission Moment banner */}
-      {post.isMissionMoment && (
-        <div className="flex items-center gap-2 px-4 sm:px-5 py-2" style={{ background: "#FFFBEB", borderBottom: "1px solid #E5E7EB" }}>
-          <BookOpen className="h-3 w-3 flex-shrink-0" style={{ color: "#92400E" }} />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#92400E", letterSpacing: "0.07em", textTransform: "uppercase", flexGrow: 1 }}>
-            Mission Moment
-          </span>
-          <Sparkles className="h-3 w-3" style={{ color: "#D97706" }} />
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex items-start gap-3 px-4 sm:px-5 pt-3 pb-2">
         <Avatar className="h-9 w-9 flex-shrink-0 mt-0.5" style={{ border: "1px solid #E5E7EB" }}>

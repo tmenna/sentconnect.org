@@ -59,8 +59,7 @@ export default function MissionaryProfile() {
   }
 
   const posts = (reports ?? []) as PostData[];
-  const missionMoments = posts.filter(p => p.isMissionMoment);
-  const displayedPosts = activeTab === "moments" ? missionMoments : posts;
+  const displayedPosts = posts;
 
   return (
     <div className="space-y-5">
@@ -108,11 +107,6 @@ export default function MissionaryProfile() {
           <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#111827", background: "#F5F5F5", border: "1px solid #D1D5DB", borderRadius: 999, padding: "4px 12px" }}>
             {posts.length} <span style={{ fontWeight: 400, color: "#475569" }}>posts</span>
           </span>
-          {missionMoments.length > 0 && (
-            <span className="inline-flex items-center gap-1.5" style={{ fontSize: 12, fontWeight: 600, color: "#111827", background: "#F5F5F5", border: "1px solid #D1D5DB", borderRadius: 999, padding: "4px 12px" }}>
-              {missionMoments.length} <span style={{ fontWeight: 400, color: "#475569" }}>moments</span>
-            </span>
-          )}
         </div>
       </div>
 
@@ -120,7 +114,6 @@ export default function MissionaryProfile() {
       <div className="flex items-center" style={{ borderBottom: "1px solid #D1D5DB" }}>
         {([
           { id: "all" as ProfileTab, label: "All Posts", count: posts.length },
-          { id: "moments" as ProfileTab, label: "Mission Moments", count: missionMoments.length },
         ] as const).map(tab => {
           const active = activeTab === tab.id;
           return (

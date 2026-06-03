@@ -104,21 +104,13 @@ export default function PublicPost() {
               boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
             }}
           >
-            {/* Mission Moment / Highlight banner */}
-            {post.isMissionMoment ? (
-              <div className="flex items-center gap-2 px-6 py-2.5" style={{ background: "#F5F5F5", borderBottom: "1px solid #D1D5DB" }}>
-                <BookOpen className="h-3.5 w-3.5 flex-shrink-0" style={{ color: "#111827" }} />
-                <span className="text-[12px] font-semibold tracking-wide uppercase" style={{ color: "#111827" }}>Mission Moments</span>
-                {post.isHighlight && <Star className="h-3 w-3 fill-amber-400 text-gray-400 ml-0.5" />}
-                <div className="flex-1" />
-                <Sparkles className="h-3 w-3" style={{ color: "#93C5FD" }} />
-              </div>
-            ) : post.isHighlight ? (
+            {/* Highlight banner */}
+            {post.isHighlight && (
               <div className="flex items-center gap-1.5 px-6 py-2 bg-gray-50 text-[12px] font-semibold text-gray-700 uppercase tracking-wide" style={{ borderBottom: "1px solid #FDE68A" }}>
                 <Star className="h-3.5 w-3.5 fill-amber-400 text-gray-400" />
                 Highlight
               </div>
-            ) : null}
+            )}
 
             {/* Author header */}
             <div className="flex items-center gap-3.5 px-6 pt-6 pb-4">

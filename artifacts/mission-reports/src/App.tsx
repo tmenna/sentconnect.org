@@ -94,7 +94,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
   primaryCtaLabel: "Set Up Your Organization",
   primaryCtaHref: "/signup",
-  previewCardTitle: "Mission Moments",
+  previewCardTitle: "Latest Updates",
   previewLabel: "Latest field updates",
   previewTitle1: "Prayer gathering in Kigali",
   previewTitle2: "New family visits this week",

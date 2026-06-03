@@ -316,39 +316,6 @@ export default function SubmitReport() {
               </div>
             </div>
 
-            {/* Mission Moment toggle */}
-            <FormField
-              control={form.control}
-              name="isMissionMoment"
-              render={({ field }) => (
-                <div style={{ padding: "12px 20px 0" }}>
-                  <button
-                    type="button"
-                    onClick={() => field.onChange(!field.value)}
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      padding: "10px 14px",
-                      borderRadius: 12,
-                      border: field.value ? "1px solid #C4B5FD" : "1px solid #F1F5F9",
-                      background: field.value ? "#FEFBFF" : "#FAFAFA",
-                      cursor: "pointer",
-                      transition: "all 0.12s",
-                      textAlign: "left",
-                    }}
-                  >
-                    <BookOpen style={{ width: 16, height: 16, color: field.value ? "#1085FD" : "#94A3B8", flexShrink: 0 }} />
-                    <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: field.value ? "#1085FD" : "#374151" }}>Mark as Mission Moment</span>
-                    <div style={{ width: 36, height: 20, borderRadius: 999, background: field.value ? "#1085FD" : "#E2E8F0", position: "relative", flexShrink: 0, transition: "background 0.2s" }}>
-                      <div style={{ position: "absolute", top: 2, left: field.value ? 18 : 2, width: 16, height: 16, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,0.2)", transition: "left 0.2s" }} />
-                    </div>
-                  </button>
-                </div>
-              )}
-            />
-
             {/* Actions */}
             <div style={{ padding: "16px 20px 18px", display: "flex", alignItems: "center", gap: 10, borderTop: "1px solid #F1F5F9", marginTop: 14 }}>
               <button

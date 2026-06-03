@@ -76,8 +76,7 @@ export default function Feed() {
     setAccumulatedPosts(prev => prev.filter(p => p.id !== id));
   }
 
-  const missionMoments = accumulatedPosts.filter(p => p.isMissionMoment);
-  const displayedPosts = activeTab === "moments" ? missionMoments : accumulatedPosts;
+  const displayedPosts = accumulatedPosts;
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 max-w-[700px] mx-auto" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
@@ -131,7 +130,6 @@ export default function Feed() {
       >
         {([
           { id: "all" as TimelineTab, label: "All Posts", count: accumulatedPosts.length },
-          { id: "moments" as TimelineTab, label: "Mission Moments", count: missionMoments.length },
         ] as { id: TimelineTab; label: string; count: number }[]).map(tab => {
           const active = activeTab === tab.id;
           return (
