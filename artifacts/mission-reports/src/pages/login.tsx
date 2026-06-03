@@ -45,6 +45,8 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       .catch(() => {});
   }, [orgSlug]);
 
+  const signupHref = orgSlug === "demo" ? "https://www.sentconnect.org/signup" : "/signup";
+
   const from = (() => {
     if (platformMode) return "/admin";
     const raw = new URLSearchParams(search).get("from") ?? null;
@@ -152,12 +154,12 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
             Help
           </a>
-          <Link
-            href="/signup"
+          <a
+            href={signupHref}
             style={{ display: "inline-flex", alignItems: "center", height: 34, padding: "0 16px", borderRadius: 8, background: "#fff", color: BLUE, fontSize: 13, fontWeight: 600, textDecoration: "none", border: `1.5px solid ${BLUE}` }}
           >
             Sign Up
-          </Link>
+          </a>
         </div>
       )}
 
@@ -332,8 +334,8 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               {/* Button row */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginTop: 20 }}>
                 {!platformMode ? (
-                  <Link
-                    href="/signup"
+                  <a
+                    href={signupHref}
                     style={{
                       height: 42,
                       borderRadius: 999,
@@ -350,7 +352,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                     }}
                   >
                     Sign up
-                  </Link>
+                  </a>
                 ) : (
                   <Link
                     href="/"
