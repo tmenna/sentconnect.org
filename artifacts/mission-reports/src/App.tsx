@@ -228,82 +228,37 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="lp-hero-section" style={{ background: "linear-gradient(160deg, #F0F6FF 0%, #F7FAFF 50%, #FFFFFF 100%)", position: "relative", overflow: "hidden", borderBottom: "1px solid #E8F0FE" }}>
-          {/* blue glow blobs */}
-          <div style={{ position: "absolute", top: -180, right: -120, width: 580, height: 580, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.10) 0%, transparent 65%)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: -80, left: -80, width: 420, height: 420, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.06) 0%, transparent 65%)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", top: "40%", left: "45%", width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,133,253,0.04) 0%, transparent 70%)", pointerEvents: "none" }} />
-
-          <div className="lp-hero-grid mx-auto max-w-6xl px-6">
-            {/* Left */}
-            <div>
-              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "#EEF5FF", borderRadius: 999, padding: "5px 16px", border: "1px solid rgba(16,133,253,0.2)" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
-              </div>
-
-              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(42px, 5.5vw, 62px)", fontWeight: 900, lineHeight: 1.08, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 24px", whiteSpace: "pre-line" }}>
-                {content.heroTitle}
-              </h1>
-
-              <p className="lp-animate lp-delay-3" style={{ fontSize: 18, lineHeight: 1.8, color: TEXT2, maxWidth: 460, margin: "0 0 44px" }}>
-                {content.heroDescription}
-              </p>
-
-              <div className="lp-animate lp-delay-4" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-                <a
-                  href={content.primaryCtaHref}
-                  onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                  style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.4)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.4)"; }}
-                >{content.primaryCtaLabel}</a>
-                <a
-                  href="/try"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 6, height: 52, padding: "0 26px", borderRadius: 999, background: "transparent", color: "#0F172A", fontSize: 15, fontWeight: 600, textDecoration: "none", border: "1.5px solid #CBD5E1", transition: "border-color .15s, color .15s, background .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#1085FD"; el.style.color = "#1085FD"; el.style.background = "#F0F7FF"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#CBD5E1"; el.style.color = "#0F172A"; el.style.background = "transparent"; }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                  Try Demo
-                </a>
-              </div>
+        <section className="lp-hero-section" style={{ background: "#ffffff", borderBottom: "1px solid #E8F0FE" }}>
+          <div className="mx-auto max-w-4xl px-6 text-center">
+            <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: "#EEF5FF", borderRadius: 999, padding: "5px 16px", border: "1px solid rgba(16,133,253,0.2)" }}>
+              <span style={{ fontSize: 11, fontWeight: 800, color: BLUE, letterSpacing: "0.1em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
             </div>
 
-            {/* Right — Mission Moments card */}
-            <div className="lp-animate lp-delay-5" style={{ background: "#fff", borderRadius: 24, boxShadow: "0 12px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.04)", padding: "24px", position: "relative" }}>
-              {/* accent dot */}
-              <div style={{ position: "absolute", top: -12, right: 32, width: 24, height: 24, borderRadius: "50%", background: BLUE, boxShadow: "0 4px 12px rgba(0,89,214,0.45)" }} />
+            <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(40px, 6vw, 68px)", fontWeight: 900, lineHeight: 1.06, letterSpacing: "-0.04em", color: TEXT, margin: "0 0 28px" }}>
+              {content.heroTitle}
+            </h1>
 
-              {/* card header */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #F1F5F9" }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: BLUE, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <Shuffle style={{ width: 16, height: 16, color: "#fff" }} />
-                </div>
-                <div>
-                  <p style={{ fontSize: 14, fontWeight: 800, color: TEXT, margin: 0, letterSpacing: "-0.01em" }}>{content.previewCardTitle}</p>
-                  <p style={{ fontSize: 11, color: "#94A3B8", margin: "2px 0 0" }}>{content.previewLabel}</p>
-                </div>
-                <div style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#22C55E", boxShadow: "0 0 0 3px rgba(34,197,94,0.2)" }} />
-              </div>
+            <p className="lp-animate lp-delay-3" style={{ fontSize: 19, lineHeight: 1.8, color: TEXT2, maxWidth: 640, margin: "0 auto 48px" }}>
+              {content.heroDescription}
+            </p>
 
-              {/* feed rows */}
-              {[
-                { title: content.previewTitle1, ago: "2h ago", w: "80%", initials: "GN", bg: "rgba(16,133,253,0.15)", fg: "#1085FD" },
-                { title: content.previewTitle2, ago: "3h ago", w: "65%", initials: "EO", bg: "rgba(16,133,253,0.10)", fg: "#1085FD" },
-                { title: content.previewTitle3, ago: "5h ago", w: "52%", initials: "SV", bg: "rgba(16,133,253,0.08)", fg: "#1085FD" },
-              ].map(({ title, ago, w, initials, bg, fg }, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: i < 2 ? "1px solid #F1F5F9" : "none" }}>
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: bg, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <span style={{ fontSize: 10, fontWeight: 800, color: fg, letterSpacing: "0.02em" }}>{initials}</span>
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</p>
-                    <p style={{ fontSize: 11, color: "#94A3B8", margin: "0 0 8px" }}>{ago}</p>
-                    <div style={{ height: 4, background: "rgba(16,133,253,0.08)", borderRadius: 999, width: "100%" }} />
-                    <div style={{ height: 4, background: "rgba(16,133,253,0.05)", borderRadius: 999, width: w, marginTop: 4 }} />
-                  </div>
-                </div>
-              ))}
+            <div className="lp-animate lp-delay-4" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 14 }}>
+              <a
+                href={content.primaryCtaHref}
+                onClick={e => handleCtaClick(e, content.primaryCtaHref)}
+                style={{ display: "inline-flex", alignItems: "center", height: 54, padding: "0 34px", borderRadius: 999, background: TEAL, color: "#fff", fontSize: 16, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.4)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = TEAL; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.4)"; }}
+              >Set Up Your Organization</a>
+              <a
+                href="https://demo.sentconnect.org/"
+                style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 54, padding: "0 30px", borderRadius: 999, background: "transparent", color: "#0F172A", fontSize: 16, fontWeight: 600, textDecoration: "none", border: "1.5px solid #CBD5E1", transition: "border-color .15s, color .15s, background .15s" }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#1085FD"; el.style.color = "#1085FD"; el.style.background = "#F0F7FF"; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#CBD5E1"; el.style.color = "#0F172A"; el.style.background = "transparent"; }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Try Demo
+              </a>
             </div>
           </div>
         </section>
