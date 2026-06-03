@@ -555,6 +555,23 @@ router.post("/reports/:id/comments", async (req, res): Promise<void> => {
   notifyAdminsOfNewComment(postId, comment.id, currentUserId, comment.text).catch(() => {});
 });
 
+// PATCH /comments/:id — edit own comment text
+router.patch("/comments/:id", async (req, res): Promise<void> => {
+  const commentId = Number(req.params.id);
+  if (isNaN(commentId)) { res.status(400).json({ error: "Invalid id" }); return; }
+  const currentUserId = req.session?.userId as number | undefined;
+  if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
+  const text = (req.body?.text ?? "").trim().slice(0, 1000);
+  if (!text) { res.status(400).json({ error: "Comment text is required" }); return; }
+  const [updated] = await db
+    .update(commentsTable)
+    .set({ text })
+    .where(and(eq(commentsTable.id, commentId), eq(commentsTable.userId, currentUserId)))
+    .returning();
+  if (!updated) { res.status(404).json({ error: "Comment not found or not yours" }); return; }
+  res.json(updated);
+});
+
 // DELETE /comments/:id
 router.delete("/comments/:id", async (req, res): Promise<void> => {
   const commentId = Number(req.params.id);

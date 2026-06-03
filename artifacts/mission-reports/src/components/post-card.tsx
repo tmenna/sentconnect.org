@@ -485,6 +485,9 @@ export function PostCard({
   const [commentText, setCommentText] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
   const [showAllComments, setShowAllComments] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editingText, setEditingText] = useState("");
+  const [deletingCommentId, setDeletingCommentId] = useState<number | null>(null);
   const commentInputRef = useRef<HTMLInputElement>(null);
 
   const COMMENT_PREVIEW = 5;
@@ -591,6 +594,37 @@ export function PostCard({
     } finally {
       setSubmittingComment(false);
     }
+  }
+
+  async function deleteComment(id: number) {
+    setDeletingCommentId(id);
+    try {
+      await apiFetch(`/api/comments/${id}`, { method: "DELETE" });
+      setComments(prev => prev.filter(c => c.id !== id));
+      setPost(p => ({ ...p, commentCount: Math.max(0, p.commentCount - 1) }));
+    } finally {
+      setDeletingCommentId(null);
+    }
+  }
+
+  function startEditComment(c: Comment) {
+    setEditingCommentId(c.id);
+    setEditingText(c.text);
+  }
+
+  async function saveEditComment(id: number) {
+    const trimmed = editingText.trim();
+    if (!trimmed) return;
+    const updated = await apiFetch(`/api/comments/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: trimmed }),
+    });
+    if (updated) {
+      setComments(prev => prev.map(c => c.id === id ? { ...c, text: trimmed } : c));
+    }
+    setEditingCommentId(null);
+    setEditingText("");
   }
 
   async function deletePost() {
@@ -793,26 +827,84 @@ export function PostCard({
                 <p className="text-[13px] pt-2" style={{ color: "#536471" }}>Loading…</p>
               ) : comments.length > 0 ? (
                 <div className="space-y-2 pt-2">
-                  {(showAllComments ? comments : comments.slice(0, COMMENT_PREVIEW)).map(c => (
-                    <div key={c.id} className="flex gap-2.5">
-                      <Avatar className="h-8 w-8 flex-shrink-0 mt-0.5" style={{ border: "1px solid #E5E7EB" }}>
-                        <AvatarImage src={c.author.avatarUrl ?? undefined} />
-                        <AvatarFallback style={{ background: "#2B92FD", color: "#fff", fontWeight: 700, fontSize: 11 }}>
-                          {c.author.name.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span style={{ fontSize: 14, fontWeight: 700, color: "#0F1419" }}>{c.author.name}</span>
-                          <span style={{ fontSize: 13, color: "#536471" }}>·</span>
-                          <span style={{ fontSize: 13, color: "#536471" }}>
-                            {formatDistanceToNow(new Date(c.createdAt), { addSuffix: true })}
-                          </span>
+                  {(showAllComments ? comments : comments.slice(0, COMMENT_PREVIEW)).map(c => {
+                    const isOwn = user?.id === c.author.id;
+                    const isDeleting = deletingCommentId === c.id;
+                    const isEditing = editingCommentId === c.id;
+                    return (
+                      <div key={c.id} className="flex gap-2.5 group">
+                        <Avatar className="h-8 w-8 flex-shrink-0 mt-0.5" style={{ border: "1px solid #E5E7EB" }}>
+                          <AvatarImage src={c.author.avatarUrl ?? undefined} />
+                          <AvatarFallback style={{ background: "#2B92FD", color: "#fff", fontWeight: 700, fontSize: 11 }}>
+                            {c.author.name.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#0F1419" }}>{c.author.name}</span>
+                            <span style={{ fontSize: 13, color: "#536471" }}>·</span>
+                            <span style={{ fontSize: 13, color: "#536471" }}>
+                              {formatDistanceToNow(new Date(c.createdAt), { addSuffix: true })}
+                            </span>
+                            {isOwn && !isEditing && (
+                              <div className="ml-auto flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button
+                                  onClick={() => startEditComment(c)}
+                                  className="p-1 rounded transition-colors hover:bg-gray-100"
+                                  title="Edit comment"
+                                >
+                                  <Pencil className="h-3 w-3" style={{ color: "#6B7280" }} />
+                                </button>
+                                <button
+                                  onClick={() => deleteComment(c.id)}
+                                  disabled={isDeleting}
+                                  className="p-1 rounded transition-colors hover:bg-red-50 disabled:opacity-40"
+                                  title="Delete comment"
+                                >
+                                  {isDeleting
+                                    ? <Loader2 className="h-3 w-3 animate-spin" style={{ color: "#EF4444" }} />
+                                    : <Trash2 className="h-3 w-3" style={{ color: "#EF4444" }} />}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          {isEditing ? (
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <input
+                                autoFocus
+                                value={editingText}
+                                onChange={e => setEditingText(e.target.value)}
+                                onKeyDown={e => {
+                                  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); saveEditComment(c.id); }
+                                  if (e.key === "Escape") { setEditingCommentId(null); setEditingText(""); }
+                                }}
+                                maxLength={500}
+                                className="flex-1 rounded-full px-3 py-1 outline-none text-[14px]"
+                                style={{ background: "#F7F9F9", border: "1px solid #E5E7EB", color: "#0F1419" }}
+                              />
+                              <button
+                                onClick={() => saveEditComment(c.id)}
+                                disabled={!editingText.trim()}
+                                className="p-1.5 rounded-full transition-colors hover:bg-blue-50 disabled:opacity-30"
+                                title="Save"
+                              >
+                                <Check className="h-3.5 w-3.5" style={{ color: "#0085FF" }} />
+                              </button>
+                              <button
+                                onClick={() => { setEditingCommentId(null); setEditingText(""); }}
+                                className="p-1.5 rounded-full transition-colors hover:bg-gray-100"
+                                title="Cancel"
+                              >
+                                <X className="h-3.5 w-3.5" style={{ color: "#6B7280" }} />
+                              </button>
+                            </div>
+                          ) : (
+                            <p style={{ fontSize: 14, color: "#0F1419", lineHeight: 1.45, marginTop: 1 }}>{c.text}</p>
+                          )}
                         </div>
-                        <p style={{ fontSize: 14, color: "#0F1419", lineHeight: 1.45, marginTop: 1 }}>{c.text}</p>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                   {comments.length > COMMENT_PREVIEW && (
                     <button
                       onClick={() => setShowAllComments(s => !s)}
