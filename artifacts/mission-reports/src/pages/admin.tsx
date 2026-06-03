@@ -1433,7 +1433,6 @@ export default function AdminDashboard() {
               <div className="flex items-center gap-0">
                 {[
                   { id: "all", label: "All Posts", count: !feedLoading ? allFeedPosts.length : null },
-                  { id: "moments", label: "Mission Moments", count: !feedLoading && missionMomentsCount > 0 ? missionMomentsCount : null },
                 ].map(tab => {
                   const active = feedMomentFilter === tab.id;
                   return (

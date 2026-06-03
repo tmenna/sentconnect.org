@@ -289,9 +289,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={() => fileInputRef.current?.click()}
               disabled={posting || files.length >= 6}
               className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40"
-              style={{ color: "#6B7280" }}
-              onMouseEnter={e => { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F5F5F5"; }}
-              onMouseLeave={e => { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; }}
+              style={{ color: "#0085FF" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#E8F4FF"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = ""; }}
               title="Add photo"
             >
               <Image className="h-4 w-4" />
@@ -304,9 +304,9 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={() => videoInputRef.current?.click()}
               disabled={posting || files.length >= 6}
               className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40"
-              style={{ color: files.some(f => isVideo(f)) ? "#111827" : "#6B7280", background: files.some(f => isVideo(f)) ? "#F5F5F5" : "" }}
-              onMouseEnter={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F5F5F5"; } }}
-              onMouseLeave={e => { if (!files.some(f => isVideo(f))) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
+              style={{ color: "#0085FF", background: files.some(f => isVideo(f)) ? "#E8F4FF" : "" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#E8F4FF"; }}
+              onMouseLeave={e => { if (!files.some(f => isVideo(f))) e.currentTarget.style.background = ""; }}
               title="Add short video"
             >
               <Video className="h-4 w-4" />
@@ -319,31 +319,13 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
               onClick={() => setShowLocation(s => !s)}
               disabled={posting}
               className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150"
-              style={{ color: showLocation ? "#111827" : "#6B7280", background: showLocation ? "#F5F5F5" : "" }}
-              onMouseEnter={e => { if (!showLocation) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F5F5F5"; } }}
-              onMouseLeave={e => { if (!showLocation) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
+              style={{ color: "#0085FF", background: showLocation ? "#E8F4FF" : "" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#E8F4FF"; }}
+              onMouseLeave={e => { if (!showLocation) e.currentTarget.style.background = ""; }}
               title="Add location"
             >
               <MapPin className="h-4 w-4" />
               <span className="hidden sm:inline">Location</span>
-            </button>
-
-            {/* Mission Moment — labeled pill */}
-            <button
-              onClick={() => setIsMissionMoment(s => !s)}
-              disabled={posting}
-              title="A Mission Moment is a 3–5 minute story, video, or update that highlights God's work and connects people to the broader mission."
-              className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200"
-              style={{
-                background: isMissionMoment ? "#F5F5F5" : "transparent",
-                color: isMissionMoment ? "#111827" : "#6B7280",
-                border: isMissionMoment ? "1px solid #F3F4F6" : "1px solid transparent",
-              }}
-              onMouseEnter={e => { if (!isMissionMoment) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F5F5F5"; } }}
-              onMouseLeave={e => { if (!isMissionMoment) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = ""; } }}
-            >
-              <Star className={cn("h-4 w-4", isMissionMoment ? "fill-[#111827] text-[#111827]" : "")} />
-              <span className="hidden sm:inline">Mission Moment</span>
             </button>
 
             <div className="flex-1" />
