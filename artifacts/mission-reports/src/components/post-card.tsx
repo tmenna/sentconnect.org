@@ -649,7 +649,7 @@ export function PostCard({
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="overflow-hidden transition-colors duration-150"
+      className="transition-colors duration-150"
       style={{
         background: hovered ? "rgba(15,20,25,0.02)" : "#ffffff",
         borderBottom: "1px solid #dfe3e8",
