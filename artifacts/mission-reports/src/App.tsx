@@ -360,7 +360,10 @@ function LandingPage() {
         <section style={{ background: "#F8FAFF", padding: "104px 0" }}>
           <div className="mx-auto max-w-6xl px-6">
             <div style={{ textAlign: "center", marginBottom: 64 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: BLUE, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 14 }}>How SentConnect Works</p>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#EEF6FF", color: BLUE, fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 16 }}>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                How SentConnect Works
+              </span>
               <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 900, letterSpacing: "-0.035em", color: TEXT, margin: 0 }}>{content.howItWorksHeading}</h2>
             </div>
 
