@@ -111,7 +111,7 @@ export default function Signup() {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
-          background: linear-gradient(160deg, #F0F6FF 0%, #F7FAFF 50%, #FFFFFF 100%);
+          background: linear-gradient(160deg, #EEF4FF 0%, #F4F8FF 40%, #F8FAFC 100%);
           font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
@@ -123,15 +123,15 @@ export default function Signup() {
           align-items: center;
           justify-content: space-between;
           flex-shrink: 0;
-          background: #1085FD;
-          box-shadow: 0 2px 16px rgba(0,89,214,0.35);
+          background: linear-gradient(90deg, #1085FD 0%, #0970E8 55%, #0560D4 100%);
+          box-shadow: 0 2px 20px rgba(0,89,214,0.40);
         }
         .su-back-link {
           font-size: 13px;
           font-weight: 500;
-          color: rgba(255,255,255,0.72);
+          color: rgba(255,255,255,0.75);
           text-decoration: none;
-          transition: color .15s;
+          transition: color .2s;
           white-space: nowrap;
         }
         .su-back-link:hover { color: #fff; }
@@ -142,25 +142,25 @@ export default function Signup() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 8px 24px 24px;
+          padding: 20px 24px 32px;
         }
         .su-card-row {
           display: flex;
           align-items: stretch;
-          gap: 20px;
-          max-width: 980px;
+          gap: 24px;
+          max-width: 990px;
           width: 100%;
         }
 
         /* ── Left plan card ── */
         .su-plan {
-          width: 280px;
+          width: 288px;
           flex-shrink: 0;
           background: #fff;
-          border-radius: 24px;
-          padding: 32px;
-          box-shadow: 0 8px 32px rgba(15,23,42,0.07), 0 1px 4px rgba(15,23,42,0.04);
-          border: 1px solid #EBF3FF;
+          border-radius: 28px;
+          padding: 34px;
+          box-shadow: 0 12px 40px rgba(15,23,42,0.09), 0 2px 8px rgba(15,23,42,0.05);
+          border: 1px solid #E4EEFF;
           border-top: 3px solid #1085FD;
           display: flex;
           flex-direction: column;
@@ -171,11 +171,11 @@ export default function Signup() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          padding: 36px;
+          padding: 40px;
           border-radius: 28px;
           background: #ffffff;
-          box-shadow: 0 8px 40px rgba(15,23,42,0.10), 0 1px 4px rgba(15,23,42,0.05);
-          border: 1px solid #E8F0FE;
+          box-shadow: 0 12px 48px rgba(15,23,42,0.11), 0 2px 8px rgba(15,23,42,0.06);
+          border: 1px solid #E4EEFF;
           position: relative;
           overflow: hidden;
         }
@@ -183,8 +183,8 @@ export default function Signup() {
         /* ── Submit button ── */
         .su-submit-btn {
           width: 100%;
-          height: 50px;
-          background: #1085FD;
+          height: 52px;
+          background: linear-gradient(135deg, #1085FD 0%, #0560D4 100%);
           color: #ffffff;
           font-weight: 700;
           font-size: 15px;
@@ -196,30 +196,34 @@ export default function Signup() {
           justify-content: center;
           gap: 8px;
           letter-spacing: 0.01em;
-          box-shadow: 0 4px 16px rgba(16,133,253,0.35);
-          transition: background .15s, transform .1s, box-shadow .15s;
+          box-shadow: 0 4px 20px rgba(16,133,253,0.42), 0 1px 4px rgba(16,133,253,0.2);
+          transition: background .2s, transform .15s, box-shadow .2s;
         }
         .su-submit-btn:hover:not(:disabled) {
-          background: #0070E0;
-          transform: translateY(-1px);
-          box-shadow: 0 6px 22px rgba(16,133,253,0.4);
+          background: linear-gradient(135deg, #0C78F0 0%, #0452C2 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 28px rgba(16,133,253,0.48), 0 2px 8px rgba(16,133,253,0.22);
+        }
+        .su-submit-btn:active:not(:disabled) {
+          transform: translateY(0);
+          box-shadow: 0 4px 16px rgba(16,133,253,0.38);
         }
         .su-submit-btn:disabled {
-          opacity: 0.65;
+          opacity: 0.6;
           cursor: not-allowed;
         }
 
         /* ── Email + Password row ── */
         .su-field-row {
           display: flex;
-          gap: 12px;
+          gap: 14px;
         }
         .su-field-row > * { flex: 1; min-width: 0; }
 
         /* ── Bottom stripe note ── */
         .su-stripe-note {
           text-align: center;
-          padding-bottom: 24px;
+          padding-bottom: 28px;
           font-size: 12px;
           color: #94A3B8;
           display: flex;
@@ -234,12 +238,36 @@ export default function Signup() {
         /* ── Input base + focus ── */
         .su-input {
           border: 1.5px solid #E2E8F0 !important;
-          transition: border-color .15s, box-shadow .15s;
+          transition: border-color .18s, box-shadow .18s;
         }
         .su-input:focus {
           outline: none !important;
           border-color: #1085FD !important;
-          box-shadow: 0 0 0 3px rgba(16,133,253,0.12);
+          box-shadow: 0 0 0 3.5px rgba(16,133,253,0.13), 0 1px 3px rgba(16,133,253,0.08);
+        }
+
+        /* ── Trust chips row (below submit button) ── */
+        .su-trust-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          margin-top: 14px;
+          flex-wrap: wrap;
+          row-gap: 6px;
+        }
+        .su-trust-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          font-size: 11px;
+          font-weight: 600;
+          color: #64748B;
+          background: #F8FAFC;
+          border: 1px solid #E2E8F0;
+          border-radius: 999px;
+          padding: 4px 10px;
+          letter-spacing: 0.01em;
         }
 
         /* ── TABLET (≤ 900px): hide sidebar, show inline summary ── */
@@ -252,25 +280,25 @@ export default function Signup() {
         /* ── MOBILE (≤ 640px): single-column, full-width form ── */
         @media (max-width: 640px) {
           .su-nav { padding: 14px 16px; }
-          .su-main { padding: 6px 12px 16px; }
+          .su-main { padding: 8px 12px 20px; }
           .su-card-row { gap: 0; }
           .su-form-panel {
-            padding: 24px 20px 28px;
-            border-radius: 20px;
+            padding: 28px 20px 32px;
+            border-radius: 22px;
           }
-          .su-field-row { flex-direction: column; gap: 10px; }
+          .su-field-row { flex-direction: column; gap: 12px; }
           .su-stripe-note { padding-bottom: 20px; }
         }
 
         /* ── Very small (≤ 380px) ── */
         @media (max-width: 380px) {
-          .su-form-panel { padding: 20px 16px 24px; border-radius: 16px; }
+          .su-form-panel { padding: 22px 16px 28px; border-radius: 18px; }
           .su-nav { padding: 12px 14px; }
         }
 
         /* ── Subdomain suffix ── */
         .su-subdomain-suffix {
-          padding: 0 12px;
+          padding: 0 13px;
           font-size: 12.5px;
           font-weight: 500;
           color: #4B73A8;
@@ -341,11 +369,11 @@ export default function Signup() {
           <div className="su-form-panel">
 
             {/* Heading */}
-            <div style={{ textAlign: "center", marginBottom: 20 }}>
-              <h1 style={{ fontSize: "clamp(1.35rem, 4vw, 1.75rem)", fontWeight: 800, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 6 }}>
+            <div style={{ textAlign: "center", marginBottom: 24 }}>
+              <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.85rem)", fontWeight: 800, color: "#0B1628", letterSpacing: "-0.04em", lineHeight: 1.18, marginBottom: 8 }}>
                 Set Up Your Organization
               </h1>
-              <p style={{ fontSize: 13.5, color: "#64748B", margin: 0 }}>
+              <p style={{ fontSize: 14, color: "#64748B", margin: 0, fontWeight: 400, lineHeight: 1.5 }}>
                 You'll be the admin. Invite your team after setup.
               </p>
             </div>
@@ -399,7 +427,7 @@ export default function Signup() {
             </div>
 
             {/* Divider */}
-            <div style={{ height: 1, background: "#F1F5F9", marginBottom: 20 }} />
+            <div style={{ height: 1, background: "#EEF2F8", marginBottom: 22 }} />
 
             {/* Error */}
             {error && (
@@ -409,15 +437,15 @@ export default function Signup() {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16, position: "relative" }}>
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18, position: "relative" }}>
 
               {/* Org details section */}
               <div>
-                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "#94A3B8", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "#94A3B8", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
                   <span style={{ display: "inline-block", width: 14, height: 2, borderRadius: 2, background: "#1085FD" }} />
                   Organization Details
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   <Field label="Organization Name">
                     <input
                       className="su-input"
@@ -451,15 +479,15 @@ export default function Signup() {
               </div>
 
               {/* Divider */}
-              <div style={{ height: 1, background: "#F1F5F9" }} />
+              <div style={{ height: 1, background: "#EEF2F8" }} />
 
               {/* Account section */}
               <div>
-                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "#94A3B8", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "#94A3B8", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
                   <span style={{ display: "inline-block", width: 14, height: 2, borderRadius: 2, background: "#1085FD" }} />
                   Your Account
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   <Field label="Full Name">
                     <input
                       className="su-input"
@@ -523,10 +551,11 @@ export default function Signup() {
                     : "Set Up Your Organization →"
                   }
                 </button>
-                <p style={{ textAlign: "center", fontSize: 11, color: "#94A3B8", marginTop: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
-                  <Lock style={{ width: 11, height: 11, flexShrink: 0 }} />
-                  You'll be redirected to Stripe to complete your payment securely.
-                </p>
+                <div className="su-trust-row">
+                  <span className="su-trust-chip"><ShieldCheck style={{ width: 11, height: 11, color: "#1085FD" }} />Secure by Stripe</span>
+                  <span className="su-trust-chip"><Lock style={{ width: 11, height: 11, color: "#1085FD" }} />Data Encrypted</span>
+                  <span className="su-trust-chip"><RefreshCw style={{ width: 11, height: 11, color: "#1085FD" }} />Cancel Anytime</span>
+                </div>
               </div>
 
             </form>
