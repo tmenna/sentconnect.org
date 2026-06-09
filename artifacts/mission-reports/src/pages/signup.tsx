@@ -279,12 +279,12 @@ export default function Signup() {
           padding: 0 12px;
           font-size: 12.5px;
           font-weight: 500;
-          color: #6B7280;
-          background: #F9FAFB;
+          color: #4B73A8;
+          background: #DBEAFE;
           height: 100%;
           display: flex;
           align-items: center;
-          border-left: 1px solid #E5E7EB;
+          border-left: 1px solid #BFDBFE;
           white-space: nowrap;
           flex-shrink: 0;
         }
@@ -431,11 +431,11 @@ export default function Signup() {
                       onChange={e => { setOrgName(e.target.value); if (!subdomain) setSubdomain(generateSubdomain(e.target.value)); }}
                       placeholder="e.g. Calvary Community Church"
                       required
-                      style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
+                      style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#EFF6FF", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
                     />
                   </Field>
                   <Field label="Subdomain">
-                    <div style={{ display: "flex", alignItems: "center", background: subdomainError ? "rgba(255,255,255,0.9)" : "#fff", borderRadius: 12, overflow: "hidden", height: 48, outline: subdomainError ? "2px solid rgba(255,255,255,0.6)" : "none" }}>
+                    <div style={{ display: "flex", alignItems: "center", background: subdomainError ? "#DBEAFE" : "#EFF6FF", borderRadius: 12, overflow: "hidden", height: 48, outline: subdomainError ? "2px solid rgba(255,255,255,0.6)" : "none" }}>
                       <input
                         className="su-input"
                         value={subdomain}
@@ -473,7 +473,7 @@ export default function Signup() {
                       onChange={e => setName(e.target.value)}
                       placeholder="e.g. Sarah Mitchell"
                       required
-                      style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
+                      style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#EFF6FF", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
                     />
                   </Field>
                   <div className="su-field-row">
@@ -486,7 +486,7 @@ export default function Signup() {
                         onBlur={e => checkEmailAvailability(e.target.value)}
                         placeholder="you@example.org"
                         required
-                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box", boxShadow: emailError ? "0 0 0 2px rgba(255,255,255,0.6)" : "none" }}
+                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#EFF6FF", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box", boxShadow: emailError ? "0 0 0 2px rgba(255,255,255,0.6)" : "none" }}
                       />
                       {emailError && (
                         <p style={{ margin: "6px 0 0", fontSize: 12, color: "rgba(255,255,255,0.85)", fontWeight: 500 }}>{emailError}</p>
@@ -501,7 +501,7 @@ export default function Signup() {
                           onChange={e => setPassword(e.target.value)}
                           placeholder="Min. 8 characters"
                           required
-                          style={{ width: "100%", height: 48, padding: "0 44px 0 16px", fontSize: 14, background: "#fff", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
+                          style={{ width: "100%", height: 48, padding: "0 44px 0 16px", fontSize: 14, background: "#EFF6FF", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
                         />
                         <button
                           type="button"
