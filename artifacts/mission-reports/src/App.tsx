@@ -166,9 +166,9 @@ function LandingPage() {
             >About</a>
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 14, fontWeight: 700, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 18px", borderRadius: 999, border: "1.5px solid rgba(255,255,255,0.45)", background: "rgba(255,255,255,0.10)", transition: "background .15s, border-color .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.20)"; el.style.borderColor = "rgba(255,255,255,0.7)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.10)"; el.style.borderColor = "rgba(255,255,255,0.45)"; }}
+              style={{ fontSize: 14, fontWeight: 700, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 18px", borderRadius: 999, border: "1.5px solid rgba(255,255,255,0.85)", background: "rgba(255,255,255,0.12)", transition: "background .15s, border-color .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.22)"; el.style.borderColor = "#fff"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.12)"; el.style.borderColor = "rgba(255,255,255,0.85)"; }}
             >
               <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               Try Demo
@@ -264,9 +264,9 @@ function LandingPage() {
                 </a>
                 <a
                   href="https://demo.sentconnect.org/"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 52, padding: "0 24px", borderRadius: 999, background: "#fff", color: "#1A2B47", fontSize: 15, fontWeight: 600, textDecoration: "none", border: "1.5px solid #C8D9F0", boxShadow: "0 2px 8px rgba(15,23,42,0.06)", transition: "border-color .15s, color .15s, box-shadow .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#1085FD"; el.style.color = "#1085FD"; el.style.boxShadow = "0 4px 16px rgba(16,133,253,0.15)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "#C8D9F0"; el.style.color = "#1A2B47"; el.style.boxShadow = "0 2px 8px rgba(15,23,42,0.06)"; }}
+                  style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 52, padding: "0 24px", borderRadius: 999, background: "#fff", color: "#1085FD", fontSize: 15, fontWeight: 600, textDecoration: "none", border: "1.5px solid #1085FD", boxShadow: "0 2px 8px rgba(16,133,253,0.12)", transition: "border-color .15s, color .15s, box-shadow .15s, background .15s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#EEF6FF"; el.style.boxShadow = "0 4px 16px rgba(16,133,253,0.20)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#fff"; el.style.boxShadow = "0 2px 8px rgba(16,133,253,0.12)"; }}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                   Try Demo
@@ -540,9 +540,9 @@ function AboutPage() {
             >About</a>
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 14, fontWeight: 700, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 18px", borderRadius: 999, border: "1.5px solid rgba(255,255,255,0.45)", background: "rgba(255,255,255,0.10)", transition: "background .15s, border-color .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.20)"; el.style.borderColor = "rgba(255,255,255,0.7)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.10)"; el.style.borderColor = "rgba(255,255,255,0.45)"; }}
+              style={{ fontSize: 14, fontWeight: 700, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 18px", borderRadius: 999, border: "1.5px solid rgba(255,255,255,0.85)", background: "rgba(255,255,255,0.12)", transition: "background .15s, border-color .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.22)"; el.style.borderColor = "#fff"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "rgba(255,255,255,0.12)"; el.style.borderColor = "rgba(255,255,255,0.85)"; }}
             >
               <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               Try Demo
