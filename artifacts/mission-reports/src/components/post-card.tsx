@@ -735,13 +735,13 @@ export function PostCard({
           )}
 
           {/* Action bar */}
-          <div className="flex items-center justify-between px-4 sm:px-5 py-2" style={{ borderTop: "1px solid #E5E7EB" }}>
-            <div className="flex items-center gap-1">
+          <div className="flex items-center justify-between px-4 sm:px-5 py-1 sm:py-2" style={{ borderTop: "1px solid #E5E7EB" }}>
+            <div className="flex items-center gap-0 sm:gap-1">
               {/* Love */}
               <button
                 onClick={toggleLove}
                 className={cn(
-                  "flex items-center gap-1.5 px-2 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150",
+                  "flex items-center gap-1.5 px-2.5 sm:px-2 min-h-[44px] sm:min-h-0 py-2 sm:py-1.5 rounded-full text-[13px] font-medium transition-all duration-150",
                   post.lovedByMe ? "text-[#E0245E]" : "text-[#536471] hover:text-[#E0245E] hover:bg-[#FFF0F4]"
                 )}
               >
@@ -753,7 +753,7 @@ export function PostCard({
               <button
                 onClick={toggleLike}
                 className={cn(
-                  "flex items-center gap-1.5 px-2 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150",
+                  "flex items-center gap-1.5 px-2.5 sm:px-2 min-h-[44px] sm:min-h-0 py-2 sm:py-1.5 rounded-full text-[13px] font-medium transition-all duration-150",
                   post.likedByMe ? "text-[#0085FF]" : "text-[#536471] hover:text-[#0085FF] hover:bg-[#E8F4FF]"
                 )}
               >
@@ -764,7 +764,7 @@ export function PostCard({
               {/* Comment */}
               <button
                 onClick={toggleComments}
-                className="flex items-center gap-1.5 px-2 py-1.5 rounded-full text-[13px] font-medium text-[#536471] hover:text-[#0085FF] hover:bg-[#E8F4FF] transition-all duration-150"
+                className="flex items-center gap-1.5 px-2.5 sm:px-2 min-h-[44px] sm:min-h-0 py-2 sm:py-1.5 rounded-full text-[13px] font-medium text-[#536471] hover:text-[#0085FF] hover:bg-[#E8F4FF] transition-all duration-150"
               >
                 <MessageCircle className="h-[18px] w-[18px]" />
                 {post.commentCount > 0 && <span>{post.commentCount}</span>}

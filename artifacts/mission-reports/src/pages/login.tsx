@@ -184,7 +184,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       </div>
 
       {/* ── Right panel ── */}
-      <div style={{ flex: 1, background: "#fff", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", padding: "48px 48px 48px 56px" }}>
+      <div className="px-5 py-10 sm:px-10 sm:py-12 md:px-14 items-center md:items-start" style={{ flex: 1, background: "#fff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
 
         {/* Mobile-only heading */}
         <div className="md:hidden" style={{ textAlign: "center", marginBottom: 32, width: "100%", maxWidth: 460 }}>

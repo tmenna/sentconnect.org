@@ -341,13 +341,13 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={posting || files.length >= 6}
-              className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40"
+              className="flex items-center gap-1.5 px-3 py-2.5 sm:py-1.5 sm:px-3 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40 min-h-[40px] sm:min-h-0"
               style={{ color: "#0085FF" }}
               onMouseEnter={e => { e.currentTarget.style.background = "#E8F4FF"; }}
               onMouseLeave={e => { e.currentTarget.style.background = ""; }}
               title="Add photo"
             >
-              <Image className="h-4 w-4" />
+              <Image className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
               <span className="hidden sm:inline">Photo</span>
             </button>
             <input ref={fileInputRef} type="file" multiple accept="image/*" className="hidden" onChange={e => addFiles(e.target.files)} />
@@ -356,13 +356,13 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={() => videoInputRef.current?.click()}
               disabled={posting || files.length >= 6}
-              className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40"
+              className="flex items-center gap-1.5 px-3 py-2.5 sm:py-1.5 sm:px-3 rounded-full text-[13px] font-medium transition-all duration-150 disabled:opacity-40 min-h-[40px] sm:min-h-0"
               style={{ color: "#0085FF", background: files.some(f => isVideo(f)) ? "#E8F4FF" : "" }}
               onMouseEnter={e => { e.currentTarget.style.background = "#E8F4FF"; }}
               onMouseLeave={e => { if (!files.some(f => isVideo(f))) e.currentTarget.style.background = ""; }}
               title="Add video — MP4, MOV, WebM, M4V · max 50 MB · max 60 s"
             >
-              <Video className="h-4 w-4" />
+              <Video className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
               <span className="hidden sm:inline">Video</span>
             </button>
             <input ref={videoInputRef} type="file" accept={ACCEPTED_VIDEO_TYPES} className="hidden" onChange={e => addFiles(e.target.files)} />
@@ -371,13 +371,13 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={() => setShowLocation(s => !s)}
               disabled={posting}
-              className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150"
+              className="flex items-center gap-1.5 px-3 py-2.5 sm:py-1.5 sm:px-3 rounded-full text-[13px] font-medium transition-all duration-150 min-h-[40px] sm:min-h-0"
               style={{ color: "#0085FF", background: showLocation ? "#E8F4FF" : "" }}
               onMouseEnter={e => { e.currentTarget.style.background = "#E8F4FF"; }}
               onMouseLeave={e => { if (!showLocation) e.currentTarget.style.background = ""; }}
               title="Add location"
             >
-              <MapPin className="h-4 w-4" />
+              <MapPin className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
               <span className="hidden sm:inline">Location</span>
             </button>
 
@@ -393,8 +393,8 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
             <button
               onClick={handlePost}
               disabled={!canPost}
-              className="px-3 sm:px-5 font-semibold text-[13px] sm:text-[14px] text-white rounded-lg transition-all duration-200 disabled:opacity-40 whitespace-nowrap"
-              style={{ background: "#1085FD", height: "36px", letterSpacing: "-0.01em" }}
+              className="px-4 sm:px-5 font-semibold text-[14px] text-white rounded-xl transition-all duration-200 disabled:opacity-40 whitespace-nowrap min-h-[40px] sm:min-h-[36px]"
+              style={{ background: "#1085FD", letterSpacing: "-0.01em" }}
               onMouseEnter={e => { if (canPost) e.currentTarget.style.background = "#0059D6"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "#1085FD"; }}
             >
