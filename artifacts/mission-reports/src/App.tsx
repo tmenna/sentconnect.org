@@ -349,7 +349,7 @@ function LandingPage() {
           <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
             <p style={{ fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 600, color: "#fff", lineHeight: 1.6, margin: 0, letterSpacing: "-0.02em" }}>
               Ministry updates shouldn't live in email threads and WhatsApp groups.{" "}
-              <em style={{ fontStyle: "italic", color: "rgba(255,255,255,0.80)" }}>
+              <em style={{ fontStyle: "italic", color: "#fff" }}>
                 SentConnect gives your field teams one private, secure home.
               </em>
             </p>
