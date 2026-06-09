@@ -237,10 +237,15 @@ export default function Signup() {
         /* ── Inline plan summary (shown when sidebar is hidden) ── */
         .su-plan-inline { display: none; }
 
-        /* ── Input focus ── */
+        /* ── Input base + focus ── */
+        .su-input {
+          box-shadow: inset 0 1px 3px rgba(0,0,0,0.07);
+          transition: box-shadow .15s, outline .15s;
+        }
         .su-input:focus {
           outline: 2px solid #1085FD;
           outline-offset: 0;
+          box-shadow: inset 0 1px 3px rgba(0,0,0,0.05), 0 0 0 3px rgba(16,133,253,0.18);
         }
 
         /* ── TABLET (≤ 900px): hide sidebar, show inline summary ── */
@@ -304,28 +309,34 @@ export default function Signup() {
 
           {/* LEFT — Plan card (hidden on mobile/tablet) */}
           <div className="su-plan">
-            <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_DEEP} 100%)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 22, boxShadow: "0 4px 16px rgba(16,133,253,0.3)" }}>
-              <Users style={{ width: 20, height: 20, color: "#fff" }} />
+            {/* Icon + popular badge row */}
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_DEEP} 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 16px rgba(16,133,253,0.3)" }}>
+                <Users style={{ width: 20, height: 20, color: "#fff" }} />
+              </div>
+              <span style={{ fontSize: 11, fontWeight: 700, color: BLUE, background: "#EEF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "3px 10px", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                Most Popular
+              </span>
             </div>
 
-            <p style={{ fontSize: 15, fontWeight: 700, color: "#111827", marginBottom: 14 }}>Organization Plan</p>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "#6B7280", marginBottom: 4, letterSpacing: "0.02em", textTransform: "uppercase" }}>Organization Plan</p>
 
-            <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
-              <span style={{ fontSize: "2.4rem", fontWeight: 900, lineHeight: 1, color: BLUE }}>$30</span>
-              <span style={{ fontSize: 13, color: "#9CA3AF", fontWeight: 500 }}>/ month</span>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 2 }}>
+              <span style={{ fontSize: "2.6rem", fontWeight: 900, lineHeight: 1, color: BLUE, letterSpacing: "-0.03em" }}>$30</span>
+              <span style={{ fontSize: 14, color: "#9CA3AF", fontWeight: 500 }}>/mo</span>
             </div>
 
-            <p style={{ fontSize: 12, color: "#94A3B8", margin: "0 0 18px" }}>Billed monthly · cancel anytime</p>
+            <p style={{ fontSize: 12, color: "#94A3B8", margin: "0 0 20px" }}>Billed monthly · cancel anytime</p>
 
-            <div style={{ height: 1, background: "#EBF3FF", marginBottom: 20 }} />
+            <div style={{ height: 1, background: "linear-gradient(90deg, #EBF3FF, transparent)", marginBottom: 20 }} />
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {FEATURES.map(f => (
                 <div key={f} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 20, height: 20, borderRadius: "50%", background: "#EEF5FF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <CheckCircle2 style={{ width: 13, height: 13, color: BLUE }} />
+                  <div style={{ width: 22, height: 22, borderRadius: "50%", background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_DEEP} 100%)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 2px 6px rgba(16,133,253,0.25)" }}>
+                    <CheckCircle2 style={{ width: 13, height: 13, color: "#fff" }} />
                   </div>
-                  <span style={{ fontSize: 13.5, color: "#374151", fontWeight: 500 }}>{f}</span>
+                  <span style={{ fontSize: 13.5, color: "#1F2937", fontWeight: 500 }}>{f}</span>
                 </div>
               ))}
             </div>
@@ -340,7 +351,7 @@ export default function Signup() {
               <h1 style={{ fontSize: "clamp(1.45rem, 4vw, 2rem)", fontWeight: 800, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 6 }}>
                 Set Up Your Organization
               </h1>
-              <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.72)", margin: 0 }}>
+              <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.88)", margin: 0 }}>
                 You'll be the admin. Invite your team after setup.
               </p>
             </div>
@@ -380,14 +391,13 @@ export default function Signup() {
             </div>
 
             {/* Trust badges */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0, marginBottom: 20, flexWrap: "wrap", rowGap: 6, position: "relative" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 20, flexWrap: "wrap", rowGap: 6, position: "relative" }}>
               {[
-                { icon: <ShieldCheck style={{ width: 13, height: 13 }} />, label: "Secure by Stripe" },
-                { icon: <RefreshCw style={{ width: 13, height: 13 }} />, label: "Cancel anytime" },
-                { icon: <Globe style={{ width: 13, height: 13 }} />, label: "Built for mission teams" },
-              ].map(({ icon, label }, i) => (
-                <span key={label} style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11.5, fontWeight: 500, color: "rgba(255,255,255,0.82)" }}>
-                  {i > 0 && <span style={{ color: "rgba(255,255,255,0.3)", margin: "0 8px" }}>•</span>}
+                { icon: <ShieldCheck style={{ width: 12, height: 12 }} />, label: "Secure by Stripe" },
+                { icon: <RefreshCw style={{ width: 12, height: 12 }} />, label: "Cancel anytime" },
+                { icon: <Globe style={{ width: 12, height: 12 }} />, label: "Built for mission teams" },
+              ].map(({ icon, label }) => (
+                <span key={label} style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11.5, fontWeight: 600, color: "rgba(255,255,255,0.92)", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 999, padding: "4px 10px" }}>
                   {icon}
                   {label}
                 </span>
@@ -409,7 +419,8 @@ export default function Signup() {
 
               {/* Org details section */}
               <div>
-                <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.55)", marginBottom: 10 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(255,255,255,0.78)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ display: "inline-block", width: 14, height: 2, borderRadius: 2, background: "rgba(255,255,255,0.45)" }} />
                   Organization Details
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -450,7 +461,8 @@ export default function Signup() {
 
               {/* Account section */}
               <div>
-                <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.55)", marginBottom: 10 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(255,255,255,0.78)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ display: "inline-block", width: 14, height: 2, borderRadius: 2, background: "rgba(255,255,255,0.45)" }} />
                   Your Account
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -540,7 +552,7 @@ export default function Signup() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.85)", marginBottom: 6 }}>
+      <label style={{ display: "block", fontSize: 12.5, fontWeight: 700, color: "rgba(255,255,255,0.92)", marginBottom: 7, letterSpacing: "0.01em" }}>
         {label}
       </label>
       {children}
