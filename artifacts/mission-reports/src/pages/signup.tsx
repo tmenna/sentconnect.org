@@ -173,45 +173,39 @@ export default function Signup() {
           flex-direction: column;
           padding: 36px;
           border-radius: 28px;
-          background: linear-gradient(145deg, #0059D6 0%, #003FA8 100%);
-          box-shadow: 0 8px 48px rgba(0,63,168,0.4);
+          background: #ffffff;
+          box-shadow: 0 8px 40px rgba(15,23,42,0.10), 0 1px 4px rgba(15,23,42,0.05);
+          border: 1px solid #E8F0FE;
           position: relative;
           overflow: hidden;
-        }
-        .su-form-panel::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: radial-gradient(ellipse at 70% 0%, rgba(255,255,255,0.08) 0%, transparent 55%);
-          pointer-events: none;
         }
 
         /* ── Submit button ── */
         .su-submit-btn {
           width: 100%;
           height: 50px;
-          background: #ffffff;
-          color: #003FA8;
-          font-weight: 800;
+          background: #1085FD;
+          color: #ffffff;
+          font-weight: 700;
           font-size: 15px;
           border: none;
-          border-radius: 999px;
+          border-radius: 12px;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 8px;
           letter-spacing: 0.01em;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.18);
-          transition: background .15s, transform .15s, box-shadow .15s;
+          box-shadow: 0 4px 16px rgba(16,133,253,0.35);
+          transition: background .15s, transform .1s, box-shadow .15s;
         }
         .su-submit-btn:hover:not(:disabled) {
-          background: #EBF3FF;
+          background: #0070E0;
           transform: translateY(-1px);
-          box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+          box-shadow: 0 6px 22px rgba(16,133,253,0.4);
         }
         .su-submit-btn:disabled {
-          opacity: 0.7;
+          opacity: 0.65;
           cursor: not-allowed;
         }
 
@@ -239,13 +233,13 @@ export default function Signup() {
 
         /* ── Input base + focus ── */
         .su-input {
-          box-shadow: inset 0 1px 3px rgba(0,0,0,0.07);
-          transition: box-shadow .15s, outline .15s;
+          border: 1.5px solid #E2E8F0 !important;
+          transition: border-color .15s, box-shadow .15s;
         }
         .su-input:focus {
-          outline: 2px solid #1085FD;
-          outline-offset: 0;
-          box-shadow: inset 0 1px 3px rgba(0,0,0,0.05), 0 0 0 3px rgba(16,133,253,0.18);
+          outline: none !important;
+          border-color: #1085FD !important;
+          box-shadow: 0 0 0 3px rgba(16,133,253,0.12);
         }
 
         /* ── TABLET (≤ 900px): hide sidebar, show inline summary ── */
@@ -347,11 +341,11 @@ export default function Signup() {
           <div className="su-form-panel">
 
             {/* Heading */}
-            <div style={{ textAlign: "center", marginBottom: 20, position: "relative" }}>
-              <h1 style={{ fontSize: "clamp(1.45rem, 4vw, 2rem)", fontWeight: 800, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 6 }}>
+            <div style={{ textAlign: "center", marginBottom: 20 }}>
+              <h1 style={{ fontSize: "clamp(1.35rem, 4vw, 1.75rem)", fontWeight: 800, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 6 }}>
                 Set Up Your Organization
               </h1>
-              <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.88)", margin: 0 }}>
+              <p style={{ fontSize: 13.5, color: "#64748B", margin: 0 }}>
                 You'll be the admin. Invite your team after setup.
               </p>
             </div>
@@ -364,25 +358,25 @@ export default function Signup() {
                 justifyContent: "center",
                 gap: 16,
                 marginBottom: 20,
-                background: "rgba(255,255,255,0.12)",
+                background: "#F0F7FF",
                 borderRadius: 14,
                 padding: "12px 20px",
                 flexWrap: "wrap",
                 rowGap: 8,
-                position: "relative",
+                border: "1px solid #BFDBFE",
               }}
             >
               <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                <span style={{ fontSize: "1.65rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>$30</span>
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>/month</span>
+                <span style={{ fontSize: "1.65rem", fontWeight: 900, color: BLUE, lineHeight: 1 }}>$30</span>
+                <span style={{ fontSize: 12, color: "#64748B", fontWeight: 500 }}>/month</span>
               </div>
-              <div style={{ width: 1, height: 28, background: "rgba(255,255,255,0.2)", flexShrink: 0 }} />
+              <div style={{ width: 1, height: 28, background: "#CBD5E1", flexShrink: 0 }} />
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                <span style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>Organization Plan</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "#1E293B" }}>Organization Plan</span>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px" }}>
                   {FEATURES.map(f => (
-                    <span key={f} style={{ fontSize: 11.5, color: "rgba(255,255,255,0.75)", display: "flex", alignItems: "center", gap: 4 }}>
-                      <CheckCircle2 style={{ width: 11, height: 11, flexShrink: 0, color: "rgba(255,255,255,0.85)" }} />
+                    <span key={f} style={{ fontSize: 11.5, color: "#475569", display: "flex", alignItems: "center", gap: 4 }}>
+                      <CheckCircle2 style={{ width: 11, height: 11, flexShrink: 0, color: BLUE }} />
                       {f}
                     </span>
                   ))}
@@ -391,13 +385,13 @@ export default function Signup() {
             </div>
 
             {/* Trust badges */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 20, flexWrap: "wrap", rowGap: 6, position: "relative" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 20, flexWrap: "wrap", rowGap: 6 }}>
               {[
                 { icon: <ShieldCheck style={{ width: 12, height: 12 }} />, label: "Secure by Stripe" },
                 { icon: <RefreshCw style={{ width: 12, height: 12 }} />, label: "Cancel anytime" },
                 { icon: <Globe style={{ width: 12, height: 12 }} />, label: "Built for mission teams" },
               ].map(({ icon, label }) => (
-                <span key={label} style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11.5, fontWeight: 600, color: "rgba(255,255,255,0.92)", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 999, padding: "4px 10px" }}>
+                <span key={label} style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11.5, fontWeight: 600, color: "#475569", background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: 999, padding: "4px 10px" }}>
                   {icon}
                   {label}
                 </span>
@@ -405,11 +399,11 @@ export default function Signup() {
             </div>
 
             {/* Divider */}
-            <div style={{ height: 1, background: "rgba(255,255,255,0.15)", marginBottom: 20, position: "relative" }} />
+            <div style={{ height: 1, background: "#F1F5F9", marginBottom: 20 }} />
 
             {/* Error */}
             {error && (
-              <div style={{ background: "rgba(255,255,255,0.18)", color: "#fff", fontSize: 13, padding: "10px 16px", borderRadius: 12, marginBottom: 16, border: "1px solid rgba(255,255,255,0.28)", position: "relative" }}>
+              <div style={{ background: "#FEF2F2", color: "#DC2626", fontSize: 13, padding: "10px 16px", borderRadius: 12, marginBottom: 16, border: "1px solid #FECACA" }}>
                 {error}
               </div>
             )}
@@ -419,8 +413,8 @@ export default function Signup() {
 
               {/* Org details section */}
               <div>
-                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(255,255,255,0.78)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ display: "inline-block", width: 14, height: 2, borderRadius: 2, background: "rgba(255,255,255,0.45)" }} />
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "#94A3B8", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ display: "inline-block", width: 14, height: 2, borderRadius: 2, background: "#1085FD" }} />
                   Organization Details
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -431,11 +425,11 @@ export default function Signup() {
                       onChange={e => { setOrgName(e.target.value); if (!subdomain) setSubdomain(generateSubdomain(e.target.value)); }}
                       placeholder="e.g. Calvary Community Church"
                       required
-                      style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#EFF6FF", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
+                      style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "1.5px solid #E2E8F0", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
                     />
                   </Field>
                   <Field label="Subdomain">
-                    <div style={{ display: "flex", alignItems: "center", background: subdomainError ? "#DBEAFE" : "#EFF6FF", borderRadius: 12, overflow: "hidden", height: 48, outline: subdomainError ? "2px solid rgba(255,255,255,0.6)" : "none" }}>
+                    <div style={{ display: "flex", alignItems: "center", background: "#fff", borderRadius: 12, overflow: "hidden", height: 48, border: subdomainError ? "1.5px solid #F87171" : "1.5px solid #E2E8F0" }}>
                       <input
                         className="su-input"
                         value={subdomain}
@@ -443,26 +437,26 @@ export default function Signup() {
                         onBlur={e => checkSubdomainAvailability(e.target.value)}
                         placeholder="e.g. calvary"
                         required
-                        style={{ flex: 1, height: "100%", padding: "0 14px", fontSize: 14, background: "transparent", border: "none", color: "#111827", outline: "none", minWidth: 0 }}
+                        style={{ flex: 1, height: "100%", padding: "0 14px", fontSize: 14, background: "transparent", border: "none", borderRadius: 0, color: "#111827", outline: "none", minWidth: 0, boxShadow: "none" }}
                       />
                       <span className="su-subdomain-suffix">
                         .sentconnect.org
                       </span>
                     </div>
                     {subdomainError && (
-                      <p style={{ margin: "6px 0 0", fontSize: 12, color: "rgba(255,255,255,0.85)", fontWeight: 500 }}>{subdomainError}</p>
+                      <p style={{ margin: "5px 0 0", fontSize: 12, color: "#DC2626", fontWeight: 500 }}>{subdomainError}</p>
                     )}
                   </Field>
                 </div>
               </div>
 
               {/* Divider */}
-              <div style={{ height: 1, background: "rgba(255,255,255,0.15)" }} />
+              <div style={{ height: 1, background: "#F1F5F9" }} />
 
               {/* Account section */}
               <div>
-                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(255,255,255,0.78)", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ display: "inline-block", width: 14, height: 2, borderRadius: 2, background: "rgba(255,255,255,0.45)" }} />
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "#94A3B8", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ display: "inline-block", width: 14, height: 2, borderRadius: 2, background: "#1085FD" }} />
                   Your Account
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -473,7 +467,7 @@ export default function Signup() {
                       onChange={e => setName(e.target.value)}
                       placeholder="e.g. Sarah Mitchell"
                       required
-                      style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#EFF6FF", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
+                      style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: "1.5px solid #E2E8F0", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
                     />
                   </Field>
                   <div className="su-field-row">
@@ -486,10 +480,10 @@ export default function Signup() {
                         onBlur={e => checkEmailAvailability(e.target.value)}
                         placeholder="you@example.org"
                         required
-                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#EFF6FF", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box", boxShadow: emailError ? "0 0 0 2px rgba(255,255,255,0.6)" : "none" }}
+                        style={{ width: "100%", height: 48, padding: "0 16px", fontSize: 14, background: "#fff", border: emailError ? "1.5px solid #F87171" : "1.5px solid #E2E8F0", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
                       />
                       {emailError && (
-                        <p style={{ margin: "6px 0 0", fontSize: 12, color: "rgba(255,255,255,0.85)", fontWeight: 500 }}>{emailError}</p>
+                        <p style={{ margin: "5px 0 0", fontSize: 12, color: "#DC2626", fontWeight: 500 }}>{emailError}</p>
                       )}
                     </Field>
                     <Field label="Password">
@@ -501,12 +495,12 @@ export default function Signup() {
                           onChange={e => setPassword(e.target.value)}
                           placeholder="Min. 8 characters"
                           required
-                          style={{ width: "100%", height: 48, padding: "0 44px 0 16px", fontSize: 14, background: "#EFF6FF", border: "none", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
+                          style={{ width: "100%", height: 48, padding: "0 44px 0 16px", fontSize: 14, background: "#fff", border: "1.5px solid #E2E8F0", borderRadius: 12, color: "#111827", outline: "none", boxSizing: "border-box" }}
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(v => !v)}
-                          style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", display: "flex", alignItems: "center", padding: 0 }}
+                          style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "#94A3B8", display: "flex", alignItems: "center", padding: 0 }}
                           tabIndex={-1}
                         >
                           {showPassword ? <EyeOff style={{ width: 15, height: 15 }} /> : <Eye style={{ width: 15, height: 15 }} />}
@@ -529,7 +523,7 @@ export default function Signup() {
                     : "Set Up Your Organization →"
                   }
                 </button>
-                <p style={{ textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 5, position: "relative" }}>
+                <p style={{ textAlign: "center", fontSize: 11, color: "#94A3B8", marginTop: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
                   <Lock style={{ width: 11, height: 11, flexShrink: 0 }} />
                   You'll be redirected to Stripe to complete your payment securely.
                 </p>
@@ -552,7 +546,7 @@ export default function Signup() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label style={{ display: "block", fontSize: 12.5, fontWeight: 700, color: "rgba(255,255,255,0.92)", marginBottom: 7, letterSpacing: "0.01em" }}>
+      <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 6, letterSpacing: "0.005em" }}>
         {label}
       </label>
       {children}
