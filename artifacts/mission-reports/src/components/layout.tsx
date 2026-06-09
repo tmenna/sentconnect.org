@@ -166,21 +166,24 @@ export function Layout({ children }: { children: ReactNode }) {
 
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
-                        className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[13px] cursor-pointer transition-all duration-150"
-                        style={{ background: "#2B92FD", color: "#fff" }}
+                        className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[13px] cursor-pointer transition-all duration-150 overflow-hidden flex-shrink-0"
+                        style={user.avatarUrl ? { border: "2px solid #E5E7EB" } : { background: "#2B92FD", color: "#fff" }}
                       >
-                        {user.name.charAt(0).toUpperCase()}
+                        {user.avatarUrl
+                          ? <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
+                          : user.name.charAt(0).toUpperCase()}
                       </div>
                     </Link>
 
                     <button
-                      className="ml-0.5 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150"
+                      className="ml-0.5 flex items-center gap-1.5 px-3 h-8 rounded-full transition-all duration-150 text-[13px] font-semibold"
                       style={{ background: "#EFF6FF", color: "#1085FD", border: "none", cursor: "pointer" }}
                       onClick={() => logout.mutate({ data: undefined })}
                       title="Sign out"
                       data-testid="btn-logout"
                     >
                       <LogOut className="h-3.5 w-3.5" />
+                      Logout
                     </button>
                   </>
                 ) : (
@@ -214,10 +217,12 @@ export function Layout({ children }: { children: ReactNode }) {
             {!isLoading && isAuthenticated && user && (
               <Link href="/profile">
                 <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-[13px] cursor-pointer"
-                  style={{ background: "#2B92FD", color: "#fff", border: "none" }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-[13px] cursor-pointer overflow-hidden flex-shrink-0"
+                  style={user.avatarUrl ? { border: "2px solid #E5E7EB" } : { background: "#2B92FD", color: "#fff" }}
                 >
-                  {user.name.charAt(0).toUpperCase()}
+                  {user.avatarUrl
+                    ? <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
+                    : user.name.charAt(0).toUpperCase()}
                 </div>
               </Link>
             )}
