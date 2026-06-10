@@ -321,7 +321,7 @@ export default function Signup() {
 
       {/* Nav */}
       <div className="su-nav">
-        <img src={signupLogo} alt="SentConnect" style={{ maxHeight: 24, width: "auto", maxWidth: 160, display: "block", filter: isCustomSignupLogo ? undefined : "brightness(0) invert(1)" }} />
+        <img src={signupLogo} alt="SentConnect" style={{ maxHeight: 40, width: "auto", maxWidth: 200, display: "block", filter: isCustomSignupLogo ? undefined : "brightness(0) invert(1)" }} />
         <Link href="/" className="su-back-link">← Back to sentconnect.org</Link>
       </div>
 

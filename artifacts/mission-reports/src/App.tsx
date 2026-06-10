@@ -116,7 +116,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
 function LandingPage() {
   const [content, setContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const { logo: lpLogo, footerLogo: lpFooterLogo } = useLogo();
+  const { logo: lpLogo, footerLogo: lpFooterLogo, isCustomLogo, isCustomFooterLogo } = useLogo();
   const [, navigate] = useLocation();
 
   function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
@@ -153,7 +153,7 @@ function LandingPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,89,214,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={logoWhite} alt="SentConnect" style={{ maxHeight: 26, width: "auto", maxWidth: 160, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" style={{ maxHeight: 40, width: "auto", maxWidth: 200, display: "block", filter: isCustomLogo ? undefined : "brightness(0) invert(1)" }} />
           </a>
 
           {/* Desktop nav */}
@@ -438,7 +438,7 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              <img src={logoWhite} alt="SentConnect" style={{ maxHeight: 28, width: "auto", maxWidth: 160, display: "block", marginBottom: 14 }} />
+              <img src={lpFooterLogo} alt="SentConnect" style={{ maxHeight: 40, width: "auto", maxWidth: 200, display: "block", marginBottom: 14, filter: isCustomFooterLogo ? undefined : "brightness(0) invert(1)" }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -495,7 +495,7 @@ function AboutPage() {
   const [lpContent, setLpContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [about, setAbout] = useState<AboutPageContent>(DEFAULT_ABOUT_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const { logo: lpLogo } = useLogo();
+  const { logo: lpLogo, isCustomLogo } = useLogo();
   const [, navigate] = useLocation();
 
   function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
@@ -530,7 +530,7 @@ function AboutPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,89,214,0.28)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={logoWhite} alt="SentConnect" style={{ maxHeight: 26, width: "auto", maxWidth: 160, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" style={{ maxHeight: 40, width: "auto", maxWidth: 200, display: "block", filter: isCustomLogo ? undefined : "brightness(0) invert(1)" }} />
           </a>
 
           {/* Desktop nav */}

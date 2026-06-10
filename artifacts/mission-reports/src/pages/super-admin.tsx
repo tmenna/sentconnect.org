@@ -361,7 +361,10 @@ function LogoUploader({
 
         {/* Size preview panel */}
         <div className="sm:w-52 rounded-xl border border-border/60 bg-gray-50/60 p-4 space-y-3">
-          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Preview sizes</p>
+          <div>
+            <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Preview sizes</p>
+            <p className="text-[10.5px] text-muted-foreground/70 mt-0.5">Preview only — does not change the live site</p>
+          </div>
           {LOGO_SIZE_PRESETS.map(preset => (
             <button
               key={preset.value}
