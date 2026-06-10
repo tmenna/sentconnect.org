@@ -151,9 +151,9 @@ function LandingPage() {
     <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,89,214,0.28)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" style={{ maxHeight: 52, width: "auto", maxWidth: 200, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
           </a>
 
           {/* Desktop nav */}
@@ -438,7 +438,7 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              <img src={lpFooterLogo} alt="SentConnect" style={{ maxHeight: 52, width: "auto", maxWidth: 200, display: "block", marginBottom: 14 }} />
+              <img src={lpFooterLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -528,9 +528,9 @@ function AboutPage() {
     <div style={{ minHeight: "100vh", fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,89,214,0.28)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 64 }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" style={{ maxHeight: 52, width: "auto", maxWidth: 200, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
           </a>
 
           {/* Desktop nav */}
