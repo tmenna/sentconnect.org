@@ -150,7 +150,7 @@ function LandingPage() {
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,89,214,0.28)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             <img src={lpLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
@@ -527,7 +527,7 @@ function AboutPage() {
   return (
     <div style={{ minHeight: "100vh", fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE, boxShadow: "0 2px 16px rgba(0,89,214,0.28)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             <img src={lpLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
