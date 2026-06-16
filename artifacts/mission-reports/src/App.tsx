@@ -153,7 +153,7 @@ function LandingPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" width={256} height={256} fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
           </a>
 
           {/* Desktop nav */}
@@ -438,7 +438,7 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              <img src={lpFooterLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14 }} />
+              <img src={lpFooterLogo} alt="SentConnect" width={256} height={256} style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -530,7 +530,7 @@ function AboutPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" width={256} height={256} fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
           </a>
 
           {/* Desktop nav */}
