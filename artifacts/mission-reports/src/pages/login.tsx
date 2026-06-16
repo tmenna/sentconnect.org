@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { useAuth } from "@/components/auth-provider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +25,8 @@ const BLUE_DARK = "#0053CC";
 const LEFT_BG   = "#EEF2F9";
 const INPUT_BG  = "#EEF2F9";
 
+const TURNSTILE_SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) ?? "";
+
 export default function Login({ platformMode }: { platformMode?: boolean } = {}) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
@@ -36,6 +39,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const [showPassword, setShowPassword] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
+  const [demoToken, setDemoToken] = useState<string | null>(TURNSTILE_SITE_KEY ? null : "skip");
 
   useEffect(() => {
     if (!orgSlug) { setOrgName(null); return; }
@@ -413,48 +417,78 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               <p style={{ fontSize: 11, fontWeight: 600, color: "#8A9BB8", letterSpacing: "0.06em", textTransform: "uppercase", margin: "0 0 10px", paddingLeft: 2 }}>
                 Try a demo account
               </p>
+
+              {/* Invisible Turnstile — resolves automatically for real humans */}
+              {TURNSTILE_SITE_KEY && (
+                <Turnstile
+                  siteKey={TURNSTILE_SITE_KEY}
+                  onSuccess={(t) => setDemoToken(t)}
+                  onError={() => setDemoToken(null)}
+                  onExpire={() => setDemoToken(null)}
+                  options={{ size: "invisible" }}
+                />
+              )}
+
               <div style={{ display: "flex", gap: 8 }}>
                 {[
                   { label: "Admin", sublabel: "Manage team & reports", endpoint: "/api/auth/demo-login" },
                   { label: "Field User", sublabel: "Post updates & photos", endpoint: "/api/auth/demo-user-login" },
-                ].map(({ label, sublabel, endpoint }) => (
-                  <button
-                    key={endpoint}
-                    type="button"
-                    onClick={async () => {
-                      try {
-                        const res = await fetch(endpoint, { method: "POST", credentials: "include" });
-                        if (!res.ok) throw new Error("failed");
-                        await queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
-                        navigate(from);
-                      } catch {
-                        toast({ title: "Demo unavailable", description: "Please try again in a moment.", variant: "destructive" });
-                      }
-                    }}
-                    style={{
-                      flex: 1,
-                      background: INPUT_BG,
-                      border: "1.5px solid #DAE3F0",
-                      borderRadius: 10,
-                      padding: "10px 12px",
-                      textAlign: "left",
-                      cursor: "pointer",
-                      fontFamily: "inherit",
-                      transition: "border-color .15s, background .15s",
-                    }}
-                    onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.borderColor = BLUE;
-                      (e.currentTarget as HTMLElement).style.background = "#F0F6FF";
-                    }}
-                    onMouseLeave={e => {
-                      (e.currentTarget as HTMLElement).style.borderColor = "#DAE3F0";
-                      (e.currentTarget as HTMLElement).style.background = INPUT_BG;
-                    }}
-                  >
-                    <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 2px" }}>{label}</p>
-                    <p style={{ fontSize: 11, color: "#8A9BB8", margin: 0 }}>{sublabel}</p>
-                  </button>
-                ))}
+                ].map(({ label, sublabel, endpoint }) => {
+                  const waiting = TURNSTILE_SITE_KEY && !demoToken;
+                  return (
+                    <button
+                      key={endpoint}
+                      type="button"
+                      disabled={!!waiting}
+                      onClick={async () => {
+                        try {
+                          const res = await fetch(endpoint, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(demoToken && demoToken !== "skip" ? { turnstileToken: demoToken } : {}),
+                          });
+                          if (!res.ok) {
+                            const data = await res.json().catch(() => ({}));
+                            throw new Error(data.error ?? "failed");
+                          }
+                          await queryClient.invalidateQueries({ queryKey: getGetCurrentUserQueryKey() });
+                          navigate(from);
+                        } catch (err) {
+                          toast({
+                            title: "Demo unavailable",
+                            description: err instanceof Error ? err.message : "Please try again in a moment.",
+                            variant: "destructive",
+                          });
+                        }
+                      }}
+                      style={{
+                        flex: 1,
+                        background: waiting ? "#F5F8FC" : INPUT_BG,
+                        border: "1.5px solid #DAE3F0",
+                        borderRadius: 10,
+                        padding: "10px 12px",
+                        textAlign: "left",
+                        cursor: waiting ? "default" : "pointer",
+                        fontFamily: "inherit",
+                        opacity: waiting ? 0.6 : 1,
+                        transition: "border-color .15s, background .15s, opacity .15s",
+                      }}
+                      onMouseEnter={e => {
+                        if (waiting) return;
+                        (e.currentTarget as HTMLElement).style.borderColor = BLUE;
+                        (e.currentTarget as HTMLElement).style.background = "#F0F6FF";
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLElement).style.borderColor = "#DAE3F0";
+                        (e.currentTarget as HTMLElement).style.background = waiting ? "#F5F8FC" : INPUT_BG;
+                      }}
+                    >
+                      <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 2px" }}>{label}</p>
+                      <p style={{ fontSize: 11, color: "#8A9BB8", margin: 0 }}>{sublabel}</p>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

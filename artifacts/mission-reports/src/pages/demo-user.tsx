@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
+
+const SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) ?? "";
 
 export default function DemoUser() {
   const [errMsg, setErrMsg] = useState("");
+  const [token, setToken] = useState<string | null>(SITE_KEY ? null : "skip");
 
+  // Fire login as soon as we have a Turnstile token (or immediately if no key configured)
   useEffect(() => {
+    if (token === null) return;
     let cancelled = false;
+
     (async () => {
       try {
         const res = await fetch("/api/auth/demo-user-login", {
           method: "POST",
           credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(token === "skip" ? {} : { turnstileToken: token }),
         });
         if (cancelled) return;
         if (res.ok) {
           const { subdomain } = await res.json();
-          window.location.href = `/${subdomain}/feed`;   // Timeline — accessible to field users
+          window.location.href = `/${subdomain}/feed`;
         } else {
           const data = await res.json().catch(() => ({}));
           setErrMsg(data.error ?? "Demo temporarily unavailable — please try again shortly.");
@@ -23,8 +32,9 @@ export default function DemoUser() {
         if (!cancelled) setErrMsg("Network error — please check your connection and try again.");
       }
     })();
+
     return () => { cancelled = true; };
-  }, []);
+  }, [token]);
 
   return (
     <div style={{
@@ -45,6 +55,17 @@ export default function DemoUser() {
         </div>
         <span style={{ fontSize: 18, fontWeight: 800, color: "#0F172A", letterSpacing: "-0.03em" }}>sentconnect</span>
       </div>
+
+      {/* Invisible Turnstile challenge — resolves immediately for real humans */}
+      {SITE_KEY && !token && !errMsg && (
+        <Turnstile
+          siteKey={SITE_KEY}
+          onSuccess={(t) => setToken(t)}
+          onError={() => setErrMsg("Security check failed. Please refresh and try again.")}
+          onExpire={() => setToken(null)}
+          options={{ size: "invisible" }}
+        />
+      )}
 
       {errMsg ? (
         <div style={{ textAlign: "center", maxWidth: 360 }}>

@@ -1,6 +1,7 @@
 import { Router, type IRouter } from "express";
 import { eq, and, gt } from "drizzle-orm";
 import crypto from "crypto";
+import rateLimit from "express-rate-limit";
 import { db, usersTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { maybeResetDemoOrg } from "../lib/seed";
@@ -9,6 +10,17 @@ import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
 import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
 import { DEFAULT_ABOUT_PAGE_CONTENT, getAboutPageContent } from "../lib/about-page-content";
 import { resolveObjectUrl } from "../lib/r2Storage";
+import { verifyTurnstileToken } from "../lib/turnstile";
+
+// Demo endpoints: max 8 attempts per IP per 15 minutes.
+// trust proxy is set to 1 in app.ts so req.ip is the real client IP.
+const demoRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 8,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many demo requests. Please wait a few minutes before trying again." },
+});
 
 const router: IRouter = Router();
 
@@ -236,7 +248,15 @@ const DEMO_USER_EMAIL = "demoadmin@sentconnect.org";
 const DEMO_USER_NAME = "Demo Admin";
 const DEMO_USER_PASSWORD = "password123";
 
-router.post("/auth/demo-login", async (req, res): Promise<void> => {
+router.post("/auth/demo-login", demoRateLimit, async (req, res): Promise<void> => {
+  const cfIp = req.headers["cf-connecting-ip"] as string | undefined;
+  const ip = cfIp ?? req.ip;
+  const tokenOk = await verifyTurnstileToken(req.body?.turnstileToken, ip);
+  if (!tokenOk) {
+    res.status(403).json({ error: "Security check failed. Please refresh and try again." });
+    return;
+  }
+
   try {
     // Find or create demo org
     let [org] = await db.select().from(organizationsTable).where(eq(organizationsTable.subdomain, DEMO_ORG_SUBDOMAIN));
@@ -282,7 +302,15 @@ router.post("/auth/demo-login", async (req, res): Promise<void> => {
 
 const DEMO_FIELD_USER_EMAIL = "demouser@sentconnect.org";
 
-router.post("/auth/demo-user-login", async (req, res): Promise<void> => {
+router.post("/auth/demo-user-login", demoRateLimit, async (req, res): Promise<void> => {
+  const cfIp = req.headers["cf-connecting-ip"] as string | undefined;
+  const ip = cfIp ?? req.ip;
+  const tokenOk = await verifyTurnstileToken(req.body?.turnstileToken, ip);
+  if (!tokenOk) {
+    res.status(403).json({ error: "Security check failed. Please refresh and try again." });
+    return;
+  }
+
   try {
     // Reset demo feed only if 1 hour has passed
     await maybeResetDemoOrg();
