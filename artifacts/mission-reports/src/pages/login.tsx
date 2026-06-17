@@ -40,6 +40,8 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [demoToken, setDemoToken] = useState<string | null>(TURNSTILE_SITE_KEY ? null : "skip");
+  const [demoTurnstileError, setDemoTurnstileError] = useState(false);
+  const [demoTurnstileKey, setDemoTurnstileKey] = useState(0);
 
   useEffect(() => {
     if (!orgSlug) { setOrgName(null); return; }
@@ -419,14 +421,30 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               </p>
 
               {/* Invisible Turnstile — resolves automatically for real humans */}
-              {TURNSTILE_SITE_KEY && (
+              {TURNSTILE_SITE_KEY && !demoTurnstileError && (
                 <Turnstile
+                  key={demoTurnstileKey}
                   siteKey={TURNSTILE_SITE_KEY}
-                  onSuccess={(t) => setDemoToken(t)}
-                  onError={() => setDemoToken(null)}
+                  onSuccess={(t) => { setDemoToken(t); setDemoTurnstileError(false); }}
+                  onError={() => { setDemoToken(null); setDemoTurnstileError(true); }}
                   onExpire={() => setDemoToken(null)}
                   options={{ size: "invisible" }}
                 />
+              )}
+
+              {demoTurnstileError && (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
+                  <p style={{ fontSize: 12, color: "#B91C1C", margin: 0, lineHeight: 1.4 }}>
+                    Security check couldn't load. Disable tracking protection or
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => { setDemoTurnstileError(false); setDemoToken(null); setDemoTurnstileKey(k => k + 1); }}
+                    style={{ flexShrink: 0, background: "#fff", border: "1px solid #FCA5A5", borderRadius: 8, padding: "5px 10px", fontSize: 12, fontWeight: 600, color: "#B91C1C", cursor: "pointer", fontFamily: "inherit" }}
+                  >
+                    Retry
+                  </button>
+                </div>
               )}
 
               <div style={{ display: "flex", gap: 8 }}>
@@ -434,7 +452,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   { label: "Admin", sublabel: "Manage team & reports", endpoint: "/api/auth/demo-login" },
                   { label: "Field User", sublabel: "Post updates & photos", endpoint: "/api/auth/demo-user-login" },
                 ].map(({ label, sublabel, endpoint }) => {
-                  const waiting = TURNSTILE_SITE_KEY && !demoToken;
+                  const waiting = TURNSTILE_SITE_KEY && !demoToken && !demoTurnstileError;
                   return (
                     <button
                       key={endpoint}

@@ -7,6 +7,15 @@ export default function DemoUser() {
   const [errMsg, setErrMsg] = useState("");
   const [token, setToken] = useState<string | null>(SITE_KEY ? null : "skip");
 
+  // If Turnstile never resolves (script blocked / domain not allowed), don't hang forever
+  useEffect(() => {
+    if (!SITE_KEY || token !== null || errMsg) return;
+    const t = setTimeout(() => {
+      setErrMsg("The security check didn't load. Try disabling browser tracking protection, or open the demo in another browser.");
+    }, 12000);
+    return () => clearTimeout(t);
+  }, [token, errMsg]);
+
   // Fire login as soon as we have a Turnstile token (or immediately if no key configured)
   useEffect(() => {
     if (token === null) return;
@@ -61,7 +70,7 @@ export default function DemoUser() {
         <Turnstile
           siteKey={SITE_KEY}
           onSuccess={(t) => setToken(t)}
-          onError={() => setErrMsg("Security check failed. Please refresh and try again.")}
+          onError={() => setErrMsg("The security check couldn't load. Try disabling browser tracking protection, or open the demo in another browser.")}
           onExpire={() => setToken(null)}
           options={{ size: "invisible" }}
         />
