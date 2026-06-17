@@ -5,6 +5,7 @@ import { db, usersTable, reportsTable, organizationsTable } from "@workspace/db"
 import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
 import { sendTemporaryPasswordEmail, emailConfigured } from "../lib/mailer";
+import { invalidateUserCache } from "./reports";
 
 const router: IRouter = Router();
 
@@ -101,6 +102,8 @@ router.patch("/admin/users/:id", async (req, res): Promise<void> => {
   }
 
   const [updated] = await db.update(usersTable).set(updates).where(eq(usersTable.id, userId)).returning();
+  // Drop any cached copy so role/status/permission changes take effect immediately.
+  invalidateUserCache(userId);
   res.json(toUserResponse(updated));
 });
 

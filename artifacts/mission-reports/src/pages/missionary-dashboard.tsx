@@ -1,19 +1,30 @@
 import React, { useState, useRef } from "react";
 import { useAuth } from "@/components/auth-provider";
-import { useGetUserReports, getGetUserReportsQueryKey } from "@workspace/api-client-react";
+import { useGetUserReports, getGetUserReportsQueryKey, useListReports } from "@workspace/api-client-react";
 import { Redirect, Link } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
-import { FileText, Star, CircleUser, PenSquare, BookOpen } from "lucide-react";
+import { FileText, Star, CircleUser, PenSquare, BookOpen, Users } from "lucide-react";
 
-type FeedTab = "all" | "moments";
+type FeedTab = "all" | "moments" | "team";
+
+function canViewAllReports(permissions: string | null | undefined): boolean {
+  if (!permissions) return false;
+  try {
+    return JSON.parse(permissions)?.canViewAllReports === true;
+  } catch {
+    return false;
+  }
+}
 
 export default function MissionaryDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [posts, setPosts] = useState<PostData[] | null>(null);
   const [activeTab, setActiveTab] = useState<FeedTab>("all");
   const composerRef = useRef<HTMLDivElement>(null);
+
+  const canViewAll = canViewAllReports(user?.permissions);
 
   const { data, isLoading: postsLoading } = useGetUserReports(
     user?.id ?? 0,
@@ -25,22 +36,31 @@ export default function MissionaryDashboard() {
     }
   );
 
+  const { data: teamData, isLoading: teamLoading } = useListReports(
+    { limit: 100 },
+    { query: { enabled: !!user?.id && canViewAll } }
+  );
+
   if (isLoading) return null;
   if (!isAuthenticated) return <Redirect href="/login" />;
   if (user?.role === "admin") return <Redirect href="/admin" />;
 
-  const allPosts: PostData[] = posts ?? ((data ?? []) as PostData[]);
-  const myPosts = allPosts;
+  const showingTeam = activeTab === "team" && canViewAll;
+  const myPosts: PostData[] = posts ?? ((data ?? []) as PostData[]);
+  const teamPosts: PostData[] = (teamData ?? []) as PostData[];
+  const displayPosts = showingTeam ? teamPosts : myPosts;
+  const listLoading = showingTeam ? teamLoading : postsLoading;
 
   function handleDelete(id: number) {
     setPosts(prev => prev ? prev.filter(p => p.id !== id) : (data as PostData[] ?? []).filter(p => p.id !== id));
   }
 
-  const displayedCount = allPosts.length;
+  const displayedCount = displayPosts.length;
   const firstName = user.name.split(" ")[0];
 
   const navItems: { id: FeedTab | "profile"; label: string; Icon: React.ElementType }[] = [
     { id: "all",     label: "My Posts",        Icon: FileText },
+    ...(canViewAll ? [{ id: "team" as FeedTab, label: "Team Posts", Icon: Users }] : []),
     { id: "moments", label: "Moments",          Icon: Star },
     { id: "profile", label: "Profile",          Icon: CircleUser },
   ];
@@ -66,6 +86,7 @@ export default function MissionaryDashboard() {
         <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
           {([
             { id: "all" as FeedTab, label: "My Posts", Icon: FileText },
+            ...(canViewAll ? [{ id: "team" as FeedTab, label: "Team Posts", Icon: Users }] : []),
           ]).map(({ id, label, Icon }) => {
             const active = activeTab === id;
             return (
@@ -161,16 +182,18 @@ export default function MissionaryDashboard() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-[26px] font-bold tracking-tight leading-tight mb-1.5" style={{ color: "#2B2B2B" }}>
-              {activeTab === "moments" ? "Mission Moments" : "My Posts"}
+              {showingTeam ? "Team Posts" : activeTab === "moments" ? "Mission Moments" : "My Posts"}
             </h1>
             <p className="text-sm" style={{ color: "#6B7280" }}>
-              Stay connected. Share what God is doing in the field.
+              {showingTeam
+                ? "All updates from across your field team."
+                : "Stay connected. Share what God is doing in the field."}
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0 mt-1">
             <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full border"
               style={{ color: "#2B2B2B", background: "#F1F5F9", borderColor: "#E2E8F0" }}>
-              {allPosts.length} <span className="font-normal text-slate-400">posts</span>
+              {displayPosts.length} <span className="font-normal text-slate-400">posts</span>
             </span>
           </div>
         </div>
@@ -185,7 +208,8 @@ export default function MissionaryDashboard() {
         {/* Filter tabs */}
         <div className="flex items-center" style={{ borderBottom: "2px solid #F1F5F9" }}>
           {[
-            { id: "all" as FeedTab, label: "All Posts", count: allPosts.length },
+            { id: "all" as FeedTab, label: "My Posts", count: myPosts.length },
+            ...(canViewAll ? [{ id: "team" as FeedTab, label: "Team Posts", count: teamPosts.length }] : []),
           ].map(tab => {
             const active = activeTab === tab.id;
             return (
@@ -219,7 +243,7 @@ export default function MissionaryDashboard() {
               </button>
             );
           })}
-          {!postsLoading && (
+          {!listLoading && (
             <span className="ml-auto pb-3 text-[12px]" style={{ color: "#94A3B8" }}>
               {displayedCount} result{displayedCount !== 1 ? "s" : ""}
             </span>
@@ -227,7 +251,7 @@ export default function MissionaryDashboard() {
         </div>
 
         {/* Posts */}
-        {postsLoading && posts === null ? (
+        {listLoading && (showingTeam ? teamData == null : posts === null) ? (
           <div className="bg-white rounded-2xl border border-border/50 overflow-hidden divide-y divide-border/40">
             {[1, 2, 3].map(i => (
               <div key={i} className="p-5 sm:p-6 space-y-3">
@@ -244,17 +268,21 @@ export default function MissionaryDashboard() {
               </div>
             ))}
           </div>
-        ) : myPosts.length === 0 ? (
+        ) : displayPosts.length === 0 ? (
           <div className="bg-white rounded-2xl py-16 sm:py-20 text-center" style={{ border: "1.5px dashed #CBD5E1" }}>
             <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: "#F3F4F6" }}>
-              <FileText className="h-6 w-6 text-slate-400" />
+              {showingTeam ? <Users className="h-6 w-6 text-slate-400" /> : <FileText className="h-6 w-6 text-slate-400" />}
             </div>
-            <p className="font-semibold text-base" style={{ color: "#2B2B2B" }}>No posts yet</p>
-            <p className="text-sm mt-1.5 text-slate-500">Share your first update using the composer above.</p>
+            <p className="font-semibold text-base" style={{ color: "#2B2B2B" }}>
+              {showingTeam ? "No team posts yet" : "No posts yet"}
+            </p>
+            <p className="text-sm mt-1.5 text-slate-500">
+              {showingTeam ? "Updates from your team will appear here." : "Share your first update using the composer above."}
+            </p>
           </div>
         ) : (
           <div className="overflow-hidden" style={{ borderTop: "1px solid #E5E7EB" }}>
-            {myPosts.map(post => (
+            {displayPosts.map(post => (
               <PostCard key={post.id} post={post} hideViewPost onDelete={handleDelete} flat />
             ))}
           </div>

@@ -134,8 +134,25 @@ async function getCurrentUser(userId: number) {
 }
 
 /** Call when the user record changes so the cache doesn't serve stale data. */
-function invalidateUserCache(userId: number) {
+export function invalidateUserCache(userId: number) {
   _userCache.delete(userId);
+}
+
+/**
+ * True if the user may see all reports in their org.
+ * Admins and super_admins always can. A field_user can if their
+ * permissions JSON has `canViewAllReports: true`.
+ */
+function canViewAllReports(user: typeof usersTable.$inferSelect | null | undefined): boolean {
+  if (!user) return false;
+  if (user.role === "admin" || user.role === "super_admin") return true;
+  if (!user.permissions) return false;
+  try {
+    const perms = JSON.parse(user.permissions);
+    return perms?.canViewAllReports === true;
+  } catch {
+    return false;
+  }
 }
 
 // GET /timeline — all authenticated org members: shows all posts in same org
@@ -179,13 +196,18 @@ router.get("/reports", async (req, res): Promise<void> => {
   if (!currentUserId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
   const currentUser = await getCurrentUser(currentUserId);
-  const isAdmin = currentUser?.role === "admin" || currentUser?.role === "super_admin";
+  const viewAll = canViewAllReports(currentUser);
+  // A non-super-admin granted view-all must belong to an org; without an org
+  // context an unscoped org-wide query would leak across tenants, so fall back
+  // to own-posts-only.
+  const canViewOrgWide =
+    viewAll && (currentUser?.role === "super_admin" || !!currentUser?.organizationId);
   const missionaryId = req.query.missionaryId ? Number(req.query.missionaryId) : undefined;
-  const limit = Math.min(Number(req.query.limit) || 20, 50);
+  const limit = Math.min(Number(req.query.limit) || 20, 100);
   const offset = Number(req.query.offset) || 0;
 
   const conditions = [];
-  if (isAdmin) {
+  if (canViewOrgWide) {
     if (currentUser?.organizationId && currentUser.role !== "super_admin") {
       conditions.push(eq(reportsTable.organizationId, currentUser.organizationId));
     } else if (currentUser?.role === "super_admin" && req.resolvedOrg?.id) {

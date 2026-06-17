@@ -31,6 +31,7 @@ export const ListUsersResponseItem = zod.object({
   location: zod.string().nullish(),
   avatarUrl: zod.string().nullish(),
   organization: zod.string().nullish(),
+  permissions: zod.string().nullish(),
   createdAt: zod.coerce.date(),
 });
 export const ListUsersResponse = zod.array(ListUsersResponseItem);
@@ -65,6 +66,7 @@ export const GetUserResponse = zod.object({
   location: zod.string().nullish(),
   avatarUrl: zod.string().nullish(),
   organization: zod.string().nullish(),
+  permissions: zod.string().nullish(),
   createdAt: zod.coerce.date(),
 });
 
@@ -92,6 +94,7 @@ export const UpdateUserResponse = zod.object({
   location: zod.string().nullish(),
   avatarUrl: zod.string().nullish(),
   organization: zod.string().nullish(),
+  permissions: zod.string().nullish(),
   createdAt: zod.coerce.date(),
 });
 
@@ -113,6 +116,7 @@ export const LoginUserResponse = zod.object({
     location: zod.string().nullish(),
     avatarUrl: zod.string().nullish(),
     organization: zod.string().nullish(),
+    permissions: zod.string().nullish(),
     createdAt: zod.coerce.date(),
   }),
 });
@@ -129,6 +133,7 @@ export const GetCurrentUserResponse = zod.object({
   location: zod.string().nullish(),
   avatarUrl: zod.string().nullish(),
   organization: zod.string().nullish(),
+  permissions: zod.string().nullish(),
   createdAt: zod.coerce.date(),
 });
 
@@ -167,6 +172,7 @@ export const GetUserReportsResponseItem = zod.object({
     location: zod.string().nullish(),
     avatarUrl: zod.string().nullish(),
     organization: zod.string().nullish(),
+    permissions: zod.string().nullish(),
     createdAt: zod.coerce.date(),
   }),
   photos: zod.array(
@@ -231,6 +237,7 @@ export const ListReportsResponseItem = zod.object({
     location: zod.string().nullish(),
     avatarUrl: zod.string().nullish(),
     organization: zod.string().nullish(),
+    permissions: zod.string().nullish(),
     createdAt: zod.coerce.date(),
   }),
   photos: zod.array(
@@ -301,6 +308,7 @@ export const GetReportResponse = zod.object({
     location: zod.string().nullish(),
     avatarUrl: zod.string().nullish(),
     organization: zod.string().nullish(),
+    permissions: zod.string().nullish(),
     createdAt: zod.coerce.date(),
   }),
   photos: zod.array(
@@ -360,6 +368,7 @@ export const UpdateReportResponse = zod.object({
     location: zod.string().nullish(),
     avatarUrl: zod.string().nullish(),
     organization: zod.string().nullish(),
+    permissions: zod.string().nullish(),
     createdAt: zod.coerce.date(),
   }),
   photos: zod.array(
@@ -440,6 +449,7 @@ export const GetTimelineResponse = zod.object({
         location: zod.string().nullish(),
         avatarUrl: zod.string().nullish(),
         organization: zod.string().nullish(),
+        permissions: zod.string().nullish(),
         createdAt: zod.coerce.date(),
       }),
       photos: zod.array(
@@ -494,6 +504,7 @@ export const GetRecentActivityResponseItem = zod.object({
     location: zod.string().nullish(),
     avatarUrl: zod.string().nullish(),
     organization: zod.string().nullish(),
+    permissions: zod.string().nullish(),
     createdAt: zod.coerce.date(),
   }),
   photos: zod.array(

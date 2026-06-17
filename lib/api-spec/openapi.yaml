@@ -456,6 +456,8 @@ components:
           type: ["string", "null"]
         organization:
           type: ["string", "null"]
+        permissions:
+          type: ["string", "null"]
         createdAt:
           type: string
           format: date-time

@@ -29,6 +29,8 @@ export interface User {
   avatarUrl?: string | null;
   /** @nullable */
   organization?: string | null;
+  /** @nullable */
+  permissions?: string | null;
   createdAt: string;
 }
 

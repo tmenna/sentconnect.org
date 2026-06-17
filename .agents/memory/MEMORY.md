@@ -1,0 +1,1 @@
+- [User authz cache](user-authz-cache.md) — api-server caches user records ~30s; any mutation affecting role/status/permissions must call invalidateUserCache or grants/revokes lag.
