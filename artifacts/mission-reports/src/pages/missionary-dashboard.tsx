@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { useGetUserReports, getGetUserReportsQueryKey, useListReports } from "@workspace/api-client-react";
 import { Redirect, Link } from "wouter";
@@ -25,6 +25,20 @@ export default function MissionaryDashboard() {
   const composerRef = useRef<HTMLDivElement>(null);
 
   const canViewAll = canViewAllReports(user?.permissions);
+  const defaultedForUserRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const uid = user?.id ?? null;
+    // Once per signed-in identity: default permitted users to the team view.
+    if (canViewAll && uid != null && defaultedForUserRef.current !== uid) {
+      defaultedForUserRef.current = uid;
+      setActiveTab("team");
+    }
+    // If the permission is revoked while viewing the team tab, fall back.
+    if (!canViewAll) {
+      setActiveTab(prev => (prev === "team" ? "all" : prev));
+    }
+  }, [canViewAll, user?.id]);
 
   const { data, isLoading: postsLoading } = useGetUserReports(
     user?.id ?? 0,
