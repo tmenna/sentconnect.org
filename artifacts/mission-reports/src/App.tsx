@@ -616,28 +616,31 @@ function AboutPage() {
             ← Back to home
           </a>
 
-          {/* Eyebrow */}
-          <div style={{ display: "inline-flex", alignItems: "center", marginBottom: 20, background: "#F5F5F5", borderRadius: 999, padding: "4px 14px" }}>
-            <span style={{ fontSize: 11, fontWeight: 800, color: "#111827", letterSpacing: "0.1em", textTransform: "uppercase" }}>Our Story</span>
-          </div>
-
-          {/* Title */}
-          <h1 style={{ fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.1, color: TEXT, margin: "0 0 40px" }}>
-            {about.aboutTitle}
-          </h1>
-
-          {/* Family photo — only rendered when an image has been uploaded */}
-          {about.aboutImageUrl && (
-            <div style={{ marginBottom: 48, borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 32px rgba(15,23,42,0.10)" }}>
+          {/* Header — circular profile photo beside the title, blog-style */}
+          <div style={{ display: "flex", alignItems: "center", gap: 28, flexWrap: "wrap", marginBottom: 48 }}>
+            {/* Profile photo — circular, medium; only rendered when an image has been uploaded */}
+            {about.aboutImageUrl && (
               <img
                 src={about.aboutImageUrl}
                 alt="The Menna family serving in Ethiopia"
                 fetchPriority="high"
                 decoding="async"
-                style={{ width: "100%", display: "block", objectFit: "cover", maxHeight: 420 }}
+                style={{ width: 132, height: 132, flexShrink: 0, borderRadius: "50%", objectFit: "cover", boxShadow: "0 8px 32px rgba(15,23,42,0.10)" }}
               />
+            )}
+
+            <div style={{ flex: "1 1 260px", minWidth: 0 }}>
+              {/* Eyebrow */}
+              <div style={{ display: "inline-flex", alignItems: "center", marginBottom: 16, background: "#F5F5F5", borderRadius: 999, padding: "4px 14px" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#111827", letterSpacing: "0.1em", textTransform: "uppercase" }}>Our Story</span>
+              </div>
+
+              {/* Title */}
+              <h1 style={{ fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.1, color: TEXT, margin: 0 }}>
+                {about.aboutTitle}
+              </h1>
             </div>
-          )}
+          </div>
 
           {/* Body */}
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
