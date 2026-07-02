@@ -344,7 +344,7 @@ export default function Signup() {
             <p style={{ fontSize: 13, fontWeight: 600, color: "#6B7280", marginBottom: 4, letterSpacing: "0.02em", textTransform: "uppercase" }}>Organization Plan</p>
 
             <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 2 }}>
-              <span style={{ fontSize: "2.6rem", fontWeight: 900, lineHeight: 1, color: BLUE, letterSpacing: "-0.03em" }}>$30</span>
+              <span style={{ fontSize: "2.6rem", fontWeight: 900, lineHeight: 1, color: BLUE, letterSpacing: "-0.03em" }}>$79</span>
               <span style={{ fontSize: 14, color: "#9CA3AF", fontWeight: 500 }}>/mo</span>
             </div>
 
@@ -395,7 +395,7 @@ export default function Signup() {
               }}
             >
               <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                <span style={{ fontSize: "1.65rem", fontWeight: 900, color: BLUE, lineHeight: 1 }}>$30</span>
+                <span style={{ fontSize: "1.65rem", fontWeight: 900, color: BLUE, lineHeight: 1 }}>$79</span>
                 <span style={{ fontSize: 12, color: "#64748B", fontWeight: 500 }}>/month</span>
               </div>
               <div style={{ width: 1, height: 28, background: "#CBD5E1", flexShrink: 0 }} />
