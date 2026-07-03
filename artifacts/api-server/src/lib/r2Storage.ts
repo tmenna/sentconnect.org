@@ -194,6 +194,7 @@ export async function uploadStreamToR2(
       Key: objectKey,
       Body: stream,
       ContentType: contentType,
+      CacheControl: IMMUTABLE_CACHE_CONTROL,
     },
     partSize: 5 * 1024 * 1024, // 5 MB per part
     queueSize: 4,               // up to 4 concurrent parts
@@ -268,18 +269,66 @@ export async function createPresignedPutUrl(
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Generate a short-lived presigned GET URL for a private R2 object.
- * Default expiry is 1 hour.
+ * Long-lived, immutable cache directive. Object keys are content-addressed
+ * (a fresh random UUID per upload), so the bytes at a given key never change —
+ * safe to cache "forever". Applied as a response override on presigned GETs so
+ * browsers cache the file instead of re-downloading it on every page view.
+ */
+const IMMUTABLE_CACHE_CONTROL = "public, max-age=31536000, immutable";
+
+/**
+ * In-memory cache of presigned GET URLs, keyed by `${objectKey}|${ttl}`.
+ *
+ * Without this, every call mints a fresh signature, so the URL changes on each
+ * API response and the browser can never reuse its cached copy — the root cause
+ * of laggy logo / image loading. Reusing a stable URL (while it still has ample
+ * life left) lets the browser serve repeat loads straight from disk cache.
+ */
+const _presignedGetCache = new Map<string, { url: string; expiresAt: number }>();
+const PRESIGNED_GET_CACHE_MAX = 5000;
+
+/**
+ * Generate a presigned GET URL for a private R2 object.
+ *
+ * The URL is cached and reused while it still has plenty of life left, so the
+ * same stable URL is returned across responses (enabling browser byte caching),
+ * and R2 is asked to return long-lived immutable cache headers on the response.
+ * Default expiry is 24 hours.
  */
 export async function createPresignedGetUrl(
   objectKey: string,
-  ttlSeconds = 3600
+  ttlSeconds = 86400
 ): Promise<string> {
+  const cacheKey = `${objectKey}|${ttlSeconds}`;
+  const now = Date.now();
+
+  const cached = _presignedGetCache.get(cacheKey);
+  // Reuse while more than 10% of the lifetime remains, so the URL stays stable
+  // across responses (browser cache hits) yet never gets close to expiring.
+  if (cached && cached.expiresAt - now > ttlSeconds * 100) {
+    return cached.url;
+  }
+
   const command = new GetObjectCommand({
     Bucket: getBucket(),
     Key: objectKey,
+    ResponseCacheControl: IMMUTABLE_CACHE_CONTROL,
   });
-  return getSignedUrl(getR2(), command, { expiresIn: ttlSeconds });
+  const url = await getSignedUrl(getR2(), command, { expiresIn: ttlSeconds });
+
+  // Bound the cache: drop expired entries, then the oldest if still too large.
+  if (_presignedGetCache.size >= PRESIGNED_GET_CACHE_MAX) {
+    for (const [k, v] of _presignedGetCache) {
+      if (v.expiresAt <= now) _presignedGetCache.delete(k);
+    }
+    if (_presignedGetCache.size >= PRESIGNED_GET_CACHE_MAX) {
+      const oldest = _presignedGetCache.keys().next().value;
+      if (oldest !== undefined) _presignedGetCache.delete(oldest);
+    }
+  }
+
+  _presignedGetCache.set(cacheKey, { url, expiresAt: now + ttlSeconds * 1000 });
+  return url;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -299,7 +348,7 @@ export async function createPresignedGetUrl(
  */
 export async function resolveObjectUrl(
   url: string | null | undefined,
-  ttlSeconds = 7200,
+  ttlSeconds = 86400,
 ): Promise<string | null> {
   if (!url) return null;
   if (!url.startsWith("/objects/")) return url;
@@ -320,7 +369,7 @@ export async function resolveObjectUrl(
  */
 export async function resolveObjectUrls(
   urls: (string | null | undefined)[],
-  ttlSeconds = 7200,
+  ttlSeconds = 86400,
 ): Promise<Map<string, string>> {
   const unique = [...new Set(urls.filter((u): u is string => !!u && u.startsWith("/objects/")))];
   const signed = await Promise.all(unique.map(u => resolveObjectUrl(u, ttlSeconds)));

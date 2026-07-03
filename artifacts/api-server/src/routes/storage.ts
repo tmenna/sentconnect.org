@@ -163,11 +163,14 @@ router.get("/storage/objects/*path", async (req: Request, res: Response) => {
   }
 
   try {
-    const signedUrl = await createPresignedGetUrl(objectKey, 3600);
-    // Cache the redirect for 55 min (safely inside the 1-hour presigned URL window).
-    // This means repeat visitors skip the API entirely on subsequent image loads.
+    const signedUrl = await createPresignedGetUrl(objectKey);
+    // R2 returns immutable cache headers on the bytes and the presigned URL is
+    // stable across responses, so the browser caches the file itself long-term.
+    // Keep the *redirect's* own max-age (1h) well under the reused URL's minimum
+    // guaranteed remaining lifetime (~2.4h) so a cached 302 can never point to an
+    // already-expired signature.
     res
-      .set("Cache-Control", "public, max-age=3300")
+      .set("Cache-Control", "public, max-age=3600")
       .redirect(302, signedUrl);
   } catch (err: any) {
     req.log.error({ err }, "Error generating presigned GET URL");
