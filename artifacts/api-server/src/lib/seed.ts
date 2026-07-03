@@ -39,6 +39,25 @@ const DEMO_ADMIN_EMAIL = "demoadmin@sentconnect.org";
 const DEMO_ADMIN_PASSWORD = "password123";
 const DEMO_ADMIN_EMAIL_LEGACY = "demo@sentconnect.org";
 
+// Sample post photos (stable Unsplash CDN URLs, hotlink-friendly) so new users
+// see media when trying the demo. Attached to the church-planting and literacy posts.
+const DEMO_POST_CHURCH_TITLE = "A New Church Planted in Achi Village";
+const DEMO_POST_LITERACY_TITLE = "Literacy Opens Hearts in San Pedro Village";
+const DEMO_PHOTO_CHURCH = "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=1000&q=80";
+const DEMO_PHOTO_LITERACY = "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1000&q=80";
+
+// Maps freshly-inserted demo reports (by title, since RETURNING row order is not
+// contractually guaranteed) to their sample photo rows. Safe no-op if a title is missing.
+function demoPhotoRows(seededReports: { id: number; title: string | null }[]) {
+  const idByTitle = new Map(seededReports.map((r) => [r.title, r.id]));
+  const churchId = idByTitle.get(DEMO_POST_CHURCH_TITLE);
+  const literacyId = idByTitle.get(DEMO_POST_LITERACY_TITLE);
+  const rows: { reportId: number; url: string; caption: string; mimeType: string }[] = [];
+  if (churchId) rows.push({ reportId: churchId, url: DEMO_PHOTO_CHURCH, caption: "The first gathering of the Achi Community Church", mimeType: "image/jpeg" });
+  if (literacyId) rows.push({ reportId: literacyId, url: DEMO_PHOTO_LITERACY, caption: "Women's literacy class in San Pedro village", mimeType: "image/jpeg" });
+  return rows;
+}
+
 /**
  * Idempotent demo seed — safe to call on any database state, including production.
  * Always verifies the complete set of demo data exists, not just the org row.
@@ -192,11 +211,11 @@ export async function seedIfEmpty() {
     .limit(1);
 
   if (!sampleReport) {
-    await db.insert(reportsTable).values([
+    const seededReports = await db.insert(reportsTable).values([
       {
         missionaryId: userIds["demouser@sentconnect.org"],
         organizationId: demoOrg.id,
-        title: "A New Church Planted in Achi Village",
+        title: DEMO_POST_CHURCH_TITLE,
         description: `Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy. Three local men have expressed a calling to pastoral leadership.`,
         category: "post",
         location: "Achi Village, Enugu State, Nigeria",
@@ -216,7 +235,7 @@ export async function seedIfEmpty() {
       {
         missionaryId: userIds["maria@mission.org"],
         organizationId: demoOrg.id,
-        title: "Literacy Opens Hearts in San Pedro Village",
+        title: DEMO_POST_LITERACY_TITLE,
         description: `We launched our first women's literacy program. 28 women gathered every Tuesday and Thursday. By month four, they were reading full sentences. The day Maria Elena — a 52-year-old grandmother — read a verse from John aloud for the first time, the room went silent.`,
         category: "post",
         location: "San Pedro Soloma, Huehuetenango, Guatemala",
@@ -233,8 +252,12 @@ export async function seedIfEmpty() {
         reportDate: new Date("2026-03-08"),
         peopleReached: 180,
       },
-    ]);
-    logger.info("Demo seed complete: demo org, 3 field users, 1 admin, 4 posts");
+    ]).returning({ id: reportsTable.id, title: reportsTable.title });
+
+    // Attach sample photos to the church-planting and literacy posts (mapped by title)
+    const photoRows = demoPhotoRows(seededReports);
+    if (photoRows.length > 0) await db.insert(photosTable).values(photoRows);
+    logger.info("Demo seed complete: demo org, 3 field users, 1 admin, 4 posts, 2 photos");
   } else {
     logger.info(`Demo org '${DEMO_ORG_SUBDOMAIN}' seeded and verified`);
   }
@@ -302,11 +325,11 @@ export async function resetDemoOrg() {
     return;
   }
 
-  await db.insert(reportsTable).values([
+  const seededReports = await db.insert(reportsTable).values([
     {
       missionaryId: userIds["demouser@sentconnect.org"],
       organizationId: demoOrg.id,
-      title: "A New Church Planted in Achi Village",
+      title: DEMO_POST_CHURCH_TITLE,
       description: `Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy. Three local men have expressed a calling to pastoral leadership.`,
       category: "post",
       location: "Achi Village, Enugu State, Nigeria",
@@ -326,7 +349,7 @@ export async function resetDemoOrg() {
     {
       missionaryId: userIds["maria@mission.org"],
       organizationId: demoOrg.id,
-      title: "Literacy Opens Hearts in San Pedro Village",
+      title: DEMO_POST_LITERACY_TITLE,
       description: `We launched our first women's literacy program. 28 women gathered every Tuesday and Thursday. By month four, they were reading full sentences. The day Maria Elena — a 52-year-old grandmother — read a verse from John aloud for the first time, the room went silent.`,
       category: "post",
       location: "San Pedro Soloma, Huehuetenango, Guatemala",
@@ -343,9 +366,13 @@ export async function resetDemoOrg() {
       reportDate: new Date("2026-03-08"),
       peopleReached: 180,
     },
-  ]);
+  ]).returning({ id: reportsTable.id, title: reportsTable.title });
 
-  logger.info("resetDemoOrg: demo feed restored to 4 seed posts");
+  // Attach sample photos to the church-planting and literacy posts (mapped by title)
+  const photoRows = demoPhotoRows(seededReports);
+  if (photoRows.length > 0) await db.insert(photosTable).values(photoRows);
+
+  logger.info("resetDemoOrg: demo feed restored to 4 seed posts with 2 photos");
 }
 
 /**

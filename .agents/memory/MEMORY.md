@@ -1,1 +1,2 @@
 - [User authz cache](user-authz-cache.md) — api-server caches user records ~30s; any mutation affecting role/status/permissions must call invalidateUserCache or grants/revokes lag.
+- [Demo seed dual path](demo-seed-dual-path.md) — demo-org feed seeded in two functions (seed-if-empty + hourly reset that wipes photos); edit BOTH or content vanishes hourly.
