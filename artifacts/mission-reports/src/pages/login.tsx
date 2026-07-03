@@ -434,6 +434,10 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </li>
               </ul>
 
+              <p style={{ fontSize: 12.5, color: "#607089", lineHeight: 1.55, margin: "0 0 12px", paddingLeft: 2 }}>
+                Sign in as a Field User or Admin using the buttons below.
+              </p>
+
               {/* Invisible Turnstile — resolves automatically for real humans */}
               {TURNSTILE_SITE_KEY && !demoTurnstileError && (
                 <Turnstile
