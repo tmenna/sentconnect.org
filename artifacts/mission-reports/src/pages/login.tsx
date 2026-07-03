@@ -420,13 +420,19 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 Try a demo account
               </p>
 
-              <p style={{ fontSize: 12.5, color: "#607089", lineHeight: 1.55, margin: "0 0 12px", paddingLeft: 2 }}>
-                Explore SentConnect with sample data — no signup needed. Sign in as an{" "}
-                <strong style={{ color: "#374151", fontWeight: 600 }}>Admin</strong> to manage your team,
-                review reports, and view organization stats, or as a{" "}
-                <strong style={{ color: "#374151", fontWeight: 600 }}>Field User</strong> to post updates,
-                share photos, and interact with the feed.
+              <p style={{ fontSize: 12.5, color: "#607089", lineHeight: 1.55, margin: "0 0 10px", paddingLeft: 2 }}>
+                Explore SentConnect with sample data — no signup needed. The two roles see different things:
               </p>
+              <ul style={{ fontSize: 12.5, color: "#607089", lineHeight: 1.55, margin: "0 0 12px", paddingLeft: 18, listStyle: "disc" }}>
+                <li style={{ marginBottom: 4 }}>
+                  <strong style={{ color: "#374151", fontWeight: 600 }}>Field User</strong> — posts their own
+                  ministry updates and photos to the team feed.
+                </li>
+                <li>
+                  <strong style={{ color: "#374151", fontWeight: 600 }}>Admin</strong> — sees and reviews the
+                  posts from <em>every</em> field user, manages the team, and views organization-wide stats.
+                </li>
+              </ul>
 
               {/* Invisible Turnstile — resolves automatically for real humans */}
               {TURNSTILE_SITE_KEY && !demoTurnstileError && (
