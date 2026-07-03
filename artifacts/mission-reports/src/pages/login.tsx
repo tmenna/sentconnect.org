@@ -416,8 +416,16 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {/* Demo quick-access — only shown on the demo org */}
           {orgSlug === "demo" && (
             <div style={{ marginTop: 28 }}>
-              <p style={{ fontSize: 11, fontWeight: 600, color: "#8A9BB8", letterSpacing: "0.06em", textTransform: "uppercase", margin: "0 0 10px", paddingLeft: 2 }}>
+              <p style={{ fontSize: 11, fontWeight: 600, color: "#8A9BB8", letterSpacing: "0.06em", textTransform: "uppercase", margin: "0 0 8px", paddingLeft: 2 }}>
                 Try a demo account
+              </p>
+
+              <p style={{ fontSize: 12.5, color: "#607089", lineHeight: 1.55, margin: "0 0 12px", paddingLeft: 2 }}>
+                Explore SentConnect with sample data — no signup needed. Sign in as an{" "}
+                <strong style={{ color: "#374151", fontWeight: 600 }}>Admin</strong> to manage your team,
+                review reports, and view organization stats, or as a{" "}
+                <strong style={{ color: "#374151", fontWeight: 600 }}>Field User</strong> to post updates,
+                share photos, and interact with the feed.
               </p>
 
               {/* Invisible Turnstile — resolves automatically for real humans */}
