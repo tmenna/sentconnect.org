@@ -459,12 +459,12 @@ function LandingPage() {
                 2108 N ST STE N, Sacramento, CA 95816
               </p>
               <a
-                href="mailto:support@sentconnect.org"
+                href="tel:+19515514528"
                 style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
               >
-                support@sentconnect.org
+                Contact Support at +1-951-551-4528 (Call/WhatsApp)
               </a>
             </div>
           </div>
@@ -683,12 +683,12 @@ function AboutPage() {
                 2108 N ST STE N, Sacramento, CA 95816
               </p>
               <a
-                href="mailto:support@sentconnect.org"
+                href="tel:+19515514528"
                 style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-block" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
               >
-                support@sentconnect.org
+                Contact Support at +1-951-551-4528 (Call/WhatsApp)
               </a>
             </div>
           </div>
