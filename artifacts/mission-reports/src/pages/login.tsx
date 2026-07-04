@@ -416,27 +416,26 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {/* Demo quick-access — only shown on the demo org */}
           {orgSlug === "demo" && (
             <div style={{ marginTop: 28 }}>
-              <p style={{ fontSize: 11, fontWeight: 600, color: "#8A9BB8", letterSpacing: "0.06em", textTransform: "uppercase", margin: "0 0 8px", paddingLeft: 2 }}>
-                Try a demo account
-              </p>
+              <div style={{ background: "#F0F6FF", border: "1px solid #D6E6FF", borderRadius: 12, padding: "16px 18px", marginBottom: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7, margin: "0 0 10px" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" fill={BLUE} stroke="none" /></svg>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, letterSpacing: "-0.01em" }}>
+                    Try a live demo — no signup needed
+                  </span>
+                </div>
 
-              <p style={{ fontSize: 12.5, color: "#607089", lineHeight: 1.55, margin: "0 0 10px", paddingLeft: 2 }}>
-                Explore SentConnect with sample data — no signup needed. The two roles see different things:
-              </p>
-              <ul style={{ fontSize: 12.5, color: "#607089", lineHeight: 1.55, margin: "0 0 12px", paddingLeft: 18, listStyle: "disc" }}>
-                <li style={{ marginBottom: 4 }}>
-                  <strong style={{ color: "#374151", fontWeight: 600 }}>Field User</strong> — posts their own
-                  ministry updates and photos to the team feed.
-                </li>
-                <li>
-                  <strong style={{ color: "#374151", fontWeight: 600 }}>Admin</strong> — sees and reviews the
-                  posts from <em>every</em> field user, manages the team, and views organization-wide stats.
-                </li>
-              </ul>
-
-              <p style={{ fontSize: 12.5, color: "#607089", lineHeight: 1.55, margin: "0 0 12px", paddingLeft: 2 }}>
-                Just pick a role below to jump straight in — no password needed.
-              </p>
+                <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: "0 0 10px" }}>
+                  Explore SentConnect with real sample data. Just pick a role below to jump straight in — no password required. The two roles see different things:
+                </p>
+                <ul style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0, paddingLeft: 20, listStyle: "disc" }}>
+                  <li style={{ marginBottom: 6 }}>
+                    <strong style={{ color: BLUE_DARK, fontWeight: 700 }}>Field User</strong> — posts their own ministry updates and photos to the team feed.
+                  </li>
+                  <li>
+                    <strong style={{ color: BLUE_DARK, fontWeight: 700 }}>Admin</strong> — reviews posts from <em>every</em> field user, manages the team, and views organization-wide stats.
+                  </li>
+                </ul>
+              </div>
 
               {/* Invisible Turnstile — resolves automatically for real humans */}
               {TURNSTILE_SITE_KEY && !demoTurnstileError && (
