@@ -425,16 +425,19 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </div>
 
                 <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: "0 0 10px" }}>
-                  Explore SentConnect with real sample data. Just pick a role below to jump straight in — no password required. The two roles see different things:
+                  Take a look around SentConnect with real sample data — no password needed. Just pick a role below to jump right in. Each role sees something different:
                 </p>
-                <ul style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0, paddingLeft: 20, listStyle: "disc" }}>
+                <ul style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: "0 0 10px", paddingLeft: 20, listStyle: "disc" }}>
                   <li style={{ marginBottom: 6 }}>
-                    <strong style={{ color: BLUE_DARK, fontWeight: 700 }}>Field User</strong> — posts their own ministry updates and photos to the team feed.
+                    <strong style={{ color: BLUE_DARK, fontWeight: 700 }}>Field User</strong> — shares their own ministry updates and photos with the team feed.
                   </li>
                   <li>
                     <strong style={{ color: BLUE_DARK, fontWeight: 700 }}>Admin</strong> — reviews posts from <em>every</em> field user, manages the team, and views organization-wide stats.
                   </li>
                 </ul>
+                <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0, fontStyle: "italic" }}>
+                  All with the heart of bringing the Church and missions teams closer together.
+                </p>
               </div>
 
               {/* Invisible Turnstile — resolves automatically for real humans */}
