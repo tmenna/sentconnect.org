@@ -417,19 +417,30 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {orgSlug === "demo" && (
             <div style={{ marginTop: 28 }}>
               <div style={{ background: "#F0F6FF", border: "1px solid #D6E6FF", borderRadius: 12, padding: "16px 18px", marginBottom: 14 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 7, margin: "0 0 10px" }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" fill={BLUE} stroke="none" /></svg>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, letterSpacing: "-0.01em" }}>
-                    Try a live demo — no signup needed
-                  </span>
+                <p style={{ fontSize: 15.5, fontWeight: 700, color: BLUE_DARK, letterSpacing: "-0.01em", lineHeight: 1.4, margin: "0 0 8px" }}>
+                  🚀 Explore SentConnect — No Signup Required
+                </p>
+                <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: "0 0 14px" }}>
+                  Experience SentConnect from either perspective. Click a role below to instantly enter the demo.
+                </p>
+
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#607089", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 10px" }}>
+                  Choose your experience
+                </p>
+
+                <div style={{ marginBottom: 12 }}>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, margin: "0 0 3px" }}>👨‍💼 Admin</p>
+                  <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0 }}>
+                    Manage missionaries and teams, review field updates, publish church-wide posts, view reports, and keep your congregation connected.
+                  </p>
                 </div>
 
-                <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: "0 0 8px" }}>
-                  Pick a role below to jump right in — no password needed.
-                </p>
-                <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0, fontStyle: "italic" }}>
-                  Bringing the Church and missions teams closer together.
-                </p>
+                <div>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, margin: "0 0 3px" }}>🌍 Field User</p>
+                  <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0 }}>
+                    Share mission updates, photos, prayer requests, and stories directly from the field so your church stays informed and engaged.
+                  </p>
+                </div>
               </div>
 
               {/* Invisible Turnstile — resolves automatically for real humans */}
