@@ -544,8 +544,8 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                       }}
                     >
                       <span style={{ minWidth: 0 }}>
-                        <span style={{ display: "block", fontSize: 15.5, fontWeight: 700, color: primary ? "#fff" : "#111827", marginBottom: 2 }}>{emoji} {label}</span>
-                        <span style={{ display: "block", fontSize: 12.5, color: primary ? "rgba(255,255,255,0.85)" : "#8A9BB8" }}>{sublabel}</span>
+                        <span style={{ display: "block", fontSize: 16, fontWeight: 700, color: primary ? "#fff" : "#111827", marginBottom: 3 }}>{emoji} {label}</span>
+                        <span style={{ display: "block", fontSize: 13, color: primary ? "rgba(255,255,255,0.85)" : "#8A9BB8" }}>{sublabel}</span>
                       </span>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={primary ? "#fff" : BLUE} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
                     </button>
