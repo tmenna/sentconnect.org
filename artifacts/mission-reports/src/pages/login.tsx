@@ -423,30 +423,43 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {/* Demo quick-access — only shown on the demo org */}
           {orgSlug === "demo" && (
             <div style={{ marginTop: 28 }}>
-              <div style={{ background: "#F0F6FF", border: "1px solid #D6E6FF", borderRadius: 14, padding: "22px 24px", marginBottom: 16 }}>
-                <p style={{ fontSize: 20, fontWeight: 700, color: BLUE_DARK, letterSpacing: "-0.01em", lineHeight: 1.3, margin: "0 0 12px" }}>
-                  🚀 Explore SentConnect — No Signup Required
+              <div style={{ background: "#fff", border: "1px solid #E5EAF2", borderRadius: 18, padding: "26px 26px 24px", marginBottom: 16, boxShadow: "0 1px 2px rgba(16,24,40,0.04), 0 12px 32px -12px rgba(0,106,255,0.12)", position: "relative", overflow: "hidden" }}>
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: `linear-gradient(90deg, ${BLUE}, #7DB2FF, ${BLUE})` }} />
+
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F0F6FF", border: "1px solid #D6E6FF", borderRadius: 999, padding: "5px 12px", fontSize: 12.5, fontWeight: 600, color: BLUE_DARK, marginBottom: 14 }}>
+                  <span style={{ width: 7, height: 7, borderRadius: 999, background: "#22C55E", display: "inline-block" }} />
+                  Live demo · No signup required
+                </span>
+
+                <p style={{ fontSize: 21, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, margin: "0 0 8px" }}>
+                  Explore SentConnect
                 </p>
-                <p style={{ fontSize: 16, color: "#374151", lineHeight: 1.6, margin: "0 0 20px" }}>
+                <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.6, margin: "0 0 22px" }}>
                   Experience SentConnect from either perspective. Click a role below to instantly enter the demo.
                 </p>
 
-                <p style={{ fontSize: 13, fontWeight: 700, color: "#607089", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 14px" }}>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.08em", margin: "0 0 14px" }}>
                   Choose your experience
                 </p>
 
-                <div style={{ marginBottom: 18 }}>
-                  <p style={{ fontSize: 17, fontWeight: 700, color: BLUE_DARK, margin: "0 0 5px" }}>🌍 Field User</p>
-                  <p style={{ fontSize: 16, color: "#374151", lineHeight: 1.6, margin: 0 }}>
-                    Share mission updates, photos, prayer requests, and stories directly from the field so your church stays informed and engaged.
-                  </p>
+                <div style={{ display: "flex", gap: 14, marginBottom: 18 }}>
+                  <span style={{ flexShrink: 0, width: 42, height: 42, borderRadius: 12, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", border: "1px solid #D6E6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🌍</span>
+                  <div>
+                    <p style={{ fontSize: 16.5, fontWeight: 700, color: "#0F172A", margin: "0 0 4px" }}>Field User</p>
+                    <p style={{ fontSize: 15, color: "#4B5563", lineHeight: 1.55, margin: 0 }}>
+                      Share mission updates, photos, prayer requests, and stories directly from the field so your church stays informed and engaged.
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <p style={{ fontSize: 17, fontWeight: 700, color: BLUE_DARK, margin: "0 0 5px" }}>👨‍💼 Admin</p>
-                  <p style={{ fontSize: 16, color: "#374151", lineHeight: 1.6, margin: 0 }}>
-                    Manage missionaries and teams, review field updates, publish church-wide posts, view reports, and keep your congregation connected.
-                  </p>
+                <div style={{ display: "flex", gap: 14 }}>
+                  <span style={{ flexShrink: 0, width: 42, height: 42, borderRadius: 12, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", border: "1px solid #D6E6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>👨‍💼</span>
+                  <div>
+                    <p style={{ fontSize: 16.5, fontWeight: 700, color: "#0F172A", margin: "0 0 4px" }}>Admin</p>
+                    <p style={{ fontSize: 15, color: "#4B5563", lineHeight: 1.55, margin: 0 }}>
+                      Manage missionaries and teams, review field updates, publish church-wide posts, view reports, and keep your congregation connected.
+                    </p>
+                  </div>
                 </div>
               </div>
 
