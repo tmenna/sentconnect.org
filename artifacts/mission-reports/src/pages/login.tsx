@@ -472,9 +472,9 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
               <div style={{ display: "flex", gap: 8 }}>
                 {[
-                  { label: "Field User", sublabel: "Post updates & photos", endpoint: "/api/auth/demo-user-login" },
-                  { label: "Admin", sublabel: "Manage team & reports", endpoint: "/api/auth/demo-login" },
-                ].map(({ label, sublabel, endpoint }) => {
+                  { label: "Field User", sublabel: "Post updates & photos", emoji: "🌍", endpoint: "/api/auth/demo-user-login", primary: true },
+                  { label: "Admin", sublabel: "Manage team & reports", emoji: "👨‍💼", endpoint: "/api/auth/demo-login", primary: false },
+                ].map(({ label, sublabel, emoji, endpoint, primary }) => {
                   const waiting = TURNSTILE_SITE_KEY && !demoToken && !demoTurnstileError;
                   return (
                     <button
@@ -505,28 +505,42 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                       }}
                       style={{
                         flex: 1,
-                        background: waiting ? "#F5F8FC" : INPUT_BG,
-                        border: "1.5px solid #DAE3F0",
-                        borderRadius: 10,
-                        padding: "10px 12px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 8,
+                        background: waiting ? "#F5F8FC" : primary ? BLUE : "#fff",
+                        border: primary ? `1.5px solid ${BLUE}` : "1.5px solid #C7D9F5",
+                        borderRadius: 12,
+                        padding: "13px 15px",
                         textAlign: "left",
                         cursor: waiting ? "default" : "pointer",
                         fontFamily: "inherit",
                         opacity: waiting ? 0.6 : 1,
-                        transition: "border-color .15s, background .15s, opacity .15s",
+                        boxShadow: primary && !waiting ? "0 2px 8px rgba(0,106,255,0.28)" : "0 1px 2px rgba(16,24,40,0.05)",
+                        transition: "transform .15s, box-shadow .15s, background .15s, border-color .15s, opacity .15s",
                       }}
                       onMouseEnter={e => {
                         if (waiting) return;
-                        (e.currentTarget as HTMLElement).style.borderColor = BLUE;
-                        (e.currentTarget as HTMLElement).style.background = "#F0F6FF";
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.transform = "translateY(-2px)";
+                        el.style.boxShadow = primary ? "0 6px 16px rgba(0,106,255,0.38)" : "0 4px 12px rgba(16,24,40,0.12)";
+                        el.style.background = primary ? BLUE_DARK : "#F0F6FF";
+                        if (!primary) el.style.borderColor = BLUE;
                       }}
                       onMouseLeave={e => {
-                        (e.currentTarget as HTMLElement).style.borderColor = "#DAE3F0";
-                        (e.currentTarget as HTMLElement).style.background = waiting ? "#F5F8FC" : INPUT_BG;
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.transform = "translateY(0)";
+                        el.style.boxShadow = primary && !waiting ? "0 2px 8px rgba(0,106,255,0.28)" : "0 1px 2px rgba(16,24,40,0.05)";
+                        el.style.background = waiting ? "#F5F8FC" : primary ? BLUE : "#fff";
+                        el.style.borderColor = primary ? BLUE : "#C7D9F5";
                       }}
                     >
-                      <p style={{ fontSize: 13, fontWeight: 700, color: "#111827", margin: "0 0 2px" }}>{label}</p>
-                      <p style={{ fontSize: 11, color: "#8A9BB8", margin: 0 }}>{sublabel}</p>
+                      <span style={{ minWidth: 0 }}>
+                        <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: primary ? "#fff" : "#111827", marginBottom: 2 }}>{emoji} {label}</span>
+                        <span style={{ display: "block", fontSize: 11.5, color: primary ? "rgba(255,255,255,0.85)" : "#8A9BB8" }}>{sublabel}</span>
+                      </span>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={primary ? "#fff" : BLUE} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
                     </button>
                   );
                 })}
