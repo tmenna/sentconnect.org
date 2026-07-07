@@ -423,28 +423,28 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {/* Demo quick-access — only shown on the demo org */}
           {orgSlug === "demo" && (
             <div style={{ marginTop: 28 }}>
-              <div style={{ background: "#F0F6FF", border: "1px solid #D6E6FF", borderRadius: 12, padding: "16px 18px", marginBottom: 14 }}>
-                <p style={{ fontSize: 17.5, fontWeight: 700, color: BLUE_DARK, letterSpacing: "-0.01em", lineHeight: 1.35, margin: "0 0 10px" }}>
+              <div style={{ background: "#F0F6FF", border: "1px solid #D6E6FF", borderRadius: 14, padding: "22px 24px", marginBottom: 16 }}>
+                <p style={{ fontSize: 20, fontWeight: 700, color: BLUE_DARK, letterSpacing: "-0.01em", lineHeight: 1.3, margin: "0 0 12px" }}>
                   🚀 Explore SentConnect — No Signup Required
                 </p>
-                <p style={{ fontSize: 14.5, color: "#374151", lineHeight: 1.6, margin: "0 0 16px" }}>
+                <p style={{ fontSize: 16, color: "#374151", lineHeight: 1.6, margin: "0 0 20px" }}>
                   Experience SentConnect from either perspective. Click a role below to instantly enter the demo.
                 </p>
 
-                <p style={{ fontSize: 12, fontWeight: 700, color: "#607089", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 12px" }}>
+                <p style={{ fontSize: 13, fontWeight: 700, color: "#607089", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 14px" }}>
                   Choose your experience
                 </p>
 
-                <div style={{ marginBottom: 14 }}>
-                  <p style={{ fontSize: 15.5, fontWeight: 700, color: BLUE_DARK, margin: "0 0 4px" }}>🌍 Field User</p>
-                  <p style={{ fontSize: 14.5, color: "#374151", lineHeight: 1.6, margin: 0 }}>
+                <div style={{ marginBottom: 18 }}>
+                  <p style={{ fontSize: 17, fontWeight: 700, color: BLUE_DARK, margin: "0 0 5px" }}>🌍 Field User</p>
+                  <p style={{ fontSize: 16, color: "#374151", lineHeight: 1.6, margin: 0 }}>
                     Share mission updates, photos, prayer requests, and stories directly from the field so your church stays informed and engaged.
                   </p>
                 </div>
 
                 <div>
-                  <p style={{ fontSize: 15.5, fontWeight: 700, color: BLUE_DARK, margin: "0 0 4px" }}>👨‍💼 Admin</p>
-                  <p style={{ fontSize: 14.5, color: "#374151", lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontSize: 17, fontWeight: 700, color: BLUE_DARK, margin: "0 0 5px" }}>👨‍💼 Admin</p>
+                  <p style={{ fontSize: 16, color: "#374151", lineHeight: 1.6, margin: 0 }}>
                     Manage missionaries and teams, review field updates, publish church-wide posts, view reports, and keep your congregation connected.
                   </p>
                 </div>
@@ -544,10 +544,10 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                       }}
                     >
                       <span style={{ minWidth: 0 }}>
-                        <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: primary ? "#fff" : "#111827", marginBottom: 2 }}>{emoji} {label}</span>
-                        <span style={{ display: "block", fontSize: 11.5, color: primary ? "rgba(255,255,255,0.85)" : "#8A9BB8" }}>{sublabel}</span>
+                        <span style={{ display: "block", fontSize: 15.5, fontWeight: 700, color: primary ? "#fff" : "#111827", marginBottom: 2 }}>{emoji} {label}</span>
+                        <span style={{ display: "block", fontSize: 12.5, color: primary ? "rgba(255,255,255,0.85)" : "#8A9BB8" }}>{sublabel}</span>
                       </span>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={primary ? "#fff" : BLUE} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={primary ? "#fff" : BLUE} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
                     </button>
                   );
                 })}
