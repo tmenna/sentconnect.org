@@ -417,27 +417,27 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {orgSlug === "demo" && (
             <div style={{ marginTop: 28 }}>
               <div style={{ background: "#F0F6FF", border: "1px solid #D6E6FF", borderRadius: 12, padding: "16px 18px", marginBottom: 14 }}>
-                <p style={{ fontSize: 15.5, fontWeight: 700, color: BLUE_DARK, letterSpacing: "-0.01em", lineHeight: 1.4, margin: "0 0 8px" }}>
+                <p style={{ fontSize: 17.5, fontWeight: 700, color: BLUE_DARK, letterSpacing: "-0.01em", lineHeight: 1.35, margin: "0 0 10px" }}>
                   🚀 Explore SentConnect — No Signup Required
                 </p>
-                <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: "0 0 14px" }}>
+                <p style={{ fontSize: 14.5, color: "#374151", lineHeight: 1.6, margin: "0 0 16px" }}>
                   Experience SentConnect from either perspective. Click a role below to instantly enter the demo.
                 </p>
 
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#607089", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 10px" }}>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "#607089", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 12px" }}>
                   Choose your experience
                 </p>
 
-                <div style={{ marginBottom: 12 }}>
-                  <p style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, margin: "0 0 3px" }}>🌍 Field User</p>
-                  <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0 }}>
+                <div style={{ marginBottom: 14 }}>
+                  <p style={{ fontSize: 15.5, fontWeight: 700, color: BLUE_DARK, margin: "0 0 4px" }}>🌍 Field User</p>
+                  <p style={{ fontSize: 14.5, color: "#374151", lineHeight: 1.6, margin: 0 }}>
                     Share mission updates, photos, prayer requests, and stories directly from the field so your church stays informed and engaged.
                   </p>
                 </div>
 
                 <div>
-                  <p style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, margin: "0 0 3px" }}>👨‍💼 Admin</p>
-                  <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontSize: 15.5, fontWeight: 700, color: BLUE_DARK, margin: "0 0 4px" }}>👨‍💼 Admin</p>
+                  <p style={{ fontSize: 14.5, color: "#374151", lineHeight: 1.6, margin: 0 }}>
                     Manage missionaries and teams, review field updates, publish church-wide posts, view reports, and keep your congregation connected.
                   </p>
                 </div>
