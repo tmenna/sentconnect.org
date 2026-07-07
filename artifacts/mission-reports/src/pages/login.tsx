@@ -429,16 +429,16 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </p>
 
                 <div style={{ marginBottom: 12 }}>
-                  <p style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, margin: "0 0 3px" }}>👨‍💼 Admin</p>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, margin: "0 0 3px" }}>🌍 Field User</p>
                   <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0 }}>
-                    Manage missionaries and teams, review field updates, publish church-wide posts, view reports, and keep your congregation connected.
+                    Share mission updates, photos, prayer requests, and stories directly from the field so your church stays informed and engaged.
                   </p>
                 </div>
 
                 <div>
-                  <p style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, margin: "0 0 3px" }}>🌍 Field User</p>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: BLUE_DARK, margin: "0 0 3px" }}>👨‍💼 Admin</p>
                   <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0 }}>
-                    Share mission updates, photos, prayer requests, and stories directly from the field so your church stays informed and engaged.
+                    Manage missionaries and teams, review field updates, publish church-wide posts, view reports, and keep your congregation connected.
                   </p>
                 </div>
               </div>
@@ -472,8 +472,8 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
               <div style={{ display: "flex", gap: 8 }}>
                 {[
-                  { label: "Admin", sublabel: "Manage team & reports", endpoint: "/api/auth/demo-login" },
                   { label: "Field User", sublabel: "Post updates & photos", endpoint: "/api/auth/demo-user-login" },
+                  { label: "Admin", sublabel: "Manage team & reports", endpoint: "/api/auth/demo-login" },
                 ].map(({ label, sublabel, endpoint }) => {
                   const waiting = TURNSTILE_SITE_KEY && !demoToken && !demoTurnstileError;
                   return (
