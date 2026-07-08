@@ -142,12 +142,27 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
       async pos => {
         try {
           const { latitude, longitude } = pos.coords;
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&zoom=14&addressdetails=1&lat=${latitude}&lon=${longitude}`,
+            { headers: { Accept: "application/json" } }
+          );
           if (res.ok) {
             const data = await res.json();
-            const city = data.address?.city || data.address?.town || data.address?.village || data.address?.county || "";
-            const country = data.address?.country || "";
-            setLocation(city && country ? `${city}, ${country}` : data.display_name?.split(",").slice(0, 2).join(", ") || "");
+            const a = data.address ?? {};
+            const city =
+              a.city || a.town || a.village || a.municipality || a.suburb || a.county || "";
+            const region = a.state || a.province || a.region || "";
+            const country = a.country || "";
+            const parts = [city, region, country].filter(Boolean);
+            // Avoid duplicates like "New York, New York, United States"
+            const deduped = parts.filter((p, i) => parts.indexOf(p) === i);
+            setLocation(
+              deduped.length > 0
+                ? deduped.join(", ")
+                : data.display_name?.split(",").slice(0, 3).map((s: string) => s.trim()).join(", ") || ""
+            );
+          } else {
+            setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
           }
         } catch {
           // fallback: just show coords
@@ -157,7 +172,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
         }
       },
       () => setDetectingLocation(false),
-      { timeout: 8000 }
+      { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
     );
   }
 
