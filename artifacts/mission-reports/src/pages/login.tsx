@@ -202,7 +202,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           <p style={{ fontSize: 14, fontWeight: 600, color: "#3A4A5C", margin: 0 }}>{orgSlug === "demo" ? "Pick a role below to explore the live demo." : "Enter your username and password."}</p>
         </div>
 
-        <div style={{ width: "100%", maxWidth: 460 }}>
+        <div style={{ width: "100%", maxWidth: orgSlug === "demo" ? 560 : 460 }}>
 
           {/* Org portal error */}
           {orgPortalError && (
@@ -423,44 +423,40 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {/* Demo quick-access — only shown on the demo org */}
           {orgSlug === "demo" && (
             <div style={{ marginTop: 28 }}>
-              <div style={{ background: "#fff", border: "1px solid #E5EAF2", borderRadius: 18, padding: "26px 26px 24px", marginBottom: 16, boxShadow: "0 1px 2px rgba(16,24,40,0.04), 0 12px 32px -12px rgba(0,106,255,0.12)", position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: `linear-gradient(90deg, ${BLUE}, #7DB2FF, ${BLUE})` }} />
-
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#F0F6FF", border: "1px solid #D6E6FF", borderRadius: 999, padding: "5px 12px", fontSize: 12.5, fontWeight: 600, color: BLUE_DARK, marginBottom: 14 }}>
-                  <span style={{ width: 7, height: 7, borderRadius: 999, background: "#22C55E", display: "inline-block" }} />
+              <div style={{ marginBottom: 28 }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#F0F6FF", borderRadius: 999, padding: "6px 14px", fontSize: 13, fontWeight: 600, color: BLUE_DARK, marginBottom: 20 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: 999, background: "#22C55E", display: "inline-block" }} />
                   Live demo · No signup required
                 </span>
 
-                <p style={{ fontSize: 21, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, margin: "0 0 8px" }}>
+                <p style={{ fontSize: 26, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.2, margin: "0 0 10px" }}>
                   Explore SentConnect
                 </p>
-                <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.6, margin: "0 0 22px" }}>
+                <p style={{ fontSize: 16.5, color: "#4B5563", lineHeight: 1.65, margin: "0 0 32px", maxWidth: 500 }}>
                   Experience SentConnect from either perspective. Click a role below to instantly enter the demo.
                 </p>
 
-                <p style={{ fontSize: 12, fontWeight: 700, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.08em", margin: "0 0 14px" }}>
-                  Choose your experience
-                </p>
-
-                <div style={{ display: "flex", gap: 14, marginBottom: 18 }}>
-                  <span style={{ flexShrink: 0, width: 42, height: 42, borderRadius: 12, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", border: "1px solid #D6E6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🌍</span>
+                <div style={{ display: "flex", gap: 18, marginBottom: 26 }}>
+                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 23 }}>🌍</span>
                   <div>
-                    <p style={{ fontSize: 16.5, fontWeight: 700, color: "#0F172A", margin: "0 0 4px" }}>Field User</p>
-                    <p style={{ fontSize: 15, color: "#4B5563", lineHeight: 1.55, margin: 0 }}>
+                    <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Field User</p>
+                    <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
                       Share mission updates, photos, prayer requests, and stories directly from the field so your church stays informed and engaged.
                     </p>
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: 14 }}>
-                  <span style={{ flexShrink: 0, width: 42, height: 42, borderRadius: 12, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", border: "1px solid #D6E6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>👨‍💼</span>
+                <div style={{ display: "flex", gap: 18 }}>
+                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 23 }}>👨‍💼</span>
                   <div>
-                    <p style={{ fontSize: 16.5, fontWeight: 700, color: "#0F172A", margin: "0 0 4px" }}>Admin</p>
-                    <p style={{ fontSize: 15, color: "#4B5563", lineHeight: 1.55, margin: 0 }}>
+                    <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Admin</p>
+                    <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
                       Manage missionaries and teams, review field updates, publish church-wide posts, view reports, and keep your congregation connected.
                     </p>
                   </div>
                 </div>
+
+                <div style={{ height: 1, background: "linear-gradient(90deg, transparent, #E2E8F0 20%, #E2E8F0 80%, transparent)", margin: "30px 0 0" }} />
               </div>
 
               {/* Invisible Turnstile — resolves automatically for real humans */}
