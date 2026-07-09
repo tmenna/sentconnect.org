@@ -312,6 +312,13 @@ export function Layout({ children }: { children: ReactNode }) {
       <footer className="mt-8 sm:mt-12 py-5 bg-white" style={{ borderTop: `1px solid ${BORDER}` }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-gray-400 italic text-center">"Declare his glory among the nations." — Ps 96:3</p>
+          <a
+            href="https://www.sentconnect.org"
+            className="text-xs font-semibold hover:underline"
+            style={{ color: "#006AFF" }}
+          >
+            Visit sentconnect.org →
+          </a>
         </div>
       </footer>
     </div>

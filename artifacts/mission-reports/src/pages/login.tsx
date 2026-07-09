@@ -574,6 +574,19 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             </div>
           )}
 
+          {/* Visit sentconnect.org — shown on all non-demo portals (demo has its own link above) */}
+          {orgSlug !== "demo" && (
+            <div style={{ textAlign: "center", marginTop: 24 }}>
+              <a
+                href="https://www.sentconnect.org"
+                style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 600, color: BLUE, textDecoration: "none" }}
+              >
+                <Globe style={{ width: 13, height: 13 }} />
+                Visit sentconnect.org
+              </a>
+            </div>
+          )}
+
           {/* Footer verse — desktop hidden (in left panel); mobile shown here */}
           <p className="md:hidden" style={{ fontSize: 11, color: "#C0CDD8", fontStyle: "italic", textAlign: "center", marginTop: 40, margin: "40px 0 0" }}>
             "Declare his glory among the nations." — Psalm 96:3
