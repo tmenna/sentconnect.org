@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
   Heart, ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
-  Send, Star, X, Loader2, Check, Navigation, BookOpen, Sparkles, PlayCircle,
+  Send, Star, X, Loader2, Check, BookOpen, Sparkles, PlayCircle,
   Link2, ImageDown, ChevronLeft, ChevronRight, ZoomIn
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -337,46 +337,7 @@ function EditForm({
   const [isHighlight, setIsHighlight] = useState(post.isHighlight ?? false);
   const [isMissionMoment, setIsMissionMoment] = useState(post.isMissionMoment ?? false);
   const [saving, setSaving] = useState(false);
-  const [detectingLocation, setDetectingLocation] = useState(false);
   const [showLocation, setShowLocation] = useState(!!post.location);
-
-  function detectLocation() {
-    if (!navigator.geolocation) return;
-    setDetectingLocation(true);
-    navigator.geolocation.getCurrentPosition(
-      async pos => {
-        try {
-          const { latitude, longitude } = pos.coords;
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&zoom=14&addressdetails=1&lat=${latitude}&lon=${longitude}`,
-            { headers: { Accept: "application/json" } }
-          );
-          if (res.ok) {
-            const data = await res.json();
-            const a = data.address ?? {};
-            const city = a.city || a.town || a.village || a.municipality || a.suburb || a.county || "";
-            const region = a.state || a.province || a.region || "";
-            const country = a.country || "";
-            const parts = [city, region, country].filter(Boolean);
-            const deduped = parts.filter((p, i) => parts.indexOf(p) === i);
-            setLocation(
-              deduped.length > 0
-                ? deduped.join(", ")
-                : data.display_name?.split(",").slice(0, 3).map((s: string) => s.trim()).join(", ") || ""
-            );
-          } else {
-            setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-          }
-        } catch {
-          setLocation(`${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
-        } finally {
-          setDetectingLocation(false);
-        }
-      },
-      () => setDetectingLocation(false),
-      { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
-    );
-  }
 
   async function handleSave() {
     setSaving(true);
@@ -421,14 +382,6 @@ function EditForm({
             className="flex-1 text-[13px] bg-transparent outline-none"
             disabled={saving}
           />
-          <button
-            onClick={detectLocation}
-            disabled={detectingLocation || saving}
-            title="Auto-detect"
-            className="text-primary hover:text-primary/70 transition-colors disabled:opacity-40"
-          >
-            {detectingLocation ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Navigation className="h-3.5 w-3.5" />}
-          </button>
           <button onClick={() => { setShowLocation(false); setLocation(""); }}>
             <X className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
           </button>

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Image, MapPin, X, Loader2, Navigation, Video, PlayCircle, AlertCircle } from "lucide-react";
+import { Image, MapPin, X, Loader2, Video, PlayCircle, AlertCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/auth-provider";
 import { cn } from "@/lib/utils";
@@ -83,7 +83,6 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
   const [showLocation, setShowLocation] = useState(false);
   const [posting, setPosting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState("");
-  const [detectingLocation, setDetectingLocation] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -133,47 +132,6 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
   function handleDrop(e: React.DragEvent) {
     e.preventDefault();
     addFiles(e.dataTransfer.files);
-  }
-
-  function detectLocation() {
-    if (!navigator.geolocation) return;
-    setDetectingLocation(true);
-    navigator.geolocation.getCurrentPosition(
-      async pos => {
-        try {
-          const { latitude, longitude } = pos.coords;
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&zoom=14&addressdetails=1&lat=${latitude}&lon=${longitude}`,
-            { headers: { Accept: "application/json" } }
-          );
-          if (res.ok) {
-            const data = await res.json();
-            const a = data.address ?? {};
-            const city =
-              a.city || a.town || a.village || a.municipality || a.suburb || a.county || "";
-            const region = a.state || a.province || a.region || "";
-            const country = a.country || "";
-            const parts = [city, region, country].filter(Boolean);
-            // Avoid duplicates like "New York, New York, United States"
-            const deduped = parts.filter((p, i) => parts.indexOf(p) === i);
-            setLocation(
-              deduped.length > 0
-                ? deduped.join(", ")
-                : data.display_name?.split(",").slice(0, 3).map((s: string) => s.trim()).join(", ") || ""
-            );
-          } else {
-            setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-          }
-        } catch {
-          // fallback: just show coords
-          setLocation(`${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
-        } finally {
-          setDetectingLocation(false);
-        }
-      },
-      () => setDetectingLocation(false),
-      { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
-    );
   }
 
   async function handlePost() {
@@ -325,14 +283,6 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
                 disabled={posting}
                 autoFocus
               />
-              <button
-                onClick={detectLocation}
-                disabled={detectingLocation || posting}
-                title="Auto-detect location"
-                className="text-primary hover:text-primary/70 transition-colors disabled:opacity-40"
-              >
-                {detectingLocation ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Navigation className="h-3.5 w-3.5" />}
-              </button>
               <button onClick={() => { setShowLocation(false); setLocation(""); }}>
                 <X className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground transition-colors" />
               </button>
