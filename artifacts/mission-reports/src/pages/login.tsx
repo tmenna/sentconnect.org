@@ -183,7 +183,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               See the mission<br />field come<br /><span style={{ color: BLUE }}>alive.</span>
             </p>
             <p style={{ fontSize: 18, fontWeight: 500, color: "#4B5563", margin: 0, lineHeight: 1.6, maxWidth: 400 }}>
-              Bringing missionary field teams and their supporting churches and organizations closer together. No signup required — pick a role and explore the live demo in seconds.
+              Connecting churches and field teams.
             </p>
           </div>
         ) : (
@@ -219,7 +219,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 See the mission field come <span style={{ color: BLUE }}>alive.</span>
               </p>
               <p style={{ fontSize: 15, fontWeight: 500, color: "#4B5563", margin: 0, lineHeight: 1.55 }}>
-                Bringing missionary field teams and their supporting churches and organizations closer together. No signup required — pick a role and explore the live demo in seconds.
+                Connecting churches and field teams.
               </p>
             </>
           ) : (
