@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { useLoginUser, useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useSearch, useLocation } from "wouter";
-import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe } from "lucide-react";
+import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe, ShieldCheck } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
@@ -467,7 +467,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </p>
 
                 <div style={{ display: "flex", gap: 18, marginBottom: 26 }}>
-                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 23 }}>🌍</span>
+                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", display: "flex", alignItems: "center", justifyContent: "center" }}><Globe style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
                   <div>
                     <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Field User</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
@@ -477,7 +477,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </div>
 
                 <div style={{ display: "flex", gap: 18 }}>
-                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 23 }}>👨‍💼</span>
+                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", display: "flex", alignItems: "center", justifyContent: "center" }}><ShieldCheck style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
                   <div>
                     <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Admin</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
@@ -518,9 +518,9 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
               <div style={{ display: "flex", gap: 8 }}>
                 {[
-                  { label: "Field User", sublabel: "Post updates & photos", emoji: "🌍", endpoint: "/api/auth/demo-user-login", primary: true },
-                  { label: "Admin", sublabel: "Manage team & reports", emoji: "👨‍💼", endpoint: "/api/auth/demo-login", primary: false },
-                ].map(({ label, sublabel, emoji, endpoint, primary }) => {
+                  { label: "Field User", sublabel: "Post updates & photos", Icon: Globe, endpoint: "/api/auth/demo-user-login", primary: true },
+                  { label: "Admin", sublabel: "Manage team & reports", Icon: ShieldCheck, endpoint: "/api/auth/demo-login", primary: false },
+                ].map(({ label, sublabel, Icon, endpoint, primary }) => {
                   const waiting = TURNSTILE_SITE_KEY && !demoToken && !demoTurnstileError;
                   return (
                     <button
@@ -583,7 +583,10 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                       }}
                     >
                       <span style={{ minWidth: 0 }}>
-                        <span style={{ display: "block", fontSize: 16, fontWeight: 700, color: primary ? "#fff" : "#111827", marginBottom: 3 }}>{emoji} {label}</span>
+                        <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 16, fontWeight: 700, color: primary ? "#fff" : "#111827", marginBottom: 3 }}>
+                          <Icon style={{ width: 17, height: 17, flexShrink: 0, color: primary ? "#fff" : BLUE }} strokeWidth={2} />
+                          {label}
+                        </span>
                         <span style={{ display: "block", fontSize: 13, color: primary ? "rgba(255,255,255,0.85)" : "#8A9BB8" }}>{sublabel}</span>
                       </span>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={primary ? "#fff" : BLUE} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
