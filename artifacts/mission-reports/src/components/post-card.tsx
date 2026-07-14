@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
-  Heart, ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
+  Heart, ThumbsUp, MessageCircle, MapPin, Share, Trash2, Pencil,
   Send, Star, X, Loader2, Check, BookOpen, Sparkles, PlayCircle,
   Link2, ImageDown, ChevronLeft, ChevronRight, ZoomIn
 } from "lucide-react";
@@ -745,7 +745,7 @@ export function PostCard({
                   title="Share this post"
                   className="p-1.5 rounded-full bg-[#FF4500] hover:bg-[#E03E00] transition-colors text-white shadow-sm"
                 >
-                  <MoreHorizontal className="h-4 w-4" strokeWidth={3} />
+                  <Share className="h-4 w-4" strokeWidth={2.5} />
                 </button>
                 {showMenu && (
                   <div className="absolute right-0 top-8 bg-white border border-border shadow-md rounded-lg z-50 min-w-[140px] py-1">
