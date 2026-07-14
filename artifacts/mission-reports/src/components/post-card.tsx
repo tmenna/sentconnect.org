@@ -737,17 +737,25 @@ export function PostCard({
               </button>
             </div>
 
-            {/* MoreHorizontal menu — far right */}
-            {canManage && !editing && (
+            {/* Share / actions menu — far right, visible on every post */}
+            {!editing && (
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setShowMenu(s => !s)}
-                  className="p-1.5 rounded-lg hover:bg-[#FFF0E8] transition-colors text-[#FF4500]"
+                  title="Share this post"
+                  className="p-1.5 rounded-full bg-[#FF4500] hover:bg-[#E03E00] transition-colors text-white shadow-sm"
                 >
-                  <MoreHorizontal className="h-5 w-5" strokeWidth={3} />
+                  <MoreHorizontal className="h-4 w-4" strokeWidth={3} />
                 </button>
                 {showMenu && (
                   <div className="absolute right-0 top-8 bg-white border border-border shadow-md rounded-lg z-50 min-w-[140px] py-1">
+                    <button
+                      onClick={() => { setShowMenu(false); copyShareLink(); }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
+                    >
+                      <Link2 className="h-3.5 w-3.5" />
+                      {copied ? "Copied!" : "Copy link"}
+                    </button>
                     {isOwner && (
                       <button
                         onClick={() => { setShowMenu(false); setEditing(true); }}
@@ -757,13 +765,6 @@ export function PostCard({
                         Edit
                       </button>
                     )}
-                    <button
-                      onClick={() => { setShowMenu(false); copyShareLink(); }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
-                    >
-                      <Link2 className="h-3.5 w-3.5" />
-                      {copied ? "Copied!" : "Copy link"}
-                    </button>
                     {canManage && (
                       <button
                         onClick={() => { setShowMenu(false); setShowSlideExport(true); }}
@@ -773,13 +774,15 @@ export function PostCard({
                         Export
                       </button>
                     )}
-                    <button
-                      onClick={() => { setShowMenu(false); deletePost(); }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                      Delete
-                    </button>
+                    {canManage && (
+                      <button
+                        onClick={() => { setShowMenu(false); deletePost(); }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Delete
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
