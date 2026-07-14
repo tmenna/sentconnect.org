@@ -2525,18 +2525,22 @@ function UserEditRow({
 }) {
   const { toast } = useToast();
   const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
   const [showPw, setShowPw] = useState(false);
   const [password, setPassword] = useState("");
   const [saving, setSaving] = useState(false);
   const [sendingReset, setSendingReset] = useState(false);
 
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const hasNameChange = name.trim().length > 0 && name.trim() !== user.name;
+  const hasEmailChange = emailValid && email.trim().toLowerCase() !== user.email.toLowerCase();
   const hasPasswordChange = showPw && password.length >= 8;
-  const hasChanges = hasNameChange || hasPasswordChange;
+  const hasChanges = hasNameChange || hasEmailChange || hasPasswordChange;
 
   async function save() {
     const body: Record<string, string> = {};
     if (hasNameChange) body.name = name.trim();
+    if (hasEmailChange) body.email = email.trim();
     if (hasPasswordChange) body.newPassword = password;
     if (Object.keys(body).length === 0) return;
 
@@ -2554,6 +2558,8 @@ function UserEditRow({
       }
       const updated = await res.json();
       toast({ title: `${updated.name} updated` });
+      setName(updated.name);
+      setEmail(updated.email);
       onUpdated?.(updated);
       if (hasPasswordChange) { setShowPw(false); setPassword(""); }
     } catch (err: any) {
@@ -2636,7 +2642,18 @@ function UserEditRow({
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
         </button>
       </div>
-      <p className="text-[11px] text-muted-foreground mt-1 ml-9 truncate">{user.email}</p>
+      <div className="mt-1.5 ml-9">
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          className="w-full px-2.5 py-1.5 text-[12px] bg-white border border-border/60 rounded-lg outline-none focus:ring-2 focus:ring-primary/20"
+          placeholder="Email address"
+        />
+        {email.trim().length > 0 && !emailValid && (
+          <p className="text-[10px] text-gray-500 mt-0.5">Enter a valid email address</p>
+        )}
+      </div>
       {showPw && (
         <div className="mt-2 ml-9">
           <input
@@ -2789,7 +2806,7 @@ function EditOrgModal({ org, orgUsers, onClose, onSaved, onUserUpdated }: {
                   <span className="text-[11px] text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded-full">{orgUsers.length}</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground mb-3">
-                  Edit a member's name or set a new password. Click <KeyRound className="h-2.5 w-2.5 inline-block" /> to enter a new password, then save.
+                  Edit a member's name or email, or set a new password. Click <KeyRound className="h-2.5 w-2.5 inline-block" /> to enter a new password, then save.
                 </p>
                 <div className="space-y-2">
                   {orgUsers.map(u => (

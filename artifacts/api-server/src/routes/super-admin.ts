@@ -322,7 +322,7 @@ router.patch("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req, 
     res.status(403).json({ error: "Cannot modify your own account" }); return;
   }
 
-  const { role, permissions, status, organizationId, name, newPassword } = req.body ?? {};
+  const { role, permissions, status, organizationId, name, email, newPassword } = req.body ?? {};
   const updates: Partial<typeof usersTable.$inferInsert> = {};
 
   if (name !== undefined) {
@@ -330,6 +330,19 @@ router.patch("/super-admin/users/:id", requireSuperOrPlatformAdmin, async (req, 
       res.status(400).json({ error: "name must be a non-empty string" }); return;
     }
     updates.name = name.trim();
+  }
+
+  if (email !== undefined) {
+    if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      res.status(400).json({ error: "A valid email address is required" }); return;
+    }
+    const normalizedEmail = email.trim().toLowerCase();
+    const [emailTaken] = await db.select({ id: usersTable.id }).from(usersTable)
+      .where(eq(usersTable.email, normalizedEmail));
+    if (emailTaken && emailTaken.id !== userId) {
+      res.status(409).json({ error: "Email already in use by another user" }); return;
+    }
+    updates.email = normalizedEmail;
   }
 
   if (newPassword !== undefined) {
