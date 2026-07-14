@@ -742,9 +742,9 @@ export function PostCard({
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setShowMenu(s => !s)}
-                  className="p-1.5 rounded-lg hover:bg-[#E8F4FF] transition-colors text-[#0085FF]"
+                  className="p-1.5 rounded-lg hover:bg-[#FFF0E8] transition-colors text-[#FF4500]"
                 >
-                  <MoreHorizontal className="h-4 w-4" />
+                  <MoreHorizontal className="h-5 w-5" strokeWidth={3} />
                 </button>
                 {showMenu && (
                   <div className="absolute right-0 top-8 bg-white border border-border shadow-md rounded-lg z-50 min-w-[140px] py-1">
