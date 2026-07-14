@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import {
-  Heart, ThumbsUp, MessageCircle, MapPin, Share, Trash2, Pencil,
+  Heart, ThumbsUp, MessageCircle, MapPin, MoreHorizontal, Trash2, Pencil,
   Send, Star, X, Loader2, Check, BookOpen, Sparkles, PlayCircle,
   Link2, ImageDown, ChevronLeft, ChevronRight, ZoomIn
 } from "lucide-react";
@@ -458,6 +458,7 @@ export function PostCard({
 
   const COMMENT_PREVIEW = 5;
   const [showMenu, setShowMenu] = useState(false);
+  const [menuOpensUp, setMenuOpensUp] = useState(false);
   const [editing, setEditing] = useState(false);
   const [showSlideExport, setShowSlideExport] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -741,14 +742,21 @@ export function PostCard({
             {!editing && (
               <div className="relative" ref={menuRef}>
                 <button
-                  onClick={() => setShowMenu(s => !s)}
+                  onClick={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setMenuOpensUp(window.innerHeight - rect.bottom < 190);
+                    setShowMenu(s => !s);
+                  }}
                   title="Share this post"
                   className="p-1.5 rounded-full bg-[#FF4500] hover:bg-[#E03E00] transition-colors text-white shadow-sm"
                 >
-                  <Share className="h-4 w-4" strokeWidth={2.5} />
+                  <MoreHorizontal className="h-4 w-4" strokeWidth={3} />
                 </button>
                 {showMenu && (
-                  <div className="absolute right-0 top-8 bg-white border border-border shadow-md rounded-lg z-50 min-w-[140px] py-1">
+                  <div className={cn(
+                    "absolute right-0 bg-white border border-border shadow-md rounded-lg z-50 min-w-[140px] py-1",
+                    menuOpensUp ? "bottom-8" : "top-8"
+                  )}>
                     <button
                       onClick={() => { setShowMenu(false); copyShareLink(); }}
                       className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
