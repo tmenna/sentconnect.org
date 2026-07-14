@@ -458,11 +458,12 @@ export function PostCard({
 
   const COMMENT_PREVIEW = 5;
   const [showMenu, setShowMenu] = useState(false);
-  const [menuOpensUp, setMenuOpensUp] = useState(false);
+  const [menuPos, setMenuPos] = useState<{ top?: number; bottom?: number; right: number }>({ right: 0 });
   const [editing, setEditing] = useState(false);
   const [showSlideExport, setShowSlideExport] = useState(false);
   const [hovered, setHovered] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuPopupRef = useRef<HTMLDivElement>(null);
 
   const isOwner = user?.id === post.author.id;
   const isAdmin = user?.role === "admin" || user?.role === "super_admin";
@@ -472,16 +473,25 @@ export function PostCard({
   const isLongPost = (post.description?.length ?? 0) > COLLAPSE_THRESHOLD;
   const [textCollapsed, setTextCollapsed] = useState(isLongPost);
 
-  // Close menu on outside click
+  // Close menu on outside click or scroll (menu is fixed-positioned in a portal)
   useEffect(() => {
     if (!showMenu) return;
     function handler(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+      const inButton = menuRef.current?.contains(e.target as Node);
+      const inMenu = menuPopupRef.current?.contains(e.target as Node);
+      if (!inButton && !inMenu) {
         setShowMenu(false);
       }
     }
+    function onScroll() {
+      setShowMenu(false);
+    }
     document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    window.addEventListener("scroll", onScroll, true);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      window.removeEventListener("scroll", onScroll, true);
+    };
   }, [showMenu]);
 
   async function toggleLike() {
@@ -744,7 +754,12 @@ export function PostCard({
                 <button
                   onClick={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
-                    setMenuOpensUp(window.innerHeight - rect.bottom < 190);
+                    const opensUp = window.innerHeight - rect.bottom < 200;
+                    setMenuPos(
+                      opensUp
+                        ? { bottom: window.innerHeight - rect.top + 6, right: window.innerWidth - rect.right }
+                        : { top: rect.bottom + 6, right: window.innerWidth - rect.right }
+                    );
                     setShowMenu(s => !s);
                   }}
                   title="Share this post"
@@ -752,11 +767,12 @@ export function PostCard({
                 >
                   <MoreHorizontal className="h-4 w-4" strokeWidth={3} />
                 </button>
-                {showMenu && (
-                  <div className={cn(
-                    "absolute right-0 bg-white border border-border shadow-md rounded-lg z-50 min-w-[140px] py-1",
-                    menuOpensUp ? "bottom-8" : "top-8"
-                  )}>
+                {showMenu && createPortal(
+                  <div
+                    ref={menuPopupRef}
+                    style={{ position: "fixed", top: menuPos.top, bottom: menuPos.bottom, right: menuPos.right }}
+                    className="bg-white border border-border shadow-md rounded-lg z-[100] min-w-[140px] py-1"
+                  >
                     <button
                       onClick={() => { setShowMenu(false); copyShareLink(); }}
                       className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-foreground hover:bg-muted/60 transition-colors"
@@ -791,7 +807,8 @@ export function PostCard({
                         Delete
                       </button>
                     )}
-                  </div>
+                  </div>,
+                  document.body
                 )}
               </div>
             )}
