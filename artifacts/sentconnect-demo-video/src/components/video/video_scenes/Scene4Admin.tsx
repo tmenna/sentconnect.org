@@ -95,7 +95,7 @@ export function Scene4Admin() {
 
       {/* ADMIN APP FRAME */}
       <motion.div
-        className="w-[85vw] h-[72vh] bg-white rounded-2xl shadow-heavy border border-slate-200 overflow-hidden flex relative"
+        className="w-[1360px] h-[648px] bg-white rounded-2xl shadow-heavy border border-slate-200 overflow-hidden flex relative"
         initial={{ scale: 0.9, opacity: 0, y: 40 }}
         animate={{
           scale: phase >= 11 ? 1.1 : 1,
@@ -216,7 +216,7 @@ export function Scene4Admin() {
                   <div className="px-5 pb-3 text-slate-800 text-[15px] leading-relaxed">
                     Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home.
                   </div>
-                  <div className="w-full h-[19vh]">
+                  <div className="w-full h-[171px]">
                     <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
                   </div>
                   <div className="px-5 py-3 flex items-center gap-5 text-slate-400 relative">
@@ -641,7 +641,7 @@ export function Scene4Admin() {
             </motion.div>
 
             <motion.div
-              className="w-[70vw] aspect-[16/9] bg-white relative z-10 shadow-[0_0_100px_rgba(255,255,255,0.2)] flex rounded-lg overflow-hidden"
+              className="w-[1120px] aspect-[16/9] bg-white relative z-10 shadow-[0_0_100px_rgba(255,255,255,0.2)] flex rounded-lg overflow-hidden"
               initial={{ rotateX: 90, opacity: 0, y: 100 }}
               animate={{ rotateX: 0, opacity: 1, y: 0 }}
               transition={{ type: 'spring', damping: 20, stiffness: 80, delay: 0.5 }}

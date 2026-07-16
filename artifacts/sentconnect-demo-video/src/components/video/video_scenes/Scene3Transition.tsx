@@ -10,7 +10,7 @@ export function Scene3Transition() {
       transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
     >
       <motion.h2 
-        className="text-[5vw] font-bold text-white tracking-tight text-center"
+        className="text-[80px] font-bold text-white tracking-tight text-center"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5 }}

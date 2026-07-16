@@ -22,7 +22,7 @@ export function Scene1Problem() {
       exit={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
       transition={{ duration: 0.8 }}
     >
-      <div className="relative w-full max-w-4xl mx-auto h-[60vh] flex items-center justify-center">
+      <div className="relative w-full max-w-4xl mx-auto h-[540px] flex items-center justify-center">
         {/* Scattered messy updates metaphor */}
         <motion.div 
           className="absolute top-[20%] left-[20%] w-24 h-24 bg-white rounded-2xl shadow-soft flex items-center justify-center border border-slate-100"
@@ -83,7 +83,7 @@ export function Scene1Problem() {
         {/* Central Text */}
         <div className="z-10 flex flex-col items-center">
           <motion.h1 
-            className="text-[4vw] font-bold text-slate-900 tracking-tight text-center leading-[1.1]"
+            className="text-[64px] font-bold text-slate-900 tracking-tight text-center leading-[1.1]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: phase >= 1 ? 1 : 0, y: phase >= 1 ? 0 : 20 }}
             transition={{ duration: 0.8, delay: 0.5 }}
@@ -92,7 +92,7 @@ export function Scene1Problem() {
           </motion.h1>
           
           <motion.p 
-            className="mt-6 text-[2vw] text-slate-500 font-medium tracking-tight text-center max-w-2xl"
+            className="mt-6 text-[32px] text-slate-500 font-medium tracking-tight text-center max-w-2xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: phase >= 2 ? 1 : 0 }}
             transition={{ duration: 0.8 }}

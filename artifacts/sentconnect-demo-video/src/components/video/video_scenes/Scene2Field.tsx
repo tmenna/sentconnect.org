@@ -112,10 +112,10 @@ export function Scene2Field() {
 
       {/* App frame: sidebar + main */}
       <motion.div
-        className="w-[85vw] h-[72vh] bg-white rounded-2xl shadow-heavy border border-slate-200 overflow-hidden flex relative"
-        initial={{ y: '100vh', opacity: 0, scale: 0.95 }}
+        className="w-[1360px] h-[648px] bg-white rounded-2xl shadow-heavy border border-slate-200 overflow-hidden flex relative"
+        initial={{ y: 900, opacity: 0, scale: 0.95 }}
         animate={{
-          y: phase >= 1 ? 0 : '100vh',
+          y: phase >= 1 ? 0 : 900,
           opacity: phase >= 1 && phase < 9 ? 1 : 0,
           scale: phase >= 9 ? 0.85 : 1,
         }}
@@ -275,7 +275,7 @@ export function Scene2Field() {
                   Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home.
                 </div>
 
-                <div className="w-full h-[26vh]">
+                <div className="w-full h-[234px]">
                   <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
                 </div>
 

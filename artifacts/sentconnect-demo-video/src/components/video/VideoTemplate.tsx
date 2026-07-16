@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useVideoPlayer } from '@/lib/video';
 import { Scene1Problem } from './video_scenes/Scene1Problem';
@@ -36,6 +36,9 @@ const SCENE_START_SEC: Record<string, number> = (() => {
 
 const AUDIO_SEEK_EPSILON_SEC = 0.18;
 
+export const STAGE_W = 1600;
+export const STAGE_H = 900;
+
 export default function VideoTemplate({
   durations = SCENE_DURATIONS,
   loop = true,
@@ -61,6 +64,20 @@ export default function VideoTemplate({
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Fixed 16:9 design stage scaled to fit any viewport (mobile-friendly)
+  const [stageScale, setStageScale] = useState(1);
+  useEffect(() => {
+    const update = () =>
+      setStageScale(Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H));
+    update();
+    window.addEventListener('resize', update);
+    window.addEventListener('orientationchange', update);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.removeEventListener('orientationchange', update);
+    };
+  }, []);
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -78,14 +95,23 @@ export default function VideoTemplate({
 
   return (
     <div
-      className="w-full h-screen overflow-hidden relative text-slate-900"
+      className="w-full h-[100svh] overflow-hidden relative text-slate-900"
       style={{ backgroundColor: 'var(--color-bg-light)' }}
     >
+      {/* Fixed-size 16:9 stage, scaled to fit the viewport */}
+      <div
+        className="absolute left-1/2 top-1/2 overflow-hidden"
+        style={{
+          width: STAGE_W,
+          height: STAGE_H,
+          transform: `translate(-50%, -50%) scale(${stageScale})`,
+        }}
+      >
       {/* Persistent Background layer */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Soft animated gradient orbs to give life */}
         <motion.div 
-          className="absolute w-[80vw] h-[80vw] rounded-full blur-[100px] opacity-30"
+          className="absolute w-[1280px] h-[1280px] rounded-full blur-[100px] opacity-30"
           style={{ background: 'radial-gradient(circle, #E2E8F0, transparent)' }}
           animate={{ 
             x: ['-20%', '30%', '-10%'], 
@@ -95,7 +121,7 @@ export default function VideoTemplate({
           transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
         />
         <motion.div 
-          className="absolute w-[60vw] h-[60vw] rounded-full blur-[80px] opacity-20 right-0 bottom-0"
+          className="absolute w-[960px] h-[960px] rounded-full blur-[80px] opacity-20 right-0 bottom-0"
           style={{ background: 'radial-gradient(circle, #CBD5E1, transparent)' }}
           animate={{ 
             x: ['20%', '-20%', '10%'], 
@@ -114,6 +140,7 @@ export default function VideoTemplate({
       <AnimatePresence mode="popLayout">
         {SceneComponent && <SceneComponent key={currentSceneKey} />}
       </AnimatePresence>
+      </div>
 
       <audio
         ref={audioRef}
