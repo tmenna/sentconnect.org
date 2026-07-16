@@ -12,7 +12,7 @@ import {
   Globe, Plus, X, Trash2,
   ChevronDown, Eye, EyeOff, Check, UserPlus, Mail, KeyRound, Copy, RefreshCw,
   ShieldCheck, Pencil, Settings2, Save, Loader2,
-  BarChart3, Star, UserCog, BookOpen, MapPin, ImageIcon,
+  UserCog, BookOpen, MapPin, ImageIcon,
   Rss,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -38,33 +38,25 @@ async function apiFetch(path: string, options: RequestInit = {}) {
 type OrgPermissions = {
   canSubmitReports: boolean;
   canViewAllReports: boolean;
-  canHighlightReports: boolean;
   canManageTeam: boolean;
-  canViewAnalytics: boolean;
 };
 
 const ORG_DEFAULT_PERMS: OrgPermissions = {
   canSubmitReports: true,
   canViewAllReports: false,
-  canHighlightReports: false,
   canManageTeam: false,
-  canViewAnalytics: false,
 };
 
 const ORG_ADMIN_PERMS: OrgPermissions = {
   canSubmitReports: true,
   canViewAllReports: true,
-  canHighlightReports: true,
   canManageTeam: true,
-  canViewAnalytics: true,
 };
 
 const ORG_PERM_META: { key: keyof OrgPermissions; label: string; desc: string; icon: React.ReactNode }[] = [
   { key: "canSubmitReports",    label: "Submit Reports",      desc: "Post mission reports to the feed",       icon: <BookOpen className="h-3.5 w-3.5" /> },
   { key: "canViewAllReports",   label: "View All Reports",    desc: "See reports from all team members",      icon: <Eye className="h-3.5 w-3.5" /> },
-  { key: "canHighlightReports", label: "Highlight Reports",   desc: "Star / feature important updates",       icon: <Star className="h-3.5 w-3.5" /> },
   { key: "canManageTeam",       label: "Manage Team",         desc: "Add, edit and remove team members",      icon: <UserCog className="h-3.5 w-3.5" /> },
-  { key: "canViewAnalytics",    label: "View Analytics",      desc: "Access stats and activity dashboards",   icon: <BarChart3 className="h-3.5 w-3.5" /> },
 ];
 
 function parseOrgPerms(raw: string | null | undefined): OrgPermissions {

@@ -5,7 +5,7 @@ import {
   Loader2, Globe, ShieldCheck, UserCog, Search,
   Plus, Lock, Unlock, Ban, UserCheck, KeyRound, ChevronDown,
   ShieldAlert, Shield, Edit3, X, Save, Eye, EyeOff,
-  Trash2, AlertTriangle, Settings2, BookOpen, Star, BarChart3,
+  Trash2, AlertTriangle, Settings2, BookOpen,
   LogOut, Upload, ImageOff, ChevronRight, Image, Mail,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
@@ -1517,33 +1517,25 @@ function UserActionMenu({
 type OrgPermissions = {
   canSubmitReports: boolean;
   canViewAllReports: boolean;
-  canHighlightReports: boolean;
   canManageTeam: boolean;
-  canViewAnalytics: boolean;
 };
 
 const ORG_DEFAULT_PERMS: OrgPermissions = {
   canSubmitReports: true,
   canViewAllReports: false,
-  canHighlightReports: false,
   canManageTeam: false,
-  canViewAnalytics: false,
 };
 
 const ORG_ADMIN_PERMS: OrgPermissions = {
   canSubmitReports: true,
   canViewAllReports: true,
-  canHighlightReports: true,
   canManageTeam: true,
-  canViewAnalytics: true,
 };
 
 const ORG_PERM_META: { key: keyof OrgPermissions; label: string; desc: string; icon: React.ReactNode }[] = [
   { key: "canSubmitReports",    label: "Submit Reports",    desc: "Post mission reports to the feed",     icon: <BookOpen className="h-3.5 w-3.5" /> },
   { key: "canViewAllReports",   label: "View All Reports",  desc: "See reports from all team members",    icon: <Eye className="h-3.5 w-3.5" /> },
-  { key: "canHighlightReports", label: "Highlight Reports", desc: "Star / feature important updates",     icon: <Star className="h-3.5 w-3.5" /> },
   { key: "canManageTeam",       label: "Manage Team",       desc: "Add, edit and remove team members",    icon: <UserCog className="h-3.5 w-3.5" /> },
-  { key: "canViewAnalytics",    label: "View Analytics",    desc: "Access stats and activity dashboards", icon: <BarChart3 className="h-3.5 w-3.5" /> },
 ];
 
 function parseOrgPerms(raw: string | null | undefined): OrgPermissions {
