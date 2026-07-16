@@ -96,7 +96,7 @@ export function Scene2Field() {
               initial={{ opacity: 0 }}
               animate={{ opacity: phase >= 2 ? 1 : 0 }}
             >
-              Arrived in Addis Ababa, Ethiopia! The team is on the ground. The team is ready to begin work tomorrow!
+              After three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home!
             </motion.div>
 
             <motion.div 
@@ -106,7 +106,7 @@ export function Scene2Field() {
               transition={{ delay: 0.4 }}
             >
               <MapPin className="w-4 h-4" />
-              Addis Ababa, Ethiopia
+              Achi Village, Enugu State, Nigeria
             </motion.div>
 
             <div className="mt-4 flex justify-end">
@@ -140,8 +140,8 @@ export function Scene2Field() {
                   JD
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900 text-lg">John Doe</h3>
-                  <p className="text-sm text-slate-500">2 mins ago • Grace Church</p>
+                  <h3 className="font-bold text-slate-900 text-lg">James Okafor</h3>
+                  <p className="text-sm text-slate-500">2 mins ago • Africa Inland Mission</p>
                 </div>
               </div>
               
@@ -169,7 +169,7 @@ export function Scene2Field() {
 
             {/* Post Content */}
             <div className="px-6 pb-4 text-slate-800 text-lg font-medium">
-              Arrived in Addis Ababa, Ethiopia! The team is on the ground. The team is ready to begin work tomorrow!
+              After three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home!
             </div>
 
             {/* Media */}
@@ -181,7 +181,7 @@ export function Scene2Field() {
               />
               <div className="absolute bottom-4 left-4 flex items-center gap-2 text-white bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-medium">
                 <MapPin className="w-4 h-4" />
-                Addis Ababa, Ethiopia
+                Achi Village, Enugu State, Nigeria
               </div>
             </div>
 
@@ -226,7 +226,7 @@ export function Scene2Field() {
                   SM
                 </div>
                 <div>
-                  <div className="font-bold text-sm text-slate-900">Sarah Miller</div>
+                  <div className="font-bold text-sm text-slate-900">Maria Santos</div>
                   <div className="text-sm text-slate-600 mt-0.5">Praying for you and the team! 🙏</div>
                 </div>
               </motion.div>

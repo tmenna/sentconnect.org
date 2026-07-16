@@ -116,25 +116,25 @@ export function Scene4Admin() {
                 </motion.div>
 
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-sm">JD</div>
+                  <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-sm">JO</div>
                   <div>
-                    <div className="font-bold text-slate-900">John Doe</div>
-                    <div className="text-xs text-slate-500">Addis Ababa, Ethiopia</div>
+                    <div className="font-bold text-slate-900">James Okafor</div>
+                    <div className="text-xs text-slate-500">Achi Village, Enugu State, Nigeria</div>
                   </div>
                 </div>
                 <div className="w-full h-32 rounded-lg bg-slate-100 mb-4 overflow-hidden">
                    <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
                 </div>
-                <p className="text-slate-800 font-medium line-clamp-2">Arrived safely at the project site. The team is ready to begin work tomorrow!</p>
+                <p className="text-slate-800 font-medium line-clamp-2">A New Church Planted in Achi Village — sixty-seven people gathered for the first official service.</p>
               </motion.div>
 
               {/* Post 2 */}
               <div className="border border-slate-200 rounded-xl p-5 shadow-sm opacity-60">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-emerald-800 rounded-full flex items-center justify-center text-white font-bold text-sm">SM</div>
+                  <div className="w-10 h-10 bg-emerald-800 rounded-full flex items-center justify-center text-white font-bold text-sm">MS</div>
                   <div>
-                    <div className="font-bold text-slate-900">Sarah Miller</div>
-                    <div className="text-xs text-slate-500">Addis Ababa, Ethiopia</div>
+                    <div className="font-bold text-slate-900">Maria Santos</div>
+                    <div className="text-xs text-slate-500">San Pedro Soloma, Guatemala</div>
                   </div>
                 </div>
                 <div className="w-full h-32 rounded-lg bg-slate-200 mb-4" />
@@ -180,9 +180,9 @@ export function Scene4Admin() {
                 exit={{ scale: 0.9, y: 20 }}
               >
                 <div className="p-6 border-b border-slate-100 bg-slate-50 flex items-center gap-4">
-                  <div className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-lg">JD</div>
+                  <div className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-lg">JO</div>
                   <div>
-                    <h2 className="text-xl font-bold text-slate-900">John Doe</h2>
+                    <h2 className="text-xl font-bold text-slate-900">James Okafor</h2>
                     <p className="text-slate-500 font-medium">Field Missionary</p>
                   </div>
                 </div>
@@ -285,15 +285,15 @@ export function Scene4Admin() {
               <div className="w-1/2 h-full bg-[#0F172A] text-white p-12 flex flex-col justify-between">
                 <div>
                   <div className="w-12 h-12 bg-[#0059D6] rounded mb-6" />
-                  <h1 className="text-5xl font-black leading-tight mb-4 tracking-tight">Field Update:<br/>Addis Ababa Project</h1>
-                  <p className="text-xl text-slate-300 font-medium">"Arrived safely at the project site. The team is ready to begin work tomorrow!"</p>
+                  <h1 className="text-5xl font-black leading-tight mb-4 tracking-tight">A New Church<br/>Planted in Achi Village</h1>
+                  <p className="text-xl text-slate-300 font-medium">"Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy."</p>
                 </div>
                 
                 <div className="flex items-center gap-4 border-t border-slate-700 pt-6">
-                  <div className="w-16 h-16 rounded-full bg-slate-600 flex items-center justify-center text-xl font-bold">JD</div>
+                  <div className="w-16 h-16 rounded-full bg-slate-600 flex items-center justify-center text-xl font-bold">JO</div>
                   <div>
-                    <div className="text-2xl font-bold">John Doe</div>
-                    <div className="text-[#0059D6] font-semibold text-lg">Grace Church Missions</div>
+                    <div className="text-2xl font-bold">James Okafor</div>
+                    <div className="text-[#0059D6] font-semibold text-lg">Africa Inland Mission</div>
                   </div>
                 </div>
               </div>
