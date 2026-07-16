@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { LayoutDashboard, Users, Download, Star, Filter, Shield, Check } from 'lucide-react';
+import { LayoutDashboard, Users, Download, Filter, Shield, Check } from 'lucide-react';
 
 export function Scene4Admin() {
   const [phase, setPhase] = useState(0);
@@ -8,7 +8,7 @@ export function Scene4Admin() {
   useEffect(() => {
     const timers = [
       setTimeout(() => setPhase(1), 1000),   // Admin dashboard slides in
-      setTimeout(() => setPhase(2), 5000),   // Highlight a post (star)
+      setTimeout(() => setPhase(2), 5000),   // Focus the featured post
       setTimeout(() => setPhase(3), 9000),   // Sidebar click -> Team Management Dialog
       setTimeout(() => setPhase(4), 11000),  // 3 Toggles flick on
       setTimeout(() => setPhase(5), 16000),  // Dialog closes, Export button click
@@ -86,9 +86,6 @@ export function Scene4Admin() {
             {phase < 3 && (
               <div className="flex bg-slate-100 p-1 rounded-lg">
                 <div className="px-4 py-1.5 bg-white shadow-sm rounded-md text-sm font-semibold text-slate-900">All Posts</div>
-                <div className="px-4 py-1.5 text-sm font-semibold text-slate-500 flex items-center gap-1">
-                  <Star className="w-4 h-4" /> Highlighted
-                </div>
               </div>
             )}
           </div>
@@ -101,19 +98,9 @@ export function Scene4Admin() {
                 className="border border-slate-200 rounded-xl p-5 shadow-sm relative overflow-hidden"
                 animate={{
                   borderColor: phase >= 2 ? "#0059D6" : "#E2E8F0",
-                  boxShadow: phase >= 2 ? "0 4px 20px -2px rgba(255,69,0,0.15)" : "0 1px 3px rgba(0,0,0,0.05)"
+                  boxShadow: phase >= 2 ? "0 4px 20px -2px rgba(0,89,214,0.15)" : "0 1px 3px rgba(0,0,0,0.05)"
                 }}
               >
-                {/* Highlight Badge */}
-                <motion.div 
-                  className="absolute top-4 right-4 bg-[#0059D6] text-white p-1.5 rounded-full z-10"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: phase >= 2 ? 1 : 0, opacity: phase >= 2 ? 1 : 0 }}
-                  transition={{ type: "spring", bounce: 0.6 }}
-                >
-                  <Star className="w-4 h-4 fill-current" />
-                </motion.div>
-
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-sm">JO</div>
                   <div>
