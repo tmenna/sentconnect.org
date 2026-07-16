@@ -17,3 +17,27 @@ id = "_0I-1E3uUCbe2RQXcqpSN"
 uri = "file://attached_assets/about-family.png"
 type = "image"
 title = "Generated family portrait for About page"
+
+[[outputs]]
+id = "gJ7WZ7lQIxebaIJHpd952"
+uri = "file://artifacts/sentconnect-demo-video/public/images/field-worker.jpg"
+type = "image"
+title = "a team of missionaries or aid workers outdoors smiling"
+
+[[outputs]]
+id = "kuU2Hz1rqXDa7J9FE1msa"
+uri = "file://artifacts/sentconnect-demo-video/public/images/church-presentation.jpg"
+type = "image"
+title = "church congregation watching presentation screen"
+
+[[outputs]]
+id = "ONoCcU7gTHH1Tw4LdfvJz"
+uri = "file://artifacts/sentconnect-demo-video/public/images/laptop-desk.jpg"
+type = "image"
+title = "modern minimalist laptop screen on desk"
+
+[[outputs]]
+id = "eaeljZAMnXEWP4MKuSD1X"
+uri = "file://artifacts/sentconnect-demo-video/public/audio/bg_music.mp3"
+type = "audio"
+title = "background music"
