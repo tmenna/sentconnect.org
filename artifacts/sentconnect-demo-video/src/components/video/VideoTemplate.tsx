@@ -7,12 +7,12 @@ import { Scene3Transition } from './video_scenes/Scene3Transition';
 import { Scene4Admin } from './video_scenes/Scene4Admin';
 import { Scene5Close } from './video_scenes/Scene5Close';
 
-// Total duration ~80s
+// Total duration ~94s
 export const SCENE_DURATIONS = {
   problem: 6000,
-  field: 28000,
+  field: 34000,
   transition: 5000,
-  admin: 30000,
+  admin: 38000,
   close: 11000
 };
 
@@ -65,7 +65,11 @@ export default function VideoTemplate({
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = 0.45;
-    const targetTime = SCENE_START_SEC[baseSceneKey] ?? 0;
+    let targetTime = SCENE_START_SEC[baseSceneKey] ?? 0;
+    const trackLength = audio.duration;
+    if (Number.isFinite(trackLength) && trackLength > 0 && targetTime >= trackLength) {
+      targetTime = targetTime % trackLength;
+    }
     if (Math.abs(audio.currentTime - targetTime) > AUDIO_SEEK_EPSILON_SEC) {
       audio.currentTime = targetTime;
     }
@@ -116,6 +120,7 @@ export default function VideoTemplate({
         src={`${import.meta.env.BASE_URL}audio/bg_music.mp3`}
         preload="auto"
         autoPlay
+        loop
         muted={muted}
       />
     </div>
