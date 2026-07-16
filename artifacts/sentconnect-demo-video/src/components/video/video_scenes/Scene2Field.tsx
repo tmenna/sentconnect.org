@@ -6,13 +6,13 @@ import {
 } from 'lucide-react';
 
 const CAPTIONS: Record<number, string> = {
-  1: 'Field User Dashboard — My Posts & Team Posts',
-  2: 'Share an update — just start typing',
-  3: 'Attach photos or short videos',
-  4: 'Tag your location',
-  5: 'One tap — it\u2019s on the team feed',
-  6: 'Reactions — hearts & likes from your church',
-  7: 'Comments — two-way encouragement',
+  1: 'James, in Nigeria, opens his Missions Feed',
+  2: 'He shares what God is doing — in his own words',
+  3: 'Adds photos from the field',
+  4: 'Tags where it happened',
+  5: 'One tap — his church back home sees it instantly',
+  6: 'Supporters respond with hearts & likes',
+  7: 'Comments — prayer & encouragement from home',
   8: 'Share menu — public link, edit, or export',
 };
 
@@ -21,15 +21,15 @@ export function Scene2Field() {
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase(1), 800),    // App frame in
-      setTimeout(() => setPhase(2), 4000),   // Typing text
-      setTimeout(() => setPhase(3), 9000),   // Photo drops in
-      setTimeout(() => setPhase(4), 13000),  // Location chip
-      setTimeout(() => setPhase(5), 16500),  // Post -> feed card
-      setTimeout(() => setPhase(6), 20500),  // Reactions
-      setTimeout(() => setPhase(7), 24500),  // Comment
-      setTimeout(() => setPhase(8), 28500),  // 3-dot menu opens
-      setTimeout(() => setPhase(9), 32500),  // Fade out
+      setTimeout(() => setPhase(1), 4800),   // Intro headline out, app frame in
+      setTimeout(() => setPhase(2), 8300),   // Typing text
+      setTimeout(() => setPhase(3), 13000),  // Photo drops in
+      setTimeout(() => setPhase(4), 16500),  // Location chip
+      setTimeout(() => setPhase(5), 20000),  // Post -> feed card
+      setTimeout(() => setPhase(6), 24000),  // Reactions
+      setTimeout(() => setPhase(7), 28000),  // Comment
+      setTimeout(() => setPhase(8), 32000),  // 3-dot menu opens
+      setTimeout(() => setPhase(9), 36000),  // Fade out
     ];
     return () => timers.forEach(t => clearTimeout(t));
   }, []);
@@ -44,6 +44,44 @@ export function Scene2Field() {
       exit={{ opacity: 0, x: -100, filter: 'blur(10px)' }}
       transition={{ duration: 0.8 }}
     >
+      {/* STORY INTRO (phase 0) */}
+      <AnimatePresence>
+        {phase < 1 && (
+          <motion.div
+            className="absolute inset-0 flex flex-col items-center justify-center text-center px-16 z-[60]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, y: -40, filter: 'blur(8px)' }}
+            transition={{ duration: 0.7 }}
+          >
+            <motion.div
+              className="text-slate-400 font-semibold tracking-widest text-sm uppercase mb-4"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              From the field
+            </motion.div>
+            <motion.h1
+              className="text-5xl md:text-6xl font-black text-slate-900 leading-tight max-w-4xl tracking-tight"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.7 }}
+            >
+              Missionaries share what <span className="text-[#1085FD]">God is doing</span>
+            </motion.h1>
+            <motion.p
+              className="text-2xl text-slate-500 font-medium mt-5 max-w-2xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.6, duration: 0.7 }}
+            >
+              — and the church back home sees it the moment it happens.
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Chapter badge */}
       <motion.div
         className="absolute top-[5%] left-0 right-0 flex justify-center z-50"
