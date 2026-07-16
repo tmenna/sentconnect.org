@@ -611,7 +611,7 @@ export function Scene4Admin() {
           {phase >= 1 && phase < 11 && CAPTIONS[phase] && (
             <motion.div
               key={phase}
-              className="bg-[#0F172A] text-white px-6 py-3 rounded-full shadow-heavy text-lg font-semibold"
+              className="bg-[#F74302] text-white px-6 py-3 rounded-full shadow-heavy text-lg font-semibold"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}

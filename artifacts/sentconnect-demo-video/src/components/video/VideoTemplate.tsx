@@ -93,6 +93,23 @@ export default function VideoTemplate({
     audio.play().catch(() => {});
   }, [currentSceneKey, baseSceneKey, muted]);
 
+  // Browsers may block autoplay until the first user gesture — unlock music ASAP
+  useEffect(() => {
+    const tryPlay = () => {
+      const audio = audioRef.current;
+      if (!audio || !audio.paused) return;
+      audio.play().catch(() => {});
+    };
+    tryPlay();
+    const events = ['pointerdown', 'touchstart', 'keydown', 'scroll'] as const;
+    const unlock = () => {
+      tryPlay();
+      events.forEach((e) => window.removeEventListener(e, unlock));
+    };
+    events.forEach((e) => window.addEventListener(e, unlock, { passive: true }));
+    return () => events.forEach((e) => window.removeEventListener(e, unlock));
+  }, []);
+
   return (
     <div
       className="w-full h-[100svh] overflow-hidden relative text-slate-900"
