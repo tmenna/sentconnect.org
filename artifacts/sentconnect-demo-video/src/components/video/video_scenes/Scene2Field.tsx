@@ -82,7 +82,7 @@ export function Scene2Field() {
               )}
               {phase >= 2 && (
                 <motion.img 
-                  src={`${import.meta.env.BASE_URL}images/field-worker.jpg`}
+                  src={`${import.meta.env.BASE_URL}images/field-worker.png`}
                   className="absolute inset-0 w-full h-full object-cover"
                   initial={{ opacity: 0, scale: 1.2 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -96,17 +96,17 @@ export function Scene2Field() {
               initial={{ opacity: 0 }}
               animate={{ opacity: phase >= 2 ? 1 : 0 }}
             >
-              Arrived safely at the project site. The team is ready to begin work tomorrow!
+              Arrived in Addis Ababa, Ethiopia! The team is on the ground. The team is ready to begin work tomorrow!
             </motion.div>
 
             <motion.div 
-              className="flex items-center gap-2 text-[#FF4500] bg-[#FF4500]/10 px-3 py-1.5 rounded-full w-max text-sm font-medium"
+              className="flex items-center gap-2 text-[#0059D6] bg-[#0059D6]/10 px-3 py-1.5 rounded-full w-max text-sm font-medium"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: phase >= 2 ? 1 : 0, x: phase >= 2 ? 0 : -20 }}
               transition={{ delay: 0.4 }}
             >
               <MapPin className="w-4 h-4" />
-              Nairobi, Kenya
+              Addis Ababa, Ethiopia
             </motion.div>
 
             <div className="mt-4 flex justify-end">
@@ -115,7 +115,7 @@ export function Scene2Field() {
                 whileHover={{ scale: 1.05 }}
                 animate={{ 
                   scale: phase === 3 ? 0.95 : 1,
-                  backgroundColor: phase === 3 ? "#FF4500" : "#0F172A"
+                  backgroundColor: phase === 3 ? "#0059D6" : "#0F172A"
                 }}
               >
                 <Send className="w-4 h-4" />
@@ -149,8 +149,8 @@ export function Scene2Field() {
               <motion.button 
                 className="text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-100 transition-colors relative"
                 animate={{ 
-                  color: phase >= 7 ? "#FF4500" : "#94A3B8",
-                  backgroundColor: phase >= 7 ? "#FF45001a" : "transparent",
+                  color: phase >= 7 ? "#0059D6" : "#94A3B8",
+                  backgroundColor: phase >= 7 ? "#0059D61a" : "transparent",
                   scale: phase === 7 ? [1, 1.2, 1] : 1
                 }}
               >
@@ -169,19 +169,19 @@ export function Scene2Field() {
 
             {/* Post Content */}
             <div className="px-6 pb-4 text-slate-800 text-lg font-medium">
-              Arrived safely at the project site. The team is ready to begin work tomorrow!
+              Arrived in Addis Ababa, Ethiopia! The team is on the ground. The team is ready to begin work tomorrow!
             </div>
 
             {/* Media */}
             <div className="w-full h-[250px] relative">
               <img 
-                src={`${import.meta.env.BASE_URL}images/field-worker.jpg`}
+                src={`${import.meta.env.BASE_URL}images/field-worker.png`}
                 className="w-full h-full object-cover"
                 alt="Field Work"
               />
               <div className="absolute bottom-4 left-4 flex items-center gap-2 text-white bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-medium">
                 <MapPin className="w-4 h-4" />
-                Nairobi, Kenya
+                Addis Ababa, Ethiopia
               </div>
             </div>
 
@@ -243,7 +243,7 @@ export function Scene2Field() {
         animate={{ opacity: phase >= 9 ? 1 : 0, y: phase >= 9 ? 0 : 20 }}
       >
         <div className="bg-white p-6 rounded-2xl shadow-heavy border border-slate-100">
-          <Globe className="w-8 h-8 text-[#FF4500] mb-3" />
+          <Globe className="w-8 h-8 text-[#0059D6] mb-3" />
           <h4 className="text-xl font-bold text-slate-900 mb-2">Share with anyone</h4>
           <p className="text-slate-500 font-medium">Public links open instantly. No app download or login required.</p>
         </div>

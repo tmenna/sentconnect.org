@@ -12,6 +12,12 @@ uri = "file://artifacts/sentconnect-mobile/assets/images/icon.png"
 type = "image"
 title = "sentconnect-app-icon"
 
+[[generated]]
+id = "n0cGljUQDzyJX0smGPlWH"
+uri = "file://artifacts/sentconnect-demo-video/public/images/field-worker.png"
+type = "image"
+title = "Addis Ababa arrival no faces"
+
 [[outputs]]
 id = "_0I-1E3uUCbe2RQXcqpSN"
 uri = "file://attached_assets/about-family.png"

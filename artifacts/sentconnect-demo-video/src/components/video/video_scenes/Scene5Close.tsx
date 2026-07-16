@@ -17,7 +17,7 @@ export function Scene5Close() {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           transition={{ duration: 1, type: 'spring', bounce: 0.4 }}
         >
-          <div className="w-16 h-16 rounded-xl bg-[#FF4500] rotate-45 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-xl bg-[#0059D6] rotate-45 flex items-center justify-center">
             <div className="w-8 h-8 bg-white -rotate-45" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
           </div>
           <span className="text-6xl font-black tracking-tight">SentConnect</span>

@@ -54,7 +54,7 @@ export function Scene4Admin() {
         {/* Sidebar */}
         <div className="w-64 border-r border-slate-200 bg-slate-50 flex flex-col py-6 px-4">
           <div className="font-black text-xl text-slate-900 mb-8 px-4 flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-[#FF4500]" />
+            <div className="w-6 h-6 rounded bg-[#0059D6]" />
             SentConnect
           </div>
           
@@ -101,13 +101,13 @@ export function Scene4Admin() {
               <motion.div 
                 className="border border-slate-200 rounded-xl p-5 shadow-sm relative overflow-hidden"
                 animate={{
-                  borderColor: phase >= 2 ? "#FF4500" : "#E2E8F0",
+                  borderColor: phase >= 2 ? "#0059D6" : "#E2E8F0",
                   boxShadow: phase >= 2 ? "0 4px 20px -2px rgba(255,69,0,0.15)" : "0 1px 3px rgba(0,0,0,0.05)"
                 }}
               >
                 {/* Highlight Badge */}
                 <motion.div 
-                  className="absolute top-4 right-4 bg-[#FF4500] text-white p-1.5 rounded-full z-10"
+                  className="absolute top-4 right-4 bg-[#0059D6] text-white p-1.5 rounded-full z-10"
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: phase >= 2 ? 1 : 0, opacity: phase >= 2 ? 1 : 0 }}
                   transition={{ type: "spring", bounce: 0.6 }}
@@ -119,11 +119,11 @@ export function Scene4Admin() {
                   <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-sm">JD</div>
                   <div>
                     <div className="font-bold text-slate-900">John Doe</div>
-                    <div className="text-xs text-slate-500">Nairobi, Kenya</div>
+                    <div className="text-xs text-slate-500">Addis Ababa, Ethiopia</div>
                   </div>
                 </div>
                 <div className="w-full h-32 rounded-lg bg-slate-100 mb-4 overflow-hidden">
-                   <img src={`${import.meta.env.BASE_URL}images/field-worker.jpg`} className="w-full h-full object-cover" />
+                   <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
                 </div>
                 <p className="text-slate-800 font-medium line-clamp-2">Arrived safely at the project site. The team is ready to begin work tomorrow!</p>
               </motion.div>
@@ -134,7 +134,7 @@ export function Scene4Admin() {
                   <div className="w-10 h-10 bg-emerald-800 rounded-full flex items-center justify-center text-white font-bold text-sm">SM</div>
                   <div>
                     <div className="font-bold text-slate-900">Sarah Miller</div>
-                    <div className="text-xs text-slate-500">Bogotá, Kenya</div>
+                    <div className="text-xs text-slate-500">Addis Ababa, Ethiopia</div>
                   </div>
                 </div>
                 <div className="w-full h-32 rounded-lg bg-slate-200 mb-4" />
@@ -284,8 +284,8 @@ export function Scene4Admin() {
               {/* Slide Content */}
               <div className="w-1/2 h-full bg-[#0F172A] text-white p-12 flex flex-col justify-between">
                 <div>
-                  <div className="w-12 h-12 bg-[#FF4500] rounded mb-6" />
-                  <h1 className="text-5xl font-black leading-tight mb-4 tracking-tight">Field Update:<br/>Nairobi Project</h1>
+                  <div className="w-12 h-12 bg-[#0059D6] rounded mb-6" />
+                  <h1 className="text-5xl font-black leading-tight mb-4 tracking-tight">Field Update:<br/>Addis Ababa Project</h1>
                   <p className="text-xl text-slate-300 font-medium">"Arrived safely at the project site. The team is ready to begin work tomorrow!"</p>
                 </div>
                 
@@ -293,12 +293,12 @@ export function Scene4Admin() {
                   <div className="w-16 h-16 rounded-full bg-slate-600 flex items-center justify-center text-xl font-bold">JD</div>
                   <div>
                     <div className="text-2xl font-bold">John Doe</div>
-                    <div className="text-[#FF4500] font-semibold text-lg">Grace Church Missions</div>
+                    <div className="text-[#0059D6] font-semibold text-lg">Grace Church Missions</div>
                   </div>
                 </div>
               </div>
               <div className="w-1/2 h-full">
-                <img src={`${import.meta.env.BASE_URL}images/field-worker.jpg`} className="w-full h-full object-cover" />
+                <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
