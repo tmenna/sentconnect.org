@@ -236,7 +236,7 @@ export function Scene2Field() {
 
                   {/* Orange three-dot menu button */}
                   <motion.button
-                    className="ml-auto w-8 h-8 rounded-full bg-[#F97316] text-white flex items-center justify-center shadow-sm"
+                    className="ml-auto w-8 h-8 rounded-full bg-[#FF4500] text-white flex items-center justify-center shadow-sm"
                     animate={{ scale: phase === 8 ? [1, 1.25, 1] : 1 }}
                   >
                     <MoreHorizontal className="w-5 h-5" />
@@ -251,8 +251,8 @@ export function Scene2Field() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                       >
                         {[
-                          { icon: Link, label: 'Copy public link', color: 'text-slate-700' },
-                          { icon: Presentation, label: 'Export to Slide', color: 'text-slate-700' },
+                          { icon: Link, label: 'Copy link', color: 'text-slate-700' },
+                          { icon: Presentation, label: 'Export', color: 'text-slate-700' },
                           { icon: Pencil, label: 'Edit', color: 'text-slate-700' },
                           { icon: Trash2, label: 'Delete', color: 'text-red-500' },
                         ].map((item, i) => (

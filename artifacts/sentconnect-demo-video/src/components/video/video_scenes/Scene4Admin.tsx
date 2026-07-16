@@ -2,43 +2,74 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import {
   Rss, Users, MapPin, Heart, ThumbsUp, MessageCircle, MoreHorizontal,
-  Link, Presentation, ShieldCheck, Globe, KeyRound, Send, ChevronDown
+  Link2, ImageDown, Pencil, Trash2, ShieldCheck, Globe, KeyRound, ChevronDown, Mail, Check
 } from 'lucide-react';
 
 const CAPTIONS: Record<number, string> = {
-  1: 'Admin — Updates: every post across your org',
-  2: 'Filter by member',
-  3: 'Share or export any post',
-  4: 'User Management — roles & status at a glance',
-  5: 'Simple 3-permission editor',
-  6: 'One-click password resets',
+  1: 'Admin — every missionary update in one feed',
+  2: 'Filter dropdown — view posts by one missionary',
+  3: 'Now showing only James Okafor\u2019s posts',
+  4: 'Orange button = share menu for every post',
+  5: 'Copy link — email it to people praying for this post',
+  6: 'Export — turn the post into a Sunday-morning slide',
+  7: 'User Management — every member, role & status',
+  8: 'Add Team Member — create a field user in seconds',
+  9: 'Permissions — control what each user can do',
+  10: 'Key icon — one-click password reset',
 };
 
 const MEMBERS = [
-  { initials: 'JO', name: 'James Okafor', email: 'demouser@sentconnect.org', role: 'Field User', active: true, color: 'bg-[#1085FD]' },
-  { initials: 'MS', name: 'Maria Santos', email: 'maria@mission.org', role: 'Field User', active: true, color: 'bg-emerald-600' },
-  { initials: 'DC', name: 'David Chen', email: 'david@mission.org', role: 'Field User', active: true, color: 'bg-violet-600' },
-  { initials: 'DA', name: 'Demo Admin', email: 'demoadmin@sentconnect.org', role: 'Admin', active: true, color: 'bg-slate-800' },
+  { initials: 'JO', name: 'James Okafor', email: 'demouser@sentconnect.org', role: 'Field User', color: 'bg-[#1085FD]' },
+  { initials: 'MS', name: 'Maria Santos', email: 'maria@mission.org', role: 'Field User', color: 'bg-emerald-600' },
+  { initials: 'DC', name: 'David Chen', email: 'david@mission.org', role: 'Field User', color: 'bg-violet-600' },
+  { initials: 'DA', name: 'Demo Admin', email: 'demoadmin@sentconnect.org', role: 'Admin', color: 'bg-slate-800' },
 ];
+
+function MenuItem({ icon: Icon, label, active, danger, delay }: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  active?: boolean;
+  danger?: boolean;
+  delay: number;
+}) {
+  return (
+    <motion.div
+      className={`px-4 py-2.5 flex items-center gap-3 text-sm font-medium rounded-md mx-1 ${danger ? 'text-red-600' : 'text-slate-700'}`}
+      initial={{ opacity: 0, x: 8 }}
+      animate={{ opacity: 1, x: 0, backgroundColor: active ? '#EFF6FF' : 'rgba(255,255,255,0)' }}
+      transition={{ delay }}
+    >
+      <Icon className="w-4 h-4" />
+      {label}
+      {active && <Check className="w-4 h-4 ml-auto text-[#1085FD]" />}
+    </motion.div>
+  );
+}
 
 export function Scene4Admin() {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase(1), 1000),   // Dashboard in (Updates feed)
-      setTimeout(() => setPhase(2), 5500),   // Member filter pulses
-      setTimeout(() => setPhase(3), 9500),   // Orange 3-dot menu opens
-      setTimeout(() => setPhase(4), 14500),  // User Management table
-      setTimeout(() => setPhase(5), 19500),  // Permissions dialog
-      setTimeout(() => setPhase(6), 24500),  // Password reset
-      setTimeout(() => setPhase(7), 28500),  // Export -> slide
-      setTimeout(() => setPhase(8), 36000),  // End hold
+      setTimeout(() => setPhase(1), 1000),   // Updates feed in
+      setTimeout(() => setPhase(2), 5500),   // Dropdown opens with member list
+      setTimeout(() => setPhase(3), 10500),  // Filtered to James Okafor
+      setTimeout(() => setPhase(4), 14500),  // Orange 3-dot menu opens
+      setTimeout(() => setPhase(5), 18500),  // Copy link highlighted (+email hint)
+      setTimeout(() => setPhase(6), 23500),  // Export highlighted
+      setTimeout(() => setPhase(7), 27500),  // User Management table
+      setTimeout(() => setPhase(8), 32000),  // Add Team Member dialog
+      setTimeout(() => setPhase(9), 37000),  // Permissions dialog
+      setTimeout(() => setPhase(10), 42000), // Password reset key icon
+      setTimeout(() => setPhase(11), 46000), // Export slide finale
+      setTimeout(() => setPhase(12), 53000), // End hold
     ];
     return () => timers.forEach(t => clearTimeout(t));
   }, []);
 
-  const onTeam = phase >= 4 && phase < 7;
+  const onTeam = phase >= 7 && phase < 11;
+  const filtered = phase >= 3;
+  const menuOpen = phase >= 4 && phase < 7;
 
   return (
     <motion.div
@@ -49,9 +80,9 @@ export function Scene4Admin() {
       transition={{ duration: 0.8 }}
     >
       {/* Chapter badge */}
-      {phase < 7 && (
+      {phase < 11 && (
         <motion.div
-          className="absolute top-[5%] left-0 right-0 flex justify-center z-50"
+          className="absolute top-[4%] left-0 right-0 flex justify-center z-50"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
@@ -67,13 +98,13 @@ export function Scene4Admin() {
         className="w-[85vw] h-[72vh] bg-white rounded-2xl shadow-heavy border border-slate-200 overflow-hidden flex relative"
         initial={{ scale: 0.9, opacity: 0, y: 40 }}
         animate={{
-          scale: phase >= 7 ? 1.1 : 1,
-          opacity: phase >= 7 ? 0 : 1,
+          scale: phase >= 11 ? 1.1 : 1,
+          opacity: phase >= 11 ? 0 : 1,
           y: 0,
         }}
         transition={{ type: 'spring', damping: 30, stiffness: 100 }}
       >
-        {/* Sidebar — mirrors real admin */}
+        {/* Sidebar */}
         <div className="w-60 border-r border-slate-200 bg-white flex flex-col py-6 px-4 flex-shrink-0">
           <div className="px-3 mb-2">
             <img src={`${import.meta.env.BASE_URL}images/logo-color.png`} alt="SentConnect" className="h-7 w-auto object-contain mb-4" />
@@ -84,7 +115,7 @@ export function Scene4Admin() {
             <motion.div
               className="px-3 py-2.5 rounded-lg font-semibold flex items-center gap-3"
               animate={{
-                backgroundColor: !onTeam ? '#EEF4FF' : 'transparent',
+                backgroundColor: !onTeam ? '#EEF4FF' : 'rgba(255,255,255,0)',
                 color: !onTeam ? '#0F172A' : '#64748B',
               }}
             >
@@ -94,9 +125,9 @@ export function Scene4Admin() {
             <motion.div
               className="px-3 py-2.5 rounded-lg font-semibold flex items-center gap-3 justify-between"
               animate={{
-                backgroundColor: onTeam ? '#EEF4FF' : 'transparent',
+                backgroundColor: onTeam ? '#EEF4FF' : 'rgba(255,255,255,0)',
                 color: onTeam ? '#0F172A' : '#64748B',
-                scale: phase === 4 ? [1, 1.04, 1] : 1,
+                scale: phase === 7 ? [1, 1.04, 1] : 1,
               }}
             >
               <span className="flex items-center gap-3"><Users className="w-5 h-5" /> User Management</span>
@@ -110,25 +141,68 @@ export function Scene4Admin() {
           {/* UPDATES FEED VIEW */}
           {!onTeam && (
             <>
-              <div className="px-8 pt-5 pb-0 border-b border-slate-100 flex items-center justify-between">
+              <div className="px-8 pt-5 pb-0 border-b border-slate-100 flex items-center justify-between relative">
                 <div className="flex items-center gap-6">
                   <div className="pb-3 border-b-2 border-[#1085FD] text-[#1085FD] font-bold flex items-center gap-2">
                     All Posts
-                    <span className="bg-[#EFF6FF] text-[#1085FD] text-xs font-bold px-2 py-0.5 rounded">4</span>
+                    <span className="bg-[#EFF6FF] text-[#1085FD] text-xs font-bold px-2 py-0.5 rounded">{filtered ? 2 : 4}</span>
                   </div>
                 </div>
                 <motion.div
-                  className="mb-3 border border-slate-200 rounded-full px-4 py-1.5 text-sm font-medium text-slate-600 flex items-center gap-2"
+                  className="mb-3 border rounded-full px-4 py-1.5 text-sm font-medium text-slate-600 flex items-center gap-2 bg-white"
                   animate={{
                     scale: phase === 2 ? [1, 1.1, 1] : 1,
-                    borderColor: phase >= 2 ? '#1085FD' : '#E2E8F0',
+                    borderColor: phase >= 2 && phase < 4 ? '#1085FD' : '#E2E8F0',
+                    boxShadow: phase === 2 ? '0 0 0 4px rgba(16,133,253,0.15)' : '0 0 0 0px rgba(16,133,253,0)',
                   }}
                 >
-                  All members <ChevronDown className="w-4 h-4" />
+                  {filtered ? 'James Okafor' : 'All members'} <ChevronDown className="w-4 h-4" />
                 </motion.div>
+
+                {/* Member filter dropdown */}
+                <AnimatePresence>
+                  {phase === 2 && (
+                    <motion.div
+                      className="absolute right-8 top-14 bg-white rounded-xl shadow-heavy border border-slate-200 py-1.5 w-52 z-40"
+                      initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -8 }}
+                    >
+                      <div className="px-4 py-2 text-sm font-medium text-slate-500">All members</div>
+                      {['James Okafor', 'Maria Santos', 'David Chen'].map((n, i) => (
+                        <motion.div
+                          key={n}
+                          className="px-4 py-2 text-sm font-medium rounded-md mx-1"
+                          initial={{ opacity: 0, x: 8 }}
+                          animate={{
+                            opacity: 1, x: 0,
+                            backgroundColor: i === 0 ? '#EFF6FF' : 'rgba(255,255,255,0)',
+                            color: i === 0 ? '#1085FD' : '#334155',
+                          }}
+                          transition={{ delay: 0.3 + i * 0.25, backgroundColor: { delay: 1.6 } }}
+                        >
+                          {n}
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               <div className="flex-1 p-6 bg-slate-50/60 overflow-hidden">
+                {/* Filter result banner */}
+                <AnimatePresence>
+                  {filtered && (
+                    <motion.div
+                      className="max-w-2xl mx-auto mb-3 text-sm font-medium text-[#1085FD] bg-[#EFF6FF] border border-[#BFDBFE] rounded-lg px-4 py-2 flex items-center gap-2"
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      <Users className="w-4 h-4" /> Showing posts by James Okafor only
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden max-w-2xl mx-auto relative">
                   <div className="p-5 pb-3 flex items-center gap-3">
                     <div className="w-11 h-11 rounded-full bg-[#1085FD] text-white flex items-center justify-center font-bold">JO</div>
@@ -142,7 +216,7 @@ export function Scene4Admin() {
                   <div className="px-5 pb-3 text-slate-800 text-[15px] leading-relaxed">
                     Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home.
                   </div>
-                  <div className="w-full h-[22vh]">
+                  <div className="w-full h-[19vh]">
                     <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
                   </div>
                   <div className="px-5 py-3 flex items-center gap-5 text-slate-400 relative">
@@ -150,41 +224,65 @@ export function Scene4Admin() {
                     <div className="flex items-center gap-1.5 text-[#1085FD]"><ThumbsUp className="w-5 h-5 fill-current" /><span className="font-medium text-slate-500">5</span></div>
                     <div className="flex items-center gap-1.5"><MessageCircle className="w-5 h-5" /><span className="font-medium text-slate-500">1</span></div>
 
-                    <motion.button
-                      className="ml-auto w-8 h-8 rounded-full bg-[#F97316] text-white flex items-center justify-center shadow-sm"
-                      animate={{ scale: phase === 3 ? [1, 1.25, 1] : 1 }}
-                    >
-                      <MoreHorizontal className="w-5 h-5" />
-                    </motion.button>
+                    {/* Orange share button + tooltip */}
+                    <div className="ml-auto relative">
+                      <motion.button
+                        className="w-8 h-8 rounded-full bg-[#FF4500] text-white flex items-center justify-center shadow-sm"
+                        animate={{ scale: phase === 4 ? [1, 1.3, 1] : 1 }}
+                      >
+                        <MoreHorizontal className="w-5 h-5" strokeWidth={3} />
+                      </motion.button>
+                      <AnimatePresence>
+                        {phase === 4 && (
+                          <motion.div
+                            className="absolute -top-9 right-0 bg-slate-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-md whitespace-nowrap"
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                          >
+                            Share this post
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
 
+                    {/* Share menu — mirrors real app: Copy link / Edit / Export / Delete */}
                     <AnimatePresence>
-                      {phase === 3 && (
+                      {menuOpen && (
                         <motion.div
-                          className="absolute right-4 bottom-11 bg-white rounded-xl shadow-heavy border border-slate-200 py-2 w-56 z-30"
+                          className="absolute right-4 bottom-11 bg-white rounded-xl shadow-heavy border border-slate-200 py-1.5 w-52 z-30"
                           initial={{ opacity: 0, y: 8, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 8 }}
                         >
-                          {[
-                            { icon: Link, label: 'Copy public link' },
-                            { icon: Presentation, label: 'Export to Slide' },
-                          ].map((item, i) => (
-                            <motion.div
-                              key={item.label}
-                              className={`px-4 py-2.5 flex items-center gap-3 text-sm font-medium text-slate-700 ${i === 1 ? 'bg-slate-50' : ''}`}
-                              initial={{ opacity: 0, x: 8 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.2 + i * 0.15 }}
-                            >
-                              <item.icon className="w-4 h-4" />
-                              {item.label}
-                            </motion.div>
-                          ))}
+                          <MenuItem icon={Link2} label={phase >= 5 && phase < 6 ? 'Copied!' : 'Copy link'} active={phase === 5} delay={0.2} />
+                          <MenuItem icon={Pencil} label="Edit" delay={0.35} />
+                          <MenuItem icon={ImageDown} label="Export" active={phase >= 6} delay={0.5} />
+                          <MenuItem icon={Trash2} label="Delete" danger delay={0.65} />
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
                 </div>
+
+                {/* Email hint card (phase 5) */}
+                <AnimatePresence>
+                  {phase === 5 && (
+                    <motion.div
+                      className="max-w-2xl mx-auto mt-3 bg-white border border-slate-200 rounded-xl shadow-sm px-4 py-3 flex items-center gap-3"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <div className="w-9 h-9 rounded-full bg-[#EFF6FF] flex items-center justify-center">
+                        <Mail className="w-5 h-5 text-[#1085FD]" />
+                      </div>
+                      <div className="text-sm text-slate-600">
+                        <span className="font-semibold text-slate-900">Link copied.</span> Paste it into an email — anyone praying for this work can open the post, no login needed.
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </>
           )}
@@ -198,7 +296,12 @@ export function Scene4Admin() {
             >
               <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold text-slate-900">User Management</h1>
-                <button className="bg-[#1085FD] text-white px-4 py-2 rounded-lg font-semibold text-sm">Add Team Member</button>
+                <motion.button
+                  className="bg-[#1085FD] text-white px-4 py-2 rounded-lg font-semibold text-sm"
+                  animate={{ scale: phase === 8 ? [1, 1.1, 1] : 1 }}
+                >
+                  Add Team Member
+                </motion.button>
               </div>
 
               <div className="border border-slate-200 rounded-xl overflow-hidden">
@@ -210,7 +313,7 @@ export function Scene4Admin() {
                     key={m.name}
                     className="grid grid-cols-[2fr_1fr_1fr_1fr] px-5 py-3.5 border-t border-slate-100 items-center"
                     initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0, backgroundColor: i === 0 && phase >= 5 ? '#F8FAFC' : '#FFFFFF' }}
+                    animate={{ opacity: 1, y: 0, backgroundColor: i === 0 && phase >= 9 ? '#F8FAFC' : '#FFFFFF' }}
                     transition={{ delay: 0.2 + i * 0.12 }}
                   >
                     <div className="flex items-center gap-3">
@@ -229,12 +332,21 @@ export function Scene4Admin() {
                     <div className="flex items-center gap-1.5 text-sm font-medium text-slate-600">
                       <span className="w-2 h-2 rounded-full bg-emerald-500" /> Active
                     </div>
-                    <div className="flex items-center gap-2 text-slate-400">
+                    <div className="flex items-center gap-2 text-slate-400 relative">
                       <motion.div
-                        className="p-1.5 rounded-md"
-                        animate={i === 0 && phase === 6 ? { backgroundColor: '#EFF6FF', color: '#1085FD', scale: [1, 1.2, 1] } : {}}
+                        className="p-1.5 rounded-md relative"
+                        animate={i === 0 && phase === 10 ? { backgroundColor: '#EFF6FF', color: '#1085FD', scale: [1, 1.3, 1] } : {}}
                       >
                         <KeyRound className="w-4 h-4" />
+                        {i === 0 && phase === 10 && (
+                          <motion.div
+                            className="absolute -top-9 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-md whitespace-nowrap z-20"
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                          >
+                            Reset password
+                          </motion.div>
+                        )}
                       </motion.div>
                       <MoreHorizontal className="w-4 h-4" />
                     </div>
@@ -244,12 +356,13 @@ export function Scene4Admin() {
 
               {/* Password reset toast */}
               <AnimatePresence>
-                {phase === 6 && (
+                {phase === 10 && (
                   <motion.div
                     className="absolute bottom-6 right-8 bg-[#0F172A] text-white px-5 py-3 rounded-xl shadow-heavy text-sm font-medium flex items-center gap-2"
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
+                    transition={{ delay: 1.2 }}
                   >
                     <KeyRound className="w-4 h-4 text-[#1085FD]" />
                     Temporary password generated for James Okafor
@@ -257,9 +370,81 @@ export function Scene4Admin() {
                 )}
               </AnimatePresence>
 
-              {/* PERMISSIONS DIALOG */}
+              {/* ADD TEAM MEMBER DIALOG (phase 8) */}
               <AnimatePresence>
-                {phase === 5 && (
+                {phase === 8 && (
+                  <motion.div
+                    className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-40"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <motion.div
+                      className="bg-white rounded-2xl shadow-heavy w-[420px] overflow-hidden"
+                      initial={{ scale: 0.9, y: 20 }}
+                      animate={{ scale: 1, y: 0 }}
+                      exit={{ scale: 0.9, y: 20 }}
+                    >
+                      <div className="p-5 border-b border-slate-100 bg-slate-50">
+                        <h2 className="text-lg font-bold text-slate-900">Add Team Member</h2>
+                        <p className="text-slate-500 text-sm">Create a new field user account</p>
+                      </div>
+                      <div className="p-5 space-y-3.5">
+                        {[
+                          { label: 'Name', value: 'Grace Adeyemi', delay: 0.5 },
+                          { label: 'Email', value: 'grace@mission.org', delay: 1.1 },
+                        ].map(f => (
+                          <div key={f.label}>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{f.label}</div>
+                            <div className="border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 font-medium">
+                              <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: f.delay }}>{f.value}</motion.span>
+                            </div>
+                          </div>
+                        ))}
+                        <div>
+                          <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Password</div>
+                          <div className="flex gap-2">
+                            <div className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 font-medium tracking-widest">
+                              <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.0 }}>••••••••••</motion.span>
+                            </div>
+                            <motion.button
+                              className="px-3 py-2 rounded-lg text-sm font-semibold border"
+                              animate={{
+                                backgroundColor: phase === 8 ? '#EFF6FF' : '#FFFFFF',
+                                color: '#1085FD',
+                                borderColor: '#BFDBFE',
+                                scale: [1, 1, 1.08, 1],
+                              }}
+                              transition={{ delay: 1.7, duration: 0.6 }}
+                            >
+                              Generate
+                            </motion.button>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Role</div>
+                          <div className="border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 font-medium flex items-center justify-between">
+                            Field User <ChevronDown className="w-4 h-4 text-slate-400" />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+                        <motion.button
+                          className="bg-[#1085FD] text-white px-5 py-2 rounded-lg font-bold text-sm"
+                          animate={{ scale: [1, 1, 0.94, 1] }}
+                          transition={{ delay: 3.6, duration: 0.5 }}
+                        >
+                          Create Account
+                        </motion.button>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* PERMISSIONS DIALOG (phase 9) */}
+              <AnimatePresence>
+                {phase === 9 && (
                   <motion.div
                     className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-40"
                     initial={{ opacity: 0 }}
@@ -280,20 +465,27 @@ export function Scene4Admin() {
                         </div>
                       </div>
                       <div className="p-5 space-y-4">
-                        {['Submit Reports', 'View All Reports', 'Manage Team'].map((perm, i) => (
-                          <div key={perm} className="flex items-center justify-between">
-                            <div className="font-semibold text-slate-800 text-sm">{perm}</div>
+                        {[
+                          { label: 'Submit Reports', desc: 'Post updates from the field', on: true },
+                          { label: 'View All Reports', desc: 'See the whole team\u2019s feed', on: true },
+                          { label: 'Manage Team', desc: 'Add or edit members', on: false },
+                        ].map((perm, i) => (
+                          <div key={perm.label} className="flex items-center justify-between">
+                            <div>
+                              <div className="font-semibold text-slate-800 text-sm">{perm.label}</div>
+                              <div className="text-xs text-slate-400">{perm.desc}</div>
+                            </div>
                             <motion.div
                               className="w-5 h-5 rounded border-2 flex items-center justify-center"
                               animate={{
-                                backgroundColor: i < 2 ? '#1085FD' : '#FFFFFF',
-                                borderColor: i < 2 ? '#1085FD' : '#CBD5E1',
+                                backgroundColor: perm.on ? '#1085FD' : '#FFFFFF',
+                                borderColor: perm.on ? '#1085FD' : '#CBD5E1',
                               }}
-                              transition={{ delay: 0.5 + i * 0.3 }}
+                              transition={{ delay: 0.6 + i * 0.5 }}
                             >
-                              {i < 2 && (
+                              {perm.on && (
                                 <motion.svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth={4}
-                                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 + i * 0.3 }}>
+                                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 + i * 0.5 }}>
                                   <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
                                 </motion.svg>
                               )}
@@ -314,9 +506,9 @@ export function Scene4Admin() {
       </motion.div>
 
       {/* Feature caption */}
-      <div className="absolute bottom-[6%] left-0 right-0 flex justify-center z-50">
+      <div className="absolute bottom-[5%] left-0 right-0 flex justify-center z-50">
         <AnimatePresence mode="wait">
-          {phase >= 1 && phase < 7 && CAPTIONS[phase] && (
+          {phase >= 1 && phase < 11 && CAPTIONS[phase] && (
             <motion.div
               key={phase}
               className="bg-[#0F172A] text-white px-6 py-3 rounded-full shadow-heavy text-lg font-semibold"
@@ -331,9 +523,9 @@ export function Scene4Admin() {
         </AnimatePresence>
       </div>
 
-      {/* EXPORTED SLIDE (phase 7+) */}
+      {/* EXPORTED SLIDE FINALE (phase 11+) */}
       <AnimatePresence>
-        {phase >= 7 && (
+        {phase >= 11 && (
           <motion.div
             className="absolute inset-0 flex items-center justify-center bg-black/90 backdrop-blur-xl z-[100]"
             initial={{ opacity: 0 }}
@@ -380,7 +572,7 @@ export function Scene4Admin() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.5 }}
             >
-              Ready for Sunday Morning
+              Exported — Ready for Sunday Morning
             </motion.div>
           </motion.div>
         )}
