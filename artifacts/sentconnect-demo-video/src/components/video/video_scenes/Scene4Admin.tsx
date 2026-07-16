@@ -53,9 +53,8 @@ export function Scene4Admin() {
       >
         {/* Sidebar */}
         <div className="w-64 border-r border-slate-200 bg-slate-50 flex flex-col py-6 px-4">
-          <div className="font-black text-xl text-slate-900 mb-8 px-4 flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-[#0059D6]" />
-            SentConnect
+          <div className="mb-8 px-4 flex items-center">
+            <img src={`${import.meta.env.BASE_URL}images/logo-color.png`} alt="SentConnect" className="h-8 w-auto object-contain" />
           </div>
           
           <div className="flex flex-col gap-2">
@@ -284,7 +283,7 @@ export function Scene4Admin() {
               {/* Slide Content */}
               <div className="w-1/2 h-full bg-[#0F172A] text-white p-12 flex flex-col justify-between">
                 <div>
-                  <div className="w-12 h-12 bg-[#0059D6] rounded mb-6" />
+                  <img src={`${import.meta.env.BASE_URL}images/logo-white.png`} alt="SentConnect" className="h-10 w-auto object-contain mb-6" />
                   <h1 className="text-5xl font-black leading-tight mb-4 tracking-tight">A New Church<br/>Planted in Achi Village</h1>
                   <p className="text-xl text-slate-300 font-medium">"Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy."</p>
                 </div>
