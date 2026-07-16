@@ -16,8 +16,24 @@ const CAPTIONS: Record<number, string> = {
   8: 'Share menu — public link, edit, or export',
 };
 
+const POST_TEXT = "Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home.";
+
 export function Scene2Field() {
   const [phase, setPhase] = useState(0);
+  const [typedCount, setTypedCount] = useState(0);
+
+  // Fast typing effect during phase 2
+  useEffect(() => {
+    if (phase < 2) return;
+    if (phase >= 5) { setTypedCount(POST_TEXT.length); return; }
+    const interval = setInterval(() => {
+      setTypedCount(c => {
+        if (c >= POST_TEXT.length) { clearInterval(interval); return c; }
+        return c + 2;
+      });
+    }, 28);
+    return () => clearInterval(interval);
+  }, [phase >= 2, phase >= 5]);
 
   useEffect(() => {
     const timers = [
@@ -162,9 +178,16 @@ export function Scene2Field() {
                     <div className="min-h-[56px] text-slate-800 text-[17px] leading-relaxed">
                       {phase < 2 && <span className="text-slate-400">Share an update...</span>}
                       {phase >= 2 && (
-                        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                          Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home.
-                        </motion.span>
+                        <span>
+                          {POST_TEXT.slice(0, typedCount)}
+                          {typedCount < POST_TEXT.length && (
+                            <motion.span
+                              className="inline-block w-[2px] h-[1.1em] bg-[#1085FD] align-middle ml-0.5"
+                              animate={{ opacity: [1, 0, 1] }}
+                              transition={{ duration: 0.8, repeat: Infinity }}
+                            />
+                          )}
+                        </span>
                       )}
                     </div>
 
@@ -215,8 +238,11 @@ export function Scene2Field() {
                     <MapPin className="w-5 h-5" /> Location
                   </motion.div>
                   <motion.button
-                    className="ml-auto bg-[#1085FD] text-white px-5 py-2 rounded-lg font-semibold flex items-center gap-2 shadow-sm"
-                    animate={{ scale: phase >= 5 ? 0.92 : 1 }}
+                    className="ml-auto bg-[#1085FD] text-white px-5 py-2 rounded-lg font-semibold flex items-center gap-2 shadow-sm relative"
+                    animate={phase >= 5
+                      ? { scale: [1, 0.85, 1.05, 1], boxShadow: ['0 1px 2px rgba(0,0,0,0.1)', '0 0 0 6px rgba(16,133,253,0.25)', '0 0 0 12px rgba(16,133,253,0)', '0 1px 2px rgba(0,0,0,0.1)'] }
+                      : { scale: 1 }}
+                    transition={phase >= 5 ? { duration: 0.7, times: [0, 0.25, 0.6, 1] } : undefined}
                   >
                     <Send className="w-4 h-4" />
                     Post Update
