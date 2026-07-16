@@ -11,8 +11,8 @@ const CAPTIONS: Record<number, string> = {
   3: 'Adds photos from the field',
   4: 'Tags where it happened',
   5: 'One tap — his church back home sees it instantly',
-  6: 'Supporters respond with hearts & likes',
-  7: 'Comments — prayer & encouragement from home',
+  6: 'His church & partner organizations react with hearts & likes',
+  7: 'They comment back — prayer & encouragement from home',
   8: 'Share menu — public link, edit, or export',
 };
 
@@ -21,15 +21,15 @@ export function Scene2Field() {
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase(1), 4800),   // Intro headline out, app frame in
-      setTimeout(() => setPhase(2), 8300),   // Typing text
-      setTimeout(() => setPhase(3), 13000),  // Photo drops in
-      setTimeout(() => setPhase(4), 16500),  // Location chip
-      setTimeout(() => setPhase(5), 20000),  // Post -> feed card
-      setTimeout(() => setPhase(6), 24000),  // Reactions
-      setTimeout(() => setPhase(7), 28000),  // Comment
-      setTimeout(() => setPhase(8), 32000),  // 3-dot menu opens
-      setTimeout(() => setPhase(9), 36000),  // Fade out
+      setTimeout(() => setPhase(1), 5500),   // Intro headline out, app frame in
+      setTimeout(() => setPhase(2), 10000),  // Typing text
+      setTimeout(() => setPhase(3), 15000),  // Photo drops in
+      setTimeout(() => setPhase(4), 19000),  // Location chip
+      setTimeout(() => setPhase(5), 23000),  // Post -> feed card
+      setTimeout(() => setPhase(6), 28000),  // Reactions
+      setTimeout(() => setPhase(7), 33000),  // Comment
+      setTimeout(() => setPhase(8), 38000),  // 3-dot menu opens
+      setTimeout(() => setPhase(9), 42500),  // Fade out
     ];
     return () => timers.forEach(t => clearTimeout(t));
   }, []);
@@ -89,8 +89,8 @@ export function Scene2Field() {
         animate={{ opacity: phase >= 1 && phase < 9 ? 1 : 0, y: phase >= 1 ? 0 : -20 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="bg-white/80 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-slate-200">
-          <span className="text-slate-500 font-semibold tracking-wide text-sm uppercase">Field User</span>
+        <div className="bg-[#1085FD] text-white px-10 py-3.5 rounded-full shadow-heavy">
+          <span className="font-black tracking-widest text-2xl uppercase">Field User</span>
         </div>
       </motion.div>
 

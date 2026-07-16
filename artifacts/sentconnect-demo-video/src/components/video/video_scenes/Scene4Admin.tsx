@@ -54,15 +54,15 @@ export function Scene4Admin() {
       setTimeout(() => setPhase(1), 1000),   // Updates feed in
       setTimeout(() => setPhase(2), 5500),   // Dropdown opens with member list
       setTimeout(() => setPhase(3), 10500),  // Filtered to James Okafor
-      setTimeout(() => setPhase(4), 14500),  // Orange 3-dot menu opens
-      setTimeout(() => setPhase(5), 18500),  // Copy link highlighted (+email hint)
-      setTimeout(() => setPhase(6), 23500),  // Export highlighted
-      setTimeout(() => setPhase(7), 27500),  // User Management table
-      setTimeout(() => setPhase(8), 32000),  // Add Team Member dialog (role choice)
-      setTimeout(() => setPhase(9), 38500),  // Role & Permissions dialog
-      setTimeout(() => setPhase(10), 45000), // Password reset dialog
-      setTimeout(() => setPhase(11), 51500), // Export slide finale
-      setTimeout(() => setPhase(12), 58000), // End hold
+      setTimeout(() => setPhase(4), 15500),  // Orange 3-dot menu opens
+      setTimeout(() => setPhase(5), 20000),  // Copy link highlighted (+email hint)
+      setTimeout(() => setPhase(6), 25500),  // Export highlighted
+      setTimeout(() => setPhase(7), 30000),  // User Management table
+      setTimeout(() => setPhase(8), 35000),  // Add Team Member dialog (role choice)
+      setTimeout(() => setPhase(9), 42000),  // Role & Permissions dialog
+      setTimeout(() => setPhase(10), 49000), // Password reset dialog
+      setTimeout(() => setPhase(11), 56000), // Export slide finale
+      setTimeout(() => setPhase(12), 62500), // End hold
     ];
     return () => timers.forEach(t => clearTimeout(t));
   }, []);
@@ -87,8 +87,8 @@ export function Scene4Admin() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
         >
-          <div className="bg-[#0F172A] text-white px-6 py-2 rounded-full shadow-md">
-            <span className="font-semibold tracking-wide text-sm uppercase">Admin Portal</span>
+          <div className="bg-[#1085FD] text-white px-10 py-3.5 rounded-full shadow-heavy">
+            <span className="font-black tracking-widest text-2xl uppercase">Admin Portal</span>
           </div>
         </motion.div>
       )}
