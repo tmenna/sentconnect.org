@@ -64,11 +64,20 @@ export default function VideoTemplate({
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Fixed 16:9 design stage scaled to fit any viewport (mobile-friendly)
-  const [stageScale, setStageScale] = useState(1);
+  // Fixed 16:9 design stage scaled to fit any viewport (mobile-friendly).
+  // On portrait screens (phones held upright), rotate the stage 90° so the
+  // video fills the screen large and clear instead of a tiny letterboxed strip.
+  const [stage, setStage] = useState({ scale: 1, rotate: false });
   useEffect(() => {
-    const update = () =>
-      setStageScale(Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H));
+    const update = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const rotate = h > w;
+      const scale = rotate
+        ? Math.min(h / STAGE_W, w / STAGE_H)
+        : Math.min(w / STAGE_W, h / STAGE_H);
+      setStage({ scale, rotate });
+    };
     update();
     window.addEventListener('resize', update);
     window.addEventListener('orientationchange', update);
@@ -121,7 +130,7 @@ export default function VideoTemplate({
         style={{
           width: STAGE_W,
           height: STAGE_H,
-          transform: `translate(-50%, -50%) scale(${stageScale})`,
+          transform: `translate(-50%, -50%) ${stage.rotate ? 'rotate(90deg) ' : ''}scale(${stage.scale})`,
         }}
       >
       {/* Persistent Background layer */}
