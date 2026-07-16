@@ -13,9 +13,9 @@ const CAPTIONS: Record<number, string> = {
   5: 'Copy link — email it to people praying for this post',
   6: 'Export — turn the post into a Sunday-morning slide',
   7: 'User Management — every member, role & status',
-  8: 'Add Team Member — create a field user in seconds',
-  9: 'Permissions — control what each user can do',
-  10: 'Key icon — one-click password reset',
+  8: 'Add a member — as Field User or another Admin',
+  9: 'Update a member\u2019s Role & Permissions anytime',
+  10: 'Key icon — reset any field user\u2019s password',
 };
 
 const MEMBERS = [
@@ -58,11 +58,11 @@ export function Scene4Admin() {
       setTimeout(() => setPhase(5), 18500),  // Copy link highlighted (+email hint)
       setTimeout(() => setPhase(6), 23500),  // Export highlighted
       setTimeout(() => setPhase(7), 27500),  // User Management table
-      setTimeout(() => setPhase(8), 32000),  // Add Team Member dialog
-      setTimeout(() => setPhase(9), 37000),  // Permissions dialog
-      setTimeout(() => setPhase(10), 42000), // Password reset key icon
-      setTimeout(() => setPhase(11), 46000), // Export slide finale
-      setTimeout(() => setPhase(12), 53000), // End hold
+      setTimeout(() => setPhase(8), 32000),  // Add Team Member dialog (role choice)
+      setTimeout(() => setPhase(9), 38500),  // Role & Permissions dialog
+      setTimeout(() => setPhase(10), 45000), // Password reset dialog
+      setTimeout(() => setPhase(11), 51500), // Export slide finale
+      setTimeout(() => setPhase(12), 58000), // End hold
     ];
     return () => timers.forEach(t => clearTimeout(t));
   }, []);
@@ -354,18 +354,76 @@ export function Scene4Admin() {
                 ))}
               </div>
 
-              {/* Password reset toast */}
+              {/* MANAGE PASSWORD DIALOG (phase 10) */}
               <AnimatePresence>
                 {phase === 10 && (
                   <motion.div
-                    className="absolute bottom-6 right-8 bg-[#0F172A] text-white px-5 py-3 rounded-xl shadow-heavy text-sm font-medium flex items-center gap-2"
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-40"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ delay: 1.2 }}
+                    transition={{ delay: 1.0 }}
                   >
-                    <KeyRound className="w-4 h-4 text-[#1085FD]" />
-                    Temporary password generated for James Okafor
+                    <motion.div
+                      className="bg-white rounded-2xl shadow-heavy w-[420px] overflow-hidden"
+                      initial={{ scale: 0.9, y: 20 }}
+                      animate={{ scale: 1, y: 0 }}
+                      exit={{ scale: 0.9, y: 20 }}
+                      transition={{ delay: 1.0 }}
+                    >
+                      <div className="p-5 border-b border-slate-100 bg-slate-50 flex items-center gap-3">
+                        <div className="w-11 h-11 bg-[#1085FD] rounded-full flex items-center justify-center text-white">
+                          <KeyRound className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-bold text-slate-900">Manage Password</h2>
+                          <p className="text-slate-500 text-sm">James Okafor</p>
+                        </div>
+                      </div>
+                      <div className="p-5 space-y-3">
+                        <div className="border border-slate-200 rounded-lg px-4 py-3 flex items-center gap-3">
+                          <div className="w-4 h-4 rounded-full border-2 border-slate-300" />
+                          <div>
+                            <div className="font-semibold text-slate-800 text-sm">Set a specific password</div>
+                            <div className="text-xs text-slate-400">Type a new password yourself</div>
+                          </div>
+                        </div>
+                        <motion.div
+                          className="border-2 rounded-lg px-4 py-3 flex items-center gap-3"
+                          animate={{ borderColor: ['#E2E8F0', '#1085FD'], backgroundColor: ['#FFFFFF', '#F8FBFF'] }}
+                          transition={{ delay: 2.2, duration: 0.4 }}
+                        >
+                          <motion.div
+                            className="w-4 h-4 rounded-full border-2 flex items-center justify-center"
+                            animate={{ borderColor: ['#CBD5E1', '#1085FD'] }}
+                            transition={{ delay: 2.2 }}
+                          >
+                            <motion.div
+                              className="w-2 h-2 rounded-full bg-[#1085FD]"
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ delay: 2.4 }}
+                            />
+                          </motion.div>
+                          <div>
+                            <div className="font-semibold text-slate-800 text-sm">Generate temporary password</div>
+                            <div className="text-xs text-slate-400">Share it with the user — they sign in and change it</div>
+                          </div>
+                        </motion.div>
+                        <motion.div
+                          className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 flex items-center justify-between"
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 3.4 }}
+                        >
+                          <span className="font-mono text-sm font-bold text-slate-800 tracking-wider">TmP-4k9x-Qe2</span>
+                          <span className="text-xs font-semibold text-[#1085FD] flex items-center gap-1"><Check className="w-3.5 h-3.5" /> Copied</span>
+                        </motion.div>
+                      </div>
+                      <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+                        <button className="bg-[#1085FD] text-white px-5 py-2 rounded-lg font-bold text-sm">Done</button>
+                      </div>
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -421,11 +479,34 @@ export function Scene4Admin() {
                             </motion.button>
                           </div>
                         </div>
-                        <div>
+                        <div className="relative">
                           <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Role</div>
-                          <div className="border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 font-medium flex items-center justify-between">
-                            Field User <ChevronDown className="w-4 h-4 text-slate-400" />
-                          </div>
+                          <motion.div
+                            className="border rounded-lg px-3 py-2 text-sm text-slate-800 font-medium flex items-center justify-between"
+                            animate={{ borderColor: ['#E2E8F0', '#E2E8F0', '#1085FD'] }}
+                            transition={{ delay: 2.4, duration: 0.4 }}
+                          >
+                            <motion.span initial={{ opacity: 1 }}>Field User</motion.span>
+                            <ChevronDown className="w-4 h-4 text-slate-400" />
+                          </motion.div>
+                          {/* Role dropdown — shows you can also create org Admins */}
+                          <motion.div
+                            className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-heavy py-1 z-20"
+                            initial={{ opacity: 0, y: -6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 2.6 }}
+                          >
+                            <div className="px-3 py-2 text-sm font-medium text-slate-700 flex items-center gap-2 mx-1 rounded-md">
+                              <Globe className="w-3.5 h-3.5" /> Field User
+                            </div>
+                            <motion.div
+                              className="px-3 py-2 text-sm font-semibold flex items-center gap-2 mx-1 rounded-md"
+                              animate={{ backgroundColor: ['rgba(255,255,255,0)', 'rgba(255,255,255,0)', '#EFF6FF'], color: ['#334155', '#334155', '#1085FD'] }}
+                              transition={{ delay: 3.4, duration: 0.4 }}
+                            >
+                              <ShieldCheck className="w-3.5 h-3.5" /> Admin — full org access
+                            </motion.div>
+                          </motion.div>
                         </div>
                       </div>
                       <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
@@ -461,10 +542,29 @@ export function Scene4Admin() {
                         <div className="w-11 h-11 bg-[#1085FD] rounded-full flex items-center justify-center text-white font-bold">JO</div>
                         <div>
                           <h2 className="text-lg font-bold text-slate-900">James Okafor</h2>
-                          <p className="text-slate-500 text-sm">Edit Permissions</p>
+                          <p className="text-slate-500 text-sm">Edit Role &amp; Permissions</p>
                         </div>
                       </div>
-                      <div className="p-5 space-y-4">
+                      <div className="p-5 pb-2">
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Role</div>
+                        <motion.div
+                          className="border rounded-lg px-3 py-2 text-sm font-medium flex items-center justify-between"
+                          animate={{ borderColor: ['#E2E8F0', '#1085FD', '#E2E8F0'] }}
+                          transition={{ delay: 0.5, duration: 1.2 }}
+                        >
+                          <span className="flex items-center gap-2 text-slate-800"><Globe className="w-3.5 h-3.5 text-slate-400" /> Field User</span>
+                          <ChevronDown className="w-4 h-4 text-slate-400" />
+                        </motion.div>
+                        <motion.div
+                          className="text-xs text-slate-400 mt-1.5"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 1.2 }}
+                        >
+                          Switch to Admin to give full organization access
+                        </motion.div>
+                      </div>
+                      <div className="p-5 pt-3 space-y-4">
                         {[
                           { label: 'Submit Reports', desc: 'Post updates from the field', on: true },
                           { label: 'View All Reports', desc: 'See the whole team\u2019s feed', on: true },

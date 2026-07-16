@@ -7,12 +7,12 @@ import { Scene3Transition } from './video_scenes/Scene3Transition';
 import { Scene4Admin } from './video_scenes/Scene4Admin';
 import { Scene5Close } from './video_scenes/Scene5Close';
 
-// Total duration ~111s
+// Total duration ~116s
 export const SCENE_DURATIONS = {
   problem: 6000,
   field: 34000,
   transition: 5000,
-  admin: 55000,
+  admin: 60000,
   close: 11000
 };
 
