@@ -27,6 +27,7 @@ export const RESERVED_PATHS = new Set([
   "forgot-password",
   "reset-password",
   "api",
+  "demo",
   "health",
   "static",
   "assets",
