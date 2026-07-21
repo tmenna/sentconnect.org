@@ -18,6 +18,24 @@ uri = "file://artifacts/sentconnect-demo-video/public/images/field-worker.png"
 type = "image"
 title = "Achi village church gathering"
 
+[[generated]]
+id = "mbJEronndGdxHxCxXgR_X"
+uri = "file://artifacts/mockup-sandbox/public/images/addis-well.png"
+type = "image"
+title = "Water well in dry landscape"
+
+[[generated]]
+id = "IkWtW909QDJl0aQNay5ex"
+uri = "file://artifacts/mockup-sandbox/public/images/medical-outreach.png"
+type = "image"
+title = "Medical outreach in village"
+
+[[generated]]
+id = "iO_uSoWegAJjc3_Qo2UkB"
+uri = "file://artifacts/mockup-sandbox/public/images/youth-program.png"
+type = "image"
+title = "Youth playing soccer at sunset"
+
 [[outputs]]
 id = "_0I-1E3uUCbe2RQXcqpSN"
 uri = "file://attached_assets/about-family.png"

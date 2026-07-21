@@ -26,7 +26,8 @@ const INITIAL_POSTS: Post[] = [
     author: { name: 'Maria Gonzalez', initials: 'MG', avatarColor: 'bg-emerald-500' },
     location: 'Kigali, Rwanda',
     time: '2h ago',
-    content: 'Praise God for an amazing youth outreach this morning! We had over 50 teenagers show up to play soccer and hear the gospel. Please pray for the seeds planted today.',
+    content: 'Praise God for an amazing youth outreach! The kids loved the new soccer gear. We shared a simple message about hope and community, and the response was overwhelming. Thank you for making this possible.',
+    image: 'url(/__mockup/images/youth-program.png) center/cover no-repeat',
     likes: 12,
     comments: 3,
     isLiked: false,
@@ -36,8 +37,7 @@ const INITIAL_POSTS: Post[] = [
     author: { name: 'James Okafor', initials: 'JO', avatarColor: 'bg-blue-500' },
     location: 'Chiang Mai, Thailand',
     time: '5h ago',
-    content: 'Just finished our weekly team prayer gathering. The encouragement from this community is incredible. Preparing for our language exams next week!',
-    image: 'linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 100%)',
+    content: 'Met with local pastors today to plan the upcoming leadership training seminar. They are so hungry for resources and fellowship. Please pray for wisdom as we finalize the curriculum.',
     likes: 24,
     comments: 5,
     isLiked: true,
@@ -45,9 +45,10 @@ const INITIAL_POSTS: Post[] = [
   {
     id: '3',
     author: { name: 'David Kim', initials: 'DK', avatarColor: 'bg-violet-500' },
-    location: 'Amman, Rwanda',
+    location: 'Nairobi, Rwanda',
     time: '1d ago',
-    content: 'Visited the local hospital today with care packages. So many opportunities to share hope. Thank you to everyone supporting this project back home!',
+    content: 'Our first day of the rural medical clinic was exhausting but incredibly rewarding. We treated over 100 patients and prayed with many families. The need is great, but we are so thankful for the opportunity to serve.',
+    image: 'url(/__mockup/images/medical-outreach.png) center/cover no-repeat',
     likes: 31,
     comments: 8,
     isLiked: false,
@@ -95,12 +96,13 @@ export function InteractiveFeed() {
         
         // Start composing a new post
         setComposerStep('typing');
-        const textToType = "We just arrived safely! Thank you all for the prayers.";
-        for (let i = 0; i <= textToType.length; i++) {
+        const textToType = "We safely arrived this week and are partnering with a local church and community leaders to launch a clean water project outside Addis Ababa. The new well will provide safe drinking water for hundreds of people. Please keep the project and our team in your prayers.";
+        for (let i = 0; i <= textToType.length; i += 3) {
           if (!isActive) return;
           setComposerText(textToType.substring(0, i));
-          await sleep(50 + Math.random() * 50);
+          await sleep(20 + Math.random() * 30);
         }
+        setComposerText(textToType);
         
         await sleep(1000);
         setComposerStep('attaching');
@@ -114,10 +116,10 @@ export function InteractiveFeed() {
         const newPost: Post = {
           id: Date.now().toString(),
           author: { name: 'Sarah Jenkins', initials: 'SJ', avatarColor: 'bg-amber-500' },
-          location: 'Bogotá, Jordan',
+          location: 'Addis Ababa, Ethiopia',
           time: 'Just now',
           content: textToType,
-          image: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+          image: 'url(/__mockup/images/addis-well.png) center/cover no-repeat',
           likes: 0,
           comments: 0,
           isLiked: false,
