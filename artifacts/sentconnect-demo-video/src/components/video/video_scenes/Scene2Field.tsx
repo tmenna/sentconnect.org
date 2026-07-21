@@ -199,7 +199,7 @@ export function Scene2Field() {
                           initial={{ opacity: 0, y: 16, scale: 0.9 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                         >
-                          <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
+                          <img src={`${import.meta.env.BASE_URL}images/field-worker.jpg`} className="w-full h-full object-cover" />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -276,7 +276,7 @@ export function Scene2Field() {
                 </div>
 
                 <div className="w-full h-[234px]">
-                  <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
+                  <img src={`${import.meta.env.BASE_URL}images/field-worker.jpg`} className="w-full h-full object-cover" />
                 </div>
 
                 {/* Actions row with orange 3-dot */}

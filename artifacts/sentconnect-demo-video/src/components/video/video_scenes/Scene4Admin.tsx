@@ -217,7 +217,7 @@ export function Scene4Admin() {
                     Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home.
                   </div>
                   <div className="w-full h-[171px]">
-                    <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
+                    <img src={`${import.meta.env.BASE_URL}images/field-worker.jpg`} className="w-full h-full object-cover" />
                   </div>
                   <div className="px-5 py-3 flex items-center gap-5 text-slate-400 relative">
                     <div className="flex items-center gap-1.5 text-red-400"><Heart className="w-5 h-5 fill-current" /><span className="font-medium text-slate-500">8</span></div>
@@ -662,7 +662,7 @@ export function Scene4Admin() {
                 </div>
               </div>
               <div className="w-1/2 h-full">
-                <img src={`${import.meta.env.BASE_URL}images/field-worker.png`} className="w-full h-full object-cover" />
+                <img src={`${import.meta.env.BASE_URL}images/field-worker.jpg`} className="w-full h-full object-cover" />
               </div>
             </motion.div>
 

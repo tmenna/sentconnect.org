@@ -438,7 +438,7 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              <img src={lpFooterLogo} alt="SentConnect" width={256} height={256} style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14 }} />
+              <img src={lpFooterLogo} alt="SentConnect" width={256} height={256} loading="lazy" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -672,7 +672,7 @@ function AboutPage() {
         <div className="mx-auto max-w-6xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
-              <img src={lpLogo} alt="SentConnect" style={{ maxHeight: 28, width: "auto", maxWidth: 160, display: "block", marginBottom: 14 }} />
+              <img src={lpLogo} alt="SentConnect" loading="lazy" style={{ maxHeight: 28, width: "auto", maxWidth: 160, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
