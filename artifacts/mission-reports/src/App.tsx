@@ -257,7 +257,7 @@ function LandingPage() {
                 <a
                   href={content.primaryCtaHref}
                   onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                  style={{ display: "inline-flex", alignItems: "center", gap: 8, height: 52, padding: "0 28px", borderRadius: 999, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)", transition: "opacity .15s, transform .15s, box-shadow .15s" }}
+                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 52, minWidth: 250, padding: "0 28px", borderRadius: 999, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)", transition: "opacity .15s, transform .15s, box-shadow .15s" }}
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "0.92"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "1"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.38)"; }}
                 >
@@ -266,11 +266,13 @@ function LandingPage() {
                 </a>
                 <a
                   href="https://demo.sentconnect.org/"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 52, padding: "0 24px", borderRadius: 999, background: "#fff", color: "#1085FD", fontSize: 15, fontWeight: 600, textDecoration: "none", border: "1.5px solid #1085FD", boxShadow: "0 2px 8px rgba(16,133,253,0.12)", transition: "border-color .15s, color .15s, box-shadow .15s, background .15s" }}
+                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 52, minWidth: 170, padding: "0 28px", borderRadius: 999, background: "#fff", color: "#1085FD", fontSize: 15, fontWeight: 700, textDecoration: "none", border: "1.5px solid #1085FD", boxShadow: "0 2px 8px rgba(16,133,253,0.12)", transition: "border-color .15s, color .15s, box-shadow .15s, background .15s" }}
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#EEF6FF"; el.style.boxShadow = "0 4px 16px rgba(16,133,253,0.20)"; }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#fff"; el.style.boxShadow = "0 2px 8px rgba(16,133,253,0.12)"; }}
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: "50%", background: "rgba(16,133,253,0.14)" }}>
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 1 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </span>
                   Try Demo
                 </a>
               </div>
