@@ -5,8 +5,9 @@ export const modules: ModuleMap = {
   "./components/mockups/admin-dashboard/NavyAmber.tsx": () => import("../components/mockups/admin-dashboard/NavyAmber.tsx"),
   "./components/mockups/admin-dashboard/SlateTeal.tsx": () => import("../components/mockups/admin-dashboard/SlateTeal.tsx"),
   "./components/mockups/dashboard/Feed.tsx": () => import("../components/mockups/dashboard/Feed.tsx"),
-  "./components/mockups/sentconnect-ui/AdminDashboard.tsx": () => import("../components/mockups/sentconnect-ui/AdminDashboard.tsx"),
-  "./components/mockups/sentconnect-ui/PostFeed.tsx": () => import("../components/mockups/sentconnect-ui/PostFeed.tsx"),
+  "./components/mockups/sentconnect-hero/InteractiveFeed.tsx": () => import("../components/mockups/sentconnect-hero/InteractiveFeed.tsx"),
   "./components/mockups/dashboard-redesign/RenderStyle.tsx": () => import("../components/mockups/dashboard-redesign/RenderStyle.tsx"),
-  "./components/mockups/dashboard-redesign/TimelineFeed.tsx": () => import("../components/mockups/dashboard-redesign/TimelineFeed.tsx")
+  "./components/mockups/dashboard-redesign/TimelineFeed.tsx": () => import("../components/mockups/dashboard-redesign/TimelineFeed.tsx"),
+  "./components/mockups/sentconnect-ui/AdminDashboard.tsx": () => import("../components/mockups/sentconnect-ui/AdminDashboard.tsx"),
+  "./components/mockups/sentconnect-ui/PostFeed.tsx": () => import("../components/mockups/sentconnect-ui/PostFeed.tsx")
 };
