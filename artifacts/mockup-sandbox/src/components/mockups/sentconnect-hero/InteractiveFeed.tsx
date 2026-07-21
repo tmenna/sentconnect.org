@@ -22,6 +22,16 @@ type Post = {
 // Initial Data
 const INITIAL_POSTS: Post[] = [
   {
+    id: '0',
+    author: { name: 'Grace Adeyemi', initials: 'GA', avatarColor: 'bg-rose-500' },
+    location: 'Jos, Nigeria',
+    time: '1h ago',
+    content: 'For two weeks in January, we gathered 18 young leaders from five different villages. These leaders wake before dawn to study. They argued passionately over Scripture. One young woman, Adaeze, is leading a fellowship of 34 women in her village.',
+    likes: 19,
+    comments: 4,
+    isLiked: false,
+  },
+  {
     id: '1',
     author: { name: 'Maria Gonzalez', initials: 'MG', avatarColor: 'bg-emerald-500' },
     location: 'Kigali, Rwanda',
