@@ -12,6 +12,7 @@ import NotFound from "@/pages/not-found";
 import { OrgProvider, useOrg } from "@/providers/org-provider";
 import { LogoProvider, useLogo } from "@/providers/logo-provider";
 import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
+import { HeroFeedPreview } from "@/components/hero-feed-preview";
 import "./landing-page.css";
 
 // Critical path — eagerly bundled (small or needed immediately)
@@ -279,63 +280,10 @@ function LandingPage() {
 
             </div>
 
-            {/* ── RIGHT: floating feed UI mockup ── */}
-            <div className="lp-hero-split-deco lp-animate lp-delay-5" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 0" }}>
-              <div style={{ position: "relative", width: "100%", maxWidth: 380 }}>
-
-                {/* Ghost card — peeking behind with slight rotation */}
-                <div style={{ position: "absolute", top: -14, right: -16, left: 24, background: "#fff", borderRadius: 18, padding: "16px 18px", boxShadow: "0 4px 20px rgba(15,23,42,0.07)", border: "1px solid #E8F0FE", transform: "rotate(2.5deg)", opacity: 0.65, zIndex: 0 }}>
-                  <div style={{ height: 9, borderRadius: 5, background: "#EEF4FF", width: "65%", marginBottom: 8 }} />
-                  <div style={{ height: 7, borderRadius: 4, background: "#F5F7FA", width: "88%", marginBottom: 5 }} />
-                  <div style={{ height: 7, borderRadius: 4, background: "#F5F7FA", width: "52%" }} />
-                </div>
-
-                {/* Main feed card */}
-                <div style={{ background: "#fff", borderRadius: 20, boxShadow: "0 16px 56px rgba(15,23,42,0.13), 0 2px 8px rgba(15,23,42,0.05)", border: "1px solid #E0EBFF", overflow: "hidden", position: "relative", zIndex: 1 }}>
-
-                  {/* Card header */}
-                  <div style={{ padding: "16px 20px", borderBottom: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(135deg, ${BLUE} 0%, #60A5FA 100%)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 13.5, fontWeight: 700, color: "#0F172A" }}>Missions Feed</div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 2 }}>
-                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22C55E" }} />
-                        <span style={{ fontSize: 11, color: "#64748B" }}>Field updates</span>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: 10, color: "#94A3B8", background: "#F8FAFC", border: "1px solid #E2E8F0", padding: "3px 8px", borderRadius: 999 }}>calvary.sentconnect.org</span>
-                  </div>
-
-                  {/* Feed items */}
-                  {[
-                    { title: content.previewTitle1 || "Prayer gathering in Kigali", color: "#DBEAFE", time: "2h ago" },
-                    { title: content.previewTitle2 || "New family visits this week", color: "#FCE7F3", time: "3h ago" },
-                    { title: content.previewTitle3 || "Youth outreach photos shared", color: "#D1FAE5", time: "5h ago" },
-                  ].map(({ title, color, time }, i) => (
-                    <div key={i} style={{ padding: "13px 20px", borderBottom: i < 2 ? "1px solid #F8FAFC" : "none", display: "flex", alignItems: "flex-start", gap: 11 }}>
-                      <div style={{ width: 30, height: 30, borderRadius: "50%", background: color, flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 12.5, fontWeight: 600, color: "#0F172A", marginBottom: 5, lineHeight: 1.35, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</div>
-                        <div style={{ display: "flex", gap: 6 }}>
-                          <div style={{ height: 7, borderRadius: 3, background: "#F1F5F9", width: "52%" }} />
-                          <div style={{ height: 7, borderRadius: 3, background: "#F1F5F9", width: "22%" }} />
-                        </div>
-                      </div>
-                      <span style={{ fontSize: 10.5, color: "#94A3B8", flexShrink: 0, marginTop: 1 }}>{time}</span>
-                    </div>
-                  ))}
-
-                  {/* Compose bar */}
-                  <div style={{ padding: "11px 20px", background: "#FAFBFF", borderTop: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{ width: 26, height: 26, borderRadius: "50%", background: "#E0EBFF", flexShrink: 0 }} />
-                    <div style={{ flex: 1, height: 28, borderRadius: 8, background: "#F1F5F9", display: "flex", alignItems: "center", padding: "0 12px" }}>
-                      <span style={{ fontSize: 11.5, color: "#94A3B8" }}>Share an update…</span>
-                    </div>
-                  </div>
-                </div>
-
+            {/* ── RIGHT: interactive feed phone preview ── */}
+            <div className="lp-hero-split-deco lp-animate lp-delay-5" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", padding: "0" }}>
+              <div className="lp-phone-wrap" style={{ position: "relative" }}>
+                <HeroFeedPreview />
                 {/* Decorative dot cluster */}
                 <div style={{ position: "absolute", bottom: -20, right: -24, display: "flex", flexWrap: "wrap", gap: 6, width: 72, opacity: 0.35, pointerEvents: "none" }}>
                   {Array.from({ length: 9 }).map((_, i) => (

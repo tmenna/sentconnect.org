@@ -74,6 +74,17 @@
 /* Hero section responsive padding */
 .lp-hero-section { padding: 112px 0 96px; }
 
+/* Interactive phone feed preview */
+.lp-feed-scroll::-webkit-scrollbar { display: none; }
+.lp-feed-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+.lp-phone-wrap {
+  transform: scale(0.82);
+  transform-origin: center center;
+}
+@media (max-width: 1100px) {
+  .lp-phone-wrap { transform: scale(0.72); }
+}
+
 @media (max-width: 767px) {
   .lp-hero-grid   { grid-template-columns: 1fr; gap: 40px; }
   .lp-hero-split  { grid-template-columns: 1fr; min-height: unset; }
