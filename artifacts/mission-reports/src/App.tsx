@@ -116,7 +116,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
 function LandingPage() {
   const [content, setContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const { logo: lpLogo, footerLogo: lpFooterLogo } = useLogo();
+  const { logo: lpLogo, footerLogo: lpFooterLogo, isLogoReady } = useLogo();
   const [, navigate] = useLocation();
 
   function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
@@ -153,7 +153,7 @@ function LandingPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" width={256} height={256} fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
 
           {/* Desktop nav */}
@@ -438,7 +438,7 @@ function LandingPage() {
           <div className="lp-footer-brand-row">
             {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              <img src={lpFooterLogo} alt="SentConnect" width={256} height={256} loading="lazy" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14 }} />
+              <img src={lpFooterLogo} alt="SentConnect" loading="lazy" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
@@ -495,7 +495,7 @@ function AboutPage() {
   const [lpContent, setLpContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [about, setAbout] = useState<AboutPageContent>(DEFAULT_ABOUT_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const { logo: lpLogo } = useLogo();
+  const { logo: lpLogo, isLogoReady } = useLogo();
   const [, navigate] = useLocation();
 
   function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
@@ -530,7 +530,7 @@ function AboutPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" width={256} height={256} fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
+            <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
 
           {/* Desktop nav */}
@@ -672,7 +672,7 @@ function AboutPage() {
         <div className="mx-auto max-w-6xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
-              <img src={lpLogo} alt="SentConnect" loading="lazy" style={{ maxHeight: 28, width: "auto", maxWidth: 160, display: "block", marginBottom: 14 }} />
+              <img src={lpLogo} alt="SentConnect" loading="lazy" style={{ maxHeight: 28, width: "auto", maxWidth: 160, display: "block", marginBottom: 14, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
