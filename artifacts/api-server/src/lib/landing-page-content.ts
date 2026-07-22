@@ -9,7 +9,7 @@ export const DEFAULT_LANDING_PAGE_CONTENT = {
   headerPrimaryCtaLabel: "Sign up",
   headerPrimaryCtaHref: "/signup",
   heroEyebrow: "Private missionary updates",
-  heroTitle: "Stay connected with your field teams from one private mission feed.",
+  heroTitle: "Helping churches stay connected with the missionaries they send and support.",
   heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
   primaryCtaLabel: "Set Up Your Organization",
   primaryCtaHref: "/signup",
