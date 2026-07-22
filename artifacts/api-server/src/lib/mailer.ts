@@ -1,5 +1,8 @@
 import { Resend } from "resend";
 import { logger } from "./logger";
+import { getLandingPageContent } from "./landing-page-content";
+
+const BRAND_BLUE = "#1085FD";
 
 const DISPLAY_NAME = "SentConnect Notification";
 
@@ -71,7 +74,42 @@ const CANONICAL_DOMAIN = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org
 
 // Base URL used only for the logo image and non-org links (footer, etc.).
 const APP_URL = process.env["APP_BASE_URL"] ?? `https://${CANONICAL_DOMAIN}`;
-const LOGO_URL = `${APP_URL}/public/images/logo-white.png`;
+// ─── Email logo (platform logo uploaded via super-admin panel) ──────────────
+// Resolved at send time from landing_page_content, cached briefly. Falls back
+// to a text wordmark when no logo has been uploaded.
+let logoCache: { url: string | null; fetchedAt: number } | null = null;
+
+async function getEmailLogoUrl(): Promise<string | null> {
+  if (logoCache && Date.now() - logoCache.fetchedAt < 5 * 60 * 1000) return logoCache.url;
+  let url: string | null = null;
+  try {
+    const content = await getLandingPageContent();
+    const raw = content.headerLogoUrl || content.logoUrl || "";
+    if (raw) {
+      if (raw.startsWith("/objects/")) {
+        // Use the stable API proxy path — presigned URLs expire and break old emails.
+        url = `${APP_URL}/api/storage/objects/${raw.slice("/objects/".length)}`;
+      } else if (raw.startsWith("/")) {
+        url = `${APP_URL}${raw}`;
+      } else {
+        url = raw;
+      }
+    }
+  } catch (err) {
+    logger.warn({ err }, "[email] failed to resolve platform logo — using text wordmark");
+  }
+  logoCache = { url, fetchedAt: Date.now() };
+  return url;
+}
+
+const LOGO_PLACEHOLDER = "%%EMAIL_LOGO_BLOCK%%";
+
+export function logoBlockHtml(logoUrl: string | null): string {
+  if (logoUrl) {
+    return `<img src="${logoUrl}" alt="SentConnect" width="170" style="height:auto;max-width:170px;max-height:56px;display:block;margin:0 auto;" />`;
+  }
+  return `<div style="font-size:24px;font-weight:800;color:#ffffff;letter-spacing:0.14em;">SENTCONNECT</div>`;
+}
 
 /**
  * Builds the deep-link URL for an org-specific post.
@@ -88,7 +126,7 @@ function postDeepLink(postId: number, orgSubdomain?: string | null): string {
 
 // ─── Shared template helpers ────────────────────────────────────────────────
 
-function baseTemplate(content: string, orgName?: string): string {
+export function baseTemplate(content: string, orgName?: string): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,9 +140,9 @@ function baseTemplate(content: string, orgName?: string): string {
     <table width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
 
       <!-- Header -->
-      <tr><td style="background:linear-gradient(135deg,#5C03AC 0%,#8705FA 60%,#A020F0 100%);border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
-        <img src="${LOGO_URL}" alt="SentConnect" width="180" style="height:auto;max-width:180px;display:block;margin:0 auto;" />
-        <div style="font-size:12px;color:rgba(255,255,255,0.65);margin-top:8px;letter-spacing:0.03em;">Stay connected with your field teams</div>
+      <tr><td style="background:linear-gradient(135deg,#1085FD 0%,#0560D4 100%);border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
+        ${LOGO_PLACEHOLDER}
+        <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:8px;letter-spacing:0.03em;">Helping churches stay connected with their missionaries</div>
       </td></tr>
 
       <!-- Body -->
@@ -116,8 +154,8 @@ function baseTemplate(content: string, orgName?: string): string {
       <tr><td style="background:#F8FAFD;border:1px solid #E5E9F2;border-top:none;border-radius:0 0 16px 16px;padding:20px 40px;text-align:center;">
         <p style="margin:0;font-size:12px;color:#94A3B8;line-height:1.6;">
           You are receiving this because you are part of <strong>${orgName ?? "your organization"}</strong> on SentConnect.<br />
-          <a href="${APP_URL}" style="color:#8705FA;text-decoration:none;">Manage notification preferences</a> &nbsp;·&nbsp;
-          <a href="mailto:support@sentconnect.org" style="color:#8705FA;text-decoration:none;">Contact support</a>
+          <a href="${APP_URL}" style="color:#1085FD;text-decoration:none;">Manage notification preferences</a> &nbsp;·&nbsp;
+          <a href="mailto:support@sentconnect.org" style="color:#1085FD;text-decoration:none;">Contact support</a>
         </p>
       </td></tr>
 
@@ -128,7 +166,7 @@ function baseTemplate(content: string, orgName?: string): string {
 </html>`;
 }
 
-function ctaButton(href: string, label: string, color = "#8705FA"): string {
+function ctaButton(href: string, label: string, color = BRAND_BLUE): string {
   return `<table cellpadding="0" cellspacing="0" style="margin:24px 0 0;">
     <tr><td style="background:${color};border-radius:10px;">
       <a href="${href}" style="display:inline-block;padding:13px 28px;color:#fff;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:0.01em;">${label}</a>
@@ -144,7 +182,7 @@ function avatar(name: string, avatarUrl?: string | null): string {
   // Use a table for centering — flexbox is stripped by Gmail and many email clients.
   return `<table cellpadding="0" cellspacing="0" style="display:inline-table;vertical-align:middle;">
     <tr><td width="44" height="44" align="center" valign="middle"
-      style="width:44px;height:44px;border-radius:50%;background:#8705FA;color:#fff;font-size:17px;font-weight:700;line-height:44px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+      style="width:44px;height:44px;border-radius:50%;background:#1085FD;color:#fff;font-size:17px;font-weight:700;line-height:44px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
       ${initials}
     </td></tr>
   </table>`;
@@ -162,8 +200,10 @@ async function sendEmail(to: string, subject: string, html: string, text: string
     return { sent: false, error: "Resend API key not configured" };
   }
   const client = new Resend(apiKey);
+  const logoUrl = await getEmailLogoUrl();
+  const finalHtml = html.replace(LOGO_PLACEHOLDER, logoBlockHtml(logoUrl));
   try {
-    const { error } = await client.emails.send({ from: FROM_ADDRESS, to, subject, html, text });
+    const { error } = await client.emails.send({ from: FROM_ADDRESS, to, subject, html: finalHtml, text });
     if (error) {
       logger.error({ to, from: FROM_ADDRESS, subject, resendError: error }, "[email] send failed — Resend rejected the request");
       return { sent: false, error: error.message };
@@ -330,7 +370,7 @@ export async function sendNewCommentEmail(params: NewCommentEmailParams): Promis
     <h2 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#0F172A;">Someone commented on your post</h2>
 
     <!-- Post snippet -->
-    <div style="background:#F8FAFD;border-left:3px solid #8705FA;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
+    <div style="background:#F8FAFD;border-left:3px solid #1085FD;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
       <p style="margin:0;font-size:13px;color:#64748B;line-height:1.6;font-style:italic;">"${postSnippet}"</p>
     </div>
 
@@ -390,7 +430,7 @@ export async function sendAdminCommentAlertEmail(params: AdminCommentAlertParams
     </p>
 
     <!-- Post snippet -->
-    <div style="background:#F8FAFD;border-left:3px solid #8705FA;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
+    <div style="background:#F8FAFD;border-left:3px solid #1085FD;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
       <p style="margin:0 0 4px;font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em;">Post by ${postAuthorName}</p>
       <p style="margin:0;font-size:13px;color:#64748B;line-height:1.6;font-style:italic;">"${postSnippet}"</p>
     </div>
