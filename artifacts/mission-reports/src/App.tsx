@@ -250,6 +250,11 @@ function LandingPage() {
               {/* Accent rule */}
               <div className="lp-animate lp-delay-3" style={{ width: 48, height: 4, borderRadius: 999, background: `linear-gradient(90deg, ${BLUE} 0%, #60A5FA 100%)`, margin: "0 0 24px" }} />
 
+              {/* Tagline — the platform's central point */}
+              <p className="lp-animate lp-delay-3" style={{ fontSize: 20, fontWeight: 600, lineHeight: 1.55, color: TEXT, letterSpacing: "-0.015em", maxWidth: 520, margin: "0 0 16px" }}>
+                Helping churches stay connected with the missionaries they send and support.
+              </p>
+
               <p className="lp-animate lp-delay-3" style={{ fontSize: 17, lineHeight: 1.85, color: TEXT2, maxWidth: 500, margin: "0 0 44px" }}>
                 {content.heroDescription}
               </p>
