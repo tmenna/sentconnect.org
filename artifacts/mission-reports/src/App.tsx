@@ -20,7 +20,6 @@ import Login from "./pages/login";
 import ForgotPassword from "./pages/forgot-password";
 import ResetPassword from "./pages/reset-password";
 import PublicPost from "./pages/public-post";
-import SignupSuccess from "./pages/signup-success";
 import Demo from "./pages/demo";
 import DemoUser from "./pages/demo-user";
 
@@ -32,7 +31,8 @@ const MissionaryProfile = lazy(() => import("./pages/missionary-profile"));
 const SubmitReport = lazy(() => import("./pages/submit-report"));
 const AdminDashboard = lazy(() => import("./pages/admin"));
 const MissionaryDashboard = lazy(() => import("./pages/missionary-dashboard"));
-const Signup = lazy(() => import("./pages/signup"));
+const RequestAccess = lazy(() => import("./pages/request-access"));
+const SignupSuccess = lazy(() => import("./pages/signup-success"));
 const SuperAdminPanel = lazy(() => import("./pages/super-admin"));
 
 const PageFallback = () => (
@@ -88,12 +88,12 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   headerLogoUrl: "",
   footerLogoUrl: "",
   headerBrandName: "SentConnect",
-  headerPrimaryCtaLabel: "Sign up",
+  headerPrimaryCtaLabel: "Request Access",
   headerPrimaryCtaHref: "/signup",
   heroEyebrow: "Private missionary updates",
   heroTitle: "Helping churches stay connected with the missionaries they send and support.",
   heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
-  primaryCtaLabel: "Set Up Your Organization",
+  primaryCtaLabel: "Request Access",
   primaryCtaHref: "/signup",
   previewCardTitle: "Latest Updates",
   previewLabel: "Latest field updates",
@@ -102,8 +102,8 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   previewTitle3: "Youth outreach photos shared",
   howItWorksLabel: "How it works",
   howItWorksHeading: "Connecting churches and field teams",
-  step1Title: "1. Sign up",
-  step1Description: "Create your organization and choose a short subdomain, like rvc.",
+  step1Title: "1. Request access",
+  step1Description: "Tell us about your church and we'll set up your organization with its own subdomain.",
   step2Title: "2. Use your portal",
   step2Description: "Your team signs in at your dedicated address, such as rvc.sentconnect.org/login.",
   step3Title: "3. Share updates",
@@ -834,8 +834,9 @@ function AppRoutes() {
       {/* Org user login — always /{org}/login */}
       <Route path="/login" component={LoginRoute} />
       <Route path="/sentconnect-home" component={LandingPreviewRoute} />
-      <Route path="/signup" component={Signup} />
+      <Route path="/signup" component={RequestAccess} />
       <Route path="/signup/success" component={SignupSuccess} />
+      <Route path="/request-access" component={RequestAccess} />
       <Route path="/try" component={Demo} />
       <Route path="/try-user" component={DemoUser} />
       <Route path="/forgot-password" component={ForgotPassword} />

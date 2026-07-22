@@ -1,16 +1,18 @@
 import { Router, type IRouter } from "express";
-import { eq, and, gt } from "drizzle-orm";
+import { eq, and, gt, sql } from "drizzle-orm";
 import crypto from "crypto";
 import rateLimit from "express-rate-limit";
 import { db, usersTable, organizationsTable } from "@workspace/db";
 import { hashPassword } from "../lib/password";
 import { maybeResetDemoOrg } from "../lib/seed";
 import { logger } from "../lib/logger";
-import { sendPasswordResetEmail, emailConfigured } from "../lib/mailer";
+import { sendPasswordResetEmail, sendSignupRequestEmail, emailConfigured } from "../lib/mailer";
 import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
 import { DEFAULT_ABOUT_PAGE_CONTENT, getAboutPageContent } from "../lib/about-page-content";
 import { resolveObjectUrl } from "../lib/r2Storage";
 import { verifyTurnstileToken } from "../lib/turnstile";
+
+const PLATFORM_ADMIN_NOTIFY_EMAIL = process.env.SIGNUP_REQUEST_NOTIFY_EMAIL || "teki.menna@gmail.com";
 
 // Demo endpoints: max 8 attempts per IP per 15 minutes.
 // trust proxy is set to 1 in app.ts so req.ip is the real client IP.
@@ -89,8 +91,63 @@ function toUserResponse(user: typeof usersTable.$inferSelect) {
   return rest;
 }
 
+// POST /signup-requests — public "request access" form (signup is invite-only for now)
+const signupRequestRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many requests. Please wait a few minutes before trying again." },
+});
+
+router.post("/signup-requests", signupRequestRateLimit, async (req, res): Promise<void> => {
+  const { churchName, contactName, email, phone, message } = req.body ?? {};
+
+  if (!churchName || typeof churchName !== "string" || churchName.trim().length < 2) {
+    res.status(400).json({ error: "Church or organization name must be at least 2 characters" }); return;
+  }
+  if (!contactName || typeof contactName !== "string" || contactName.trim().length < 2) {
+    res.status(400).json({ error: "Contact name must be at least 2 characters" }); return;
+  }
+  if (!email || typeof email !== "string" || !email.includes("@")) {
+    res.status(400).json({ error: "Valid email is required" }); return;
+  }
+  const cleanPhone = typeof phone === "string" ? phone.trim().slice(0, 40) : null;
+  const cleanMessage = typeof message === "string" ? message.trim().slice(0, 2000) : null;
+
+  try {
+    await db.execute(sql`
+      INSERT INTO signup_requests (church_name, contact_name, email, phone, message)
+      VALUES (${churchName.trim().slice(0, 200)}, ${contactName.trim().slice(0, 120)}, ${email.trim().toLowerCase().slice(0, 200)}, ${cleanPhone}, ${cleanMessage})
+    `);
+  } catch (err) {
+    req.log.error({ err }, "Failed to store signup request");
+    res.status(500).json({ error: "Something went wrong. Please try again." }); return;
+  }
+
+  // Best-effort notification to the platform admin — don't block the response on it
+  sendSignupRequestEmail({
+    to: PLATFORM_ADMIN_NOTIFY_EMAIL,
+    churchName: churchName.trim(),
+    contactName: contactName.trim(),
+    email: email.trim().toLowerCase(),
+    phone: cleanPhone,
+    message: cleanMessage,
+  }).catch((err) => logger.error({ err }, "Failed to send signup request email"));
+
+  res.status(201).json({ ok: true });
+});
+
+// Self-serve signup is disabled — onboarding is request-only (see /signup-requests).
+// Set SELF_SERVE_SIGNUP_ENABLED=true to re-enable.
+export const selfServeSignupEnabled = process.env.SELF_SERVE_SIGNUP_ENABLED === "true";
+
 // POST /auth/signup — create a new organization + first admin user
 router.post("/auth/signup", async (req, res): Promise<void> => {
+  if (!selfServeSignupEnabled) {
+    res.status(410).json({ error: "Self-serve signup is disabled. Please request access at /signup and we'll get in touch." });
+    return;
+  }
   const { orgName, subdomain, plan, name, email, password } = req.body ?? {};
   const orgPlan = plan === "paid" ? "paid" : "trial";
 

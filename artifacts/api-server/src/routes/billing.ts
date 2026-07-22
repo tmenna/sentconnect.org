@@ -4,6 +4,7 @@ import { db, organizationsTable, usersTable } from "@workspace/db";
 import { stripe } from "../lib/stripe";
 import { hashPassword } from "../lib/password";
 import { logger } from "../lib/logger";
+import { selfServeSignupEnabled } from "./auth";
 
 const router: IRouter = Router();
 
@@ -37,6 +38,10 @@ router.get("/billing/check-availability", async (req, res): Promise<void> => {
 // Validates form data, then redirects to Stripe Checkout.
 // The org + user are created ONLY after payment succeeds (via webhook).
 router.post("/billing/create-checkout-session", async (req, res): Promise<void> => {
+  if (!selfServeSignupEnabled) {
+    res.status(410).json({ error: "Self-serve signup is disabled. Please request access at /signup and we'll get in touch." });
+    return;
+  }
   const { organizationName, subdomain, fullName, email, password } = req.body ?? {};
 
   // Basic validation

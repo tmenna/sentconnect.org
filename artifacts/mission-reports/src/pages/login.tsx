@@ -392,7 +392,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                       whiteSpace: "nowrap",
                     }}
                   >
-                    Sign up
+                    Request access
                   </a>
                 ) : (
                   <Link

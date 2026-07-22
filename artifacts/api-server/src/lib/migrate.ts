@@ -118,6 +118,31 @@ export async function runMigrations(): Promise<void> {
               SET hero_title = 'Helping churches stay connected with the missionaries they send and support.'
             WHERE hero_title LIKE 'Stay connected with your field teams%'`,
     },
+    {
+      name: "signup_requests table",
+      sql: `CREATE TABLE IF NOT EXISTS signup_requests (
+        id           SERIAL PRIMARY KEY,
+        church_name  TEXT NOT NULL,
+        contact_name TEXT NOT NULL,
+        email        TEXT NOT NULL,
+        phone        TEXT,
+        message      TEXT,
+        status       TEXT NOT NULL DEFAULT 'pending',
+        created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      )`,
+    },
+    {
+      name: "landing_page: header CTA Sign up → Request Access",
+      sql: `UPDATE landing_page_content
+              SET header_primary_cta_label = 'Request Access'
+            WHERE header_primary_cta_label = 'Sign up'`,
+    },
+    {
+      name: "landing_page: primary CTA → Request Access",
+      sql: `UPDATE landing_page_content
+              SET primary_cta_label = 'Request Access'
+            WHERE primary_cta_label = 'Set Up Your Organization'`,
+    },
   ];
 
   for (const migration of migrations) {

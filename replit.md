@@ -92,7 +92,7 @@ Path-based routing simulates subdomain multi-tenancy during development. The fir
 - `/missionaries/:id` — Missionary profile: bio, location, report history
 - `/submit` — Submit report form (field users only)
 - `/login` — Login
-- `/signup` — Create a new organization + first admin account
+- `/signup` (and `/request-access`) — Request Access form: churches submit a signup request (stored in `signup_requests` table + email to platform admin). Self-serve paid signup is disabled; re-enable via `SELF_SERVE_SIGNUP_ENABLED=true` (gates `POST /api/auth/signup` and Stripe checkout creation)
 - `/forgot-password` — Request a password reset link
 - `/reset-password` — Set a new password via token
 - `/admin` — Admin dashboard: Team tab + Activity Feed tab + Branding tab (logo upload)
@@ -127,6 +127,7 @@ Tables: `organizations`, `users`, `reports`, `photos`
 ## API Routes
 
 **Auth**
+- `POST /api/signup-requests` — Public request-access form (rate-limited; stores request + notifies platform admin by email)
 - `GET /api/landing-page` — Public editable landing page content for `sentconnect.org`
 - `GET /api/orgs/resolve?subdomain=calvary` — Public tenant existence/status check used before showing org login
 - `POST /api/auth/signup` — Create org + first admin user

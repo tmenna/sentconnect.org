@@ -422,3 +422,51 @@ export async function sendAdminCommentAlertEmail(params: AdminCommentAlertParams
 
   return sendEmail(to, `${commenterName} commented on ${postAuthorName}'s post · SentConnect`, html, text);
 }
+
+// ─── 6. Signup request notification (to platform admin) ─────────────────────
+
+export interface SignupRequestEmailParams {
+  to: string;
+  churchName: string;
+  contactName: string;
+  email: string;
+  phone?: string | null;
+  message?: string | null;
+}
+
+export async function sendSignupRequestEmail(params: SignupRequestEmailParams): Promise<SendResult> {
+  const { to, churchName, contactName, email, phone, message } = params;
+
+  const html = baseTemplate(`
+    <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#0F172A;">New access request</h2>
+    <p style="margin:0 0 20px;font-size:15px;color:#475569;line-height:1.6;">
+      A church has requested access to <strong>SentConnect</strong>.
+    </p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;background:#F8FAFD;border:1.5px solid #E2E8F0;border-radius:10px;">
+      <tr><td style="padding:16px 24px;">
+        <p style="margin:0 0 10px;font-size:14px;color:#0F172A;"><strong>Church / Organization:</strong> ${churchName}</p>
+        <p style="margin:0 0 10px;font-size:14px;color:#0F172A;"><strong>Contact:</strong> ${contactName}</p>
+        <p style="margin:0 0 10px;font-size:14px;color:#0F172A;"><strong>Email:</strong> ${email}</p>
+        ${phone ? `<p style="margin:0 0 10px;font-size:14px;color:#0F172A;"><strong>Phone:</strong> ${phone}</p>` : ""}
+        ${message ? `<p style="margin:0;font-size:14px;color:#475569;line-height:1.6;"><strong>Message:</strong><br/>${message}</p>` : ""}
+      </td></tr>
+    </table>
+    <p style="margin:28px 0 0;font-size:13px;color:#94A3B8;line-height:1.6;">
+      Reply directly to ${email} to follow up.
+    </p>
+  `);
+
+  const text = [
+    "New SentConnect access request",
+    "",
+    `Church / Organization: ${churchName}`,
+    `Contact: ${contactName}`,
+    `Email: ${email}`,
+    phone ? `Phone: ${phone}` : "",
+    message ? `Message: ${message}` : "",
+    "",
+    `Reply directly to ${email} to follow up.`,
+  ].filter(Boolean).join("\n");
+
+  return sendEmail(to, `Access request from ${churchName} · SentConnect`, html, text);
+}
