@@ -1,12 +1,123 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { Loader2, CheckCircle2, Send, Mail } from "lucide-react";
+import { Loader2, CheckCircle2, Send, Mail, X, ArrowRight } from "lucide-react";
 import { useLogo } from "@/providers/logo-provider";
+import { buildOrgLoginHref } from "@/lib/org";
 
 const BLUE = "#1085FD";
 
+function SignInModal({ onClose }: { onClose: () => void }) {
+  const [subdomain, setSubdomain] = useState("");
+  const [checking, setChecking] = useState(false);
+  const [error, setError] = useState("");
+
+  const cleaned = subdomain.trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
+
+  async function handleContinue(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    if (!cleaned || cleaned.length < 2) {
+      setError("Please enter your church's subdomain.");
+      return;
+    }
+    setChecking(true);
+    try {
+      const res = await fetch(`/api/orgs/resolve?subdomain=${encodeURIComponent(cleaned)}`);
+      if (!res.ok) {
+        setError("We couldn't find a church with that subdomain. Double-check the spelling or contact your administrator.");
+        return;
+      }
+      window.location.href = buildOrgLoginHref(cleaned);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setChecking(false);
+    }
+  }
+
+  return (
+    <div
+      onClick={onClose}
+      style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, zIndex: 100 }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="signin-modal-title"
+        style={{ background: "#fff", borderRadius: 24, padding: "36px 32px", width: "100%", maxWidth: 440, boxShadow: "0 24px 64px rgba(15,23,42,0.25)", position: "relative" }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          style={{ position: "absolute", top: 16, right: 16, background: "#F1F5F9", border: "none", borderRadius: 999, width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#64748B" }}
+        >
+          <X size={16} />
+        </button>
+        <h2 id="signin-modal-title" style={{ fontSize: 21, fontWeight: 800, color: "#0F172A", margin: "0 0 8px", letterSpacing: "-0.02em" }}>
+          Sign in to your church
+        </h2>
+        <p style={{ fontSize: 14, lineHeight: 1.65, color: "#64748B", margin: "0 0 24px" }}>
+          Enter your church's subdomain to go to its sign-in page.
+        </p>
+        <form onSubmit={handleContinue}>
+          <label htmlFor="signin-subdomain" style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#334155", marginBottom: 6 }}>
+            Church subdomain
+          </label>
+          <div style={{ display: "flex", alignItems: "center", border: "1.5px solid #E2E8F0", borderRadius: 12, overflow: "hidden", background: "#fff", marginBottom: 6 }}>
+            <input
+              id="signin-subdomain"
+              autoFocus
+              value={subdomain}
+              onChange={e => setSubdomain(e.target.value)}
+              placeholder="yourchurch"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              style={{ flex: 1, minWidth: 0, height: 48, padding: "0 14px", border: "none", outline: "none", fontSize: 15, color: "#0F172A", fontFamily: "inherit" }}
+            />
+            <span style={{ padding: "0 14px", fontSize: 14, color: "#94A3B8", background: "#F8FAFC", alignSelf: "stretch", display: "flex", alignItems: "center", borderLeft: "1px solid #E2E8F0", whiteSpace: "nowrap" }}>
+              .sentconnect.org
+            </span>
+          </div>
+          <p style={{ fontSize: 12.5, color: "#94A3B8", margin: "0 0 18px" }}>
+            e.g. if your church signs in at <strong style={{ color: "#64748B" }}>calvary.sentconnect.org</strong>, enter <strong style={{ color: "#64748B" }}>calvary</strong>
+          </p>
+
+          {error && (
+            <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, padding: "10px 14px", marginBottom: 16, fontSize: 13.5, color: "#B91C1C", lineHeight: 1.5 }}>
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={checking}
+            style={{ width: "100%", height: 48, background: `linear-gradient(135deg, ${BLUE} 0%, #0560D4 100%)`, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 12, cursor: checking ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 4px 16px rgba(16,133,253,0.35)", opacity: checking ? 0.7 : 1, fontFamily: "inherit" }}
+          >
+            {checking ? <Loader2 size={18} className="animate-spin" /> : <ArrowRight size={16} />}
+            {checking ? "Checking…" : "Continue to Sign In"}
+          </button>
+        </form>
+        <p style={{ fontSize: 13, color: "#94A3B8", textAlign: "center", margin: "18px 0 0" }}>
+          Don't know your subdomain? <Link href="/login" style={{ color: BLUE, fontWeight: 600, textDecoration: "none" }}>Sign in here</Link>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function RequestAccess() {
   const { signupLogo } = useLogo();
+  const [showSignIn, setShowSignIn] = useState(false);
   const [churchName, setChurchName] = useState("");
   const [contactName, setContactName] = useState("");
   const [email, setEmail] = useState("");
@@ -67,9 +178,13 @@ export default function RequestAccess() {
           <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
             <img src={signupLogo} alt="SentConnect" style={{ height: 56, width: "auto", maxWidth: 200, display: "block" }} />
           </a>
-          <Link href="/login" style={{ fontSize: 14, fontWeight: 600, color: "#fff", textDecoration: "none", background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 999, padding: "9px 22px" }}>
+          <button
+            type="button"
+            onClick={() => setShowSignIn(true)}
+            style={{ fontSize: 14, fontWeight: 600, color: "#fff", background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 999, padding: "9px 22px", cursor: "pointer", fontFamily: "inherit" }}
+          >
             Sign in
-          </Link>
+          </button>
         </div>
       </header>
 
@@ -150,12 +265,21 @@ export default function RequestAccess() {
               </form>
 
               <p style={{ fontSize: 13, color: "#94A3B8", textAlign: "center", margin: "22px 0 0", lineHeight: 1.6 }}>
-                Already have an account? <Link href="/login" style={{ color: BLUE, fontWeight: 600, textDecoration: "none" }}>Sign in</Link>
+                Already have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => setShowSignIn(true)}
+                  style={{ color: BLUE, fontWeight: 600, background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 13, fontFamily: "inherit" }}
+                >
+                  Sign in
+                </button>
               </p>
             </div>
           )}
         </div>
       </main>
+
+      {showSignIn && <SignInModal onClose={() => setShowSignIn(false)} />}
     </div>
   );
 }
