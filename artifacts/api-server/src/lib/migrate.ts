@@ -112,6 +112,12 @@ export async function runMigrations(): Promise<void> {
               SET hero_description = replace(hero_description, 'SENTCONNECT gives', 'SentConnect gives')
             WHERE hero_description LIKE 'SENTCONNECT gives%'`,
     },
+    {
+      name: "landing_page: hero_title → central tagline",
+      sql: `UPDATE landing_page_content
+              SET hero_title = 'Helping churches stay connected with the missionaries they send and support.'
+            WHERE hero_title LIKE 'Stay connected with your field teams%'`,
+    },
   ];
 
   for (const migration of migrations) {
