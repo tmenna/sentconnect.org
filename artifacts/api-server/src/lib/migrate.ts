@@ -143,6 +143,12 @@ export async function runMigrations(): Promise<void> {
               SET primary_cta_label = 'Request Access'
             WHERE primary_cta_label = 'Set Up Your Organization'`,
     },
+    {
+      name: "landing_page: CTA band subtext → free invitation statement",
+      sql: `UPDATE landing_page_content
+              SET cta_band_subtext = 'We''re currently inviting churches and missionaries to use SentConnect at no cost while we continue improving the platform.'
+            WHERE cta_band_subtext = 'Set up your organization in minutes.'`,
+    },
   ];
 
   for (const migration of migrations) {

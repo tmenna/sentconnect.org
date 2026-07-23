@@ -214,7 +214,7 @@ export default function RequestAccess() {
                 Get SentConnect for your church
               </h1>
               <p style={{ fontSize: 15, lineHeight: 1.7, color: "#64748B", margin: "0 0 32px" }}>
-                SentConnect is currently available by invitation. Tell us about your church or mission organization and we'll reach out to get you set up.
+                We're currently inviting churches and missionaries to use SentConnect at no cost while we continue improving the platform. Tell us about your church or mission organization and we'll reach out to get you set up.
               </p>
 
               <form onSubmit={handleSubmit}>

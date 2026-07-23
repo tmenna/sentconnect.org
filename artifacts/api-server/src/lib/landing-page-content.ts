@@ -27,7 +27,7 @@ export const DEFAULT_LANDING_PAGE_CONTENT = {
   step3Title: "3. Share updates",
   step3Description: "Invite field users, collect reports, and keep your church connected to ministry work.",
   ctaBandHeading: "Bring your church and field teams closer together.",
-  ctaBandSubtext: "Set up your organization in minutes.",
+  ctaBandSubtext: "We're currently inviting churches and missionaries to use SentConnect at no cost while we continue improving the platform.",
   footerBrandName: "SentConnect",
   footerOwnerText: "Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA",
 };
