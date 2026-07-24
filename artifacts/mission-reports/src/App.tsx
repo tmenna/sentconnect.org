@@ -242,8 +242,32 @@ function LandingPage() {
           </div>
         </section>
 
-        {/* ── RESULT ── */}
+        {/* ── STORY ── */}
         <section style={{ background: "#fff", padding: "clamp(72px, 10vh, 110px) 24px" }}>
+          <div style={{ maxWidth: 680, margin: "0 auto" }}>
+            <p style={{ fontSize: "clamp(17px, 1.8vw, 20px)", fontWeight: 600, lineHeight: 1.75, color: TEXT, margin: "0 0 26px" }}>
+              Have you ever wondered how the missionaries your church supports are doing in Africa, South America, Southeast Asia, or elsewhere around the world?
+            </p>
+            <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: "0 0 22px" }}>
+              Sometimes months&mdash;or even years&mdash;pass with little communication, and then suddenly you receive a lengthy report filled with updates, photos, and stories.
+            </p>
+            <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: "0 0 30px" }}>
+              It&rsquo;s usually not because missionaries aren&rsquo;t actively serving. More often, they feel they need to collect enough stories, photos, and ministry updates before sending a complete newsletter or report to their supporting churches or mission organizations.
+            </p>
+            <p style={{ fontSize: "clamp(19px, 2vw, 23px)", fontWeight: 800, letterSpacing: "-0.02em", color: BLUE, margin: "0 0 30px" }}>
+              SentConnect changes that.
+            </p>
+            <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: "0 0 22px" }}>
+              Instead of waiting weeks or months to share a comprehensive update, missionaries can post ministry moments as they happen&mdash;a meaningful conversation, someone they prayed with, a ministry event, a photo, a prayer request, or a short story from the field.
+            </p>
+            <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: 0 }}>
+              Every update is delivered to your church&rsquo;s secure mission feed, making it easy to stay informed, pray intentionally, encourage your missionaries, and remain connected throughout their ministry&mdash;not just when the next newsletter arrives.
+            </p>
+          </div>
+        </section>
+
+        {/* ── RESULT ── */}
+        <section style={{ background: "#F8FBFF", padding: "clamp(72px, 10vh, 110px) 24px" }}>
           <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
             <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: BLUE, margin: "0 0 22px" }}>
               The Result
