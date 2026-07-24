@@ -236,11 +236,34 @@ function LandingPage() {
               {content.heroTitle}
             </h1>
 
-            <p className="lp-animate lp-delay-2" style={{ fontSize: "clamp(16px, 1.6vw, 19px)", lineHeight: 1.8, color: TEXT2, maxWidth: 640, margin: "0 auto 44px" }}>
+            <p className="lp-animate lp-delay-2" style={{ fontSize: "clamp(16px, 1.6vw, 19px)", lineHeight: 1.8, color: TEXT2, maxWidth: 640, margin: "0 auto" }}>
               {content.heroDescription}
             </p>
+          </div>
+        </section>
 
-            <div className="lp-animate lp-delay-3" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 14 }}>
+        {/* ── RESULT ── */}
+        <section style={{ background: "#fff", padding: "clamp(72px, 10vh, 110px) 24px" }}>
+          <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
+            <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: BLUE, margin: "0 0 22px" }}>
+              The Result
+            </p>
+            <div style={{ borderRadius: 24, background: "linear-gradient(135deg, #F0F7FF 0%, #E8F2FF 100%)", border: "1px solid #D6E9FF", padding: "clamp(32px, 5vw, 56px)", boxShadow: "0 12px 40px rgba(16,133,253,0.08)" }}>
+              <p style={{ fontSize: "clamp(19px, 2.2vw, 26px)", fontWeight: 700, lineHeight: 1.6, letterSpacing: "-0.015em", color: "#1E3A5F", margin: 0 }}>
+                <span style={{ color: BLUE }}>Stronger relationships</span>, <span style={{ color: BLUE }}>more informed prayer</span>, <span style={{ color: BLUE }}>better communication</span>, and a <span style={{ color: BLUE }}>deeper connection</span> between your church and the missionaries you send and support.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── CTA ── */}
+        <section style={{ background: "linear-gradient(180deg, #F5FAFF 0%, #EDF5FF 100%)", padding: "clamp(72px, 10vh, 120px) 24px" }}>
+          <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
+            <h2 style={{ fontSize: "clamp(26px, 3.4vw, 40px)", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.03em", color: TEXT, margin: "0 0 36px" }}>
+              Ready to stay connected with your missionaries?
+            </h2>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 14 }}>
               <a
                 href={content.primaryCtaHref}
                 onClick={e => handleCtaClick(e, content.primaryCtaHref)}
@@ -267,17 +290,6 @@ function LandingPage() {
             <p className="lp-animate lp-delay-4" style={{ fontSize: 14.5, lineHeight: 1.7, color: "#94A3B8", maxWidth: 560, margin: "36px auto 0" }}>
               {content.ctaBandSubtext}
             </p>
-          </div>
-        </section>
-
-        {/* ── STORY ── */}
-        <section style={{ background: "#fff", padding: "clamp(72px, 10vh, 120px) 24px" }}>
-          <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            <div style={{ borderRadius: 20, background: "linear-gradient(135deg, #F0F7FF 0%, #E8F2FF 100%)", border: "1px solid #D6E9FF", padding: "clamp(28px, 4vw, 44px)", textAlign: "center" }}>
-              <p style={{ fontSize: "clamp(17px, 1.8vw, 20px)", fontWeight: 600, lineHeight: 1.7, color: "#1E3A5F", margin: 0 }}>
-                The result is <span style={{ color: BLUE }}>stronger relationships</span>, <span style={{ color: BLUE }}>more informed prayer</span>, <span style={{ color: BLUE }}>better communication</span>, and a <span style={{ color: BLUE }}>deeper connection</span> between your church and the missionaries you send and support.
-              </p>
-            </div>
           </div>
         </section>
       </main>
