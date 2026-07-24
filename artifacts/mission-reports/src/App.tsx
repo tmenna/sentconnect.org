@@ -267,16 +267,11 @@ function LandingPage() {
         </section>
 
         {/* ── RESULT ── */}
-        <section style={{ background: "#F8FBFF", padding: "clamp(72px, 10vh, 110px) 24px" }}>
+        <section style={{ background: BLUE, padding: "clamp(56px, 8vh, 90px) 24px" }}>
           <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
-            <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: BLUE, margin: "0 0 22px" }}>
-              The Result
+            <p style={{ fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 600, lineHeight: 1.6, letterSpacing: "-0.01em", color: "#fff", margin: 0 }}>
+              <em>Stronger relationships</em>, <em>more informed prayer</em>, <em>better communication</em>, and a <em>deeper connection</em> between your church and the missionaries you send and support.
             </p>
-            <div style={{ borderRadius: 24, background: "linear-gradient(135deg, #F0F7FF 0%, #E8F2FF 100%)", border: "1px solid #D6E9FF", padding: "clamp(32px, 5vw, 56px)", boxShadow: "0 12px 40px rgba(16,133,253,0.08)" }}>
-              <p style={{ fontSize: "clamp(19px, 2.2vw, 26px)", fontWeight: 700, lineHeight: 1.6, letterSpacing: "-0.015em", color: "#1E3A5F", margin: 0 }}>
-                <span style={{ color: BLUE }}>Stronger relationships</span>, <span style={{ color: BLUE }}>more informed prayer</span>, <span style={{ color: BLUE }}>better communication</span>, and a <span style={{ color: BLUE }}>deeper connection</span> between your church and the missionaries you send and support.
-              </p>
-            </div>
           </div>
         </section>
 
