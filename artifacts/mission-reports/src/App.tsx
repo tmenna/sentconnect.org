@@ -314,7 +314,7 @@ function LandingPage() {
       </main>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: `linear-gradient(180deg, #263341 0%, ${CHARCOAL} 100%)`, padding: "72px 24px 0" }}>
+      <footer style={{ background: "#212B38", padding: "72px 24px 0" }}>
         <div className="mx-auto max-w-6xl">
           {/* Row 1 — brand left / contact right */}
           <div className="lp-footer-brand-row">
@@ -326,17 +326,9 @@ function LandingPage() {
               </p>
             </div>
 
-            {/* Right: links + contact info */}
+            {/* Right: contact info */}
             <div className="lp-footer-right" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10 }}>
-              {/* Quick links */}
-              <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 6 }}>
-                <a href="/about" style={{ fontSize: 13, fontWeight: 600, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}>About</a>
-                <a href="/help" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, fontWeight: 600, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-flex", alignItems: "center", gap: 5 }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                  Help &amp; Support
-                </a>
-              </div>
-              <p style={{ fontSize: 13.5, fontWeight: 600, color: "#D1D5DB", margin: 0 }}>Holtek Solutions LLC</p>
+              <p style={{ fontSize: 13.5, fontWeight: 600, color: "#E5E7EB", margin: 0 }}>Holtek Solutions LLC</p>
               <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0, lineHeight: 1.6, textAlign: "right" }}>
                 2108 N ST STE N, Sacramento, CA 95816
               </p>
@@ -552,7 +544,7 @@ function AboutPage() {
       </main>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: "linear-gradient(180deg, #263341 0%, #1F2937 100%)", padding: "72px 24px 0" }}>
+      <footer style={{ background: "#212B38", padding: "72px 24px 0" }}>
         <div className="mx-auto max-w-6xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
