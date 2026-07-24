@@ -237,7 +237,7 @@ function LandingPage() {
             </h1>
 
             <p className="lp-animate lp-delay-2" style={{ fontSize: "clamp(16px, 1.6vw, 19px)", lineHeight: 1.8, color: TEXT2, maxWidth: 640, margin: "0 auto" }}>
-              Every update is delivered to your church&rsquo;s secure mission feed, making it easy to stay informed, pray intentionally, encourage your missionaries, and remain connected throughout their ministry&mdash;not just when the next newsletter arrives.
+              {content.heroDescription}
             </p>
           </div>
         </section>
