@@ -273,34 +273,7 @@ function LandingPage() {
         {/* ── STORY ── */}
         <section style={{ background: "#fff", padding: "clamp(72px, 10vh, 120px) 24px" }}>
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: BLUE, textAlign: "center", margin: "0 0 18px" }}>
-              Why SentConnect
-            </p>
-            <h2 style={{ fontSize: "clamp(26px, 3.2vw, 38px)", fontWeight: 800, lineHeight: 1.25, letterSpacing: "-0.03em", color: TEXT, textAlign: "center", margin: "0 0 40px" }}>
-              Have you ever wondered how the missionaries your church supports are doing?
-            </h2>
-
-            <div style={{ fontSize: "clamp(16px, 1.5vw, 18px)", lineHeight: 1.85, color: TEXT2 }}>
-              <p style={{ margin: "0 0 24px" }}>
-                Whether they serve in Africa, South America, Southeast Asia, or another part of the world — sometimes months, or even years, go by without hearing much. Then suddenly you receive a long report filled with updates, photos, and stories.
-              </p>
-              <p style={{ margin: "0 0 24px" }}>
-                It's usually not because missionaries aren't actively serving. More often, they feel obligated to gather enough updates, photos, and stories to prepare a detailed newsletter or report before reaching out to their sending churches or mission organizations.
-              </p>
-
-              <p style={{ fontSize: "clamp(24px, 3vw, 34px)", fontWeight: 800, letterSpacing: "-0.03em", color: BLUE, textAlign: "center", margin: "48px 0" }}>
-                SentConnect changes that.
-              </p>
-
-              <p style={{ margin: "0 0 24px" }}>
-                Instead of waiting weeks or months to share a large update, missionaries can post simple moments as they happen — a conversation they had, someone they prayed with, a ministry event, a photo, a prayer request, or a short story from the field.
-              </p>
-              <p style={{ margin: "0 0 24px" }}>
-                Every update is delivered to your church's secure dashboard, where all of your missionaries' reports are organized in one place. Your missions team receives notifications when new updates are posted, making it easy to read, respond, encourage, and stay connected with each missionary throughout their ministry — not just when a quarterly newsletter arrives.
-              </p>
-            </div>
-
-            <div style={{ marginTop: 48, borderRadius: 20, background: "linear-gradient(135deg, #F0F7FF 0%, #E8F2FF 100%)", border: "1px solid #D6E9FF", padding: "clamp(28px, 4vw, 44px)", textAlign: "center" }}>
+            <div style={{ borderRadius: 20, background: "linear-gradient(135deg, #F0F7FF 0%, #E8F2FF 100%)", border: "1px solid #D6E9FF", padding: "clamp(28px, 4vw, 44px)", textAlign: "center" }}>
               <p style={{ fontSize: "clamp(17px, 1.8vw, 20px)", fontWeight: 600, lineHeight: 1.7, color: "#1E3A5F", margin: 0 }}>
                 The result is <span style={{ color: BLUE }}>stronger relationships</span>, <span style={{ color: BLUE }}>more informed prayer</span>, <span style={{ color: BLUE }}>better communication</span>, and a <span style={{ color: BLUE }}>deeper connection</span> between your church and the missionaries you send and support.
               </p>
