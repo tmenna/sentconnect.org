@@ -12,7 +12,6 @@ import NotFound from "@/pages/not-found";
 import { OrgProvider, useOrg } from "@/providers/org-provider";
 import { LogoProvider, useLogo } from "@/providers/logo-provider";
 import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
-import { HeroFeedPreview } from "@/components/hero-feed-preview";
 import "./landing-page.css";
 
 // Critical path — eagerly bundled (small or needed immediately)
@@ -231,154 +230,43 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="lp-hero-section" style={{ background: "#FFFFFF", borderBottom: "1px solid #DDE9FF", position: "relative", overflow: "hidden" }}>
+        <section style={{ background: "linear-gradient(180deg, #FFFFFF 0%, #F5FAFF 100%)", padding: "clamp(80px, 12vh, 150px) 24px" }}>
+          <div style={{ maxWidth: 880, margin: "0 auto", textAlign: "center" }}>
+            <h1 className="lp-animate lp-delay-1" style={{ fontSize: "clamp(36px, 5.2vw, 64px)", fontWeight: 900, lineHeight: 1.12, letterSpacing: "-0.04em", color: BLUE, margin: "0 0 28px" }}>
+              {content.heroTitle}
+            </h1>
 
-
-          <div className="lp-hero-split mx-auto max-w-6xl px-6">
-
-            {/* ── LEFT: text content ── */}
-            <div style={{ paddingRight: 48 }}>
-              <div className="lp-animate lp-delay-1" style={{ display: "inline-flex", alignItems: "center", marginBottom: 28, background: BLUE, borderRadius: 999, padding: "6px 16px", gap: 7 }}>
-                <svg width="7" height="7" viewBox="0 0 8 8" style={{ flexShrink: 0 }}><circle cx="4" cy="4" r="4" fill="rgba(255,255,255,0.7)" /></svg>
-                <span style={{ fontSize: 11.5, fontWeight: 700, color: "#fff", letterSpacing: "0.11em", textTransform: "uppercase" }}>{content.heroEyebrow}</span>
-              </div>
-
-              <h1 className="lp-animate lp-delay-2" style={{ fontSize: "clamp(38px, 4.8vw, 60px)", fontWeight: 900, lineHeight: 1.07, letterSpacing: "-0.04em", color: BLUE, margin: "0 0 24px" }}>
-                {content.heroTitle}
-              </h1>
-
-              {/* Accent rule */}
-              <div className="lp-animate lp-delay-3" style={{ width: 48, height: 4, borderRadius: 999, background: `linear-gradient(90deg, ${BLUE} 0%, #60A5FA 100%)`, margin: "0 0 24px" }} />
-
-              <p className="lp-animate lp-delay-3" style={{ fontSize: 17, lineHeight: 1.85, color: TEXT2, maxWidth: 500, margin: "0 0 44px" }}>
-                {content.heroDescription}
-              </p>
-
-              <div className="lp-animate lp-delay-4" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-                <a
-                  href={content.primaryCtaHref}
-                  onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 52, minWidth: 250, padding: "0 28px", borderRadius: 999, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)", transition: "opacity .15s, transform .15s, box-shadow .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "0.92"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "1"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.38)"; }}
-                >
-                  {content.primaryCtaLabel}
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-                <a
-                  href="https://demo.sentconnect.org/"
-                  style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 52, minWidth: 170, padding: "0 28px", borderRadius: 999, background: "#fff", color: "#1085FD", fontSize: 15, fontWeight: 700, textDecoration: "none", border: "1.5px solid #1085FD", boxShadow: "0 2px 8px rgba(16,133,253,0.12)", transition: "border-color .15s, color .15s, box-shadow .15s, background .15s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#EEF6FF"; el.style.boxShadow = "0 4px 16px rgba(16,133,253,0.20)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#fff"; el.style.boxShadow = "0 2px 8px rgba(16,133,253,0.12)"; }}
-                >
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: "50%", background: "rgba(16,133,253,0.14)" }}>
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 1 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                  </span>
-                  Try Demo
-                </a>
-              </div>
-
-            </div>
-
-            {/* ── RIGHT: interactive feed phone preview ── */}
-            <div className="lp-hero-split-deco lp-animate lp-delay-5" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", padding: "0" }}>
-              <div className="lp-phone-wrap" style={{ position: "relative" }}>
-                <HeroFeedPreview />
-                {/* Decorative dot cluster */}
-                <div style={{ position: "absolute", bottom: -20, right: -24, display: "flex", flexWrap: "wrap", gap: 6, width: 72, opacity: 0.35, pointerEvents: "none" }}>
-                  {Array.from({ length: 9 }).map((_, i) => (
-                    <div key={i} style={{ width: 5, height: 5, borderRadius: "50%", background: BLUE }} />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ── STATEMENT BAND ── */}
-        <section style={{ background: BLUE, padding: "88px 24px" }}>
-          <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
-            <p style={{ fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 600, color: "#fff", lineHeight: 1.6, margin: 0, letterSpacing: "-0.02em" }}>
-              Ministry updates shouldn't live in email threads and WhatsApp groups.{" "}
-              <em style={{ fontStyle: "italic", color: "#fff" }}>
-                SentConnect gives your field teams one private, secure home.
-              </em>
+            <p className="lp-animate lp-delay-2" style={{ fontSize: "clamp(16px, 1.6vw, 19px)", lineHeight: 1.8, color: TEXT2, maxWidth: 640, margin: "0 auto 44px" }}>
+              {content.heroDescription}
             </p>
-          </div>
-        </section>
 
-        {/* ── HOW IT WORKS ── */}
-        <section style={{ background: "#F8FAFF", padding: "104px 0" }}>
-          <div className="mx-auto max-w-6xl px-6">
-            <div style={{ textAlign: "center", marginBottom: 64 }}>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#EEF6FF", color: BLUE, fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 999, marginBottom: 16 }}>
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                How SentConnect Works
-              </span>
-              <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 900, letterSpacing: "-0.035em", color: TEXT, margin: 0 }}>{content.howItWorksHeading}</h2>
+            <div className="lp-animate lp-delay-3" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 14 }}>
+              <a
+                href={content.primaryCtaHref}
+                onClick={e => handleCtaClick(e, content.primaryCtaHref)}
+                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 56, minWidth: 220, padding: "0 34px", borderRadius: 999, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, color: "#fff", fontSize: 16, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)", transition: "opacity .15s, transform .15s, box-shadow .15s" }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "0.92"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "1"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.38)"; }}
+              >
+                {content.primaryCtaLabel}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a
+                href="https://demo.sentconnect.org/"
+                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 56, minWidth: 170, padding: "0 30px", borderRadius: 999, background: "#fff", color: BLUE, fontSize: 16, fontWeight: 700, textDecoration: "none", border: `1.5px solid ${BLUE}`, boxShadow: "0 2px 8px rgba(16,133,253,0.12)", transition: "border-color .15s, color .15s, box-shadow .15s, background .15s" }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#EEF6FF"; el.style.boxShadow = "0 4px 16px rgba(16,133,253,0.20)"; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#fff"; el.style.boxShadow = "0 2px 8px rgba(16,133,253,0.12)"; }}
+              >
+                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: "50%", background: "rgba(16,133,253,0.14)" }}>
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 1 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </span>
+                Try Demo
+              </a>
             </div>
 
-            <div className="lp-steps-grid">
-              {/* connector line */}
-              <div className="lp-connector" style={{ position: "absolute", top: 40, left: "calc(16.66% + 16px)", right: "calc(16.66% + 16px)", height: 1, background: "linear-gradient(90deg, transparent, rgba(16,133,253,0.2), transparent)", pointerEvents: "none" }} />
-
-              {[
-                {
-                  title: content.step1Title, desc: content.step1Description,
-                  accent: BLUE, bg: "#EEF5FF",
-                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M12 8v8"/></svg>
-                },
-                {
-                  title: content.step2Title, desc: content.step2Description,
-                  accent: "#7C3AED", bg: "#F3EEFF",
-                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                },
-                {
-                  title: content.step3Title, desc: content.step3Description,
-                  accent: "#059669", bg: "#ECFDF5",
-                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
-                },
-              ].map(({ title, desc, accent, bg, icon }, i) => (
-                <div key={i} style={{ background: "#fff", borderRadius: 20, padding: "36px 28px", boxShadow: "0 4px 24px rgba(15,23,42,0.07), 0 1px 4px rgba(15,23,42,0.03)", border: "1px solid #EBF3FF", transition: "box-shadow .2s, transform .2s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = "0 12px 40px rgba(15,23,42,0.12), 0 2px 8px rgba(15,23,42,0.05)"; el.style.transform = "translateY(-3px)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = "0 4px 24px rgba(15,23,42,0.07), 0 1px 4px rgba(15,23,42,0.03)"; el.style.transform = "translateY(0)"; }}
-                >
-                  {/* Step number badge + icon */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 24 }}>
-                    <div style={{ width: 52, height: 52, borderRadius: 16, background: accent, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: `0 6px 20px ${accent}40` }}>
-                      {icon}
-                    </div>
-                    <div style={{ width: 24, height: 24, borderRadius: "50%", background: bg, border: `2px solid ${accent}30`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: accent }}>0{i + 1}</span>
-                    </div>
-                  </div>
-                  <h3 style={{ fontSize: 17, fontWeight: 800, color: TEXT, margin: "0 0 10px", letterSpacing: "-0.02em" }}>{title}</h3>
-                  <p style={{ fontSize: 14.5, lineHeight: 1.8, color: TEXT2, margin: 0 }}>{desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── CTA BAND ── */}
-        <section style={{ background: `linear-gradient(135deg, #0059D6 0%, #003FA8 100%)`, padding: "100px 24px", position: "relative", overflow: "hidden" }}>
-          {/* subtle shine overlay */}
-          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 60% 0%, rgba(255,255,255,0.07) 0%, transparent 60%)", pointerEvents: "none" }} />
-          <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto", position: "relative" }}>
-            <h2 style={{ fontSize: "clamp(28px, 3.5vw, 46px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.035em", lineHeight: 1.2, margin: "0 0 18px" }}>
-              {content.ctaBandHeading}
-            </h2>
-            <p style={{ fontSize: 18, color: "rgba(255,255,255,0.75)", margin: "0 0 40px", lineHeight: 1.7 }}>
+            <p className="lp-animate lp-delay-4" style={{ fontSize: 14.5, lineHeight: 1.7, color: "#94A3B8", maxWidth: 560, margin: "36px auto 0" }}>
               {content.ctaBandSubtext}
             </p>
-            <a
-              href={content.primaryCtaHref}
-              onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-              style={{ display: "inline-flex", alignItems: "center", height: 56, padding: "0 36px", borderRadius: 999, background: "#fff", color: "#003FA8", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,0,0,0.2)", transition: "transform .15s, box-shadow .15s, background .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#EBF3FF"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.28)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#fff"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 24px rgba(0,0,0,0.2)"; }}
-            >{content.primaryCtaLabel}</a>
           </div>
         </section>
       </main>
