@@ -194,7 +194,7 @@ export function Layout({ children }: { children: ReactNode }) {
                         className="h-8 px-4 text-sm font-semibold rounded-lg transition-colors"
                         style={{ background: "#fff", color: "#1085FD", border: "1.5px solid #1085FD" }}
                       >
-                        Sign Up
+                        Request Access
                       </Button>
                     </Link>
                     <Link href="/login" data-testid="link-nav-login">
@@ -284,7 +284,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     </a>
                     <Link href="/signup">
                       <span className="flex items-center justify-center h-11 rounded-xl text-[15px] font-semibold transition-colors" style={{ color: "#1085FD", border: "1.5px solid #1085FD" }}>
-                        Sign Up
+                        Request Access
                       </span>
                     </Link>
                     <Link href="/login">

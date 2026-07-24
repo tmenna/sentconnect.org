@@ -240,25 +240,28 @@ function LandingPage() {
         </section>
 
         {/* ── STORY ── */}
-        <section style={{ background: "#fff", padding: "clamp(64px, 9vh, 100px) 24px" }}>
+        <section style={{ background: "#fff", padding: "clamp(72px, 10vh, 110px) 24px" }}>
           <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "left" }}>
-            <p style={{ fontSize: "clamp(17px, 1.8vw, 20px)", fontWeight: 700, lineHeight: 1.65, color: TEXT, margin: "0 0 26px" }}>
+            <div style={{ width: 48, height: 4, borderRadius: 999, background: `linear-gradient(90deg, ${BLUE}, #6BB6FF)`, margin: "0 0 34px" }} />
+            <p style={{ fontSize: "clamp(19px, 2vw, 23px)", fontWeight: 700, lineHeight: 1.55, letterSpacing: "-0.02em", color: TEXT, margin: "0 0 28px" }}>
               Have you ever wondered how the missionaries your church supports are doing in Africa, South America, Southeast Asia, or elsewhere around the world?
             </p>
-            <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: "0 0 22px" }}>
+            <p style={{ fontSize: "clamp(16px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: "0 0 24px" }}>
               Sometimes months&mdash;or even years&mdash;pass with little communication, and then suddenly you receive a lengthy report filled with updates, photos, and stories.
             </p>
-            <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: "0 0 30px" }}>
+            <p style={{ fontSize: "clamp(16px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: "0 0 36px" }}>
               It&rsquo;s usually not because missionaries aren&rsquo;t actively serving. More often, they feel they need to collect enough stories, photos, and ministry updates before sending a complete newsletter or report to their supporting churches or mission organizations.
             </p>
-            <p style={{ fontSize: "clamp(19px, 2vw, 23px)", fontWeight: 800, letterSpacing: "-0.02em", color: BLUE, margin: "0 0 30px" }}>
-              SentConnect changes that.
-            </p>
-            <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: "0 0 22px" }}>
+            <div style={{ borderLeft: `3px solid ${BLUE}`, padding: "6px 0 6px 22px", margin: "0 0 36px" }}>
+              <p style={{ fontSize: "clamp(20px, 2.2vw, 25px)", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.3, color: BLUE, margin: 0 }}>
+                SentConnect changes that.
+              </p>
+            </div>
+            <p style={{ fontSize: "clamp(16px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: "0 0 24px" }}>
               Instead of waiting weeks or months to share a comprehensive update, missionaries can post ministry moments as they happen&mdash;a meaningful conversation, someone they prayed with, a ministry event, a photo, a prayer request, or a short story from the field.
             </p>
-            <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: 0 }}>
-              Every update is delivered to your church&rsquo;s secure mission feed, making it easy to stay informed, pray intentionally, encourage your missionaries, and remain connected throughout their ministry&mdash;not just when the next newsletter arrives.
+            <p style={{ fontSize: "clamp(16px, 1.5vw, 17.5px)", lineHeight: 1.85, color: TEXT2, margin: 0 }}>
+              Every update is delivered to your church&rsquo;s <strong style={{ color: TEXT, fontWeight: 600 }}>secure mission feed</strong>, making it easy to stay informed, pray intentionally, encourage your missionaries, and remain connected throughout their ministry&mdash;not just when the next newsletter arrives.
             </p>
           </div>
         </section>
