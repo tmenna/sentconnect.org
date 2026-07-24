@@ -176,7 +176,7 @@ export default function RequestAccess() {
       <header style={{ background: BLUE }}>
         <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 24px", height: 76, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-            <img src={signupLogo} alt="SentConnect" style={{ height: 56, width: "auto", maxWidth: 200, display: "block" }} />
+            <img src={signupLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
           </a>
           <button
             type="button"
