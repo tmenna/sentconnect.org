@@ -3,17 +3,11 @@ import { pool } from "@workspace/db";
 export const DEFAULT_ABOUT_PAGE_CONTENT = {
   aboutTitle: "Why We Created SentConnect",
   aboutImageUrl: "",
-  aboutBody: `We are the Menna family, serving in Ethiopia alongside internally displaced persons (IDPs) through local ministry work. Over the years, one consistent gap we have seen in partnerships between churches, missionaries, international ministries, and local field partners is communication and reporting.
+  aboutBody: `We are the Menna family. While serving in Ethiopia, we saw a common challenge: churches often struggle to stay connected with the missionaries and ministry partners they send and support. Important updates, prayer requests, photos, and ministry reports are often scattered across emails, messaging apps, and social media.
 
-Too often, important ministry updates, prayer needs, stories from the field, and impact reports are shared inconsistently or get lost across emails, messaging apps, and informal channels. This can create distance between sending churches, mission organizations, and the teams they support in the field.
+Through years of serving as a bridge between churches, mission organizations, and field teams, we saw the need for a simple, dedicated platform built specifically for missionary communication.
 
-While serving with organizations like e3 Partners, I often helped bridge this gap as a communication liaison between field teams and churches in Ethiopia and ministry partners in the U.S.—supporting local ministries with reporting, updates, and timely communication. Through that experience, we saw the need for a simple tool designed specifically for this challenge.
-
-SentConnect was born from that need.
-
-We created SentConnect to give churches, mission organizations, and field teams a dedicated shared space to communicate clearly and consistently—where teams can share updates, photos, prayer requests, and ministry reports, and where churches can stay meaningfully connected to the work happening on the field.
-
-Our vision is simple: strengthen the connection between the church, mission organizations, and the field—so ministry partnerships can be more informed, engaged, and fruitful.`,
+SentConnect was created to strengthen the connection between churches and the mission field—helping ministries communicate clearly, stay engaged, and partner more effectively in God's mission.`,
 };
 
 export type AboutPageContent = typeof DEFAULT_ABOUT_PAGE_CONTENT;
