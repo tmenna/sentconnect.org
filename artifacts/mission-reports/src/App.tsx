@@ -3,6 +3,7 @@ import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wo
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Shuffle } from "lucide-react";
 import logoWhite from "@/assets/logo-white.png";
+import logoColor from "@/assets/logo-color.png";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/components/auth-provider";
@@ -116,7 +117,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
 function LandingPage() {
   const [content, setContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const { logo: lpLogo, footerLogo: lpFooterLogo, isLogoReady } = useLogo();
+  const { logo: lpLogo, footerLogo: lpFooterLogo, isLogoReady, isCustomLogo } = useLogo();
   const [, navigate] = useLocation();
 
   function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
@@ -138,39 +139,40 @@ function LandingPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const BLUE      = "#1085FD";
-  const BLUE_DARK = "#0070E0";
-  const TEAL      = "#1085FD";
-  const TEAL_DARK = "#0070E0";
+  const BLUE      = "#FF4405";
+  const BLUE_DARK = "#E63C00";
+  const TEAL      = "#FF4405";
+  const TEAL_DARK = "#E63C00";
   const CHARCOAL  = "#1F2937";
-  const TEXT      = "#0F172A";
-  const TEXT2     = "#64748B";
-  const BG        = "#FFFFFF";
+  const TEXT      = "#111827";
+  const TEXT2     = "#4B5563";
+  const BG        = "#F8F9FA";
+  const MONO      = "'JetBrains Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace";
 
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: "#F8F9FA", borderBottom: "1px solid #E5E7EB" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+            <img src={isCustomLogo ? lpLogo : logoColor} alt="SentConnect" fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
 
           {/* Desktop nav */}
-          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 4, background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.22)", borderRadius: 999, padding: 4, backdropFilter: "blur(8px)" }}>
+          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 8 }}>
             <a
               href="/about"
-              style={{ fontSize: 14, fontWeight: 600, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, transition: "background .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.18)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+              style={{ fontSize: 14, fontWeight: 600, color: TEXT2, textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, padding: "0 14px", borderRadius: 8, transition: "color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT2; }}
             >About</a>
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 14, fontWeight: 600, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, transition: "background .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.18)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+              style={{ fontSize: 14, fontWeight: 600, color: TEXT2, textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, height: 36, padding: "0 14px", borderRadius: 8, transition: "color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT2; }}
             >
-              <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 18, height: 18, borderRadius: "50%", background: "rgba(255,255,255,0.25)" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 18, height: 18, borderRadius: "50%", background: "rgba(17,24,39,0.08)" }}>
                 <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 1 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
               </span>
               Try Demo
@@ -178,9 +180,9 @@ function LandingPage() {
             <a
               href={content.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
-              style={{ fontSize: 14, fontWeight: 700, color: "#0B67C2", background: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, minWidth: 96, padding: "0 20px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 8px rgba(0,0,0,0.16)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0F7FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 14px rgba(0,0,0,0.2)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.16)"; }}
+              style={{ fontSize: 14, fontWeight: 700, color: "#fff", background: BLUE, display: "inline-flex", alignItems: "center", justifyContent: "center", height: 38, minWidth: 110, padding: "0 20px", borderRadius: 8, textDecoration: "none", boxShadow: "0 2px 8px rgba(255,68,5,0.24)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 14px rgba(255,68,5,0.32)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 8px rgba(255,68,5,0.24)"; }}
             >{content.headerPrimaryCtaLabel}</a>
           </nav>
 
@@ -188,21 +190,21 @@ function LandingPage() {
           <div className="flex sm:hidden items-center gap-2">
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 12, fontWeight: 700, color: "#fff", border: "1.5px solid rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.1)", padding: "6px 12px", borderRadius: 999, textDecoration: "none" }}
+              style={{ fontSize: 12, fontWeight: 700, color: TEXT, border: "1.5px solid #D1D5DB", background: "#fff", padding: "6px 12px", borderRadius: 8, textDecoration: "none" }}
             >Demo</a>
             <a
               href={content.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
-              style={{ fontSize: 12, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "6px 14px", borderRadius: 999, textDecoration: "none" }}
+              style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: BLUE, padding: "6px 14px", borderRadius: 8, textDecoration: "none" }}
             >{content.headerPrimaryCtaLabel}</a>
             <button
               onClick={() => setMobileNavOpen(o => !o)}
-              style={{ background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, padding: "7px 8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              style={{ background: "rgba(17,24,39,0.06)", border: "none", borderRadius: 8, padding: "7px 8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
               aria-label="Menu"
             >
               {mobileNavOpen
-                ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
               }
             </button>
           </div>
@@ -210,15 +212,15 @@ function LandingPage() {
 
         {/* Mobile dropdown */}
         {mobileNavOpen && (
-          <div className="sm:hidden" style={{ background: BLUE_DARK, borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
+          <div className="sm:hidden" style={{ background: "#fff", borderTop: "1px solid #E5E7EB", padding: "12px 16px 16px" }}>
             <a
               href="/about"
-              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 700, color: "#fff", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 700, color: TEXT, textDecoration: "none", borderBottom: "1px solid #F3F4F6" }}
               onClick={() => setMobileNavOpen(false)}
             >About</a>
             <a
               href="https://demo.sentconnect.org/"
-              style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none" }}
+              style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 0", fontSize: 15, fontWeight: 600, color: TEXT2, textDecoration: "none" }}
               onClick={() => setMobileNavOpen(false)}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -230,9 +232,12 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section style={{ background: "linear-gradient(180deg, #FFFFFF 0%, #F5FAFF 100%)", padding: "clamp(80px, 12vh, 150px) 24px" }}>
+        <section style={{ background: "#F8F9FA", padding: "clamp(80px, 12vh, 150px) 24px" }}>
           <div style={{ maxWidth: 880, margin: "0 auto", textAlign: "center" }}>
-            <h1 className="lp-animate lp-delay-1" style={{ fontSize: "clamp(36px, 5.2vw, 64px)", fontWeight: 900, lineHeight: 1.12, letterSpacing: "-0.04em", color: BLUE, margin: "0 0 28px" }}>
+            <p className="lp-animate" style={{ fontFamily: MONO, fontSize: "clamp(20px, 2.6vw, 30px)", fontWeight: 500, letterSpacing: "-0.01em", color: TEXT, margin: "0 0 26px" }}>
+              SentConnect.org
+            </p>
+            <h1 className="lp-animate lp-delay-1" style={{ fontSize: "clamp(32px, 4.6vw, 56px)", fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.03em", color: TEXT, margin: "0 0 28px" }}>
               {content.heroTitle}
             </h1>
 
@@ -242,7 +247,7 @@ function LandingPage() {
         {/* ── STORY ── */}
         <section style={{ background: "#fff", padding: "clamp(72px, 10vh, 110px) 24px" }}>
           <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "left" }}>
-            <div style={{ width: 48, height: 4, borderRadius: 999, background: `linear-gradient(90deg, ${BLUE}, #6BB6FF)`, margin: "0 0 34px" }} />
+            <div style={{ width: 48, height: 4, borderRadius: 999, background: BLUE, margin: "0 0 34px" }} />
             <p style={{ fontSize: "clamp(19px, 2vw, 23px)", fontWeight: 700, lineHeight: 1.55, letterSpacing: "-0.02em", color: TEXT, margin: "0 0 28px" }}>
               Have you ever wondered how the missionaries your church supports are doing in Africa, South America, Southeast Asia, or elsewhere around the world?
             </p>
@@ -276,7 +281,7 @@ function LandingPage() {
         </section>
 
         {/* ── CTA ── */}
-        <section style={{ background: "linear-gradient(180deg, #F5FAFF 0%, #EDF5FF 100%)", padding: "clamp(72px, 10vh, 120px) 24px" }}>
+        <section style={{ background: "#F8F9FA", borderTop: "1px solid #E5E7EB", padding: "clamp(72px, 10vh, 120px) 24px" }}>
           <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
             <h2 style={{ fontSize: "clamp(26px, 3.4vw, 40px)", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.03em", color: TEXT, margin: "0 0 36px" }}>
               Ready to stay connected with your missionaries?
@@ -286,20 +291,20 @@ function LandingPage() {
               <a
                 href={content.primaryCtaHref}
                 onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 56, minWidth: 220, padding: "0 34px", borderRadius: 999, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, color: "#fff", fontSize: 16, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)", transition: "opacity .15s, transform .15s, box-shadow .15s" }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "0.92"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "1"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.38)"; }}
+                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 56, minWidth: 220, padding: "0 34px", borderRadius: 10, background: BLUE, color: "#fff", fontSize: 16, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(255,68,5,0.30)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(255,68,5,0.42)"; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(255,68,5,0.30)"; }}
               >
                 {content.primaryCtaLabel}
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </a>
               <a
                 href="https://demo.sentconnect.org/"
-                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 56, minWidth: 170, padding: "0 30px", borderRadius: 999, background: "#fff", color: BLUE, fontSize: 16, fontWeight: 700, textDecoration: "none", border: `1.5px solid ${BLUE}`, boxShadow: "0 2px 8px rgba(16,133,253,0.12)", transition: "border-color .15s, color .15s, box-shadow .15s, background .15s" }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#EEF6FF"; el.style.boxShadow = "0 4px 16px rgba(16,133,253,0.20)"; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#fff"; el.style.boxShadow = "0 2px 8px rgba(16,133,253,0.12)"; }}
+                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 56, minWidth: 170, padding: "0 30px", borderRadius: 10, background: "#EEEFF1", color: TEXT, fontSize: 16, fontWeight: 700, textDecoration: "none", transition: "background .15s" }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#E4E5E8"; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#EEEFF1"; }}
               >
-                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: "50%", background: "rgba(16,133,253,0.14)" }}>
+                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: "50%", background: "rgba(17,24,39,0.10)" }}>
                   <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 1 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 </span>
                 Try Demo
@@ -369,7 +374,7 @@ function AboutPage() {
   const [lpContent, setLpContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [about, setAbout] = useState<AboutPageContent>(DEFAULT_ABOUT_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const { logo: lpLogo, isLogoReady } = useLogo();
+  const { logo: lpLogo, isLogoReady, isCustomLogo } = useLogo();
   const [, navigate] = useLocation();
 
   function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
@@ -390,38 +395,38 @@ function AboutPage() {
       .catch(() => setAbout(DEFAULT_ABOUT_PAGE_CONTENT));
   }, []);
 
-  const BLUE      = "#1085FD";
-  const BLUE_DARK = "#1085FD";
-  const TEXT      = "#0F172A";
-  const TEXT2     = "#374151";
-  const BG        = "#FFFFFF";
+  const BLUE      = "#FF4405";
+  const BLUE_DARK = "#E63C00";
+  const TEXT      = "#111827";
+  const TEXT2     = "#4B5563";
+  const BG        = "#F8F9FA";
 
   const paragraphs = about.aboutBody.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
 
   return (
     <div style={{ minHeight: "100vh", fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: "#F8F9FA", borderBottom: "1px solid #E5E7EB" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+            <img src={isCustomLogo ? lpLogo : logoColor} alt="SentConnect" fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
 
           {/* Desktop nav */}
-          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 4, background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.22)", borderRadius: 999, padding: 4, backdropFilter: "blur(8px)" }}>
+          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 8 }}>
             <a
               href="/about"
-              style={{ fontSize: 14, fontWeight: 600, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, transition: "background .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.18)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+              style={{ fontSize: 14, fontWeight: 600, color: TEXT2, textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, padding: "0 14px", borderRadius: 8, transition: "color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT2; }}
             >About</a>
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 14, fontWeight: 600, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, transition: "background .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.18)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+              style={{ fontSize: 14, fontWeight: 600, color: TEXT2, textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, height: 36, padding: "0 14px", borderRadius: 8, transition: "color .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT2; }}
             >
-              <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 18, height: 18, borderRadius: "50%", background: "rgba(255,255,255,0.25)" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 18, height: 18, borderRadius: "50%", background: "rgba(17,24,39,0.08)" }}>
                 <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 1 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
               </span>
               Try Demo
@@ -429,9 +434,9 @@ function AboutPage() {
             <a
               href={lpContent.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, lpContent.headerPrimaryCtaHref)}
-              style={{ fontSize: 14, fontWeight: 700, color: "#0B67C2", background: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, minWidth: 96, padding: "0 20px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 8px rgba(0,0,0,0.16)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0F7FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 14px rgba(0,0,0,0.2)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.16)"; }}
+              style={{ fontSize: 14, fontWeight: 700, color: "#fff", background: BLUE, display: "inline-flex", alignItems: "center", justifyContent: "center", height: 38, minWidth: 110, padding: "0 20px", borderRadius: 8, textDecoration: "none", boxShadow: "0 2px 8px rgba(255,68,5,0.24)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 14px rgba(255,68,5,0.32)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 8px rgba(255,68,5,0.24)"; }}
             >{lpContent.headerPrimaryCtaLabel}</a>
           </nav>
 
@@ -439,21 +444,21 @@ function AboutPage() {
           <div className="flex sm:hidden items-center gap-2">
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 12, fontWeight: 700, color: "#fff", border: "1.5px solid rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.1)", padding: "6px 12px", borderRadius: 999, textDecoration: "none" }}
+              style={{ fontSize: 12, fontWeight: 700, color: TEXT, border: "1.5px solid #D1D5DB", background: "#fff", padding: "6px 12px", borderRadius: 8, textDecoration: "none" }}
             >Demo</a>
             <a
               href={lpContent.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, lpContent.headerPrimaryCtaHref)}
-              style={{ fontSize: 12, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "6px 14px", borderRadius: 999, textDecoration: "none" }}
+              style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: BLUE, padding: "6px 14px", borderRadius: 8, textDecoration: "none" }}
             >{lpContent.headerPrimaryCtaLabel}</a>
             <button
               onClick={() => setMobileNavOpen(o => !o)}
-              style={{ background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, padding: "7px 8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              style={{ background: "rgba(17,24,39,0.06)", border: "none", borderRadius: 8, padding: "7px 8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
               aria-label="Menu"
             >
               {mobileNavOpen
-                ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
               }
             </button>
           </div>
@@ -461,15 +466,15 @@ function AboutPage() {
 
         {/* Mobile dropdown */}
         {mobileNavOpen && (
-          <div className="sm:hidden" style={{ background: BLUE_DARK, borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
+          <div className="sm:hidden" style={{ background: "#fff", borderTop: "1px solid #E5E7EB", padding: "12px 16px 16px" }}>
             <a
               href="/about"
-              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 700, color: "#fff", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 700, color: TEXT, textDecoration: "none", borderBottom: "1px solid #F3F4F6" }}
               onClick={() => setMobileNavOpen(false)}
             >About</a>
             <a
               href="https://demo.sentconnect.org/"
-              style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none" }}
+              style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 0", fontSize: 15, fontWeight: 600, color: TEXT2, textDecoration: "none" }}
               onClick={() => setMobileNavOpen(false)}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -485,9 +490,9 @@ function AboutPage() {
           {/* Back link */}
           <a
             href="/"
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "#1085FD", textDecoration: "none", marginBottom: 40 }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#0059D6"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#1085FD"; }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: BLUE, textDecoration: "none", marginBottom: 40 }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = BLUE_DARK; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = BLUE; }}
           >
             ← Back to home
           </a>
@@ -535,7 +540,7 @@ function AboutPage() {
             <a
               href={lpContent.primaryCtaHref}
               onClick={e => handleCtaClick(e, lpContent.primaryCtaHref)}
-              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 14, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,89,214,0.32)", transition: "background .15s, transform .15s" }}
+              style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 30px", borderRadius: 10, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(255,68,5,0.30)", transition: "background .15s, transform .15s" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE_DARK; el.style.transform = "translateY(-1px)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; }}
             >{lpContent.primaryCtaLabel}</a>
