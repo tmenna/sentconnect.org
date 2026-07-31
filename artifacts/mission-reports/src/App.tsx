@@ -30,6 +30,7 @@ const MissionaryProfile = lazy(() => import("./pages/missionary-profile"));
 const SubmitReport = lazy(() => import("./pages/submit-report"));
 const AdminDashboard = lazy(() => import("./pages/admin"));
 const MissionaryDashboard = lazy(() => import("./pages/missionary-dashboard"));
+const Signup = lazy(() => import("./pages/signup"));
 const RequestAccess = lazy(() => import("./pages/request-access"));
 const SignupSuccess = lazy(() => import("./pages/signup-success"));
 const SuperAdminPanel = lazy(() => import("./pages/super-admin"));
@@ -756,7 +757,7 @@ function AppRoutes() {
       {/* Org user login — always /{org}/login */}
       <Route path="/login" component={LoginRoute} />
       <Route path="/sentconnect-home" component={LandingPreviewRoute} />
-      <Route path="/signup" component={RequestAccess} />
+      <Route path="/signup" component={Signup} />
       <Route path="/signup/success" component={SignupSuccess} />
       <Route path="/request-access" component={RequestAccess} />
       <Route path="/try" component={Demo} />

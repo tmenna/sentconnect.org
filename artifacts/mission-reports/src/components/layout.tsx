@@ -188,13 +188,22 @@ export function Layout({ children }: { children: ReactNode }) {
                   </>
                 ) : (
                   <div className="flex items-center gap-2 ml-1">
-                    <Link href="/signup">
+                    <Link href="/request-access">
                       <Button
                         size="sm"
                         className="h-8 px-4 text-sm font-semibold rounded-lg transition-colors"
                         style={{ background: "#fff", color: "#1085FD", border: "1.5px solid #1085FD" }}
                       >
                         Request Access
+                      </Button>
+                    </Link>
+                    <Link href="/signup">
+                      <Button
+                        size="sm"
+                        className="h-8 px-4 text-sm font-semibold rounded-lg transition-colors"
+                        style={{ background: "#1085FD", color: "#fff" }}
+                      >
+                        Sign Up
                       </Button>
                     </Link>
                     <Link href="/login" data-testid="link-nav-login">
@@ -282,9 +291,14 @@ export function Layout({ children }: { children: ReactNode }) {
                       <HelpCircle className="h-4 w-4" />
                       Help
                     </a>
-                    <Link href="/signup">
+                    <Link href="/request-access">
                       <span className="flex items-center justify-center h-11 rounded-xl text-[15px] font-semibold transition-colors" style={{ color: "#1085FD", border: "1.5px solid #1085FD" }}>
                         Request Access
+                      </span>
+                    </Link>
+                    <Link href="/signup">
+                      <span className="flex items-center justify-center h-11 rounded-xl text-[15px] font-semibold text-white transition-colors" style={{ backgroundColor: "#1085FD" }}>
+                        Sign Up
                       </span>
                     </Link>
                     <Link href="/login">
