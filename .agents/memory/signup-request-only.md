@@ -1,10 +1,12 @@
 ---
-name: Signup is request-only
-description: Self-serve signup/Stripe checkout are gated off; onboarding goes through a request-access form.
+name: Signup flow modes
+description: How self-serve paid signup vs request-access onboarding are gated
 ---
 
-Onboarding is request-only: `/signup` shows a Request Access form (stores to `signup_requests`, emails platform admin). Self-serve org creation (`POST /api/auth/signup`) and Stripe checkout creation are gated behind `SELF_SERVE_SIGNUP_ENABLED=true` and return 410 otherwise.
+Self-serve paid signup (org creation + Stripe checkout) is gated by `SELF_SERVE_SIGNUP_ENABLED=true` — it gates both `POST /api/auth/signup` and `POST /api/billing/create-checkout-session`.
 
-**Why:** Owner wanted the paid pricing/signup page hidden — churches should be vetted manually before getting an org.
+**Status (July 2026):** BOTH flows are now active. `/signup` → paid self-serve signup (Stripe subscription checkout, org created only after payment via webhook); `/request-access` → request-access form (stores request + emails platform admin). Nav/login pages show both buttons.
 
-**How to apply:** Don't re-link or re-route the old paid signup page; if payments/self-serve return, flip the env flag rather than deleting the gate. Landing CTA labels ("Request Access") live in code defaults AND prod DB rows — DB changes need a migrate.ts UPDATE.
+**Why:** User first disabled self-serve (request-only onboarding), then in July 2026 asked to bring signup back alongside request access.
+
+**How to apply:** Checkout also requires `STRIPE_PRICE_ID` (set to the live "SentConnect Platform" $79/mo price). If deploying to Render/production, set `SELF_SERVE_SIGNUP_ENABLED=true` and `STRIPE_PRICE_ID` there too or signup returns 410. Stripe key is LIVE mode.
