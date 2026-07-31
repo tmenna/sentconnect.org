@@ -5,7 +5,7 @@ description: How self-serve paid signup vs request-access onboarding are gated
 
 Self-serve paid signup (org creation + Stripe checkout) is gated by `SELF_SERVE_SIGNUP_ENABLED=true` — it gates both `POST /api/auth/signup` and `POST /api/billing/create-checkout-session`.
 
-**Status (July 2026):** BOTH flows are now active. `/signup` → paid self-serve signup (Stripe subscription checkout, org created only after payment via webhook); `/request-access` → request-access form (stores request + emails platform admin). Nav/login pages show both buttons.
+**Status (July 2026):** BOTH flows are now active. `/signup` → paid self-serve signup (Stripe subscription checkout, org created only after payment via webhook); `/request-access` → request-access form (stores request + emails platform admin). Nav/login pages show only a "Sign Up" button (→ paid /signup); the /request-access form still exists but is not linked from nav/login.
 
 **Why:** User first disabled self-serve (request-only onboarding), then in July 2026 asked to bring signup back alongside request access.
 

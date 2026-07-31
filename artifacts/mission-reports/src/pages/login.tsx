@@ -163,12 +163,6 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             </a>
           )}
           <a
-            href="/request-access"
-            style={{ display: "inline-flex", alignItems: "center", height: 34, padding: "0 16px", borderRadius: 8, background: "#fff", color: BLUE, fontSize: 13, fontWeight: 600, textDecoration: "none", border: `1.5px solid ${BLUE}` }}
-          >
-            Request Access
-          </a>
-          <a
             href="/signup"
             style={{ display: "inline-flex", alignItems: "center", height: 34, padding: "0 16px", borderRadius: 8, background: BLUE, color: "#fff", fontSize: 13, fontWeight: 600, textDecoration: "none" }}
           >
@@ -383,46 +377,25 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               {/* Button row */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginTop: 20 }}>
                 {!platformMode ? (
-                  <div style={{ display: "flex", gap: 8 }}>
-                    <a
-                      href="/request-access"
-                      style={{
-                        height: 42,
-                        borderRadius: 999,
-                        background: INPUT_BG,
-                        color: "#3A4A5C",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        textDecoration: "none",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "0 16px",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      Request Access
-                    </a>
-                    <a
-                      href="/signup"
-                      style={{
-                        height: 42,
-                        borderRadius: 999,
-                        background: BLUE,
-                        color: "#fff",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        textDecoration: "none",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "0 16px",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      Sign Up
-                    </a>
-                  </div>
+                  <a
+                    href="/signup"
+                    style={{
+                      height: 42,
+                      borderRadius: 999,
+                      background: INPUT_BG,
+                      color: "#3A4A5C",
+                      fontSize: 14,
+                      fontWeight: 600,
+                      textDecoration: "none",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "0 22px",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Sign Up
+                  </a>
                 ) : (
                   <Link
                     href="/"
