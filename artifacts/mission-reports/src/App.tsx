@@ -369,17 +369,6 @@ function LandingPage() {
           </div>
         </section>
 
-        {/* ── IMPACT BAND ── */}
-        <section className="py-14 border-y border-slate-200 bg-white">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <p className="text-lg sm:text-xl font-semibold text-slate-700 leading-relaxed">
-              <em className="not-italic" style={{ color: BLUE }}>Stronger relationships</em>,{" "}
-              <em className="not-italic" style={{ color: BLUE }}>more informed prayer</em>,{" "}
-              <em className="not-italic" style={{ color: BLUE }}>better communication</em> — and a deeper connection between your church and the missionaries you send.
-            </p>
-          </div>
-        </section>
-
         {/* ── FEATURES ── */}
         <section id="features" className="py-28 bg-slate-50">
           <div className="max-w-7xl mx-auto px-6">
@@ -417,14 +406,15 @@ function LandingPage() {
                 <div className="absolute inset-0 rounded-[3rem] -rotate-3 scale-105" style={{ background: "rgba(16,133,253,0.06)" }} />
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)", padding: "3rem 2rem" }}>
                   <div className="bg-white/95 p-6 rounded-2xl shadow-lg">
-                    <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: BLUE }}>Missionary Highlight</div>
-                    <div className="text-2xl font-bold text-slate-900 mb-4" style={{ fontFamily: "Georgia, serif" }}>"The new well is finally complete!"</div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-emerald-500" />
-                      <div>
-                        <div className="font-bold text-slate-900 text-sm">The Jenkins Family</div>
-                        <div className="text-xs text-slate-500">Ethiopia</div>
-                      </div>
+                    <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: BLUE }}>{content.previewLabel}</div>
+                    <div className="text-2xl font-bold text-slate-900 mb-4">{content.previewTitle1}</div>
+                    <div className="space-y-2.5">
+                      {[content.previewTitle2, content.previewTitle3].map((t, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <div className="w-2 h-2 rounded-full shrink-0" style={{ background: BLUE }} />
+                          <div className="text-sm font-medium text-slate-600">{t}</div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                   <div className="mt-4 bg-slate-900/80 text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">
@@ -443,9 +433,9 @@ function LandingPage() {
                 </p>
                 <ul className="space-y-3">
                   {[
-                    "Mark any post as a highlight from the feed",
-                    "Export directly to presentation slides",
-                    "High-resolution photos preserved automatically",
+                    "Mark important posts as highlights",
+                    "Export them as presentation slides",
+                    "Share mission updates with your congregation on Sunday morning",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <div className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(16,133,253,0.12)", color: BLUE }}>
@@ -460,14 +450,13 @@ function LandingPage() {
           </div>
         </section>
 
-        {/* ── TESTIMONIAL ── */}
+        {/* ── IMPACT BAND ── */}
         <section className="py-24 relative overflow-hidden" style={{ background: BLUE }}>
           <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
             <Heart className="w-10 h-10 text-blue-200 mx-auto mb-8 opacity-80" />
-            <blockquote className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mb-8" style={{ fontFamily: "Georgia, serif" }}>
-              "Before SentConnect, our church felt disconnected from our sent ones. Now, our congregation prays specifically and immediately for needs on the field. It has transformed our missions culture."
-            </blockquote>
-            <cite className="not-italic text-blue-200 font-semibold text-base tracking-wide">— David R., Missions Pastor</cite>
+            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight m-0">
+              <em>Stronger relationships</em>, <em>more informed prayer</em>, <em>better communication</em>, and a <em>deeper connection</em> between your church and the missionaries you send and support.
+            </p>
           </div>
         </section>
 
