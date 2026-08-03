@@ -236,7 +236,9 @@ function LandingPage() {
             <h1 className="lp-animate lp-delay-1" style={{ fontSize: "clamp(36px, 5.2vw, 64px)", fontWeight: 900, lineHeight: 1.12, letterSpacing: "-0.04em", color: BLUE, margin: "0 0 28px" }}>
               {content.heroTitle}
             </h1>
-
+            <p className="lp-animate lp-delay-2" style={{ fontSize: "clamp(16.5px, 1.8vw, 19.5px)", lineHeight: 1.75, color: TEXT2, maxWidth: 660, margin: "0 auto" }}>
+              {content.heroDescription}
+            </p>
           </div>
         </section>
 
@@ -273,6 +275,71 @@ function LandingPage() {
             <p style={{ fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 600, lineHeight: 1.6, letterSpacing: "-0.01em", color: "#fff", margin: 0 }}>
               <em>Stronger relationships</em>, <em>more informed prayer</em>, <em>better communication</em>, and a <em>deeper connection</em> between your church and the missionaries you send and support.
             </p>
+          </div>
+        </section>
+
+        {/* ── FEATURES ── */}
+        <section style={{ background: "#fff", padding: "clamp(72px, 10vh, 120px) 24px" }}>
+          <div style={{ maxWidth: 1040, margin: "0 auto" }}>
+            <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 56px" }}>
+              <span style={{ display: "inline-block", fontSize: 12.5, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: BLUE, background: "rgba(16,133,253,0.08)", padding: "6px 14px", borderRadius: 999, marginBottom: 18 }}>
+                What you get
+              </span>
+              <h2 style={{ fontSize: "clamp(26px, 3.4vw, 40px)", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.03em", color: TEXT, margin: "0 0 16px" }}>
+                Everything your church needs to follow the field
+              </h2>
+              <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17px)", lineHeight: 1.75, color: TEXT2, margin: 0 }}>
+                Simple enough for anyone in your congregation to use, and built specifically for churches and the missionaries they send.
+              </p>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
+              {[
+                {
+                  title: "A live feed from the field",
+                  desc: "Missionaries share ministry moments as they happen\u2014short stories, prayer needs, and everyday wins\u2014so your church sees what God is doing right now, not months later.",
+                  icon: <path d="M4 5h16v14H4zM4 10h16M9 5v5" />,
+                },
+                {
+                  title: "Photos and short videos",
+                  desc: "Every update can include up to six photos or short video clips, with a full-screen viewer that makes it feel like you're right there with your missionaries.",
+                  icon: <><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="M21 15l-5-4-9 8" /></>,
+                },
+                {
+                  title: "Pray and encourage back",
+                  desc: "Members can like, love, and comment on every update\u2014turning one-way newsletters into real conversations and letting missionaries know they're not forgotten.",
+                  icon: <path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21z" />,
+                },
+                {
+                  title: "Email and mobile alerts",
+                  desc: "Get notified the moment a new update or comment arrives\u2014by email or on your phone with the SentConnect mobile app\u2014so nothing slips through the cracks.",
+                  icon: <path d="M4 6l8 6 8-6M4 6h16v12H4z" />,
+                },
+                {
+                  title: "Highlights ready for Sunday",
+                  desc: "Mark standout posts as highlights and export updates as presentation slides\u2014perfect for sharing mission news with your whole congregation on Sunday morning.",
+                  icon: <path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.9L12 3z" />,
+                },
+                {
+                  title: "Private and secure by design",
+                  desc: "Your church gets its own address, like yourchurch.sentconnect.org. Your mission feed is for invited members, and posts are only shared beyond it when you choose to share them.",
+                  icon: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
+                },
+              ].map((f, i) => (
+                <div
+                  key={i}
+                  style={{ background: "#F8FBFF", border: "1px solid #E3EEFB", borderRadius: 18, padding: "30px 28px", transition: "transform .18s, box-shadow .18s, border-color .18s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-3px)"; el.style.boxShadow = "0 10px 30px rgba(16,133,253,0.10)"; el.style.borderColor = "#BFDCFB"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "none"; el.style.borderColor = "#E3EEFB"; }}
+                >
+                  <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, marginBottom: 18 }}>
+                    <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{f.icon}</svg>
+                  </div>
+                  <h3 style={{ fontSize: 17.5, fontWeight: 700, letterSpacing: "-0.01em", color: TEXT, margin: "0 0 10px" }}>{f.title}</h3>
+                  <p style={{ fontSize: 15, lineHeight: 1.7, color: TEXT2, margin: 0 }}>{f.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
