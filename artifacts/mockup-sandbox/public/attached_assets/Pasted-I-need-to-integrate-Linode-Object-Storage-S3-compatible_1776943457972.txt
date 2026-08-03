@@ -1,0 +1,78 @@
+I need to integrate Linode Object Storage (S3-compatible) into this application for handling media uploads (images, videos, files).
+
+Please implement this using **secure, production-ready best practices**.
+
+### Core Requirements
+
+1. **Credentials & Security**
+
+   * Use environment variables (already configured):
+
+     * LINODE_ACCESS_KEY
+     * LINODE_SECRET_KEY
+     * LINODE_BUCKET
+     * LINODE_REGION
+   * Do NOT hardcode or expose secrets anywhere in the codebase or frontend
+
+2. **S3 Client Setup**
+
+   * Use AWS SDK (v3 preferred)
+   * Configure endpoint for Linode Object Storage
+   * Ensure compatibility with S3 APIs
+
+3. **Pre-Signed Upload Flow (Required)**
+
+   * Create endpoint:
+     POST /api/upload-url
+   * Accept:
+
+     * fileName
+     * contentType
+   * Generate:
+
+     * unique object key (UUID-based)
+     * pre-signed PUT URL (expires in ~5 minutes)
+   * Return:
+
+     * upload URL
+     * object key (or final file URL)
+
+4. **Frontend Upload Flow**
+
+   * Call backend to get signed URL
+   * Upload file directly to storage using PUT
+   * Do NOT route file uploads through backend server
+
+5. **Data Handling**
+
+   * Only store file URL or object key in database
+   * Do NOT store files in backend or Render filesystem
+
+6. **Security Constraints**
+
+   * Assume bucket is private
+   * Validate allowed file types (images/videos only)
+   * Prevent arbitrary file uploads
+
+7. **Optional (Recommended)**
+
+   * Add endpoint:
+     GET /api/file-url
+     → returns signed GET URL for private file access
+   * Useful for controlled viewing of sensitive media
+
+8. **Code Expectations**
+
+   * Clean modular backend code
+   * Clear separation: config / routes / services
+   * Include comments for integration points
+   * Provide example frontend upload function (fetch or axios)
+
+### Important Constraints
+
+* Do NOT ask me to paste access keys in chat
+* Do NOT expose secrets to frontend
+* Do NOT use local or ephemeral storage
+* Follow scalable architecture suitable for media-heavy apps
+
+Generate the implementation step-by-step and show where each piece fits in the current project.

@@ -1,0 +1,98 @@
+Redesign this community/social feed UI to match the typography and visual density style of Bluesky while keeping the platform modern and clean.
+
+STYLE DIRECTION:
+- Use Bluesky-inspired typography hierarchy
+- Stronger text contrast
+- Darker body text
+- Higher readability and scan speed
+- Dense but clean feed layout
+- Friendly modern social platform aesthetic
+- Lightweight and responsive feeling
+
+TYPOGRAPHY:
+- Font Family:
+  - Inter
+  - fallback: system-ui, sans-serif
+
+- Username:
+  - font-weight: 700
+  - color: #0F1419
+  - font-size: 15px
+
+- Metadata (time/location):
+  - font-weight: 400
+  - color: #536471
+  - font-size: 13px
+
+- Post Body:
+  - font-weight: 400
+  - color: #0F1419
+  - font-size: 15px
+  - line-height: 1.5
+
+VISUAL STYLE:
+- Increase text darkness and readability
+- Reduce excessive whitespace
+- Make feed cards feel tighter and more content-focused
+- Add subtle hover states
+- Use cleaner separators instead of large card borders
+- More native-social-feed feeling
+- Keep UI elegant and uncluttered
+
+LAYOUT:
+- Similar density to Bluesky feed
+- Compact post header spacing
+- Tighter image spacing
+- Balanced padding
+- Smooth scrolling experience
+
+COLORS:
+- Background: #FFFFFF
+- Primary text: #0F1419
+- Secondary text: #536471
+- Borders: #E5E7EB
+- Hover: rgba(15,20,25,0.03)
+- Accent blue: #0085FF
+
+POST CARD DESIGN:
+- Flat feed style instead of floating SaaS cards
+- Thin bottom border separator
+- Rounded images only
+- Minimal shadows
+- Cleaner engagement icons
+- Softer and more approachable than Twitter/X
+
+INTERACTIONS:
+- Smooth hover transitions
+- Subtle icon animations
+- Highlight feed row on hover like Bluesky
+
+MOBILE OPTIMIZATION:
+- Highly readable on mobile
+- Dense but touch-friendly
+- Optimized for scrolling and engagement
+
+OVERALL FEEL:
+The interface should feel:
+- modern
+- readable
+- lightweight
+- social-media-native
+- clean
+- fast
+- polished
+- community-oriented
+
+Avoid:
+- overly soft SaaS styling
+- excessive rounded cards
+- light gray text
+- too much whitespace
+- low contrast typography
+- heavy dashboard appearance
+
+Reference inspiration:
+- Bluesky feed UI
+- Threads
+- modern mobile-first social apps
+- lightweight community platforms

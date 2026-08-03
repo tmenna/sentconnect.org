@@ -1,0 +1,215 @@
+Build a multi-tenant SaaS web application called "SentConnect".
+
+Core Idea:
+SentConnect is a simple, private platform that allows organizations to stay connected with their distributed field teams through quick, media-rich updates. Each organization has its own isolated workspace.
+
+IMPORTANT:
+
+* Do NOT implement categories or complex reporting structures
+* Keep posting simple, fast, and flexible (similar to a social feed)
+* Prioritize ease of use over complexity
+
+---
+
+1. Multi-Tenant Architecture
+
+* Each organization has a unique subdomain:
+  e.g. org1.sentconnect.org, org2.sentconnect.org
+* Detect subdomain from incoming request
+* Attach organization context via middleware
+* All data must be strictly scoped by organization_id
+
+---
+
+2. User Roles
+
+* Super Admin (platform owner)
+* Organization Admin
+* Field User
+
+---
+
+3. Authentication
+
+* Email/password login
+* JWT-based authentication
+* Role-based access control (RBAC)
+* Secure password hashing
+
+---
+
+4. Core Features
+
+A. Organization Signup
+
+* Create organization
+* Choose subdomain (must be unique)
+* First registered user becomes Organization Admin
+
+---
+
+B. Admin Dashboard
+
+* View all users in the organization
+* View all posts (updates)
+* Filter posts by:
+
+  * User
+  * Date range
+* Basic stats:
+
+  * Total posts
+  * Active users
+
+---
+
+C. Field User Experience (Post Creation)
+
+* Simple, fast post composer (similar to Twitter)
+
+Fields:
+
+* Content (required, main input)
+* Optional:
+
+  * Title (optional, keep lightweight)
+  * Location
+  * People Reached (number)
+  * Image upload (multiple images supported)
+  * Short video upload (if supported)
+
+Notes:
+
+* No categories
+* No complex forms
+* Posting should take less than 30 seconds
+
+---
+
+D. Feed View (Core Experience)
+
+* Chronological feed of posts
+
+* Each post shows:
+
+  * User name + avatar
+  * Timestamp
+  * Location (if available)
+  * Content text
+  * Media (images/video prominently displayed)
+  * Optional stats (people reached)
+
+* Filters:
+
+  * By user
+  * By date range
+
+---
+
+E. Engagement (Lightweight)
+
+* Allow admins to:
+
+  * Like posts
+  * Comment on posts
+* Display likes and comments on posts
+* Keep interaction simple and encouraging
+
+---
+
+5. Database (Prisma + PostgreSQL)
+
+Organization:
+
+* id
+* name
+* subdomain (unique)
+* plan
+* created_at
+
+User:
+
+* id
+* organization_id
+* name
+* email
+* password_hash
+* role (admin, field_user)
+* status
+* created_at
+
+Post:
+
+* id
+* organization_id
+* user_id
+* content
+* title (optional)
+* location (optional)
+* people_reached (optional)
+* image_urls (array)
+* video_url (optional)
+* created_at
+
+Comment:
+
+* id
+* post_id
+* user_id
+* content
+* created_at
+
+Like:
+
+* id
+* post_id
+* user_id
+
+---
+
+6. Super Admin Panel
+
+* View all organizations
+* Activate/deactivate organizations
+* View total users and posts across platform
+* Ability to impersonate organization admin
+
+---
+
+7. Tech Stack
+
+* Backend: Node.js + Express
+* ORM: Prisma
+* Database: PostgreSQL
+* Frontend: React (Vite) + Tailwind
+* Auth: JWT
+
+---
+
+8. UI/UX Requirements
+
+* Clean, modern dashboard
+* Sidebar navigation
+* Mobile-first responsive design
+* Fast and minimal post creation flow
+* Media-first feed (images/video prioritized visually)
+
+---
+
+9. Optional (Future-Friendly, Keep Simple Now)
+
+* Basic summary stats:
+
+  * Total posts
+  * Total people reached
+* Export summary as text
+
+---
+
+Key Principles:
+
+* Keep everything simple and intuitive
+* Optimize for speed and ease of posting
+* Avoid over-engineering
+* Ensure strict data isolation between organizations
+* Make the product feel like a lightweight social feed, not a reporting system

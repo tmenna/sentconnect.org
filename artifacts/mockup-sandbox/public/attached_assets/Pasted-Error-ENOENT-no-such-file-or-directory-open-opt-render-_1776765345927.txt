@@ -1,0 +1,12 @@
+Error: ENOENT: no such file or directory, open '/opt/render/project/src/artifacts/api-server/dist/table.sql'
+    at async open (node:internal/fs/promises:636:25)
+    at async Object.readFile (node:internal/fs/promises:1235:14)
+    at async PGStore._rawEnsureSessionStoreTable (/opt/render/project/src/node_modules/.pnpm/connect-pg-simple@10.0.0/node_modules/connect-pg-simple/index.js:183:32)
+    at async PGStore._asyncQuery (/opt/render/project/src/node_modules/.pnpm/connect-pg-simple@10.0.0/node_modules/connect-pg-simple/index.js:315:7)
+{"level":30,"time":1776765299757,"pid":80,"hostname":"srv-d7jivbpkh4rs73foc7a0-hibernate-6f7fc6c797-blcmt","req":{"id":208,"method":"GET","url":"/api/users/me"},"res":{"statusCode":401},"responseTime":0,"msg":"request completed"}
+{"level":30,"time":1776765300122,"pid":80,"hostname":"srv-d7jivbpkh4rs73foc7a0-hibernate-6f7fc6c797-blcmt","req":{"id":209,"method":"GET","url":"/api/healthz"},"res":{"statusCode":200},"responseTime":1,"msg":"request completed"}
+{"level":30,"time":1776765305121,"pid":80,"hostname":"srv-d7jivbpkh4rs73foc7a0-hibernate-6f7fc6c797-blcmt","req":{"id":210,"method":"GET","url":"/api/healthz"},"res":{"statusCode":200},"responseTime":1,"msg":"request completed"}
+{"level":30,"time":1776765310122,"pid":80,"hostname":"srv-d7jivbpkh4rs73foc7a0-hibernate-6f7fc6c797-blcmt","req":{"id":211,"method":"GET","url":"/api/healthz"},"res":{"statusCode":200},"responseTime":1,"msg":"request completed"}
+{"level":30,"time":1776765310123,"pid":80,"hostname":"srv-d7jivbpkh4rs73foc7a0-hibernate-6f7fc6c797-blcmt","req":{"id":212,"method":"GET","url":"/api/healthz"},"res":{"statusCode":200},"responseTime":0,"msg":"request completed"}
+{"level":30,"time":1776765315122,"pid":80,"hostname":"srv-d7jivbpkh4rs73foc7a0-hibernate-6f7fc6c797-blcmt","req":{"id":213,"method":"GET","url":"/api/healthz"},"res":{"statusCode":200},"responseTime":1,"msg":"request completed"}
+{"level":30,"time":1776765320122,"pid":80,"hostname":"srv-d7jivbpkh4rs73foc7a0-hibernate-6f7fc6c797-blcmt","req":{"id":214,"method":"GET","url":"/api/healthz"},"res":{"statusCode":200},"responseTime":1,"msg":"request completed"}

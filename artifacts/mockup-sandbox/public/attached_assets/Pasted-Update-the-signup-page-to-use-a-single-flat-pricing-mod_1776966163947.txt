@@ -1,0 +1,146 @@
+Update the signup page to use a **single flat pricing model ($30/month per organization)** with **no free trial**, and require payment upfront using Stripe before creating the organization.
+
+---
+
+### 1) UI Changes (Signup Page)
+
+Remove any “Plan” or “Free Trial vs Paid” toggle.
+
+Add a clear pricing section above the account fields using this exact copy:
+
+Simple, transparent pricing
+
+$30 / month per organization
+Unlimited users • Media sharing • Secure access
+
+No contracts. Cancel anytime.
+
+---
+
+### 2) CTA Update
+
+Replace the main button:
+
+* From: "Create Organization"
+* To: "Start for $30/month"
+
+---
+
+### 3) Form Behavior (Important Flow Change)
+
+Current flow:
+Create org → then handle billing
+
+New flow (required):
+User submits form → create Stripe Checkout Session → redirect to Stripe → on success → create organization
+
+---
+
+### 4) Stripe Integration (Required)
+
+Implement Stripe Checkout for subscriptions:
+
+* Create backend endpoint:
+  POST /api/billing/create-checkout-session
+
+* It should:
+
+  * Accept signup form data:
+
+    * organizationName
+    * subdomain
+    * fullName
+    * email
+    * password
+  * Create a Stripe Checkout Session with:
+
+    * mode: "subscription"
+    * price: $30/month (use Stripe Price ID via env: STRIPE_PRICE_ID)
+  * Include metadata:
+
+    * organizationName
+    * subdomain
+    * fullName
+    * email
+
+* Return:
+
+  * checkoutUrl
+
+---
+
+### 5) Redirect Flow
+
+Frontend should:
+
+1. Submit form → call /api/billing/create-checkout-session
+2. Redirect user to Stripe Checkout
+3. After payment success → Stripe redirects to:
+
+   /signup/success
+
+---
+
+### 6) Webhook (Critical)
+
+Create endpoint:
+POST /api/webhooks/stripe
+
+* Listen for:
+
+  * checkout.session.completed
+
+* On success:
+
+  * Extract metadata
+  * Create:
+
+    * organization
+    * user (admin)
+  * Mark subscription as active
+
+* Use STRIPE_WEBHOOK_SECRET (env)
+
+---
+
+### 7) Environment Variables
+
+Use:
+
+* STRIPE_SECRET_KEY
+* STRIPE_PRICE_ID
+* STRIPE_WEBHOOK_SECRET
+
+Do NOT hardcode any secrets.
+
+---
+
+### 8) Validation & UX
+
+* Validate required fields before calling Stripe
+* Show loading state on submit
+* Handle errors gracefully
+* Prevent duplicate org creation
+
+---
+
+### 9) Keep Code Clean
+
+* Separate:
+
+  * billing service
+  * auth/org creation logic
+* Use async/await
+* Add comments where needed
+
+---
+
+### Goal
+
+A clean signup experience where:
+
+* User sees simple $30/month pricing
+* Pays first via Stripe
+* Organization is created only after successful payment
+
+Ensure the flow works end-to-end.

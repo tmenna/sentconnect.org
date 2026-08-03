@@ -1,0 +1,174 @@
+You are improving an existing multi-tenant admin dashboard for a field communication platform called SentConnect.
+
+GOAL:
+Enhance the current clean, white, minimal UI into a more powerful, action-driven admin dashboard while keeping it lightweight, fast, and easy for field-based use.
+
+-----------------------------------
+1. HEADER → MAKE IT ACTION-ORIENTED
+-----------------------------------
+Keep the existing blue welcome header, but enhance it:
+
+- On the right side, add Quick Action buttons:
+  + Add User
+  + Create Post
+  + View Reports
+  + Flagged Posts
+
+- Keep it clean and aligned horizontally
+- Buttons should be subtle (outline or soft white fill)
+
+-----------------------------------
+2. KPI CARDS → KEEP BUT ADD CONTEXT
+-----------------------------------
+Keep existing cards:
+- Total Posts
+- Field Users
+- Countries
+- Role
+
+Enhance by:
+- Adding small subtext:
+  e.g. "+3 this week"
+- Add subtle hover effect
+- Make cards clickable (drill-down ready)
+
+-----------------------------------
+3. LIVE ACTIVITY STRIP (NEW)
+-----------------------------------
+Add a thin horizontal section under KPI cards:
+
+Display:
+- Active users count (e.g. "3 users active now")
+- Latest post time (e.g. "Last update 12 min ago")
+- Latest location (e.g. "From Mekelle, Ethiopia")
+
+Style:
+- Minimal, inline, soft gray text
+- Small icons (dot, clock, location)
+
+-----------------------------------
+4. POSTS → CORE INTERACTION UPGRADE
+-----------------------------------
+Update post cards:
+
+- Entire card should be clickable
+- Clicking opens FULL-SCREEN modal (no "view post" button)
+
+Inside each post card:
+- Add:
+  - User name + avatar
+  - Timestamp
+  - Location (if available)
+  - Tag (Update / Mission Moment)
+
+- Add Admin Menu (top-right ⋯):
+  - Edit
+  - Delete
+  - Flag
+  - Pin
+  - Mark as Mission Moment
+
+- Bottom actions:
+  - Like
+  - Comment (click opens comment panel)
+
+-----------------------------------
+5. MISSION MOMENT FEATURE
+-----------------------------------
+Enhance existing tab:
+
+- Add visible badge on posts:
+  "⭐ Mission Moment"
+
+- Add filter tabs:
+  - All Posts
+  - Mission Moments
+  - Urgent Updates
+
+- Mission Moment posts should have:
+  - Slight border highlight OR soft background tint
+
+-----------------------------------
+6. FILTER BAR → EXPAND
+-----------------------------------
+Enhance filters:
+
+Keep:
+- Team member
+- Date range
+
+Add:
+- Country dropdown
+- Post type (All / Mission / Update)
+- User role
+- Flagged posts toggle
+
+Make filter bar:
+- Sticky when scrolling
+
+-----------------------------------
+7. MANAGE TEAM → ADMIN POWER
+-----------------------------------
+Upgrade team management:
+
+For each user add:
+- Lock / Unlock
+- Reset password
+- Assign role (Admin / Field / Viewer)
+
+Add status indicator:
+- Green = Active
+- Yellow = Inactive
+- Red = Needs attention (no posts recently)
+
+-----------------------------------
+8. INSIGHTS PANEL (LIGHT ANALYTICS)
+-----------------------------------
+Add small section:
+
+- Posts this week
+- Most active user
+- Least active region
+- Total comments
+
+Keep it simple (no heavy charts)
+
+-----------------------------------
+9. UI/UX IMPROVEMENTS
+-----------------------------------
+- Increase spacing between sections slightly
+- Keep white background dominant
+- Use ONE accent color (green or orange)
+- Keep icon style consistent
+- Add soft shadows to cards
+
+-----------------------------------
+10. MOBILE OPTIMIZATION
+-----------------------------------
+Ensure:
+- Cards stack vertically
+- Filters collapse into dropdown
+- Buttons are thumb-friendly
+- Modal is full-screen on mobile
+
+-----------------------------------
+11. PERFORMANCE
+-----------------------------------
+- Keep UI lightweight
+- Avoid heavy animations
+- Optimize images for fast loading
+
+-----------------------------------
+OUTPUT:
+-----------------------------------
+- Updated React components (or current framework in project)
+- Clean reusable components:
+  - Header
+  - KPI Cards
+  - Post Card
+  - Filters
+  - Modal View
+- Maintain existing design language but improve usability
+
+PRIORITY:
+Clarity > Speed > Simplicity > Admin control

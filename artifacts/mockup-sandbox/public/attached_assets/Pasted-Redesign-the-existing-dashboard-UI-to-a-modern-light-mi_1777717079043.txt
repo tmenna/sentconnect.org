@@ -1,0 +1,170 @@
+Redesign the existing dashboard UI to a modern, light, minimal “Render.com style” interface while keeping all current functionality and data intact.
+
+GOAL:
+Transform the UI from a heavy, boxed, gradient-based layout into a clean, airy, content-first experience using whitespace, subtle borders, and minimal color.
+
+---
+
+GLOBAL STYLE CHANGES:
+
+1. Remove all heavy gradients (especially the blue header background).
+
+2. Use a light color system:
+
+   * Page background: #f9fafb
+   * Card/background: #ffffff
+   * Borders: #e5e7eb or #f0f0f0
+   * Primary text: #111827
+   * Secondary text: #6b7280
+   * Accent (buttons only): #2563eb
+
+3. Remove strong shadows. If needed, use very soft shadows:
+   box-shadow: 0 1px 2px rgba(0,0,0,0.03)
+
+4. Increase spacing across the layout:
+
+   * Section spacing: 32px
+   * Component padding: 12–16px
+
+---
+
+HEADER:
+
+* Replace the large blue gradient header with a simple white top bar.
+* Add a thin bottom border:
+  border-bottom: 1px solid #f0f0f0
+* Keep logo/title left and user/help on right.
+* No background color blocks.
+
+---
+
+PAGE TITLE SECTION:
+
+* Remove any container/card around "Missions Feed".
+* Display as plain text:
+  Title: medium-bold
+  Subtitle: smaller, gray (#6b7280)
+* Add spacing below instead of borders.
+
+---
+
+STATS (Posts / Mission Moments):
+
+* Convert from cards into inline pills.
+* Style:
+
+  * background: #f9fafb
+  * border: 1px solid #eee
+  * border-radius: 999px
+  * padding: 6px 12px
+  * font-size: 13px
+* Place inline under the title.
+
+---
+
+POST INPUT BOX:
+
+* Keep functionality but simplify design.
+* Style:
+
+  * background: #ffffff
+  * border: 1px solid #e5e7eb
+  * border-radius: 12px
+  * padding: 14px
+* Remove heavy shadows.
+* Keep action buttons inline and minimal.
+
+---
+
+TABS (All Posts / Mission Moments):
+
+* Remove boxed tab container.
+* Use simple text tabs.
+* Active tab:
+
+  * border-bottom: 2px solid #2563eb
+  * font-weight: 500
+* Inactive tab:
+
+  * color: #6b7280
+
+---
+
+POST FEED (IMPORTANT):
+
+* Convert from card-based layout to timeline-style layout.
+* Remove card borders and containers.
+
+Each post should:
+
+* Use a simple vertical layout
+* Be separated by a thin divider:
+  border-bottom: 1px solid #f0f0f0
+* Padding: 16px 0
+
+Structure:
+
+* User name (bold)
+* Metadata (time/location in gray)
+* Content text
+* Actions row (Like, Comment, Share, Export)
+
+Optional:
+
+* Add hover effect:
+  background: #fafafa
+
+---
+
+BUTTONS:
+
+* Primary buttons:
+  background: #2563eb
+  color: white
+  border-radius: 8px
+  padding: 8px 14px
+
+* Secondary buttons:
+  background: transparent
+  color: #374151
+
+---
+
+LAYOUT:
+
+* Center main content:
+  max-width: 900px
+  margin: 0 auto
+  padding: 32px 24px
+
+* Use spacing instead of borders to separate sections.
+
+---
+
+DESIGN PRINCIPLES TO FOLLOW:
+
+* Use whitespace instead of boxes
+* Reduce visual noise
+* Keep UI flat and minimal
+* Let content stand out, not containers
+* Only use color for actions (not structure)
+
+---
+
+DO NOT:
+
+* Do not change backend logic or data
+* Do not remove features
+* Do not add heavy UI libraries
+* Do not reintroduce gradients or thick shadows
+
+---
+
+EXPECTED RESULT:
+
+A clean, modern, SaaS-style dashboard similar to Render, Notion, or Linear:
+
+* Light
+* Minimal
+* Easy to scan
+* Content-first

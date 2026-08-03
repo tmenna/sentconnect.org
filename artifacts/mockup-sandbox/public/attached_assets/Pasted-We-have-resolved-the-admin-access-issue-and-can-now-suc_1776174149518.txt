@@ -1,0 +1,131 @@
+We have resolved the /admin access issue and can now successfully load the platform admin panel from the root domain.
+
+Next, we want to enhance the platform with role-based access control for platform users and enable centralized management across all organizations.
+
+Please implement the following:
+
+✅ 1. Extend Role System
+
+Add support for platform-level roles:
+
+super_admin → full unrestricted access
+platform_admin → full platform management access
+platform_manager → limited access based on permissions
+
+These roles operate at the platform level (not organization-scoped).
+
+✅ 2. Platform User Management
+
+Allow super_admin to:
+
+Create platform users
+Assign roles (platform_admin, platform_manager)
+Update roles
+Deactivate or remove platform users
+
+Platform users should NOT be restricted by organization_id.
+
+✅ 3. Permission System (for platform_manager)
+
+Introduce a flexible permission system:
+
+Add a permissions field (JSON) to users table (or equivalent)
+Only applies to platform_manager
+
+Example structure:
+
+{
+  "canViewOrganizations": true,
+  "canManageOrganizations": false,
+  "canViewUsers": true,
+  "canManageUsers": true,
+  "canResetPasswords": true,
+  "canLockUnlockUsers": true,
+  "canSuspendUsers": true,
+  "canImpersonateUsers": false
+}
+✅ 4. Middleware Enforcement
+
+Create middleware:
+
+requirePlatformAccess
+requirePermission(permissionKey)
+
+Rules:
+
+super_admin → bypass all checks
+platform_admin → full access
+platform_manager → check permissions JSON
+
+Ensure:
+
+All platform routes enforce permissions at backend level
+No reliance on frontend-only checks
+✅ 5. Organization Management (Platform Level)
+
+Allow platform users (based on role/permissions) to:
+
+View all organizations
+Suspend / unsuspend organizations
+✅ 6. Cross-Organization User Management
+
+Allow platform users to:
+
+View all users across organizations
+Filter by org, role, status
+
+Add actions:
+
+Reset password
+Lock / unlock accounts
+Activate / deactivate users
+Suspend / unsuspend users
+✅ 7. API Updates
+
+Ensure or extend these routes:
+
+GET /api/super-admin/orgs
+GET /api/super-admin/users
+POST /api/super-admin/users (create platform user)
+PATCH /api/super-admin/users/:id (update role/permissions)
+POST /api/super-admin/users/:id/reset-password
+POST /api/super-admin/users/:id/lock
+POST /api/super-admin/users/:id/unlock
+POST /api/super-admin/users/:id/suspend
+POST /api/super-admin/users/:id/unsuspend
+✅ 8. Frontend (Wouter + React)
+
+Update /admin panel:
+
+Add Sections:
+Platform Users
+List platform users
+Create/edit users
+Assign roles + permissions
+Organizations
+List all orgs
+Suspend/unsuspend toggle
+Users (Global)
+List all users
+Action buttons:
+Reset password
+Lock/unlock
+Suspend/unsuspend
+(optional) impersonate
+✅ 9. Context Rules
+/admin → platform context (no org filtering)
+Subdomain routes → organization context
+Do NOT apply organization_id filtering for platform users
+✅ 10. Keep It Simple
+Reuse existing schema and role system
+Avoid introducing new services
+Keep logic modular and easy to extend
+✅ 11. Output Required
+
+Provide:
+
+Schema changes (if any)
+Middleware implementation
+Updated/added API routes
+Frontend updates
+Notes on permission enforcement

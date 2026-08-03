@@ -1,0 +1,140 @@
+Refine the Mission Feed dashboard and fix visual alignment between the header card, post composer, tabs and feed cards.
+
+Important:
+Do not redesign the page.
+Preserve current layout and overall structure.
+Focus on alignment precision, spacing consistency, and UI polish.
+
+------------------------------------------------
+1. FIX MASTER CONTENT ALIGNMENT
+------------------------------------------------
+
+Create one shared content container used by ALL sections:
+
+- Mission Feed header card
+- Post composer
+- Feed tabs
+- Post cards
+
+Use one identical max-width and center alignment for all.
+
+Example:
+max-width: 1100px
+margin: 0 auto
+
+Critical:
+All sections must align on the same left and right edges.
+
+Visually these should stack on one rail:
+
+| Header Card                |
+| Composer                   |
+| Tabs                       |
+| Posts                      |
+
+No section should appear slightly inset or wider than another.
+
+------------------------------------------------
+2. ALIGN INTERNAL CONTENT START POINTS
+------------------------------------------------
+
+Match the left content starting point inside cards.
+
+Align these vertically:
+- "Mission Feed" heading
+- composer input text
+- post author names
+- feed content text
+
+Use consistent internal horizontal padding:
+32px left/right throughout
+
+Create one shared baseline.
+
+Goal:
+Hero and feed should feel optically locked together.
+
+------------------------------------------------
+3. HEADER CARD REFINEMENT
+------------------------------------------------
+
+Rename:
+My Updates
+→ Mission Feed
+
+Keep current blue hero card but:
+- Match border radius to post cards
+- Match horizontal padding to composer
+- Match visual width exactly to feed cards
+- Increase internal spacing slightly
+
+Header should feel part of feed system,
+not floating above it.
+
+------------------------------------------------
+4. COMPOSER POLISH
+------------------------------------------------
+
+Keep structure, keep alignment.
+
+Update placeholder:
+Share an update with your church or field team…
+
+Refine:
+- Even spacing for composer actions
+- Better alignment of icons row
+- Slightly stronger Post button
+
+Keep composer width exactly matching header.
+
+------------------------------------------------
+5. POST CARD POLISH
+------------------------------------------------
+
+Keep feed layout.
+
+Improve:
+- soften nested box feel
+- increase breathing room
+- use consistent padding matching header/composer
+- slightly lighter borders or softer shadows
+
+Optional engagement row:
+Like • Comment • Pray • Share
+
+------------------------------------------------
+6. VERTICAL RHYTHM
+------------------------------------------------
+
+Use consistent spacing between stacked sections:
+
+Header → Composer:
+24-32px
+
+Composer → Tabs:
+24px
+
+Tabs → Posts:
+24-32px
+
+Posts:
+consistent gap between cards
+
+Make spacing rhythm intentional.
+
+------------------------------------------------
+7. DO NOT CHANGE
+------------------------------------------------
+
+Do NOT change:
+- overall dashboard structure
+- current visual style
+- brand colors
+- feed concept
+- current column layout
+
+This is alignment correction + polish only.
+
+Primary goal:
+Make header and feed feel perfectly aligned
+and visually part of one cohesive content rail.
