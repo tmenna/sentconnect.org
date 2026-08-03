@@ -3,8 +3,8 @@ import { Link } from "wouter";
 import { Loader2, CheckCircle2 } from "lucide-react";
 import { useOrg } from "@/providers/org-provider";
 
-const BLUE    = "#006AFF";
-const BLUE_DK = "#0053CC";
+const BLUE    = "#FF4405";
+const BLUE_DK = "#E63C00";
 
 export default function ForgotPassword() {
   const { orgSlug, prefix } = useOrg();
@@ -41,7 +41,7 @@ export default function ForgotPassword() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-4 py-12"
-      style={{ background: "#fff" }}
+      style={{ background: "#F8F9FA" }}
     >
       <div
         className="w-full max-w-[420px] bg-white rounded-2xl px-8 py-8"
@@ -93,14 +93,14 @@ export default function ForgotPassword() {
                   required
                   className="w-full h-11 px-4 text-[14px] rounded-xl border outline-none transition-all"
                   style={{ borderColor: "#E5E7EB" }}
-                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(0,106,255,0.1)`; }}
+                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(255,68,5,0.12)`; }}
                   onBlur={e => { e.target.style.borderColor = "#E5E7EB"; e.target.style.boxShadow = "none"; }}
                 />
               </div>
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full h-11 text-white font-bold rounded-xl text-[15px] flex items-center justify-center gap-2 transition-all"
+                className="w-full h-11 text-white font-bold rounded-[10px] text-[15px] flex items-center justify-center gap-2 transition-all"
                 style={{ background: hoverBtn ? BLUE_DK : BLUE, opacity: submitting ? 0.7 : 1 }}
                 onMouseEnter={() => setHoverBtn(true)}
                 onMouseLeave={() => setHoverBtn(false)}
@@ -118,7 +118,7 @@ export default function ForgotPassword() {
         )}
       </div>
 
-      <p className="mt-8 text-[12px]" style={{ color: "#C0CDD8", fontStyle: "italic" }}>"Declare his glory among the nations." — Ps 96:3</p>
+      <p className="mt-8 text-[12px]" style={{ color: "#9CA3AF", fontStyle: "italic" }}>"Declare his glory among the nations." — Ps 96:3</p>
     </div>
   );
 }

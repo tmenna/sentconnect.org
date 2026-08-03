@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { Loader2, CheckCircle2, Send, Mail, X, ArrowRight } from "lucide-react";
 import { useLogo } from "@/providers/logo-provider";
+import logoColor from "@/assets/logo-color.png";
 import { buildOrgLoginHref } from "@/lib/org";
 
-const BLUE = "#1085FD";
+const BLUE = "#FF4405";
+const BLUE_DARK = "#E63C00";
 
 function SignInModal({ onClose }: { onClose: () => void }) {
   const [subdomain, setSubdomain] = useState("");
@@ -101,7 +103,7 @@ function SignInModal({ onClose }: { onClose: () => void }) {
           <button
             type="submit"
             disabled={checking}
-            style={{ width: "100%", height: 48, background: `linear-gradient(135deg, ${BLUE} 0%, #0560D4 100%)`, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 12, cursor: checking ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 4px 16px rgba(16,133,253,0.35)", opacity: checking ? 0.7 : 1, fontFamily: "inherit" }}
+            style={{ width: "100%", height: 48, background: BLUE, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 12, cursor: checking ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 4px 16px rgba(255,68,5,0.35)", opacity: checking ? 0.7 : 1, fontFamily: "inherit" }}
           >
             {checking ? <Loader2 size={18} className="animate-spin" /> : <ArrowRight size={16} />}
             {checking ? "Checking…" : "Continue to Sign In"}
@@ -116,7 +118,7 @@ function SignInModal({ onClose }: { onClose: () => void }) {
 }
 
 export default function RequestAccess() {
-  const { signupLogo } = useLogo();
+  const { signupLogo, isCustomSignupLogo } = useLogo();
   const [showSignIn, setShowSignIn] = useState(false);
   const [churchName, setChurchName] = useState("");
   const [contactName, setContactName] = useState("");
@@ -171,17 +173,19 @@ export default function RequestAccess() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #F0F7FF 0%, #FAFCFF 100%)", fontFamily: "'Inter', system-ui, sans-serif", display: "flex", flexDirection: "column" }}>
+    <div style={{ minHeight: "100vh", background: "#F8F9FA", fontFamily: "'Inter', system-ui, sans-serif", display: "flex", flexDirection: "column" }}>
       {/* Header */}
-      <header style={{ background: BLUE }}>
-        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 24px", height: 76, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: "#F8F9FA", borderBottom: "1px solid #E5E7EB" }}>
+        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 24px", height: 80, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-            <img src={signupLogo} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
+            <img src={isCustomSignupLogo ? signupLogo : logoColor} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
           </a>
           <button
             type="button"
             onClick={() => setShowSignIn(true)}
-            style={{ fontSize: 14, fontWeight: 600, color: "#fff", background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 999, padding: "9px 22px", cursor: "pointer", fontFamily: "inherit" }}
+            style={{ fontSize: 14, fontWeight: 700, color: "#fff", background: BLUE, border: "none", borderRadius: 8, padding: "0 20px", height: 38, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(255,68,5,0.24)", transition: "background .15s" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = BLUE_DARK; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
           >
             Sign in
           </button>
@@ -192,7 +196,7 @@ export default function RequestAccess() {
       <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "48px 24px" }}>
         <div style={{ width: "100%", maxWidth: 560 }}>
           {submitted ? (
-            <div style={{ background: "#fff", borderRadius: 28, padding: "56px 44px", textAlign: "center", boxShadow: "0 12px 48px rgba(15,23,42,0.11), 0 2px 8px rgba(15,23,42,0.06)", border: "1px solid #E4EEFF" }}>
+            <div style={{ background: "#fff", borderRadius: 28, padding: "56px 44px", textAlign: "center", boxShadow: "0 12px 48px rgba(15,23,42,0.11), 0 2px 8px rgba(15,23,42,0.06)", border: "1px solid #E5E7EB" }}>
               <div style={{ width: 72, height: 72, borderRadius: "50%", background: "#ECFDF5", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
                 <CheckCircle2 size={38} color="#10B981" />
               </div>
@@ -200,13 +204,13 @@ export default function RequestAccess() {
               <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#64748B", margin: "0 0 28px" }}>
                 Thank you for your interest in SentConnect. We'll review your request and reach out to <strong style={{ color: "#0F172A" }}>{email}</strong> to get your church set up.
               </p>
-              <a href="/" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 48, padding: "0 32px", borderRadius: 999, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)" }}>
+              <a href="/" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 48, padding: "0 32px", borderRadius: 10, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(255,68,5,0.38)" }}>
                 Back to Home
               </a>
             </div>
           ) : (
-            <div style={{ background: "#fff", borderRadius: 28, padding: "44px", boxShadow: "0 12px 48px rgba(15,23,42,0.11), 0 2px 8px rgba(15,23,42,0.06)", border: "1px solid #E4EEFF" }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#EFF6FF", borderRadius: 999, padding: "6px 14px", marginBottom: 20 }}>
+            <div style={{ background: "#fff", borderRadius: 28, padding: "44px", boxShadow: "0 12px 48px rgba(15,23,42,0.11), 0 2px 8px rgba(15,23,42,0.06)", border: "1px solid #E5E7EB" }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#FFF1EC", borderRadius: 999, padding: "6px 14px", marginBottom: 20 }}>
                 <Mail size={13} color={BLUE} />
                 <span style={{ fontSize: 11.5, fontWeight: 700, color: BLUE, letterSpacing: "0.08em", textTransform: "uppercase" }}>Request Access</span>
               </div>
@@ -257,7 +261,7 @@ export default function RequestAccess() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  style={{ width: "100%", height: 52, background: `linear-gradient(135deg, ${BLUE} 0%, #0560D4 100%)`, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 12, cursor: submitting ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 4px 20px rgba(16,133,253,0.42)", opacity: submitting ? 0.7 : 1, fontFamily: "inherit" }}
+                  style={{ width: "100%", height: 52, background: BLUE, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 12, cursor: submitting ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 4px 20px rgba(255,68,5,0.42)", opacity: submitting ? 0.7 : 1, fontFamily: "inherit" }}
                 >
                   {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={16} />}
                   {submitting ? "Sending…" : "Send Request"}

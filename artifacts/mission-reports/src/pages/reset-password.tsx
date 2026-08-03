@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useSearch } from "wouter";
 import { Loader2, CheckCircle2 } from "lucide-react";
-import logoWhite from "@/assets/logo-white.png";
+import logoColor from "@/assets/logo-color.png";
 
-const BG    = "linear-gradient(150deg, #3D0066 0%, #111827 55%, #374151 100%)";
-const BLUE  = "#111827";
-const BLUE_DK = "#000000";
+const BG    = "#F8F9FA";
+const BLUE  = "#FF4405";
+const BLUE_DK = "#E63C00";
 
 export default function ResetPassword() {
   const search = useSearch();
@@ -50,7 +50,7 @@ export default function ResetPassword() {
   const inputStyle = { borderColor: "#E5E7EB" };
   function onFocus(e: React.FocusEvent<HTMLInputElement>) {
     e.target.style.borderColor = BLUE;
-    e.target.style.boxShadow = `0 0 0 3px rgba(0,89,214,0.1)`;
+    e.target.style.boxShadow = `0 0 0 3px rgba(255,68,5,0.12)`;
   }
   function onBlur(e: React.FocusEvent<HTMLInputElement>) {
     e.target.style.borderColor = "#E5E7EB";
@@ -63,12 +63,12 @@ export default function ResetPassword() {
       style={{ background: BG }}
     >
       <div className="flex items-center gap-2.5 mb-8">
-        <img src={logoWhite} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
+        <img src={logoColor} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
       </div>
 
       <div
         className="w-full max-w-[420px] bg-white rounded-2xl px-8 py-8"
-        style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}
+        style={{ boxShadow: "0 0 0 1px #E5E7EB, 0 4px 24px rgba(0,0,0,0.07)" }}
       >
         {!token ? (
           <div className="text-center">
@@ -89,7 +89,7 @@ export default function ResetPassword() {
             <p className="text-[14px] text-gray-500 mb-5">You can now sign in with your new password.</p>
             <Link href={loginHref}>
               <button
-                className="w-full h-11 text-white font-bold rounded-xl text-[15px] transition-all"
+                className="w-full h-11 text-white font-bold rounded-[10px] text-[15px] transition-all"
                 style={{ background: BLUE }}
                 onMouseEnter={e => { e.currentTarget.style.background = BLUE_DK; }}
                 onMouseLeave={e => { e.currentTarget.style.background = BLUE; }}
@@ -141,7 +141,7 @@ export default function ResetPassword() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full h-11 text-white font-bold rounded-xl text-[15px] flex items-center justify-center gap-2 transition-all"
+                className="w-full h-11 text-white font-bold rounded-[10px] text-[15px] flex items-center justify-center gap-2 transition-all"
                 style={{ background: hoverBtn ? BLUE_DK : BLUE, opacity: submitting ? 0.7 : 1 }}
                 onMouseEnter={() => setHoverBtn(true)}
                 onMouseLeave={() => setHoverBtn(false)}
@@ -153,7 +153,7 @@ export default function ResetPassword() {
         )}
       </div>
 
-      <p className="mt-8 text-white/40 text-[12px]">"Declare his glory among the nations." — Ps 96:3</p>
+      <p className="mt-8 text-[12px]" style={{ color: "#9CA3AF", fontStyle: "italic" }}>"Declare his glory among the nations." — Ps 96:3</p>
     </div>
   );
 }

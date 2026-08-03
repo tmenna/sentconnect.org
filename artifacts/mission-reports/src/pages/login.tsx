@@ -12,6 +12,7 @@ import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe, Shield
 import { useQueryClient } from "@tanstack/react-query";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
+import logoColor from "@/assets/logo-color.png";
 import { useOrg } from "@/providers/org-provider";
 
 const loginSchema = z.object({
@@ -20,10 +21,10 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const BLUE      = "#006AFF";
-const BLUE_DARK = "#0053CC";
-const LEFT_BG   = "#EEF2F9";
-const INPUT_BG  = "#EEF2F9";
+const BLUE      = "#FF4405";
+const BLUE_DARK = "#E63C00";
+const LEFT_BG   = "#F8F9FA";
+const INPUT_BG  = "#F3F4F6";
 
 const TURNSTILE_SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) ?? "";
 
@@ -35,6 +36,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const [, navigate] = useLocation();
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
   const { orgSlug } = useOrg();
+  const { logo, isCustomLogo } = useLogo();
   const [orgName, setOrgName] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
@@ -111,7 +113,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           <p style={{ fontSize: 38, fontWeight: 700, color: BLUE, letterSpacing: "-0.02em", lineHeight: 1.1, margin: "0 0 8px" }}>
             {platformMode ? "Admin\nsign in." : "Sign in."}
           </p>
-          <p style={{ fontSize: 15, fontWeight: 600, color: "#3A4A5C", margin: 0 }}>You're already signed in.</p>
+          <p style={{ fontSize: 15, fontWeight: 600, color: "#4B5563", margin: 0 }}>You're already signed in.</p>
         </div>
       </div>
       {/* Right panel */}
@@ -124,7 +126,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           <p style={{ fontSize: 13, color: "#607089", marginBottom: 28 }}>{user.email}</p>
           <div style={{ display: "flex", gap: 10 }}>
             <button
-              style={{ flex: 1, height: 42, borderRadius: 999, background: LEFT_BG, color: "#3A4A5C", fontSize: 14, fontWeight: 600, border: "none", cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, transition: "background .15s" }}
+              style={{ flex: 1, height: 42, borderRadius: 10, background: LEFT_BG, color: "#4B5563", fontSize: 14, fontWeight: 600, border: "none", cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, transition: "background .15s" }}
               onClick={() => logout.mutate({ data: undefined })}
               disabled={logout.isPending}
             >
@@ -132,7 +134,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               {logout.isPending ? "Signing out…" : "Sign out"}
             </button>
             <button
-              style={{ flex: 1, height: 42, borderRadius: 999, background: BLUE, color: "#fff", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "inherit", transition: "background .15s" }}
+              style={{ flex: 1, height: 42, borderRadius: 10, background: BLUE, color: "#fff", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "inherit", transition: "background .15s" }}
               onClick={() => navigate(from)}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = BLUE_DARK; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
@@ -150,7 +152,11 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
       {/* ── Top bar ── */}
       {!platformMode && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8, padding: "10px 24px", borderBottom: "1px solid #E5E7EB", background: "#fff", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "10px 24px", borderBottom: "1px solid #E5E7EB", background: "#F8F9FA", flexShrink: 0 }}>
+          <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+            <img src={isCustomLogo ? logo : logoColor} alt="SentConnect" style={{ height: 44, width: "auto", maxWidth: 180, display: "block" }} />
+          </a>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {orgSlug !== "demo" && (
             <a
               href="/help"
@@ -168,6 +174,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           >
             Sign Up
           </a>
+          </div>
         </div>
       )}
 
@@ -194,13 +201,13 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               <p style={{ fontSize: 48, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 16px", whiteSpace: "pre-line" }}>
                 {platformMode ? "Admin\nsign in" : "Sign in"}
               </p>
-              <p style={{ fontSize: 17, fontWeight: 600, color: "#3A4A5C", margin: 0, lineHeight: 1.5, whiteSpace: "nowrap" }}>
+              <p style={{ fontSize: 17, fontWeight: 600, color: "#4B5563", margin: 0, lineHeight: 1.5, whiteSpace: "nowrap" }}>
                 {platformMode
                   ? "SentConnect platform administration."
                   : "Enter your username and password"}
               </p>
             </div>
-            <p style={{ position: "absolute", bottom: 32, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "#A8B8CC", fontStyle: "italic", margin: 0 }}>
+            <p style={{ position: "absolute", bottom: 32, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "#9CA3AF", fontStyle: "italic", margin: 0 }}>
               "Declare his glory among the nations." — Psalm 96:3
             </p>
           </>
@@ -229,7 +236,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               <p style={{ fontSize: 36, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 8px" }}>
                 Sign in
               </p>
-              <p style={{ fontSize: 14, fontWeight: 600, color: "#3A4A5C", margin: 0 }}>Enter your username and password.</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: "#4B5563", margin: 0 }}>Enter your username and password.</p>
             </>
           )}
         </div>
@@ -256,11 +263,11 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           )}
 
           {/* Hosting provider row */}
-          <p style={{ fontSize: 12, fontWeight: 600, color: "#8A9BB8", letterSpacing: "0.04em", textTransform: "uppercase", margin: "0 0 8px", paddingLeft: 2 }}>
+          <p style={{ fontSize: 12, fontWeight: 600, color: "#6B7280", letterSpacing: "0.04em", textTransform: "uppercase", margin: "0 0 8px", paddingLeft: 2 }}>
             {orgName ? "Organization" : "Hosting provider"}
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: 10, background: INPUT_BG, borderRadius: 10, padding: "0 14px", height: 48, marginBottom: 16 }}>
-            <Globe style={{ width: 15, height: 15, color: "#9BACC4", flexShrink: 0 }} />
+            <Globe style={{ width: 15, height: 15, color: "#9CA3AF", flexShrink: 0 }} />
             <span style={{ flex: 1, fontSize: 14, fontWeight: 500, color: "#111827", fontFamily: "inherit" }}>
               {orgName ?? "SentConnect"}
             </span>
@@ -270,7 +277,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {orgSlug !== "demo" && (
           <>
           {/* Account label */}
-          <p style={{ fontSize: 12, fontWeight: 600, color: "#8A9BB8", letterSpacing: "0.04em", textTransform: "uppercase", margin: "0 0 8px", paddingLeft: 2 }}>Account</p>
+          <p style={{ fontSize: 12, fontWeight: 600, color: "#6B7280", letterSpacing: "0.04em", textTransform: "uppercase", margin: "0 0 8px", paddingLeft: 2 }}>Account</p>
 
           {/* Form */}
           <Form {...form}>
@@ -284,7 +291,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   <FormItem style={{ marginBottom: 2 }}>
                     <FormControl>
                       <div style={{ position: "relative", borderRadius: "10px 10px 0 0", overflow: "hidden" }}>
-                        <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: emailFocused ? BLUE : "#9BACC4", display: "flex", alignItems: "center", pointerEvents: "none", transition: "color .15s" }}>
+                        <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: emailFocused ? BLUE : "#9CA3AF", display: "flex", alignItems: "center", pointerEvents: "none", transition: "color .15s" }}>
                           <AtSign style={{ width: 15, height: 15 }} />
                         </span>
                         <input
@@ -297,7 +304,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                             height: 48,
                             background: INPUT_BG,
                             border: "none",
-                            borderBottom: "1.5px solid #DAE3F0",
+                            borderBottom: "1.5px solid #E5E7EB",
                             borderRadius: "10px 10px 0 0",
                             padding: "0 14px 0 40px",
                             fontSize: 14,
@@ -326,7 +333,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   <FormItem style={{ marginBottom: 0 }}>
                     <FormControl>
                       <div style={{ position: "relative", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-                        <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: passwordFocused ? BLUE : "#9BACC4", display: "flex", alignItems: "center", pointerEvents: "none", transition: "color .15s" }}>
+                        <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: passwordFocused ? BLUE : "#9CA3AF", display: "flex", alignItems: "center", pointerEvents: "none", transition: "color .15s" }}>
                           <Lock style={{ width: 14, height: 14 }} />
                         </span>
                         <input
@@ -354,7 +361,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                         {/* Forgot? link inside the input */}
                         <Link
                           href="/forgot-password"
-                          style={{ position: "absolute", right: 36, top: "50%", transform: "translateY(-50%)", fontSize: 13, fontWeight: 500, color: "#8A9BB8", textDecoration: "none", whiteSpace: "nowrap" }}
+                          style={{ position: "absolute", right: 36, top: "50%", transform: "translateY(-50%)", fontSize: 13, fontWeight: 500, color: "#6B7280", textDecoration: "none", whiteSpace: "nowrap" }}
                         >
                           Forgot?
                         </Link>
@@ -363,7 +370,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                           type="button"
                           tabIndex={-1}
                           onClick={() => setShowPassword(s => !s)}
-                          style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "#9BACC4", padding: 0, display: "flex", alignItems: "center" }}
+                          style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", padding: 0, display: "flex", alignItems: "center" }}
                         >
                           {showPassword ? <EyeOff style={{ width: 15, height: 15 }} /> : <Eye style={{ width: 15, height: 15 }} />}
                         </button>
@@ -381,9 +388,9 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                     href="/signup"
                     style={{
                       height: 42,
-                      borderRadius: 999,
+                      borderRadius: 10,
                       background: INPUT_BG,
-                      color: "#3A4A5C",
+                      color: "#4B5563",
                       fontSize: 14,
                       fontWeight: 600,
                       textDecoration: "none",
@@ -401,9 +408,9 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                     href="/"
                     style={{
                       height: 42,
-                      borderRadius: 999,
+                      borderRadius: 10,
                       background: INPUT_BG,
-                      color: "#3A4A5C",
+                      color: "#4B5563",
                       fontSize: 14,
                       fontWeight: 600,
                       textDecoration: "none",
@@ -423,8 +430,8 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   data-testid="btn-login-submit"
                   style={{
                     height: 42,
-                    borderRadius: 999,
-                    background: login.isPending ? "#4D8EFF" : BLUE,
+                    borderRadius: 10,
+                    background: login.isPending ? "#FF9673" : BLUE,
                     color: "#fff",
                     fontSize: 14,
                     fontWeight: 700,
@@ -456,7 +463,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {orgSlug === "demo" && (
             <div style={{ marginTop: 28 }}>
               <div style={{ marginBottom: 28 }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#F0F6FF", borderRadius: 999, padding: "6px 14px", fontSize: 13, fontWeight: 600, color: BLUE_DARK, marginBottom: 20 }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#FFF1EC", borderRadius: 999, padding: "6px 14px", fontSize: 13, fontWeight: 600, color: BLUE_DARK, marginBottom: 20 }}>
                   <span style={{ width: 8, height: 8, borderRadius: 999, background: "#22C55E", display: "inline-block" }} />
                   Live demo · No signup required
                 </span>
@@ -469,7 +476,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </p>
 
                 <div style={{ display: "flex", gap: 18, marginBottom: 26 }}>
-                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", display: "flex", alignItems: "center", justifyContent: "center" }}><Globe style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
+                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #FFF1EC, #FFE0D3)", display: "flex", alignItems: "center", justifyContent: "center" }}><Globe style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
                   <div>
                     <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Field User</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
@@ -479,7 +486,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </div>
 
                 <div style={{ display: "flex", gap: 18 }}>
-                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF2FF, #DBEAFE)", display: "flex", alignItems: "center", justifyContent: "center" }}><ShieldCheck style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
+                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #FFF1EC, #FFE0D3)", display: "flex", alignItems: "center", justifyContent: "center" }}><ShieldCheck style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
                   <div>
                     <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Admin</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
@@ -557,31 +564,31 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                         alignItems: "center",
                         justifyContent: "space-between",
                         gap: 8,
-                        background: waiting ? "#F5F8FC" : primary ? BLUE : "#fff",
-                        border: primary ? `1.5px solid ${BLUE}` : "1.5px solid #C7D9F5",
+                        background: waiting ? "#F8F9FA" : primary ? BLUE : "#fff",
+                        border: primary ? `1.5px solid ${BLUE}` : "1.5px solid #E5E7EB",
                         borderRadius: 12,
                         padding: "13px 15px",
                         textAlign: "left",
                         cursor: waiting ? "default" : "pointer",
                         fontFamily: "inherit",
                         opacity: waiting ? 0.6 : 1,
-                        boxShadow: primary && !waiting ? "0 2px 8px rgba(0,106,255,0.28)" : "0 1px 2px rgba(16,24,40,0.05)",
+                        boxShadow: primary && !waiting ? "0 2px 8px rgba(255,68,5,0.28)" : "0 1px 2px rgba(16,24,40,0.05)",
                         transition: "transform .15s, box-shadow .15s, background .15s, border-color .15s, opacity .15s",
                       }}
                       onMouseEnter={e => {
                         if (waiting) return;
                         const el = e.currentTarget as HTMLElement;
                         el.style.transform = "translateY(-2px)";
-                        el.style.boxShadow = primary ? "0 6px 16px rgba(0,106,255,0.38)" : "0 4px 12px rgba(16,24,40,0.12)";
-                        el.style.background = primary ? BLUE_DARK : "#F0F6FF";
+                        el.style.boxShadow = primary ? "0 6px 16px rgba(255,68,5,0.38)" : "0 4px 12px rgba(16,24,40,0.12)";
+                        el.style.background = primary ? BLUE_DARK : "#FFF1EC";
                         if (!primary) el.style.borderColor = BLUE;
                       }}
                       onMouseLeave={e => {
                         const el = e.currentTarget as HTMLElement;
                         el.style.transform = "translateY(0)";
-                        el.style.boxShadow = primary && !waiting ? "0 2px 8px rgba(0,106,255,0.28)" : "0 1px 2px rgba(16,24,40,0.05)";
-                        el.style.background = waiting ? "#F5F8FC" : primary ? BLUE : "#fff";
-                        el.style.borderColor = primary ? BLUE : "#C7D9F5";
+                        el.style.boxShadow = primary && !waiting ? "0 2px 8px rgba(255,68,5,0.28)" : "0 1px 2px rgba(16,24,40,0.05)";
+                        el.style.background = waiting ? "#F8F9FA" : primary ? BLUE : "#fff";
+                        el.style.borderColor = primary ? BLUE : "#E5E7EB";
                       }}
                     >
                       <span style={{ minWidth: 0 }}>
@@ -589,7 +596,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                           <Icon style={{ width: 17, height: 17, flexShrink: 0, color: primary ? "#fff" : BLUE }} strokeWidth={2} />
                           {label}
                         </span>
-                        <span style={{ display: "block", fontSize: 13, color: primary ? "rgba(255,255,255,0.85)" : "#8A9BB8" }}>{sublabel}</span>
+                        <span style={{ display: "block", fontSize: 13, color: primary ? "rgba(255,255,255,0.85)" : "#6B7280" }}>{sublabel}</span>
                       </span>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={primary ? "#fff" : BLUE} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
                     </button>
@@ -623,7 +630,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           )}
 
           {/* Footer verse — desktop hidden (in left panel); mobile shown here */}
-          <p className="md:hidden" style={{ fontSize: 11, color: "#C0CDD8", fontStyle: "italic", textAlign: "center", marginTop: 40, margin: "40px 0 0" }}>
+          <p className="md:hidden" style={{ fontSize: 11, color: "#9CA3AF", fontStyle: "italic", textAlign: "center", marginTop: 40, margin: "40px 0 0" }}>
             "Declare his glory among the nations." — Psalm 96:3
           </p>
 
