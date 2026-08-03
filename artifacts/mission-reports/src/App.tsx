@@ -270,32 +270,32 @@ function LandingPage() {
               {[
                 {
                   title: "A live feed from the field",
-                  desc: "Missionaries share ministry moments as they happen\u2014short stories, prayer needs, and everyday wins\u2014so your church sees what God is doing right now, not months later.",
+                  desc: "Missionaries share ministry moments as they happen\u2014through short stories, prayer requests, and ministry updates\u2014so your church stays connected to what God is doing throughout the year, not just through occasional newsletters.",
                   icon: <path d="M4 5h16v14H4zM4 10h16M9 5v5" />,
                 },
                 {
                   title: "Photos and short videos",
-                  desc: "Every update can include up to six photos or short video clips, with a full-screen viewer that makes it feel like you're right there with your missionaries.",
+                  desc: "Every update can include up to six photos or short video clips, displayed in a full-screen viewer for an engaging viewing experience.",
                   icon: <><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="M21 15l-5-4-9 8" /></>,
                 },
                 {
-                  title: "Pray and encourage back",
-                  desc: "Members can like, love, and comment on every update\u2014turning one-way newsletters into real conversations and letting missionaries know they're not forgotten.",
+                  title: "Pray and encourage from anywhere",
+                  desc: "Church missions teams and authorized members can like, love, and comment on every update\u2014turning one-way newsletters into meaningful conversations and reminding missionaries they are supported and remembered.",
                   icon: <path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21z" />,
                 },
                 {
-                  title: "Email and mobile alerts",
-                  desc: "Get notified the moment a new update or comment arrives\u2014by email or on your phone with the SentConnect mobile app\u2014so nothing slips through the cracks.",
+                  title: "Email notifications",
+                  desc: "Receive an email whenever a new update or comment is posted, so you never miss what's happening in the field.",
                   icon: <path d="M4 6l8 6 8-6M4 6h16v12H4z" />,
                 },
                 {
                   title: "Highlights ready for Sunday",
-                  desc: "Mark standout posts as highlights and export updates as presentation slides\u2014perfect for sharing mission news with your whole congregation on Sunday morning.",
+                  desc: "Mark important posts as highlights and export them as presentation slides, making it easy to share mission updates with your congregation on Sunday morning.",
                   icon: <path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.9L12 3z" />,
                 },
                 {
                   title: "Private and secure by design",
-                  desc: "Your church gets its own address, like yourchurch.sentconnect.org. Your mission feed is for invited members, and posts are only shared beyond it when you choose to share them.",
+                  desc: "Your church receives its own dedicated address, such as yourchurch.sentconnect.org. Your mission feed is accessible only to invited members, and updates are shared outside your church only when you choose to share them.",
                   icon: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
                 },
               ].map((f, i) => (
