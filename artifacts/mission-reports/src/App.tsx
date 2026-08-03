@@ -109,7 +109,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   step3Title: "3. Share updates",
   step3Description: "Invite field users, collect reports, and keep your church connected to ministry work.",
   ctaBandHeading: "Bring your church and field teams closer together.",
-  ctaBandSubtext: "We're currently inviting churches and missionaries to use SentConnect at no cost while we continue improving the platform.",
+  ctaBandSubtext: "",
   footerBrandName: "SentConnect",
   footerOwnerText: "Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA",
 };
@@ -347,9 +347,11 @@ function LandingPage() {
               </a>
             </div>
 
-            <p className="lp-animate lp-delay-4" style={{ fontSize: 14.5, lineHeight: 1.7, color: "#94A3B8", maxWidth: 560, margin: "36px auto 0" }}>
-              {content.ctaBandSubtext}
-            </p>
+            {content.ctaBandSubtext && (
+              <p className="lp-animate lp-delay-4" style={{ fontSize: 14.5, lineHeight: 1.7, color: "#94A3B8", maxWidth: 560, margin: "36px auto 0" }}>
+                {content.ctaBandSubtext}
+              </p>
+            )}
           </div>
         </section>
       </main>

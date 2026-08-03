@@ -161,6 +161,12 @@ export async function runMigrations(): Promise<void> {
               SET cta_band_subtext = 'We''re currently inviting churches and missionaries to use SentConnect at no cost while we continue improving the platform.'
             WHERE cta_band_subtext = 'Set up your organization in minutes.'`,
     },
+    {
+      name: "landing_page: remove free-invitation CTA band subtext",
+      sql: `UPDATE landing_page_content
+              SET cta_band_subtext = ''
+            WHERE cta_band_subtext = 'We''re currently inviting churches and missionaries to use SentConnect at no cost while we continue improving the platform.'`,
+    },
   ];
 
   for (const migration of migrations) {
