@@ -21,10 +21,20 @@ const loginSchema = z.object({
 });
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const BLUE      = "#FF4405";
-const BLUE_DARK = "#E63C00";
-const LEFT_BG   = "#F8F9FA";
-const INPUT_BG  = "#F3F4F6";
+const BRAND_PALETTE = {
+  BLUE:      "#FF4405",
+  BLUE_DARK: "#E63C00",
+  LEFT_BG:   "#F8F9FA",
+  INPUT_BG:  "#F3F4F6",
+};
+
+// The demo org keeps the original default blue look.
+const DEMO_PALETTE = {
+  BLUE:      "#006AFF",
+  BLUE_DARK: "#0053CC",
+  LEFT_BG:   "#EEF2F9",
+  INPUT_BG:  "#EEF2F9",
+};
 
 const TURNSTILE_SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) ?? "";
 
@@ -36,6 +46,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const [, navigate] = useLocation();
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
   const { orgSlug } = useOrg();
+  const { BLUE, BLUE_DARK, LEFT_BG, INPUT_BG } = orgSlug === "demo" ? DEMO_PALETTE : BRAND_PALETTE;
   const { logo, isCustomLogo } = useLogo();
   const [orgName, setOrgName] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
