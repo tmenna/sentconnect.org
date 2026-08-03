@@ -1,7 +1,8 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Shuffle } from "lucide-react";
+import { Shuffle, ArrowRight, Play, Heart, MessageCircle, MapPin, Check, Upload } from "lucide-react";
+import { motion } from "framer-motion";
 import logoWhite from "@/assets/logo-white.png";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -117,6 +118,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
 function LandingPage() {
   const [content, setContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { logo: lpLogo, footerLogo: lpFooterLogo, isLogoReady } = useLogo();
   const [, navigate] = useLocation();
 
@@ -130,269 +132,402 @@ function LandingPage() {
     let cancelled = false;
     fetch("/api/landing-page", { cache: "no-store" })
       .then((res) => res.ok ? res.json() : DEFAULT_LANDING_PAGE_CONTENT)
-      .then((data) => {
-        if (!cancelled) setContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...data });
-      })
-      .catch(() => {
-        if (!cancelled) setContent(DEFAULT_LANDING_PAGE_CONTENT);
-      });
+      .then((data) => { if (!cancelled) setContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...data }); })
+      .catch(() => { if (!cancelled) setContent(DEFAULT_LANDING_PAGE_CONTENT); });
     return () => { cancelled = true; };
   }, []);
 
-  const BLUE      = "#1085FD";
-  const BLUE_DARK = "#0070E0";
-  const TEAL      = "#1085FD";
-  const TEAL_DARK = "#0070E0";
-  const CHARCOAL  = "#1F2937";
-  const TEXT      = "#0F172A";
-  const TEXT2     = "#64748B";
-  const BG        = "#FFFFFF";
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const BLUE = "#1085FD";
+
+  const features = [
+    {
+      title: "A live feed from the field",
+      desc: "Missionaries share ministry moments as they happen — through short stories, prayer requests, and ministry updates — so your church stays connected to what God is doing throughout the year, not just through occasional newsletters.",
+      icon: <path d="M4 5h16v14H4zM4 10h16M9 5v5" />,
+    },
+    {
+      title: "Photos and short videos",
+      desc: "Every update can include up to six photos or short video clips, displayed in a full-screen viewer for an engaging viewing experience.",
+      icon: <><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="M21 15l-5-4-9 8" /></>,
+    },
+    {
+      title: "Pray and encourage from anywhere",
+      desc: "Church missions teams and authorized members can like, love, and comment on every update — turning one-way newsletters into meaningful conversations and reminding missionaries they are supported.",
+      icon: <path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21z" />,
+    },
+    {
+      title: "Email notifications",
+      desc: "Receive an email whenever a new update or comment is posted, so you never miss what's happening in the field.",
+      icon: <path d="M4 6l8 6 8-6M4 6h16v12H4z" />,
+    },
+    {
+      title: "Highlights ready for Sunday",
+      desc: "Mark important posts as highlights and export them as presentation slides, making it easy to share mission updates with your congregation on Sunday morning.",
+      icon: <path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.9L12 3z" />,
+    },
+    {
+      title: "Private and secure by design",
+      desc: "Your church receives its own dedicated address, such as yourchurch.sentconnect.org. Your mission feed is accessible only to invited members, and updates are shared outside your church only when you choose.",
+      icon: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
+    },
+  ];
 
   return (
-    <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
-      {/* ── HEADER ── */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
+    <div className="min-h-screen bg-slate-50 selection:bg-[#1085FD]/20 selection:text-[#1085FD]" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
+
+      {/* ── NAV ── */}
+      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-5"}`}>
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          {/* Logo */}
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+            {isLogoReady
+              ? <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 48, width: "auto", maxWidth: 200 }} />
+              : <span className="font-extrabold text-xl text-slate-900 tracking-tight">SentConnect</span>
+            }
           </a>
 
-          {/* Desktop nav */}
-          <nav className="hidden sm:flex" style={{ alignItems: "center", gap: 4, background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.22)", borderRadius: 999, padding: 4, backdropFilter: "blur(8px)" }}>
-            <a
-              href="/about"
-              style={{ fontSize: 14, fontWeight: 600, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, transition: "background .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.18)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
-            >About</a>
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-4">
+            <a href="/about" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors" style={{ textDecoration: "none" }}>About</a>
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 14, fontWeight: 600, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, transition: "background .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.18)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+              className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors flex items-center gap-1.5"
+              style={{ textDecoration: "none" }}
             >
-              <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 18, height: 18, borderRadius: "50%", background: "rgba(255,255,255,0.25)" }}>
-                <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 1 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-100">
+                <Play className="w-2.5 h-2.5 fill-slate-600 text-slate-600" />
               </span>
               Try Demo
             </a>
             <a
               href={content.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
-              style={{ fontSize: 14, fontWeight: 700, color: "#0B67C2", background: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, minWidth: 96, padding: "0 20px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 8px rgba(0,0,0,0.16)", transition: "background .15s, transform .15s, box-shadow .15s" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0F7FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 14px rgba(0,0,0,0.2)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.16)"; }}
+              className="text-sm font-bold text-white px-5 py-2.5 rounded-full transition-all"
+              style={{ background: BLUE, textDecoration: "none", boxShadow: "0 2px 12px rgba(16,133,253,0.35)" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#0e74e0"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 6px 20px rgba(16,133,253,0.45)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 12px rgba(16,133,253,0.35)"; }}
             >{content.headerPrimaryCtaLabel}</a>
-          </nav>
+          </div>
 
-          {/* Mobile: Try Demo + Sign up + hamburger */}
-          <div className="flex sm:hidden items-center gap-2">
-            <a
-              href="https://demo.sentconnect.org/"
-              style={{ fontSize: 12, fontWeight: 700, color: "#fff", border: "1.5px solid rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.1)", padding: "6px 12px", borderRadius: 999, textDecoration: "none" }}
-            >Demo</a>
-            <a
-              href={content.headerPrimaryCtaHref}
-              onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
-              style={{ fontSize: 12, fontWeight: 700, color: "#111827", background: "#FFFFFF", padding: "6px 14px", borderRadius: 999, textDecoration: "none" }}
-            >{content.headerPrimaryCtaLabel}</a>
-            <button
-              onClick={() => setMobileNavOpen(o => !o)}
-              style={{ background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, padding: "7px 8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-              aria-label="Menu"
-            >
+          {/* Mobile: demo + signup + hamburger */}
+          <div className="flex md:hidden items-center gap-2">
+            <a href="https://demo.sentconnect.org/" className="text-xs font-bold text-slate-600 border border-slate-300 bg-white px-3 py-1.5 rounded-full" style={{ textDecoration: "none" }}>Demo</a>
+            <a href={content.headerPrimaryCtaHref} onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)} className="text-xs font-bold text-white px-3 py-1.5 rounded-full" style={{ background: BLUE, textDecoration: "none" }}>{content.headerPrimaryCtaLabel}</a>
+            <button onClick={() => setMobileNavOpen(o => !o)} className="p-2 rounded-lg bg-slate-100" aria-label="Menu">
               {mobileNavOpen
-                ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
               }
             </button>
           </div>
         </div>
-
-        {/* Mobile dropdown */}
         {mobileNavOpen && (
-          <div className="sm:hidden" style={{ background: BLUE_DARK, borderTop: "1px solid rgba(255,255,255,0.15)", padding: "12px 16px 16px" }}>
-            <a
-              href="/about"
-              style={{ display: "flex", alignItems: "center", padding: "12px 0", fontSize: 15, fontWeight: 700, color: "#fff", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.1)" }}
-              onClick={() => setMobileNavOpen(false)}
-            >About</a>
-            <a
-              href="https://demo.sentconnect.org/"
-              style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 0", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.9)", textDecoration: "none" }}
-              onClick={() => setMobileNavOpen(false)}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Try Demo
-            </a>
+          <div className="md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-4 shadow-md">
+            <a href="/about" className="block text-sm font-semibold text-slate-700" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>About</a>
+            <a href="https://demo.sentconnect.org/" className="block text-sm font-semibold text-slate-700" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>Try Demo</a>
           </div>
         )}
-      </header>
+      </nav>
 
       <main>
         {/* ── HERO ── */}
-        <section style={{ background: "linear-gradient(180deg, #FFFFFF 0%, #F5FAFF 100%)", padding: "clamp(80px, 12vh, 150px) 24px" }}>
-          <div style={{ maxWidth: 880, margin: "0 auto", textAlign: "center" }}>
-            <h1 className="lp-animate lp-delay-1" style={{ fontSize: "clamp(36px, 5.2vw, 64px)", fontWeight: 900, lineHeight: 1.12, letterSpacing: "-0.04em", color: BLUE, margin: "0 0 28px" }}>
-              {content.heroTitle}
-            </h1>
-            <p className="lp-animate lp-delay-2" style={{ fontSize: "clamp(16.5px, 1.8vw, 19.5px)", lineHeight: 1.75, color: TEXT2, maxWidth: 660, margin: "0 auto" }}>
-              {content.heroDescription}
-            </p>
+        <section className="relative pt-36 pb-20 lg:pt-52 lg:pb-32 overflow-hidden">
+          <div className="absolute top-0 inset-x-0 h-[700px] bg-gradient-to-b from-[#1085FD]/8 to-transparent -z-10" />
+          <div className="absolute top-1/4 right-0 w-1/2 h-1/2 bg-[#1085FD]/5 blur-[120px] rounded-full -z-10" />
+
+          <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, ease: "easeOut" }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-[#1085FD] text-sm font-semibold mb-6 border border-blue-100">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1085FD] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1085FD]" />
+                </span>
+                Now available for all churches
+              </div>
+
+              <h1 className="text-5xl lg:text-[4rem] leading-[1.08] font-extrabold text-slate-900 tracking-tight mb-8">
+                {content.heroTitle}
+              </h1>
+
+              <p className="text-xl text-slate-600 mb-10 leading-relaxed">
+                {content.heroDescription}
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href={content.primaryCtaHref}
+                  onClick={e => handleCtaClick(e, content.primaryCtaHref)}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-white group transition-all"
+                  style={{ background: BLUE, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.32)" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#0e74e0"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(16,133,253,0.45)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.32)"; }}
+                >
+                  {content.primaryCtaLabel}
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </a>
+                <a
+                  href="https://demo.sentconnect.org/"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-slate-700 bg-white border border-slate-200 transition-all hover:shadow-md hover:bg-slate-50"
+                  style={{ textDecoration: "none" }}
+                >
+                  <Play className="w-4 h-4 fill-slate-700 text-slate-700" />
+                  Try Demo
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Phone mockup */}
+            <motion.div
+              initial={{ opacity: 0, x: 28 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
+              className="relative lg:h-[600px] flex items-center justify-center"
+            >
+              <div className="relative w-[300px] h-[610px] bg-slate-900 rounded-[2.5rem] border-[8px] border-slate-900 shadow-2xl overflow-hidden z-10 rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
+                <div className="w-full h-full bg-slate-50 flex flex-col">
+                  <div className="pt-10 pb-4 px-4 flex flex-col z-10 shadow-sm" style={{ background: BLUE }}>
+                    <div className="flex justify-between items-center mb-1">
+                      <div className="text-[10px] font-bold tracking-wider uppercase text-white/80">SentConnect</div>
+                      <div className="bg-white/20 text-white text-[9px] px-2 py-0.5 rounded-full font-medium">grace.sentconnect.org</div>
+                    </div>
+                    <div className="text-base font-bold text-white">Missions Feed</div>
+                  </div>
+                  <div className="flex-1 p-3 space-y-3 bg-slate-50 overflow-hidden relative">
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-50 z-10 pointer-events-none" />
+                    <div className="bg-white rounded-xl p-3 shadow-sm border border-slate-100">
+                      <div className="flex gap-2 items-center mb-2">
+                        <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-[10px] shrink-0">SJ</div>
+                        <div>
+                          <div className="font-bold text-slate-900 text-xs leading-tight">Sarah Jenkins</div>
+                          <div className="flex items-center gap-1 text-[9px] text-slate-400">
+                            <MapPin size={7} /> Rural Kenya · 2h ago
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-slate-700 text-[11px] leading-relaxed mb-2">The youth outreach program launched today! Over 50 kids showed up for soccer and a short message.</div>
+                      <div className="w-full h-28 rounded-lg bg-slate-200 mb-2 overflow-hidden">
+                        <img src="/attached_assets/generated_images/hero-missionary-phone.jpg" className="w-full h-full object-cover" alt="" aria-hidden="true" />
+                      </div>
+                      <div className="flex items-center gap-3 text-slate-400 text-[10px]">
+                        <span className="flex items-center gap-1 text-pink-500"><Heart size={12} className="fill-current" /> 24</span>
+                        <span className="flex items-center gap-1"><MessageCircle size={12} /> 5</span>
+                      </div>
+                    </div>
+                    <div className="bg-white rounded-xl p-3 shadow-sm border border-slate-100">
+                      <div className="flex gap-2 items-center mb-2">
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-[10px] shrink-0" style={{ background: BLUE }}>MG</div>
+                        <div>
+                          <div className="font-bold text-slate-900 text-xs leading-tight">Mark &amp; Gina</div>
+                          <div className="text-[9px] text-slate-400">Chiang Mai · 5h ago</div>
+                        </div>
+                      </div>
+                      <div className="text-slate-700 text-[11px] leading-relaxed">Praise report: The leadership training manuals finally cleared customs!</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating cards */}
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                className="absolute top-20 -left-10 bg-white p-3 rounded-2xl shadow-xl border border-slate-100 z-20 flex items-center gap-2.5"
+              >
+                <div className="w-9 h-9 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 shrink-0">
+                  <Heart size={18} className="fill-current" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900">New Reaction</div>
+                  <div className="text-[10px] text-slate-500">Pastor Dave loved a post</div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-28 -right-10 bg-white p-3 rounded-2xl shadow-xl border border-slate-100 z-20 flex items-center gap-2.5"
+              >
+                <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: "#EEF6FF", color: BLUE }}>
+                  <MessageCircle size={18} className="fill-current" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900">Prayer Team</div>
+                  <div className="text-[10px] text-slate-500">"Praying for this now!"</div>
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
-        {/* ── RESULT ── */}
-        <section style={{ background: BLUE, padding: "clamp(56px, 8vh, 90px) 24px" }}>
-          <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
-            <p style={{ fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 600, lineHeight: 1.6, letterSpacing: "-0.01em", color: "#fff", margin: 0 }}>
-              <em>Stronger relationships</em>, <em>more informed prayer</em>, <em>better communication</em>, and a <em>deeper connection</em> between your church and the missionaries you send and support.
+        {/* ── IMPACT BAND ── */}
+        <section className="py-14 border-y border-slate-200 bg-white">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <p className="text-lg sm:text-xl font-semibold text-slate-700 leading-relaxed">
+              <em className="not-italic" style={{ color: BLUE }}>Stronger relationships</em>,{" "}
+              <em className="not-italic" style={{ color: BLUE }}>more informed prayer</em>,{" "}
+              <em className="not-italic" style={{ color: BLUE }}>better communication</em> — and a deeper connection between your church and the missionaries you send.
             </p>
           </div>
         </section>
 
         {/* ── FEATURES ── */}
-        <section style={{ background: "#fff", padding: "clamp(72px, 10vh, 120px) 24px" }}>
-          <div style={{ maxWidth: 1040, margin: "0 auto" }}>
-            <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 56px" }}>
-              <span style={{ display: "inline-block", fontSize: 12.5, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: BLUE, background: "rgba(16,133,253,0.08)", padding: "6px 14px", borderRadius: 999, marginBottom: 18 }}>
-                What you get
-              </span>
-              <h2 style={{ fontSize: "clamp(26px, 3.4vw, 40px)", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.03em", color: TEXT, margin: "0 0 16px" }}>
-                Everything your church needs to follow the field
-              </h2>
-              <p style={{ fontSize: "clamp(15.5px, 1.5vw, 17px)", lineHeight: 1.75, color: TEXT2, margin: 0 }}>
-                Simple enough for anyone in your congregation to use, and built specifically for churches and the missionaries they send.
-              </p>
+        <section id="features" className="py-28 bg-slate-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <span className="inline-block text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full mb-5" style={{ color: BLUE, background: "rgba(16,133,253,0.08)" }}>What you get</span>
+              <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Everything your church needs to follow the field</h2>
+              <p className="text-lg text-slate-600 leading-relaxed">Simple enough for anyone in your congregation, and built specifically for churches and the missionaries they send.</p>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
-              {[
-                {
-                  title: "A live feed from the field",
-                  desc: "Missionaries share ministry moments as they happen\u2014through short stories, prayer requests, and ministry updates\u2014so your church stays connected to what God is doing throughout the year, not just through occasional newsletters.",
-                  icon: <path d="M4 5h16v14H4zM4 10h16M9 5v5" />,
-                },
-                {
-                  title: "Photos and short videos",
-                  desc: "Every update can include up to six photos or short video clips, displayed in a full-screen viewer for an engaging viewing experience.",
-                  icon: <><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="M21 15l-5-4-9 8" /></>,
-                },
-                {
-                  title: "Pray and encourage from anywhere",
-                  desc: "Church missions teams and authorized members can like, love, and comment on every update\u2014turning one-way newsletters into meaningful conversations and reminding missionaries they are supported and remembered.",
-                  icon: <path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21z" />,
-                },
-                {
-                  title: "Email notifications",
-                  desc: "Receive an email whenever a new update or comment is posted, so you never miss what's happening in the field.",
-                  icon: <path d="M4 6l8 6 8-6M4 6h16v12H4z" />,
-                },
-                {
-                  title: "Highlights ready for Sunday",
-                  desc: "Mark important posts as highlights and export them as presentation slides, making it easy to share mission updates with your congregation on Sunday morning.",
-                  icon: <path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.9L12 3z" />,
-                },
-                {
-                  title: "Private and secure by design",
-                  desc: "Your church receives its own dedicated address, such as yourchurch.sentconnect.org. Your mission feed is accessible only to invited members, and updates are shared outside your church only when you choose to share them.",
-                  icon: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
-                },
-              ].map((f, i) => (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {features.map((f, i) => (
                 <div
                   key={i}
-                  style={{ background: "#F8FBFF", border: "1px solid #E3EEFB", borderRadius: 18, padding: "30px 28px", transition: "transform .18s, box-shadow .18s, border-color .18s" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-3px)"; el.style.boxShadow = "0 10px 30px rgba(16,133,253,0.10)"; el.style.borderColor = "#BFDCFB"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "none"; el.style.borderColor = "#E3EEFB"; }}
+                  className="bg-white p-7 rounded-3xl border border-slate-100 transition-all duration-200"
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-3px)"; el.style.boxShadow = "0 12px 32px rgba(16,133,253,0.10)"; el.style.borderColor = "#bfdbfe"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "none"; el.style.borderColor = "rgb(241 245 249)"; }}
                 >
-                  <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, borderRadius: 12, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, marginBottom: 18 }}>
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)" }}>
                     <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{f.icon}</svg>
                   </div>
-                  <h3 style={{ fontSize: 17.5, fontWeight: 700, letterSpacing: "-0.01em", color: TEXT, margin: "0 0 10px" }}>{f.title}</h3>
-                  <p style={{ fontSize: 15, lineHeight: 1.7, color: TEXT2, margin: 0 }}>{f.desc}</p>
+                  <h3 className="text-base font-bold text-slate-900 mb-2">{f.title}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">{f.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── CTA ── */}
-        <section style={{ background: "linear-gradient(180deg, #F5FAFF 0%, #EDF5FF 100%)", padding: "clamp(72px, 10vh, 120px) 24px" }}>
-          <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
-            <h2 style={{ fontSize: "clamp(26px, 3.4vw, 40px)", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.03em", color: TEXT, margin: "0 0 36px" }}>
-              Ready to stay connected with your missionaries?
-            </h2>
+        {/* ── SUNDAY SLIDES SPOTLIGHT ── */}
+        <section className="py-24 bg-white overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              {/* Visual */}
+              <div className="relative">
+                <div className="absolute inset-0 rounded-[3rem] -rotate-3 scale-105" style={{ background: "rgba(16,133,253,0.06)" }} />
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)", padding: "3rem 2rem" }}>
+                  <div className="bg-white/95 p-6 rounded-2xl shadow-lg">
+                    <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: BLUE }}>Missionary Highlight</div>
+                    <div className="text-2xl font-bold text-slate-900 mb-4" style={{ fontFamily: "Georgia, serif" }}>"The new well is finally complete!"</div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500" />
+                      <div>
+                        <div className="font-bold text-slate-900 text-sm">The Jenkins Family</div>
+                        <div className="text-xs text-slate-500">Ethiopia</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 bg-slate-900/80 text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-400" />
+                    Ready for Sunday presentation
+                  </div>
+                </div>
+              </div>
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 14 }}>
+              {/* Copy */}
+              <div>
+                <span className="inline-block text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full mb-6 bg-slate-100 text-slate-600">Sunday Mornings</span>
+                <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-5">Ready for Sunday service.</h2>
+                <p className="text-lg text-slate-600 leading-relaxed mb-8">
+                  No more copy-pasting from emails or digging through Facebook groups on Saturday night. Export the week's top field updates into presentation-ready slides — in one click.
+                </p>
+                <ul className="space-y-3">
+                  {[
+                    "Mark any post as a highlight from the feed",
+                    "Export directly to presentation slides",
+                    "High-resolution photos preserved automatically",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(16,133,253,0.12)", color: BLUE }}>
+                        <Check size={11} strokeWidth={3} />
+                      </div>
+                      <span className="text-slate-700 font-medium text-sm">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── TESTIMONIAL ── */}
+        <section className="py-24 relative overflow-hidden" style={{ background: BLUE }}>
+          <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <Heart className="w-10 h-10 text-blue-200 mx-auto mb-8 opacity-80" />
+            <blockquote className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mb-8" style={{ fontFamily: "Georgia, serif" }}>
+              "Before SentConnect, our church felt disconnected from our sent ones. Now, our congregation prays specifically and immediately for needs on the field. It has transformed our missions culture."
+            </blockquote>
+            <cite className="not-italic text-blue-200 font-semibold text-base tracking-wide">— David R., Missions Pastor</cite>
+          </div>
+        </section>
+
+        {/* ── CTA ── */}
+        <section className="py-32 bg-slate-50">
+          <div className="max-w-3xl mx-auto px-6 text-center">
+            <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">{content.ctaBandHeading}</h2>
+            <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-xl mx-auto">
+              Set up your church's private network in minutes. Invite your missionaries. Start connecting.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
               <a
                 href={content.primaryCtaHref}
                 onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 56, minWidth: 220, padding: "0 34px", borderRadius: 999, background: `linear-gradient(135deg, ${BLUE} 0%, #0059D6 100%)`, color: "#fff", fontSize: 16, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)", transition: "opacity .15s, transform .15s, box-shadow .15s" }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "0.92"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 28px rgba(16,133,253,0.5)"; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.opacity = "1"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.38)"; }}
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-white transition-all"
+                style={{ background: BLUE, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.35)" }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#0e74e0"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(16,133,253,0.45)"; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.35)"; }}
               >
                 {content.primaryCtaLabel}
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <ArrowRight className="w-4 h-4" />
               </a>
               <a
                 href="https://demo.sentconnect.org/"
-                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, height: 56, minWidth: 170, padding: "0 30px", borderRadius: 999, background: "#fff", color: BLUE, fontSize: 16, fontWeight: 700, textDecoration: "none", border: `1.5px solid ${BLUE}`, boxShadow: "0 2px 8px rgba(16,133,253,0.12)", transition: "border-color .15s, color .15s, box-shadow .15s, background .15s" }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#EEF6FF"; el.style.boxShadow = "0 4px 16px rgba(16,133,253,0.20)"; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#fff"; el.style.boxShadow = "0 2px 8px rgba(16,133,253,0.12)"; }}
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-slate-700 bg-white border border-slate-200 transition-all hover:shadow-md hover:bg-slate-50"
+                style={{ textDecoration: "none" }}
               >
-                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: "50%", background: "rgba(16,133,253,0.14)" }}>
-                  <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 1 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                </span>
+                <Play className="w-4 h-4 fill-slate-700 text-slate-700" />
                 Try Demo
               </a>
             </div>
-
             {content.ctaBandSubtext && (
-              <p className="lp-animate lp-delay-4" style={{ fontSize: 14.5, lineHeight: 1.7, color: "#94A3B8", maxWidth: 560, margin: "36px auto 0" }}>
-                {content.ctaBandSubtext}
-              </p>
+              <p className="mt-6 text-sm text-slate-400">{content.ctaBandSubtext}</p>
             )}
           </div>
         </section>
       </main>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: "#212B38", padding: "72px 24px 0" }}>
-        <div className="mx-auto max-w-6xl">
-          {/* Row 1 — brand left / contact right */}
+      <footer style={{ background: "#1a2332", padding: "72px 24px 0" }}>
+        <div className="mx-auto max-w-7xl">
           <div className="lp-footer-brand-row">
-            {/* Left: logo + tagline */}
             <div className="lp-footer-left">
-              <img src={lpFooterLogo} alt="SentConnect" loading="lazy" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+              <img src={lpFooterLogo} alt="SentConnect" loading="lazy" style={{ height: 52, width: "auto", maxWidth: 200, display: "block", marginBottom: 14, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for churches and mission teams, all in one secure feed.
               </p>
             </div>
-
-            {/* Right: contact info */}
             <div className="lp-footer-right" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10 }}>
               <p style={{ fontSize: 13.5, fontWeight: 600, color: "#E5E7EB", margin: 0 }}>Holtek Solutions LLC</p>
-              <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0, lineHeight: 1.6, textAlign: "right" }}>
-                2108 N ST STE N, Sacramento, CA 95816
-              </p>
-              <a
-                href="tel:+19515514528"
-                style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-                onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
-              >
+              <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0, lineHeight: 1.6, textAlign: "right" }}>2108 N ST STE N, Sacramento, CA 95816</p>
+              <a href="tel:+19515514528" style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}>
                 Contact Support at +1-951-551-4528 (Call/WhatsApp)
               </a>
             </div>
           </div>
-
-          {/* Divider — equal spacing above (from brand row pb) and below (mb) */}
           <div style={{ height: 1, background: "rgba(255,255,255,0.08)", marginBottom: 24 }} />
-
-          {/* Row 2 — legal bar */}
           <div className="lp-footer-legal">
             <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0 }}>{content.footerOwnerText}</p>
-            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0, flexShrink: 0 }}>© 2026 Holtek Solutions. All rights reserved.</p>
+            <p style={{ fontSize: 12.5, color: "#6B7280", margin: 0, flexShrink: 0 }}>© {new Date().getFullYear()} Holtek Solutions. All rights reserved.</p>
           </div>
         </div>
       </footer>
