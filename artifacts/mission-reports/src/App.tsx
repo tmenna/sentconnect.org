@@ -377,12 +377,6 @@ function LandingPage() {
         {/* ── FEATURES ── */}
         <section id="features" className="py-28 bg-slate-50">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <span className="inline-block text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full mb-5" style={{ color: BLUE, background: "rgba(16,133,253,0.08)" }}>What you get</span>
-              <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Everything your church needs to follow the field</h2>
-              <p className="text-lg text-slate-600 leading-relaxed">Simple enough for anyone in your congregation, and built specifically for churches and the missionaries they send.</p>
-            </div>
-
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {features.map((f, i) => (
                 <div
