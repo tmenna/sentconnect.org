@@ -336,7 +336,7 @@ function LandingPage() {
       </main>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: "#1a2332", padding: "72px 24px 0" }}>
+      <footer style={{ background: "#0B1F3A", padding: "72px 24px 0" }}>
         <div className="mx-auto max-w-7xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
@@ -551,7 +551,7 @@ function AboutPage() {
       </main>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: "#212B38", padding: "72px 24px 0" }}>
+      <footer style={{ background: "#0B1F3A", padding: "72px 24px 0" }}>
         <div className="mx-auto max-w-6xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
