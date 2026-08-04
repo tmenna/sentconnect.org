@@ -182,43 +182,41 @@ function LandingPage() {
     <div className="min-h-screen bg-slate-50 selection:bg-[#1085FD]/20 selection:text-[#1085FD]" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
 
       {/* ── NAV ── */}
-      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-5"}`}>
+      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "py-2 shadow-md" : "py-3"}`} style={{ background: BLUE }}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <span className="inline-flex items-center rounded-2xl px-4 py-2" style={{ background: BLUE, boxShadow: "0 2px 12px rgba(16,133,253,0.25)" }}>
-              <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 40, width: "auto", maxWidth: 180, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
-            </span>
+            <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 56, width: "auto", maxWidth: 200, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-4">
-            <a href="/about" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors" style={{ textDecoration: "none" }}>About</a>
+          <div className="hidden md:flex items-center gap-2">
+            <a href="/about" className="text-sm font-semibold text-white/90 hover:text-white transition-colors px-4 py-2 rounded-full hover:bg-white/10" style={{ textDecoration: "none" }}>About</a>
             <a
               href="https://demo.sentconnect.org/"
-              className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors flex items-center gap-1.5"
+              className="text-sm font-semibold text-white/90 hover:text-white transition-colors flex items-center gap-1.5 px-4 py-2 rounded-full hover:bg-white/10"
               style={{ textDecoration: "none" }}
             >
-              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-100">
-                <Play className="w-2.5 h-2.5 fill-slate-600 text-slate-600" />
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/25">
+                <Play className="w-2.5 h-2.5 fill-white text-white" />
               </span>
               Try Demo
             </a>
             <a
               href={content.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
-              className="text-sm font-bold text-white px-5 py-2.5 rounded-full transition-all"
-              style={{ background: BLUE, textDecoration: "none", boxShadow: "0 2px 12px rgba(16,133,253,0.35)" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#0e74e0"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 6px 20px rgba(16,133,253,0.45)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 12px rgba(16,133,253,0.35)"; }}
+              className="text-sm font-bold px-5 py-2.5 rounded-full transition-all ml-1"
+              style={{ background: "#FFFFFF", color: "#0B67C2", textDecoration: "none", boxShadow: "0 2px 8px rgba(0,0,0,0.16)" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0F7FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 14px rgba(0,0,0,0.2)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.16)"; }}
             >{content.headerPrimaryCtaLabel}</a>
           </div>
 
           {/* Mobile: demo + signup + hamburger */}
           <div className="flex md:hidden items-center gap-2">
-            <a href="https://demo.sentconnect.org/" className="text-xs font-bold text-slate-600 border border-slate-300 bg-white px-3 py-1.5 rounded-full" style={{ textDecoration: "none" }}>Demo</a>
-            <a href={content.headerPrimaryCtaHref} onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)} className="text-xs font-bold text-white px-3 py-1.5 rounded-full" style={{ background: BLUE, textDecoration: "none" }}>{content.headerPrimaryCtaLabel}</a>
-            <button onClick={() => setMobileNavOpen(o => !o)} className="p-2 rounded-lg bg-slate-100" aria-label="Menu">
+            <a href="https://demo.sentconnect.org/" className="text-xs font-bold text-white border border-white/50 bg-white/10 px-3 py-1.5 rounded-full" style={{ textDecoration: "none" }}>Demo</a>
+            <a href={content.headerPrimaryCtaHref} onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)} className="text-xs font-bold px-3 py-1.5 rounded-full" style={{ background: "#FFFFFF", color: "#111827", textDecoration: "none" }}>{content.headerPrimaryCtaLabel}</a>
+            <button onClick={() => setMobileNavOpen(o => !o)} className="p-2 rounded-lg bg-white/15 text-white" aria-label="Menu">
               {mobileNavOpen
                 ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -227,9 +225,9 @@ function LandingPage() {
           </div>
         </div>
         {mobileNavOpen && (
-          <div className="md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-4 shadow-md">
-            <a href="/about" className="block text-sm font-semibold text-slate-700" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>About</a>
-            <a href="https://demo.sentconnect.org/" className="block text-sm font-semibold text-slate-700" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>Try Demo</a>
+          <div className="md:hidden border-t border-white/15 px-6 py-4 space-y-4" style={{ background: "#0070E0" }}>
+            <a href="/about" className="block text-sm font-semibold text-white" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>About</a>
+            <a href="https://demo.sentconnect.org/" className="block text-sm font-semibold text-white/90" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>Try Demo</a>
           </div>
         )}
       </nav>
