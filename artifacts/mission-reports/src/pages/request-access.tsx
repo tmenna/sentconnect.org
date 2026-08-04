@@ -5,8 +5,8 @@ import { useLogo } from "@/providers/logo-provider";
 import logoColor from "@/assets/logo-color.png";
 import { buildOrgLoginHref } from "@/lib/org";
 
-const BLUE = "#FF4405";
-const BLUE_DARK = "#E63C00";
+const BLUE = "#1085FD";
+const BLUE_DARK = "#0059D6";
 
 function SignInModal({ onClose }: { onClose: () => void }) {
   const [subdomain, setSubdomain] = useState("");
@@ -103,7 +103,7 @@ function SignInModal({ onClose }: { onClose: () => void }) {
           <button
             type="submit"
             disabled={checking}
-            style={{ width: "100%", height: 48, background: BLUE, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 12, cursor: checking ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 4px 16px rgba(255,68,5,0.35)", opacity: checking ? 0.7 : 1, fontFamily: "inherit" }}
+            style={{ width: "100%", height: 48, background: BLUE, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 12, cursor: checking ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 4px 16px rgba(16,133,253,0.35)", opacity: checking ? 0.7 : 1, fontFamily: "inherit" }}
           >
             {checking ? <Loader2 size={18} className="animate-spin" /> : <ArrowRight size={16} />}
             {checking ? "Checking…" : "Continue to Sign In"}
@@ -183,7 +183,7 @@ export default function RequestAccess() {
           <button
             type="button"
             onClick={() => setShowSignIn(true)}
-            style={{ fontSize: 14, fontWeight: 700, color: "#fff", background: BLUE, border: "none", borderRadius: 8, padding: "0 20px", height: 38, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(255,68,5,0.24)", transition: "background .15s" }}
+            style={{ fontSize: 14, fontWeight: 700, color: "#fff", background: BLUE, border: "none", borderRadius: 8, padding: "0 20px", height: 38, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(16,133,253,0.24)", transition: "background .15s" }}
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = BLUE_DARK; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = BLUE; }}
           >
@@ -204,13 +204,13 @@ export default function RequestAccess() {
               <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#64748B", margin: "0 0 28px" }}>
                 Thank you for your interest in SentConnect. We'll review your request and reach out to <strong style={{ color: "#0F172A" }}>{email}</strong> to get your church set up.
               </p>
-              <a href="/" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 48, padding: "0 32px", borderRadius: 10, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(255,68,5,0.38)" }}>
+              <a href="/" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 48, padding: "0 32px", borderRadius: 10, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)" }}>
                 Back to Home
               </a>
             </div>
           ) : (
             <div style={{ background: "#fff", borderRadius: 28, padding: "44px", boxShadow: "0 12px 48px rgba(15,23,42,0.11), 0 2px 8px rgba(15,23,42,0.06)", border: "1px solid #E5E7EB" }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#FFF1EC", borderRadius: 999, padding: "6px 14px", marginBottom: 20 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#EAF3FF", borderRadius: 999, padding: "6px 14px", marginBottom: 20 }}>
                 <Mail size={13} color={BLUE} />
                 <span style={{ fontSize: 11.5, fontWeight: 700, color: BLUE, letterSpacing: "0.08em", textTransform: "uppercase" }}>Request Access</span>
               </div>
@@ -261,7 +261,7 @@ export default function RequestAccess() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  style={{ width: "100%", height: 52, background: BLUE, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 12, cursor: submitting ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 4px 20px rgba(255,68,5,0.42)", opacity: submitting ? 0.7 : 1, fontFamily: "inherit" }}
+                  style={{ width: "100%", height: 52, background: BLUE, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 12, cursor: submitting ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 4px 20px rgba(16,133,253,0.42)", opacity: submitting ? 0.7 : 1, fontFamily: "inherit" }}
                 >
                   {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={16} />}
                   {submitting ? "Sending…" : "Send Request"}

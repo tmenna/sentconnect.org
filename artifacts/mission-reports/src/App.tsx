@@ -1,7 +1,7 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Shuffle, ArrowRight, Play, Upload } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import logoWhite from "@/assets/logo-white.png";
 import { Toaster } from "@/components/ui/toaster";
@@ -97,7 +97,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   heroDescription: "A private space where your missionaries share updates, photos, and prayer needs — and your church stays close to the work it supports.",
   primaryCtaLabel: "Sign Up",
   primaryCtaHref: "/signup",
-  previewCardTitle: "Latest Updates",
+  previewCardTitle: "Mission Moments",
   previewLabel: "Latest field updates",
   previewTitle1: "Prayer gathering in Kigali",
   previewTitle2: "New family visits this week",

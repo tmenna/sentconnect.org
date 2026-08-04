@@ -3,8 +3,8 @@ import { Link } from "wouter";
 import { Loader2, CheckCircle2 } from "lucide-react";
 import { useOrg } from "@/providers/org-provider";
 
-const BLUE    = "#FF4405";
-const BLUE_DK = "#E63C00";
+const BLUE    = "#1085FD";
+const BLUE_DK = "#0059D6";
 
 export default function ForgotPassword() {
   const { orgSlug, prefix } = useOrg();
@@ -93,7 +93,7 @@ export default function ForgotPassword() {
                   required
                   className="w-full h-11 px-4 text-[14px] rounded-xl border outline-none transition-all"
                   style={{ borderColor: "#E5E7EB" }}
-                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(255,68,5,0.12)`; }}
+                  onFocus={e => { e.target.style.borderColor = BLUE; e.target.style.boxShadow = `0 0 0 3px rgba(16,133,253,0.12)`; }}
                   onBlur={e => { e.target.style.borderColor = "#E5E7EB"; e.target.style.boxShadow = "none"; }}
                 />
               </div>

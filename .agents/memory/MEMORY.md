@@ -1,3 +1,4 @@
+- [Brand color](brand-color.md) — canonical brand is blue #1085FD everywhere (site + emails); orange experiment removed, don't reintroduce.
 - [User authz cache](user-authz-cache.md) — api-server caches user records ~30s; any mutation affecting role/status/permissions must call invalidateUserCache or grants/revokes lag.
 - [Demo seed dual path](demo-seed-dual-path.md) — demo-org feed seeded in two functions (seed-if-empty + hourly reset that wipes photos); edit BOTH or content vanishes hourly.
 - [R2 image caching](r2-image-caching.md) — R2 media loads laggy because presigned signatures rotate (byte-cache miss); fix = stable server-cached URLs + ResponseCacheControl immutable; keep 302 max-age under URL lifetime.

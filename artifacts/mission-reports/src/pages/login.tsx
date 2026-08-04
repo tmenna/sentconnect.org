@@ -22,8 +22,8 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const BRAND_PALETTE = {
-  BLUE:      "#FF4405",
-  BLUE_DARK: "#E63C00",
+  BLUE:      "#1085FD",
+  BLUE_DARK: "#0059D6",
   LEFT_BG:   "#F8F9FA",
   INPUT_BG:  "#F3F4F6",
 };
@@ -442,7 +442,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   style={{
                     height: 42,
                     borderRadius: 10,
-                    background: login.isPending ? "#FF9673" : BLUE,
+                    background: login.isPending ? "#7FBCFE" : BLUE,
                     color: "#fff",
                     fontSize: 14,
                     fontWeight: 700,
@@ -474,7 +474,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           {orgSlug === "demo" && (
             <div style={{ marginTop: 28 }}>
               <div style={{ marginBottom: 28 }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#FFF1EC", borderRadius: 999, padding: "6px 14px", fontSize: 13, fontWeight: 600, color: BLUE_DARK, marginBottom: 20 }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#EAF3FF", borderRadius: 999, padding: "6px 14px", fontSize: 13, fontWeight: 600, color: BLUE_DARK, marginBottom: 20 }}>
                   <span style={{ width: 8, height: 8, borderRadius: 999, background: "#22C55E", display: "inline-block" }} />
                   Live demo · No signup required
                 </span>
@@ -487,7 +487,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </p>
 
                 <div style={{ display: "flex", gap: 18, marginBottom: 26 }}>
-                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #FFF1EC, #FFE0D3)", display: "flex", alignItems: "center", justifyContent: "center" }}><Globe style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
+                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF3FF, #D3E7FE)", display: "flex", alignItems: "center", justifyContent: "center" }}><Globe style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
                   <div>
                     <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Field User</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
@@ -497,7 +497,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </div>
 
                 <div style={{ display: "flex", gap: 18 }}>
-                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #FFF1EC, #FFE0D3)", display: "flex", alignItems: "center", justifyContent: "center" }}><ShieldCheck style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
+                  <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF3FF, #D3E7FE)", display: "flex", alignItems: "center", justifyContent: "center" }}><ShieldCheck style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
                   <div>
                     <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Admin</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
@@ -583,21 +583,21 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                         cursor: waiting ? "default" : "pointer",
                         fontFamily: "inherit",
                         opacity: waiting ? 0.6 : 1,
-                        boxShadow: primary && !waiting ? "0 2px 8px rgba(255,68,5,0.28)" : "0 1px 2px rgba(16,24,40,0.05)",
+                        boxShadow: primary && !waiting ? "0 2px 8px rgba(16,133,253,0.28)" : "0 1px 2px rgba(16,24,40,0.05)",
                         transition: "transform .15s, box-shadow .15s, background .15s, border-color .15s, opacity .15s",
                       }}
                       onMouseEnter={e => {
                         if (waiting) return;
                         const el = e.currentTarget as HTMLElement;
                         el.style.transform = "translateY(-2px)";
-                        el.style.boxShadow = primary ? "0 6px 16px rgba(255,68,5,0.38)" : "0 4px 12px rgba(16,24,40,0.12)";
-                        el.style.background = primary ? BLUE_DARK : "#FFF1EC";
+                        el.style.boxShadow = primary ? "0 6px 16px rgba(16,133,253,0.38)" : "0 4px 12px rgba(16,24,40,0.12)";
+                        el.style.background = primary ? BLUE_DARK : "#EAF3FF";
                         if (!primary) el.style.borderColor = BLUE;
                       }}
                       onMouseLeave={e => {
                         const el = e.currentTarget as HTMLElement;
                         el.style.transform = "translateY(0)";
-                        el.style.boxShadow = primary && !waiting ? "0 2px 8px rgba(255,68,5,0.28)" : "0 1px 2px rgba(16,24,40,0.05)";
+                        el.style.boxShadow = primary && !waiting ? "0 2px 8px rgba(16,133,253,0.28)" : "0 1px 2px rgba(16,24,40,0.05)";
                         el.style.background = waiting ? "#F8F9FA" : primary ? BLUE : "#fff";
                         el.style.borderColor = primary ? BLUE : "#E5E7EB";
                       }}
