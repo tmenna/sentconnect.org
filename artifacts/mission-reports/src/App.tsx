@@ -285,15 +285,16 @@ function LandingPage() {
               {features.map((f, i) => (
                 <div
                   key={i}
-                  className="bg-white p-7 rounded-3xl border border-slate-100 transition-all duration-200"
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-3px)"; el.style.boxShadow = "0 12px 32px rgba(16,133,253,0.10)"; el.style.borderColor = "#bfdbfe"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "none"; el.style.borderColor = "rgb(241 245 249)"; }}
+                  className="bg-white p-10 rounded-3xl border border-slate-100 transition-all duration-200"
+                  style={{ boxShadow: "0 4px 20px rgba(15,23,42,0.05)" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 16px 40px rgba(16,133,253,0.14)"; el.style.borderColor = "#bfdbfe"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(15,23,42,0.05)"; el.style.borderColor = "rgb(241 245 249)"; }}
                 >
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)" }}>
-                    <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{f.icon}</svg>
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-7" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)", boxShadow: "0 8px 20px rgba(16,133,253,0.30)" }}>
+                    <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{f.icon}</svg>
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 mb-2">{f.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{f.desc}</p>
+                  <h3 className="text-xl font-bold text-slate-900 tracking-tight mb-3">{f.title}</h3>
+                  <p className="text-[15px] text-slate-600 leading-relaxed">{f.desc}</p>
                 </div>
               ))}
             </div>
