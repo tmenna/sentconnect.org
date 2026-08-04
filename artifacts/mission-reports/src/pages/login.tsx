@@ -193,7 +193,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       <div style={{ flex: 1, display: "flex" }}>
 
       {/* ── Left panel (hidden on mobile) ── */}
-      <div className="hidden md:flex" style={{ flex: orgSlug === "demo" ? "0 0 44%" : "0 0 34%", background: orgSlug === "demo" ? "#fff" : LEFT_BG, flexDirection: "column", alignItems: orgSlug === "demo" ? "flex-start" : "flex-end", justifyContent: "center", padding: orgSlug === "demo" ? "48px 56px 48px 72px" : "48px 60px 48px 32px", position: "relative" }}>
+      <div className="hidden md:flex" style={{ flex: "0 0 44%", background: "#fff", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", padding: "48px 56px 48px 72px", position: "relative" }}>
         {orgSlug === "demo" ? (
           <div style={{ maxWidth: 460 }}>
             <p style={{ fontSize: 15, fontWeight: 700, color: BLUE, letterSpacing: "0.02em", textTransform: "uppercase", margin: "0 0 20px" }}>
@@ -208,17 +208,24 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           </div>
         ) : (
           <>
-            <div style={{ maxWidth: 280 }}>
-              <p style={{ fontSize: 48, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 16px", whiteSpace: "pre-line" }}>
-                {platformMode ? "Admin\nsign in" : "Sign in"}
+            <div style={{ maxWidth: 460 }}>
+              <p style={{ fontSize: 15, fontWeight: 700, color: BLUE, letterSpacing: "0.02em", textTransform: "uppercase", margin: "0 0 20px" }}>
+                SentConnect
               </p>
-              <p style={{ fontSize: 17, fontWeight: 600, color: "#4B5563", margin: 0, lineHeight: 1.5, whiteSpace: "nowrap" }}>
+              <p style={{ fontSize: 52, fontWeight: 800, color: "#0F172A", letterSpacing: "-0.035em", lineHeight: 1.04, margin: "0 0 22px" }}>
+                {platformMode ? (
+                  <>Admin<br /><span style={{ color: BLUE }}>sign in.</span></>
+                ) : (
+                  <>Welcome<br /><span style={{ color: BLUE }}>back.</span></>
+                )}
+              </p>
+              <p style={{ fontSize: 18, fontWeight: 500, color: "#4B5563", margin: 0, lineHeight: 1.6, maxWidth: 400 }}>
                 {platformMode
                   ? "SentConnect platform administration."
-                  : "Enter your username and password"}
+                  : "Sign in to stay close to the work your church supports."}
               </p>
             </div>
-            <p style={{ position: "absolute", bottom: 32, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "#9CA3AF", fontStyle: "italic", margin: 0 }}>
+            <p style={{ position: "absolute", bottom: 32, left: 72, right: 56, textAlign: "left", fontSize: 12, color: "#9CA3AF", fontStyle: "italic", margin: 0 }}>
               "Declare his glory among the nations." — Psalm 96:3
             </p>
           </>
@@ -229,7 +236,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       <div className="px-5 py-10 sm:px-10 sm:py-12 md:px-14 items-center md:items-start" style={{ flex: 1, background: "#fff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
 
         {/* Mobile-only heading */}
-        <div className="md:hidden" style={{ textAlign: orgSlug === "demo" ? "left" : "center", marginBottom: 32, width: "100%", maxWidth: 460 }}>
+        <div className="md:hidden" style={{ textAlign: "left", marginBottom: 32, width: "100%", maxWidth: 460 }}>
           {orgSlug === "demo" ? (
             <>
               <p style={{ fontSize: 13, fontWeight: 700, color: BLUE, letterSpacing: "0.02em", textTransform: "uppercase", margin: "0 0 12px" }}>
@@ -244,10 +251,15 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
             </>
           ) : (
             <>
-              <p style={{ fontSize: 36, fontWeight: 800, color: BLUE, letterSpacing: "-0.03em", lineHeight: 1.05, margin: "0 0 8px" }}>
-                Sign in
+              <p style={{ fontSize: 13, fontWeight: 700, color: BLUE, letterSpacing: "0.02em", textTransform: "uppercase", margin: "0 0 12px" }}>
+                SentConnect
               </p>
-              <p style={{ fontSize: 14, fontWeight: 600, color: "#4B5563", margin: 0 }}>Enter your username and password.</p>
+              <p style={{ fontSize: 34, fontWeight: 800, color: "#0F172A", letterSpacing: "-0.03em", lineHeight: 1.08, margin: "0 0 10px" }}>
+                Welcome <span style={{ color: BLUE }}>back.</span>
+              </p>
+              <p style={{ fontSize: 15, fontWeight: 500, color: "#4B5563", margin: 0, lineHeight: 1.55 }}>
+                Sign in to stay close to the work your church supports.
+              </p>
             </>
           )}
         </div>
