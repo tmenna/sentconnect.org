@@ -35,6 +35,7 @@ const Signup = lazy(() => import("./pages/signup"));
 const RequestAccess = lazy(() => import("./pages/request-access"));
 const SignupSuccess = lazy(() => import("./pages/signup-success"));
 const SuperAdminPanel = lazy(() => import("./pages/super-admin"));
+const RootSignIn = lazy(() => import("./pages/root-sign-in"));
 
 const PageFallback = () => (
   <div className="min-h-screen flex items-center justify-center bg-[#F5F7FA]">
@@ -193,6 +194,12 @@ function LandingPage() {
           <div className="hidden md:flex items-center gap-2">
             <a href="/about" className="text-sm font-semibold text-white/90 hover:text-white transition-colors px-4 py-2 rounded-full hover:bg-white/10" style={{ textDecoration: "none" }}>About</a>
             <a
+              href="/login"
+              onClick={e => handleCtaClick(e, "/login")}
+              className="text-sm font-semibold text-white/90 hover:text-white transition-colors px-4 py-2 rounded-full hover:bg-white/10"
+              style={{ textDecoration: "none" }}
+            >Sign In</a>
+            <a
               href="https://demo.sentconnect.org/"
               className="text-sm font-semibold text-white/90 hover:text-white transition-colors flex items-center gap-1.5 px-4 py-2 rounded-full hover:bg-white/10"
               style={{ textDecoration: "none" }}
@@ -227,6 +234,7 @@ function LandingPage() {
         {mobileNavOpen && (
           <div className="md:hidden border-t border-white/15 px-6 py-4 space-y-4" style={{ background: "#0070E0" }}>
             <a href="/about" className="block text-sm font-semibold text-white" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>About</a>
+            <a href="/login" className="block text-sm font-semibold text-white" style={{ textDecoration: "none" }} onClick={e => { setMobileNavOpen(false); handleCtaClick(e, "/login"); }}>Sign In</a>
             <a href="https://demo.sentconnect.org/" className="block text-sm font-semibold text-white/90" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>Try Demo</a>
           </div>
         )}
@@ -862,7 +870,7 @@ function AdminFeedRoute() {
 
 function LoginRoute() {
   const { orgSlug } = useOrg();
-  if (!orgSlug && isTenantRootHost() && !isPlatformAdminHost()) return <LandingPage />;
+  if (!orgSlug && isTenantRootHost() && !isPlatformAdminHost()) return <RootSignIn />;
   return <Login platformMode={isPlatformAdminHost()} />;
 }
 
