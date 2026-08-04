@@ -165,7 +165,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       {!platformMode && (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "10px 24px", borderBottom: "1px solid #E5E7EB", background: "#F8F9FA", flexShrink: 0 }}>
           <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-            <img src={isCustomLogo ? logo : logoColor} alt="SentConnect" style={{ height: 44, width: "auto", maxWidth: 180, display: "block" }} />
+            <img src={isCustomLogo ? logo : logoColor} alt="SentConnect" className="h-12 md:h-14" style={{ width: "auto", maxWidth: 200, display: "block" }} />
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {orgSlug !== "demo" && (
