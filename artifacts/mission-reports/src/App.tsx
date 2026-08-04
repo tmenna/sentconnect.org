@@ -1,7 +1,7 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Shuffle, ArrowRight, Play, Heart, MessageCircle, MapPin, Check, Upload } from "lucide-react";
+import { Shuffle, ArrowRight, Play, Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import logoWhite from "@/assets/logo-white.png";
 import { Toaster } from "@/components/ui/toaster";
@@ -93,8 +93,8 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   headerPrimaryCtaLabel: "Sign Up",
   headerPrimaryCtaHref: "/signup",
   heroEyebrow: "Private missionary updates",
-  heroTitle: "Helping churches stay connected with the missionaries they send and support.",
-  heroDescription: "SentConnect gives churches and mission organizations a dedicated space where missionaries can share updates, photos, prayer needs, and impact reports with the people who support them.",
+  heroTitle: "Connecting churches with the missionaries they send.",
+  heroDescription: "A private space where your missionaries share updates, photos, and prayer needs — and your church stays close to the work it supports.",
   primaryCtaLabel: "Sign Up",
   primaryCtaHref: "/signup",
   previewCardTitle: "Latest Updates",
@@ -153,24 +153,9 @@ function LandingPage() {
       icon: <path d="M4 5h16v14H4zM4 10h16M9 5v5" />,
     },
     {
-      title: "Photos and short videos",
-      desc: "Every update can include up to six photos or short video clips, displayed in a full-screen viewer for an engaging viewing experience.",
-      icon: <><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="M21 15l-5-4-9 8" /></>,
-    },
-    {
       title: "Pray and encourage from anywhere",
       desc: "Church missions teams and authorized members can like, love, and comment on every update — turning one-way newsletters into meaningful conversations and reminding missionaries they are supported.",
       icon: <path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12C19 16.4 12 21 12 21z" />,
-    },
-    {
-      title: "Email notifications",
-      desc: "Receive an email whenever a new update or comment is posted, so you never miss what's happening in the field.",
-      icon: <path d="M4 6l8 6 8-6M4 6h16v12H4z" />,
-    },
-    {
-      title: "Highlights ready for Sunday",
-      desc: "Mark important posts as highlights and export them as presentation slides, making it easy to share mission updates with your congregation on Sunday morning.",
-      icon: <path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.9L12 3z" />,
     },
     {
       title: "Private and secure by design",
@@ -246,7 +231,7 @@ function LandingPage() {
           <div className="absolute top-0 inset-x-0 h-[700px] bg-gradient-to-b from-[#1085FD]/8 to-transparent -z-10" />
           <div className="absolute top-1/4 right-0 w-1/2 h-1/2 bg-[#1085FD]/5 blur-[120px] rounded-full -z-10" />
 
-          <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+          <div className="max-w-3xl mx-auto px-6 text-center">
             <motion.div
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
@@ -257,18 +242,18 @@ function LandingPage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1085FD] opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1085FD]" />
                 </span>
-                Now available for all churches
+                {content.heroEyebrow}
               </div>
 
-              <h1 className="text-5xl lg:text-[4rem] leading-[1.08] font-extrabold text-slate-900 tracking-tight mb-8">
+              <h1 className="text-5xl lg:text-6xl leading-[1.08] font-extrabold text-slate-900 tracking-tight mb-6">
                 {content.heroTitle}
               </h1>
 
-              <p className="text-xl text-slate-600 mb-10 leading-relaxed">
+              <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
                 {content.heroDescription}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href={content.primaryCtaHref}
                   onClick={e => handleCtaClick(e, content.primaryCtaHref)}
@@ -289,87 +274,6 @@ function LandingPage() {
                   Try Demo
                 </a>
               </div>
-            </motion.div>
-
-            {/* Phone mockup */}
-            <motion.div
-              initial={{ opacity: 0, x: 28 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
-              className="relative lg:h-[600px] flex items-center justify-center"
-            >
-              <div className="relative w-[300px] h-[610px] bg-slate-900 rounded-[2.5rem] border-[8px] border-slate-900 shadow-2xl overflow-hidden z-10 rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
-                <div className="w-full h-full bg-slate-50 flex flex-col">
-                  <div className="pt-10 pb-4 px-4 flex flex-col z-10 shadow-sm" style={{ background: BLUE }}>
-                    <div className="flex justify-between items-center mb-1">
-                      <div className="text-[10px] font-bold tracking-wider uppercase text-white/80">SentConnect</div>
-                      <div className="bg-white/20 text-white text-[9px] px-2 py-0.5 rounded-full font-medium">grace.sentconnect.org</div>
-                    </div>
-                    <div className="text-base font-bold text-white">Missions Feed</div>
-                  </div>
-                  <div className="flex-1 p-3 space-y-3 bg-slate-50 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-50 z-10 pointer-events-none" />
-                    <div className="bg-white rounded-xl p-3 shadow-sm border border-slate-100">
-                      <div className="flex gap-2 items-center mb-2">
-                        <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-[10px] shrink-0">SJ</div>
-                        <div>
-                          <div className="font-bold text-slate-900 text-xs leading-tight">Sarah Jenkins</div>
-                          <div className="flex items-center gap-1 text-[9px] text-slate-400">
-                            <MapPin size={7} /> Rural Kenya · 2h ago
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-slate-700 text-[11px] leading-relaxed mb-2">The youth outreach program launched today! Over 50 kids showed up for soccer and a short message.</div>
-                      <div className="w-full h-28 rounded-lg bg-slate-200 mb-2 overflow-hidden">
-                        <img src="/attached_assets/generated_images/hero-missionary-phone.jpg" className="w-full h-full object-cover" alt="" aria-hidden="true" />
-                      </div>
-                      <div className="flex items-center gap-3 text-slate-400 text-[10px]">
-                        <span className="flex items-center gap-1 text-pink-500"><Heart size={12} className="fill-current" /> 24</span>
-                        <span className="flex items-center gap-1"><MessageCircle size={12} /> 5</span>
-                      </div>
-                    </div>
-                    <div className="bg-white rounded-xl p-3 shadow-sm border border-slate-100">
-                      <div className="flex gap-2 items-center mb-2">
-                        <div className="w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-[10px] shrink-0" style={{ background: BLUE }}>MG</div>
-                        <div>
-                          <div className="font-bold text-slate-900 text-xs leading-tight">Mark &amp; Gina</div>
-                          <div className="text-[9px] text-slate-400">Chiang Mai · 5h ago</div>
-                        </div>
-                      </div>
-                      <div className="text-slate-700 text-[11px] leading-relaxed">Praise report: The leadership training manuals finally cleared customs!</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating cards */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="absolute top-20 -left-10 bg-white p-3 rounded-2xl shadow-xl border border-slate-100 z-20 flex items-center gap-2.5"
-              >
-                <div className="w-9 h-9 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 shrink-0">
-                  <Heart size={18} className="fill-current" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900">New Reaction</div>
-                  <div className="text-[10px] text-slate-500">Pastor Dave loved a post</div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-                className="absolute bottom-28 -right-10 bg-white p-3 rounded-2xl shadow-xl border border-slate-100 z-20 flex items-center gap-2.5"
-              >
-                <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: "#EEF6FF", color: BLUE }}>
-                  <MessageCircle size={18} className="fill-current" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900">Prayer Team</div>
-                  <div className="text-[10px] text-slate-500">"Praying for this now!"</div>
-                </div>
-              </motion.div>
             </motion.div>
           </div>
         </section>
@@ -396,71 +300,8 @@ function LandingPage() {
           </div>
         </section>
 
-        {/* ── SUNDAY SLIDES SPOTLIGHT ── */}
-        <section className="py-24 bg-white overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              {/* Visual */}
-              <div className="relative">
-                <div className="absolute inset-0 rounded-[3rem] -rotate-3 scale-105" style={{ background: "rgba(16,133,253,0.06)" }} />
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)", padding: "3rem 2rem" }}>
-                  <div className="bg-white/95 p-6 rounded-2xl shadow-lg">
-                    <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: BLUE }}>{content.previewLabel}</div>
-                    <div className="text-2xl font-bold text-slate-900 mb-4">{content.previewTitle1}</div>
-                    <div className="space-y-2.5">
-                      {[content.previewTitle2, content.previewTitle3].map((t, i) => (
-                        <div key={i} className="flex items-center gap-3">
-                          <div className="w-2 h-2 rounded-full shrink-0" style={{ background: BLUE }} />
-                          <div className="text-sm font-medium text-slate-600">{t}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="mt-4 bg-slate-900/80 text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-400" />
-                    Ready for Sunday presentation
-                  </div>
-                </div>
-              </div>
-
-              {/* Copy */}
-              <div>
-                <span className="inline-block text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full mb-6 bg-slate-100 text-slate-600">Sunday Mornings</span>
-                <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-5">Ready for Sunday service.</h2>
-                <p className="text-lg text-slate-600 leading-relaxed mb-8">
-                  No more copy-pasting from emails or digging through Facebook groups on Saturday night. Export the week's top field updates into presentation-ready slides — in one click.
-                </p>
-                <ul className="space-y-3">
-                  {[
-                    "Mark important posts as highlights",
-                    "Export them as presentation slides",
-                    "Share mission updates with your congregation on Sunday morning",
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <div className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(16,133,253,0.12)", color: BLUE }}>
-                        <Check size={11} strokeWidth={3} />
-                      </div>
-                      <span className="text-slate-700 font-medium text-sm">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── IMPACT BAND ── */}
-        <section className="py-24 relative overflow-hidden" style={{ background: BLUE }}>
-          <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <Heart className="w-10 h-10 text-blue-200 mx-auto mb-8 opacity-80" />
-            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight m-0">
-              <em>Stronger relationships</em>, <em>more informed prayer</em>, <em>better communication</em>, and a <em>deeper connection</em> between your church and the missionaries you send and support.
-            </p>
-          </div>
-        </section>
-
         {/* ── CTA ── */}
-        <section className="py-32 bg-slate-50">
+        <section className="py-24 bg-slate-50">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">{content.ctaBandHeading}</h2>
             <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-xl mx-auto">

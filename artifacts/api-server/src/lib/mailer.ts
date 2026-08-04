@@ -106,7 +106,7 @@ const LOGO_PLACEHOLDER = "%%EMAIL_LOGO_BLOCK%%";
 
 export function logoBlockHtml(logoUrl: string | null): string {
   if (logoUrl) {
-    return `<img src="${logoUrl}" alt="SentConnect" width="170" style="height:auto;max-width:170px;max-height:56px;display:block;margin:0 auto;" />`;
+    return `<img src="${logoUrl}" alt="SentConnect" height="44" style="height:44px;width:auto;display:block;margin:0 auto;border:0;" />`;
   }
   return `<div style="font-size:24px;font-weight:800;color:#ffffff;letter-spacing:0.14em;">SENTCONNECT</div>`;
 }
@@ -140,7 +140,7 @@ export function baseTemplate(content: string, orgName?: string): string {
     <table width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
 
       <!-- Header -->
-      <tr><td style="background:linear-gradient(135deg,#1085FD 0%,#0560D4 100%);border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
+      <tr><td style="background:linear-gradient(135deg,#1085FD 0%,#0059D6 100%);border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
         ${LOGO_PLACEHOLDER}
         <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:8px;letter-spacing:0.03em;">Helping churches stay connected with their missionaries</div>
       </td></tr>
