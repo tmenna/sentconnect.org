@@ -420,7 +420,7 @@ function AboutPage() {
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+            <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
 
           {/* Desktop nav */}

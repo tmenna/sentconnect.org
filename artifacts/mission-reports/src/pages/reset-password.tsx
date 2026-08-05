@@ -63,7 +63,7 @@ export default function ResetPassword() {
       style={{ background: BG }}
     >
       <div className="flex items-center gap-2.5 mb-8">
-        <img src={logoColor} alt="SentConnect" style={{ height: 64, width: "auto", maxWidth: 220, display: "block" }} />
+        <img src={logoColor} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block" }} />
       </div>
 
       <div
