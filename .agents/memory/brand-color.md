@@ -6,4 +6,4 @@ The single brand color everywhere (site + emails) is blue `#1085FD`, dark shade 
 **Why:** User explicitly chose blue over the orange (`#FF4405`) experiment on 2026-08-04; orange was removed from login/reset/request-access/forgot-password/post-card. The old "orange rebrand" project task is obsolete.
 **How to apply:** Any new UI or email styling should use the #1085FD family; don't reintroduce orange.
 
-**Update (Aug 2026):** User explicitly requested #F38B00 orange as an accent for "Try Demo" buttons/pills on the landing + about pages so they stand out and invite clicks (hover #DD7E00). This is intentional and should not be "fixed" back to blue; blue remains the primary brand everywhere else.
+**Update (Aug 2026):** User explicitly requested #E85D04 orange as an accent for "Try Demo" buttons/pills on the landing + about pages so they stand out and invite clicks (hover #C74E03). This is intentional and should not be "fixed" back to blue; blue remains the primary brand everywhere else.

@@ -187,9 +187,9 @@ function LandingPage() {
             <a
               href="https://demo.sentconnect.org/"
               className="text-sm font-semibold text-white flex items-center gap-1.5 px-5 py-2.5 rounded-full transition-all"
-              style={{ background: "#F38B00", textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.18)" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#DD7E00"; el.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F38B00"; el.style.transform = "translateY(0)"; }}
+              style={{ background: "#E85D04", textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.18)" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#C74E03"; el.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#E85D04"; el.style.transform = "translateY(0)"; }}
             >
               <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/25">
                 <Play className="w-2.5 h-2.5 fill-white text-white" />
@@ -208,7 +208,7 @@ function LandingPage() {
 
           {/* Mobile: demo + signup + hamburger */}
           <div className="flex md:hidden items-center gap-2">
-            <a href="https://demo.sentconnect.org/" className="text-xs font-bold text-white px-3 py-1.5 rounded-full" style={{ background: "#F38B00", textDecoration: "none", boxShadow: "0 1px 6px rgba(0,0,0,0.18)" }}>Demo</a>
+            <a href="https://demo.sentconnect.org/" className="text-xs font-bold text-white px-3 py-1.5 rounded-full" style={{ background: "#E85D04", textDecoration: "none", boxShadow: "0 1px 6px rgba(0,0,0,0.18)" }}>Demo</a>
             <a href={content.headerPrimaryCtaHref} onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)} className="text-xs font-bold px-3 py-1.5 rounded-full" style={{ background: "#FFFFFF", color: "#111827", textDecoration: "none" }}>{content.headerPrimaryCtaLabel}</a>
             <button onClick={() => setMobileNavOpen(o => !o)} className="p-2 rounded-lg bg-white/15 text-white" aria-label="Menu">
               {mobileNavOpen
@@ -277,9 +277,9 @@ function LandingPage() {
                 <a
                   href="https://demo.sentconnect.org/"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-white transition-all"
-                  style={{ background: "#F38B00", textDecoration: "none", boxShadow: "0 4px 20px rgba(243,139,0,0.32)" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#DD7E00"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(243,139,0,0.42)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F38B00"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(243,139,0,0.32)"; }}
+                  style={{ background: "#E85D04", textDecoration: "none", boxShadow: "0 4px 20px rgba(232,93,4,0.32)" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#C74E03"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(232,93,4,0.42)"; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#E85D04"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(232,93,4,0.32)"; }}
                 >
                   <Play className="w-4 h-4 fill-white text-white" />
                   Try Demo
@@ -335,9 +335,9 @@ function LandingPage() {
               <a
                 href="https://demo.sentconnect.org/"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-white transition-all"
-                style={{ background: "#F38B00", textDecoration: "none", boxShadow: "0 4px 20px rgba(243,139,0,0.32)" }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#DD7E00"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(243,139,0,0.42)"; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F38B00"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(243,139,0,0.32)"; }}
+                style={{ background: "#E85D04", textDecoration: "none", boxShadow: "0 4px 20px rgba(232,93,4,0.32)" }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#C74E03"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(232,93,4,0.42)"; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#E85D04"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(232,93,4,0.32)"; }}
               >
                 <Play className="w-4 h-4 fill-white text-white" />
                 Try Demo
@@ -439,9 +439,9 @@ function AboutPage() {
             >About</a>
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 14, fontWeight: 600, color: "#fff", background: "#F38B00", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, boxShadow: "0 2px 8px rgba(0,0,0,0.16)", transition: "background .15s" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#DD7E00"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#F38B00"; }}
+              style={{ fontSize: 14, fontWeight: 600, color: "#fff", background: "#E85D04", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, boxShadow: "0 2px 8px rgba(0,0,0,0.16)", transition: "background .15s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#C74E03"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#E85D04"; }}
             >
               <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 18, height: 18, borderRadius: "50%", background: "rgba(255,255,255,0.25)" }}>
                 <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 1 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -461,7 +461,7 @@ function AboutPage() {
           <div className="flex sm:hidden items-center gap-2">
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "#F38B00", padding: "6px 12px", borderRadius: 999, textDecoration: "none", boxShadow: "0 1px 6px rgba(0,0,0,0.18)" }}
+              style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "#E85D04", padding: "6px 12px", borderRadius: 999, textDecoration: "none", boxShadow: "0 1px 6px rgba(0,0,0,0.18)" }}
             >Demo</a>
             <a
               href={lpContent.headerPrimaryCtaHref}
