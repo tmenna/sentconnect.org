@@ -39,7 +39,7 @@ export default function RootSignIn() {
       <header style={{ background: BLUE }}>
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" className="h-14 md:h-16" style={{ width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+            <img src={lpLogo} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
           <a href="/" className="text-sm font-semibold text-white/90 hover:text-white px-4 py-2 rounded-full hover:bg-white/10 transition-colors" style={{ textDecoration: "none" }}>
             &larr; Back to home

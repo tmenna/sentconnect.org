@@ -172,7 +172,7 @@ function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-14 md:h-16" style={{ width: "auto", maxWidth: 220, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+            <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
 
           {/* Desktop links */}
