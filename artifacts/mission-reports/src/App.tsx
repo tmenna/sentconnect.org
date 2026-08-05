@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ArrowRight, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import logoWhite from "@/assets/logo-white.png";
+import worldMapDots from "@/assets/world-map-dots.png";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/components/auth-provider";
@@ -286,8 +287,22 @@ function LandingPage() {
         </section>
 
         {/* ── FEATURES ── */}
-        <section id="features" className="py-28 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-6">
+        <section id="features" className="relative py-28 bg-slate-50 overflow-hidden">
+          {/* Faint dotted world map — the fields where missionaries serve */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: `url(${worldMapDots})`,
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center 42%",
+              backgroundSize: "min(1400px, 120%)",
+              opacity: 0.35,
+              maskImage: "radial-gradient(ellipse 70% 60% at 50% 45%, black 30%, transparent 75%)",
+              WebkitMaskImage: "radial-gradient(ellipse 70% 60% at 50% 45%, black 30%, transparent 75%)",
+            }}
+          />
+          <div className="relative max-w-7xl mx-auto px-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {features.map((f, i) => (
                 <div
