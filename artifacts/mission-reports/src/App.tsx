@@ -177,16 +177,16 @@ function LandingPage() {
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-2">
-            <a href="/about" className="text-sm font-semibold text-white/90 hover:text-white transition-colors px-4 py-2 rounded-full hover:bg-white/10" style={{ textDecoration: "none" }}>About</a>
+            <a href="/about" className="text-sm font-semibold text-white transition-colors px-5 py-2.5 rounded-full hover:bg-white/15" style={{ textDecoration: "none" }}>About</a>
             <a
               href="/login"
               onClick={e => handleCtaClick(e, "/login")}
-              className="text-sm font-semibold text-white/90 hover:text-white transition-colors px-4 py-2 rounded-full hover:bg-white/10"
+              className="text-sm font-semibold text-white transition-colors px-5 py-2.5 rounded-full hover:bg-white/15"
               style={{ textDecoration: "none" }}
             >Sign In</a>
             <a
               href="https://demo.sentconnect.org/"
-              className="text-sm font-bold text-white flex items-center gap-1.5 px-5 py-2.5 rounded-full transition-all"
+              className="text-sm font-semibold text-white flex items-center gap-1.5 px-5 py-2.5 rounded-full transition-all"
               style={{ background: "#FF7A00", textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.18)" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#E86E00"; el.style.transform = "translateY(-1px)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FF7A00"; el.style.transform = "translateY(0)"; }}
@@ -199,7 +199,7 @@ function LandingPage() {
             <a
               href={content.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
-              className="text-sm font-bold px-5 py-2.5 rounded-full transition-all ml-1"
+              className="text-sm font-semibold px-5 py-2.5 rounded-full transition-all ml-1"
               style={{ background: "#FFFFFF", color: "#0B67C2", textDecoration: "none", boxShadow: "0 2px 8px rgba(0,0,0,0.16)" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0F7FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 14px rgba(0,0,0,0.2)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.16)"; }}
@@ -439,7 +439,7 @@ function AboutPage() {
             >About</a>
             <a
               href="https://demo.sentconnect.org/"
-              style={{ fontSize: 14, fontWeight: 700, color: "#fff", background: "#FF7A00", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, boxShadow: "0 2px 8px rgba(0,0,0,0.16)", transition: "background .15s" }}
+              style={{ fontSize: 14, fontWeight: 600, color: "#fff", background: "#FF7A00", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, height: 36, minWidth: 96, padding: "0 18px", borderRadius: 999, boxShadow: "0 2px 8px rgba(0,0,0,0.16)", transition: "background .15s" }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#E86E00"; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#FF7A00"; }}
             >
@@ -451,7 +451,7 @@ function AboutPage() {
             <a
               href={lpContent.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, lpContent.headerPrimaryCtaHref)}
-              style={{ fontSize: 14, fontWeight: 700, color: "#0B67C2", background: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, minWidth: 96, padding: "0 20px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 8px rgba(0,0,0,0.16)", transition: "background .15s, transform .15s, box-shadow .15s" }}
+              style={{ fontSize: 14, fontWeight: 600, color: "#0B67C2", background: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", height: 36, minWidth: 96, padding: "0 20px", borderRadius: 999, textDecoration: "none", boxShadow: "0 2px 8px rgba(0,0,0,0.16)", transition: "background .15s, transform .15s, box-shadow .15s" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0F7FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 14px rgba(0,0,0,0.2)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.16)"; }}
             >{lpContent.headerPrimaryCtaLabel}</a>
