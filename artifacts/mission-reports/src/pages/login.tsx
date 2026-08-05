@@ -627,7 +627,14 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 })}
               </div>
 
-              <div style={{ textAlign: "center", marginTop: 16 }}>
+              <div style={{ textAlign: "center", marginTop: 18, display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
+                <a
+                  href="https://www.sentconnect.org/login"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13.5, fontWeight: 700, color: BLUE, textDecoration: "none", border: "1px solid #BFDBFE", background: "#F5FAFF", borderRadius: 999, padding: "8px 16px" }}
+                >
+                  Have your own organization? Sign in
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                </a>
                 <a
                   href="https://www.sentconnect.org"
                   style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 600, color: BLUE, textDecoration: "none" }}
