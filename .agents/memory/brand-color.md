@@ -5,3 +5,5 @@ description: Canonical SentConnect brand color confirmed by the user
 The single brand color everywhere (site + emails) is blue `#1085FD`, dark shade `#0059D6`, light tints `#EAF3FF` / `#D3E7FE`.
 **Why:** User explicitly chose blue over the orange (`#FF4405`) experiment on 2026-08-04; orange was removed from login/reset/request-access/forgot-password/post-card. The old "orange rebrand" project task is obsolete.
 **How to apply:** Any new UI or email styling should use the #1085FD family; don't reintroduce orange.
+
+**Update (Aug 2026):** User explicitly requested #FF7A00 orange as an accent for "Try Demo" buttons/pills on the landing + about pages so they stand out and invite clicks (hover #E86E00). This is intentional and should not be "fixed" back to blue; blue remains the primary brand everywhere else.
