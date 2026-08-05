@@ -249,8 +249,15 @@ function LandingPage() {
                 {content.heroTitle}
               </h1>
 
-              <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
-                {content.heroDescription}
+              <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+                {content.heroDescription.includes(" — ") ? (
+                  <>
+                    <span className="block">{content.heroDescription.split(" — ")[0]}</span>
+                    <span className="block mt-2">{content.heroDescription.split(" — ").slice(1).join(" — ")}</span>
+                  </>
+                ) : (
+                  content.heroDescription
+                )}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -293,8 +300,8 @@ function LandingPage() {
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-7" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)", boxShadow: "0 8px 20px rgba(16,133,253,0.30)" }}>
                     <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{f.icon}</svg>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 tracking-tight mb-3">{f.title}</h3>
-                  <p className="text-[15px] text-slate-600 leading-relaxed">{f.desc}</p>
+                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight mb-3">{f.title}</h3>
+                  <p className="text-base text-slate-600 leading-[1.8]">{f.desc}</p>
                 </div>
               ))}
             </div>
@@ -305,8 +312,9 @@ function LandingPage() {
         <section className="py-24 bg-slate-50">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">{content.ctaBandHeading}</h2>
-            <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-xl mx-auto">
-              Set up your church's private network in minutes. Invite your missionaries. Start connecting.
+            <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+              Set up your church's private network in minutes.
+              <span className="block mt-2">Invite your missionaries. Start connecting.</span>
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <a
