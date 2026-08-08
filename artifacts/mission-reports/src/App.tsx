@@ -241,8 +241,8 @@ function LandingPage() {
             >
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-[#1085FD] text-sm font-semibold mb-6 border border-blue-100">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1085FD] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1085FD]" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#22C55E]" />
                 </span>
                 {content.heroEyebrow}
               </div>
