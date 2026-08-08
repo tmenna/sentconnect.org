@@ -229,7 +229,7 @@ function LandingPage() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="relative pt-36 pb-20 lg:pt-52 lg:pb-32 overflow-hidden">
+        <section className="relative pt-36 pb-16 lg:pt-48 lg:pb-24 overflow-hidden">
           <div className="absolute top-0 inset-x-0 h-[700px] bg-gradient-to-b from-[#1085FD]/8 to-transparent -z-10" />
           <div className="absolute top-1/4 right-0 w-1/2 h-1/2 bg-[#1085FD]/5 blur-[120px] rounded-full -z-10" />
 
@@ -290,13 +290,13 @@ function LandingPage() {
         </section>
 
         {/* ── FEATURES ── */}
-        <section id="features" className="py-28 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section id="features" className="pt-24 pb-10 bg-slate-50">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
               {features.map((f, i) => (
                 <div
                   key={i}
-                  className="bg-white p-10 rounded-3xl border border-slate-100 transition-all duration-200"
+                  className="bg-white p-10 rounded-3xl border border-slate-100 transition-all duration-200 flex flex-col"
                   style={{ boxShadow: "0 4px 20px rgba(15,23,42,0.05)" }}
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 16px 40px rgba(16,133,253,0.14)"; el.style.borderColor = "#bfdbfe"; }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(15,23,42,0.05)"; el.style.borderColor = "rgb(241 245 249)"; }}
@@ -304,7 +304,7 @@ function LandingPage() {
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-7" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)", boxShadow: "0 8px 20px rgba(16,133,253,0.30)" }}>
                     <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{f.icon}</svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight mb-3">{f.title}</h3>
+                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight mb-3 lg:min-h-[4rem] lg:flex lg:items-start">{f.title}</h3>
                   <p className="text-base text-slate-600 leading-[1.8]">{f.desc}</p>
                 </div>
               ))}
@@ -313,7 +313,7 @@ function LandingPage() {
         </section>
 
         {/* ── CTA ── */}
-        <section className="py-24 bg-slate-50">
+        <section className="pt-20 pb-28 bg-slate-50">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">{content.ctaBandHeading}</h2>
             <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
