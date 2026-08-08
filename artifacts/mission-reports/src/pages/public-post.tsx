@@ -28,7 +28,7 @@ function MediaItem({ photo, single, priority }: { photo: Photo; single?: boolean
         src={photo.url}
         controls
         className="w-full object-contain bg-black"
-        style={{ maxHeight: single ? 560 : 340, borderRadius: single ? "0 0 10px 10px" : 8 }}
+        style={{ maxHeight: 560, borderRadius: single ? "0 0 10px 10px" : 8 }}
       />
     );
   }
@@ -36,9 +36,9 @@ function MediaItem({ photo, single, priority }: { photo: Photo; single?: boolean
     <img
       src={photo.url}
       alt=""
-      className="w-full object-cover"
+      className="w-full h-auto"
       decoding="async"
-      style={{ maxHeight: single ? 560 : 340, borderRadius: single ? "0 0 10px 10px" : 8 }}
+      style={{ borderRadius: single ? "0 0 10px 10px" : 8, display: "block" }}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {...(priority ? { fetchPriority: "high" } as any : { loading: "lazy" })}
     />
@@ -164,7 +164,7 @@ export default function PublicPost() {
             {/* Photos / Videos */}
             {post.photos.length > 0 && (
               <div
-                className={post.photos.length === 1 ? "" : "grid grid-cols-2 gap-1 px-1 pb-1"}
+                className={post.photos.length === 1 ? "" : "flex flex-col gap-2 px-1 pb-1"}
                 style={post.photos.length === 1 ? { marginTop: post.description ? 4 : 0 } : {}}
               >
                 {post.photos.length === 1 ? (
