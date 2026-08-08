@@ -12,7 +12,6 @@ import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe, Shield
 import { useQueryClient } from "@tanstack/react-query";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
-import logoBlueBlack from "@/assets/logo-blue-black.png";
 import { useOrg } from "@/providers/org-provider";
 
 const loginSchema = z.object({
@@ -47,7 +46,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
   const [orgPortalError, setOrgPortalError] = useState<{ subdomain: string | null } | null>(null);
   const { orgSlug } = useOrg();
   const { BLUE, BLUE_DARK, LEFT_BG, INPUT_BG } = orgSlug === "demo" ? DEMO_PALETTE : BRAND_PALETTE;
-  const { logo, isCustomLogo } = useLogo();
+  const { logo } = useLogo();
   const [orgName, setOrgName] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
@@ -163,9 +162,9 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
       {/* ── Top bar ── */}
       {!platformMode && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "10px 24px", borderBottom: "1px solid #E5E7EB", background: "#F8F9FA", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "10px 24px", background: BLUE, flexShrink: 0 }}>
           <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-            <img src={isCustomLogo ? logo : logoBlueBlack} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block" }} />
+            <img src={logo} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block" }} />
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {orgSlug !== "demo" && (
@@ -173,7 +172,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               href="/help"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ display: "inline-flex", alignItems: "center", gap: 5, height: 34, padding: "0 14px", borderRadius: 8, background: BLUE, color: "#fff", fontSize: 13, fontWeight: 600, textDecoration: "none" }}
+              style={{ display: "inline-flex", alignItems: "center", gap: 5, height: 34, padding: "0 14px", borderRadius: 8, background: "#fff", color: BLUE, fontSize: 13, fontWeight: 600, textDecoration: "none" }}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
               Help
@@ -181,7 +180,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
           )}
           <a
             href="/signup"
-            style={{ display: "inline-flex", alignItems: "center", height: 34, padding: "0 16px", borderRadius: 8, background: BLUE, color: "#fff", fontSize: 13, fontWeight: 600, textDecoration: "none" }}
+            style={{ display: "inline-flex", alignItems: "center", height: 34, padding: "0 16px", borderRadius: 8, background: "#fff", color: BLUE, fontSize: 13, fontWeight: 600, textDecoration: "none" }}
           >
             Sign Up
           </a>
