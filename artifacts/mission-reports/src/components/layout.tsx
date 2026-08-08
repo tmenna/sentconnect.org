@@ -7,7 +7,7 @@ import { LogOut, LogIn, Rss, ShieldCheck, HelpCircle, Menu, X, User } from "luci
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useOrg } from "@/providers/org-provider";
-import logoColor from "@/assets/logo-color.png";
+import logoBlueBlack from "@/assets/logo-blue-black.png";
 
 
 const PURPLE   = "#1085FD";
@@ -146,7 +146,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
           {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <img src={logoColor} alt="SentConnect" className="h-9" style={{ width: "auto", maxWidth: 170, display: "block" }} />
+            <img src={logoBlueBlack} alt="SentConnect" className="h-9" style={{ width: "auto", maxWidth: 170, display: "block" }} />
           </Link>
 
           {/* Desktop nav */}

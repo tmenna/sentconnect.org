@@ -12,7 +12,7 @@ import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe, Shield
 import { useQueryClient } from "@tanstack/react-query";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
-import logoColor from "@/assets/logo-color.png";
+import logoBlueBlack from "@/assets/logo-blue-black.png";
 import { useOrg } from "@/providers/org-provider";
 
 const loginSchema = z.object({
@@ -165,7 +165,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
       {!platformMode && (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "10px 24px", borderBottom: "1px solid #E5E7EB", background: "#F8F9FA", flexShrink: 0 }}>
           <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-            <img src={isCustomLogo ? logo : logoColor} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block" }} />
+            <img src={isCustomLogo ? logo : logoBlueBlack} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block" }} />
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {orgSlug !== "demo" && (
