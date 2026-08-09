@@ -366,6 +366,9 @@ function LandingPage() {
               <a href="tel:+19515514528" style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}>
                 Contact Support at +1-951-551-4528 (Call/WhatsApp)
               </a>
+              <a href="mailto:holly@holteksolutions.com" style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}>
+                holly@holteksolutions.com
+              </a>
             </div>
           </div>
           <div style={{ height: 1, background: "rgba(255,255,255,0.08)", marginBottom: 24 }} />
@@ -587,6 +590,14 @@ function AboutPage() {
                 onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
               >
                 Contact Support at +1-951-551-4528 (Call/WhatsApp)
+              </a>
+              <a
+                href="mailto:holly@holteksolutions.com"
+                style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-block", marginTop: 6 }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
+              >
+                holly@holteksolutions.com
               </a>
             </div>
           </div>

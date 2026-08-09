@@ -98,7 +98,9 @@ export default function SignupSuccess() {
           <>
             <h1 className="text-xl font-extrabold text-gray-900 mb-2">Something went wrong</h1>
             <p className="text-sm text-gray-500 mb-6">
-              If you were charged, your organization will be set up shortly. Contact support if this persists.
+              If you were charged, your organization will be set up shortly. Contact support at{" "}
+              <a href="mailto:holly@holteksolutions.com" className="font-semibold" style={{ color: BLUE, textDecoration: "none" }}>holly@holteksolutions.com</a>{" "}
+              if this persists.
             </p>
             <a href="/" className="inline-flex w-full h-11 items-center justify-center rounded-xl text-[15px] font-bold text-white" style={{ background: BLUE }}>
               Return home
