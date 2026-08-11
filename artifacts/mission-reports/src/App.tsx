@@ -251,11 +251,11 @@ function LandingPage() {
                 {content.heroTitle}
               </h1>
 
-              <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+              <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto [text-wrap:balance]">
                 {content.heroDescription.includes(" — ") ? (
                   <>
-                    <span className="block">{content.heroDescription.split(" — ")[0]}</span>
-                    <span className="block mt-2">{content.heroDescription.split(" — ").slice(1).join(" — ")}</span>
+                    <span className="block [text-wrap:balance]">{content.heroDescription.split(" — ")[0]}</span>
+                    <span className="block mt-1.5 [text-wrap:balance]">{content.heroDescription.split(" — ").slice(1).join(" — ")}</span>
                   </>
                 ) : (
                   content.heroDescription
