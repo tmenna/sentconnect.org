@@ -93,8 +93,8 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   headerPrimaryCtaLabel: "Sign Up",
   headerPrimaryCtaHref: "/signup",
   heroEyebrow: "Private missionary updates",
-  heroTitle: "Connecting churches with the missionaries they send.",
-  heroDescription: "A private space where your missionaries share updates, photos, and prayer needs — and your church stays close to the work it supports.",
+  heroTitle: "Connecting churches and field teams",
+  heroDescription: "Stay connected to the missionaries your church supports through simple updates, photos, stories, and prayer needs—shared throughout the year, not just in an occasional newsletter.",
   primaryCtaLabel: "Sign Up",
   primaryCtaHref: "/signup",
   previewCardTitle: "Mission Moments",
@@ -247,11 +247,15 @@ function LandingPage() {
                 {content.heroEyebrow}
               </div>
 
-              <h1 className="text-5xl lg:text-6xl leading-[1.08] font-extrabold text-slate-900 tracking-tight mb-6">
+              <h1 className="text-5xl lg:text-6xl leading-[1.08] font-extrabold text-slate-900 tracking-tight mb-5">
                 {content.heroTitle}
               </h1>
 
-              <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+              <p className="text-xl lg:text-2xl font-semibold text-slate-800 mb-5 leading-snug max-w-2xl mx-auto">
+                Helping churches stay connected with the missionaries they send and support.
+              </p>
+
+              <p className="text-lg lg:text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
                 {content.heroDescription.includes(" — ") ? (
                   <>
                     <span className="block">{content.heroDescription.split(" — ")[0]}</span>
@@ -286,6 +290,32 @@ function LandingPage() {
                 </a>
               </div>
             </motion.div>
+          </div>
+        </section>
+
+        {/* ── STORY ── */}
+        <section className="py-24 bg-white">
+          <div className="max-w-3xl mx-auto px-6">
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight text-center mb-10 leading-[1.15]">
+              Staying connected shouldn't require waiting for a newsletter.
+            </h2>
+            <div className="space-y-6 text-lg text-slate-600 leading-[1.8]">
+              <p>
+                Have you ever wondered how the missionaries your church supports are doing in Africa, South America,
+                Southeast Asia, or another part of the world? Sometimes months—or even years—go by without hearing much,
+                and then suddenly you receive a long report filled with updates, photos, and stories.
+              </p>
+              <p>
+                It's usually not because missionaries aren't actively serving. More often, they feel obligated to gather
+                enough updates, photos, and stories to prepare a detailed newsletter or report before reaching out to
+                their sending churches or mission organizations.
+              </p>
+              <p>
+                SentConnect changes that. Instead of waiting weeks or months to share a large update, missionaries can
+                post simple moments as they happen—a conversation, a prayer request, a ministry opportunity, a
+                celebration, or something God is doing in their community.
+              </p>
+            </div>
           </div>
         </section>
 
