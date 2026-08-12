@@ -69,8 +69,33 @@ interface OrgLogoCache {
   fetchedAt: number;
 }
 
-let platformCache: PlatformLogoCache | null = null;
-let orgCacheMap: Map<string, OrgLogoCache> = new Map();
+// Persisted across visits so returning visitors get the correct logo on first
+// paint (no default → custom swap). TTL still governs refetching; the stored
+// value is only used for the initial render and is refreshed in the background.
+const PLATFORM_LS_KEY = "sc-platform-logos-v1";
+const ORG_LS_KEY = "sc-org-logos-v1";
+
+function readLS<T>(key: string): T | null {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeLS(key: string, value: unknown) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // storage full / private mode — non-fatal
+  }
+}
+
+let platformCache: PlatformLogoCache | null = readLS<PlatformLogoCache>(PLATFORM_LS_KEY);
+let orgCacheMap: Map<string, OrgLogoCache> = new Map(
+  Object.entries(readLS<Record<string, OrgLogoCache>>(ORG_LS_KEY) ?? {}),
+);
 
 function platformCacheValid(forceRefreshTick: number): boolean {
   return forceRefreshTick === 0 && !!platformCache && (Date.now() - platformCache.fetchedAt < CACHE_TTL_MS);
@@ -134,6 +159,7 @@ export function LogoProvider({ children }: { children: ReactNode }) {
         if (cancelled) return;
 
         platformCache = { headerLogoUrl: loadedHeader, footerLogoUrl: loadedFooter, signupLogoUrl: loadedSignup, logoUrl: loadedLogo, fetchedAt: Date.now() };
+        writeLS(PLATFORM_LS_KEY, platformCache);
         setPlatformHeaderLogo(loadedHeader);
         setPlatformFooterLogo(loadedFooter);
         setPlatformSignupLogo(loadedSignup);
@@ -156,6 +182,11 @@ export function LogoProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    // Show the last-known logo immediately (even if stale) while refetching,
+    // so the header doesn't flash the default logo on repeat visits.
+    const stale = orgCacheMap.get(orgSlug);
+    if (stale) setOrgLogo(stale.logoUrl);
+
     let cancelled = false;
     fetch(`/api/orgs/resolve?subdomain=${encodeURIComponent(orgSlug)}`)
       .then(r => r.ok ? r.json() : {})
@@ -165,6 +196,7 @@ export function LogoProvider({ children }: { children: ReactNode }) {
         const loadedUrl = await preloadImage(url);
         if (cancelled) return;
         orgCacheMap.set(orgSlug, { logoUrl: loadedUrl, fetchedAt: Date.now() });
+        writeLS(ORG_LS_KEY, Object.fromEntries(orgCacheMap));
         setOrgLogo(loadedUrl);
       })
       .catch(() => {});

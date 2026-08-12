@@ -116,8 +116,34 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   footerOwnerText: "Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA",
 };
 
+// ── Content cache ─────────────────────────────────────────────────────────────
+// Persists the last-fetched page content so returning visitors see the current
+// copy on first paint instead of a flash of built-in defaults.
+const LANDING_LS_KEY = "sc-landing-content-v1";
+const ABOUT_LS_KEY = "sc-about-content-v1";
+
+function readContentCache<T>(key: string): Partial<T> | null {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as Partial<T>) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeContentCache(key: string, value: unknown) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // storage unavailable — non-fatal
+  }
+}
+
 function LandingPage() {
-  const [content, setContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
+  const [content, setContent] = useState<LandingPageContent>(() => ({
+    ...DEFAULT_LANDING_PAGE_CONTENT,
+    ...(readContentCache<LandingPageContent>(LANDING_LS_KEY) ?? {}),
+  }));
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { logo: lpLogo, footerLogo: lpFooterLogo, isLogoReady } = useLogo();
@@ -132,9 +158,13 @@ function LandingPage() {
   useEffect(() => {
     let cancelled = false;
     fetch("/api/landing-page", { cache: "no-store" })
-      .then((res) => res.ok ? res.json() : DEFAULT_LANDING_PAGE_CONTENT)
-      .then((data) => { if (!cancelled) setContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...data }); })
-      .catch(() => { if (!cancelled) setContent(DEFAULT_LANDING_PAGE_CONTENT); });
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (!data) return;
+        writeContentCache(LANDING_LS_KEY, data);
+        if (!cancelled) setContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...data });
+      })
+      .catch(() => {});
     return () => { cancelled = true; };
   }, []);
 
@@ -391,8 +421,14 @@ const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
 };
 
 function AboutPage() {
-  const [lpContent, setLpContent] = useState<LandingPageContent>(DEFAULT_LANDING_PAGE_CONTENT);
-  const [about, setAbout] = useState<AboutPageContent>(DEFAULT_ABOUT_PAGE_CONTENT);
+  const [lpContent, setLpContent] = useState<LandingPageContent>(() => ({
+    ...DEFAULT_LANDING_PAGE_CONTENT,
+    ...(readContentCache<LandingPageContent>(LANDING_LS_KEY) ?? {}),
+  }));
+  const [about, setAbout] = useState<AboutPageContent>(() => ({
+    ...DEFAULT_ABOUT_PAGE_CONTENT,
+    ...(readContentCache<AboutPageContent>(ABOUT_LS_KEY) ?? {}),
+  }));
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { logo: lpLogo, isLogoReady } = useLogo();
   const [, navigate] = useLocation();
@@ -405,14 +441,22 @@ function AboutPage() {
 
   useEffect(() => {
     fetch("/api/landing-page", { cache: "no-store" })
-      .then(r => r.ok ? r.json() : DEFAULT_LANDING_PAGE_CONTENT)
-      .then(d => setLpContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...d }))
-      .catch(() => setLpContent(DEFAULT_LANDING_PAGE_CONTENT));
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d) return;
+        writeContentCache(LANDING_LS_KEY, d);
+        setLpContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...d });
+      })
+      .catch(() => {});
 
-    fetch("/api/about-page")
-      .then(r => r.ok ? r.json() : DEFAULT_ABOUT_PAGE_CONTENT)
-      .then(d => setAbout({ ...DEFAULT_ABOUT_PAGE_CONTENT, ...d }))
-      .catch(() => setAbout(DEFAULT_ABOUT_PAGE_CONTENT));
+    fetch("/api/about-page", { cache: "no-store" })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d) return;
+        writeContentCache(ABOUT_LS_KEY, d);
+        setAbout({ ...DEFAULT_ABOUT_PAGE_CONTENT, ...d });
+      })
+      .catch(() => {});
   }, []);
 
   const BLUE      = "#1085FD";
