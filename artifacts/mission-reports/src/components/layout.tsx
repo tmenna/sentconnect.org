@@ -16,55 +16,194 @@ const BORDER   = "#E5E7EB";
 const DEMO_ORG = "demo";
 const DEMO_DISMISSED_KEY = "sc_demo_banner_dismissed";
 
+function MissionaryIcon({ size = 15 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" /><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+    </svg>
+  );
+}
+
+function AdminIcon({ size = 15 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="10" width="18" height="11" rx="1" /><path d="M12 3v7" /><path d="M9 6h6" /><path d="M9 21v-4a3 3 0 0 1 6 0v4" />
+    </svg>
+  );
+}
+
+/**
+ * Demo-only "Viewing as" switcher: flips the demo session between the
+ * missionary (field user) and Church admin personas in one click.
+ */
+function DemoRoleSwitch({ compact }: { compact?: boolean }) {
+  const { user } = useAuth();
+  const { prefix } = useOrg();
+  const { toast } = useToast();
+  const [switching, setSwitching] = useState(false);
+
+  const isAdmin = user?.role === "admin" || user?.role === "super_admin";
+
+  async function switchTo(role: "admin" | "field_user") {
+    if (switching) return;
+    if ((role === "admin") === isAdmin) return; // already there
+    setSwitching(true);
+    try {
+      const res = await fetch("/api/auth/demo-switch-role", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role }),
+      });
+      if (res.ok) {
+        window.location.href = prefix("/feed");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast({ title: data.error ?? "Couldn't switch views — please try again." });
+        setSwitching(false);
+      }
+    } catch {
+      toast({ title: "Network error — please try again." });
+      setSwitching(false);
+    }
+  }
+
+  const btnBase: React.CSSProperties = {
+    display: "inline-flex", alignItems: "center", gap: 7,
+    border: "none", cursor: switching ? "wait" : "pointer",
+    borderRadius: 999, fontWeight: 700, lineHeight: 1,
+    fontSize: compact ? 13 : 14.5,
+    padding: compact ? "7px 14px" : "10px 18px",
+    transition: "background .15s, color .15s",
+    whiteSpace: "nowrap",
+  };
+
+  return (
+    <div
+      role="group"
+      aria-label="Switch demo view"
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 3,
+        background: "rgba(255,255,255,0.16)", borderRadius: 999, padding: 3,
+        border: "1px solid rgba(255,255,255,0.25)",
+        opacity: switching ? 0.7 : 1,
+      }}
+    >
+      <button
+        onClick={() => switchTo("field_user")}
+        aria-pressed={!isAdmin}
+        data-testid="btn-demo-view-missionary"
+        style={{ ...btnBase, background: !isAdmin ? "#fff" : "transparent", color: !isAdmin ? "#0B67C2" : "rgba(255,255,255,0.92)" }}
+      >
+        <MissionaryIcon size={compact ? 13 : 15} />
+        Missionary
+      </button>
+      <button
+        onClick={() => switchTo("admin")}
+        aria-pressed={isAdmin}
+        data-testid="btn-demo-view-admin"
+        style={{ ...btnBase, background: isAdmin ? "#fff" : "transparent", color: isAdmin ? "#0B67C2" : "rgba(255,255,255,0.92)" }}
+      >
+        <AdminIcon size={compact ? 13 : 15} />
+        Church Admin
+      </button>
+    </div>
+  );
+}
+
 function DemoBanner() {
   const { orgSlug } = useOrg();
-  const [visible, setVisible] = useState(true);
+  const { user, isAuthenticated } = useAuth();
+  const [expanded, setExpanded] = useState(true);
 
   useEffect(() => {
     if (typeof window !== "undefined" && localStorage.getItem(DEMO_DISMISSED_KEY)) {
-      setVisible(false);
+      setExpanded(false);
     }
   }, []);
 
-  if (orgSlug !== DEMO_ORG || !visible) return null;
+  if (orgSlug !== DEMO_ORG || !isAuthenticated || !user) return null;
 
-  function dismiss() {
+  // Only the two canonical demo personas can switch views; anyone else in the
+  // demo org (invited members, platform admins) sees the banner without the toggle.
+  const isDemoPersona = user.email === "demoadmin@sentconnect.org" || user.email === "demouser@sentconnect.org";
+  const isAdmin = user.role === "admin" || user.role === "super_admin";
+
+  function collapse() {
     localStorage.setItem(DEMO_DISMISSED_KEY, "1");
-    setVisible(false);
+    setExpanded(false);
+  }
+  function expand() {
+    localStorage.removeItem(DEMO_DISMISSED_KEY);
+    setExpanded(true);
   }
 
+  // ── Compact bar: always keeps the switcher visible ──
+  if (!expanded) {
+    return (
+      <div style={{
+        background: "linear-gradient(90deg, #0059D6 0%, #1085FD 100%)",
+        color: "#fff", flexShrink: 0,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        gap: 12, padding: "8px 16px", flexWrap: "wrap", position: "relative",
+      }}>
+        {isDemoPersona ? (
+          <>
+            <span style={{ fontSize: 13.5, fontWeight: 700, opacity: 0.95 }}>Demo · Viewing as</span>
+            <DemoRoleSwitch compact />
+          </>
+        ) : (
+          <span style={{ fontSize: 13.5, fontWeight: 700, opacity: 0.95 }}>You're in the demo workspace</span>
+        )}
+        <button
+          onClick={expand}
+          aria-label="Show demo tips"
+          style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.75)", padding: 4, display: "flex", alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600 }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
+    );
+  }
+
+  // ── Full banner: big friendly explainer + switcher ──
   return (
     <div style={{
-      background: "linear-gradient(90deg, #0059D6 0%, #1085FD 100%)",
-      color: "#fff",
-      fontSize: 13,
-      fontWeight: 500,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 10,
-      padding: "9px 16px",
-      position: "relative",
-      flexShrink: 0,
+      background: "linear-gradient(105deg, #0052C8 0%, #1085FD 70%, #2B92FD 100%)",
+      color: "#fff", flexShrink: 0, position: "relative",
+      padding: "20px 16px 22px",
     }}>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.85, flexShrink: 0 }}>
-        <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>
-      </svg>
-      <span style={{ opacity: 0.95 }}>
-        You're in the <strong>demo workspace</strong> — feel free to explore, post, and invite users.
-      </span>
-      <a
-        href="/signup"
-        style={{ marginLeft: 6, fontWeight: 700, color: "#fff", textDecoration: "underline", textUnderlineOffset: 2, whiteSpace: "nowrap", opacity: 0.95, fontSize: 13 }}
-      >
-        Set up your own →
-      </a>
+      <div style={{ maxWidth: 880, margin: "0 auto", textAlign: "center" }}>
+        <p style={{ margin: 0, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)" }}>
+          SentConnect Demo
+        </p>
+        <h2 style={{ margin: "6px 0 4px", fontSize: "clamp(19px, 3.5vw, 24px)", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+          {isAdmin ? "You're viewing as the Church Admin" : "You're viewing as a Missionary in the field"}
+        </h2>
+        <p style={{ margin: "0 auto 14px", fontSize: "clamp(14px, 2.5vw, 15.5px)", lineHeight: 1.55, color: "rgba(255,255,255,0.92)", maxWidth: 640 }}>
+          {isAdmin
+            ? "This is what your Church sees — every update from the field arrives here in one dashboard. Switch to Missionary to post an update yourself, then flip back to watch it appear."
+            : "Try posting an update, photo, or prayer need below — then switch to Church Admin to see it arrive on the Church's dashboard instantly."}
+        </p>
+        {isDemoPersona && (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 14, fontWeight: 700, opacity: 0.9 }}>Viewing as</span>
+            <DemoRoleSwitch />
+          </div>
+        )}
+        <a
+          href="https://www.sentconnect.org/signup"
+          style={{ display: "inline-block", marginTop: 12, fontSize: 13, fontWeight: 700, color: "#fff", textDecoration: "underline", textUnderlineOffset: 3, opacity: 0.9 }}
+        >
+          Ready for your own Church workspace? Set it up →
+        </a>
+      </div>
       <button
-        onClick={dismiss}
-        aria-label="Dismiss"
-        style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.7)", padding: 4, display: "flex", alignItems: "center" }}
+        onClick={collapse}
+        aria-label="Collapse demo banner"
+        style={{ position: "absolute", right: 12, top: 12, background: "rgba(255,255,255,0.12)", border: "none", borderRadius: 8, cursor: "pointer", color: "rgba(255,255,255,0.85)", padding: 6, display: "flex", alignItems: "center" }}
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6"/></svg>
       </button>
     </div>
   );

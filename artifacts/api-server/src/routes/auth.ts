@@ -368,4 +368,61 @@ router.post("/auth/demo-user-login", demoRateLimit, async (req, res): Promise<vo
   }
 });
 
+/**
+ * Switch demo persona (missionary <-> admin) without logging out.
+ * Only allowed when the current session user already belongs to the demo org,
+ * so it can never be used to escalate into a real organization.
+ */
+router.post("/auth/demo-switch-role", demoRateLimit, async (req, res): Promise<void> => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      res.status(401).json({ error: "Not signed in." });
+      return;
+    }
+
+    const [org] = await db.select().from(organizationsTable).where(eq(organizationsTable.subdomain, DEMO_ORG_SUBDOMAIN));
+    const [current] = await db
+      .select({ id: usersTable.id, organizationId: usersTable.organizationId, email: usersTable.email })
+      .from(usersTable)
+      .where(eq(usersTable.id, userId))
+      .limit(1);
+
+    // Only the two canonical demo personas may switch — invited demo members,
+    // platform admins, and real-org users are all denied.
+    const isDemoPersona =
+      current?.email === DEMO_USER_EMAIL || current?.email === DEMO_FIELD_USER_EMAIL;
+    if (!org || !current || current.organizationId !== org.id || !isDemoPersona) {
+      res.status(403).json({ error: "Role switching is only available in the demo workspace." });
+      return;
+    }
+
+    const targetRole = req.body?.role === "admin" ? "admin" : "field_user";
+    const targetEmail = targetRole === "admin" ? DEMO_USER_EMAIL : DEMO_FIELD_USER_EMAIL;
+
+    const [target] = await db
+      .select({ id: usersTable.id, status: usersTable.status, organizationId: usersTable.organizationId, role: usersTable.role })
+      .from(usersTable)
+      .where(eq(usersTable.email, targetEmail))
+      .limit(1);
+
+    // The target must be the expected demo persona in the demo org — never a
+    // colliding account from another organization.
+    if (!target || target.organizationId !== org.id || target.role !== targetRole) {
+      res.status(503).json({ error: "Demo is temporarily unavailable. Please try again shortly." });
+      return;
+    }
+
+    if (target.status !== "active") {
+      await db.update(usersTable).set({ status: "active" }).where(eq(usersTable.id, target.id));
+    }
+
+    req.session.userId = target.id;
+    res.json({ role: targetRole });
+  } catch (err) {
+    logger.error({ err }, "demo-switch-role failed");
+    res.status(500).json({ error: "Demo is temporarily unavailable. Please try again." });
+  }
+});
+
 export default router;
