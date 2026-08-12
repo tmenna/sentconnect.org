@@ -169,31 +169,47 @@ function DemoBanner() {
   // ── Full banner: big friendly explainer + switcher ──
   return (
     <div style={{
-      background: "linear-gradient(105deg, #0052C8 0%, #1085FD 70%, #2B92FD 100%)",
+      background: "linear-gradient(115deg, #003B94 0%, #0059D6 45%, #1085FD 100%)",
       color: "#fff", flexShrink: 0, position: "relative",
-      padding: "20px 16px 22px",
+      padding: "24px 16px 26px",
+      borderBottom: "1px solid rgba(255,255,255,0.15)",
     }}>
       <div style={{ maxWidth: 880, margin: "0 auto", textAlign: "center" }}>
-        <p style={{ margin: 0, fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)" }}>
+        <p style={{
+          margin: "0 auto 10px", display: "inline-block",
+          fontSize: 11.5, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase",
+          color: "#BFDBFE", background: "rgba(255,255,255,0.1)",
+          border: "1px solid rgba(255,255,255,0.22)", borderRadius: 999, padding: "5px 14px",
+        }}>
           SentConnect Demo
         </p>
-        <h2 style={{ margin: "6px 0 4px", fontSize: "clamp(19px, 3.5vw, 24px)", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-          {isAdmin ? "You're viewing as the Church Admin" : "You're viewing as a Missionary in the field"}
+        <h2 style={{
+          margin: "0 0 8px", fontSize: "clamp(22px, 4vw, 28px)", fontWeight: 800,
+          letterSpacing: "-0.02em", lineHeight: 1.2, color: "#FFFFFF",
+          textShadow: "0 1px 3px rgba(0,30,80,0.25)",
+        }}>
+          {isAdmin ? (
+            <>You're viewing as the <span style={{ color: "#FFD9A8" }}>Church Admin</span></>
+          ) : (
+            <>You're viewing as a <span style={{ color: "#FFD9A8" }}>Missionary in the field</span></>
+          )}
         </h2>
-        <p style={{ margin: "0 auto 14px", fontSize: "clamp(14px, 2.5vw, 15.5px)", lineHeight: 1.55, color: "rgba(255,255,255,0.92)", maxWidth: 640 }}>
+        <p style={{ margin: "0 auto 18px", fontSize: "clamp(15px, 2.6vw, 17px)", lineHeight: 1.6, fontWeight: 500, color: "#EAF3FF", maxWidth: 660 }}>
           {isAdmin
-            ? "This is what your Church sees — every update from the field arrives here in one dashboard. Switch to Missionary to post an update yourself, then flip back to watch it appear."
-            : "Try posting an update, photo, or prayer need below — then switch to Church Admin to see it arrive on the Church's dashboard instantly."}
+            ? <>This is what your Church sees — every update from the field arrives here in one dashboard. Switch to <strong style={{ color: "#fff", fontWeight: 700 }}>Missionary</strong> to post an update yourself, then flip back to watch it appear.</>
+            : <>Try posting an update, photo, or prayer need below — then switch to <strong style={{ color: "#fff", fontWeight: 700 }}>Church Admin</strong> to see it arrive on the Church's dashboard instantly.</>}
         </p>
         {isDemoPersona && (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 14, fontWeight: 700, opacity: 0.9 }}>Viewing as</span>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 13, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: "#BFDBFE" }}>Viewing as</span>
             <DemoRoleSwitch />
           </div>
         )}
         <a
           href="https://www.sentconnect.org/signup"
-          style={{ display: "inline-block", marginTop: 12, fontSize: 13, fontWeight: 700, color: "#fff", textDecoration: "underline", textUnderlineOffset: 3, opacity: 0.9 }}
+          style={{ display: "inline-block", marginTop: 16, fontSize: 13.5, fontWeight: 700, color: "#FFFFFF", textDecoration: "underline", textUnderlineOffset: 4, textDecorationColor: "rgba(255,255,255,0.5)" }}
+          onMouseEnter={e => (e.currentTarget.style.textDecorationColor = "#fff")}
+          onMouseLeave={e => (e.currentTarget.style.textDecorationColor = "rgba(255,255,255,0.5)")}
         >
           Ready for your own Church workspace? Set it up →
         </a>
