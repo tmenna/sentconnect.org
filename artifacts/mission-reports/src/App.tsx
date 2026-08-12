@@ -193,6 +193,11 @@ function LandingPage() {
       desc: "Your Church receives its own dedicated address, such as yourchurch.sentconnect.org. Your mission feed is accessible only to invited members, and updates are shared outside your Church only when you choose.",
       icon: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
     },
+    {
+      title: "Stay informed, instantly",
+      desc: "SentConnect keeps communication moving with automatic email notifications. When a missionary posts an update, Church administrators are notified right away — and when admins post or comment, missionaries hear about it immediately. Both sides stay connected without constantly checking the platform.",
+      icon: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></>,
+    },
   ];
 
   return (
@@ -326,7 +331,7 @@ function LandingPage() {
         {/* ── FEATURES ── */}
         <section id="features" className="pt-24 pb-10 bg-slate-50">
           <div className="max-w-6xl mx-auto px-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
               {features.map((f, i) => (
                 <div
                   key={i}
