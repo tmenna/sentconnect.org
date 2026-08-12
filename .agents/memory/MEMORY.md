@@ -4,4 +4,4 @@
 - [R2 image caching](r2-image-caching.md) — R2 media loads laggy because presigned signatures rotate (byte-cache miss); fix = stable server-cached URLs + ResponseCacheControl immutable; keep 302 max-age under URL lifetime.
 - [video-js scaffold tsconfig lacks DOM lib](video-scaffold-tsconfig.md) — add DOM to lib in the artifact tsconfig or typecheck fails on window/document.
 - [Signup flow modes](signup-request-only.md) — both flows live: /signup = paid Stripe checkout (needs SELF_SERVE_SIGNUP_ENABLED + STRIPE_PRICE_ID, live key), /request-access = request form.
-- [Landing page content caching](landing-page-cache.md) — landing content JSON is browser-cached 5 min; defaults duplicated in frontend + api-server, and api-server must restart to serve new defaults.
+- [Static public content](landing-page-cache.md) — landing/about/platform logos are static in code (CMS removed to kill flicker); edit constants, don't re-add routes; org logos still dynamic; mailer keeps landing lib.

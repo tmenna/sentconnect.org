@@ -116,34 +116,48 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   footerOwnerText: "Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA",
 };
 
-// ── Content cache ─────────────────────────────────────────────────────────────
-// Persists the last-fetched page content so returning visitors see the current
-// copy on first paint instead of a flash of built-in defaults.
-const LANDING_LS_KEY = "sc-landing-content-v1";
-const ABOUT_LS_KEY = "sc-about-content-v1";
+// ── Support contact (shown in top bar + footer) ──────────────────────────────
+const SUPPORT_PHONE_DISPLAY = "+1-951-551-4528";
+const SUPPORT_PHONE_TEL = "+19515514528";
+const SUPPORT_EMAIL = "holly@holteksolutions.com";
 
-function readContentCache<T>(key: string): Partial<T> | null {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as Partial<T>) : null;
-  } catch {
-    return null;
-  }
-}
+function ContactTopBar() {
+  const link: React.CSSProperties = {
+    display: "inline-flex", alignItems: "center", gap: 6,
+    color: "rgba(255,255,255,0.92)", textDecoration: "none",
+    fontSize: 12.5, fontWeight: 600, lineHeight: 1,
+    padding: "4px 6px", borderRadius: 6, transition: "color .15s, background .15s",
+  };
+  const hoverOn = (e: React.MouseEvent<HTMLElement>) => { const el = e.currentTarget as HTMLElement; el.style.color = "#fff"; el.style.background = "rgba(255,255,255,0.12)"; };
+  const hoverOff = (e: React.MouseEvent<HTMLElement>) => { const el = e.currentTarget as HTMLElement; el.style.color = "rgba(255,255,255,0.92)"; el.style.background = "transparent"; };
 
-function writeContentCache(key: string, value: unknown) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    // storage unavailable — non-fatal
-  }
+  return (
+    <div style={{ background: "#0A5FB5" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-center sm:justify-end gap-1 sm:gap-3 flex-wrap" style={{ minHeight: 34, paddingTop: 4, paddingBottom: 4 }}>
+        <span className="hidden md:inline" style={{ fontSize: 12.5, fontWeight: 700, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          Contact Support
+        </span>
+        <a href={`tel:${SUPPORT_PHONE_TEL}`} style={link} onMouseEnter={hoverOn} onMouseLeave={hoverOff} aria-label={`Call support at ${SUPPORT_PHONE_DISPLAY}`}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          {SUPPORT_PHONE_DISPLAY}
+        </a>
+        <a href={`https://wa.me/${SUPPORT_PHONE_TEL.replace("+", "")}`} target="_blank" rel="noreferrer" style={link} onMouseEnter={hoverOn} onMouseLeave={hoverOff} aria-label="Chat with support on WhatsApp">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.1-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          WhatsApp
+        </a>
+        <a href={`mailto:${SUPPORT_EMAIL}`} style={link} onMouseEnter={hoverOn} onMouseLeave={hoverOff} aria-label={`Email support at ${SUPPORT_EMAIL}`}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <span className="hidden xs:inline sm:inline">{SUPPORT_EMAIL}</span>
+          <span className="inline sm:hidden">Email</span>
+        </a>
+      </div>
+    </div>
+  );
 }
 
 function LandingPage() {
-  const [content, setContent] = useState<LandingPageContent>(() => ({
-    ...DEFAULT_LANDING_PAGE_CONTENT,
-    ...(readContentCache<LandingPageContent>(LANDING_LS_KEY) ?? {}),
-  }));
+  // Content is static — bundled with the app, no fetch, no flash.
+  const content = DEFAULT_LANDING_PAGE_CONTENT;
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { logo: lpLogo, footerLogo: lpFooterLogo, isLogoReady } = useLogo();
@@ -154,19 +168,6 @@ function LandingPage() {
     e.preventDefault();
     navigate(href);
   }
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/landing-page", { cache: "no-store" })
-      .then((res) => res.ok ? res.json() : null)
-      .then((data) => {
-        if (!data) return;
-        writeContentCache(LANDING_LS_KEY, data);
-        if (!cancelled) setContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...data });
-      })
-      .catch(() => {});
-    return () => { cancelled = true; };
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -198,8 +199,9 @@ function LandingPage() {
     <div className="min-h-screen bg-slate-50 selection:bg-[#1085FD]/20 selection:text-[#1085FD]" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
 
       {/* ── NAV ── */}
-      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "py-2 shadow-md" : "py-3"}`} style={{ background: BLUE }}>
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "shadow-md" : ""}`} style={{ background: BLUE }}>
+        <ContactTopBar />
+        <div className={`max-w-7xl mx-auto px-6 flex items-center justify-between transition-all duration-300 ${scrolled ? "py-2" : "py-3"}`}>
           {/* Logo */}
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
@@ -417,18 +419,17 @@ type AboutPageContent = { aboutTitle: string; aboutImageUrl: string; aboutBody: 
 const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
   aboutTitle: "Why We Created SentConnect",
   aboutImageUrl: "",
-  aboutBody: "",
+  aboutBody: `We are the Menna family. While serving in Ethiopia, we saw a common challenge: churches often struggle to stay connected with the missionaries and ministry partners they send and support. Important updates, prayer requests, photos, and ministry reports are often scattered across emails, messaging apps, and social media.
+
+Through years of serving as a bridge between churches, mission organizations, and field teams, we saw the need for a simple, dedicated platform built specifically for missionary communication.
+
+SentConnect was created to strengthen the connection between churches and the mission field—helping ministries communicate clearly, stay engaged, and partner more effectively in God's mission.`,
 };
 
 function AboutPage() {
-  const [lpContent, setLpContent] = useState<LandingPageContent>(() => ({
-    ...DEFAULT_LANDING_PAGE_CONTENT,
-    ...(readContentCache<LandingPageContent>(LANDING_LS_KEY) ?? {}),
-  }));
-  const [about, setAbout] = useState<AboutPageContent>(() => ({
-    ...DEFAULT_ABOUT_PAGE_CONTENT,
-    ...(readContentCache<AboutPageContent>(ABOUT_LS_KEY) ?? {}),
-  }));
+  // Content is static — bundled with the app, no fetch, no flash.
+  const lpContent = DEFAULT_LANDING_PAGE_CONTENT;
+  const about = DEFAULT_ABOUT_PAGE_CONTENT;
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { logo: lpLogo, isLogoReady } = useLogo();
   const [, navigate] = useLocation();
@@ -438,26 +439,6 @@ function AboutPage() {
     e.preventDefault();
     navigate(href);
   }
-
-  useEffect(() => {
-    fetch("/api/landing-page", { cache: "no-store" })
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (!d) return;
-        writeContentCache(LANDING_LS_KEY, d);
-        setLpContent({ ...DEFAULT_LANDING_PAGE_CONTENT, ...d });
-      })
-      .catch(() => {});
-
-    fetch("/api/about-page", { cache: "no-store" })
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (!d) return;
-        writeContentCache(ABOUT_LS_KEY, d);
-        setAbout({ ...DEFAULT_ABOUT_PAGE_CONTENT, ...d });
-      })
-      .catch(() => {});
-  }, []);
 
   const BLUE      = "#1085FD";
   const BLUE_DARK = "#1085FD";
@@ -471,6 +452,7 @@ function AboutPage() {
     <div style={{ minHeight: "100vh", fontFamily: "'Inter', system-ui, -apple-system, sans-serif", background: BG, color: TEXT }}>
       {/* ── HEADER ── */}
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
+        <ContactTopBar />
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />

@@ -5,6 +5,9 @@ import { useLocation } from "wouter";
 import { getOrgRoutingContext } from "@/lib/org";
 import logoWhiteStatic from "@/assets/logo-white.png";
 
+// Platform branding is static (bundled with the app) — no fetch, no flash.
+// Only org-specific logos are loaded dynamically, for org login pages/portals.
+
 export interface LogoContextValue {
   logo: string;
   footerLogo: string;
@@ -27,7 +30,7 @@ const LogoContext = createContext<LogoContextValue>({
   isCustomLogo: false,
   isCustomFooterLogo: false,
   isCustomSignupLogo: false,
-  isLogoReady: false,
+  isLogoReady: true,
   refresh: () => {},
 });
 
@@ -35,10 +38,8 @@ export function useLogo() {
   return useContext(LogoContext);
 }
 
-// ─── Image preloader ──────────────────────────────────────────────────────────
-// Preloads a logo URL into the browser cache before we update React state.
-// This ensures the swap from static → custom logo is instant with no blank flash.
-
+// Preloads a logo URL into the browser cache before we update React state,
+// so the swap from static → custom org logo is instant with no blank flash.
 function preloadImage(url: string | null): Promise<string | null> {
   if (!url) return Promise.resolve(null);
   return new Promise(resolve => {
@@ -49,31 +50,17 @@ function preloadImage(url: string | null): Promise<string | null> {
   });
 }
 
-// ─── Module-level cache ────────────────────────────────────────────────────────
-// Avoids redundant API calls when navigating between pages within the same org.
-// The API response has Cache-Control: max-age=300, so we mirror a similar TTL
-// here to avoid hitting the API on every React navigation.
+// ─── Org logo cache ───────────────────────────────────────────────────────────
+// Module-level + localStorage so returning visitors get the org logo on first
+// paint (no default → custom swap). TTL governs background refetching.
 
-const CACHE_TTL_MS = 4 * 60 * 1000; // 4 minutes (just inside the 5-min API cache)
-
-interface PlatformLogoCache {
-  headerLogoUrl: string | null;
-  footerLogoUrl: string | null;
-  signupLogoUrl: string | null;
-  logoUrl: string | null;
-  fetchedAt: number;
-}
+const CACHE_TTL_MS = 4 * 60 * 1000;
+const ORG_LS_KEY = "sc-org-logos-v1";
 
 interface OrgLogoCache {
   logoUrl: string | null;
   fetchedAt: number;
 }
-
-// Persisted across visits so returning visitors get the correct logo on first
-// paint (no default → custom swap). TTL still governs refetching; the stored
-// value is only used for the initial render and is refreshed in the background.
-const PLATFORM_LS_KEY = "sc-platform-logos-v1";
-const ORG_LS_KEY = "sc-org-logos-v1";
 
 function readLS<T>(key: string): T | null {
   try {
@@ -92,14 +79,9 @@ function writeLS(key: string, value: unknown) {
   }
 }
 
-let platformCache: PlatformLogoCache | null = readLS<PlatformLogoCache>(PLATFORM_LS_KEY);
-let orgCacheMap: Map<string, OrgLogoCache> = new Map(
+const orgCacheMap: Map<string, OrgLogoCache> = new Map(
   Object.entries(readLS<Record<string, OrgLogoCache>>(ORG_LS_KEY) ?? {}),
 );
-
-function platformCacheValid(forceRefreshTick: number): boolean {
-  return forceRefreshTick === 0 && !!platformCache && (Date.now() - platformCache.fetchedAt < CACHE_TTL_MS);
-}
 
 function orgCacheValid(slug: string, forceRefreshTick: number): boolean {
   const entry = orgCacheMap.get(slug);
@@ -107,68 +89,16 @@ function orgCacheValid(slug: string, forceRefreshTick: number): boolean {
 }
 
 export function LogoProvider({ children }: { children: ReactNode }) {
-  const [platformHeaderLogo, setPlatformHeaderLogo] = useState<string | null>(() => platformCache?.headerLogoUrl ?? null);
-  const [platformFooterLogo, setPlatformFooterLogo] = useState<string | null>(() => platformCache?.footerLogoUrl ?? null);
-  const [platformSignupLogo, setPlatformSignupLogo] = useState<string | null>(() => platformCache?.signupLogoUrl ?? null);
-  const [platformLogo, setPlatformLogo] = useState<string | null>(() => platformCache?.logoUrl ?? null);
   const [orgLogo, setOrgLogo] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
-  // isLogoReady: true once the first platform fetch (+ any preloading) has settled,
-  // so consumers can fade-in the logo instead of showing a jarring swap.
-  const [isLogoReady, setIsLogoReady] = useState<boolean>(() => !!platformCache);
 
   const refresh = useCallback(() => {
-    // Bust both module caches and trigger re-fetch
-    platformCache = null;
     orgCacheMap.clear();
     setTick(t => t + 1);
   }, []);
 
   const [location] = useLocation();
   const { orgSlug } = getOrgRoutingContext(location);
-
-  // Fetch platform logos
-  useEffect(() => {
-    if (platformCacheValid(tick)) {
-      setPlatformHeaderLogo(platformCache!.headerLogoUrl);
-      setPlatformFooterLogo(platformCache!.footerLogoUrl);
-      setPlatformSignupLogo(platformCache!.signupLogoUrl);
-      setPlatformLogo(platformCache!.logoUrl);
-      setIsLogoReady(true);
-      return;
-    }
-
-    let cancelled = false;
-    fetch("/api/landing-page")
-      .then(r => r.ok ? r.json() : {})
-      .then(async (d: any) => {
-        if (cancelled) return;
-        const headerUrl  = (d.headerLogoUrl as string) || null;
-        const footerUrl  = (d.footerLogoUrl as string) || null;
-        const signupUrl  = (d.signupLogoUrl as string) || null;
-        const logoUrl    = (d.logoUrl as string)       || null;
-
-        // Preload all images before touching state so the swap is instant.
-        // Returns null for any URL that fails to load (e.g. 401) → falls back to static.
-        const [loadedHeader, loadedFooter, loadedSignup, loadedLogo] = await Promise.all([
-          preloadImage(headerUrl),
-          preloadImage(footerUrl),
-          preloadImage(signupUrl),
-          preloadImage(logoUrl),
-        ]);
-        if (cancelled) return;
-
-        platformCache = { headerLogoUrl: loadedHeader, footerLogoUrl: loadedFooter, signupLogoUrl: loadedSignup, logoUrl: loadedLogo, fetchedAt: Date.now() };
-        writeLS(PLATFORM_LS_KEY, platformCache);
-        setPlatformHeaderLogo(loadedHeader);
-        setPlatformFooterLogo(loadedFooter);
-        setPlatformSignupLogo(loadedSignup);
-        setPlatformLogo(loadedLogo);
-        setIsLogoReady(true);
-      })
-      .catch(() => { setIsLogoReady(true); }); // even on failure, stop blocking
-    return () => { cancelled = true; };
-  }, [tick]);
 
   // Fetch org-scoped logo
   useEffect(() => {
@@ -203,14 +133,9 @@ export function LogoProvider({ children }: { children: ReactNode }) {
     return () => { cancelled = true; };
   }, [orgSlug, tick]);
 
-  const effectivePlatformLogo = platformHeaderLogo || platformLogo || null;
-  const logo        = orgLogo || effectivePlatformLogo || logoWhiteStatic;
-  const footerLogo  = orgLogo || platformFooterLogo || effectivePlatformLogo || logoWhiteStatic;
-  const signupLogo  = platformSignupLogo || effectivePlatformLogo || logoWhiteStatic;
-
-  const isCustomLogo        = logo !== logoWhiteStatic;
-  const isCustomFooterLogo  = footerLogo !== logoWhiteStatic;
-  const isCustomSignupLogo  = signupLogo !== logoWhiteStatic;
+  const logo       = orgLogo || logoWhiteStatic;
+  const footerLogo = orgLogo || logoWhiteStatic;
+  const signupLogo = logoWhiteStatic;
 
   return (
     <LogoContext.Provider value={{
@@ -218,11 +143,11 @@ export function LogoProvider({ children }: { children: ReactNode }) {
       footerLogo,
       signupLogo,
       orgLogo,
-      platformLogo: effectivePlatformLogo,
-      isCustomLogo,
-      isCustomFooterLogo,
-      isCustomSignupLogo,
-      isLogoReady,
+      platformLogo: null,
+      isCustomLogo: logo !== logoWhiteStatic,
+      isCustomFooterLogo: footerLogo !== logoWhiteStatic,
+      isCustomSignupLogo: false,
+      isLogoReady: true,
       refresh,
     }}>
       {children}

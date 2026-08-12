@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import jsPDF from "jspdf";
 import { X, Download, Loader2, FileText, MapPin, Calendar } from "lucide-react";
 import type { PostData } from "./post-card";
+import logoBlueBlack from "@/assets/logo-blue-black.png";
 
 interface SlideExportModalProps {
   post: PostData;
@@ -65,17 +66,13 @@ export function SlideExportModal({ post, orgName, orgLogoUrl, onClose }: SlideEx
   }, []);
 
   useEffect(() => {
-    fetch("/api/landing-page")
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        const url = data?.logoUrl || data?.headerLogoUrl || orgLogoUrl || null;
-        if (url) {
-          toDataUrl(url).then(blob => setBlobLogoUrl(blob ?? null));
-        }
-      })
-      .catch(() => {
-        if (orgLogoUrl) toDataUrl(orgLogoUrl).then(blob => setBlobLogoUrl(blob ?? null));
-      });
+    // Org logo first; otherwise the bundled blue/black platform logo
+    // (the PDF header is white, so the dark logo variant is required).
+    const url = orgLogoUrl || logoBlueBlack;
+    toDataUrl(url).then(blob => {
+      if (blob) setBlobLogoUrl(blob);
+      else if (url !== logoBlueBlack) toDataUrl(logoBlueBlack).then(b => setBlobLogoUrl(b ?? null));
+    });
   }, [orgLogoUrl]);
 
   async function generatePDF() {

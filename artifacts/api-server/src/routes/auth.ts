@@ -7,8 +7,6 @@ import { hashPassword } from "../lib/password";
 import { maybeResetDemoOrg } from "../lib/seed";
 import { logger } from "../lib/logger";
 import { sendPasswordResetEmail, sendSignupRequestEmail, emailConfigured } from "../lib/mailer";
-import { DEFAULT_LANDING_PAGE_CONTENT, getLandingPageContent } from "../lib/landing-page-content";
-import { DEFAULT_ABOUT_PAGE_CONTENT, getAboutPageContent } from "../lib/about-page-content";
 import { resolveObjectUrl } from "../lib/r2Storage";
 import { verifyTurnstileToken } from "../lib/turnstile";
 
@@ -31,31 +29,6 @@ async function resolveLogoUrl(url: string): Promise<string> {
   const resolved = await resolveObjectUrl(url);
   return resolved || url;
 }
-
-router.get("/landing-page", async (_req, res): Promise<void> => {
-  try {
-    const content = await getLandingPageContent();
-    const [logoUrl, headerLogoUrl, footerLogoUrl, signupLogoUrl] = await Promise.all([
-      resolveLogoUrl(content.logoUrl),
-      resolveLogoUrl(content.headerLogoUrl),
-      resolveLogoUrl(content.footerLogoUrl),
-      resolveLogoUrl(content.signupLogoUrl),
-    ]);
-    res
-      .set("Cache-Control", "public, max-age=300, stale-while-revalidate=60")
-      .json({ ...content, logoUrl, headerLogoUrl, footerLogoUrl, signupLogoUrl });
-  } catch {
-    res.json(DEFAULT_LANDING_PAGE_CONTENT);
-  }
-});
-
-router.get("/about-page", async (_req, res): Promise<void> => {
-  try {
-    res.json(await getAboutPageContent());
-  } catch {
-    res.json(DEFAULT_ABOUT_PAGE_CONTENT);
-  }
-});
 
 router.get("/orgs/resolve", async (req, res): Promise<void> => {
   const subdomain = typeof req.query.subdomain === "string" ? req.query.subdomain.trim().toLowerCase() : "";
