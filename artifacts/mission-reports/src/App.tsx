@@ -93,8 +93,8 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   headerPrimaryCtaLabel: "Sign Up",
   headerPrimaryCtaHref: "/signup",
   heroEyebrow: "Private missionary updates",
-  heroTitle: "Connecting churches with the missionaries they send.",
-  heroDescription: "A private space where your missionaries share updates, photos, and prayer needs — and your church stays close to the work it supports.",
+  heroTitle: "Connecting Churches with the missionaries they send.",
+  heroDescription: "A private space where your missionaries share updates, photos, and prayer needs — and your Church stays connected to what's happening in the field.",
   primaryCtaLabel: "Sign Up",
   primaryCtaHref: "/signup",
   previewCardTitle: "Mission Moments",
@@ -103,14 +103,14 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   previewTitle2: "New family visits this week",
   previewTitle3: "Youth outreach photos shared",
   howItWorksLabel: "How it works",
-  howItWorksHeading: "Connecting churches and field teams",
+  howItWorksHeading: "Connecting Churches and field teams",
   step1Title: "1. Request access",
-  step1Description: "Tell us about your church and we'll set up your organization with its own subdomain.",
+  step1Description: "Tell us about your Church and we'll set up your organization with its own subdomain.",
   step2Title: "2. Use your portal",
   step2Description: "Your team signs in at your dedicated address, such as rvc.sentconnect.org/login.",
   step3Title: "3. Share updates",
-  step3Description: "Invite field users, collect reports, and keep your church connected to ministry work.",
-  ctaBandHeading: "Bring your church and field teams closer together.",
+  step3Description: "Invite field users, collect reports, and keep your Church connected to ministry work.",
+  ctaBandHeading: "Bring your Church and field teams closer together.",
   ctaBandSubtext: "",
   footerBrandName: "SentConnect",
   footerOwnerText: "Holtek Solutions LLC, 2108 N ST STE N, Sacramento, CA 95816 USA",
@@ -180,7 +180,7 @@ function LandingPage() {
   const features = [
     {
       title: "A live feed from the field",
-      desc: "Missionaries share ministry moments as they happen — through short stories, prayer requests, and ministry updates — so your church stays connected to what God is doing throughout the year, not just through occasional newsletters.",
+      desc: "Missionaries share ministry moments as they happen — through short stories, prayer requests, and ministry updates — so your Church stays connected to what God is doing throughout the year, not just through occasional newsletters.",
       icon: <path d="M4 5h16v14H4zM4 10h16M9 5v5" />,
     },
     {
@@ -190,7 +190,7 @@ function LandingPage() {
     },
     {
       title: "Private and secure by design",
-      desc: "Your church receives its own dedicated address, such as yourchurch.sentconnect.org. Your mission feed is accessible only to invited members, and updates are shared outside your church only when you choose.",
+      desc: "Your Church receives its own dedicated address, such as yourchurch.sentconnect.org. Your mission feed is accessible only to invited members, and updates are shared outside your Church only when you choose.",
       icon: <><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
     },
   ];
@@ -349,7 +349,7 @@ function LandingPage() {
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">{content.ctaBandHeading}</h2>
             <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
-              Set up your church's private network in minutes.
+              Set up your Church's private network in minutes.
               <span className="block mt-2">Invite your missionaries. Start connecting.</span>
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -389,7 +389,7 @@ function LandingPage() {
             <div className="lp-footer-left">
               <img src={lpFooterLogo} alt="SentConnect" loading="lazy" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", marginBottom: 16, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
-                Private updates for churches and mission teams, all in one secure feed.
+                Private updates for Churches and mission teams, all in one secure feed.
               </p>
             </div>
             <div className="lp-footer-right" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10 }}>
@@ -419,11 +419,11 @@ type AboutPageContent = { aboutTitle: string; aboutImageUrl: string; aboutBody: 
 const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
   aboutTitle: "Why We Created SentConnect",
   aboutImageUrl: "",
-  aboutBody: `We are the Menna family. While serving in Ethiopia, we saw a common challenge: churches often struggle to stay connected with the missionaries and ministry partners they send and support. Important updates, prayer requests, photos, and ministry reports are often scattered across emails, messaging apps, and social media.
+  aboutBody: `We are the Menna family. While serving in Ethiopia, we saw a common challenge: Churches often struggle to stay connected with the missionaries and ministry partners they send and support. Important updates, prayer requests, photos, and ministry reports are often scattered across emails, messaging apps, and social media.
 
-Through years of serving as a bridge between churches, mission organizations, and field teams, we saw the need for a simple, dedicated platform built specifically for missionary communication.
+Through years of serving as a bridge between Churches, mission organizations, and field teams, we saw the need for a simple, dedicated platform built specifically for missionary communication.
 
-SentConnect was created to strengthen the connection between churches and the mission field—helping ministries communicate clearly, stay engaged, and partner more effectively in God's mission.`,
+SentConnect was created to strengthen the connection between Churches and the mission field—helping ministries communicate clearly, stay engaged, and partner more effectively in God's mission.`,
 };
 
 function AboutPage() {
@@ -582,7 +582,7 @@ function AboutPage() {
 
           {/* CTA */}
           <div style={{ marginTop: 64, paddingTop: 48, borderTop: "1px solid #E2E8F0" }}>
-            <p style={{ fontSize: 17, fontWeight: 700, color: TEXT, marginBottom: 20 }}>Ready to connect your church and field teams?</p>
+            <p style={{ fontSize: 17, fontWeight: 700, color: TEXT, marginBottom: 20 }}>Ready to connect your Church and field teams?</p>
             <a
               href={lpContent.primaryCtaHref}
               onClick={e => handleCtaClick(e, lpContent.primaryCtaHref)}
@@ -601,7 +601,7 @@ function AboutPage() {
             <div className="lp-footer-left">
               <img src={lpLogo} alt="SentConnect" loading="lazy" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
-                Private updates for churches and mission teams, all in one secure feed.
+                Private updates for Churches and mission teams, all in one secure feed.
               </p>
             </div>
             <div className="lp-footer-right">

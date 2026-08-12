@@ -220,7 +220,7 @@ export function PostComposer({ onPost }: { onPost: (post: PostData) => void }) {
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
-            placeholder="Share an update with your church or field team…"
+            placeholder="Share an update with your Church or field team…"
             disabled={posting}
             rows={text.length > 80 ? 4 : 2}
             className="w-full resize-none bg-transparent text-[16px] outline-none leading-relaxed disabled:opacity-50 placeholder:text-[#9CA3AF]"

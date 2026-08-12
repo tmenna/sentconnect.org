@@ -27,14 +27,14 @@ function SignInModal({ onClose }: { onClose: () => void }) {
     e.preventDefault();
     setError("");
     if (!cleaned || cleaned.length < 2) {
-      setError("Please enter your church's subdomain.");
+      setError("Please enter your Church's subdomain.");
       return;
     }
     setChecking(true);
     try {
       const res = await fetch(`/api/orgs/resolve?subdomain=${encodeURIComponent(cleaned)}`);
       if (!res.ok) {
-        setError("We couldn't find a church with that subdomain. Double-check the spelling or contact your administrator.");
+        setError("We couldn't find a Church with that subdomain. Double-check the spelling or contact your administrator.");
         return;
       }
       window.location.href = buildOrgLoginHref(cleaned);
@@ -65,10 +65,10 @@ function SignInModal({ onClose }: { onClose: () => void }) {
           <X size={16} />
         </button>
         <h2 id="signin-modal-title" style={{ fontSize: 21, fontWeight: 800, color: "#0F172A", margin: "0 0 8px", letterSpacing: "-0.02em" }}>
-          Sign in to your church
+          Sign in to your Church
         </h2>
         <p style={{ fontSize: 14, lineHeight: 1.65, color: "#64748B", margin: "0 0 24px" }}>
-          Enter your church's subdomain to go to its sign-in page.
+          Enter your Church's subdomain to go to its sign-in page.
         </p>
         <form onSubmit={handleContinue}>
           <label htmlFor="signin-subdomain" style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#334155", marginBottom: 6 }}>
@@ -91,7 +91,7 @@ function SignInModal({ onClose }: { onClose: () => void }) {
             </span>
           </div>
           <p style={{ fontSize: 12.5, color: "#94A3B8", margin: "0 0 18px" }}>
-            e.g. if your church signs in at <strong style={{ color: "#64748B" }}>calvary.sentconnect.org</strong>, enter <strong style={{ color: "#64748B" }}>calvary</strong>
+            e.g. if your Church signs in at <strong style={{ color: "#64748B" }}>calvary.sentconnect.org</strong>, enter <strong style={{ color: "#64748B" }}>calvary</strong>
           </p>
 
           {error && (
@@ -202,7 +202,7 @@ export default function RequestAccess() {
               </div>
               <h1 style={{ fontSize: 26, fontWeight: 800, color: "#0F172A", margin: "0 0 12px", letterSpacing: "-0.02em" }}>Request received!</h1>
               <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#64748B", margin: "0 0 28px" }}>
-                Thank you for your interest in SentConnect. We'll review your request and reach out to <strong style={{ color: "#0F172A" }}>{email}</strong> to get your church set up.
+                Thank you for your interest in SentConnect. We'll review your request and reach out to <strong style={{ color: "#0F172A" }}>{email}</strong> to get your Church set up.
               </p>
               <a href="/" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", height: 48, padding: "0 32px", borderRadius: 10, background: BLUE, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.38)" }}>
                 Back to Home
@@ -215,16 +215,16 @@ export default function RequestAccess() {
                 <span style={{ fontSize: 11.5, fontWeight: 700, color: BLUE, letterSpacing: "0.08em", textTransform: "uppercase" }}>Request Access</span>
               </div>
               <h1 style={{ fontSize: 28, fontWeight: 800, color: "#0F172A", margin: "0 0 10px", letterSpacing: "-0.025em", lineHeight: 1.2 }}>
-                Get SentConnect for your church
+                Get SentConnect for your Church
               </h1>
               <p style={{ fontSize: 15, lineHeight: 1.7, color: "#64748B", margin: "0 0 32px" }}>
-                We're currently inviting churches and missionaries to use SentConnect at no cost while we continue improving the platform. Tell us about your church or mission organization and we'll reach out to get you set up.
+                We're currently inviting Churches and missionaries to use SentConnect at no cost while we continue improving the platform. Tell us about your Church or mission organization and we'll reach out to get you set up.
               </p>
 
               <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: 18 }}>
-                  <label style={labelStyle} htmlFor="ra-church">Church / organization name *</label>
-                  <input id="ra-church" style={inputStyle} value={churchName} onChange={e => setChurchName(e.target.value)} required minLength={2} placeholder="e.g. Calvary Chapel" />
+                  <label style={labelStyle} htmlFor="ra-Church">Church / organization name *</label>
+                  <input id="ra-Church" style={inputStyle} value={churchName} onChange={e => setChurchName(e.target.value)} required minLength={2} placeholder="e.g. Calvary Chapel" />
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 18 }}>
                   <div>

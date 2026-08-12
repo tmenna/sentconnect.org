@@ -142,7 +142,7 @@ export function baseTemplate(content: string, orgName?: string): string {
       <!-- Header -->
       <tr><td style="background:linear-gradient(135deg,#1085FD 0%,#0059D6 100%);border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
         ${LOGO_PLACEHOLDER}
-        <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:8px;letter-spacing:0.03em;">Helping churches stay connected with their missionaries</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:8px;letter-spacing:0.03em;">Helping Churches stay connected with their missionaries</div>
       </td></tr>
 
       <!-- Body -->
@@ -480,7 +480,7 @@ export async function sendSignupRequestEmail(params: SignupRequestEmailParams): 
   const html = baseTemplate(`
     <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#0F172A;">New access request</h2>
     <p style="margin:0 0 20px;font-size:15px;color:#475569;line-height:1.6;">
-      A church has requested access to <strong>SentConnect</strong>.
+      A Church has requested access to <strong>SentConnect</strong>.
     </p>
     <table cellpadding="0" cellspacing="0" style="width:100%;background:#F8FAFD;border:1.5px solid #E2E8F0;border-radius:10px;">
       <tr><td style="padding:16px 24px;">

@@ -202,7 +202,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               See the mission<br />field come<br /><span style={{ color: BLUE }}>alive.</span>
             </p>
             <p style={{ fontSize: 18, fontWeight: 500, color: "#4B5563", margin: 0, lineHeight: 1.6, maxWidth: 400 }}>
-              Connecting churches and field teams.
+              Connecting Churches and field teams.
             </p>
           </div>
         ) : (
@@ -221,7 +221,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               <p style={{ fontSize: 18, fontWeight: 500, color: "#4B5563", margin: 0, lineHeight: 1.6, maxWidth: 400 }}>
                 {platformMode
                   ? "SentConnect platform administration."
-                  : "Sign in to stay close to the work your church supports."}
+                  : "Sign in to stay close to the work your Church supports."}
               </p>
             </div>
             <p style={{ position: "absolute", bottom: 32, left: 72, right: 56, textAlign: "left", fontSize: 12, color: "#9CA3AF", fontStyle: "italic", margin: 0 }}>
@@ -245,7 +245,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 See the mission field come <span style={{ color: BLUE }}>alive.</span>
               </p>
               <p style={{ fontSize: 15, fontWeight: 500, color: "#4B5563", margin: 0, lineHeight: 1.55 }}>
-                Connecting churches and field teams.
+                Connecting Churches and field teams.
               </p>
             </>
           ) : (
@@ -257,7 +257,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 Welcome <span style={{ color: BLUE }}>back.</span>
               </p>
               <p style={{ fontSize: 15, fontWeight: 500, color: "#4B5563", margin: 0, lineHeight: 1.55 }}>
-                Sign in to stay close to the work your church supports.
+                Sign in to stay close to the work your Church supports.
               </p>
             </>
           )}
@@ -502,7 +502,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   <div>
                     <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Field User</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
-                      Share mission updates, photos, prayer requests, and stories directly from the field so your church stays informed and engaged.
+                      Share mission updates, photos, prayer requests, and stories directly from the field so your Church stays informed and engaged.
                     </p>
                   </div>
                 </div>
@@ -512,7 +512,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                   <div>
                     <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Admin</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
-                      Manage missionaries and teams, review field updates, publish church-wide posts, view reports, and keep your congregation connected.
+                      Manage missionaries and teams, review field updates, publish Church-wide posts, view reports, and keep your congregation connected.
                     </p>
                   </div>
                 </div>

@@ -138,7 +138,7 @@ export function HeroFeedPreview() {
         // Start composing a new post
         setComposerStep("typing");
         const textToType =
-          "We safely arrived this week and are partnering with a local church and community leaders to launch a clean water project outside Addis Ababa. The new well will provide safe drinking water for hundreds of people. Please keep the project and our team in your prayers.";
+          "We safely arrived this week and are partnering with a local Church and community leaders to launch a clean water project outside Addis Ababa. The new well will provide safe drinking water for hundreds of people. Please keep the project and our team in your prayers.";
         for (let i = 0; i <= textToType.length; i += 3) {
           if (!isActive) return;
           setComposerText(textToType.substring(0, i));

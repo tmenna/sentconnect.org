@@ -327,7 +327,7 @@ function FieldUserProfile() {
         </div>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", letterSpacing: "-0.02em", lineHeight: 1.25, marginBottom: 4 }}>Profile Settings</h1>
-          <p style={{ fontSize: 14, color: "#64748B" }}>Your profile is visible to church admins and on your reports.</p>
+          <p style={{ fontSize: 14, color: "#64748B" }}>Your profile is visible to Church admins and on your reports.</p>
         </div>
       </div>
 
