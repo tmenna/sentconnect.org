@@ -500,7 +500,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 <div style={{ display: "flex", gap: 18, marginBottom: 26 }}>
                   <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF3FF, #D3E7FE)", display: "flex", alignItems: "center", justifyContent: "center" }}><Globe style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
                   <div>
-                    <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Field User</p>
+                    <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Missionary</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
                       Share mission updates, photos, prayer requests, and stories directly from the field so your Church stays informed and engaged.
                     </p>
@@ -510,7 +510,7 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 <div style={{ display: "flex", gap: 18 }}>
                   <span style={{ flexShrink: 0, width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #EAF3FF, #D3E7FE)", display: "flex", alignItems: "center", justifyContent: "center" }}><ShieldCheck style={{ width: 23, height: 23, color: BLUE }} strokeWidth={1.9} /></span>
                   <div>
-                    <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Admin</p>
+                    <p style={{ fontSize: 17.5, fontWeight: 700, color: "#0F172A", margin: "0 0 5px" }}>Church Admin</p>
                     <p style={{ fontSize: 15.5, color: "#4B5563", lineHeight: 1.65, margin: 0 }}>
                       Manage missionaries and teams, review field updates, publish Church-wide posts, view reports, and keep your congregation connected.
                     </p>
@@ -549,8 +549,8 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
 
               <div style={{ display: "flex", gap: 8 }}>
                 {[
-                  { label: "Field User", sublabel: "Post updates & photos", Icon: Globe, endpoint: "/api/auth/demo-user-login", primary: true },
-                  { label: "Admin", sublabel: "Manage team & reports", Icon: ShieldCheck, endpoint: "/api/auth/demo-login", primary: false },
+                  { label: "Missionary", sublabel: "Post updates & photos", Icon: Globe, endpoint: "/api/auth/demo-user-login", primary: true },
+                  { label: "Church Admin", sublabel: "Manage team & reports", Icon: ShieldCheck, endpoint: "/api/auth/demo-login", primary: false },
                 ].map(({ label, sublabel, Icon, endpoint, primary }) => {
                   const waiting = TURNSTILE_SITE_KEY && !demoToken && !demoTurnstileError;
                   return (
