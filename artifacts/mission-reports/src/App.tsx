@@ -94,7 +94,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   headerPrimaryCtaHref: "/signup",
   heroEyebrow: "Private missionary updates",
   heroTitle: "Connecting Churches with the missionaries they send.",
-  heroDescription: "A private space where your missionaries share updates, photos, and prayer needs — and your Church stays connected to what's happening in the field.",
+  heroDescription: "A private space where your missionaries share updates, photos, and prayer needs, and your Church can see what's happening across the field — all in one dashboard.",
   primaryCtaLabel: "Sign Up",
   primaryCtaHref: "/signup",
   previewCardTitle: "Mission Moments",
@@ -284,14 +284,16 @@ function LandingPage() {
               </h1>
 
               <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto [text-wrap:balance]">
-                {content.heroDescription.includes(" — ") ? (
-                  <>
-                    <span className="block [text-wrap:balance]">{content.heroDescription.split(" — ")[0]}</span>
-                    <span className="block mt-1.5 [text-wrap:balance]">{content.heroDescription.split(" — ").slice(1).join(" — ")}</span>
-                  </>
-                ) : (
-                  content.heroDescription
-                )}
+                <span className="block [text-wrap:balance]">
+                  A private space where your missionaries share <span className="font-semibold text-slate-800">updates</span>, <span className="font-semibold text-slate-800">photos</span>, and <span className="font-semibold text-slate-800">prayer needs</span>,
+                </span>
+                <span className="block mt-1.5 [text-wrap:balance]">
+                  and your Church can see what's happening across the field —
+                </span>
+                <span className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#1085FD]/8 border border-[#1085FD]/20 px-5 py-2 text-lg lg:text-xl font-semibold text-[#0B67C2]">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                  all in one dashboard
+                </span>
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
