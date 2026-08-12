@@ -331,7 +331,7 @@ function LandingPage() {
         {/* ── FEATURES ── */}
         <section id="features" className="pt-24 pb-10 bg-slate-50">
           <div className="max-w-6xl mx-auto px-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
+            <div className="grid md:grid-cols-2 gap-8 items-stretch">
               {features.map((f, i) => (
                 <div
                   key={i}
@@ -343,7 +343,7 @@ function LandingPage() {
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-7" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)", boxShadow: "0 8px 20px rgba(16,133,253,0.30)" }}>
                     <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{f.icon}</svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight mb-3 lg:min-h-[4rem] lg:flex lg:items-start">{f.title}</h3>
+                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight mb-3">{f.title}</h3>
                   <p className="text-base text-slate-600 leading-[1.8]">{f.desc}</p>
                 </div>
               ))}
