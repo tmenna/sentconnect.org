@@ -56,7 +56,9 @@ function DemoRoleSwitch({ compact }: { compact?: boolean }) {
         body: JSON.stringify({ role }),
       });
       if (res.ok) {
-        window.location.href = prefix("/feed");
+        // Land each persona on its full home experience: admins get the
+        // dashboard (sidebar, member filter), missionaries get the feed.
+        window.location.href = prefix(role === "admin" ? "/admin" : "/feed");
       } else {
         const data = await res.json().catch(() => ({}));
         toast({ title: data.error ?? "Couldn't switch views — please try again." });
