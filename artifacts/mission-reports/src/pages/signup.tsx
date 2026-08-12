@@ -331,14 +331,11 @@ export default function Signup() {
 
           {/* LEFT — Plan card (hidden on mobile/tablet) */}
           <div className="su-plan">
-            {/* Icon + popular badge row */}
-            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
+            {/* Icon row */}
+            <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
               <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_DEEP} 100%)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 16px rgba(16,133,253,0.3)" }}>
                 <Users style={{ width: 20, height: 20, color: "#fff" }} />
               </div>
-              <span style={{ fontSize: 11, fontWeight: 700, color: BLUE, background: "#EEF6FF", border: "1px solid #BFDBFE", borderRadius: 999, padding: "3px 10px", letterSpacing: "0.04em", textTransform: "uppercase" }}>
-                Most Popular
-              </span>
             </div>
 
             <p style={{ fontSize: 13, fontWeight: 600, color: "#6B7280", marginBottom: 4, letterSpacing: "0.02em", textTransform: "uppercase" }}>Organization Plan</p>
