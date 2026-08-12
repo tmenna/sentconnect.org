@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { useLoginUser, useLogoutUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useSearch, useLocation } from "wouter";
-import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe, ShieldCheck } from "lucide-react";
+import { LogOut, Loader2, Eye, EyeOff, ExternalLink, AtSign, Lock, Globe, ShieldCheck, Clock } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { buildOrgLoginHref } from "@/lib/org";
 import { useLogo } from "@/providers/logo-provider";
@@ -518,6 +518,14 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
                 </div>
 
                 <div style={{ height: 1, background: "linear-gradient(90deg, transparent, #E2E8F0 20%, #E2E8F0 80%, transparent)", margin: "30px 0 0" }} />
+              </div>
+
+              {/* Demo content lifetime notice */}
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 10, background: "linear-gradient(135deg, #FFFBEB, #FEF3C7)", border: "1px solid #FDE68A", borderRadius: 12, padding: "12px 14px", marginBottom: 18 }}>
+                <Clock style={{ flexShrink: 0, width: 17, height: 17, color: "#B45309", marginTop: 1.5 }} strokeWidth={2} />
+                <p style={{ fontSize: 13.5, color: "#92400E", lineHeight: 1.55, margin: 0 }}>
+                  <strong style={{ fontWeight: 700 }}>Demo Content Notice:</strong> All posts added to the demo site are temporary and will be automatically removed after 30 minutes.
+                </p>
               </div>
 
               {/* Invisible Turnstile — resolves automatically for real humans */}

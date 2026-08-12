@@ -24,6 +24,12 @@ reports, use `.returning({ id, title })` and map children by a stable key like
 title — Postgres multi-row `INSERT ... RETURNING` order is not contractually
 guaranteed, so index-based mapping is fragile.
 
+**Sweeper note:** visitor-created demo posts are also deleted by a background
+sweeper 30 minutes after posting (checked every minute). Seed posts are exempt
+via the `is_demo_seed` flag on reports — any new seed post insert (in BOTH seed
+paths) must set that flag true, or the sweeper removes it after 30 minutes. Do
+not identify seed posts by title: titles are nullable and visitor-spoofable.
+
 **Production note:** on Render, a redeploy restarts the server (reset timer =
 null), so the first demo login after deploy triggers the reset immediately —
 new seed content appears right away rather than waiting an hour.

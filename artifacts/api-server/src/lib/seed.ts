@@ -1,5 +1,5 @@
 import { db, usersTable, reportsTable, organizationsTable, photosTable, likesTable, commentsTable } from "@workspace/db";
-import { eq, and, isNull, inArray } from "drizzle-orm";
+import { eq, and, isNull, inArray, lt } from "drizzle-orm";
 import { logger } from "./logger";
 import { hashPassword } from "./password";
 
@@ -218,6 +218,7 @@ export async function seedIfEmpty() {
         title: DEMO_POST_CHURCH_TITLE,
         description: `Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy. Three local men have expressed a calling to pastoral leadership.`,
         category: "post",
+        isDemoSeed: true,
         location: "Achi Village, Enugu State, Nigeria",
         reportDate: new Date("2026-03-15"),
         peopleReached: 230,
@@ -228,6 +229,7 @@ export async function seedIfEmpty() {
         title: "Leadership Training Camp: 18 Emerging Pastors Equipped",
         description: `For two weeks in January, we gathered 18 young leaders from five different villages. These leaders wake before dawn to study. They argued passionately over Scripture. One young woman, Adaeze, is leading a fellowship of 34 women in her village.`,
         category: "post",
+        isDemoSeed: true,
         location: "Nsukka, Enugu State, Nigeria",
         reportDate: new Date("2026-02-10"),
         peopleReached: 450,
@@ -238,6 +240,7 @@ export async function seedIfEmpty() {
         title: DEMO_POST_LITERACY_TITLE,
         description: `We launched our first women's literacy program. 28 women gathered every Tuesday and Thursday. By month four, they were reading full sentences. The day Maria Elena — a 52-year-old grandmother — read a verse from John aloud for the first time, the room went silent.`,
         category: "post",
+        isDemoSeed: true,
         location: "San Pedro Soloma, Huehuetenango, Guatemala",
         reportDate: new Date("2026-03-20"),
         peopleReached: 340,
@@ -248,6 +251,7 @@ export async function seedIfEmpty() {
         title: "Three New House Churches Among the Akha People",
         description: `Over the past eighteen months, God has been doing something quiet and extraordinary. It began with a young man named Amu. Today, there are three house churches among the Akha villages within our reach — small, fragile, and full of the Spirit.`,
         category: "post",
+        isDemoSeed: true,
         location: "Chiang Rai Province, Thailand",
         reportDate: new Date("2026-03-08"),
         peopleReached: 180,
@@ -332,6 +336,7 @@ export async function resetDemoOrg() {
       title: DEMO_POST_CHURCH_TITLE,
       description: `Last month, after three years of prayer and relationship-building, we held the first official gathering of the Achi Community Church. Sixty-seven people crowded into Emmanuel's home. The worship was raw and full of joy. Three local men have expressed a calling to pastoral leadership.`,
       category: "post",
+        isDemoSeed: true,
       location: "Achi Village, Enugu State, Nigeria",
       reportDate: new Date("2026-03-15"),
       peopleReached: 230,
@@ -342,6 +347,7 @@ export async function resetDemoOrg() {
       title: "Leadership Training Camp: 18 Emerging Pastors Equipped",
       description: `For two weeks in January, we gathered 18 young leaders from five different villages. These leaders wake before dawn to study. They argued passionately over Scripture. One young woman, Adaeze, is leading a fellowship of 34 women in her village.`,
       category: "post",
+        isDemoSeed: true,
       location: "Nsukka, Enugu State, Nigeria",
       reportDate: new Date("2026-02-10"),
       peopleReached: 450,
@@ -352,6 +358,7 @@ export async function resetDemoOrg() {
       title: DEMO_POST_LITERACY_TITLE,
       description: `We launched our first women's literacy program. 28 women gathered every Tuesday and Thursday. By month four, they were reading full sentences. The day Maria Elena — a 52-year-old grandmother — read a verse from John aloud for the first time, the room went silent.`,
       category: "post",
+        isDemoSeed: true,
       location: "San Pedro Soloma, Huehuetenango, Guatemala",
       reportDate: new Date("2026-03-20"),
       peopleReached: 340,
@@ -362,6 +369,7 @@ export async function resetDemoOrg() {
       title: "Three New House Churches Among the Akha People",
       description: `Over the past eighteen months, God has been doing something quiet and extraordinary. It began with a young man named Amu. Today, there are three house churches among the Akha villages within our reach — small, fragile, and full of the Spirit.`,
       category: "post",
+        isDemoSeed: true,
       location: "Chiang Rai Province, Thailand",
       reportDate: new Date("2026-03-08"),
       peopleReached: 180,
@@ -373,6 +381,53 @@ export async function resetDemoOrg() {
   if (photoRows.length > 0) await db.insert(photosTable).values(photoRows);
 
   logger.info("resetDemoOrg: demo feed restored to 4 seed posts with 2 photos");
+}
+
+const DEMO_POST_MAX_AGE_MS = 30 * 60 * 1000; // 30 minutes
+const DEMO_SWEEP_INTERVAL_MS = 60 * 1000; // check every minute
+
+/**
+ * Deletes visitor-created posts in the demo org that are older than 30 minutes,
+ * along with their photos, likes, and comments. Seed posts are never removed.
+ */
+export async function sweepDemoVisitorPosts(): Promise<void> {
+  const [demoOrg] = await db
+    .select({ id: organizationsTable.id })
+    .from(organizationsTable)
+    .where(eq(organizationsTable.subdomain, DEMO_ORG_SUBDOMAIN))
+    .limit(1);
+  if (!demoOrg) return;
+
+  const cutoff = new Date(Date.now() - DEMO_POST_MAX_AGE_MS);
+  const stale = await db
+    .select({ id: reportsTable.id })
+    .from(reportsTable)
+    .where(and(
+      eq(reportsTable.organizationId, demoOrg.id),
+      lt(reportsTable.createdAt, cutoff),
+      eq(reportsTable.isDemoSeed, false),
+    ));
+
+  if (stale.length === 0) return;
+
+  const ids = stale.map(r => r.id);
+  await db.delete(photosTable).where(inArray(photosTable.reportId, ids));
+  await db.delete(likesTable).where(inArray(likesTable.postId, ids));
+  await db.delete(commentsTable).where(inArray(commentsTable.postId, ids));
+  await db.delete(reportsTable).where(inArray(reportsTable.id, ids));
+  logger.info(`sweepDemoVisitorPosts: removed ${ids.length} demo post(s) older than 30 minutes`);
+}
+
+/**
+ * Starts the background sweeper that enforces the 30-minute lifetime
+ * of visitor-created demo posts, regardless of logins or activity.
+ */
+export function startDemoPostSweeper(): void {
+  const timer = setInterval(() => {
+    sweepDemoVisitorPosts().catch(err => logger.error({ err }, "sweepDemoVisitorPosts failed"));
+  }, DEMO_SWEEP_INTERVAL_MS);
+  timer.unref?.();
+  logger.info("Demo post sweeper started (30-minute post lifetime, checked every minute)");
 }
 
 /**

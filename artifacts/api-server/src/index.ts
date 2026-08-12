@@ -1,6 +1,6 @@
 import app from "./app";
 import { logger } from "./lib/logger";
-import { seedIfEmpty, ensureSuperAdmin, cleanupDemoOrgs } from "./lib/seed";
+import { seedIfEmpty, ensureSuperAdmin, cleanupDemoOrgs, startDemoPostSweeper } from "./lib/seed";
 import { runMigrations } from "./lib/migrate";
 
 const rawPort = process.env["PORT"];
@@ -54,4 +54,7 @@ app.listen(port, (err) => {
   } catch (err) {
     logger.error({ err }, "ensureSuperAdmin failed");
   }
+
+  // Enforce the 30-minute lifetime of visitor-created demo posts
+  startDemoPostSweeper();
 })();

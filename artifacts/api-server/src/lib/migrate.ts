@@ -18,6 +18,24 @@ export async function runMigrations(): Promise<void> {
       sql: `ALTER TABLE organizations ADD COLUMN IF NOT EXISTS logo_url TEXT`,
     },
     {
+      name: "reports.is_demo_seed column",
+      sql: `ALTER TABLE reports ADD COLUMN IF NOT EXISTS is_demo_seed BOOLEAN NOT NULL DEFAULT FALSE`,
+    },
+    {
+      // One-time backfill: flag the pre-existing canonical demo seed posts so
+      // the 30-minute sweeper never removes them. Safe to re-run (idempotent).
+      name: "reports.is_demo_seed backfill for canonical demo posts",
+      sql: `UPDATE reports SET is_demo_seed = TRUE
+            WHERE is_demo_seed = FALSE
+              AND organization_id = (SELECT id FROM organizations WHERE subdomain = 'demo')
+              AND title IN (
+                'A New Church Planted in Achi Village',
+                'Leadership Training Camp: 18 Emerging Pastors Equipped',
+                'Literacy Opens Hearts in San Pedro Village',
+                'Three New House Churches Among the Akha People'
+              )`,
+    },
+    {
       name: "notification_logs table",
       sql: `CREATE TABLE IF NOT EXISTS notification_logs (
         id          SERIAL PRIMARY KEY,
