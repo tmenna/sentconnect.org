@@ -173,48 +173,26 @@ function DemoBanner() {
     <div style={{
       background: "linear-gradient(115deg, #003B94 0%, #0059D6 45%, #1085FD 100%)",
       color: "#fff", flexShrink: 0, position: "relative",
-      padding: "24px 16px 26px",
+      padding: "16px 16px 18px",
       borderBottom: "1px solid rgba(255,255,255,0.15)",
     }}>
-      <div style={{ maxWidth: 880, margin: "0 auto", textAlign: "center" }}>
-        <p style={{
-          margin: "0 auto 10px", display: "inline-block",
-          fontSize: 11.5, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase",
-          color: "#BFDBFE", background: "rgba(255,255,255,0.1)",
-          border: "1px solid rgba(255,255,255,0.22)", borderRadius: 999, padding: "5px 14px",
-        }}>
-          SentConnect Demo
-        </p>
+      <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
         <h2 style={{
-          margin: "0 0 8px", fontSize: "clamp(22px, 4vw, 28px)", fontWeight: 800,
-          letterSpacing: "-0.02em", lineHeight: 1.2, color: "#FFFFFF",
-          textShadow: "0 1px 3px rgba(0,30,80,0.25)",
+          margin: "0 0 6px", fontSize: "clamp(17px, 3vw, 20px)", fontWeight: 800,
+          letterSpacing: "-0.01em", lineHeight: 1.25, color: "#FFFFFF",
         }}>
           {isAdmin ? (
-            <>You're viewing as the <span style={{ color: "#FFD9A8" }}>Church Admin</span></>
+            <>Demo · Viewing as the <span style={{ color: "#FFD9A8" }}>Church Admin</span></>
           ) : (
-            <>You're viewing as a <span style={{ color: "#FFD9A8" }}>Missionary in the field</span></>
+            <>Demo · Viewing as a <span style={{ color: "#FFD9A8" }}>Missionary</span></>
           )}
         </h2>
-        <p style={{ margin: "0 auto 18px", fontSize: "clamp(15px, 2.6vw, 17px)", lineHeight: 1.6, fontWeight: 500, color: "#EAF3FF", maxWidth: 660 }}>
+        <p style={{ margin: "0 auto 12px", fontSize: 14, lineHeight: 1.55, fontWeight: 500, color: "#DCEBFF", maxWidth: 560 }}>
           {isAdmin
-            ? <>This is what your Church sees — every update from the field arrives here in one dashboard. Switch to <strong style={{ color: "#fff", fontWeight: 700 }}>Missionary</strong> to post an update yourself, then flip back to watch it appear.</>
-            : <>Try posting an update, photo, or prayer need below — then switch to <strong style={{ color: "#fff", fontWeight: 700 }}>Church Admin</strong> to see it arrive on the Church's dashboard instantly.</>}
+            ? <>This is your Church's dashboard. Switch to <strong style={{ color: "#fff", fontWeight: 700 }}>Missionary</strong> to post an update, then flip back to watch it arrive.</>
+            : <>Post an update below, then switch to <strong style={{ color: "#fff", fontWeight: 700 }}>Church Admin</strong> to see it arrive instantly.</>}
         </p>
-        {isDemoPersona && (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 13, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: "#BFDBFE" }}>Viewing as</span>
-            <DemoRoleSwitch />
-          </div>
-        )}
-        <a
-          href="https://www.sentconnect.org/signup"
-          style={{ display: "inline-block", marginTop: 16, fontSize: 13.5, fontWeight: 700, color: "#FFFFFF", textDecoration: "underline", textUnderlineOffset: 4, textDecorationColor: "rgba(255,255,255,0.5)" }}
-          onMouseEnter={e => (e.currentTarget.style.textDecorationColor = "#fff")}
-          onMouseLeave={e => (e.currentTarget.style.textDecorationColor = "rgba(255,255,255,0.5)")}
-        >
-          Ready for your own Church workspace? Set it up →
-        </a>
+        {isDemoPersona && <DemoRoleSwitch />}
       </div>
       <button
         onClick={collapse}
@@ -308,7 +286,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
           {/* Desktop nav */}
           <nav className="hidden sm:flex items-center gap-0.5">
-            {isDemoOrg && (
+            {isDemoOrg && !isAuthenticated && (
               <a
                 href="https://www.sentconnect.org/login"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 mr-1 rounded-lg text-[13px] font-semibold transition-colors"
@@ -323,8 +301,8 @@ export function Layout({ children }: { children: ReactNode }) {
               href="/help"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all duration-150"
-              style={{ background: "#1085FD", color: "#fff" }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all duration-150 hover:bg-gray-100"
+              style={{ color: "#6B7280" }}
             >
               <HelpCircle className="h-3.5 w-3.5" />
               Help
