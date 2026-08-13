@@ -510,10 +510,12 @@ export default function Login({ platformMode }: { platformMode?: boolean } = {})
               </div>
 
               {/* Demo content lifetime notice */}
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 10, background: "#F5FAFF", border: "1px solid #D6E9FF", borderLeft: "3px solid #1085FD", borderRadius: 12, padding: "12px 14px", marginBottom: 18 }}>
-                <Clock style={{ flexShrink: 0, width: 17, height: 17, color: "#1085FD", marginTop: 1.5 }} strokeWidth={2} />
-                <p style={{ fontSize: 13.5, color: "#33506E", lineHeight: 1.55, margin: 0 }}>
-                  <strong style={{ fontWeight: 700 }}>Demo Content Notice:</strong> All posts added to the demo site are temporary and will be automatically removed after 30 minutes.
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 12, background: "#F2FBF5", border: "1px solid #DCF3E3", borderRadius: 12, padding: "12px 14px", marginBottom: 18 }}>
+                <span style={{ flexShrink: 0, width: 28, height: 28, borderRadius: 8, background: "#DDF4E4", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                  <Clock style={{ width: 15, height: 15, color: "#16A34A" }} strokeWidth={2.25} />
+                </span>
+                <p style={{ fontSize: 13.5, color: "#374151", lineHeight: 1.55, margin: 0 }}>
+                  <strong style={{ fontWeight: 700, color: "#111827" }}>Demo Content Notice:</strong> All posts added to the demo site are temporary and will be automatically removed after 30 minutes.
                 </p>
               </div>
 
