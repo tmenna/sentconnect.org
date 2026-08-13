@@ -17,7 +17,7 @@ export default function NotFound() {
         <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.18)" }}>
           <Shuffle className="h-5 w-5 text-white" />
         </div>
-        <img src={logo} alt="SentConnect" width={256} height={256} fetchPriority="high" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block" }} />
+        <img src={logo} alt="SentConnect" width={256} height={256} fetchPriority="high" className="h-20 md:h-24" style={{ width: "auto", maxWidth: 300, display: "block" }} />
       </div>
 
       <div

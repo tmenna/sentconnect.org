@@ -209,7 +209,7 @@ function LandingPage() {
         <div className={`max-w-7xl mx-auto px-6 flex items-center justify-between transition-all duration-300 ${scrolled ? "py-2" : "py-3"}`}>
           {/* Logo */}
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+            <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-20 md:h-24" style={{ width: "auto", maxWidth: 300, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
 
           {/* Desktop links */}
@@ -394,7 +394,7 @@ function LandingPage() {
         <div className="mx-auto max-w-7xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
-              <img src={lpFooterLogo} alt="SentConnect" loading="lazy" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", marginBottom: 16, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+              <img src={lpFooterLogo} alt="SentConnect" loading="lazy" className="h-20 md:h-24" style={{ width: "auto", maxWidth: 300, display: "block", marginBottom: 16, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for Churches and mission teams, all in one secure feed.
               </p>
@@ -460,9 +460,9 @@ function AboutPage() {
       {/* ── HEADER ── */}
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: BLUE }}>
         <ContactTopBar />
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 80 }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6" style={{ height: 112 }}>
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+            <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-20 md:h-24" style={{ width: "auto", maxWidth: 300, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
           </a>
 
           {/* Desktop nav */}
@@ -606,7 +606,7 @@ function AboutPage() {
         <div className="mx-auto max-w-6xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
-              <img src={lpLogo} alt="SentConnect" loading="lazy" style={{ height: 64, width: "auto", maxWidth: 220, display: "block", marginBottom: 14, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+              <img src={lpLogo} alt="SentConnect" loading="lazy" className="h-20 md:h-24" style={{ width: "auto", maxWidth: 300, display: "block", marginBottom: 14, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
                 Private updates for Churches and mission teams, all in one secure feed.
               </p>

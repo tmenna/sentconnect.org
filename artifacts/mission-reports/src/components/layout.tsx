@@ -282,7 +282,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
           {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <img src={logoBlueBlack} alt="SentConnect" className="h-9" style={{ width: "auto", maxWidth: 170, display: "block" }} />
+            <img src={logoBlueBlack} alt="SentConnect" className="h-10 md:h-11" style={{ width: "auto", maxWidth: 200, display: "block" }} />
           </Link>
 
           {/* Desktop nav */}
@@ -390,7 +390,7 @@ export function Layout({ children }: { children: ReactNode }) {
         {/* Mobile dropdown */}
         {mobileOpen && (
           <div ref={menuRef} className="sm:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1 shadow-lg">
-            {isDemoOrg && (
+            {isDemoOrg && !isAuthenticated && (
               <a
                 href="https://www.sentconnect.org/login"
                 className="flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-semibold transition-colors"

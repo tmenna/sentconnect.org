@@ -54,7 +54,7 @@ export default function SignupSuccess() {
         style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.18)" }}>
 
         <div className="flex items-center justify-center gap-2 mb-6">
-          <img src={logoWhite} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 240, display: "block", filter: "brightness(0)" }} />
+          <img src={logoWhite} alt="SentConnect" className="h-20 md:h-24" style={{ width: "auto", maxWidth: 300, display: "block", filter: "brightness(0)" }} />
         </div>
 
         {status === "loading" && (
