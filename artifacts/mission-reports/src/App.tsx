@@ -94,7 +94,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
   headerPrimaryCtaLabel: "Sign Up",
   headerPrimaryCtaHref: "/signup",
   heroEyebrow: "Private missionary updates",
-  heroTitle: "Connecting Churches with the missionaries they send.",
+  heroTitle: "Connecting Churches with the missionaries they send and support.",
   heroDescription: "A private space where your missionaries share updates, photos, and prayer needs, and your Church can see what's happening across the field — all in one dashboard.",
   primaryCtaLabel: "Sign Up",
   primaryCtaHref: "/signup",
