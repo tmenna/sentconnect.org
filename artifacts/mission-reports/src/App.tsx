@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ArrowRight, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import logoWhite from "@/assets/logo-white.png";
+import aboutFamilyPhoto from "@/assets/about-family.jpg";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/components/auth-provider";
@@ -425,7 +426,7 @@ type AboutPageContent = { aboutTitle: string; aboutImageUrl: string; aboutBody: 
 
 const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
   aboutTitle: "Why We Created SentConnect",
-  aboutImageUrl: "",
+  aboutImageUrl: aboutFamilyPhoto,
   aboutBody: `We are the Menna family. While serving in Ethiopia, we saw a common challenge: Churches often struggle to stay connected with the missionaries and ministry partners they send and support. Important updates, prayer requests, photos, and ministry reports are often scattered across emails, messaging apps, and social media.
 
 Through years of serving as a bridge between Churches, mission organizations, and field teams, we saw the need for a simple, dedicated platform built specifically for missionary communication.
