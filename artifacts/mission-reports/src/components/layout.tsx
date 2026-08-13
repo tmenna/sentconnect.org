@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
 import { Button } from "./ui/button";
-import { LogOut, LogIn, Rss, ShieldCheck, Menu, X, User } from "lucide-react";
+import { LogOut, LogIn, Rss, ShieldCheck, Menu, X, User, Globe } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useOrg } from "@/providers/org-provider";
@@ -292,6 +292,19 @@ export function Layout({ children }: { children: ReactNode }) {
 
           {/* Desktop nav */}
           <nav className="hidden sm:flex items-center gap-0.5">
+            {isDemoOrg && (
+              <a
+                href="https://www.sentconnect.org"
+                className="inline-flex items-center gap-1.5 px-3 h-8 mr-1 rounded-full text-[13px] font-semibold transition-colors"
+                style={onBlue
+                  ? { color: "rgba(255,255,255,0.92)", border: "1px solid rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.1)", textDecoration: "none" }
+                  : { color: "#6B7280", border: "1px solid #E5E7EB", background: "#fff", textDecoration: "none" }}
+                title="Back to sentconnect.org"
+              >
+                <Globe className="h-3.5 w-3.5" />
+                Main Site
+              </a>
+            )}
             {isDemoOrg && !isAuthenticated && (
               <a
                 href="https://www.sentconnect.org/login"
@@ -396,6 +409,15 @@ export function Layout({ children }: { children: ReactNode }) {
         {/* Mobile dropdown */}
         {mobileOpen && (
           <div ref={menuRef} className="sm:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1 shadow-lg">
+            {isDemoOrg && (
+              <a
+                href="https://www.sentconnect.org"
+                className="flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+              >
+                <Globe className="h-4 w-4" />
+                Main Site
+              </a>
+            )}
             {isDemoOrg && !isAuthenticated && (
               <a
                 href="https://www.sentconnect.org/login"
