@@ -121,6 +121,9 @@ router.post("/users/login", async (req, res): Promise<void> => {
 });
 
 router.get("/users/me", async (req, res): Promise<void> => {
+  // Identity must never be served from browser/proxy cache — a stale copy
+  // makes the previous user's name flash after demo role switches or logout.
+  res.set("Cache-Control", "no-store");
   if (!req.session.userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
