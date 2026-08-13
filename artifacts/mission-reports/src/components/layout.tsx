@@ -279,10 +279,10 @@ export function Layout({ children }: { children: ReactNode }) {
         className="sticky top-0 z-50 w-full"
         style={{ background: "#fff", borderBottom: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
       >
-        <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
+        <div className="max-w-6xl mx-auto flex h-20 md:h-24 items-center justify-between px-4 sm:px-8">
           {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <img src={logoBlueBlack} alt="SentConnect" className="h-10 md:h-11" style={{ width: "auto", maxWidth: 200, display: "block" }} />
+            <img src={logoBlueBlack} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 300, display: "block" }} />
           </Link>
 
           {/* Desktop nav */}
