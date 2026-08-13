@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
 import { Button } from "./ui/button";
-import { LogOut, LogIn, Rss, ShieldCheck, HelpCircle, Menu, X, User } from "lucide-react";
+import { LogOut, LogIn, Rss, ShieldCheck, Menu, X, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useOrg } from "@/providers/org-provider";
@@ -298,17 +298,6 @@ export function Layout({ children }: { children: ReactNode }) {
                 Your Org Sign In
               </a>
             )}
-            <a
-              href="/help"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all duration-150 hover:bg-gray-100"
-              style={{ color: "#6B7280" }}
-            >
-              <HelpCircle className="h-3.5 w-3.5" />
-              Help
-            </a>
-
             {!isLoading && (
               <>
                 {isAuthenticated && user ? (
@@ -413,15 +402,6 @@ export function Layout({ children }: { children: ReactNode }) {
                     {(user.role === "admin" || user.role === "super_admin") &&
                       mobileNavLink("/admin", user.role === "super_admin" ? "Platform Admin" : "Updates", <ShieldCheck className="h-4 w-4" />)}
                     {mobileNavLink("/profile", "Profile", <User className="h-4 w-4" />)}
-                    <a
-                      href="/help"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-                    >
-                      <HelpCircle className="h-4 w-4" />
-                      Help
-                    </a>
                     <div className="h-px bg-gray-100 my-1" />
                     <button
                       onClick={() => logout.mutate({ data: undefined })}
@@ -434,15 +414,6 @@ export function Layout({ children }: { children: ReactNode }) {
                   </>
                 ) : (
                   <>
-                    <a
-                      href="/help"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-                    >
-                      <HelpCircle className="h-4 w-4" />
-                      Help
-                    </a>
                     <Link href="/signup">
                       <span className="flex items-center justify-center h-11 rounded-xl text-[15px] font-semibold text-white transition-colors" style={{ backgroundColor: "#1085FD" }}>
                         Sign Up

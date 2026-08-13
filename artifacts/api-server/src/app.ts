@@ -90,20 +90,6 @@ app.use("/public", express.static(path.resolve(process.cwd(), "public")));
 
 app.use("/api", resolveOrg, router);
 
-const slidesDist = [
-  path.resolve(process.cwd(), "../sentconnect-slides/dist/public"),
-  path.resolve(process.cwd(), "artifacts/sentconnect-slides/dist/public"),
-].find((dir) => existsSync(path.join(dir, "index.html")));
-
-if (slidesDist) {
-  app.use("/help", express.static(slidesDist));
-  app.use("/help/*splat", (_req, res) => {
-    res.sendFile(path.join(slidesDist, "index.html"));
-  });
-} else if (process.env.NODE_ENV === "production") {
-  logger.warn("Slides build output was not found. /help will not serve the slide deck.");
-}
-
 const frontendDist = [
   path.resolve(process.cwd(), "../mission-reports/dist/public"),
   path.resolve(process.cwd(), "artifacts/mission-reports/dist/public"),
