@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useOrg } from "@/providers/org-provider";
 import logoBlueBlack from "@/assets/logo-blue-black.png";
+import logoWhite from "@/assets/logo-white.png";
 
 
 const PURPLE   = "#1085FD";
@@ -210,6 +211,8 @@ export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { orgSlug } = useOrg();
   const isDemoOrg = orgSlug === DEMO_ORG;
+  // In the demo, the header blends into the blue demo banner as one block.
+  const onBlue = isDemoOrg && isAuthenticated;
 
   const [currentPath] = useLocation();
   const { toast } = useToast();
@@ -277,12 +280,14 @@ export function Layout({ children }: { children: ReactNode }) {
       {/* ── Nav ── */}
       <header
         className="sticky top-0 z-50 w-full"
-        style={{ background: "#fff", borderBottom: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
+        style={onBlue
+          ? { background: "linear-gradient(115deg, #003B94 0%, #0059D6 45%, #1085FD 100%)" }
+          : { background: "#fff", borderBottom: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
       >
         <div className="max-w-6xl mx-auto flex h-20 md:h-24 items-center justify-between px-4 sm:px-8">
           {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <img src={logoBlueBlack} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 300, display: "block" }} />
+            <img src={onBlue ? logoWhite : logoBlueBlack} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 300, display: "block" }} />
           </Link>
 
           {/* Desktop nav */}
@@ -307,7 +312,11 @@ export function Layout({ children }: { children: ReactNode }) {
                     <Link href="/profile" data-testid="link-nav-profile">
                       <div
                         className="ml-1.5 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[13px] cursor-pointer transition-all duration-150 overflow-hidden flex-shrink-0"
-                        style={user.avatarUrl ? { border: "2px solid #E5E7EB" } : { background: "#2B92FD", color: "#fff" }}
+                        style={user.avatarUrl
+                          ? { border: onBlue ? "2px solid rgba(255,255,255,0.6)" : "2px solid #E5E7EB" }
+                          : onBlue
+                            ? { background: "rgba(255,255,255,0.2)", color: "#fff", border: "1px solid rgba(255,255,255,0.35)" }
+                            : { background: "#2B92FD", color: "#fff" }}
                       >
                         {user.avatarUrl
                           ? <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
@@ -317,7 +326,9 @@ export function Layout({ children }: { children: ReactNode }) {
 
                     <button
                       className="ml-0.5 flex items-center gap-1.5 px-3 h-8 rounded-full transition-all duration-150 text-[13px] font-semibold"
-                      style={{ background: "#EFF6FF", color: "#1085FD", border: "none", cursor: "pointer" }}
+                      style={onBlue
+                        ? { background: "rgba(255,255,255,0.16)", color: "#fff", border: "1px solid rgba(255,255,255,0.3)", cursor: "pointer" }
+                        : { background: "#EFF6FF", color: "#1085FD", border: "none", cursor: "pointer" }}
                       onClick={() => logout.mutate({ data: undefined })}
                       title="Sign out"
                       data-testid="btn-logout"
@@ -358,7 +369,11 @@ export function Layout({ children }: { children: ReactNode }) {
               <Link href="/profile">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-[13px] cursor-pointer overflow-hidden flex-shrink-0"
-                  style={user.avatarUrl ? { border: "2px solid #E5E7EB" } : { background: "#2B92FD", color: "#fff" }}
+                  style={user.avatarUrl
+                    ? { border: onBlue ? "2px solid rgba(255,255,255,0.6)" : "2px solid #E5E7EB" }
+                    : onBlue
+                      ? { background: "rgba(255,255,255,0.2)", color: "#fff", border: "1px solid rgba(255,255,255,0.35)" }
+                      : { background: "#2B92FD", color: "#fff" }}
                 >
                   {user.avatarUrl
                     ? <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
@@ -368,7 +383,9 @@ export function Layout({ children }: { children: ReactNode }) {
             )}
             <button
               onClick={() => setMobileOpen(o => !o)}
-              className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
+              className={onBlue
+                ? "p-2 rounded-lg text-white/90 hover:bg-white/15 transition-colors"
+                : "p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"}
               aria-label="Menu"
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
