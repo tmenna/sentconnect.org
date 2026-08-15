@@ -168,6 +168,71 @@ export async function sendWeeklyDigests(now = new Date()): Promise<number> {
 }
 
 /**
+ * Sends a one-off TEST digest for a single org to a single email address.
+ * Does not write dedup/claim rows, so it never interferes with the real
+ * Thursday send. Uses the same query + template as the real digest.
+ * Returns a short status string.
+ */
+export async function sendTestDigest(orgSubdomain: string, toEmail: string): Promise<string> {
+  const now = new Date();
+  const cutoff = new Date(now.getTime() - DIGEST_WINDOW_MS);
+
+  const [org] = await db
+    .select({ id: organizationsTable.id, name: organizationsTable.name, subdomain: organizationsTable.subdomain })
+    .from(organizationsTable)
+    .where(eq(organizationsTable.subdomain, orgSubdomain));
+  if (!org) return `org not found: ${orgSubdomain}`;
+
+  const posts = await db
+    .select({
+      id: reportsTable.id,
+      title: reportsTable.title,
+      description: reportsTable.description,
+      location: reportsTable.location,
+      createdAt: reportsTable.createdAt,
+      authorName: usersTable.name,
+      authorAvatarUrl: usersTable.avatarUrl,
+    })
+    .from(reportsTable)
+    .innerJoin(usersTable, eq(usersTable.id, reportsTable.missionaryId))
+    .where(and(eq(reportsTable.organizationId, org.id), gte(reportsTable.createdAt, cutoff)))
+    .orderBy(desc(reportsTable.createdAt));
+  if (posts.length === 0) return `no posts in the last 7 days for ${orgSubdomain} — nothing to send`;
+
+  const photoRows = await db
+    .select({ reportId: photosTable.reportId, url: photosTable.url })
+    .from(photosTable)
+    .where(inArray(photosTable.reportId, posts.map(p => p.id)));
+  const firstPhoto = new Map<number, string>();
+  for (const ph of photoRows) {
+    if (!firstPhoto.has(ph.reportId)) firstPhoto.set(ph.reportId, ph.url);
+  }
+
+  const digestPosts: DigestPost[] = await Promise.all(posts.slice(0, 10).map(async p => ({
+    postId: p.id,
+    authorName: p.authorName,
+    authorAvatarUrl: await emailImageUrl(p.authorAvatarUrl),
+    title: p.title,
+    snippet: snippet(p.description),
+    imageUrl: await emailImageUrl(firstPhoto.get(p.id)),
+    location: p.location,
+    postedAt: p.createdAt,
+  })));
+
+  const result = await sendWeeklyDigestEmail({
+    to: toEmail,
+    adminName: "Admin",
+    orgName: org.name,
+    orgSubdomain: org.subdomain,
+    weekLabel: weekLabel(now),
+    posts: digestPosts,
+  });
+  return result.sent
+    ? `test digest sent to ${toEmail} (${digestPosts.length} post${digestPosts.length === 1 ? "" : "s"})`
+    : `send failed: ${result.error ?? "unknown error"}`;
+}
+
+/**
  * Starts the scheduler: every 15 minutes, checks whether it's Thursday between
  * 8 AM and noon Eastern; if so, sends any digests not yet sent this week.
  * Restart-safe — deduplication is backed by the notification log.
