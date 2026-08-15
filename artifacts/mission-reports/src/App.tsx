@@ -1,7 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ArrowRight, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import logoWhite from "@/assets/logo-white.png";
 import aboutFamilyPhoto from "@/assets/about-family.jpg";
@@ -15,6 +14,7 @@ import { OrgProvider, useOrg } from "@/providers/org-provider";
 import { LogoProvider, useLogo } from "@/providers/logo-provider";
 import { getOrgRoutingContext, isPlatformAdminHost, isTenantRootHost } from "@/lib/org";
 import "./landing-page.css";
+import { ArrowRight, Play, Heart, MessageCircle, MapPin, Check, Shield, Bell, ArrowUpRight } from "lucide-react";
 
 // Critical path — eagerly bundled (small or needed immediately)
 import Login from "./pages/login";
@@ -25,6 +25,9 @@ import Demo from "./pages/demo";
 import DemoUser from "./pages/demo-user";
 
 // Heavy pages — code-split so share links and first loads stay fast
+import heroPostImg from "@assets/generated_images/hero-missionary-phone.jpg";
+import clinicImg from "@assets/generated_images/brazil-clinic.jpg";
+import bibleStudyImg from "@assets/generated_images/kenya-bible-study.jpg";
 const Timeline = lazy(() => import("./pages/timeline"));
 const ReportDetail = lazy(() => import("./pages/report-detail"));
 const Profile = lazy(() => import("./pages/profile"));
@@ -122,7 +125,7 @@ const SUPPORT_PHONE_DISPLAY = "+1-951-551-4528";
 const SUPPORT_PHONE_TEL = "+19515514528";
 const SUPPORT_EMAIL = "holly@holteksolutions.com";
 
-function ContactTopBar() {
+function ContactTopBar({ background = "#0A5FB5" }: { background?: string }) {
   const link: React.CSSProperties = {
     display: "inline-flex", alignItems: "center", gap: 6,
     color: "rgba(255,255,255,0.92)", textDecoration: "none",
@@ -133,7 +136,7 @@ function ContactTopBar() {
   const hoverOff = (e: React.MouseEvent<HTMLElement>) => { const el = e.currentTarget as HTMLElement; el.style.color = "rgba(255,255,255,0.92)"; el.style.background = "transparent"; };
 
   return (
-    <div style={{ background: "#0A5FB5" }}>
+    <div style={{ background }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-center sm:justify-end gap-1 sm:gap-3 flex-wrap" style={{ minHeight: 34, paddingTop: 4, paddingBottom: 4 }}>
         <span className="hidden md:inline" style={{ fontSize: 12.5, fontWeight: 700, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
           Contact Support
@@ -176,7 +179,8 @@ function LandingPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const BLUE = "#1085FD";
+  const ORANGE = "#FF4405";
+  const ORANGE_DARK = "#E63D04";
 
   const features = [
     {
@@ -202,53 +206,48 @@ function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 selection:bg-[#1085FD]/20 selection:text-[#1085FD]" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
+    <div className="min-h-screen bg-white text-neutral-900 selection:bg-orange-100 selection:text-orange-900" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
 
       {/* ── NAV ── */}
-      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "shadow-md" : ""}`} style={{ background: BLUE }}>
-        <ContactTopBar />
-        <div className={`max-w-7xl mx-auto px-6 flex items-center justify-between transition-all duration-300 ${scrolled ? "py-2" : "py-3"}`}>
-          {/* Logo */}
+      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-white/80 backdrop-blur-md border-b border-orange-50/50"}`}>
+        <ContactTopBar background="#171717" />
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src={lpLogo} alt="SentConnect" fetchPriority="high" className="h-20 md:h-24" style={{ width: "auto", maxWidth: 300, display: "block", opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+            {isLogoReady
+              ? <img src={lpLogo} alt="SentConnect" fetchPriority="high" style={{ height: 48, width: "auto", maxWidth: 200 }} />
+              : <span className="font-bold text-xl tracking-tight text-neutral-900">SentConnect</span>
+            }
           </a>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-2">
-            <a href="/about" className="text-sm font-semibold text-white transition-colors px-5 py-2.5 rounded-full hover:bg-white/15" style={{ textDecoration: "none" }}>About</a>
-            <a
-              href="/login"
-              onClick={e => handleCtaClick(e, "/login")}
-              className="text-sm font-semibold text-white transition-colors px-5 py-2.5 rounded-full hover:bg-white/15"
-              style={{ textDecoration: "none" }}
-            >Sign In</a>
+          <div className="hidden md:flex items-center gap-6">
+            <a href="/about" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors" style={{ textDecoration: "none" }}>About</a>
+            <a href="/login" onClick={e => handleCtaClick(e, "/login")} className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors" style={{ textDecoration: "none" }}>Sign In</a>
             <a
               href="https://demo.sentconnect.org/"
-              className="text-sm font-semibold text-white flex items-center gap-1.5 px-5 py-2.5 rounded-full transition-all"
-              style={{ background: "#E85D04", textDecoration: "none", boxShadow: "0 2px 10px rgba(0,0,0,0.18)" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#C74E03"; el.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#E85D04"; el.style.transform = "translateY(0)"; }}
+              className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors flex items-center gap-1.5"
+              style={{ textDecoration: "none" }}
             >
-              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/25">
-                <Play className="w-2.5 h-2.5 fill-white text-white" />
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-orange-50">
+                <Play className="w-2.5 h-2.5 fill-[#FF4405] text-[#FF4405]" />
               </span>
               Try Demo
             </a>
             <a
               href={content.headerPrimaryCtaHref}
               onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)}
-              className="text-sm font-semibold px-5 py-2.5 rounded-full transition-all ml-1"
-              style={{ background: "#FFFFFF", color: "#0B67C2", textDecoration: "none", boxShadow: "0 2px 8px rgba(0,0,0,0.16)" }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#F0F7FF"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 4px 14px rgba(0,0,0,0.2)"; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFFFFF"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.16)"; }}
+              className="h-10 px-5 inline-flex items-center text-sm font-semibold text-white rounded-full shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30 hover:-translate-y-0.5 transition-all duration-200"
+              style={{ background: ORANGE, textDecoration: "none" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = ORANGE_DARK; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ORANGE; }}
             >{content.headerPrimaryCtaLabel}</a>
           </div>
 
           {/* Mobile: demo + signup + hamburger */}
           <div className="flex md:hidden items-center gap-2">
-            <a href="https://demo.sentconnect.org/" className="text-xs font-bold text-white px-3 py-1.5 rounded-full" style={{ background: "#E85D04", textDecoration: "none", boxShadow: "0 1px 6px rgba(0,0,0,0.18)" }}>Demo</a>
-            <a href={content.headerPrimaryCtaHref} onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)} className="text-xs font-bold px-3 py-1.5 rounded-full" style={{ background: "#FFFFFF", color: "#111827", textDecoration: "none" }}>{content.headerPrimaryCtaLabel}</a>
-            <button onClick={() => setMobileNavOpen(o => !o)} className="p-2 rounded-lg bg-white/15 text-white" aria-label="Menu">
+            <a href="https://demo.sentconnect.org/" className="text-xs font-bold text-neutral-600 border border-neutral-200 bg-white px-3 py-1.5 rounded-full" style={{ textDecoration: "none" }}>Demo</a>
+            <a href={content.headerPrimaryCtaHref} onClick={e => handleCtaClick(e, content.headerPrimaryCtaHref)} className="text-xs font-bold text-white px-3 py-1.5 rounded-full" style={{ background: ORANGE, textDecoration: "none" }}>{content.headerPrimaryCtaLabel}</a>
+            <button onClick={() => setMobileNavOpen(o => !o)} className="p-2 rounded-lg bg-orange-50 text-neutral-700" aria-label="Menu">
               {mobileNavOpen
                 ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -257,147 +256,329 @@ function LandingPage() {
           </div>
         </div>
         {mobileNavOpen && (
-          <div className="md:hidden border-t border-white/15 px-6 py-4 space-y-4" style={{ background: "#0070E0" }}>
-            <a href="/about" className="block text-sm font-semibold text-white" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>About</a>
-            <a href="/login" className="block text-sm font-semibold text-white" style={{ textDecoration: "none" }} onClick={e => { setMobileNavOpen(false); handleCtaClick(e, "/login"); }}>Sign In</a>
-            <a href="https://demo.sentconnect.org/" className="block text-sm font-semibold text-white/90" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>Try Demo</a>
+          <div className="md:hidden bg-white border-t border-neutral-100 px-6 py-4 space-y-4 shadow-md">
+            <a href="/about" className="block text-sm font-semibold text-neutral-700" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>About</a>
+            <a href="/login" className="block text-sm font-semibold text-neutral-700" style={{ textDecoration: "none" }} onClick={e => { setMobileNavOpen(false); handleCtaClick(e, "/login"); }}>Sign In</a>
+            <a href="https://demo.sentconnect.org/" className="block text-sm font-semibold text-neutral-700" style={{ textDecoration: "none" }} onClick={() => setMobileNavOpen(false)}>Try Demo</a>
           </div>
         )}
       </nav>
 
       <main>
         {/* ── HERO ── */}
-        <section className="relative pt-36 pb-16 lg:pt-48 lg:pb-24 overflow-hidden">
-          <div className="absolute top-0 inset-x-0 h-[700px] bg-gradient-to-b from-[#1085FD]/8 to-transparent -z-10" />
-          <div className="absolute top-1/4 right-0 w-1/2 h-1/2 bg-[#1085FD]/5 blur-[120px] rounded-full -z-10" />
+        <section className="relative pt-36 pb-20 md:pt-44 md:pb-28 overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-orange-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-orange-50 rounded-full blur-3xl opacity-50 translate-y-1/3 -translate-x-1/3 pointer-events-none" />
 
-          <div className="max-w-3xl mx-auto px-6 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, ease: "easeOut" }}
-            >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-[#1085FD] text-sm font-semibold mb-6 border border-blue-100">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#22C55E]" />
-                </span>
-                {content.heroEyebrow}
-              </div>
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-16 lg:gap-8 items-center">
 
-              <h1 className="text-5xl lg:text-6xl leading-[1.08] font-extrabold text-slate-900 tracking-tight mb-6">
-                {content.heroTitle}
-              </h1>
+              {/* Left copy */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="max-w-2xl"
+              >
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 text-[#FF4405] text-sm font-medium mb-8 border border-orange-100/50">
+                  <span className="w-2 h-2 rounded-full bg-[#FF4405]" />
+                  {content.heroEyebrow || "Built for sending churches"}
+                </div>
 
-              <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto [text-wrap:balance]">
-                <span className="block [text-wrap:balance]">
-                  A private space where your missionaries share <span className="font-semibold text-slate-800">updates</span>, <span className="font-semibold text-slate-800">photos</span>, and <span className="font-semibold text-slate-800">prayer needs</span>,
-                </span>
-                <span className="block mt-1.5 [text-wrap:balance]">
-                  and your Church can see what's happening across the field —
-                </span>
-                <span className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#1085FD]/8 border border-[#1085FD]/20 px-5 py-2 text-lg lg:text-xl font-semibold text-[#0B67C2]">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-                  all in one dashboard
-                </span>
-              </p>
+                <h1 className="text-5xl md:text-6xl lg:text-[4rem] font-bold text-neutral-900 leading-[1.05] tracking-tight mb-6">
+                  {content.heroTitle}
+                </h1>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href={content.primaryCtaHref}
-                  onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-white group transition-all"
-                  style={{ background: BLUE, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.32)" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#0e74e0"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(16,133,253,0.45)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.32)"; }}
+                <p className="text-lg md:text-xl text-neutral-500 leading-relaxed mb-10 max-w-xl">
+                  {content.heroDescription}
+                </p>
+
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <a
+                    href={content.primaryCtaHref}
+                    onClick={e => handleCtaClick(e, content.primaryCtaHref)}
+                    className="w-full sm:w-auto h-14 px-8 text-white text-base font-semibold rounded-full shadow-xl shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group"
+                    style={{ background: ORANGE, textDecoration: "none" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = ORANGE_DARK; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ORANGE; }}
+                  >
+                    {content.primaryCtaLabel}
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </a>
+                  <a
+                    href="https://demo.sentconnect.org/"
+                    className="w-full sm:w-auto h-14 px-8 bg-white text-neutral-700 text-base font-semibold rounded-full border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 transition-colors flex items-center justify-center gap-2"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Play className="w-4 h-4 fill-neutral-700 text-neutral-700" />
+                    Try Demo
+                  </a>
+                </div>
+              </motion.div>
+
+              {/* Right — app window mockup */}
+              <motion.div
+                initial={{ opacity: 0, x: 20, rotate: 2 }}
+                animate={{ opacity: 1, x: 0, rotate: 0 }}
+                transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="relative lg:-mr-12"
+              >
+                <div className="relative rounded-2xl bg-white border border-neutral-200 shadow-2xl shadow-neutral-900/10 overflow-hidden transform -rotate-1 hover:rotate-0 transition-transform duration-500 origin-bottom-right">
+                  {/* Browser header */}
+                  <div className="h-12 bg-neutral-50 border-b border-neutral-100 flex items-center px-4 gap-2">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-400" />
+                      <div className="w-3 h-3 rounded-full bg-amber-400" />
+                      <div className="w-3 h-3 rounded-full bg-emerald-400" />
+                    </div>
+                    <div className="mx-auto bg-white rounded-md border border-neutral-200 text-[10px] text-neutral-400 font-medium px-4 py-1 flex items-center gap-2">
+                      <Shield className="w-3 h-3" /> grace.sentconnect.org
+                    </div>
+                  </div>
+
+                  {/* App content */}
+                  <div className="p-6 bg-neutral-50/50">
+                    <div className="bg-white rounded-xl border border-neutral-100 p-5 shadow-sm">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">SJ</div>
+                        <div>
+                          <p className="font-semibold text-neutral-900 text-sm">Sarah Jenkins</p>
+                          <p className="text-xs text-neutral-500 flex items-center gap-1"><MapPin size={10} /> Rural Kenya • 2h ago</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-neutral-700 leading-relaxed mb-4">
+                        The youth outreach program launched today! Over 50 kids showed up for soccer and a short message. Please pray for the follow-up visits this week.
+                      </p>
+                      <div className="aspect-video rounded-lg overflow-hidden bg-neutral-100 mb-4 border border-neutral-100">
+                        <img src={heroPostImg} alt="" aria-hidden="true" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex items-center gap-6 pt-3 border-t border-neutral-100">
+                        <div className="flex items-center gap-1.5 text-[#FF4405]">
+                          <Heart className="w-5 h-5 fill-current" />
+                          <span className="text-sm font-medium">24</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-neutral-400">
+                          <MessageCircle className="w-5 h-5" />
+                          <span className="text-sm font-medium">5</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating notification */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ delay: 1.2, duration: 0.6, type: "spring" }}
+                  className="absolute -bottom-6 -left-4 lg:-left-12 bg-white rounded-xl shadow-xl shadow-neutral-900/10 border border-neutral-100 p-4 flex items-center gap-4 z-20 w-72"
                 >
-                  {content.primaryCtaLabel}
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </a>
-                <a
-                  href="https://demo.sentconnect.org/"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-white transition-all"
-                  style={{ background: "#E85D04", textDecoration: "none", boxShadow: "0 4px 20px rgba(232,93,4,0.32)" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#C74E03"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(232,93,4,0.42)"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#E85D04"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(232,93,4,0.32)"; }}
-                >
-                  <Play className="w-4 h-4 fill-white text-white" />
-                  Try Demo
-                </a>
-              </div>
-            </motion.div>
+                  <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-[#FF4405] shrink-0">
+                    <Bell className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-neutral-900">New update posted</p>
+                    <p className="text-xs text-neutral-500">Email notification sent to members</p>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* ── IMPACT BAND ── */}
+        <section className="py-12 border-y border-neutral-100 bg-white">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <p className="text-lg sm:text-xl font-medium text-neutral-700 leading-relaxed">
+              <em className="not-italic font-semibold" style={{ color: ORANGE }}>Stronger relationships</em>,{" "}
+              <em className="not-italic font-semibold" style={{ color: ORANGE }}>more informed prayer</em>,{" "}
+              <em className="not-italic font-semibold" style={{ color: ORANGE }}>better communication</em> — and a deeper connection between your church and the missionaries you send.
+            </p>
           </div>
         </section>
 
         {/* ── FEATURES ── */}
-        <section id="features" className="pt-24 pb-10 bg-slate-50">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="grid md:grid-cols-2 gap-8 items-stretch">
+        <section id="features" className="py-28 bg-white">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-3xl mx-auto mb-20">
+              <h2 className="text-3xl md:text-5xl font-bold text-neutral-900 tracking-tight mb-6">Everything your church needs to stay connected.</h2>
+              <p className="text-lg text-neutral-500">Simple enough for anyone in your congregation, and built specifically for churches and the missionaries they send.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
               {features.map((f, i) => (
                 <div
                   key={i}
-                  className="bg-white p-10 rounded-3xl border border-slate-100 transition-all duration-200 flex flex-col"
-                  style={{ boxShadow: "0 4px 20px rgba(15,23,42,0.05)" }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 16px 40px rgba(16,133,253,0.14)"; el.style.borderColor = "#bfdbfe"; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(15,23,42,0.05)"; el.style.borderColor = "rgb(241 245 249)"; }}
+                  className="group rounded-3xl bg-neutral-50 p-8 border border-neutral-100 hover:bg-white hover:shadow-xl hover:shadow-neutral-900/5 hover:border-orange-100 transition-all duration-300"
                 >
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-7" style={{ background: "linear-gradient(135deg, #1085FD 0%, #0059D6 100%)", boxShadow: "0 8px 20px rgba(16,133,253,0.30)" }}>
-                    <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{f.icon}</svg>
+                  <div className="w-12 h-12 rounded-xl bg-orange-100 text-[#FF4405] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{f.icon}</svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight mb-3">{f.title}</h3>
-                  <p className="text-base text-slate-600 leading-[1.8]">{f.desc}</p>
+                  <h3 className="text-xl font-bold text-neutral-900 mb-3">{f.title}</h3>
+                  <p className="text-neutral-500 leading-relaxed text-sm">{f.desc}</p>
                 </div>
               ))}
+            </div>
+
+            {/* Feature highlights */}
+            <div className="mt-32 space-y-32">
+
+              {/* Image left, text right — notifications */}
+              <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-orange-500/10 translate-x-4 translate-y-4 rounded-2xl -z-10 transition-transform group-hover:translate-x-6 group-hover:translate-y-6" />
+                  <div className="relative rounded-2xl overflow-hidden border border-neutral-200 shadow-lg">
+                    <img src={clinicImg} alt="Medical clinic outreach" loading="lazy" className="w-full h-auto object-cover aspect-[4/3] group-hover:scale-105 transition-transform duration-700" />
+                    <div className="absolute inset-0 ring-1 ring-inset ring-neutral-900/10 rounded-2xl pointer-events-none" />
+                  </div>
+                </div>
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 text-[#FF4405] text-sm font-medium mb-6">
+                    <Bell className="w-4 h-4" /> Email Notifications
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6 tracking-tight">Never miss a critical prayer request again.</h3>
+                  <p className="text-lg text-neutral-500 leading-relaxed mb-8">
+                    Not everyone checks a portal every day. When a missionary posts an update or someone leaves a comment, SentConnect sends an email so your church never misses what's happening in the field.
+                  </p>
+                  <ul className="space-y-4">
+                    {[
+                      "Email alerts for new updates and comments",
+                      "Formatting optimized for mobile",
+                      "Direct links back to the full post to pray and respond",
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-center gap-3 text-neutral-700 font-medium">
+                        <div className="w-6 h-6 rounded-full bg-orange-100 text-[#FF4405] flex items-center justify-center shrink-0">
+                          <Check className="w-3 h-3" />
+                        </div>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Text left, image right — Sunday slides */}
+              <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <div className="order-2 lg:order-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 text-[#FF4405] text-sm font-medium mb-6">
+                    <ArrowUpRight className="w-4 h-4" /> Sunday Ready
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6 tracking-tight">From field update to Sunday slides in one click.</h3>
+                  <p className="text-lg text-neutral-500 leading-relaxed mb-8">
+                    No more copy-pasting from emails or digging through group chats on Saturday night. Mark the week's top field updates as highlights and export them as presentation-ready slides — in one click.
+                  </p>
+                  <ul className="space-y-4">
+                    {[
+                      "Mark any post as a highlight from the feed",
+                      "Export directly to presentation slides",
+                      "High-resolution photos preserved automatically",
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-center gap-3 text-neutral-700 font-medium">
+                        <div className="w-6 h-6 rounded-full bg-orange-100 text-[#FF4405] flex items-center justify-center shrink-0">
+                          <Check className="w-3 h-3" />
+                        </div>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="order-1 lg:order-2 relative group">
+                  <div className="absolute inset-0 bg-neutral-900/5 -translate-x-4 translate-y-4 rounded-2xl -z-10 transition-transform group-hover:-translate-x-6 group-hover:translate-y-6" />
+
+                  {/* Slides mockup */}
+                  <div className="relative bg-neutral-900 rounded-2xl p-2 shadow-2xl border border-neutral-800">
+                    <div className="aspect-[16/9] bg-white rounded-xl overflow-hidden relative">
+                      <img src={bibleStudyImg} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 w-full h-full object-cover opacity-30" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-neutral-900/90 to-neutral-900/40" />
+                      <div className="absolute inset-0 p-8 flex flex-col justify-center">
+                        <div className="w-12 h-1 mb-6" style={{ background: ORANGE }} />
+                        <p className="text-xl md:text-2xl text-white mb-6 max-w-lg leading-snug" style={{ fontFamily: "Georgia, serif" }}>
+                          "The new well is finally complete! The whole village came out to celebrate with us."
+                        </p>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm">JF</div>
+                          <div>
+                            <p className="font-bold text-white text-sm">The Jenkins Family</p>
+                            <p className="text-xs text-white/70">Ethiopia</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* ── TESTIMONIAL ── */}
+        <section className="py-24 bg-neutral-900 text-white relative overflow-hidden">
+          <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+            <div className="mb-8 flex justify-center" style={{ color: ORANGE }}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M10 11L8.5 17H5.5L7 11H5V7H10V11ZM19 11L17.5 17H14.5L16 11H14V7H19V11Z" />
+              </svg>
+            </div>
+            <blockquote className="text-2xl md:text-4xl leading-tight mb-10 text-neutral-100" style={{ fontFamily: "Georgia, serif" }}>
+              "Before SentConnect, our church felt disconnected from our sent ones. Now, our congregation prays specifically and immediately for needs on the field. It has transformed our missions culture."
+            </blockquote>
+            <div>
+              <p className="font-bold text-lg">David R.</p>
+              <p className="text-neutral-400">Missions Pastor</p>
             </div>
           </div>
         </section>
 
         {/* ── CTA ── */}
-        <section className="pt-20 pb-28 bg-slate-50">
-          <div className="max-w-3xl mx-auto px-6 text-center">
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">{content.ctaBandHeading}</h2>
-            <p className="text-xl lg:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
-              Set up your Church's private network in minutes.
-              <span className="block mt-2">Invite your missionaries. Start connecting.</span>
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a
-                href={content.primaryCtaHref}
-                onClick={e => handleCtaClick(e, content.primaryCtaHref)}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-white transition-all"
-                style={{ background: BLUE, textDecoration: "none", boxShadow: "0 4px 20px rgba(16,133,253,0.35)" }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#0e74e0"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(16,133,253,0.45)"; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = BLUE; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(16,133,253,0.35)"; }}
-              >
-                {content.primaryCtaLabel}
-                <ArrowRight className="w-4 h-4" />
-              </a>
-              <a
-                href="https://demo.sentconnect.org/"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-bold text-white transition-all"
-                style={{ background: "#E85D04", textDecoration: "none", boxShadow: "0 4px 20px rgba(232,93,4,0.32)" }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#C74E03"; el.style.transform = "translateY(-2px)"; el.style.boxShadow = "0 10px 30px rgba(232,93,4,0.42)"; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "#E85D04"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 20px rgba(232,93,4,0.32)"; }}
-              >
-                <Play className="w-4 h-4 fill-white text-white" />
-                Try Demo
-              </a>
+        <section className="py-28 bg-white">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="bg-orange-50 rounded-[3rem] p-12 md:p-20 text-center border border-orange-100 relative overflow-hidden">
+              <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-96 h-96 bg-white rounded-full blur-3xl opacity-60" />
+              <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/3 w-96 h-96 rounded-full blur-3xl opacity-10" style={{ background: ORANGE }} />
+
+              <div className="relative z-10">
+                <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">{content.ctaBandHeading}</h2>
+                <p className="text-xl text-neutral-600 mb-10 max-w-2xl mx-auto">
+                  {content.ctaBandSubtext || "Set up your church's private network in minutes. Invite your missionaries. Start connecting."}
+                </p>
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                  <a
+                    href={content.primaryCtaHref}
+                    onClick={e => handleCtaClick(e, content.primaryCtaHref)}
+                    className="h-14 px-8 w-full sm:w-auto text-white text-lg font-semibold rounded-full shadow-xl shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center justify-center gap-2"
+                    style={{ background: ORANGE, textDecoration: "none" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = ORANGE_DARK; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ORANGE; }}
+                  >
+                    {content.primaryCtaLabel}
+                    <ArrowRight className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="https://demo.sentconnect.org/"
+                    className="h-14 px-8 w-full sm:w-auto bg-white text-neutral-700 text-lg font-semibold rounded-full border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 transition-colors inline-flex items-center justify-center gap-2"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Play className="w-4 h-4 fill-neutral-700 text-neutral-700" />
+                    Try Demo
+                  </a>
+                </div>
+              </div>
             </div>
-            {content.ctaBandSubtext && (
-              <p className="mt-6 text-sm text-slate-400">{content.ctaBandSubtext}</p>
-            )}
           </div>
         </section>
       </main>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: "#0B1F3A", padding: "72px 24px 0" }}>
+      <footer className="bg-neutral-900" style={{ padding: "72px 24px 0" }}>
         <div className="mx-auto max-w-7xl">
           <div className="lp-footer-brand-row">
             <div className="lp-footer-left">
-              <img src={lpFooterLogo} alt="SentConnect" loading="lazy" className="h-20 md:h-24" style={{ width: "auto", maxWidth: 300, display: "block", marginBottom: 16, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
+              <img src={lpFooterLogo} alt="SentConnect" loading="lazy" style={{ height: 52, width: "auto", maxWidth: 200, display: "block", marginBottom: 14, opacity: isLogoReady ? 1 : 0, transition: "opacity .25s ease" }} />
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#9CA3AF", maxWidth: 280, margin: 0 }}>
-                Private updates for Churches and mission teams, all in one secure feed.
+                Private updates for churches and mission teams, all in one secure feed.
               </p>
             </div>
             <div className="lp-footer-right" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10 }}>
