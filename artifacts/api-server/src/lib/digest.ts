@@ -5,7 +5,7 @@ import { sendWeeklyDigestEmail, type DigestPost } from "./mailer";
 import { resolveObjectUrl } from "./r2Storage";
 
 // ─── Weekly digest to church admins ──────────────────────────────────────────
-// Every Monday morning (America/New_York), each active church's admins get one
+// Every Thursday morning (America/New_York), each active church's admins get one
 // email summarizing the mission updates posted in the previous 7 days, ready
 // to forward to their congregation. Orgs with no new posts are skipped.
 
@@ -168,7 +168,7 @@ export async function sendWeeklyDigests(now = new Date()): Promise<number> {
 }
 
 /**
- * Starts the scheduler: every 15 minutes, checks whether it's Monday between
+ * Starts the scheduler: every 15 minutes, checks whether it's Thursday between
  * 8 AM and noon Eastern; if so, sends any digests not yet sent this week.
  * Restart-safe — deduplication is backed by the notification log.
  */
@@ -176,12 +176,12 @@ export function startWeeklyDigestScheduler(): void {
   const tick = async () => {
     const now = new Date();
     const { weekday, hour } = easternNow(now);
-    if (weekday !== "Mon" || hour < 8 || hour >= 12) return;
+    if (weekday !== "Thu" || hour < 8 || hour >= 12) return;
     await sendWeeklyDigests(now);
   };
   const run = () => tick().catch(err => logger.error({ err }, "[digest] scheduler tick failed"));
   run(); // immediate tick so a restart inside the send window doesn't miss the week
   const timer = setInterval(run, DIGEST_CHECK_INTERVAL_MS);
   timer.unref?.();
-  logger.info("[digest] weekly digest scheduler started (Mondays 8am–12pm Eastern)");
+  logger.info("[digest] weekly digest scheduler started (Thursdays 8am–12pm Eastern)");
 }
