@@ -2,6 +2,7 @@ import app from "./app";
 import { logger } from "./lib/logger";
 import { seedIfEmpty, ensureSuperAdmin, cleanupDemoOrgs, startDemoPostSweeper } from "./lib/seed";
 import { runMigrations } from "./lib/migrate";
+import { startWeeklyDigestScheduler } from "./lib/digest";
 
 const rawPort = process.env["PORT"];
 
@@ -57,4 +58,7 @@ app.listen(port, (err) => {
 
   // Enforce the 30-minute lifetime of visitor-created demo posts
   startDemoPostSweeper();
+
+  // Weekly missionary digest emails to church admins (Mondays, Eastern time)
+  startWeeklyDigestScheduler();
 })();

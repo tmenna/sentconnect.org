@@ -463,6 +463,109 @@ export async function sendAdminCommentAlertEmail(params: AdminCommentAlertParams
   return sendEmail(to, `${commenterName} commented on ${postAuthorName}'s post · SentConnect`, html, text);
 }
 
+// ─── 5. Weekly digest (to church admins) ─────────────────────────────────────
+// A once-a-week summary of the org's mission updates, sent to church admins so
+// they can forward it to their congregation.
+
+export interface DigestPost {
+  postId: number;
+  authorName: string;
+  authorAvatarUrl?: string | null;
+  title?: string | null;
+  snippet: string;
+  imageUrl?: string | null;
+  location?: string | null;
+  postedAt: Date;
+}
+
+export interface WeeklyDigestEmailParams {
+  to: string;
+  adminName: string;
+  orgName: string;
+  orgSubdomain?: string | null;
+  weekLabel: string; // e.g. "Aug 9 – Aug 15"
+  posts: DigestPost[];
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/** Only allow absolute https URLs in email <img> tags. */
+function safeImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:" ? url : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function sendWeeklyDigestEmail(params: WeeklyDigestEmailParams): Promise<SendResult> {
+  const { to, adminName, orgName, orgSubdomain, weekLabel, posts } = params;
+  const feedUrl = orgSubdomain ? `https://${orgSubdomain}.${CANONICAL_DOMAIN}/login` : APP_URL;
+
+  const postBlocks = posts.map(p => {
+    const dateStr = p.postedAt.toLocaleString("en-US", { month: "short", day: "numeric" });
+    const imgSrc = safeImageUrl(p.imageUrl);
+    const imageBlock = imgSrc
+      ? `<tr><td style="padding-top:12px;"><img src="${escapeHtml(imgSrc)}" alt="" width="100%" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;display:block;" /></td></tr>`
+      : "";
+    return `
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E5E9F2;border-radius:12px;margin:0 0 16px;">
+      <tr><td style="padding:18px 20px 0;">
+        <table cellpadding="0" cellspacing="0"><tr>
+          <td valign="middle">${avatar(escapeHtml(p.authorName), safeImageUrl(p.authorAvatarUrl))}</td>
+          <td valign="middle" style="padding-left:12px;">
+            <div style="font-size:14px;font-weight:700;color:#0F172A;">${escapeHtml(p.authorName)}</div>
+            <div style="font-size:12px;color:#94A3B8;margin-top:2px;">${dateStr}${p.location ? ` · ${escapeHtml(p.location)}` : ""}</div>
+          </td>
+        </tr></table>
+      </td></tr>
+      <tr><td style="padding:10px 20px 18px;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          ${p.title ? `<tr><td><h3 style="margin:0 0 6px;font-size:16px;font-weight:700;color:#0F172A;">${escapeHtml(p.title)}</h3></td></tr>` : ""}
+          <tr><td><p style="margin:0;font-size:14px;color:#475569;line-height:1.7;">${escapeHtml(p.snippet)}</p></td></tr>
+          ${imageBlock}
+        </table>
+      </td></tr>
+    </table>`;
+  }).join("");
+
+  const html = baseTemplate(`
+    <p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#1085FD;letter-spacing:0.08em;text-transform:uppercase;">Weekly digest · ${escapeHtml(weekLabel)}</p>
+    <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#0F172A;">This week from your missionaries</h2>
+    <p style="margin:0 0 24px;font-size:15px;color:#475569;line-height:1.6;">
+      Hi <strong>${escapeHtml(adminName)}</strong>, here ${posts.length === 1 ? "is the update" : `are the ${posts.length} updates`} your missionaries shared this week.
+      Feel free to forward this email to your congregation or include it in your bulletin.
+    </p>
+    ${postBlocks}
+    ${ctaButton(feedUrl, "View All Updates")}
+  `, escapeHtml(orgName));
+
+  const text = [
+    `Weekly missionary digest · ${weekLabel} · ${orgName}`,
+    "",
+    ...posts.map(p => [
+      `${p.authorName}${p.location ? ` (${p.location})` : ""} — ${p.postedAt.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`,
+      p.title ? p.title : "",
+      p.snippet,
+      "",
+    ].filter(Boolean).join("\n")),
+    `View all updates: ${feedUrl}`,
+    "",
+    `— SentConnect · ${orgName}`,
+  ].join("\n");
+
+  return sendEmail(to, `Weekly Missionary Digest · ${orgName}`, html, text);
+}
+
 // ─── 6. Signup request notification (to platform admin) ─────────────────────
 
 export interface SignupRequestEmailParams {
