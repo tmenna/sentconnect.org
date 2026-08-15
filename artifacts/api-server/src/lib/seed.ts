@@ -1,7 +1,8 @@
 import { db, usersTable, reportsTable, organizationsTable, photosTable, likesTable, commentsTable } from "@workspace/db";
 import { eq, and, isNull, inArray, lt } from "drizzle-orm";
 import { logger } from "./logger";
-import { hashPassword } from "./password";
+import { hashPassword, verifyPassword } from "./password";
+import { invalidateUserCache } from "../routes/reports";
 
 const SUPER_ADMIN_EMAIL = "teki.menna@gmail.com";
 const SUPER_ADMIN_NAME  = "Platform Admin";
@@ -386,6 +387,198 @@ export async function resetDemoOrg() {
 const DEMO_POST_MAX_AGE_MS = 30 * 60 * 1000; // 30 minutes
 const DEMO_SWEEP_INTERVAL_MS = 60 * 1000; // check every minute
 
+// ---------------------------------------------------------------------------
+// Demo user self-healing
+// ---------------------------------------------------------------------------
+// The demo org's canonical users (1 admin + 3 field users). The sweeper keeps
+// them intact regardless of what a demo admin does:
+//  - deleted canonical user       → restored 5 minutes after it goes missing
+//  - name/email/password/role/status edited → reverted 5 minutes after the edit
+//  - extra users added via admin  → removed 30 minutes after creation
+const DEMO_USER_RESTORE_DELAY_MS = 5 * 60 * 1000;   // 5 minutes
+const DEMO_EXTRA_USER_MAX_AGE_MS = 30 * 60 * 1000;  // 30 minutes
+
+const DEMO_CANONICAL_USERS = [
+  {
+    email: DEMO_ADMIN_EMAIL,
+    name: "Demo Admin",
+    password: DEMO_ADMIN_PASSWORD,
+    role: "admin",
+    bio: "Church administrator at Calvary Community Church, managing missionary outreach since 2015.",
+    location: "Dallas, TX",
+    organization: DEMO_ORG_NAME,
+  },
+  {
+    email: "demouser@sentconnect.org",
+    name: "James Okafor",
+    password: "password123",
+    role: "field_user",
+    bio: "Serving the people of rural Nigeria with church planting and leadership training.",
+    location: "Enugu, Nigeria",
+    organization: "Africa Inland Mission",
+  },
+  {
+    email: "maria@mission.org",
+    name: "Maria Santos",
+    password: "password123",
+    role: "field_user",
+    bio: "Working in remote villages in Guatemala, focused on education and literacy programs.",
+    location: "Huehuetenango, Guatemala",
+    organization: "Latin America Mission",
+  },
+  {
+    email: "david@mission.org",
+    name: "David Chen",
+    password: "password123",
+    role: "field_user",
+    bio: "Church planting pioneer working with unreached people groups in Southeast Asia.",
+    location: "Chiang Mai, Thailand",
+    organization: "OMF International",
+  },
+] as const;
+
+// Tracks when a canonical demo user was first observed missing (in-memory;
+// after a restart the clock simply starts over, which is acceptable for a demo).
+const demoUserMissingSince = new Map<string, number>();
+// Remembers the DB id last seen for each canonical email, so a canonical user
+// whose email was edited can still be found and reverted (not treated as deleted).
+const demoUserKnownId = new Map<string, number>();
+
+/**
+ * Deletes a demo-org user and their demo-org reports (+ attachments).
+ * All deletions are scoped to the demo org — records belonging to other
+ * organizations are never touched. If the user still owns reports outside
+ * the demo org, the user row is left alone (FK would fail) and we log it.
+ */
+async function deleteDemoUserCompletely(userId: number, demoOrgId: number) {
+  const reports = await db
+    .select({ id: reportsTable.id })
+    .from(reportsTable)
+    .where(and(eq(reportsTable.missionaryId, userId), eq(reportsTable.organizationId, demoOrgId)));
+  if (reports.length > 0) {
+    const ids = reports.map(r => r.id);
+    await db.delete(photosTable).where(inArray(photosTable.reportId, ids));
+    await db.delete(likesTable).where(inArray(likesTable.postId, ids));
+    await db.delete(commentsTable).where(inArray(commentsTable.postId, ids));
+    await db.delete(reportsTable).where(inArray(reportsTable.id, ids));
+  }
+  const [nonDemoReport] = await db
+    .select({ id: reportsTable.id })
+    .from(reportsTable)
+    .where(eq(reportsTable.missionaryId, userId))
+    .limit(1);
+  if (nonDemoReport) {
+    logger.warn(`sweepDemoUsers: user ${userId} owns non-demo reports — skipping user deletion`);
+    return;
+  }
+  await db.delete(usersTable).where(eq(usersTable.id, userId));
+  invalidateUserCache(userId);
+}
+
+/**
+ * Self-heals the demo org's user roster:
+ *  - restores deleted canonical users after 5 minutes
+ *  - reverts edits to canonical users (name/password/role/status) 5 minutes after the edit
+ *  - removes visitor-added users 30 minutes after creation
+ */
+export async function sweepDemoUsers(): Promise<void> {
+  const [demoOrg] = await db
+    .select({ id: organizationsTable.id })
+    .from(organizationsTable)
+    .where(eq(organizationsTable.subdomain, DEMO_ORG_SUBDOMAIN))
+    .limit(1);
+  if (!demoOrg) return;
+
+  const now = Date.now();
+  const orgUsers = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.organizationId, demoOrg.id));
+  const byEmail = new Map(orgUsers.map(u => [u.email, u]));
+  const byId = new Map(orgUsers.map(u => [u.id, u]));
+  const canonicalUserIds = new Set<number>();
+
+  for (const canonical of DEMO_CANONICAL_USERS) {
+    // Find the canonical account: by email first, then by the last-known id
+    // (covers the case where a demo admin edited the email).
+    let existing = byEmail.get(canonical.email);
+    if (!existing) {
+      const knownId = demoUserKnownId.get(canonical.email);
+      if (knownId) existing = byId.get(knownId);
+    }
+
+    // 1. Restore deleted canonical users (after a 5-minute grace period)
+    if (!existing) {
+      const since = demoUserMissingSince.get(canonical.email);
+      if (!since) {
+        demoUserMissingSince.set(canonical.email, now);
+      } else if (now - since >= DEMO_USER_RESTORE_DELAY_MS) {
+        // Never insert if the canonical email exists anywhere else (unique
+        // constraint; and we must not touch accounts outside the demo org).
+        const [conflict] = await db
+          .select({ id: usersTable.id })
+          .from(usersTable)
+          .where(eq(usersTable.email, canonical.email))
+          .limit(1);
+        if (conflict) {
+          logger.warn(`sweepDemoUsers: ${canonical.email} exists outside the demo org — skipping restore`);
+        } else {
+          const [created] = await db.insert(usersTable).values({
+            name: canonical.name,
+            email: canonical.email,
+            passwordHash: hashPassword(canonical.password),
+            role: canonical.role,
+            status: "active",
+            bio: canonical.bio,
+            location: canonical.location,
+            organization: canonical.organization,
+            organizationId: demoOrg.id,
+          }).returning({ id: usersTable.id });
+          demoUserKnownId.set(canonical.email, created.id);
+          demoUserMissingSince.delete(canonical.email);
+          logger.info(`sweepDemoUsers: restored deleted demo user ${canonical.email}`);
+        }
+      }
+      continue;
+    }
+    demoUserMissingSince.delete(canonical.email);
+    demoUserKnownId.set(canonical.email, existing.id);
+    canonicalUserIds.add(existing.id);
+
+    // 2. Revert edits to canonical users, 5 minutes after the last change
+    const drifted =
+      existing.name !== canonical.name ||
+      existing.email !== canonical.email ||
+      existing.role !== canonical.role ||
+      existing.status !== "active" ||
+      !verifyPassword(canonical.password, existing.passwordHash);
+    if (drifted && now - existing.updatedAt.getTime() >= DEMO_USER_RESTORE_DELAY_MS) {
+      await db.update(usersTable).set({
+        name: canonical.name,
+        email: canonical.email,
+        passwordHash: hashPassword(canonical.password),
+        role: canonical.role,
+        status: "active",
+        bio: canonical.bio,
+        location: canonical.location,
+        organization: canonical.organization,
+        organizationId: demoOrg.id,
+      }).where(eq(usersTable.id, existing.id));
+      invalidateUserCache(existing.id);
+      logger.info(`sweepDemoUsers: reverted edits to demo user ${canonical.email}`);
+    }
+  }
+
+  // 3. Remove visitor-added users 30 minutes after creation
+  for (const u of orgUsers) {
+    if (canonicalUserIds.has(u.id)) continue;
+    if (u.role === "super_admin") continue; // never touch platform admins
+    if (now - u.createdAt.getTime() < DEMO_EXTRA_USER_MAX_AGE_MS) continue;
+    await deleteDemoUserCompletely(u.id, demoOrg.id);
+    logger.info(`sweepDemoUsers: removed visitor-added demo user ${u.email}`);
+  }
+}
+
 /**
  * Deletes visitor-created posts in the demo org that are older than 30 minutes,
  * along with their photos, likes, and comments. Seed posts are never removed.
@@ -425,9 +618,10 @@ export async function sweepDemoVisitorPosts(): Promise<void> {
 export function startDemoPostSweeper(): void {
   const timer = setInterval(() => {
     sweepDemoVisitorPosts().catch(err => logger.error({ err }, "sweepDemoVisitorPosts failed"));
+    sweepDemoUsers().catch(err => logger.error({ err }, "sweepDemoUsers failed"));
   }, DEMO_SWEEP_INTERVAL_MS);
   timer.unref?.();
-  logger.info("Demo post sweeper started (30-minute post lifetime, checked every minute)");
+  logger.info("Demo sweeper started (30-min visitor posts/users, 5-min demo user self-heal, checked every minute)");
 }
 
 /**

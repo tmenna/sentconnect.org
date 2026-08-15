@@ -30,6 +30,15 @@ via the `is_demo_seed` flag on reports — any new seed post insert (in BOTH see
 paths) must set that flag true, or the sweeper removes it after 30 minutes. Do
 not identify seed posts by title: titles are nullable and visitor-spoofable.
 
+**User self-heal note:** the same minute sweeper also self-heals the demo
+roster: the 4 canonical demo users (admin + 3 field) are restored 5 min after
+deletion and any name/email/password/role/status edit is reverted 5 min after
+the change (via `updatedAt`); admin-added extra users are removed 30 min after
+creation. Canonical identity is defined in one constant list in the seed
+module — changing a demo user's profile requires updating that list AND the
+seed paths, or the sweeper reverts the change. All destructive sweeps are
+scoped to the demo org.
+
 **Production note:** on Render, a redeploy restarts the server (reset timer =
 null), so the first demo login after deploy triggers the reset immediately —
 new seed content appears right away rather than waiting an hour.
