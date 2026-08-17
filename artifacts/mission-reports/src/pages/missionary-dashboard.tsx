@@ -6,8 +6,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PostCard, type PostData } from "@/components/post-card";
 import { PostComposer } from "@/components/post-composer";
 import { FileText, Star, CircleUser, PenSquare, BookOpen, Users } from "lucide-react";
+import { WeeklyDigest } from "@/components/weekly-digest";
 
-type FeedTab = "all" | "moments" | "team";
+type FeedTab = "all" | "moments" | "team" | "digest";
 
 function canViewAllReports(permissions: string | null | undefined): boolean {
   if (!permissions) return false;
@@ -74,6 +75,7 @@ export default function MissionaryDashboard() {
 
   const navItems: { id: FeedTab | "profile"; label: string; Icon: React.ElementType }[] = [
     { id: "all",     label: "My Posts",        Icon: FileText },
+    { id: "digest",  label: "Weekly Digest",   Icon: BookOpen },
     ...(canViewAll ? [{ id: "team" as FeedTab, label: "Team Posts", Icon: Users }] : []),
     { id: "moments", label: "Moments",          Icon: Star },
     { id: "profile", label: "Profile",          Icon: CircleUser },
@@ -100,6 +102,7 @@ export default function MissionaryDashboard() {
         <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
           {([
             { id: "all" as FeedTab, label: "My Posts", Icon: FileText },
+            { id: "digest" as FeedTab, label: "Weekly Digest", Icon: BookOpen },
             ...(canViewAll ? [{ id: "team" as FeedTab, label: "Team Posts", Icon: Users }] : []),
           ]).map(({ id, label, Icon }) => {
             const active = activeTab === id;
@@ -196,22 +199,40 @@ export default function MissionaryDashboard() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-[26px] font-bold tracking-tight leading-tight mb-1.5" style={{ color: "#2B2B2B" }}>
-              {showingTeam ? "Team Posts" : activeTab === "moments" ? "Mission Moments" : "My Posts"}
+              {activeTab === "digest" ? "Weekly Digest" : showingTeam ? "Team Posts" : activeTab === "moments" ? "Mission Moments" : "My Posts"}
             </h1>
             <p className="text-sm" style={{ color: "#6B7280" }}>
-              {showingTeam
+              {activeTab === "digest"
+                ? "A week-by-week summary of updates, grouped by missionary."
+                : showingTeam
                 ? "All updates from across your field team."
                 : "Stay connected. Share what God is doing in the field."}
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0 mt-1">
+            {activeTab !== "digest" && (
             <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full border"
               style={{ color: "#2B2B2B", background: "#F1F5F9", borderColor: "#E2E8F0" }}>
               {displayPosts.length} <span className="font-normal text-slate-400">posts</span>
             </span>
+            )}
           </div>
         </div>
 
+        {/* Weekly Digest view */}
+        {activeTab === "digest" && (
+          (canViewAll ? teamLoading : postsLoading) ? (
+            <div className="bg-white rounded-2xl border border-border/50 p-5 space-y-3">
+              <Skeleton className="h-14 w-full rounded-2xl" />
+              <Skeleton className="h-14 w-full rounded-2xl" />
+              <Skeleton className="h-14 w-full rounded-2xl" />
+            </div>
+          ) : (
+            <WeeklyDigest posts={canViewAll ? teamPosts : myPosts} />
+          )
+        )}
+
+        {activeTab !== "digest" && <>
         {/* Composer */}
         <div ref={composerRef}>
           <PostComposer
@@ -301,6 +322,7 @@ export default function MissionaryDashboard() {
             ))}
           </div>
         )}
+        </>}
       </div>
       </main>
 

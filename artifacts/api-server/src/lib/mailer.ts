@@ -531,7 +531,7 @@ export async function sendWeeklyDigestEmail(params: WeeklyDigestEmailParams): Pr
       <tr><td style="padding:10px 20px 18px;">
         <table width="100%" cellpadding="0" cellspacing="0">
           ${p.title ? `<tr><td><h3 style="margin:0 0 6px;font-size:16px;font-weight:700;color:#0F172A;">${escapeHtml(p.title)}</h3></td></tr>` : ""}
-          <tr><td><p style="margin:0;font-size:14px;color:#475569;line-height:1.7;">${escapeHtml(p.snippet)}</p></td></tr>
+          <tr><td><p style="margin:0;font-size:14px;color:#475569;line-height:1.7;">${escapeHtml(p.snippet).replace(/\r?\n/g, "<br/>")}</p></td></tr>
           ${imageBlock}
         </table>
       </td></tr>

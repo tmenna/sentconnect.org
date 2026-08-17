@@ -43,7 +43,13 @@ function easternNow(date: Date): { weekday: string; hour: number } {
 }
 
 function snippet(textValue: string | null, max = 280): string {
-  const t = (textValue ?? "").replace(/\s+/g, " ").trim();
+  // Preserve line breaks (rendered as <br/> in the email) while normalizing
+  // other whitespace; collapse 3+ blank lines into a single blank line.
+  const t = (textValue ?? "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
   return t.length > max ? `${t.slice(0, max - 1).trimEnd()}…` : t;
 }
 
@@ -129,7 +135,7 @@ export async function sendWeeklyDigests(now = new Date()): Promise<number> {
         authorName: p.authorName,
         authorAvatarUrl: await emailImageUrl(p.authorAvatarUrl),
         title: p.title,
-        snippet: snippet(p.description),
+        snippet: snippet(p.description, 5000),
         imageUrl: await emailImageUrl(firstPhoto.get(p.id)),
         location: p.location,
         postedAt: p.createdAt,
@@ -213,7 +219,7 @@ export async function sendTestDigest(orgSubdomain: string, toEmail: string): Pro
     authorName: p.authorName,
     authorAvatarUrl: await emailImageUrl(p.authorAvatarUrl),
     title: p.title,
-    snippet: snippet(p.description),
+    snippet: snippet(p.description, 5000),
     imageUrl: await emailImageUrl(firstPhoto.get(p.id)),
     location: p.location,
     postedAt: p.createdAt,
