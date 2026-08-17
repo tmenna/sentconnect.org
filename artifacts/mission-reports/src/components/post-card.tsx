@@ -763,7 +763,7 @@ export function PostCard({
                     setShowMenu(s => !s);
                   }}
                   title="Share this post"
-                  className="p-1.5 rounded-full bg-[#1085FD] hover:bg-[#0059D6] transition-colors text-white shadow-sm"
+                  className="p-1.5 rounded-full bg-[#E85D04] hover:bg-[#C24D03] transition-colors text-white shadow-sm"
                 >
                   <MoreHorizontal className="h-4 w-4" strokeWidth={3} />
                 </button>
