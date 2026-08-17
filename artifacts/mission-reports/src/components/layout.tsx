@@ -211,8 +211,9 @@ export function Layout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { orgSlug } = useOrg();
   const isDemoOrg = orgSlug === DEMO_ORG;
-  // In the demo, the header blends into the blue demo banner as one block.
-  const onBlue = isDemoOrg && isAuthenticated;
+  // Signed-in org pages (admin + missionary dashboards) use the blue brand
+  // header with the white logo; in the demo it also blends into the demo banner.
+  const onBlue = isAuthenticated;
 
   const [currentPath] = useLocation();
   const { toast } = useToast();
@@ -249,11 +250,13 @@ export function Layout({ children }: { children: ReactNode }) {
     <Link href={href}>
       <span className={cn(
         "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
-        currentPath === href
-          ? "bg-gray-100"
-          : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+        onBlue
+          ? "text-white/85 hover:text-white hover:bg-white/15"
+          : currentPath === href
+            ? "bg-gray-100"
+            : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
       )}
-        style={currentPath === href ? { color: PURPLE, fontWeight: 600 } : {}}
+        style={!onBlue && currentPath === href ? { color: PURPLE, fontWeight: 600 } : onBlue && currentPath === href ? { fontWeight: 600, background: "rgba(255,255,255,0.16)" } : {}}
       >
         {icon}
         {label}
