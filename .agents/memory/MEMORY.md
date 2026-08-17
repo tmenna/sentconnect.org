@@ -1,3 +1,4 @@
+- [Live Render DB](live-render-db.md) — real production is on Render with its own DB (secret LIVE_DATABASE_URL, read-only); Replit "production" DB is NOT the live one.
 - [Brand color](brand-color.md) — canonical brand is blue #1085FD everywhere (site + emails); orange experiment removed, don't reintroduce.
 - [User authz cache](user-authz-cache.md) — api-server caches user records ~30s; any mutation affecting role/status/permissions must call invalidateUserCache or grants/revokes lag.
 - [Demo seed dual path](demo-seed-dual-path.md) — demo-org feed seeded in two functions (seed-if-empty + hourly reset that wipes photos); edit BOTH or content vanishes hourly.
