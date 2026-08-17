@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { PostCard, type PostData } from "@/components/post-card";
+import { WeeklyDigest } from "@/components/weekly-digest";
 import { format } from "date-fns";
 // ─── helpers ───────────────────────────────────────────────────────────────
 
@@ -1074,7 +1075,7 @@ function parseLocation(loc: string): { city: string; country: string } {
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<"team" | "feed" | "countries">("feed");
+  const [activeTab, setActiveTab] = useState<"team" | "feed" | "countries" | "digest">("feed");
   const [feedMomentFilter, setFeedMomentFilter] = useState<"all" | "moments">("all");
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
@@ -1089,7 +1090,7 @@ export default function AdminDashboard() {
     { limit: 50 },
     {
       query: {
-        enabled: activeTab === "feed",
+        enabled: activeTab === "feed" || activeTab === "digest",
         queryKey: getGetTimelineQueryKey({ limit: 50 }),
         staleTime: 3 * 60 * 1000,
       },
@@ -1165,6 +1166,7 @@ export default function AdminDashboard() {
         <div style={{ display: "flex", gap: 2, overflowX: "auto", padding: "0 12px" }}>
           {([
             { id: "feed" as const, label: "Updates", Icon: Rss },
+            { id: "digest" as const, label: "Weekly Digest", Icon: BookOpen },
             { id: "team" as const, label: "Members", Icon: Users },
           ]).map(({ id, label, Icon }) => {
             const active = activeTab === id;
@@ -1218,6 +1220,7 @@ export default function AdminDashboard() {
           <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
             {([
               { id: "feed"     as const, label: "Updates",         Icon: Rss },
+              { id: "digest"   as const, label: "Weekly Digest",   Icon: BookOpen },
               { id: "team"     as const, label: "User Management", Icon: Users },
             ]).map(({ id, label, Icon }) => {
               const active = activeTab === id;
@@ -1292,6 +1295,19 @@ export default function AdminDashboard() {
 
         {/* ── Main content ── */}
         <div style={{ flex: 1, minWidth: 0, background: "#fff" }} className="space-y-4 p-4 md:p-7 md:pl-3.5">
+
+        {/* ── Tab: Weekly Digest ── */}
+        {activeTab === "digest" && (
+          feedLoading && rawFeedPosts.length === 0 ? (
+            <div className="space-y-3">
+              <Skeleton className="h-14 w-full rounded-2xl" />
+              <Skeleton className="h-14 w-full rounded-2xl" />
+              <Skeleton className="h-14 w-full rounded-2xl" />
+            </div>
+          ) : (
+            <WeeklyDigest posts={rawFeedPosts} />
+          )
+        )}
 
         {/* ── Tab: Team ── */}
         {activeTab === "team" && (
