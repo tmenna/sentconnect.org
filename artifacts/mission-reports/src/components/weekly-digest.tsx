@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { ChevronDown, MapPin, BookOpen } from "lucide-react";
+import { ChevronDown, MapPin, BookOpen, Link2, Check } from "lucide-react";
 import type { PostData } from "@/components/post-card";
+import { useOrg } from "@/providers/org-provider";
 
 /**
  * Weekly Digest — groups posts into calendar weeks (Mon–Sun) and, within each
@@ -10,6 +11,7 @@ import type { PostData } from "@/components/post-card";
 
 type DigestGroup = {
   key: string;
+  authorId: number | string;
   authorName: string;
   avatarUrl?: string | null;
   weekLabel: string; // "Aug 10 – Aug 16"
@@ -43,6 +45,7 @@ function buildGroups(posts: PostData[]): DigestGroup[] {
     if (!group) {
       group = {
         key,
+        authorId: post.author.id,
         authorName: post.author.name,
         avatarUrl: post.author.avatarUrl,
         weekLabel: `${fmt(weekStart)} – ${fmt(weekEnd)}`,
@@ -72,9 +75,26 @@ function Avatar({ name, url }: { name: string; url?: string | null }) {
   );
 }
 
+export function weekStartISO(weekStartMs: number): string {
+  const d = new Date(weekStartMs);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
 export function WeeklyDigest({ posts }: { posts: PostData[] }) {
   const groups = useMemo(() => buildGroups(posts), [posts]);
   const [open, setOpen] = useState<string | null>(groups[0]?.key ?? null);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const { prefix } = useOrg();
+
+  function copyShareLink(group: DigestGroup) {
+    const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+    const url = `${window.location.origin}${base}${prefix(`/digest/${group.authorId}/${weekStartISO(group.weekStart)}`)}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedKey(group.key);
+      setTimeout(() => setCopiedKey(k => (k === group.key ? null : k)), 2000);
+    });
+  }
 
   if (groups.length === 0) {
     return (
@@ -95,23 +115,44 @@ export function WeeklyDigest({ posts }: { posts: PostData[] }) {
         return (
           <div key={group.key} className="bg-white rounded-2xl overflow-hidden"
             style={{ border: expanded ? "1.5px solid #BFDBFE" : "1px solid #E5E9F2" }}>
-            <button
-              onClick={() => setOpen(expanded ? null : group.key)}
-              className="w-full flex items-center gap-3 text-left"
-              style={{ padding: "14px 18px", border: "none", background: expanded ? "#F8FAFF" : "#fff", cursor: "pointer" }}
-            >
-              <Avatar name={group.authorName} url={group.avatarUrl} />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold truncate" style={{ color: "#0F172A", margin: 0 }}>{group.authorName}</p>
-                <p className="text-xs" style={{ color: "#94A3B8", margin: "2px 0 0" }}>{group.weekLabel}</p>
-              </div>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
-                style={{ background: "#EFF6FF", color: "#1085FD" }}>
-                {group.posts.length} update{group.posts.length !== 1 ? "s" : ""}
-              </span>
-              <ChevronDown className="w-4 h-4 flex-shrink-0 transition-transform duration-200"
-                style={{ color: "#94A3B8", transform: expanded ? "rotate(180deg)" : "none" }} />
-            </button>
+            <div className="flex items-center gap-2"
+              style={{ padding: "0 12px 0 0", background: expanded ? "#F8FAFF" : "#fff" }}>
+              <button
+                onClick={() => setOpen(expanded ? null : group.key)}
+                className="flex-1 min-w-0 flex items-center gap-3 text-left"
+                style={{ padding: "14px 0 14px 18px", border: "none", background: "transparent", cursor: "pointer" }}
+              >
+                <Avatar name={group.authorName} url={group.avatarUrl} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold truncate" style={{ color: "#0F172A", margin: 0 }}>{group.authorName}</p>
+                  <p className="text-xs" style={{ color: "#94A3B8", margin: "2px 0 0" }}>{group.weekLabel}</p>
+                </div>
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
+                  style={{ background: "#EFF6FF", color: "#1085FD" }}>
+                  {group.posts.length} update{group.posts.length !== 1 ? "s" : ""}
+                </span>
+              </button>
+              <button
+                type="button"
+                title="Copy share link"
+                onClick={() => copyShareLink(group)}
+                className="flex items-center gap-1 flex-shrink-0 px-2 py-1.5 rounded-full transition-colors hover:bg-[#E8F4FF]"
+                style={{ border: "none", background: "transparent", cursor: "pointer", color: copiedKey === group.key ? "#16A34A" : "#1085FD" }}
+              >
+                {copiedKey === group.key ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
+                <span className="text-xs font-semibold hidden sm:inline">{copiedKey === group.key ? "Copied!" : "Share"}</span>
+              </button>
+              <button
+                type="button"
+                aria-label={expanded ? "Collapse" : "Expand"}
+                onClick={() => setOpen(expanded ? null : group.key)}
+                className="p-1.5 rounded-full flex-shrink-0"
+                style={{ border: "none", background: "transparent", cursor: "pointer" }}
+              >
+                <ChevronDown className="w-4 h-4 transition-transform duration-200"
+                  style={{ color: "#94A3B8", transform: expanded ? "rotate(180deg)" : "none" }} />
+              </button>
+            </div>
 
             {expanded && (
               <div style={{ borderTop: "1px solid #EEF2F7" }}>

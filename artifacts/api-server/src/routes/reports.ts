@@ -365,17 +365,62 @@ router.get("/reports/mission-moments", async (req, res): Promise<void> => {
   res.json({ reports: result, total, hasMore: offset + limit < total });
 });
 
+// Whitelist of display-safe author fields for unauthenticated endpoints.
+// Never spread a users row into a public response — it would leak email,
+// push tokens, permissions, and account status.
+function publicAuthor(a: { id: number; name: string; avatarUrl: string | null; location?: string | null; organization?: string | null }) {
+  return {
+    id: a.id,
+    name: a.name,
+    avatarUrl: a.avatarUrl ?? null,
+    location: a.location ?? null,
+    organization: a.organization ?? null,
+  };
+}
+
 // GET /reports/:id/public — no auth required, used for shareable links
 router.get("/reports/:id/public", async (req, res): Promise<void> => {
   const postId = Number(req.params.id);
   if (isNaN(postId)) { res.status(400).json({ error: "Invalid post ID" }); return; }
-  const post = await getPostWithDetails(postId);
-  if (!post) { res.status(404).json({ error: "Post not found" }); return; }
+  const details = await getPostWithDetails(postId);
+  if (!details || details.visibility !== "public") { res.status(404).json({ error: "Post not found" }); return; }
+  const post = { ...details, author: publicAuthor(details.author) };
   // Cache for 60 s in the browser; CDN/proxy may cache up to 5 min.
   // Presigned URLs embedded in the response are valid for 2 h so they outlast
   // both cache TTLs easily.
   res.set("Cache-Control", "public, max-age=60, s-maxage=300");
   res.json(post);
+});
+
+// GET /reports/digest/:userId/public?week=YYYY-MM-DD — no auth required.
+// Shareable weekly digest: one author's posts for a Mon–Sun calendar week.
+router.get("/reports/digest/:userId/public", async (req, res): Promise<void> => {
+  const userId = Number(req.params.userId);
+  const weekParam = String(req.query.week ?? "");
+  if (isNaN(userId) || !/^\d{4}-\d{2}-\d{2}$/.test(weekParam)) {
+    res.status(400).json({ error: "Invalid user ID or week (expected YYYY-MM-DD)" });
+    return;
+  }
+  const weekStart = new Date(`${weekParam}T00:00:00.000Z`);
+  if (isNaN(weekStart.getTime())) { res.status(400).json({ error: "Invalid week date" }); return; }
+  // Pad one day on each side so browser-local week boundaries still match,
+  // then let the client group precisely.
+  const rangeStart = new Date(weekStart.getTime() - 24 * 60 * 60 * 1000);
+  const rangeEnd = new Date(weekStart.getTime() + 8 * 24 * 60 * 60 * 1000);
+
+  const posts = await db.select().from(reportsTable)
+    .where(and(
+      eq(reportsTable.missionaryId, userId),
+      eq(reportsTable.visibility, "public"),
+      gte(reportsTable.createdAt, rangeStart),
+      lte(reportsTable.createdAt, rangeEnd),
+    ))
+    .orderBy(desc(reportsTable.createdAt));
+
+  const detailed = await getPostsWithDetails(posts);
+  const result = detailed.map(p => ({ ...p, author: publicAuthor(p.author) }));
+  res.set("Cache-Control", "public, max-age=60, s-maxage=300");
+  res.json({ week: weekParam, reports: result });
 });
 
 // GET /reports/:id

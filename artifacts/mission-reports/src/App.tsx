@@ -26,6 +26,7 @@ import DemoUser from "./pages/demo-user";
 
 // Heavy pages — code-split so share links and first loads stay fast
 const Timeline = lazy(() => import("./pages/timeline"));
+const PublicDigest = lazy(() => import("./pages/public-digest"));
 const ReportDetail = lazy(() => import("./pages/report-detail"));
 const Profile = lazy(() => import("./pages/profile"));
 const MissionaryProfile = lazy(() => import("./pages/missionary-profile"));
@@ -832,6 +833,8 @@ function AppRoutes() {
       <Route path="/reset-password" component={ResetPassword} />
       {/* Public shareable post view — no auth required */}
       <Route path="/post/:id" component={PublicPost} />
+      {/* Public shareable weekly digest — no auth required */}
+      <Route path="/digest/:userId/:week" component={PublicDigest} />
       {/* /admin handles its own layout (login page or panel) */}
       <Route path="/admin" component={AdminRoute} />
       <Route path="/super-admin"><Redirect href="/admin" /></Route>
@@ -877,10 +880,11 @@ function OrgAwareApp() {
 
   // Share links (/post/:id) render directly — no org validation or auth check.
   // Removing those two serial API calls cuts 400–800 ms off the first paint.
-  if (/^\/post\/\d+/.test(location)) {
+  if (/^\/post\/\d+/.test(location) || /^\/digest\/\d+/.test(location)) {
     return (
       <Switch>
         <Route path="/post/:id" component={PublicPost} />
+        <Route path="/digest/:userId/:week" component={PublicDigest} />
       </Switch>
     );
   }
