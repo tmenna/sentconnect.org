@@ -197,7 +197,7 @@ function LandingPage() {
     },
     {
       title: "Stay informed, instantly",
-      desc: "SentConnect keeps communication moving with automatic email notifications. When a missionary posts an update, Church administrators are notified right away — and when admins post or comment, missionaries hear about it immediately. Administrators also receive a Weekly Missionary Report — a beautifully formatted email gathering the week's updates and photos, ready to forward to the congregation or include in the Sunday bulletin. Both sides stay connected without constantly checking the platform.",
+      desc: "SentConnect keeps communication moving with automatic email notifications. When a missionary posts an update, Church administrators are notified right away — and when admins post or comment, missionaries hear about it immediately. Every Friday morning, administrators receive a gentle reminder that their Weekly Missionary Report is ready. One click opens the secure Weekly Digest tab, where they can review the full week's updates and photos in one place. Both sides stay connected without constantly checking the platform.",
       icon: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></>,
     },
   ];
