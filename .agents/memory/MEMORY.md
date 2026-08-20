@@ -6,3 +6,4 @@
 - [video-js scaffold tsconfig lacks DOM lib](video-scaffold-tsconfig.md) — add DOM to lib in the artifact tsconfig or typecheck fails on window/document.
 - [Signup flow modes](signup-request-only.md) — both flows live: /signup = paid Stripe checkout (needs SELF_SERVE_SIGNUP_ENABLED + STRIPE_PRICE_ID, live key), /request-access = request form.
 - [Static public content](landing-page-cache.md) — landing/about/platform logos are static in code (CMS removed to kill flicker); edit constants, don't re-add routes; org logos still dynamic; mailer keeps landing lib.
+- [Weekly digest reminders](weekly-digest-reminders.md) — email only reminds admins to view the in-app digest; send Friday mornings in Pacific time, never embed the full report.

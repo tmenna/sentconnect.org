@@ -1,13 +1,12 @@
-import { db, usersTable, reportsTable, organizationsTable, photosTable, notificationLogsTable } from "@workspace/db";
-import { eq, and, gte, inArray, desc } from "drizzle-orm";
+import { db, usersTable, reportsTable, organizationsTable, notificationLogsTable } from "@workspace/db";
+import { eq, and, gte, sql } from "drizzle-orm";
 import { logger } from "./logger";
-import { sendWeeklyDigestEmail, type DigestPost } from "./mailer";
-import { resolveObjectUrl } from "./r2Storage";
+import { sendWeeklyDigestReminderEmail } from "./mailer";
 
-// ─── Weekly digest to church admins ──────────────────────────────────────────
-// Every Thursday morning (America/New_York), each active church's admins get one
-// email summarizing the mission updates posted in the previous 7 days, ready
-// to forward to their congregation. Orgs with no new posts are skipped.
+// ─── Weekly digest reminder to church admins ─────────────────────────────────
+// Every Friday morning (America/Los_Angeles), each active church's admins get
+// one short reminder to view the full Weekly Digest inside SentConnect.
+// Orgs with no new posts are skipped.
 
 const DIGEST_TYPE = "weekly_digest";
 const DIGEST_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
@@ -16,23 +15,11 @@ const DIGEST_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 const DIGEST_DEDUP_MS = 6 * 24 * 60 * 60 * 1000;
 const DIGEST_CHECK_INTERVAL_MS = 15 * 60 * 1000; // check every 15 minutes
 const DEMO_SUBDOMAIN = "demo";
-// Emails may be opened days later — sign image URLs for the S3 maximum of 7 days.
-const DIGEST_IMAGE_TTL_SECONDS = 7 * 24 * 60 * 60;
 
-const CANONICAL_DOMAIN = (process.env["TENANT_ROOT_DOMAINS"] ?? "sentconnect.org").split(",")[0]!.trim();
-const APP_URL = process.env["APP_BASE_URL"] ?? `https://${CANONICAL_DOMAIN}`;
-
-/** Emails need absolute URLs — prefix any relative path with the app URL. */
-async function emailImageUrl(url: string | null | undefined): Promise<string | null> {
-  const resolved = await resolveObjectUrl(url, DIGEST_IMAGE_TTL_SECONDS);
-  if (!resolved) return null;
-  return resolved.startsWith("/") ? `${APP_URL}${resolved}` : resolved;
-}
-
-/** Returns { weekday, hour } in America/New_York for the given date. */
-function easternNow(date: Date): { weekday: string; hour: number } {
+/** Returns { weekday, hour } in Pacific time for the given date. */
+export function pacificNow(date: Date): { weekday: string; hour: number } {
   const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/New_York",
+    timeZone: "America/Los_Angeles",
     weekday: "short",
     hour: "numeric",
     hour12: false,
@@ -42,20 +29,14 @@ function easternNow(date: Date): { weekday: string; hour: number } {
   return { weekday, hour };
 }
 
-function snippet(textValue: string | null, max = 280): string {
-  // Preserve line breaks (rendered as <br/> in the email) while normalizing
-  // other whitespace; collapse 3+ blank lines into a single blank line.
-  const t = (textValue ?? "")
-    .replace(/\r\n?/g, "\n")
-    .replace(/[ \t]+/g, " ")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-  return t.length > max ? `${t.slice(0, max - 1).trimEnd()}…` : t;
+export function shouldSendWeeklyReminder(date: Date): boolean {
+  const { weekday, hour } = pacificNow(date);
+  return weekday === "Fri" && hour >= 8 && hour < 12;
 }
 
 function weekLabel(now: Date): string {
   const start = new Date(now.getTime() - DIGEST_WINDOW_MS);
-  const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/New_York" });
+  const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Los_Angeles" });
   return `${fmt(start)} – ${fmt(now)}`;
 }
 
@@ -79,32 +60,12 @@ export async function sendWeeklyDigests(now = new Date()): Promise<number> {
     if (org.subdomain === DEMO_SUBDOMAIN) continue; // never email the demo org
 
     try {
-      // Posts from the last 7 days, newest first
+      // Only the count belongs in the email. The report content stays in-app.
       const posts = await db
-        .select({
-          id: reportsTable.id,
-          title: reportsTable.title,
-          description: reportsTable.description,
-          location: reportsTable.location,
-          createdAt: reportsTable.createdAt,
-          authorName: usersTable.name,
-          authorAvatarUrl: usersTable.avatarUrl,
-        })
+        .select({ id: reportsTable.id })
         .from(reportsTable)
-        .innerJoin(usersTable, eq(usersTable.id, reportsTable.missionaryId))
-        .where(and(eq(reportsTable.organizationId, org.id), gte(reportsTable.createdAt, cutoff)))
-        .orderBy(desc(reportsTable.createdAt));
+        .where(and(eq(reportsTable.organizationId, org.id), gte(reportsTable.createdAt, cutoff)));
       if (posts.length === 0) continue;
-
-      // First photo per post
-      const photoRows = await db
-        .select({ reportId: photosTable.reportId, url: photosTable.url })
-        .from(photosTable)
-        .where(inArray(photosTable.reportId, posts.map(p => p.id)));
-      const firstPhoto = new Map<number, string>();
-      for (const ph of photoRows) {
-        if (!firstPhoto.has(ph.reportId)) firstPhoto.set(ph.reportId, ph.url);
-      }
 
       // Active admins of this org
       const admins = await db
@@ -117,47 +78,42 @@ export async function sendWeeklyDigests(now = new Date()): Promise<number> {
         ));
       if (admins.length === 0) continue;
 
-      // Skip admins with any digest log this week — sent OR claimed.
-      // The claim row is written BEFORE sending (see below), so a crash
-      // mid-send can never cause a duplicate email; at worst that admin's
-      // digest is skipped for the week.
-      const recentLogs = await db
-        .select({ recipientEmail: notificationLogsTable.recipientEmail })
-        .from(notificationLogsTable)
-        .where(and(
-          eq(notificationLogsTable.type, DIGEST_TYPE),
-          gte(notificationLogsTable.createdAt, dedupCutoff),
-        ));
-      const alreadySent = new Set(recentLogs.map(l => l.recipientEmail));
-
-      const digestPosts: DigestPost[] = await Promise.all(posts.slice(0, 10).map(async p => ({
-        postId: p.id,
-        authorName: p.authorName,
-        authorAvatarUrl: await emailImageUrl(p.authorAvatarUrl),
-        title: p.title,
-        snippet: snippet(p.description, 5000),
-        imageUrl: await emailImageUrl(firstPhoto.get(p.id)),
-        location: p.location,
-        postedAt: p.createdAt,
-      })));
-
       for (const admin of admins) {
-        if (alreadySent.has(admin.email)) continue;
-        // Claim first (sent=false), then send, then record the outcome.
-        const [claim] = await db.insert(notificationLogsTable).values({
-          type: DIGEST_TYPE,
-          recipientId: admin.id,
-          recipientEmail: admin.email,
-          subject: `Weekly Missionary Digest · ${org.name}`,
-          sent: false,
-        }).returning({ id: notificationLogsTable.id });
-        const result = await sendWeeklyDigestEmail({
+        // Take a transaction-scoped PostgreSQL advisory lock for this reminder
+        // and admin. This makes the check + claim atomic across server instances.
+        // Recipient IDs are globally unique, so one email used in two orgs does
+        // not suppress either organization's reminder.
+        const claim = await db.transaction(async tx => {
+          await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtext(${DIGEST_TYPE}), ${admin.id})`);
+          const [recentClaim] = await tx
+            .select({ id: notificationLogsTable.id })
+            .from(notificationLogsTable)
+            .where(and(
+              eq(notificationLogsTable.type, DIGEST_TYPE),
+              eq(notificationLogsTable.recipientId, admin.id),
+              gte(notificationLogsTable.createdAt, dedupCutoff),
+            ))
+            .limit(1);
+          if (recentClaim) return null;
+
+          const [newClaim] = await tx.insert(notificationLogsTable).values({
+            type: DIGEST_TYPE,
+            recipientId: admin.id,
+            recipientEmail: admin.email,
+            subject: `Your Weekly Missionary Report is ready · ${org.name}`,
+            sent: false,
+          }).returning({ id: notificationLogsTable.id });
+          return newClaim;
+        });
+        if (!claim) continue;
+
+        const result = await sendWeeklyDigestReminderEmail({
           to: admin.email,
           adminName: admin.name,
           orgName: org.name,
           orgSubdomain: org.subdomain,
           weekLabel: weekLabel(now),
-          posts: digestPosts,
+          updateCount: posts.length,
         });
         await db.update(notificationLogsTable)
           .set({ sent: result.sent, error: result.error })
@@ -169,14 +125,14 @@ export async function sendWeeklyDigests(now = new Date()): Promise<number> {
     }
   }
 
-  if (sentCount > 0) logger.info(`[digest] weekly digests sent: ${sentCount}`);
+  if (sentCount > 0) logger.info(`[digest] weekly reminders sent: ${sentCount}`);
   return sentCount;
 }
 
 /**
- * Sends a one-off TEST digest for a single org to a single email address.
+ * Sends a one-off TEST reminder for a single org to a single email address.
  * Does not write dedup/claim rows, so it never interferes with the real
- * Thursday send. Uses the same query + template as the real digest.
+ * Friday send. Uses the same query + template as the real reminder.
  * Returns a short status string.
  */
 export async function sendTestDigest(orgSubdomain: string, toEmail: string): Promise<string> {
@@ -190,69 +146,38 @@ export async function sendTestDigest(orgSubdomain: string, toEmail: string): Pro
   if (!org) return `org not found: ${orgSubdomain}`;
 
   const posts = await db
-    .select({
-      id: reportsTable.id,
-      title: reportsTable.title,
-      description: reportsTable.description,
-      location: reportsTable.location,
-      createdAt: reportsTable.createdAt,
-      authorName: usersTable.name,
-      authorAvatarUrl: usersTable.avatarUrl,
-    })
+    .select({ id: reportsTable.id })
     .from(reportsTable)
-    .innerJoin(usersTable, eq(usersTable.id, reportsTable.missionaryId))
-    .where(and(eq(reportsTable.organizationId, org.id), gte(reportsTable.createdAt, cutoff)))
-    .orderBy(desc(reportsTable.createdAt));
+    .where(and(eq(reportsTable.organizationId, org.id), gte(reportsTable.createdAt, cutoff)));
   if (posts.length === 0) return `no posts in the last 7 days for ${orgSubdomain} — nothing to send`;
 
-  const photoRows = await db
-    .select({ reportId: photosTable.reportId, url: photosTable.url })
-    .from(photosTable)
-    .where(inArray(photosTable.reportId, posts.map(p => p.id)));
-  const firstPhoto = new Map<number, string>();
-  for (const ph of photoRows) {
-    if (!firstPhoto.has(ph.reportId)) firstPhoto.set(ph.reportId, ph.url);
-  }
-
-  const digestPosts: DigestPost[] = await Promise.all(posts.slice(0, 10).map(async p => ({
-    postId: p.id,
-    authorName: p.authorName,
-    authorAvatarUrl: await emailImageUrl(p.authorAvatarUrl),
-    title: p.title,
-    snippet: snippet(p.description, 5000),
-    imageUrl: await emailImageUrl(firstPhoto.get(p.id)),
-    location: p.location,
-    postedAt: p.createdAt,
-  })));
-
-  const result = await sendWeeklyDigestEmail({
+  const result = await sendWeeklyDigestReminderEmail({
     to: toEmail,
     adminName: "Admin",
     orgName: org.name,
     orgSubdomain: org.subdomain,
     weekLabel: weekLabel(now),
-    posts: digestPosts,
+    updateCount: posts.length,
   });
   return result.sent
-    ? `test digest sent to ${toEmail} (${digestPosts.length} post${digestPosts.length === 1 ? "" : "s"})`
+    ? `test weekly reminder sent to ${toEmail} (${posts.length} update${posts.length === 1 ? "" : "s"})`
     : `send failed: ${result.error ?? "unknown error"}`;
 }
 
 /**
- * Starts the scheduler: every 15 minutes, checks whether it's Thursday between
- * 8 AM and noon Eastern; if so, sends any digests not yet sent this week.
+ * Starts the scheduler: every 15 minutes, checks whether it's Friday between
+ * 8 AM and noon Pacific; if so, sends reminders not yet sent this week.
  * Restart-safe — deduplication is backed by the notification log.
  */
 export function startWeeklyDigestScheduler(): void {
   const tick = async () => {
     const now = new Date();
-    const { weekday, hour } = easternNow(now);
-    if (weekday !== "Thu" || hour < 8 || hour >= 12) return;
+    if (!shouldSendWeeklyReminder(now)) return;
     await sendWeeklyDigests(now);
   };
   const run = () => tick().catch(err => logger.error({ err }, "[digest] scheduler tick failed"));
   run(); // immediate tick so a restart inside the send window doesn't miss the week
   const timer = setInterval(run, DIGEST_CHECK_INTERVAL_MS);
   timer.unref?.();
-  logger.info("[digest] weekly digest scheduler started (Thursdays 8am–12pm Eastern)");
+  logger.info("[digest] weekly reminder scheduler started (Fridays 8am–12pm Pacific)");
 }

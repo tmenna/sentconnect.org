@@ -59,6 +59,6 @@ app.listen(port, (err) => {
   // Enforce the 30-minute lifetime of visitor-created demo posts
   startDemoPostSweeper();
 
-  // Weekly missionary digest emails to church admins (Mondays, Eastern time)
+  // Friday morning reminders for church admins to view their Weekly Digest
   startWeeklyDigestScheduler();
 })();

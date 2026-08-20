@@ -1,5 +1,5 @@
 import { useEffect, useState, lazy, Suspense } from "react";
-import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
+import { Switch, Route, Router as WouterRouter, Redirect, useLocation, useSearch } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ArrowRight, Play } from "lucide-react";
 import { motion } from "framer-motion";
@@ -791,13 +791,16 @@ function AdminRoute() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { orgSlug } = useOrg();
   const [location] = useLocation();
+  const search = useSearch();
   const platformHost = isPlatformAdminHost();
+  const normalizedSearch = search ? (search.startsWith("?") ? search : `?${search}`) : "";
+  const returnTo = `${location}${normalizedSearch}`;
 
   if (isLoading) return <AuthLoading />;
 
   // Org context — send unauthenticated users to the org login page
   if (orgSlug) {
-    if (!isAuthenticated) return <Redirect href={`/login?from=${encodeURIComponent(location)}`} />;
+    if (!isAuthenticated) return <Redirect href={`/login?from=${encodeURIComponent(returnTo)}`} />;
     if (user?.role !== "admin" && user?.role !== "super_admin") return <Redirect href="/" />;
     return <Layout><AdminDashboard /></Layout>;
   }

@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logger } from "./logger";
 import { getLandingPageContent } from "./landing-page-content";
 
-const BRAND_BLUE = "#1085FD";
+const BRAND_BLUE = "#086DE5";
 
 const DISPLAY_NAME = "SentConnect Notification";
 
@@ -106,9 +106,13 @@ const LOGO_PLACEHOLDER = "%%EMAIL_LOGO_BLOCK%%";
 
 export function logoBlockHtml(logoUrl: string | null): string {
   if (logoUrl) {
-    return `<img src="${logoUrl}" alt="SentConnect" height="44" style="height:44px;width:auto;display:block;margin:0 auto;border:0;" />`;
+    return `<table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0">
+      <tr><td align="center" style="background:#FFFFFF;border-radius:12px;padding:10px 18px;">
+        <img src="${logoUrl}" alt="SentConnect" height="44" style="height:44px;max-width:230px;width:auto;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" />
+      </td></tr>
+    </table>`;
   }
-  return `<div style="font-size:24px;font-weight:800;color:#ffffff;letter-spacing:0.14em;">SENTCONNECT</div>`;
+  return `<div style="font-size:26px;line-height:32px;font-weight:800;color:#FFFFFF;letter-spacing:0.12em;">SENTCONNECT</div>`;
 }
 
 /**
@@ -132,32 +136,38 @@ export function baseTemplate(content: string, orgName?: string): string {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="light only" />
+<meta name="supported-color-schemes" content="light only" />
 <title>SentConnect</title>
 </head>
-<body style="margin:0;padding:0;background:#F4F6FB;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#F4F6FB;padding:40px 16px;">
+<body style="margin:0;padding:0;background:#EAF3FF;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#10233F;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#EAF3FF" style="width:100%;background:#EAF3FF;">
   <tr><td align="center">
-    <table width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;margin:0 auto;">
+      <tr><td height="32" style="height:32px;font-size:1px;line-height:1px;">&nbsp;</td></tr>
 
       <!-- Header -->
-      <tr><td style="background:linear-gradient(135deg,#1085FD 0%,#0059D6 100%);border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
+      <tr><td align="center" bgcolor="#086DE5" style="background:#086DE5;border-radius:20px 20px 0 0;padding:30px 32px 26px;text-align:center;">
         ${LOGO_PLACEHOLDER}
-        <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:8px;letter-spacing:0.03em;">Helping Churches stay connected with their missionaries</div>
+        <p style="margin:12px 0 0;font-size:13px;line-height:20px;font-weight:600;color:#FFFFFF;letter-spacing:0.02em;">
+          Helping Churches stay connected with their missionaries
+        </p>
       </td></tr>
 
       <!-- Body -->
-      <tr><td style="background:#fff;padding:36px 40px 32px;border-left:1px solid #E5E9F2;border-right:1px solid #E5E9F2;">
+      <tr><td bgcolor="#FFFFFF" style="background:#FFFFFF;padding:38px 40px 34px;border-left:1px solid #CFE2FA;border-right:1px solid #CFE2FA;">
         ${content}
       </td></tr>
 
       <!-- Footer -->
-      <tr><td style="background:#F8FAFD;border:1px solid #E5E9F2;border-top:none;border-radius:0 0 16px 16px;padding:20px 40px;text-align:center;">
-        <p style="margin:0;font-size:12px;color:#94A3B8;line-height:1.6;">
+      <tr><td bgcolor="#F7FBFF" style="background:#F7FBFF;border:1px solid #CFE2FA;border-top:none;border-radius:0 0 20px 20px;padding:22px 32px;text-align:center;">
+        <p style="margin:0;font-size:12px;color:#6B7D95;line-height:19px;">
           You are receiving this because you are part of <strong>${orgName ?? "your organization"}</strong> on SentConnect.<br />
-          <a href="${APP_URL}" style="color:#1085FD;text-decoration:none;">Manage notification preferences</a> &nbsp;·&nbsp;
-          <a href="mailto:support@sentconnect.org" style="color:#1085FD;text-decoration:none;">Contact support</a>
+          <a href="${APP_URL}" style="color:#086DE5;text-decoration:none;font-weight:600;">Manage notification preferences</a> &nbsp;·&nbsp;
+          <a href="mailto:support@sentconnect.org" style="color:#086DE5;text-decoration:none;font-weight:600;">Contact support</a>
         </p>
       </td></tr>
+      <tr><td height="32" style="height:32px;font-size:1px;line-height:1px;">&nbsp;</td></tr>
 
     </table>
   </td></tr>
@@ -182,7 +192,7 @@ function avatar(name: string, avatarUrl?: string | null): string {
   // Use a table for centering — flexbox is stripped by Gmail and many email clients.
   return `<table cellpadding="0" cellspacing="0" style="display:inline-table;vertical-align:middle;">
     <tr><td width="44" height="44" align="center" valign="middle"
-      style="width:44px;height:44px;border-radius:50%;background:#1085FD;color:#fff;font-size:17px;font-weight:700;line-height:44px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+      style="width:44px;height:44px;border-radius:50%;background:#086DE5;color:#fff;font-size:17px;font-weight:700;line-height:44px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
       ${initials}
     </td></tr>
   </table>`;
@@ -370,7 +380,7 @@ export async function sendNewCommentEmail(params: NewCommentEmailParams): Promis
     <h2 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#0F172A;">Someone commented on your post</h2>
 
     <!-- Post snippet -->
-    <div style="background:#F8FAFD;border-left:3px solid #1085FD;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
+    <div style="background:#F7FBFF;border-left:3px solid #086DE5;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
       <p style="margin:0;font-size:13px;color:#64748B;line-height:1.6;font-style:italic;">"${postSnippet}"</p>
     </div>
 
@@ -430,7 +440,7 @@ export async function sendAdminCommentAlertEmail(params: AdminCommentAlertParams
     </p>
 
     <!-- Post snippet -->
-    <div style="background:#F8FAFD;border-left:3px solid #1085FD;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
+    <div style="background:#F7FBFF;border-left:3px solid #086DE5;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
       <p style="margin:0 0 4px;font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em;">Post by ${postAuthorName}</p>
       <p style="margin:0;font-size:13px;color:#64748B;line-height:1.6;font-style:italic;">"${postSnippet}"</p>
     </div>
@@ -463,28 +473,17 @@ export async function sendAdminCommentAlertEmail(params: AdminCommentAlertParams
   return sendEmail(to, `${commenterName} commented on ${postAuthorName}'s post · SentConnect`, html, text);
 }
 
-// ─── 5. Weekly digest (to church admins) ─────────────────────────────────────
-// A once-a-week summary of the org's mission updates, sent to church admins so
-// they can forward it to their congregation.
+// ─── 5. Weekly Digest reminder (to church admins) ────────────────────────────
+// The report content stays private inside SentConnect; email only reminds the
+// administrator that the in-app Weekly Digest is ready.
 
-export interface DigestPost {
-  postId: number;
-  authorName: string;
-  authorAvatarUrl?: string | null;
-  title?: string | null;
-  snippet: string;
-  imageUrl?: string | null;
-  location?: string | null;
-  postedAt: Date;
-}
-
-export interface WeeklyDigestEmailParams {
+export interface WeeklyDigestReminderEmailParams {
   to: string;
   adminName: string;
   orgName: string;
   orgSubdomain?: string | null;
   weekLabel: string; // e.g. "Aug 9 – Aug 15"
-  posts: DigestPost[];
+  updateCount: number;
 }
 
 function escapeHtml(value: string): string {
@@ -496,74 +495,49 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
-/** Only allow absolute https URLs in email <img> tags. */
-function safeImageUrl(url: string | null | undefined): string | null {
-  if (!url) return null;
-  try {
-    const parsed = new URL(url);
-    return parsed.protocol === "https:" ? url : null;
-  } catch {
-    return null;
-  }
-}
-
-export async function sendWeeklyDigestEmail(params: WeeklyDigestEmailParams): Promise<SendResult> {
-  const { to, adminName, orgName, orgSubdomain, weekLabel, posts } = params;
-  const feedUrl = orgSubdomain ? `https://${orgSubdomain}.${CANONICAL_DOMAIN}/login` : APP_URL;
-
-  const postBlocks = posts.map(p => {
-    const dateStr = p.postedAt.toLocaleString("en-US", { month: "short", day: "numeric" });
-    const imgSrc = safeImageUrl(p.imageUrl);
-    const imageBlock = imgSrc
-      ? `<tr><td style="padding-top:12px;"><img src="${escapeHtml(imgSrc)}" alt="" width="100%" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;display:block;" /></td></tr>`
-      : "";
-    return `
-    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E5E9F2;border-radius:12px;margin:0 0 16px;">
-      <tr><td style="padding:18px 20px 0;">
-        <table cellpadding="0" cellspacing="0"><tr>
-          <td valign="middle">${avatar(escapeHtml(p.authorName), safeImageUrl(p.authorAvatarUrl))}</td>
-          <td valign="middle" style="padding-left:12px;">
-            <div style="font-size:14px;font-weight:700;color:#0F172A;">${escapeHtml(p.authorName)}</div>
-            <div style="font-size:12px;color:#94A3B8;margin-top:2px;">${dateStr}${p.location ? ` · ${escapeHtml(p.location)}` : ""}</div>
-          </td>
-        </tr></table>
-      </td></tr>
-      <tr><td style="padding:10px 20px 18px;">
-        <table width="100%" cellpadding="0" cellspacing="0">
-          ${p.title ? `<tr><td><h3 style="margin:0 0 6px;font-size:16px;font-weight:700;color:#0F172A;">${escapeHtml(p.title)}</h3></td></tr>` : ""}
-          <tr><td><p style="margin:0;font-size:14px;color:#475569;line-height:1.7;">${escapeHtml(p.snippet).replace(/\r?\n/g, "<br/>")}</p></td></tr>
-          ${imageBlock}
-        </table>
-      </td></tr>
-    </table>`;
-  }).join("");
+export async function sendWeeklyDigestReminderEmail(params: WeeklyDigestReminderEmailParams): Promise<SendResult> {
+  const { to, adminName, orgName, orgSubdomain, weekLabel, updateCount } = params;
+  const base = orgSubdomain ? `https://${orgSubdomain}.${CANONICAL_DOMAIN}` : APP_URL;
+  const digestUrl = `${base}/admin?tab=digest`;
+  const countLabel = `${updateCount} new update${updateCount === 1 ? "" : "s"}`;
 
   const html = baseTemplate(`
-    <p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#1085FD;letter-spacing:0.08em;text-transform:uppercase;">Weekly digest · ${escapeHtml(weekLabel)}</p>
-    <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#0F172A;">This week from your missionaries</h2>
-    <p style="margin:0 0 24px;font-size:15px;color:#475569;line-height:1.6;">
-      Hi <strong>${escapeHtml(adminName)}</strong>, here ${posts.length === 1 ? "is the update" : `are the ${posts.length} updates`} your missionaries shared this week.
-      Feel free to forward this email to your congregation or include it in your bulletin.
+    <p style="margin:0 0 8px;font-size:12px;font-weight:700;color:#086DE5;letter-spacing:0.1em;text-transform:uppercase;">Weekly report · ${escapeHtml(weekLabel)}</p>
+    <h1 style="margin:0 0 14px;font-size:27px;line-height:35px;font-weight:800;color:#10233F;">Your Weekly Missionary Report is ready</h1>
+    <p style="margin:0 0 22px;font-size:16px;color:#475B75;line-height:26px;">
+      Hi <strong>${escapeHtml(adminName)}</strong>, your organization has a fresh weekly summary waiting in SentConnect.
     </p>
-    ${postBlocks}
-    ${ctaButton(feedUrl, "View All Updates")}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 24px;">
+      <tr>
+        <td bgcolor="#EAF3FF" style="background:#EAF3FF;border:1px solid #C5DEFB;border-radius:14px;padding:22px;text-align:center;">
+          <p style="margin:0 0 5px;font-size:23px;line-height:29px;font-weight:800;color:#086DE5;">${escapeHtml(countLabel)}</p>
+          <p style="margin:0;font-size:14px;line-height:21px;color:#526985;">from your missionaries this week</p>
+        </td>
+      </tr>
+    </table>
+    <p style="margin:0;font-size:15px;color:#475B75;line-height:25px;">
+      Open the Weekly Digest tab to review the full report, photos, and ministry updates in one place.
+    </p>
+    ${ctaButton(digestUrl, "View Weekly Digest")}
+    <p style="margin:22px 0 0;font-size:13px;color:#7A8CA5;line-height:20px;">
+      For privacy, the full report is available inside your organization’s secure SentConnect portal rather than included in this email.
+    </p>
   `, escapeHtml(orgName));
 
   const text = [
-    `Weekly missionary digest · ${weekLabel} · ${orgName}`,
+    `Your Weekly Missionary Report is ready · ${orgName}`,
     "",
-    ...posts.map(p => [
-      `${p.authorName}${p.location ? ` (${p.location})` : ""} — ${p.postedAt.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`,
-      p.title ? p.title : "",
-      p.snippet,
-      "",
-    ].filter(Boolean).join("\n")),
-    `View all updates: ${feedUrl}`,
+    `Hi ${adminName},`,
+    "",
+    `Your organization has ${countLabel} for ${weekLabel}.`,
+    "Open the Weekly Digest tab to review the full report, photos, and ministry updates.",
+    "",
+    `View Weekly Digest: ${digestUrl}`,
     "",
     `— SentConnect · ${orgName}`,
   ].join("\n");
 
-  return sendEmail(to, `Weekly Missionary Digest · ${orgName}`, html, text);
+  return sendEmail(to, `Your Weekly Missionary Report is ready · ${orgName}`, html, text);
 }
 
 // ─── 6. Signup request notification (to platform admin) ─────────────────────

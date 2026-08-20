@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/components/auth-provider";
-import { Redirect, Link } from "wouter";
+import { Redirect, Link, useSearch } from "wouter";
 import {
   useGetStats, getGetStatsQueryKey,
   useListUsers, getListUsersQueryKey,
@@ -1075,7 +1075,11 @@ function parseLocation(loc: string): { city: string; country: string } {
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<"team" | "feed" | "countries" | "digest">("feed");
+  const search = useSearch();
+  const requestedTab = new URLSearchParams(search).get("tab");
+  const [activeTab, setActiveTab] = useState<"team" | "feed" | "countries" | "digest">(
+    requestedTab === "digest" ? "digest" : "feed",
+  );
   const [feedMomentFilter, setFeedMomentFilter] = useState<"all" | "moments">("all");
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedPosts, setFeedPosts] = useState<PostData[] | null>(null);
@@ -1083,6 +1087,19 @@ export default function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const { toast } = useToast();
+
+  useEffect(() => {
+    const tab = new URLSearchParams(search).get("tab");
+    if (tab === "digest") setActiveTab("digest");
+  }, [search]);
+
+  function selectTab(tab: "team" | "feed" | "countries" | "digest") {
+    setActiveTab(tab);
+    const url = new URL(window.location.href);
+    if (tab === "feed") url.searchParams.delete("tab");
+    else url.searchParams.set("tab", tab);
+    window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+  }
 
   const { data: stats, isLoading: statsLoading } = useGetStats({ query: { queryKey: getGetStatsQueryKey(), staleTime: 5 * 60 * 1000 } });
   const { data: users, isLoading: usersLoading } = useListUsers({}, { query: { queryKey: getListUsersQueryKey({}), staleTime: 2 * 60 * 1000 } });
@@ -1173,7 +1190,7 @@ export default function AdminDashboard() {
             return (
               <button
                 key={id}
-                onClick={() => setActiveTab(id)}
+                onClick={() => selectTab(id)}
                 style={{
                   display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap",
                   padding: "8px 12px", border: "none",
@@ -1227,7 +1244,7 @@ export default function AdminDashboard() {
               return (
                 <button
                   key={id}
-                  onClick={() => setActiveTab(id)}
+                  onClick={() => selectTab(id)}
                   style={{
                     display: "flex", alignItems: "center", gap: 12,
                     width: "100%", textAlign: "left",
