@@ -121,7 +121,7 @@ const DEFAULT_LANDING_PAGE_CONTENT: LandingPageContent = {
 // ── Support contact (shown in top bar + footer) ──────────────────────────────
 const SUPPORT_PHONE_DISPLAY = "+1-951-551-4528";
 const SUPPORT_PHONE_TEL = "+19515514528";
-const SUPPORT_EMAIL = "holly@holteksolutions.com";
+const SUPPORT_EMAIL = "teki@holteksolutions.com";
 
 function ContactTopBar() {
   const link: React.CSSProperties = {
@@ -407,8 +407,8 @@ function LandingPage() {
               <a href="tel:+19515514528" style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}>
                 Contact Support at +1-951-551-4528 (Call/WhatsApp)
               </a>
-              <a href="mailto:holly@holteksolutions.com" style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}>
-                holly@holteksolutions.com
+              <a href="mailto:teki@holteksolutions.com" style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s" }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}>
+                teki@holteksolutions.com
               </a>
             </div>
           </div>
@@ -627,12 +627,12 @@ function AboutPage() {
                 Contact Support at +1-951-551-4528 (Call/WhatsApp)
               </a>
               <a
-                href="mailto:holly@holteksolutions.com"
+                href="mailto:teki@holteksolutions.com"
                 style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "none", transition: "color .15s", display: "inline-block", marginTop: 6 }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
               >
-                holly@holteksolutions.com
+                teki@holteksolutions.com
               </a>
             </div>
           </div>
