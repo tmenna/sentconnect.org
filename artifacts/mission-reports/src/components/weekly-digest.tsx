@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { ChevronDown, MapPin, BookOpen, Link2, Check } from "lucide-react";
-import type { PostData } from "@/components/post-card";
+import { BookOpen, Link2, Check } from "lucide-react";
+import { PostCard, type PostData } from "@/components/post-card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useOrg } from "@/providers/org-provider";
 
 /**
@@ -18,6 +19,13 @@ type DigestGroup = {
   weekStart: number;
   posts: PostData[];
 };
+
+const ACCORDION_COLORS = [
+  { accent: "#F54900", ink: "#C33A00", soft: "#FFF1EB" },
+  { accent: "#F0D030", ink: "#735F00", soft: "#FFFBE5" },
+  { accent: "#155DFC", ink: "#155DFC", soft: "#EFF6FF" },
+  { accent: "#EC3A42", ink: "#C9272F", soft: "#FFF0F2" },
+];
 
 function startOfWeek(d: Date): Date {
   const copy = new Date(d);
@@ -109,90 +117,70 @@ export function WeeklyDigest({ posts }: { posts: PostData[] }) {
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      {groups.map(group => {
+    <Accordion
+      type="single"
+      collapsible
+      value={open ?? ""}
+      onValueChange={value => setOpen(value || null)}
+      className="flex flex-col gap-3"
+    >
+      {groups.map((group, index) => {
         const expanded = open === group.key;
+        const color = ACCORDION_COLORS[index % ACCORDION_COLORS.length];
         return (
-          <div key={group.key} className="bg-white rounded-2xl overflow-hidden"
-            style={{ border: expanded ? "1.5px solid #BFDBFE" : "1px solid #E5E9F2" }}>
-            <div className="flex items-center gap-2"
-              style={{ padding: "0 12px 0 0", background: expanded ? "#F8FAFF" : "#fff" }}>
-              <button
-                onClick={() => setOpen(expanded ? null : group.key)}
-                className="flex-1 min-w-0 flex items-center gap-3 text-left"
-                style={{ padding: "14px 0 14px 18px", border: "none", background: "transparent", cursor: "pointer" }}
+          <AccordionItem
+            key={group.key}
+            value={group.key}
+            className="bg-white rounded-2xl overflow-hidden transition-colors duration-200"
+            style={{ border: `1.5px solid ${expanded ? color.accent : "#E5E9F2"}` }}
+          >
+            <div
+              className="flex items-center gap-1 sm:gap-2 [&>h3]:flex-1 [&>h3]:min-w-0"
+              style={{
+                padding: "0 8px 0 0",
+                background: expanded ? color.soft : "#FFFFFF",
+                borderLeft: `5px solid ${color.accent}`,
+              }}
+            >
+              <AccordionTrigger
+                className="min-w-0 gap-2 py-0 pr-1 text-left hover:no-underline [&>svg]:min-h-11 [&>svg]:min-w-5 [&>svg]:!text-current"
+                style={{ minHeight: 72, paddingLeft: 13, color: color.ink }}
               >
-                <Avatar name={group.authorName} url={group.avatarUrl} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold truncate" style={{ color: "#0F172A", margin: 0 }}>{group.authorName}</p>
-                  <p className="text-xs" style={{ color: "#94A3B8", margin: "2px 0 0" }}>{group.weekLabel}</p>
+                <div className="flex flex-1 min-w-0 items-center gap-3">
+                  <Avatar name={group.authorName} url={group.avatarUrl} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold truncate" style={{ color: "#0F172A", margin: 0 }}>{group.authorName}</p>
+                    <p className="text-xs" style={{ color: "#64748B", margin: "2px 0 0" }}>{group.weekLabel}</p>
+                  </div>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
+                    style={{ background: color.soft, color: color.ink, border: `1px solid ${color.accent}` }}>
+                    {group.posts.length} update{group.posts.length !== 1 ? "s" : ""}
+                  </span>
                 </div>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
-                  style={{ background: "#EFF6FF", color: "#1085FD" }}>
-                  {group.posts.length} update{group.posts.length !== 1 ? "s" : ""}
-                </span>
-              </button>
+              </AccordionTrigger>
               <button
                 type="button"
                 title="Copy share link"
+                aria-label="Copy share link"
                 onClick={() => copyShareLink(group)}
-                className="flex items-center gap-1 flex-shrink-0 px-2 py-1.5 rounded-full transition-colors hover:bg-[#E8F4FF]"
-                style={{ border: "none", background: "transparent", cursor: "pointer", color: copiedKey === group.key ? "#16A34A" : "#1085FD" }}
+                className="flex min-h-11 items-center gap-1 flex-shrink-0 px-2 py-1.5 rounded-full transition-colors"
+                style={{ border: "none", background: "transparent", cursor: "pointer", color: copiedKey === group.key ? "#16A34A" : color.ink }}
               >
                 {copiedKey === group.key ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
                 <span className="text-xs font-semibold hidden sm:inline">{copiedKey === group.key ? "Copied!" : "Share"}</span>
               </button>
-              <button
-                type="button"
-                aria-label={expanded ? "Collapse" : "Expand"}
-                onClick={() => setOpen(expanded ? null : group.key)}
-                className="p-1.5 rounded-full flex-shrink-0"
-                style={{ border: "none", background: "transparent", cursor: "pointer" }}
-              >
-                <ChevronDown className="w-4 h-4 transition-transform duration-200"
-                  style={{ color: "#94A3B8", transform: expanded ? "rotate(180deg)" : "none" }} />
-              </button>
             </div>
 
-            {expanded && (
-              <div style={{ borderTop: "1px solid #EEF2F7" }}>
-                {group.posts.map(post => {
-                  const dateStr = new Date(post.createdAt).toLocaleDateString("en-US", {
-                    weekday: "short", month: "short", day: "numeric",
-                  });
-                  const media = post.photos.filter(p => !(p.mimeType ?? "").startsWith("video/"));
-                  return (
-                    <div key={post.id} className="px-4 sm:px-5 py-4" style={{ borderBottom: "1px solid #F1F5F9" }}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs font-semibold" style={{ color: "#1085FD" }}>{dateStr}</span>
-                        {post.location && (
-                          <span className="inline-flex items-center gap-1 text-xs" style={{ color: "#94A3B8" }}>
-                            <MapPin className="w-3 h-3" /> {post.location}
-                          </span>
-                        )}
-                      </div>
-                      {post.description && (
-                        <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "#475569", margin: 0 }}>
-                          {post.description}
-                        </p>
-                      )}
-                      {media.length > 0 && (
-                        <div className={`mt-3 grid gap-2 ${media.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
-                          {media.slice(0, 4).map(p => (
-                            <img key={p.id} src={p.url} alt={p.caption ?? ""}
-                              className="w-full rounded-xl object-cover"
-                              style={{ maxHeight: media.length === 1 ? 320 : 180 }} />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+            <AccordionContent className="p-0" style={{ borderTop: `1px solid ${color.accent}` }}>
+              <div>
+                {group.posts.map(post => (
+                  <PostCard key={post.id} post={post} hideViewPost flat />
+                ))}
               </div>
-            )}
-          </div>
+            </AccordionContent>
+          </AccordionItem>
         );
       })}
-    </div>
+    </Accordion>
   );
 }
