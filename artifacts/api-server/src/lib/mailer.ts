@@ -107,8 +107,8 @@ const LOGO_PLACEHOLDER = "%%EMAIL_LOGO_BLOCK%%";
 export function logoBlockHtml(logoUrl: string | null): string {
   if (logoUrl) {
     return `<table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0">
-      <tr><td align="center" style="background:#FFFFFF;border-radius:12px;padding:10px 18px;">
-        <img src="${logoUrl}" alt="SentConnect" height="44" style="height:44px;max-width:230px;width:auto;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" />
+      <tr><td align="center">
+        <img src="${logoUrl}" alt="SentConnect" width="108" style="width:108px;max-width:108px;height:auto;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" />
       </td></tr>
     </table>`;
   }
