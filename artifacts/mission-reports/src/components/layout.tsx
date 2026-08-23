@@ -284,13 +284,18 @@ export function Layout({ children }: { children: ReactNode }) {
       <header
         className="sticky top-0 z-50 w-full"
         style={onBlue
-          ? { background: "linear-gradient(115deg, #003B94 0%, #0059D6 45%, #1085FD 100%)" }
+          ? { background: "#1085FD", boxShadow: "0 1px 0 rgba(0,72,160,0.18)" }
           : { background: "#fff", borderBottom: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
       >
-        <div className="max-w-6xl mx-auto flex h-20 md:h-24 items-center justify-between px-4 sm:px-8">
+        <div className="max-w-6xl mx-auto flex h-16 items-center justify-between px-4 sm:px-8">
           {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
-            <img src={onBlue ? logoWhite : logoBlueBlack} alt="SentConnect" className="h-16 md:h-20" style={{ width: "auto", maxWidth: 300, display: "block" }} />
+            <img
+              src={onBlue ? logoWhite : logoBlueBlack}
+              alt="SentConnect"
+              className={onBlue ? "h-12 w-12" : "h-14 w-auto"}
+              style={{ maxWidth: 220, display: "block", objectFit: "contain" }}
+            />
           </Link>
 
           {/* Desktop nav */}
