@@ -115,7 +115,7 @@ export function WeeklyDigest({ posts }: { posts: PostData[] }) {
       collapsible
       value={open ?? ""}
       onValueChange={value => setOpen(value || null)}
-      className="flex flex-col gap-3"
+      className="flex flex-col gap-2.5 sm:gap-3"
     >
       {groups.map(group => {
         const expanded = open === group.key;
@@ -123,28 +123,33 @@ export function WeeklyDigest({ posts }: { posts: PostData[] }) {
           <AccordionItem
             key={group.key}
             value={group.key}
-            className="bg-white rounded-2xl overflow-hidden transition-colors duration-200"
-            style={{ border: `1.5px solid ${expanded ? "#1085FD" : "#D5E6FF"}` }}
+            className="bg-white rounded-[16px] overflow-hidden transition-all duration-200"
+            style={{
+              border: `1px solid ${expanded ? "#1085FD" : "#D5E6FF"}`,
+              boxShadow: expanded
+                ? "0 6px 18px rgba(16,133,253,0.14)"
+                : "0 2px 8px rgba(15,23,42,0.04)",
+            }}
           >
             <div
               className="flex items-center gap-1 sm:gap-2 [&>h3]:flex-1 [&>h3]:min-w-0"
               style={{
-                padding: "0 8px 0 0",
+                padding: "0 10px 0 0",
                 background: "#1085FD",
-                borderLeft: "5px solid #0B6EDB",
+                borderLeft: "3px solid #0B6EDB",
               }}
             >
               <AccordionTrigger
-                className="min-w-0 gap-2 py-0 pr-1 text-left hover:no-underline [&>svg]:min-h-11 [&>svg]:min-w-5 [&>svg]:!text-current"
-                style={{ minHeight: 72, paddingLeft: 13, color: "#FFFFFF" }}
+                className="min-w-0 gap-2.5 py-0 pr-1 text-left hover:no-underline [&>svg]:min-h-11 [&>svg]:min-w-5 [&>svg]:!text-current"
+                style={{ minHeight: 70, paddingLeft: 14, color: "#FFFFFF" }}
               >
                 <div className="flex flex-1 min-w-0 items-center gap-3">
                   <Avatar name={group.authorName} url={group.avatarUrl} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold truncate" style={{ color: "#FFFFFF", margin: 0 }}>{group.authorName}</p>
-                    <p className="text-xs font-semibold" style={{ color: "#EAF3FF", margin: "2px 0 0" }}>{group.weekLabel}</p>
+                    <p className="text-sm font-bold truncate" style={{ color: "#FFFFFF", margin: 0, letterSpacing: "-0.01em" }}>{group.authorName}</p>
+                    <p className="text-xs font-medium" style={{ color: "#DCEBFF", margin: "3px 0 0" }}>{group.weekLabel}</p>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0"
                     style={{ background: "#FFFFFF", color: "#1085FD", border: "1px solid #FFFFFF" }}>
                     {group.posts.length} update{group.posts.length !== 1 ? "s" : ""}
                   </span>
@@ -155,8 +160,13 @@ export function WeeklyDigest({ posts }: { posts: PostData[] }) {
                 title="Copy share link"
                 aria-label="Copy share link"
                 onClick={() => copyShareLink(group)}
-                className="flex min-h-11 items-center gap-1 flex-shrink-0 px-2 py-1.5 rounded-full transition-colors"
-                style={{ border: "none", background: "transparent", cursor: "pointer", color: copiedKey === group.key ? "#D1FAE5" : "#FFFFFF" }}
+                className="flex min-h-11 items-center gap-1 flex-shrink-0 px-2.5 py-1.5 rounded-full transition-colors hover:bg-white/20"
+                style={{
+                  border: "1px solid rgba(255,255,255,0.45)",
+                  background: "rgba(255,255,255,0.12)",
+                  cursor: "pointer",
+                  color: copiedKey === group.key ? "#D1FAE5" : "#FFFFFF",
+                }}
               >
                 {copiedKey === group.key ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
                 <span className="text-xs font-semibold hidden sm:inline">{copiedKey === group.key ? "Copied!" : "Share"}</span>
