@@ -11,6 +11,7 @@ export const modules: ModuleMap = {
   "./components/mockups/landing-directions/CleanBlue.tsx": () => import("../components/mockups/landing-directions/CleanBlue.tsx"),
   "./components/mockups/landing-directions/CleanOrange.tsx": () => import("../components/mockups/landing-directions/CleanOrange.tsx"),
   "./components/mockups/landing-directions/WarmBlue.tsx": () => import("../components/mockups/landing-directions/WarmBlue.tsx"),
+  "./components/mockups/sentconnect-dashboard/SentConnectDashboard.tsx": () => import("../components/mockups/sentconnect-dashboard/SentConnectDashboard.tsx"),
   "./components/mockups/sentconnect-hero/InteractiveFeed.tsx": () => import("../components/mockups/sentconnect-hero/InteractiveFeed.tsx"),
   "./components/mockups/sentconnect-ui/AdminDashboard.tsx": () => import("../components/mockups/sentconnect-ui/AdminDashboard.tsx"),
   "./components/mockups/sentconnect-ui/PostFeed.tsx": () => import("../components/mockups/sentconnect-ui/PostFeed.tsx")
