@@ -1,0 +1,64 @@
+Please refine ONLY the way the Weekly Digest missionary items expand and collapse.
+
+Do NOT redesign the existing page, sidebar, header, navigation, typography, colors, spacing, buttons, or overall SentConnect visual language. The current overall design and consistency are good and should remain intact.
+
+The goal is to make the Weekly Digest lineup feel more polished, modern, and intentional while keeping the current design.
+
+### Desired behavior and styling
+
+Use the current layout as the foundation:
+
+- One missionary can be expanded at a time.
+- Expanded missionary shows the full update/content underneath the missionary header.
+- Other missionaries remain collapsed as compact rows.
+- Clicking the missionary row or chevron should smoothly expand/collapse it.
+- Keep the existing information and controls exactly as they are.
+
+### Visual refinement
+
+For the COLLAPSED missionary rows:
+
+- Keep them clean and lightweight.
+- Do not use the current heavy solid-blue header treatment.
+- Use the existing white/light background style of the page.
+- Use subtle separation rather than strong borders.
+- Keep the missionary avatar, name, date range, location, update count, Share button, menu, and chevron.
+- The update-count pill can retain its existing light-blue treatment.
+- Keep the small colored accent on the left side of each missionary row, but make it subtle.
+- Avoid thick borders, heavy shadows, or overly bold styling.
+- The collapsed rows should feel like part of one continuous Missions Feed rather than separate large accordion boxes.
+
+For the EXPANDED missionary:
+
+- Keep the existing expanded content and functionality.
+- Make the transition from collapsed → expanded feel smooth and natural.
+- The missionary header should remain visually connected to the content below it.
+- Use a subtle blue accent to indicate the active/expanded missionary.
+- Avoid making the entire header bright blue.
+- Keep the post content, photos, reactions, comments, and sharing controls unchanged.
+- The expanded section can have a very subtle elevation/shadow so it is clear that it is active.
+
+### Interaction
+
+Add a polished, subtle transition when opening and closing a missionary:
+
+- Smooth height/opacity transition.
+- Chevron rotates naturally between expanded and collapsed states.
+- Avoid flashy animations.
+- The interaction should feel fast and professional.
+
+### Important design principle
+
+The Weekly Digest should NOT look like a traditional accordion.
+
+It should feel more like a modern mission communication feed where:
+
+COLLAPSED = lightweight weekly summary
+
+EXPANDED = the selected missionary's active feed
+
+The hierarchy should come primarily from spacing, subtle background changes, the left accent, and the expanded content—not heavy borders or large blocks of color.
+
+Please preserve the current SentConnect design and make ONLY these Weekly Digest expand/collapse refinements.
+
+Before changing anything else, inspect the existing implementation and reuse the current components, styles, colors, and responsive behavior wherever possible.
