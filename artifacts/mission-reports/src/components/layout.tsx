@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "./auth-provider";
 import { useLogoutUser } from "@workspace/api-client-react";
 import { Button } from "./ui/button";
-import { LogOut, LogIn, Rss, ShieldCheck, Menu, X, User, Globe } from "lucide-react";
+import { ArrowRight, LogOut, LogIn, Rss, ShieldCheck, Menu, X, User, Globe } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useOrg } from "@/providers/org-provider";
@@ -36,17 +36,25 @@ function AdminIcon({ size = 15 }: { size?: number }) {
  * Demo-only "Viewing as" switcher: flips the demo session between the
  * missionary (field user) and Church admin personas in one click.
  */
-function DemoRoleSwitch() {
+function DemoRoleSwitch({
+  selectedRole,
+  onSelectRole,
+}: {
+  selectedRole: "admin" | "field_user";
+  onSelectRole: (role: "admin" | "field_user") => void;
+}) {
   const { user } = useAuth();
   const { prefix } = useOrg();
   const { toast } = useToast();
   const [switching, setSwitching] = useState(false);
 
   const isAdmin = user?.role === "admin" || user?.role === "super_admin";
+  const selectedIsAdmin = selectedRole === "admin";
 
   async function switchTo(role: "admin" | "field_user") {
     if (switching) return;
-    if ((role === "admin") === isAdmin) return; // already there
+    if (role === selectedRole) return;
+    onSelectRole(role);
     setSwitching(true);
     try {
       const res = await fetch("/api/auth/demo-switch-role", {
@@ -63,10 +71,12 @@ function DemoRoleSwitch() {
       } else {
         const data = await res.json().catch(() => ({}));
         toast({ title: data.error ?? "Couldn't switch views — please try again." });
+        onSelectRole(isAdmin ? "admin" : "field_user");
         setSwitching(false);
       }
     } catch {
       toast({ title: "Network error — please try again." });
+      onSelectRole(isAdmin ? "admin" : "field_user");
       setSwitching(false);
     }
   }
@@ -94,18 +104,18 @@ function DemoRoleSwitch() {
     >
       <button
         onClick={() => switchTo("field_user")}
-        aria-pressed={!isAdmin}
+        aria-pressed={!selectedIsAdmin}
         data-testid="btn-demo-view-missionary"
-        style={{ ...btnBase, background: !isAdmin ? "#1085FD" : "transparent", color: !isAdmin ? "#fff" : "#2563A8" }}
+        style={{ ...btnBase, background: !selectedIsAdmin ? "#1085FD" : "transparent", color: !selectedIsAdmin ? "#fff" : "#2563A8" }}
       >
         <MissionaryIcon size={13} />
         Missionary
       </button>
       <button
         onClick={() => switchTo("admin")}
-        aria-pressed={isAdmin}
+        aria-pressed={selectedIsAdmin}
         data-testid="btn-demo-view-admin"
-        style={{ ...btnBase, background: isAdmin ? "#1085FD" : "transparent", color: isAdmin ? "#fff" : "#2563A8" }}
+        style={{ ...btnBase, background: selectedIsAdmin ? "#1085FD" : "transparent", color: selectedIsAdmin ? "#fff" : "#2563A8" }}
       >
         <AdminIcon size={13} />
         Church Admin
@@ -117,13 +127,19 @@ function DemoRoleSwitch() {
 function DemoBanner() {
   const { orgSlug } = useOrg();
   const { user, isAuthenticated } = useAuth();
+  const actualRole = user?.role === "admin" || user?.role === "super_admin" ? "admin" : "field_user";
+  const [selectedRole, setSelectedRole] = useState<"admin" | "field_user">(actualRole);
+
+  useEffect(() => {
+    setSelectedRole(actualRole);
+  }, [actualRole]);
 
   if (orgSlug !== DEMO_ORG || !isAuthenticated || !user) return null;
 
   // Only the two canonical demo personas can switch views; anyone else in the
   // demo org (invited members, platform admins) sees the banner without the toggle.
   const isDemoPersona = user.email === "demoadmin@sentconnect.org" || user.email === "demouser@sentconnect.org";
-  const isAdmin = user.role === "admin" || user.role === "super_admin";
+  const isAdmin = selectedRole === "admin";
 
   return (
     <div style={{
@@ -147,11 +163,32 @@ function DemoBanner() {
         <span style={{ fontSize: 13.5, fontWeight: 700, color: "#475569" }}>
           Demo mode: <span style={{ color: "#0F172A" }}>{isAdmin ? "Church Admin" : "Missionary"}</span>
         </span>
-        {isDemoPersona && <DemoRoleSwitch />}
         {isDemoPersona && (
-          <span style={{ fontSize: 13, fontWeight: 500, color: "#64748B" }}>
-            Choose Church Admin, then open Updates to view and manage posts.
-          </span>
+          <DemoRoleSwitch selectedRole={selectedRole} onSelectRole={setSelectedRole} />
+        )}
+        {isDemoPersona && (
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "7px 10px",
+            borderRadius: 9,
+            background: "#F8FAFC",
+            border: "1px solid #E2E8F0",
+            color: "#64748B",
+            fontSize: 13,
+            lineHeight: 1.2,
+            whiteSpace: "nowrap",
+          }}>
+            <ArrowRight size={14} strokeWidth={2.4} color="#1085FD" aria-hidden="true" />
+            <span>
+              Choose{" "}
+              <strong style={{ color: "#1085FD", fontWeight: 750 }}>
+                {isAdmin ? "Missionary" : "Church Admin"}
+              </strong>
+              {isAdmin ? " to post" : " to view posts"}
+            </span>
+          </div>
         )}
       </div>
     </div>
