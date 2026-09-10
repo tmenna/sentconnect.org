@@ -135,9 +135,9 @@ function DemoBanner() {
     }}>
       <div style={{
         maxWidth: 1152,
-        minHeight: 54,
+        minHeight: 62,
         margin: "0 auto",
-        padding: "7px 32px",
+        padding: "8px 32px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -148,6 +148,11 @@ function DemoBanner() {
           Demo mode: <span style={{ color: "#0F172A" }}>{isAdmin ? "Church Admin" : "Missionary"}</span>
         </span>
         {isDemoPersona && <DemoRoleSwitch />}
+        {isDemoPersona && (
+          <span style={{ fontSize: 13, fontWeight: 500, color: "#64748B" }}>
+            Choose Church Admin, then open Updates to view and manage posts.
+          </span>
+        )}
       </div>
     </div>
   );
@@ -158,8 +163,9 @@ export function Layout({ children }: { children: ReactNode }) {
   const { orgSlug } = useOrg();
   const isDemoOrg = orgSlug === DEMO_ORG;
   // Signed-in org pages (admin + missionary dashboards) use the blue brand
-  // header with the white logo; in the demo it also blends into the demo banner.
-  const onBlue = isAuthenticated;
+  // header with the white logo. Demo pages always start with the same white
+  // logo instead of waiting for authentication and briefly showing another one.
+  const onBlue = isDemoOrg || isAuthenticated;
 
   const [currentPath] = useLocation();
   const { toast } = useToast();
@@ -233,14 +239,19 @@ export function Layout({ children }: { children: ReactNode }) {
           ? { background: "#1085FD", boxShadow: "0 1px 0 rgba(0,72,160,0.18)" }
           : { background: "#fff", borderBottom: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
       >
-        <div className="max-w-6xl mx-auto flex h-16 items-center justify-between px-4 sm:px-8">
+        <div className={cn(
+          "max-w-6xl mx-auto flex items-center justify-between px-4 sm:px-8",
+          isDemoOrg ? "h-24 md:h-28" : "h-16",
+        )}>
           {/* Brand wordmark */}
           <Link href="/" className="flex items-center gap-2 group" data-testid="link-home">
             <img
               src={onBlue ? logoWhite : logoBlueBlack}
               alt="SentConnect"
-              className={onBlue ? "h-11 w-auto" : "h-14 w-auto"}
-              style={{ maxWidth: 220, display: "block", objectFit: "contain" }}
+              fetchPriority={isDemoOrg ? "high" : "auto"}
+              decoding={isDemoOrg ? "sync" : "async"}
+              className={isDemoOrg ? "h-20 md:h-24 w-auto" : onBlue ? "h-11 w-auto" : "h-14 w-auto"}
+              style={{ maxWidth: isDemoOrg ? 300 : 220, display: "block", objectFit: "contain" }}
             />
           </Link>
 
