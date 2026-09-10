@@ -115,7 +115,7 @@ export function WeeklyDigest({ posts }: { posts: PostData[] }) {
       collapsible
       value={open ?? ""}
       onValueChange={value => setOpen(value || null)}
-      className="flex flex-col gap-2.5 sm:gap-3"
+      className="flex flex-col gap-1.5 sm:gap-2"
     >
       {groups.map(group => {
         const expanded = open === group.key;
@@ -123,34 +123,35 @@ export function WeeklyDigest({ posts }: { posts: PostData[] }) {
           <AccordionItem
             key={group.key}
             value={group.key}
-            className="bg-white rounded-[16px] overflow-hidden transition-all duration-200"
+            className="bg-white rounded-xl overflow-hidden transition-[border-color,box-shadow,background-color] duration-200"
             style={{
-              border: `1px solid ${expanded ? "#1085FD" : "#D5E6FF"}`,
+              border: `1px solid ${expanded ? "#C9E1FA" : "#E8EEF5"}`,
               boxShadow: expanded
-                ? "0 6px 18px rgba(16,133,253,0.14)"
-                : "0 2px 8px rgba(15,23,42,0.04)",
+                ? "0 5px 16px rgba(15,76,129,0.09)"
+                : "0 1px 2px rgba(15,23,42,0.025)",
             }}
           >
             <div
               className="flex items-center gap-1 sm:gap-2 [&>h3]:flex-1 [&>h3]:min-w-0"
               style={{
                 padding: "0 10px 0 0",
-                background: "#1085FD",
-                borderLeft: "3px solid #0B6EDB",
+                background: expanded ? "#F7FBFF" : "#FFFFFF",
+                borderLeft: `3px solid ${expanded ? "#1085FD" : "#BBD8F5"}`,
+                transition: "background-color 180ms ease, border-color 180ms ease",
               }}
             >
               <AccordionTrigger
-                className="min-w-0 gap-2.5 py-0 pr-1 text-left hover:no-underline [&>svg]:min-h-11 [&>svg]:min-w-5 [&>svg]:!text-current"
-                style={{ minHeight: 70, paddingLeft: 14, color: "#FFFFFF" }}
+                className="min-w-0 gap-2.5 py-0 pr-1 text-left hover:no-underline [&>svg]:min-h-11 [&>svg]:min-w-5 [&>svg]:!text-current [&>svg]:duration-200"
+                style={{ minHeight: 68, paddingLeft: 14, color: expanded ? "#1085FD" : "#64748B" }}
               >
                 <div className="flex flex-1 min-w-0 items-center gap-3">
                   <Avatar name={group.authorName} url={group.avatarUrl} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold truncate" style={{ color: "#FFFFFF", margin: 0, letterSpacing: "-0.01em" }}>{group.authorName}</p>
-                    <p className="text-xs font-medium" style={{ color: "#DCEBFF", margin: "3px 0 0" }}>{group.weekLabel}</p>
+                    <p className="text-sm font-bold truncate" style={{ color: "#172033", margin: 0, letterSpacing: "-0.01em" }}>{group.authorName}</p>
+                    <p className="text-xs font-medium" style={{ color: "#718096", margin: "3px 0 0" }}>{group.weekLabel}</p>
                   </div>
                   <span className="text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0"
-                    style={{ background: "#FFFFFF", color: "#1085FD", border: "1px solid #FFFFFF" }}>
+                    style={{ background: "#EEF6FF", color: "#0874E8", border: "1px solid #D7EAFE" }}>
                     {group.posts.length} update{group.posts.length !== 1 ? "s" : ""}
                   </span>
                 </div>
@@ -160,12 +161,12 @@ export function WeeklyDigest({ posts }: { posts: PostData[] }) {
                 title="Copy share link"
                 aria-label="Copy share link"
                 onClick={() => copyShareLink(group)}
-                className="flex min-h-11 items-center gap-1 flex-shrink-0 px-2.5 py-1.5 rounded-full transition-colors hover:bg-white/20"
+                className="flex min-h-10 items-center gap-1 flex-shrink-0 px-2.5 py-1.5 rounded-full transition-colors hover:bg-blue-50"
                 style={{
-                  border: "1px solid rgba(255,255,255,0.45)",
-                  background: "rgba(255,255,255,0.12)",
+                  border: "1px solid #D6E5F5",
+                  background: "#FFFFFF",
                   cursor: "pointer",
-                  color: copiedKey === group.key ? "#D1FAE5" : "#FFFFFF",
+                  color: copiedKey === group.key ? "#14804A" : "#3274B9",
                 }}
               >
                 {copiedKey === group.key ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
@@ -173,8 +174,14 @@ export function WeeklyDigest({ posts }: { posts: PostData[] }) {
               </button>
             </div>
 
-            <AccordionContent className="p-0" style={{ borderTop: "1px solid #D5E6FF" }}>
-              <div>
+            <AccordionContent
+              className="p-0"
+              style={{ borderTop: "1px solid #E1ECF7" }}
+            >
+              <div style={{
+                opacity: expanded ? 1 : 0,
+                transition: "opacity 180ms ease",
+              }}>
                 {group.posts.map(post => (
                   <PostCard key={post.id} post={post} hideViewPost flat />
                 ))}
