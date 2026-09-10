@@ -15,7 +15,6 @@ const PURPLE   = "#1085FD";
 const BORDER   = "#E5E7EB";
 
 const DEMO_ORG = "demo";
-const DEMO_DISMISSED_KEY = "sc_demo_banner_dismissed";
 
 function MissionaryIcon({ size = 15 }: { size?: number }) {
   return (
@@ -37,7 +36,7 @@ function AdminIcon({ size = 15 }: { size?: number }) {
  * Demo-only "Viewing as" switcher: flips the demo session between the
  * missionary (field user) and Church admin personas in one click.
  */
-function DemoRoleSwitch({ compact }: { compact?: boolean }) {
+function DemoRoleSwitch() {
   const { user } = useAuth();
   const { prefix } = useOrg();
   const { toast } = useToast();
@@ -75,9 +74,9 @@ function DemoRoleSwitch({ compact }: { compact?: boolean }) {
   const btnBase: React.CSSProperties = {
     display: "inline-flex", alignItems: "center", gap: 7,
     border: "none", cursor: switching ? "wait" : "pointer",
-    borderRadius: 999, fontWeight: 700, lineHeight: 1,
-    fontSize: compact ? 13 : 14.5,
-    padding: compact ? "7px 14px" : "10px 18px",
+    borderRadius: 8, fontWeight: 700, lineHeight: 1,
+    fontSize: 13,
+    padding: "8px 12px",
     transition: "background .15s, color .15s",
     whiteSpace: "nowrap",
   };
@@ -88,8 +87,8 @@ function DemoRoleSwitch({ compact }: { compact?: boolean }) {
       aria-label="Switch demo view"
       style={{
         display: "inline-flex", alignItems: "center", gap: 3,
-        background: "rgba(255,255,255,0.16)", borderRadius: 999, padding: 3,
-        border: "1px solid rgba(255,255,255,0.25)",
+        background: "#EFF6FF", borderRadius: 10, padding: 3,
+        border: "1px solid #BFDBFE",
         opacity: switching ? 0.7 : 1,
       }}
     >
@@ -97,18 +96,18 @@ function DemoRoleSwitch({ compact }: { compact?: boolean }) {
         onClick={() => switchTo("field_user")}
         aria-pressed={!isAdmin}
         data-testid="btn-demo-view-missionary"
-        style={{ ...btnBase, background: !isAdmin ? "#fff" : "transparent", color: !isAdmin ? "#0B67C2" : "rgba(255,255,255,0.92)" }}
+        style={{ ...btnBase, background: !isAdmin ? "#1085FD" : "transparent", color: !isAdmin ? "#fff" : "#2563A8" }}
       >
-        <MissionaryIcon size={compact ? 13 : 15} />
+        <MissionaryIcon size={13} />
         Missionary
       </button>
       <button
         onClick={() => switchTo("admin")}
         aria-pressed={isAdmin}
         data-testid="btn-demo-view-admin"
-        style={{ ...btnBase, background: isAdmin ? "#fff" : "transparent", color: isAdmin ? "#0B67C2" : "rgba(255,255,255,0.92)" }}
+        style={{ ...btnBase, background: isAdmin ? "#1085FD" : "transparent", color: isAdmin ? "#fff" : "#2563A8" }}
       >
-        <AdminIcon size={compact ? 13 : 15} />
+        <AdminIcon size={13} />
         Church Admin
       </button>
     </div>
@@ -118,13 +117,6 @@ function DemoRoleSwitch({ compact }: { compact?: boolean }) {
 function DemoBanner() {
   const { orgSlug } = useOrg();
   const { user, isAuthenticated } = useAuth();
-  const [expanded, setExpanded] = useState(true);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && localStorage.getItem(DEMO_DISMISSED_KEY)) {
-      setExpanded(false);
-    }
-  }, []);
 
   if (orgSlug !== DEMO_ORG || !isAuthenticated || !user) return null;
 
@@ -133,76 +125,30 @@ function DemoBanner() {
   const isDemoPersona = user.email === "demoadmin@sentconnect.org" || user.email === "demouser@sentconnect.org";
   const isAdmin = user.role === "admin" || user.role === "super_admin";
 
-  function collapse() {
-    localStorage.setItem(DEMO_DISMISSED_KEY, "1");
-    setExpanded(false);
-  }
-  function expand() {
-    localStorage.removeItem(DEMO_DISMISSED_KEY);
-    setExpanded(true);
-  }
-
-  // ── Compact bar: always keeps the switcher visible ──
-  if (!expanded) {
-    return (
-      <div style={{
-        background: "linear-gradient(90deg, #0059D6 0%, #1085FD 100%)",
-        color: "#fff", flexShrink: 0,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        gap: 12, padding: "8px 16px", flexWrap: "wrap", position: "relative",
-      }}>
-        {isDemoPersona ? (
-          <>
-            <span style={{ fontSize: 13.5, fontWeight: 700, opacity: 0.95 }}>Demo · Viewing as</span>
-            <DemoRoleSwitch compact />
-          </>
-        ) : (
-          <span style={{ fontSize: 13.5, fontWeight: 700, opacity: 0.95 }}>You're in the demo workspace</span>
-        )}
-        <button
-          onClick={expand}
-          aria-label="Show demo tips"
-          style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.75)", padding: 4, display: "flex", alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600 }}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </button>
-      </div>
-    );
-  }
-
-  // ── Full banner: big friendly explainer + switcher ──
   return (
     <div style={{
-      background: "linear-gradient(115deg, #003B94 0%, #0059D6 45%, #1085FD 100%)",
-      color: "#fff", flexShrink: 0, position: "relative",
-      padding: "16px 16px 18px",
-      borderBottom: "1px solid rgba(255,255,255,0.15)",
+      background: "#FFFFFF",
+      color: "#0F172A",
+      flexShrink: 0,
+      borderBottom: "1px solid #E2E8F0",
+      boxShadow: "0 2px 8px rgba(15,23,42,0.04)",
     }}>
-      <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
-        <h2 style={{
-          margin: "0 0 6px", fontSize: "clamp(17px, 3vw, 20px)", fontWeight: 800,
-          letterSpacing: "-0.01em", lineHeight: 1.25, color: "#FFFFFF",
-        }}>
-          {isAdmin ? (
-            <>Demo · Viewing as the <span style={{ color: "#FFD9A8" }}>Church Admin</span></>
-          ) : (
-            <>Demo · Viewing as a <span style={{ color: "#FFD9A8" }}>Missionary</span></>
-          )}
-        </h2>
-        <p style={{ margin: "0 auto 12px", fontSize: 14, lineHeight: 1.55, fontWeight: 500, color: "#DCEBFF", maxWidth: 560 }}>
-          {isAdmin
-            ? <>This is your Church's dashboard. Switch to <strong style={{ color: "#fff", fontWeight: 700 }}>Missionary</strong> to post an update, then flip back to watch it arrive.</>
-            : <>Post an update below, then switch to <strong style={{ color: "#fff", fontWeight: 700 }}>Church Admin</strong> to see it arrive instantly.</>}
-        </p>
+      <div style={{
+        maxWidth: 1152,
+        minHeight: 54,
+        margin: "0 auto",
+        padding: "7px 32px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 14,
+        flexWrap: "wrap",
+      }}>
+        <span style={{ fontSize: 13.5, fontWeight: 700, color: "#475569" }}>
+          Demo mode: <span style={{ color: "#0F172A" }}>{isAdmin ? "Church Admin" : "Missionary"}</span>
+        </span>
         {isDemoPersona && <DemoRoleSwitch />}
       </div>
-      <button
-        onClick={collapse}
-        aria-label="Collapse demo banner"
-        style={{ position: "absolute", right: 12, top: 12, background: "rgba(255,255,255,0.12)", border: "none", borderRadius: 8, cursor: "pointer", color: "rgba(255,255,255,0.85)", padding: 6, display: "flex", alignItems: "center" }}
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-      </button>
     </div>
   );
 }
@@ -293,7 +239,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <img
               src={onBlue ? logoWhite : logoBlueBlack}
               alt="SentConnect"
-              className={onBlue ? "h-12 w-12" : "h-14 w-auto"}
+              className={onBlue ? "h-11 w-auto" : "h-14 w-auto"}
               style={{ maxWidth: 220, display: "block", objectFit: "contain" }}
             />
           </Link>
